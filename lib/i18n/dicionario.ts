@@ -1096,6 +1096,19 @@ export const DICIONARIO: Traducoes = {
   Condição: { "fr-FR": "Condition" },
   "Classificar (IA)": { "fr-FR": "Classer (IA)" },
   "Enviar mensagem": { "fr-FR": "Envoyer un message" },
+  "Esperar a resposta por (minutos)": { "fr-FR": "Attendre la réponse pendant (minutes)" },
+  "Última resposta": { "fr-FR": "Dernière réponse" },
+  Resumo: { "fr-FR": "Résumé" },
+  "O que a IA vai ler": { "fr-FR": "Ce que l’IA va lire" },
+  "Instrução (opcional)": { "fr-FR": "Instruction (facultatif)" },
+  "Classes (separadas por vírgula)": { "fr-FR": "Classes (séparées par des virgules)" },
+  "interessado, sem interesse": { "fr-FR": "intéressé, pas intéressé" },
+  "Sem resposta": { "fr-FR": "Sans réponse" },
+  "Se o contato não responder dentro desse tempo, o fluxo segue sozinho pelo caminho “Sem resposta”. Mínimo de 15 minutos.":
+    {
+      "fr-FR":
+        "Si le contact ne répond pas dans ce délai, le flow suit automatiquement le chemin « Sans réponse ». Minimum : 15 minutes.",
+    },
   "Carregando seus modelos…": { "fr-FR": "Chargement de vos modèles…" },
   "Não consegui carregar seus modelos de mensagem. Recarregue a página.": {
     "fr-FR": "Impossible de charger vos modèles de messages. Rechargez la page.",
