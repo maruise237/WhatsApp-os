@@ -1091,6 +1091,7 @@ export const DICIONARIO: Traducoes = {
   "por item, separados": { "fr-FR": "par élément, séparées" },
   "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
   "Criar fonte": { "fr-FR": "Créer la source" },
+  "Adicionar nó": { "fr-FR": "Ajouter un nœud" },
   "Aguardando resposta": { "fr-FR": "En attente de réponse" },
   "Pausado (atendimento humano)": { "fr-FR": "En pause (traitement humain)" },
   "Pausado por uma pessoa": { "fr-FR": "Mis en pause par une personne" },
