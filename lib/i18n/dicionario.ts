@@ -1075,6 +1075,44 @@ export const DICIONARIO: Traducoes = {
   "Salvar e validar": { "fr-FR": "Enregistrer et valider" },
   Obrigatório: { "fr-FR": "Obligatoire" },
   "API key muito curta": { "fr-FR": "Clé API trop courte" },
+  "Perguntas frequentes do tenant.": { "fr-FR": "Questions fréquentes de l’organisation." },
+  "Documento PDF de políticas (troca, devolução, privacidade).": {
+    "fr-FR": "Document PDF des politiques (échange, retour, confidentialité).",
+  },
+  "Conversas opt-in": { "fr-FR": "Conversations avec consentement" },
+  "Conversas anonimizadas para aprendizado.": {
+    "fr-FR": "Conversations anonymisées pour l’apprentissage.",
+  },
+  "Entra sozinha: conversas resolvidas que alguém marcar como aproveitáveis pela IA são anonimizadas e indexadas em lote. Não há conteúdo para colar aqui.":
+    {
+      "fr-FR":
+        "Automatique : les conversations résolues marquées comme exploitables par l’IA sont anonymisées et indexées par lots. Aucun contenu à coller ici.",
+    },
+  "Produtos sincronizados do e-commerce.": {
+    "fr-FR": "Produits synchronisés depuis le commerce en ligne.",
+  },
+  "Os produtos vêm da sincronização com o e-commerce, não de conteúdo digitado aqui.": {
+    "fr-FR":
+      "Les produits proviennent de la synchronisation avec le commerce en ligne, et non d’un contenu saisi ici.",
+  },
+  "Nenhuma fonte configurada.": { "fr-FR": "Aucune source configurée." },
+  Configurar: { "fr-FR": "Configurer" },
+  "Editor de FAQ em breve.": { "fr-FR": "L’éditeur de FAQ sera bientôt disponible." },
+  "Editar conteúdo": { "fr-FR": "Modifier le contenu" },
+  "Upload de política em breve.": {
+    "fr-FR": "L’importation d’une politique sera bientôt disponible.",
+  },
+  "Upload novo arquivo": { "fr-FR": "Importer un nouveau fichier" },
+  "Última indexação": { "fr-FR": "Dernière indexation" },
+  "Chunks indexados": { "fr-FR": "Segments indexés" },
+  "Detalhes do erro": { "fr-FR": "Détails de l’erreur" },
+  "Reindexando...": { "fr-FR": "Réindexation…" },
+  "Re-indexar": { "fr-FR": "Réindexer" },
+  "Nunca indexado": { "fr-FR": "Jamais indexé" },
+  "agora há pouco": { "fr-FR": "à l’instant" },
+  min: { "fr-FR": "min" },
+  h: { "fr-FR": "h" },
+  d: { "fr-FR": "j" },
   "Regex output block": { "fr-FR": "Blocage de sortie par regex" },
   "RAG must hit": { "fr-FR": "Résultat RAG obligatoire" },
   "Regex input block": { "fr-FR": "Blocage d’entrée par regex" },

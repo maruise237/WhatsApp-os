@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { SourceStatusBadge, deriveBadgeStatus } from "@/components/ai/SourceStatusBadge";
 import { NovaFonteDialog } from "@/components/ai/NovaFonteDialog";
+import { useT } from "@/hooks/i18n/useT";
 import type { SourceRow } from "@/hooks/ai/useKnowledgeSources";
 
 export type KnowledgeSourceType = "faq" | "policy" | "conversations" | "catalog";
@@ -65,24 +66,30 @@ const TYPE_META: Record<
   },
 };
 
-function formatRelative(iso: string | null): string {
-  if (!iso) return "Nunca indexado";
+function formatRelative(iso: string | null, t: (text: string) => string): string {
+  if (!iso) return t("Nunca indexado");
   const then = new Date(iso).getTime();
   const now = Date.now();
   const diffSec = Math.floor((now - then) / 1000);
-  if (diffSec < 60) return "agora há pouco";
+  if (diffSec < 60) return t("agora há pouco");
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `há ${diffMin} min`;
+  if (diffMin < 60) return `${t("há")} ${diffMin} ${t("min")}`;
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `há ${diffHr} h`;
+  if (diffHr < 24) return `${t("há")} ${diffHr} ${t("h")}`;
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 30) return `há ${diffDay} d`;
+  if (diffDay < 30) return `${t("há")} ${diffDay} ${t("d")}`;
   return new Date(iso).toLocaleDateString("pt-BR");
 }
 
 export function KnowledgeSourceCard({
-  source, type, onReindex, isReindexing, agentId, onCriada,
+  source,
+  type,
+  onReindex,
+  isReindexing,
+  agentId,
+  onCriada,
 }: Props) {
+  const t = useT();
   const [novaAberta, setNovaAberta] = useState(false);
   const meta = TYPE_META[type];
   const Icon = meta.Icon;
@@ -98,13 +105,13 @@ export function KnowledgeSourceCard({
         <CardHeader>
           <div className="flex items-center gap-2">
             <Icon className="h-5 w-5 text-text-muted" aria-hidden />
-            <CardTitle className="text-base">{meta.label}</CardTitle>
+            <CardTitle className="text-base">{t(meta.label)}</CardTitle>
           </div>
-          <p className="text-sm text-text-muted">{meta.description}</p>
+          <p className="text-sm text-text-muted">{t(meta.description)}</p>
         </CardHeader>
         <CardContent className="flex-1">
           <p className="text-sm text-text-muted">
-            {meta.comoSePreenche ?? "Nenhuma fonte configurada."}
+            {t(meta.comoSePreenche ?? "Nenhuma fonte configurada.")}
           </p>
         </CardContent>
         <CardFooter>
@@ -114,7 +121,7 @@ export function KnowledgeSourceCard({
           {cadastroManual ? (
             <>
               <Button variant="secondary" size="sm" onClick={() => setNovaAberta(true)}>
-                Configurar {meta.label}
+                {t("Configurar")} {t(meta.label)}
               </Button>
               <NovaFonteDialog
                 agentId={agentId}
@@ -138,12 +145,8 @@ export function KnowledgeSourceCard({
   const extraButton = (() => {
     if (type === "faq") {
       return (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => toast.info("Editor de FAQ em breve.")}
-        >
-          Editar conteúdo
+        <Button variant="ghost" size="sm" onClick={() => toast.info(t("Editor de FAQ em breve."))}>
+          {t("Editar conteúdo")}
         </Button>
       );
     }
@@ -152,9 +155,9 @@ export function KnowledgeSourceCard({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => toast.info("Upload de política em breve.")}
+          onClick={() => toast.info(t("Upload de política em breve."))}
         >
-          Upload novo arquivo
+          {t("Upload novo arquivo")}
         </Button>
       );
     }
@@ -167,37 +170,35 @@ export function KnowledgeSourceCard({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Icon className="h-5 w-5 text-accent" aria-hidden />
-            <CardTitle className="text-base">{source.name || meta.label}</CardTitle>
+            <CardTitle className="text-base">{source.name || t(meta.label)}</CardTitle>
           </div>
           <SourceStatusBadge source={source} />
         </div>
-        <p className="text-sm text-text-muted">{meta.description}</p>
+        <p className="text-sm text-text-muted">{t(meta.description)}</p>
       </CardHeader>
       <CardContent className="flex-1 space-y-2 text-sm">
         <div className="flex items-baseline justify-between">
-          <span className="text-text-muted">Última indexação</span>
-          <span>{formatRelative(source.last_indexed_at)}</span>
+          <span className="text-text-muted">{t("Última indexação")}</span>
+          <span>{formatRelative(source.last_indexed_at, t)}</span>
         </div>
         <div className="flex items-baseline justify-between">
-          <span className="text-text-muted">Chunks indexados</span>
+          <span className="text-text-muted">{t("Chunks indexados")}</span>
           <span>{source.chunks_count}</span>
         </div>
         {showError ? (
-          <details className="rounded-md border border-error-bg bg-error-bg/30 p-2 text-xs text-error-fg">
-            <summary className="cursor-pointer font-medium">Detalhes do erro</summary>
+          <details className="bg-error-bg/30 rounded-md border border-error-bg p-2 text-xs text-error-fg">
+            <summary className="cursor-pointer font-medium">{t("Detalhes do erro")}</summary>
             <p className="mt-1 whitespace-pre-wrap break-words">{source.last_index_error}</p>
           </details>
         ) : null}
       </CardContent>
       <CardFooter className="flex flex-wrap gap-2">
-        <Button
-          variant="secondary"
-          size="sm"
-          disabled={reindexBlocked}
-          onClick={onReindex}
-        >
-          <RefreshCw className={`mr-2 h-3.5 w-3.5 ${isReindexing ? "animate-spin" : ""}`} aria-hidden />
-          {isReindexing ? "Reindexando..." : "Re-indexar"}
+        <Button variant="secondary" size="sm" disabled={reindexBlocked} onClick={onReindex}>
+          <RefreshCw
+            className={`mr-2 h-3.5 w-3.5 ${isReindexing ? "animate-spin" : ""}`}
+            aria-hidden
+          />
+          {isReindexing ? t("Reindexando...") : t("Re-indexar")}
         </Button>
         {extraButton}
       </CardFooter>
