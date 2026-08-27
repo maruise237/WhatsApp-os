@@ -138,7 +138,7 @@ services:
       POSTGRES_PASSWORD: ${EVOLUTION_GO_POSTGRES_PASSWORD}
       POSTGRES_DB: evo_auth
     volumes:
-      - evolution-postgres-auth-data:/var/lib/postgresql/data
+      - evolution-postgres-auth-data-v2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U evolution -d evo_auth"]
       interval: 10s
@@ -155,7 +155,7 @@ services:
       POSTGRES_PASSWORD: ${EVOLUTION_GO_POSTGRES_PASSWORD}
       POSTGRES_DB: evo_users
     volumes:
-      - evolution-postgres-users-data:/var/lib/postgresql/data
+      - evolution-postgres-users-data-v2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U evolution -d evo_users"]
       interval: 10s
@@ -284,6 +284,8 @@ volumes:
   evolution-go-data:
   evolution-postgres-auth-data:
   evolution-postgres-users-data:
+  evolution-postgres-auth-data-v2:
+  evolution-postgres-users-data-v2:
   seaweedfs-volume-data:
 
 networks:
