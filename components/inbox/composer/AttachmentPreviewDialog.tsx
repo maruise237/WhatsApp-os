@@ -2,10 +2,17 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { FileText } from "@/lib/ui/icons";
 import { formatBytes } from "@/components/inbox/media/media-utils";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   file: File | null;
@@ -16,13 +23,20 @@ interface Props {
 
 /** Preview antes do envio (padrão WhatsApp): thumb ou card + legenda. */
 export function AttachmentPreviewDialog({ file, sending, onCancel, onSend }: Props) {
+  const t = useT();
   const [caption, setCaption] = useState("");
   useEffect(() => setCaption(""), [file]);
 
-  const objectUrl = useMemo(() => (file && /^(image|video)\//.test(file.type) ? URL.createObjectURL(file) : null), [file]);
-  useEffect(() => () => {
-    if (objectUrl) URL.revokeObjectURL(objectUrl);
-  }, [objectUrl]);
+  const objectUrl = useMemo(
+    () => (file && /^(image|video)\//.test(file.type) ? URL.createObjectURL(file) : null),
+    [file],
+  );
+  useEffect(
+    () => () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    },
+    [objectUrl],
+  );
 
   if (!file) return null;
   const isImage = file.type.startsWith("image/");
@@ -32,13 +46,15 @@ export function AttachmentPreviewDialog({ file, sending, onCancel, onSend }: Pro
     <Dialog open onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Enviar anexo</DialogTitle>
+          <DialogTitle>{t("Enviar anexo")}</DialogTitle>
         </DialogHeader>
-        <div className="flex items-center justify-center rounded-lg bg-muted/40 p-3">
+        <div className="bg-muted/40 flex items-center justify-center rounded-lg p-3">
           {isImage && objectUrl && (
             <img src={objectUrl} alt={file.name} className="max-h-64 rounded-md object-contain" />
           )}
-          {isVideo && objectUrl && <video src={objectUrl} controls className="max-h-64 rounded-md" />}
+          {isVideo && objectUrl && (
+            <video src={objectUrl} controls className="max-h-64 rounded-md" />
+          )}
           {!isImage && !isVideo && (
             <div className="flex items-center gap-3 py-4">
               <FileText size={28} weight="duotone" className="text-primary" aria-hidden />
@@ -52,16 +68,16 @@ export function AttachmentPreviewDialog({ file, sending, onCancel, onSend }: Pro
         <Input
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
-          placeholder="Legenda (opcional)"
-          aria-label="Legenda"
+          placeholder={t("Legenda (opcional)")}
+          aria-label={t("Legenda")}
           onKeyDown={(e) => e.key === "Enter" && !sending && onSend(caption.trim())}
         />
         <DialogFooter>
           <Button variant="ghost" onClick={onCancel} disabled={sending}>
-            Cancelar
+            {t("Cancelar")}
           </Button>
           <Button onClick={() => onSend(caption.trim())} disabled={sending}>
-            Enviar
+            {t("Enviar")}
           </Button>
         </DialogFooter>
       </DialogContent>

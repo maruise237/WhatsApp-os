@@ -817,6 +817,13 @@ export const DICIONARIO: Traducoes = {
   "Mostrar atalhos": { "fr-FR": "Afficher les raccourcis" },
   "Atalhos de teclado": { "fr-FR": "Raccourcis clavier" },
   "Enviar contato": { "fr-FR": "Envoyer un contact" },
+  "Enviar anexo": { "fr-FR": "Envoyer la pièce jointe" },
+  "Legenda (opcional)": { "fr-FR": "Légende (facultatif)" },
+  Legenda: { "fr-FR": "Légende" },
+  "Templates de script": { "fr-FR": "Modèles de script" },
+  "Nenhum template. Crie em Configurações.": {
+    "fr-FR": "Aucun modèle. Créez-en un dans les Paramètres.",
+  },
   "Modelo enviado — a janela reabre quando o cliente responder.": {
     "fr-FR": "Modèle envoyé : la fenêtre se rouvrira lorsque le client répondra.",
   },
