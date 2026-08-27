@@ -1058,6 +1058,41 @@ export const DICIONARIO: Traducoes = {
   "Legenda (opcional)": { "fr-FR": "Légende (facultatif)" },
   Legenda: { "fr-FR": "Légende" },
   "Etapa atualizada.": { "fr-FR": "Étape mise à jour." },
+  "A coluna sai do quadro e para de receber negócios novos. Nada é apagado — o histórico de quem passou por ela continua guardado —, mas":
+    {
+      "fr-FR":
+        "La colonne quitte le tableau et ne reçoit plus de nouvelles opportunités. Rien n’est supprimé — l’historique des passages est conservé —, mais",
+    },
+  "não dá para trazer a coluna de volta por aqui": {
+    "fr-FR": "la colonne ne peut pas être restaurée ici",
+  },
+  negócio: { "fr-FR": "opportunité" },
+  negócios: { "fr-FR": "opportunités" },
+  está: { "fr-FR": "est" },
+  estão: { "fr-FR": "sont" },
+  "nesta etapa e não há outra coluna em aberto para recebê-": {
+    "fr-FR": "à cette étape et aucune autre colonne ouverte ne peut le recevoir",
+  },
+  lo: { "fr-FR": "" },
+  los: { "fr-FR": "" },
+  "Crie uma etapa antes de arquivar": { "fr-FR": "Créez une étape avant d’archiver" },
+  "está nesta etapa. Para onde ele vai?": { "fr-FR": "est dans cette étape. Où doit-il aller ?" },
+  "estão nesta etapa. Para onde eles vão?": {
+    "fr-FR": "sont dans cette étape. Où doivent-ils aller ?",
+  },
+  "Para onde vão os negócios de": { "fr-FR": "Où vont les opportunités de" },
+  "Escolha a etapa": { "fr-FR": "Choisissez l’étape" },
+  "Esta etapa é a que o assistente usa para «": {
+    "fr-FR": "Cette étape est celle que l’assistant utilise pour «",
+  },
+  "Arquivando, ele para de mover o card nesse passo até você escolher outra etapa em": {
+    "fr-FR":
+      "En l’archivant, l’assistant cesse de déplacer le card à cette étape jusqu’à ce que vous en choisissiez une autre dans",
+  },
+  "«Para onde o card vai em cada passo»": { "fr-FR": "« Où va le card à chaque étape »" },
+  "Mover os negócios e arquivar": { "fr-FR": "Déplacer les opportunités et archiver" },
+  "Ir para o mapeamento do assistente": { "fr-FR": "Accéder au mappage de l’assistant" },
+  "Nome da etapa": { "fr-FR": "Nom de l’étape" },
   "saiu do quadro.": { "fr-FR": "a quitté le tableau." },
   "entrou no fim do funil.": { "fr-FR": "a été ajoutée à la fin du pipeline." },
   "O assistente usa esta etapa para «": { "fr-FR": "L’assistant utilise cette étape pour «" },

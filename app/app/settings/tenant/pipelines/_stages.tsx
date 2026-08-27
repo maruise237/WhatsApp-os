@@ -529,9 +529,11 @@ export function StagesSection({
                     </p>
                   ) : arquivandoAqui.negocios === null ? (
                     <p className="text-sm leading-relaxed">
-                      Arquivar «{etapa.name}»? A coluna sai do quadro e para de receber negócios
-                      novos. Nada é apagado — o histórico de quem passou por ela continua guardado
-                      —, mas <strong>não dá para trazer a coluna de volta por aqui</strong>.
+                      {t("Arquivar")} «{etapa.name}»?{" "}
+                      {t(
+                        "A coluna sai do quadro e para de receber negócios novos. Nada é apagado — o histórico de quem passou por ela continua guardado —, mas",
+                      )}{" "}
+                      <strong>{t("não dá para trazer a coluna de volta por aqui")}</strong>.
                     </p>
                   ) : destinos.length === 0 ? (
                     // Sem destino possível não há pergunta a fazer — e mandar
@@ -540,10 +542,12 @@ export function StagesSection({
                       className="text-sm leading-relaxed"
                       data-testid={`arquivar-sem-destino-${etapa.id}`}
                     >
-                      {contagemDeNegocios(arquivandoAqui.negocios)}{" "}
-                      {arquivandoAqui.negocios === 1 ? "está" : "estão"} nesta etapa e não há outra
-                      coluna em aberto para recebê-{arquivandoAqui.negocios === 1 ? "lo" : "los"}.
-                      Crie uma etapa antes de arquivar «{etapa.name}».
+                      {arquivandoAqui.negocios}{" "}
+                      {t(arquivandoAqui.negocios === 1 ? "negócio" : "negócios")}{" "}
+                      {t(arquivandoAqui.negocios === 1 ? "está" : "estão")}{" "}
+                      {t("nesta etapa e não há outra coluna em aberto para recebê-")}{" "}
+                      {t(arquivandoAqui.negocios === 1 ? "lo" : "los")}.
+                      {t("Crie uma etapa antes de arquivar")} «{etapa.name}».
                     </p>
                   ) : (
                     <>
@@ -551,10 +555,13 @@ export function StagesSection({
                         className="text-sm leading-relaxed"
                         data-testid={`arquivar-pergunta-${etapa.id}`}
                       >
-                        {contagemDeNegocios(arquivandoAqui.negocios)}{" "}
-                        {arquivandoAqui.negocios === 1
-                          ? "está nesta etapa. Para onde ele vai?"
-                          : "estão nesta etapa. Para onde eles vão?"}
+                        {arquivandoAqui.negocios}{" "}
+                        {t(arquivandoAqui.negocios === 1 ? "negócio" : "negócios")}{" "}
+                        {t(
+                          arquivandoAqui.negocios === 1
+                            ? "está nesta etapa. Para onde ele vai?"
+                            : "estão nesta etapa. Para onde eles vão?",
+                        )}
                       </p>
                       <div className="sm:w-72">
                         <Select
@@ -562,10 +569,10 @@ export function StagesSection({
                           onValueChange={(v) => setArquivamento({ ...arquivandoAqui, destino: v })}
                         >
                           <SelectTrigger
-                            aria-label={`Para onde vão os negócios de «${etapa.name}»`}
+                            aria-label={`${t("Para onde vão os negócios de")} «${etapa.name}»`}
                             data-testid={`destino-${etapa.id}`}
                           >
-                            <SelectValue placeholder="Escolha a etapa" />
+                            <SelectValue placeholder={t("Escolha a etapa")} />
                           </SelectTrigger>
                           <SelectContent>
                             {destinos.map((d) => (
@@ -593,11 +600,14 @@ export function StagesSection({
                       className="text-sm leading-relaxed text-warning-fg"
                       data-testid={`arquivar-perde-passo-${etapa.id}`}
                     >
-                      Esta etapa é a que o assistente usa para «{ROTULO_DO_PASSO[passo]}».
-                      Arquivando, ele para de mover o card nesse passo até você escolher outra etapa
-                      em{" "}
+                      {t("Esta etapa é a que o assistente usa para «")}
+                      {t(ROTULO_DO_PASSO[passo])}
+                      {t("». ")}
+                      {t(
+                        "Arquivando, ele para de mover o card nesse passo até você escolher outra etapa em",
+                      )}{" "}
                       <a className="underline underline-offset-2" href={`#${ancoraMapeamento}`}>
-                        «Para onde o card vai em cada passo»
+                        {t("«Para onde o card vai em cada passo»")}
                       </a>
                       .
                     </p>
@@ -618,12 +628,12 @@ export function StagesSection({
                           onClick={() => pedirArquivamento(etapa, arquivandoAqui.destino)}
                         >
                           {arquivandoAqui.negocios === null
-                            ? "Arquivar"
-                            : "Mover os negócios e arquivar"}
+                            ? t("Arquivar")
+                            : t("Mover os negócios e arquivar")}
                         </Button>
                       )}
                     <Button size="sm" variant="ghost" onClick={() => setArquivamento(null)}>
-                      {arquivandoAqui.erro ? "Fechar" : "Cancelar"}
+                      {arquivandoAqui.erro ? t("Fechar") : t("Cancelar")}
                     </Button>
                   </div>
                 </Card>
@@ -641,7 +651,7 @@ export function StagesSection({
                       <>
                         {" "}
                         <a className="underline underline-offset-2" href={`#${ancoraMapeamento}`}>
-                          Ir para o mapeamento do assistente
+                          {t("Ir para o mapeamento do assistente")}
                         </a>
                         .
                       </>
@@ -721,6 +731,7 @@ function NomeDaEtapa({
   desabilitado: boolean;
   aoConfirmar: (nome: string) => void;
 }) {
+  const t = useT();
   const [rascunho, setRascunho] = useState(etapa.name);
 
   function confirmar() {
@@ -737,7 +748,7 @@ function NomeDaEtapa({
       value={rascunho}
       maxLength={80}
       disabled={desabilitado}
-      aria-label={`Nome da etapa «${etapa.name}»`}
+      aria-label={`${t("Nome da etapa")} «${etapa.name}»`}
       data-testid={`nome-${etapa.id}`}
       onChange={(e) => setRascunho(e.target.value)}
       onBlur={confirmar}
