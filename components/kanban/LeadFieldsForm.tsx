@@ -12,6 +12,7 @@ import type { Lead } from "@/lib/types/leads";
 import { updateLeadSchema, type UpdateLeadInput } from "@/lib/schemas/leads";
 import { parseReaisToCents } from "@/lib/money";
 import { EcoDoValor } from "./EcoDoValor";
+import { useT } from "@/hooks/i18n/useT";
 
 interface FormShape {
   title: string;
@@ -45,6 +46,7 @@ function centsToReais(cents: number | null | undefined): string {
  * fica registrada" provaria isso para todo mundo menos para o autor.
  */
 export function LeadFieldsForm({ lead, pipelineId, onSaved, onCancel }: Props) {
+  const t = useT();
   const edit = useEditLead(pipelineId);
 
   const form = useForm<FormShape>({
@@ -79,7 +81,7 @@ export function LeadFieldsForm({ lead, pipelineId, onSaved, onCancel }: Props) {
     if (reais.length > 0) {
       valueCents = parseReaisToCents(reais);
       if (valueCents === null) {
-        form.setError("valueReais", { message: "Valor inválido" });
+        form.setError("valueReais", { message: t("Valor inválido") });
         return;
       }
     }
@@ -95,7 +97,7 @@ export function LeadFieldsForm({ lead, pipelineId, onSaved, onCancel }: Props) {
     const parsed = updateLeadSchema.safeParse(patch);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(first?.message ?? "Dados inválidos");
+      toast.error(t(first?.message ?? "Dados inválidos"));
       return;
     }
 
@@ -104,68 +106,58 @@ export function LeadFieldsForm({ lead, pipelineId, onSaved, onCancel }: Props) {
         leadId: lead.id,
         patch: parsed.data as UpdateLeadInput,
       });
-      toast.success("Lead atualizado");
+      toast.success(t("Lead atualizado"));
       onSaved?.();
     } catch {
       // toast already shown
     }
   }
 
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="title">{t("Título")}</Label>
+        <Input id="title" {...form.register("title", { required: true, minLength: 2 })} />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="description">{t("Descrição")}</Label>
+        <Textarea id="description" rows={3} {...form.register("description")} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
         <div className="space-y-2">
-          <Label htmlFor="title">Título</Label>
+          <Label htmlFor="valueReais">{t("Valor (R$)")}</Label>
           <Input
-            id="title"
-            {...form.register("title", { required: true, minLength: 2 })}
+            id="valueReais"
+            inputMode="decimal"
+            placeholder="0,00"
+            {...form.register("valueReais")}
           />
+          <EcoDoValor control={form.control} />
+          {form.formState.errors.valueReais && (
+            <p className="text-xs text-error-fg">{form.formState.errors.valueReais.message}</p>
+          )}
         </div>
-
         <div className="space-y-2">
-          <Label htmlFor="description">Descrição</Label>
-          <Textarea id="description" rows={3} {...form.register("description")} />
+          <Label htmlFor="expected_close_date">{t("Fechamento previsto")}</Label>
+          <Input id="expected_close_date" type="date" {...form.register("expected_close_date")} />
         </div>
+      </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <Label htmlFor="valueReais">Valor (R$)</Label>
-            <Input
-              id="valueReais"
-              inputMode="decimal"
-              placeholder="0,00"
-              {...form.register("valueReais")}
-            />
-            <EcoDoValor control={form.control} />
-            {form.formState.errors.valueReais && (
-              <p className="text-xs text-error-fg">
-                {form.formState.errors.valueReais.message}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="expected_close_date">Fechamento previsto</Label>
-            <Input
-              id="expected_close_date"
-              type="date"
-              {...form.register("expected_close_date")}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="tagsRaw">Tags (separadas por vírgula)</Label>
-          <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
+        <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
+      </div>
 
       <div className="flex justify-end gap-2">
         {onCancel && (
           <Button type="button" variant="ghost" onClick={onCancel} disabled={edit.isPending}>
-            Cancelar
+            {t("Cancelar")}
           </Button>
         )}
         <Button type="submit" disabled={edit.isPending}>
-          {edit.isPending ? "Salvando…" : "Salvar"}
+          {edit.isPending ? t("Salvando…") : t("Salvar")}
         </Button>
       </div>
     </form>
