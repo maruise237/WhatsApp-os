@@ -4,42 +4,25 @@ import { env } from "@/lib/env";
 import { isServiceRoleConfigured } from "./index";
 
 vi.mock("@/lib/env", () => ({
-  env: { NEON_SERVICE_ROLE_JWT: "" },
+  env: { NEON_DATABASE_URL: "postgresql://neon-owner@localhost/neondb" },
 }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
 
-/**
- * O Supabase emite service role key em dois formatos reais: o JWT legado
- * (200+ caracteres, `eyJ...`) e a chave curta nova `sb_secret_...` (~41
- * caracteres). `isServiceRoleConfigured()` já teve uma versão que media
- * `key.length > 50` — media o formato ANTIGO, não a presença da chave — e
- * uma `sb_secret_...` real e válida virava "não configurada". O efeito real:
- * recuperação de MFA devolvia `service_unavailable` pro usuário que perdeu o
- * autenticador, lista de equipe vinha com nome/email nulos, atribuição em
- * massa devolvia 422 — tudo com a chave certa no `.env`.
- *
- * Estes testes travam a regra certa: presença de verdade (não vazio, não
- * placeholder), nunca o comprimento.
- */
-describe("isServiceRoleConfigured — presença de chave, não comprimento", () => {
-  it("chave sb_secret_ (~41 chars, formato novo do Supabase) → true", () => {
-    env.NEON_SERVICE_ROLE_JWT = "sb_secret_abcdefghijklmnopqrstuvwxyz012345";
-    expect(env.NEON_SERVICE_ROLE_JWT.length).toBeLessThan(50);
+describe("admin Neon — présence de la connexion PostgreSQL privée", () => {
+  it("retourne true quand la connexion privée est configurée", () => {
+    env.NEON_DATABASE_URL = "postgresql://neon-owner@localhost/neondb";
     expect(isServiceRoleConfigured()).toBe(true);
   });
 
-  it("JWT longo (formato legado do Supabase) → true", () => {
-    env.NEON_SERVICE_ROLE_JWT =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNzAwMDAwMDAwfQ.abcdefghijklmnopqrstuvwxyz0123456789ABCDEF";
+  it("retourne false quand la connexion privée est absente", () => {
+    env.NEON_DATABASE_URL = "";
+    expect(isServiceRoleConfigured()).toBe(false);
+  });
+
+  it("ne dépend pas d’une ancienne variable JWT", () => {
+    env.NEON_DATABASE_URL = "postgresql://neon-owner@localhost/neondb";
+    (env as Record<string, unknown>).NEON_SERVICE_ROLE_JWT = "PLACEHOLDER_NEON_SERVICE_ROLE_JWT";
     expect(isServiceRoleConfigured()).toBe(true);
-  });
-
-  it("string vazia → false (ausência de verdade)", () => {
-    env.NEON_SERVICE_ROLE_JWT = "";
-    expect(isServiceRoleConfigured()).toBe(false);
-  });
-
-  it("marcador de placeholder → false", () => {
-    env.NEON_SERVICE_ROLE_JWT = "PLACEHOLDER_NEON_SERVICE_ROLE_JWT";
-    expect(isServiceRoleConfigured()).toBe(false);
   });
 });

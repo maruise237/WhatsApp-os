@@ -5,8 +5,7 @@ const PORT = Number(process.env.GATEWAY_PORT || 8788);
 const GATEWAY_TOKEN = process.env.WHATSAPP_GATEWAY_TOKEN || "";
 const EVOLUTION_BASE_URL = (process.env.EVOLUTION_GO_BASE_URL || "http://evolution-go:8080").replace(/\/$/, "");
 const EVOLUTION_API_KEY = process.env.EVOLUTION_GO_API_KEY || "";
-const NEON_DATA_API_URL = (process.env.NEON_DATA_API_URL || "").replace(/\/$/, "");
-const NEON_SERVICE_ROLE_JWT = process.env.NEON_SERVICE_ROLE_JWT || "";
+const APP_INTERNAL_BASE_URL = (process.env.APP_INTERNAL_BASE_URL || "http://app:3000").replace(/\/$/, "");
 const EVOLUTION_WEBHOOK_SECRET = process.env.EVOLUTION_GO_WEBHOOK_SECRET || "";
 
 function json(res, status, body) {
@@ -74,55 +73,37 @@ async function evolutionRequest(path, init = {}) {
   return body;
 }
 
-function neonHeaders(extra = {}) {
-  return {
-    authorization: `Bearer ${NEON_SERVICE_ROLE_JWT}`,
-    "content-type": "application/json",
-    ...extra,
-  };
-}
-
-async function neonQuery(table, params) {
-  const url = new URL(`${NEON_DATA_API_URL}/rest/v1/${table}`);
-  for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-  const response = await fetch(url, { headers: neonHeaders() });
-  if (!response.ok) throw new Error(`neon_${table}_${response.status}`);
-  return response.json();
-}
-
-async function neonInsert(table, row, prefer = "return=minimal") {
-  const response = await fetch(`${NEON_DATA_API_URL}/rest/v1/${table}`, {
-    method: "POST",
-    headers: neonHeaders({ Prefer: prefer }),
-    body: JSON.stringify(row),
+async function appInternalRequest(path, init = {}) {
+  const response = await fetch(`${APP_INTERNAL_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      authorization: `Bearer ${GATEWAY_TOKEN}`,
+      accept: "application/json",
+      ...(init.body ? { "content-type": "application/json" } : {}),
+      ...(init.headers || {}),
+    },
   });
-  if (!response.ok && response.status !== 409) {
-    const detail = (await response.text()).slice(0, 400);
-    throw new Error(`neon_${table}_${response.status}:${detail}`);
+  const text = await response.text();
+  let body = {};
+  try {
+    body = text ? JSON.parse(text) : {};
+  } catch {
+    body = { raw: text.slice(0, 400) };
   }
-  return response.status;
+  if (!response.ok) {
+    const error = new Error(body.error || `app_internal_${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
+  return body;
 }
 
 async function resolveInstance(instance, expectedOrganizationId = null) {
-  if (!NEON_DATA_API_URL || !NEON_SERVICE_ROLE_JWT) throw new Error("gateway_database_not_configured");
-  const rows = await neonQuery("channel_sessions", {
-    select: "id,organization_id,evolution_instance_name",
-    provider: "eq.evolution_go",
-    evolution_instance_name: `eq.${instance}`,
-    archived_at: "is.null",
-  });
-  const session = rows[0];
-  if (!session) {
-    const error = new Error("channel_instance_not_found");
-    error.status = 404;
-    throw error;
-  }
-  if (expectedOrganizationId && session.organization_id !== expectedOrganizationId) {
-    const error = new Error("forbidden_cross_tenant");
-    error.status = 403;
-    throw error;
-  }
-  return session;
+  if (!APP_INTERNAL_BASE_URL || !GATEWAY_TOKEN) throw new Error("gateway_app_not_configured");
+  const query = new URLSearchParams({ instance });
+  if (expectedOrganizationId) query.set("organization_id", expectedOrganizationId);
+  const response = await appInternalRequest(`/api/v1/internal/gateway/resolve-instance?${query.toString()}`);
+  return response.data;
 }
 
 function numberFromRecipient(recipient) {
@@ -143,31 +124,11 @@ function eventTypeFor(event) {
 async function recordWebhook(payload, headers) {
   const instance = payload?.instance;
   if (!safeInstance(instance)) throw Object.assign(new Error("invalid_instance"), { status: 400 });
-  const session = await resolveInstance(instance);
-  const externalId = extractExternalId(payload?.data) || null;
-  const rawBody = JSON.stringify(payload);
-  const eventType = String(payload?.event || "UNKNOWN").toUpperCase();
-  const status = await neonInsert("webhook_events_log", {
-    organization_id: session.organization_id,
-    channel_session_id: session.id,
-    provider: "evolution_go",
-    raw_body: rawBody,
-    payload_parsed: payload,
-    headers,
-    event_type: eventType,
-    external_id: externalId,
-    valid_signature: true,
+  const response = await appInternalRequest("/api/v1/internal/gateway/webhook", {
+    method: "POST",
+    body: JSON.stringify({ payload, headers }),
   });
-  if (status === 409) return { duplicate: true, organizationId: session.organization_id };
-
-  await supabaseInsert("event_log", {
-    organization_id: session.organization_id,
-    event_type: eventTypeFor(eventType),
-    entity_kind: "whatsapp_webhook",
-    payload: { instance, provider_event: payload },
-    metadata: { provider: "evolution_go", external_id: externalId },
-  });
-  return { duplicate: false, organizationId: session.organization_id };
+  return { duplicate: Boolean(response.duplicate), organizationId: response.organizationId };
 }
 
 async function handleWebhook(req, res) {

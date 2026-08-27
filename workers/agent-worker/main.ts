@@ -456,8 +456,8 @@ export async function main(): Promise<void> {
   const handlers = new Map<JobKind, JobHandler>();
   const turnDeps: FollowupTurnDeps = {
     crmCfg: crmEdgeConfigFromEnv({
+      NEON_DATABASE_URL: env.NEON_DATABASE_URL,
       NEON_DATA_API_URL: env.NEON_DATA_API_URL,
-      NEON_SERVICE_ROLE_JWT: env.NEON_SERVICE_ROLE_JWT,
     }),
     llmCfg: llmEdgeConfigFromEnv(env),
     knobs: {

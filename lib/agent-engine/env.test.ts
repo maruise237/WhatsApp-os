@@ -10,8 +10,7 @@ import { loadEnv } from "./env";
 const REQUIRED: NodeJS.ProcessEnv = {
   NODE_ENV: "test",
   NEON_DATABASE_URL: "postgresql://u:p@localhost:5432/db",
-  NEON_DATA_API_URL: "https://x.supabase.co",
-  NEON_SERVICE_ROLE_JWT: "service-key",
+  NEON_DATA_API_URL: "https://data.example.test",
 };
 
 describe("loadEnv — vazio é ausente (contrato BYOK do README)", () => {

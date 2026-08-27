@@ -1,8 +1,7 @@
 /**
  * Validação Zod do env do WORKER (agent-engine) — lança no startup se faltar
- * variável crítica. Pós-fusão: o worker fala com o MESMO Supabase do app —
- * NEON_DATABASE_URL (Postgres direto, padrão do kit self-host) para o motor, e
- * URL + service role para os handlers do app (envio).
+ * variável crítica. Pós-fusão: o worker fala com o MESMO Neon do app —
+ * NEON_DATABASE_URL (Postgres direto, necessário para o moteur et ses handlers).
  */
 import { z } from 'zod';
 
@@ -15,9 +14,9 @@ import {
 const envSchema = z.object({
   // Neon Postgres direct — FOR UPDATE SKIP LOCKED, advisory locks and FTS.
   NEON_DATABASE_URL: z.string().url(),
-  // Neon Data API — handlers that need an authenticated service JWT.
+  // Neon Data API — client utilisateur côté navigateur/SSR. Les handlers du worker
+  // utilisent le client administrateur PostgreSQL direct, jamais un JWT de service.
   NEON_DATA_API_URL: z.string().url(),
-  NEON_SERVICE_ROLE_JWT: z.string().min(1),
   // Chave LLM de plataforma (fallback quando a org não tem BYOK em
   // ai_provider_credentials). Opcional no boot: sem ela e sem BYOK, o turno
   // falha com erro instrutivo — nunca silêncio.

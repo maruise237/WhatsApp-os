@@ -240,8 +240,7 @@ services:
       SEAWEEDFS_S3_ACCESS_KEY: ${SEAWEEDFS_S3_ACCESS_KEY}
       SEAWEEDFS_S3_SECRET_KEY: ${SEAWEEDFS_S3_SECRET_KEY}
       SEAWEEDFS_MEDIA_BUCKET: ${SEAWEEDFS_MEDIA_BUCKET:-media-bucket}
-      NEON_DATA_API_URL: ${NEON_DATA_API_URL}
-      NEON_SERVICE_ROLE_JWT: ${NEON_SERVICE_ROLE_JWT}
+      APP_INTERNAL_BASE_URL: http://app:3000
     depends_on:
       evolution-go:
         condition: service_healthy

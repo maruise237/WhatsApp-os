@@ -104,7 +104,6 @@ describe("4B — turno sem credencial NENHUMA (nem env, nem BYOK)", () => {
     const handler = m.createInboundTurnHandler({
       crmCfg: m.crmEdgeConfigFromEnv({
         NEON_DATA_API_URL: "https://placeholder.invalid",
-        NEON_SERVICE_ROLE_JWT: "placeholder-service",
       }),
       llmCfg: {}, // SEM anthropicApiKey — e o banco não tem BYOK para a org
       knobs: {

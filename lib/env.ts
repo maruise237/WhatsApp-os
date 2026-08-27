@@ -65,11 +65,10 @@ const schema = z.object({
   // Node
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
-  // Neon — Auth, Data API et JWT admin séparé
+  // Neon — Auth, Data API publique et connexion PostgreSQL privée côté serveur
   NEON_AUTH_BASE_URL: requiredAlways("NEON_AUTH_BASE_URL").url(),
   NEON_DATA_API_URL: requiredAlways("NEON_DATA_API_URL").url(),
   NEON_DATABASE_URL: requiredAlways("NEON_DATABASE_URL").url(),
-  NEON_SERVICE_ROLE_JWT: required("NEON_SERVICE_ROLE_JWT"),
   NEON_AUTH_COOKIE_SECRET: requiredAlways("NEON_AUTH_COOKIE_SECRET").min(32),
 
   // Cron / interno

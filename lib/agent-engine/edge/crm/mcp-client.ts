@@ -10,10 +10,11 @@
  * O arquivo mantém o nome mcp-client.ts porque é o seam que todos os módulos do
  * engine já importam (CrmEdgeConfig) — o conteúdo é a versão fundida.
  */
-import { createClient, type SupabaseClient } from "@/lib/neon/script-client";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/neon/admin-client";
 
 export interface CrmEdgeConfig {
-  /** admin client (service role) — usado só pelas bordas que chamam handlers do app. */
+  /** Client administrateur PostgreSQL direct — utilisé uniquement côté serveur. */
   supabase: SupabaseClient;
   /**
    * ai_agents.id do agente PUBLICADO deste turno (Fase 2B) — vira o actor.id do
@@ -30,13 +31,14 @@ export class CrmTransportError extends Error {
   }
 }
 
-export function crmEdgeConfigFromEnv(env: {
-  NEON_DATA_API_URL: string;
-  NEON_SERVICE_ROLE_JWT: string;
+/**
+ * Construit la configuration CRM à partir de l’environnement validé.
+ * Les arguments sont conservés pour compatibilité avec les appelants historiques,
+ * mais aucun JWT Data API n’est lu ni transmis.
+ */
+export function crmEdgeConfigFromEnv(_env: {
+  NEON_DATABASE_URL?: string;
+  NEON_DATA_API_URL?: string;
 }): CrmEdgeConfig {
-  return {
-    supabase: createClient(env.NEON_DATA_API_URL, env.NEON_SERVICE_ROLE_JWT, {
-      auth: { persistSession: false, autoRefreshToken: false },
-    }),
-  };
+  return { supabase: createAdminClient() };
 }

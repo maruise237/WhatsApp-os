@@ -49,7 +49,7 @@ export async function useRecoveryCode(
 
   if (!isServiceRoleConfigured()) {
     console.warn(
-      "[useRecoveryCode] NEON_SERVICE_ROLE_JWT not configured — recovery flow unavailable",
+      "[useRecoveryCode] NEON_DATABASE_URL not configured — recovery flow unavailable",
     );
     return { ok: false, error: "service_unavailable" };
   }

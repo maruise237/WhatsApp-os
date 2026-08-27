@@ -72,6 +72,8 @@ const KNOWN_DEBT: { reason: string; files: string[] }[] = [
       "app/api/v1/channel-sessions/[id]/route.ts",
       "app/api/v1/channel-sessions/route.ts",
       "app/api/v1/health/route.ts",
+      "app/api/v1/internal/gateway/resolve-instance/route.ts",
+      "app/api/v1/internal/gateway/webhook/route.ts",
       "app/api/v1/messages/[id]/media/route.ts",
       "app/api/v1/onboarding/whatsapp/qr/route.ts",
       "app/api/v1/onboarding/whatsapp/session/route.ts",

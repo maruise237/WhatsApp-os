@@ -16,18 +16,11 @@ import { env } from "@/lib/env";
 import type { AuditAction } from "./actions";
 
 export function isServiceRoleConfigured(): boolean {
-  const key = env.NEON_SERVICE_ROLE_JWT.trim();
-  // NUNCA infira validade pelo comprimento. O Supabase emitia só JWT (200+
-  // caracteres) — daí o `length > 50` original — e passou a emitir também a
-  // chave curta `sb_secret_...` (~41 caracteres), que esse corte rejeitava
-  // mesmo sendo uma chave real e funcional. O comprimento nunca foi a
-  // resposta certa, era um proxy frágil para "isso parece um JWT" que quebra
-  // toda vez que o formato do terceiro muda. A pergunta real é só "tem
-  // chave de verdade?": ausência (string vazia) ou placeholder explícito são
-  // os únicos "não". Erra para o lado de "tenho a chave" — tentar e falhar
-  // alto é melhor que degradar em silêncio (que foi o efeito real do bug:
-  // login/convite/atribuição em massa falhando ou perdendo dado sem
-  // explicação, com a chave real configurada).
+  // Le nom historique est conservé pour compatibilité. L’admin Neon utilise
+  // désormais le pool PostgreSQL privé, pas un JWT permanent.
+  const key = env.NEON_DATABASE_URL.trim();
+  // Une connexion configurée est le seul prérequis vérifiable ici. Ne jamais
+  // inférer une autorité depuis la longueur d’un secret.
   return key.length > 0 && !key.startsWith("PLACEHOLDER");
 }
 
@@ -48,10 +41,9 @@ interface AuditEntry {
 
 export async function audit(entry: AuditEntry): Promise<void> {
   try {
-    // Prefer service-role admin (bypasses RLS, works for unauthenticated audit
-    // events like login_failed). Fall back to user-scoped client when service
-    // role is missing in dev — RLS policy `audit_log_insert_tenant_member` has
-    // null qual so authenticated users can insert their own audit rows.
+    // Prefer the private PostgreSQL admin client (works for unauthenticated
+    // events like login_failed). Fall back to the user-scoped client only when
+    // the database connection is unavailable in local development.
     const client = isServiceRoleConfigured() ? createAdminClient() : await createClient();
     const { error } = await client.from("api_audit_log").insert({
       action: entry.action,

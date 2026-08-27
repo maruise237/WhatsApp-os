@@ -1,5 +1,5 @@
 /**
- * GET /api/v1/health — Supabase, Redis e WAHA respondem?
+ * GET /api/v1/health — Neon, Redis e WAHA respondem?
  *
  * ─── Por que cada check diz a CAUSA, e não só "down" ─────────────────────────
  * A versão anterior devolvia `error: "fetch failed"` — a mensagem que o `fetch`
@@ -25,6 +25,7 @@ import { timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { env } from "@/lib/env";
+import { getRequestPool } from "@/lib/agent-engine/db/request-pool";
 import { alvoDe, classificarFalhaDeAlcance, type FalhaDeAlcance } from "@/lib/net/alcance";
 
 export const dynamic = "force-dynamic";
@@ -66,28 +67,13 @@ function motivoDoStatusHttp(status: number): MotivoDeFalha {
 
 async function checkNeon(): Promise<Check> {
   const t0 = Date.now();
-  const url = env.NEON_DATA_API_URL;
+  const url = env.NEON_DATABASE_URL;
   try {
-    // Ping leve via Neon Data API com o JWT de service, uniquement côté serveur.
-    // Uma resposta 200 confirma endpoint, JWT e grants operacionais.
-    const key = env.NEON_SERVICE_ROLE_JWT;
-    const res = await withTimeout(
-      fetch(`${url}/rest/v1/organizations?select=id&limit=1`, {
-        headers: { Authorization: `Bearer ${key}` },
-        cache: "no-store",
-      }),
-    );
-    // 200 (lista vazia por RLS) ou 401/403 (auth ok mas RLS bloqueia anon) → conexão OK
-    if (res.status === 200 || res.status === 401 || res.status === 403) {
-      return { status: "ok", latency_ms: Date.now() - t0, target: alvoDe(url) };
-    }
-    return {
-      status: "down",
-      latency_ms: Date.now() - t0,
-      error: `http_${res.status}`,
-      reason: motivoDoStatusHttp(res.status),
-      target: alvoDe(url),
-    };
+    // Le healthcheck utilise le même pool privé que les routes serveur. Il ne
+    // fabrique donc pas de JWT de service et vérifie réellement la base utilisée
+    // par les écritures administrateur, les workers et les fonctions SQL.
+    await withTimeout(getRequestPool().query("select 1 as ok"));
+    return { status: "ok", latency_ms: Date.now() - t0, target: alvoDe(url) };
   } catch (e) {
     return {
       status: "down",

@@ -27,11 +27,11 @@
  * que o service role bypassa. O admin client entra aqui e **só** aqui, para o
  * nome, com a org resolvida de fonte confiável pelo chamador.
  *
- * ## Sem service role, o `null` é DECLARADO
+ * ## Sem conexão administrativa, o `null` é DECLARADO
  *
- * Mesma escolha de `/api/v1/team/assignable`: num self-host sem
- * `NEON_SERVICE_ROLE_JWT` o campo vem `null` porque **decidimos**, com log,
- * não porque uma chamada falhou sem ninguém ver. A tela cai no rótulo genérico e
+ * Mesma escolha de `/api/v1/team/assignable`: num self-host sem a conexão
+ * PostgreSQL privada o campo vem `null` porque **decidimos**, com log, não porque
+ * uma chamada falhou sem ninguém ver. A tela cai no rótulo genérico e
  * continua dizendo que há um responsável — o `assigned_to_user_id` é a verdade; o
  * nome é a cortesia.
  *
