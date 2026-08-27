@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Microphone, PaperPlaneTilt, Trash } from "@/lib/ui/icons";
 import { useSendMessage } from "@/hooks/inbox/useSendMessage";
 import { useUploadMedia } from "@/hooks/inbox/useUploadMedia";
+import { useT } from "@/hooks/i18n/useT";
 
 const PREFERRED_MIMES = ["audio/ogg;codecs=opus", "audio/webm;codecs=opus"];
 
@@ -20,6 +21,7 @@ interface Props {
 
 /** Gravação de voz estilo WhatsApp: mic → timer + cancelar/enviar → PTT. */
 export function AudioRecorder({ conversationId, disabled }: Props) {
+  const t = useT();
   const [recording, setRecording] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -32,8 +34,8 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
 
   useEffect(() => {
     if (!recording) return;
-    const t = setInterval(() => setElapsed((s) => s + 1), 1000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(timer);
   }, [recording]);
 
   const cleanupStream = () => {
@@ -72,7 +74,11 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         const type = rec.mimeType || "audio/webm";
         const blob = new Blob(chunksRef.current, { type });
         void upload
-          .mutateAsync({ conversationId, file: blob, filename: `ptt.${type.includes("ogg") ? "ogg" : "webm"}` })
+          .mutateAsync({
+            conversationId,
+            file: blob,
+            filename: `ptt.${type.includes("ogg") ? "ogg" : "webm"}`,
+          })
           .then((uploaded) =>
             send.mutate(
               {
@@ -96,7 +102,9 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
       cleanupStream();
       // permissão negada / sem mic — não gravar é o estado final; toast simples
       const { showApiError } = await import("@/components/feedback/ApiErrorToast");
-      showApiError(new Error("Não consegui acessar o microfone. Verifique a permissão do navegador."));
+      showApiError(
+        new Error(t("Não consegui acessar o microfone. Verifique a permissão do navegador.")),
+      );
     } finally {
       startingRef.current = false;
     }
@@ -114,7 +122,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         type="button"
         size="icon"
         className="h-9 w-9 shrink-0"
-        aria-label="Gravar áudio"
+        aria-label={t("Gravar áudio")}
         onClick={start}
         disabled={disabled}
       >
@@ -130,7 +138,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         size="icon"
         variant="ghost"
         className="h-9 w-9 shrink-0 text-destructive"
-        aria-label="Cancelar gravação"
+        aria-label={t("Cancelar gravação")}
         onClick={() => {
           discardRef.current = true;
           stopIfRecording();
@@ -146,7 +154,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         type="button"
         size="icon"
         className="h-9 w-9 shrink-0"
-        aria-label="Enviar áudio"
+        aria-label={t("Enviar áudio")}
         onClick={stopIfRecording}
       >
         <PaperPlaneTilt size={16} weight="fill" aria-hidden />

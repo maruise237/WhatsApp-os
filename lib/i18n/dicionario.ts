@@ -878,6 +878,12 @@ export const DICIONARIO: Traducoes = {
   "Enviar contato": { "fr-FR": "Envoyer un contact" },
   "Mídia indisponível": { "fr-FR": "Média indisponible" },
   "Pausar áudio": { "fr-FR": "Mettre l’audio en pause" },
+  "Não consegui acessar o microfone. Verifique a permissão do navegador.": {
+    "fr-FR": "Impossible d’accéder au microphone. Vérifiez l’autorisation du navigateur.",
+  },
+  "Gravar áudio": { "fr-FR": "Enregistrer un audio" },
+  "Cancelar gravação": { "fr-FR": "Annuler l’enregistrement" },
+  "Enviar áudio": { "fr-FR": "Envoyer l’audio" },
   "Reproduzir áudio": { "fr-FR": "Lire l’audio" },
   "Progresso do áudio": { "fr-FR": "Progression de l’audio" },
   "Velocidade de reprodução": { "fr-FR": "Vitesse de lecture" },
