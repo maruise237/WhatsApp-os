@@ -19,9 +19,9 @@ export default async function WelcomePage() {
   return (
     <div className="space-y-6">
       <header>
-        <h2 className="text-2xl font-semibold tracking-tight">Boas-vindas ao {branding().name}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Bienvenue sur {branding().name}</h2>
         <p className="text-sm text-muted-foreground">
-          Vamos montar quem vai atender seus clientes — e onde ele vai trabalhar.
+          Configurons la personne qui répondra à vos clients et son environnement de travail.
         </p>
       </header>
 

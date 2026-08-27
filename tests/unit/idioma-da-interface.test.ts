@@ -31,6 +31,11 @@ describe("traduzir", () => {
     expect(traduzir("Contatos", "es")).toBe("Contactos");
   });
 
+  it("devolve le français quand il est demandé", () => {
+    expect(traduzir("Assumir", "fr-FR")).toBe("Prendre en charge");
+    expect(traduzir("Contatos", "fr-FR")).toBe("Contacts");
+  });
+
   it("em português devolve a própria chave — ela É o texto", () => {
     expect(traduzir("Assumir", "pt-BR")).toBe("Assumir");
   });
@@ -55,6 +60,8 @@ describe("traduzir", () => {
 
 describe("normalizar o idioma que veio do perfil", () => {
   it("aceita os que sabemos servir", () => {
+    expect(normalizarIdioma("fr-FR")).toBe("fr-FR");
+    expect(normalizarIdioma("fr")).toBe("fr-FR");
     expect(normalizarIdioma("es")).toBe("es");
     expect(normalizarIdioma("pt-BR")).toBe("pt-BR");
   });
@@ -103,6 +110,7 @@ describe("os elos que somem sem barulho", () => {
     // `en-US` saiu: nunca teve tradução. Oferecer um idioma que não muda nada é
     // prometer o que a tela não cumpre.
     const perfil = readFileSync("app/app/settings/profile/_form.tsx", "utf8");
+    expect(perfil).toMatch(/value="fr-FR">Français/);
     expect(perfil).toMatch(/value="es">Español/);
     expect(perfil, "ainda oferece um idioma sem tradução").not.toMatch(/value="en-US"/);
   });

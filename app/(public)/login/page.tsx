@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { branding } from "@/lib/branding";
 
-export const metadata = { title: "Entrar" };
+export const metadata = { title: "Se connecter" };
 
 export default async function LoginPage({
   searchParams,
@@ -14,24 +14,24 @@ export default async function LoginPage({
   return (
     <div className="space-y-6">
       <div className="space-y-1.5 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Entrar</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Se connecter</h1>
         <p className="text-sm text-muted-foreground">{branding().name}</p>
       </div>
       {reset === "success" && (
         <div
-          className="rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm"
+          className="border-primary/30 bg-primary/10 rounded-md border px-3 py-2 text-sm"
           role="status"
         >
-          Senha redefinida com sucesso. Entre com a nova senha.
+          Mot de passe réinitialisé avec succès. Connectez-vous avec votre nouveau mot de passe.
         </div>
       )}
       {error === "link_invalido" && (
         <div
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="border-destructive/30 bg-destructive/10 rounded-md border px-3 py-2 text-sm text-destructive"
           role="alert"
         >
-          Link inválido ou expirado. Peça um novo em Recuperar senha ou refaça o
-          cadastro.
+          Lien invalide ou expiré. Demandez-en un nouveau via « Mot de passe oublié » ou recommencez
+          l’inscription.
         </div>
       )}
       {/*
@@ -41,33 +41,32 @@ export default async function LoginPage({
       */}
       {error === "convite_invalido" && (
         <div
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="border-destructive/30 bg-destructive/10 rounded-md border px-3 py-2 text-sm text-destructive"
           role="alert"
         >
-          Sua conta foi confirmada, mas o convite não vale mais — ele expirou ou
-          foi emitido para outro e-mail. Peça um novo a quem te convidou. Não
-          criamos uma empresa nova para você, porque não era isso que você
-          estava fazendo.
+          Votre compte a été confirmé, mais l’invitation n’est plus valide : elle a expiré ou a été
+          émise pour une autre adresse e-mail. Demandez une nouvelle invitation à la personne qui
+          vous l’a envoyée. Aucune entreprise n’a été créée, car ce n’était pas votre parcours.
         </div>
       )}
       {error === "template_padrao" && (
         <div
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="border-destructive/30 bg-destructive/10 rounded-md border px-3 py-2 text-sm text-destructive"
           role="alert"
         >
-          Este link veio do modelo de e-mail padrão do Supabase, que não fecha o
-          acesso nesta instalação — pedir outro link não resolve. Quem administra
-          o sistema precisa configurar os e-mails de acesso (
-          <code>marca-emails.sh</code>, no kit de instalação).
+          Ce lien provient du modèle d’e-mail standard de Supabase et ne permet pas l’accès à cette
+          installation ; demander un autre lien ne résoudra pas le problème. La personne qui
+          administre le système doit configurer les e-mails d’accès (<code>marca-emails.sh</code>,
+          dans le kit d’installation).
         </div>
       )}
       {error === "provisionamento" && (
         <div
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="border-destructive/30 bg-destructive/10 rounded-md border px-3 py-2 text-sm text-destructive"
           role="alert"
         >
-          Sua conta foi confirmada, mas houve um erro ao preparar seu ambiente.
-          Tente entrar novamente em instantes.
+          Votre compte a été confirmé, mais une erreur est survenue lors de la préparation de votre
+          environnement. Réessayez de vous connecter dans quelques instants.
         </div>
       )}
       <LoginForm next={next} />
@@ -77,16 +76,13 @@ export default async function LoginPage({
             href="/login/forgot"
             className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
           >
-            Esqueci minha senha
+            Mot de passe oublié
           </Link>
         </p>
         <p className="text-muted-foreground">
-          Não tem conta?{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-foreground underline underline-offset-4"
-          >
-            Criar conta
+          Pas encore de compte ?{" "}
+          <Link href="/signup" className="font-medium text-foreground underline underline-offset-4">
+            Créer un compte
           </Link>
         </p>
       </div>

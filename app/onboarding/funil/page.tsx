@@ -28,11 +28,10 @@ export default async function FunilPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h2 className="text-2xl font-semibold tracking-tight">Onde ele organiza seus clientes</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Où il organise vos clients</h2>
         <p className="text-sm text-muted-foreground">
-          Cada cliente vira um cartão que anda por essas colunas. Ele mesmo move o
-          cartão conforme a conversa avança — por isso cada coluna diz também
-          quando ele deve usá-la.
+          Chaque client devient une carte qui progresse dans ces colonnes. Votre assistant la
+          déplace au fil de la conversation ; chaque colonne précise donc aussi quand l’utiliser.
         </p>
       </header>
       <QuadroClient atual={atual} sugestao={sugestao} />

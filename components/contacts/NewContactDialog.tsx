@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { contactCreateSchema, type ContactCreate } from "@/lib/schemas/contacts";
 import { useCreateContact } from "@/hooks/contacts/useCreateContact";
+import { useT } from "@/hooks/i18n/useT";
 
 interface FormShape {
   name?: string;
@@ -30,6 +31,7 @@ interface Props {
 }
 
 export function NewContactDialog({ open, onOpenChange }: Props) {
+  const t = useT();
   const create = useCreateContact();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -54,13 +56,13 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
     const parsed = contactCreateSchema.safeParse(payload);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      setServerError(first?.message ?? "Dados inválidos");
+      setServerError(t(first?.message ?? "Dados inválidos"));
       return;
     }
 
     try {
       await create.mutateAsync(parsed.data as ContactCreate);
-      toast.success("Contato criado");
+      toast.success(t("Contato criado"));
       form.reset();
       onOpenChange(false);
     } catch {
@@ -72,22 +74,22 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo contato</DialogTitle>
+          <DialogTitle>{t("Novo contato")}</DialogTitle>
           <DialogDescription>
-            Preencha pelo menos um identificador (email ou telefone).
+            {t("Preencha pelo menos um identificador (email ou telefone).")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nome</Label>
+            <Label htmlFor="name">{t("Nome")}</Label>
             <Input id="name" {...form.register("name")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("Email")}</Label>
             <Input id="email" type="email" {...form.register("email")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone_number">Telefone (E.164)</Label>
+            <Label htmlFor="phone_number">{t("Telefone (E.164)")}</Label>
             <Input
               id="phone_number"
               placeholder="+5511999998888"
@@ -95,16 +97,14 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cpf">CPF (opcional)</Label>
+            <Label htmlFor="cpf">{t("CPF (opcional)")}</Label>
             <Input id="cpf" placeholder="00000000000" {...form.register("cpf")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tagsRaw">Tags (separadas por vírgula)</Label>
+            <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
             <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
           </div>
-          {serverError && (
-            <p className="text-sm text-error-fg">{serverError}</p>
-          )}
+          {serverError && <p className="text-sm text-error-fg">{serverError}</p>}
           <DialogFooter>
             <Button
               type="button"
@@ -112,10 +112,10 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               disabled={create.isPending}
             >
-              Cancelar
+              {t("Cancelar")}
             </Button>
             <Button type="submit" disabled={create.isPending}>
-              {create.isPending ? "Criando…" : "Criar contato"}
+              {create.isPending ? t("Criando…") : t("Criar contato")}
             </Button>
           </DialogFooter>
         </form>

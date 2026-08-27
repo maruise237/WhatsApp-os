@@ -43,9 +43,10 @@ export default async function SetupAiPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h2 className="text-2xl font-semibold tracking-tight">Treine seu funcionário</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Formez votre assistant</h2>
         <p className="text-sm text-muted-foreground">
-          Quem ele é, como fala e o que pode prometer. Dá para mudar tudo depois.
+          Définissez son rôle, sa façon de parler et ce qu’il peut promettre. Tout pourra être
+          modifié plus tard.
         </p>
       </header>
       {/*

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUp } from "@/app/actions/auth/signUp";
+import { useT } from "@/hooks/i18n/useT";
 
 /**
  * Convite em curso: a conta está sendo criada para ACEITAR um convite, não para
@@ -27,6 +28,7 @@ export interface ConviteDoSignup {
 }
 
 export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
+  const t = useT();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
@@ -57,7 +59,11 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
       // No modo convite o e-mail do formulário é readonly, e readonly no
       // cliente não vale nada: quem confere de novo é o servidor.
       const entrada: SignupInput | SignupComConviteInput = convite
-        ? { email: convite.email, password: values.password, password_confirm: values.password_confirm }
+        ? {
+            email: convite.email,
+            password: values.password,
+            password_confirm: values.password_confirm,
+          }
         : values;
       const res = await signUp(entrada, convite?.token);
       if (res.ok) {
@@ -65,25 +71,22 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
         return;
       }
       if (res.error === "rate_limited") {
-        setServerError("Muitas tentativas. Aguarde alguns minutos.");
+        setServerError(t("Muitas tentativas. Aguarde alguns minutos."));
       } else if (res.error === "validation_error") {
-        setServerError("Dados inválidos. Confira os campos.");
+        setServerError(t("Dados inválidos. Confira os campos."));
       } else {
-        setServerError("Não foi possível criar a conta. Tente novamente.");
+        setServerError(t("Não foi possível criar a conta. Tente novamente."));
       }
     });
   };
 
   if (sentTo) {
     return (
-      <div
-        className="space-y-2 rounded-md border bg-muted/40 px-4 py-6 text-center"
-        role="status"
-      >
-        <p className="text-sm font-medium">Confirme seu e-mail</p>
+      <div className="bg-muted/40 space-y-2 rounded-md border px-4 py-6 text-center" role="status">
+        <p className="text-sm font-medium">{t("Confirme seu e-mail")}</p>
         <p className="text-sm text-muted-foreground">
-          Enviamos um link de confirmação para <strong>{sentTo}</strong>. Abra o
-          e-mail e clique no link para ativar sua conta.
+          {t("Enviamos um link de confirmação para")} <strong>{sentTo}</strong>.{" "}
+          {t("Abra o e-mail e clique no link para ativar sua conta.")}
         </p>
       </div>
     );
@@ -92,23 +95,23 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
   return (
     <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       {!convite && (
-      <div className="space-y-1.5">
-        <Label htmlFor="org_name">Nome da empresa</Label>
-        <Input
-          id="org_name"
-          type="text"
-          autoComplete="organization"
-          autoFocus
-          aria-invalid={errors.org_name ? true : undefined}
-          {...register("org_name")}
-        />
-        {errors.org_name && (
-          <p className="text-xs text-destructive">{errors.org_name.message}</p>
-        )}
-      </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="org_name">{t("Nome da empresa")}</Label>
+          <Input
+            id="org_name"
+            type="text"
+            autoComplete="organization"
+            autoFocus
+            aria-invalid={errors.org_name ? true : undefined}
+            {...register("org_name")}
+          />
+          {errors.org_name && (
+            <p className="text-xs text-destructive">{t(errors.org_name.message ?? "")}</p>
+          )}
+        </div>
       )}
       <div className="space-y-1.5">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("Email")}</Label>
         <Input
           id="email"
           type="email"
@@ -120,11 +123,11 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
           {...register("email")}
         />
         {errors.email && (
-          <p className="text-xs text-destructive">{errors.email.message}</p>
+          <p className="text-xs text-destructive">{t(errors.email.message ?? "")}</p>
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="password">Senha</Label>
+        <Label htmlFor="password">{t("Senha")}</Label>
         <Input
           id="password"
           type="password"
@@ -133,11 +136,11 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
           {...register("password")}
         />
         {errors.password && (
-          <p className="text-xs text-destructive">{errors.password.message}</p>
+          <p className="text-xs text-destructive">{t(errors.password.message ?? "")}</p>
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="password_confirm">Confirmar senha</Label>
+        <Label htmlFor="password_confirm">{t("Confirmar senha")}</Label>
         <Input
           id="password_confirm"
           type="password"
@@ -146,19 +149,19 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
           {...register("password_confirm")}
         />
         {errors.password_confirm && (
-          <p className="text-xs text-destructive">{errors.password_confirm.message}</p>
+          <p className="text-xs text-destructive">{t(errors.password_confirm.message ?? "")}</p>
         )}
       </div>
       {serverError && (
         <div
-          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+          className="border-destructive/30 bg-destructive/10 rounded-md border px-3 py-2 text-sm text-destructive"
           role="alert"
         >
           {serverError}
         </div>
       )}
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? "Criando conta..." : "Criar conta"}
+        {isPending ? t("Criando conta...") : t("Criar conta")}
       </Button>
     </form>
   );

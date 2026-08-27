@@ -20,18 +20,17 @@
  * Aqui o idioma vem de quem está logado e o texto é resolvido em memória. Nada
  * de rota muda, e a tradução pode crescer tela a tela sem nenhuma migração.
  *
- * ─── Parcial de propósito, e honesto sobre isso ────────────────────────────
+ * ─── Evolução progressiva ───────────────────────────────────────────────────
  *
- * São 1.239 textos em 229 arquivos. Traduzir tudo de uma vez é um projeto, e
- * um projeto entregue pela metade deixa a tela em dois idiomas ao mesmo tempo.
- * A decisão do dono foi começar pelo que a equipe usa todo dia — inbox, kanban,
- * contatos, conexões — e o resto segue em português até fazer falta.
+ * O francês devient la langue de repli de l’interface. Les préférences existantes
+ * `pt-BR` et `es` restent valides afin de ne pas modifier silencieusement le choix
+ * des utilisateurs qui l’ont déjà enregistré.
  */
 
-export const IDIOMAS = ["pt-BR", "es"] as const;
+export const IDIOMAS = ["fr-FR", "pt-BR", "es"] as const;
 export type Idioma = (typeof IDIOMAS)[number];
 
-export const IDIOMA_PADRAO: Idioma = "pt-BR";
+export const IDIOMA_PADRAO: Idioma = "fr-FR";
 
 /**
  * O que veio do perfil é um idioma que sabemos servir?
@@ -41,7 +40,6 @@ export const IDIOMA_PADRAO: Idioma = "pt-BR";
  * e um valor desconhecido chegando ao dicionário devolveria a CHAVE na tela.
  */
 export function normalizarIdioma(bruto: string | null | undefined): Idioma {
-  return (IDIOMAS as readonly string[]).includes(bruto ?? "")
-    ? (bruto as Idioma)
-    : IDIOMA_PADRAO;
+  if (bruto === "fr") return "fr-FR";
+  return (IDIOMAS as readonly string[]).includes(bruto ?? "") ? (bruto as Idioma) : IDIOMA_PADRAO;
 }

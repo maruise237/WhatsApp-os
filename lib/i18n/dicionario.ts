@@ -34,150 +34,443 @@ export const DICIONARIO: Traducoes = {
   // chamava `t(group.label)`, então o espanhol recebia os cabeçalhos em
   // português e nada ficava vermelho — `traduzir()` devolve a chave ausente
   // como está. Achado pelo cruzamento novo entre DICIONARIO e NAV_GROUPS.
-  Atendimento: { es: "Atención" },
-  CRM: { es: "CRM" },
-  "Agente de IA": { es: "Agente de IA" },
-  Canais: { es: "Canales" },
-  Análise: { es: "Análisis" },
-  Organização: { es: "Organización" },
+  Atendimento: { "fr-FR": "Assistance", es: "Atención" },
+  CRM: { "fr-FR": "CRM", es: "CRM" },
+  "Agente de IA": { "fr-FR": "Agent IA", es: "Agente de IA" },
+  Canais: { "fr-FR": "Canaux", es: "Canales" },
+  Análise: { "fr-FR": "Analyse", es: "Análisis" },
+  Organização: { "fr-FR": "Organisation", es: "Organización" },
 
   // ─── Navegação (a barra lateral, presente em toda tela) ───
-  Inbox: { es: "Inbox" },
-  Radar: { es: "Radar" },
-  "Respostas rápidas": { es: "Respuestas rápidas" },
-  Contatos: { es: "Contactos" },
-  Ventes: { es: "Ventas" },
+  Inbox: { "fr-FR": "Inbox", es: "Inbox" },
+  Radar: { "fr-FR": "Radar", es: "Radar" },
+  "Respostas rápidas": { "fr-FR": "Réponses rapides", es: "Respuestas rápidas" },
+  Contatos: { "fr-FR": "Contacts", es: "Contactos" },
+  Ventes: { "fr-FR": "Ventes", es: "Ventas" },
   // A CHAVE É O TEXTO PT-BR, então renomear um rótulo no registro de navegação
   // sem mexer aqui NÃO quebra teste nenhum — degrada em silêncio: `traduzir()`
   // devolve a chave ausente como português e o espanhol da barra lateral some.
   // "Kanban" saiu do menu (a tela virou "Funis"); "Etapas do funil" é o nome novo
   // da tela de configuração, que antes disputava "Funis" com ela.
-  Funis: { es: "Embudos" },
-  "Etapas do funil": { es: "Etapas del embudo" },
-  Agentes: { es: "Agentes" },
-  "Follow-ups": { es: "Seguimientos" },
-  Roteadores: { es: "Enrutadores" },
-  "Ver tudo em IA": { es: "Ver todo en IA" },
-  Conexões: { es: "Conexiones" },
-  Webhooks: { es: "Webhooks" },
-  Desempenho: { es: "Rendimiento" },
-  "Evolução da IA": { es: "Evolución de la IA" },
-  "Audit Log": { es: "Registro de auditoría" },
-  Configurações: { es: "Configuración" },
-  Recolher: { es: "Contraer" },
-  Buscar: { es: "Buscar" },
+  Funis: { "fr-FR": "Entonnoirs", es: "Embudos" },
+  "Etapas do funil": { "fr-FR": "Étapes de l'entonnoir", es: "Etapas del embudo" },
+  Agentes: { "fr-FR": "Agents", es: "Agentes" },
+  "Follow-ups": { "fr-FR": "Follow-ups", es: "Seguimientos" },
+  Roteadores: { "fr-FR": "Routeurs", es: "Enrutadores" },
+  "Ver tudo em IA": { "fr-FR": "Voir tout en IA", es: "Ver todo en IA" },
+  Conexões: { "fr-FR": "Connexions", es: "Conexiones" },
+  Webhooks: { "fr-FR": "Webhooks", es: "Webhooks" },
+  Desempenho: { "fr-FR": "Performance", es: "Rendimiento" },
+  "Evolução da IA": { "fr-FR": "Évolution de l'IA", es: "Evolución de la IA" },
+  "Audit Log": { "fr-FR": "Journal d'audit", es: "Registro de auditoría" },
+  Configurações: { "fr-FR": "Paramètres", es: "Configuración" },
+  Recolher: { "fr-FR": "Réduire", es: "Contraer" },
+  Buscar: { "fr-FR": "Rechercher", es: "Buscar" },
 
   // ─── Inbox: filtros e lista ───
-  "Buscar mensagens…": { es: "Buscar mensajes…" },
-  "Todos os números": { es: "Todos los números" },
-  "Todas as tags": { es: "Todas las etiquetas" },
-  "Apenas não lidos": { es: "Solo no leídos" },
-  Fila: { es: "Cola" },
-  Minhas: { es: "Mías" },
-  Todas: { es: "Todas" },
-  Fechadas: { es: "Cerradas" },
-  IA: { es: "IA" },
-  "Sem mensagens": { es: "Sin mensajes" },
-  "Nenhuma conversa": { es: "Ninguna conversación" },
+  "Buscar mensagens…": { "fr-FR": "Rechercher des messages…", es: "Buscar mensajes…" },
+  "Todos os números": { "fr-FR": "Tous les numéros", es: "Todos los números" },
+  "Todas as tags": { "fr-FR": "Toutes les étiquettes", es: "Todas las etiquetas" },
+  "Apenas não lidos": { "fr-FR": "Uniquement non lus", es: "Solo no leídos" },
+  Fila: { "fr-FR": "File d'attente", es: "Cola" },
+  Minhas: { "fr-FR": "Mes", es: "Mías" },
+  Todas: { "fr-FR": "Toutes", es: "Todas" },
+  Fechadas: { "fr-FR": "Fermées", es: "Cerradas" },
+  IA: { "fr-FR": "IA", es: "IA" },
+  "Sem mensagens": { "fr-FR": "Sans messages", es: "Sin mensajes" },
+  "Nenhuma conversa": { "fr-FR": "Aucune conversation", es: "Ninguna conversación" },
 
   // ─── Inbox: cabeçalho e ações da conversa ───
-  Assumir: { es: "Asumir" },
-  Liberar: { es: "Liberar" },
-  Transferir: { es: "Transferir" },
-  Lembrar: { es: "Recordar" },
-  Fechar: { es: "Cerrar" },
-  "Devolver ao automático": { es: "Devolver al automático" },
-  Aberta: { es: "Abierta" },
-  Fechada: { es: "Cerrada" },
-  "Em atendimento": { es: "En atención" },
-  "Aguardando atendente": { es: "Esperando agente" },
-  "Automático atendendo": { es: "Automático atendiendo" },
-  "Automático pausado": { es: "Automático pausado" },
+  Assumir: { "fr-FR": "Prendre en charge", es: "Asumir" },
+  Liberar: { "fr-FR": "Libérer", es: "Liberar" },
+  Transferir: { "fr-FR": "Transférer", es: "Transferir" },
+  Lembrar: { "fr-FR": "Rappeler", es: "Recordar" },
+  Fechar: { "fr-FR": "Fermer", es: "Cerrar" },
+  "Devolver ao automático": { "fr-FR": "Remettre à l'automatique", es: "Devolver al automático" },
+  Aberta: { "fr-FR": "Ouverte", es: "Abierta" },
+  Fechada: { "fr-FR": "Fermée", es: "Cerrada" },
+  "Em atendimento": { "fr-FR": "En cours", es: "En atención" },
+  "Aguardando atendente": { "fr-FR": "En attente d'un agent", es: "Esperando agente" },
+  "Automático atendendo": { "fr-FR": "Automatique en cours", es: "Automático atendiendo" },
+  "Automático pausado": { "fr-FR": "Automatique en pause", es: "Automático pausado" },
   // Os motivos do silêncio (lib/inbox/comando-da-conversa.ts). "Automático
   // pausado" sozinho respondia a três situações que pedem ações diferentes:
   // alguém assumiu, o cliente inteiro está travado, ou foi pausa explícita.
   "Automático pausado — alguém assumiu": {
+    "fr-FR": "Automatique en pause — quelqu'un a pris le relais",
     es: "Automático pausado — alguien la asumió",
   },
   "Automático pausado para este cliente": {
+    "fr-FR": "Automatique en pause pour ce client",
     es: "Automático pausado para este cliente",
   },
-  "Automático volta em instantes": { es: "El automático vuelve en instantes" },
-  "Pausar o automático": { es: "Pausar el automático" },
-  "Ver contato": { es: "Ver contacto" },
+  "Automático volta em instantes": {
+    "fr-FR": "Automatique revient dans un instant",
+    es: "El automático vuelve en instantes",
+  },
+  "Pausar o automático": { "fr-FR": "Mettre l'automatique en pause", es: "Pausar el automático" },
+  "Ver contato": { "fr-FR": "Voir le contact", es: "Ver contacto" },
 
   // ─── Inbox: composer ───
-  Responder: { es: "Responder" },
-  "Nota interna": { es: "Nota interna" },
-  "Escreva uma mensagem…": { es: "Escribí un mensaje…" },
+  Responder: { "fr-FR": "Répondre", es: "Responder" },
+  "Nota interna": { "fr-FR": "Note interne", es: "Nota interna" },
+  "Escreva uma mensagem…": { "fr-FR": "Écrivez un message…", es: "Escribí un mensaje…" },
   "Escreva uma nota interna… (só o time vê)": {
+    "fr-FR": "Écrivez une note interne… (seulement l'équipe la voit)",
     es: "Escribí una nota interna… (solo la ve el equipo)",
   },
-  Enviar: { es: "Enviar" },
-  "Enviar modelo": { es: "Enviar plantilla" },
-  "Escolha um modelo aprovado…": { es: "Elegí una plantilla aprobada…" },
+  Enviar: { "fr-FR": "Envoyer", es: "Enviar" },
+  "Enviar modelo": { "fr-FR": "Envoyer un modèle", es: "Enviar plantilla" },
+  "Escolha um modelo aprovado…": {
+    "fr-FR": "Choisissez un modèle approuvé…",
+    es: "Elegí una plantilla aprobada…",
+  },
 
   // ─── Painel do contato ───
-  CONTATO: { es: "CONTACTO" },
-  "TAGS DA CONVERSA": { es: "ETIQUETAS DE LA CONVERSACIÓN" },
-  "DEMANDAS ABERTAS": { es: "PEDIDOS ABIERTOS" },
-  "LEADS RECENTES": { es: "LEADS RECIENTES" },
-  "PEDIDOS RECENTES": { es: "PEDIDOS RECIENTES" },
-  ATIVIDADE: { es: "ACTIVIDAD" },
-  "Sem tags.": { es: "Sin etiquetas." },
-  "Sem leads.": { es: "Sin leads." },
-  "Sem pedidos.": { es: "Sin pedidos." },
-  "Sem atividade.": { es: "Sin actividad." },
-  "Nova tag…": { es: "Nueva etiqueta…" },
-  "Sem próximo passo definido": { es: "Sin próximo paso definido" },
-  "Marcar próximo passo": { es: "Marcar próximo paso" },
-  Lead: { es: "Lead" },
-  Tag: { es: "Etiqueta" },
+  CONTATO: { "fr-FR": "CONTACT", es: "CONTACTO" },
+  "TAGS DA CONVERSA": {
+    "fr-FR": "ÉTIQUETTES DE LA CONVERSATION",
+    es: "ETIQUETAS DE LA CONVERSACIÓN",
+  },
+  "DEMANDAS ABERTAS": { "fr-FR": "DEMANDES OUVERTES", es: "PEDIDOS ABIERTOS" },
+  "LEADS RECENTES": { "fr-FR": "LEADS RÉCENTS", es: "LEADS RECIENTES" },
+  "PEDIDOS RECENTES": { "fr-FR": "COMMANDES RÉCENTES", es: "PEDIDOS RECIENTES" },
+  ATIVIDADE: { "fr-FR": "ACTIVITÉ", es: "ACTIVIDAD" },
+  "Sem tags.": { "fr-FR": "Aucune étiquette.", es: "Sin etiquetas." },
+  "Sem leads.": { "fr-FR": "Aucun lead.", es: "Sin leads." },
+  "Sem pedidos.": { "fr-FR": "Aucune commande.", es: "Sin pedidos." },
+  "Sem atividade.": { "fr-FR": "Aucune activité.", es: "Sin actividad." },
+  "Nova tag…": { "fr-FR": "Nouvelle étiquette…", es: "Nueva etiqueta…" },
+  "Sem próximo passo definido": {
+    "fr-FR": "Aucune prochaine étape définie",
+    es: "Sin próximo paso definido",
+  },
+  "Marcar próximo passo": { "fr-FR": "Définir la prochaine étape", es: "Marcar próximo paso" },
+  Lead: { "fr-FR": "Lead", es: "Lead" },
+  Tag: { "fr-FR": "Étiquette", es: "Etiqueta" },
 
   // ─── Kanban ───
-  "Apenas atrasados": { es: "Solo atrasados" },
-  "Sem responsável": { es: "Sin responsable" },
-  "Editar campos": { es: "Editar campos" },
-  "Linha do tempo": { es: "Línea de tiempo" },
-  "DADOS DO NEGÓCIO": { es: "DATOS DEL NEGOCIO" },
-  Título: { es: "Título" },
-  Descrição: { es: "Descripción" },
-  "Fechamento previsto": { es: "Cierre previsto" },
-  "Tags (separadas por vírgula)": { es: "Etiquetas (separadas por coma)" },
-  Salvar: { es: "Guardar" },
-  vazio: { es: "vacío" },
-  "Abrir conversa no Inbox": { es: "Abrir conversación en el Inbox" },
+  "Apenas atrasados": { "fr-FR": "Uniquement en retard", es: "Solo atrasados" },
+  "Sem responsável": { "fr-FR": "Aucun responsable", es: "Sin responsable" },
+  "Editar campos": { "fr-FR": "Modifier les champs", es: "Editar campos" },
+  "Linha do tempo": { "fr-FR": "Chronologie", es: "Línea de tiempo" },
+  "DADOS DO NEGÓCIO": { "fr-FR": "DONNÉES DE L'AFFAIRE", es: "DATOS DEL NEGOCIO" },
+  Título: { "fr-FR": "Titre", es: "Título" },
+  Descrição: { "fr-FR": "Description", es: "Descripción" },
+  "Fechamento previsto": { "fr-FR": "Clôture prévue", es: "Cierre previsto" },
+  "Tags (separadas por vírgula)": {
+    "fr-FR": "Étiquettes (séparées par des virgules)",
+    es: "Etiquetas (separadas por coma)",
+  },
+  Salvar: { "fr-FR": "Enregistrer", es: "Guardar" },
+  vazio: { "fr-FR": "vide", es: "vacío" },
+  "Abrir conversa no Inbox": {
+    "fr-FR": "Ouvrir la conversation dans Inbox",
+    es: "Abrir conversación en el Inbox",
+  },
 
   // ─── Contatos ───
-  "Buscar contatos…": { es: "Buscar contactos…" },
-  Nome: { es: "Nombre" },
-  Telefone: { es: "Teléfono" },
-  "Nenhum contato": { es: "Ningún contacto" },
-  Bloqueado: { es: "Bloqueado" },
+  "Buscar contatos…": { "fr-FR": "Rechercher des contacts…", es: "Buscar contactos…" },
+  Nome: { "fr-FR": "Nom", es: "Nombre" },
+  Telefone: { "fr-FR": "Téléphone", es: "Teléfono" },
+  "Nenhum contato": { "fr-FR": "Aucun contact", es: "Ningún contacto" },
+  Bloqueado: { "fr-FR": "Bloqué", es: "Bloqueado" },
 
   // ─── Conexões ───
-  "Números por QR": { es: "Números por QR" },
-  "API Oficial (Meta)": { es: "API Oficial (Meta)" },
-  "Provedor parceiro": { es: "Proveedor asociado" },
-  Conexão: { es: "Conexión" },
-  "Modelos do parceiro": { es: "Plantillas del asociado" },
-  "Templates da Meta": { es: "Plantillas de Meta" },
-  Sincronizar: { es: "Sincronizar" },
-  "Criar modelo": { es: "Crear plantilla" },
-  Cancelar: { es: "Cancelar" },
-  "Enviar para revisão": { es: "Enviar a revisión" },
-  Reconectar: { es: "Reconectar" },
-  Conectar: { es: "Conectar" },
-  Desconectar: { es: "Desconectar" },
-  "Fuso horário da janela": { es: "Huso horario de la ventana" },
+  "Números por QR": { "fr-FR": "Numéros via QR", es: "Números por QR" },
+  "API Oficial (Meta)": { "fr-FR": "API Officielle (Meta)", es: "API Oficial (Meta)" },
+  "Provedor parceiro": { "fr-FR": "Fournisseur partenaire", es: "Proveedor asociado" },
+  Conexão: { "fr-FR": "Connexion", es: "Conexión" },
+  "Modelos do parceiro": { "fr-FR": "Modèles du partenaire", es: "Plantillas del asociado" },
+  "Templates da Meta": { "fr-FR": "Modèles de Meta", es: "Plantillas de Meta" },
+  Sincronizar: { "fr-FR": "Synchroniser", es: "Sincronizar" },
+  "Criar modelo": { "fr-FR": "Créer un modèle", es: "Crear plantilla" },
+  Cancelar: { "fr-FR": "Annuler", es: "Cancelar" },
+  "Enviar para revisão": { "fr-FR": "Envoyer pour révision", es: "Enviar a revisión" },
+  Reconectar: { "fr-FR": "Reconnecter", es: "Reconectar" },
+  Conectar: { "fr-FR": "Connecter", es: "Conectar" },
+  Desconectar: { "fr-FR": "Déconnecter", es: "Desconectar" },
+  "Fuso horário da janela": {
+    "fr-FR": "Fuseau horaire de la fenêtre",
+    es: "Huso horario de la ventana",
+  },
 
   // ─── Estados e avisos que aparecem em várias telas ───
-  "Carregando…": { es: "Cargando…" },
-  "Nenhum resultado": { es: "Ningún resultado" },
-  Erro: { es: "Error" },
-  Excluir: { es: "Eliminar" },
-  Editar: { es: "Editar" },
-  Voltar: { es: "Volver" },
+  "Carregando…": { "fr-FR": "Chargement…", es: "Cargando…" },
+  "Nenhum resultado": { "fr-FR": "Aucun résultat", es: "Ningún resultado" },
+  Erro: { "fr-FR": "Erreur", es: "Error" },
+  Excluir: { "fr-FR": "Supprimer", es: "Eliminar" },
+  Editar: { "fr-FR": "Modifier", es: "Editar" },
+  Voltar: { "fr-FR": "Retour", es: "Volver" },
+
+  // ─── Récupération de compte et MFA ───
+  "Email inválido. Confira o campo.": { "fr-FR": "E-mail invalide. Vérifiez le champ." },
+  "Não foi possível enviar o e-mail. Tente novamente.": {
+    "fr-FR": "Impossible d’envoyer l’e-mail. Réessayez.",
+  },
+  "Enviando...": { "fr-FR": "Envoi…" },
+  "Enviar link de redefinição": { "fr-FR": "Envoyer le lien de réinitialisation" },
+  "Verifique seu e-mail": { "fr-FR": "Vérifiez votre e-mail" },
+  "Se existir uma conta com esse e-mail, enviamos um link para redefinir a senha.": {
+    "fr-FR":
+      "Si un compte existe avec cette adresse e-mail, un lien de réinitialisation du mot de passe vous a été envoyé.",
+  },
+  "Código inválido ou já utilizado.": { "fr-FR": "Code invalide ou déjà utilisé." },
+  "Serviço de recuperação indisponível. Contate o administrador.": {
+    "fr-FR": "Le service de récupération est indisponible. Contactez l’administrateur.",
+  },
+  "Código de recuperação": { "fr-FR": "Code de récupération" },
+  "Use um dos 10 códigos que você salvou ao configurar a verificação em duas etapas.": {
+    "fr-FR":
+      "Utilisez l’un des 10 codes enregistrés lors de la configuration de la validation en deux étapes.",
+  },
+  "Validando...": { "fr-FR": "Validation…" },
+  "Recuperar acesso": { "fr-FR": "Récupérer l’accès" },
+  "Nova senha": { "fr-FR": "Nouveau mot de passe" },
+  "Confirmar nova senha": { "fr-FR": "Confirmer le nouveau mot de passe" },
+  "Código de verificação (2 etapas)": { "fr-FR": "Code de validation (2 étapes)" },
+  "Sua conta tem verificação em duas etapas. Digite o código de 6 dígitos do seu app autenticador para concluir.":
+    {
+      "fr-FR":
+        "Votre compte utilise la validation en deux étapes. Saisissez le code à 6 chiffres de votre application d’authentification pour terminer.",
+    },
+  "Código de verificação inválido. Tente de novo.": {
+    "fr-FR": "Code de validation invalide. Réessayez.",
+  },
+  "Sessão de redefinição expirada. Peça um novo link em Recuperar senha.": {
+    "fr-FR":
+      "La session de réinitialisation a expiré. Demandez un nouveau lien via « Mot de passe oublié ».",
+  },
+  "A nova senha precisa ser diferente da atual.": {
+    "fr-FR": "Le nouveau mot de passe doit être différent de l’actuel.",
+  },
+  "Não foi possível redefinir a senha. Tente novamente.": {
+    "fr-FR": "Impossible de réinitialiser le mot de passe. Réessayez.",
+  },
+  "Salvando...": { "fr-FR": "Enregistrement…" },
+  "Definir nova senha": { "fr-FR": "Définir le nouveau mot de passe" },
+  "Código inválido. Tente novamente.": { "fr-FR": "Code invalide. Réessayez." },
+  "Verificando...": { "fr-FR": "Vérification…" },
+  Verificar: { "fr-FR": "Vérifier" },
+  "Perdi acesso ao autenticador": {
+    "fr-FR": "J’ai perdu l’accès à mon application d’authentification",
+  },
+  "Email inválido": { "fr-FR": "E-mail invalide" },
+  "Senha deve ter pelo menos 8 caracteres": {
+    "fr-FR": "Le mot de passe doit comporter au moins 8 caractères",
+  },
+  "Nome da empresa deve ter pelo menos 2 caracteres": {
+    "fr-FR": "Le nom de l’entreprise doit comporter au moins 2 caractères",
+  },
+  "Nome da empresa deve ter no máximo 120 caracteres": {
+    "fr-FR": "Le nom de l’entreprise doit comporter au maximum 120 caractères",
+  },
+  "As senhas não coincidem": { "fr-FR": "Les mots de passe ne correspondent pas" },
+
+  // ─── Onboarding ───
+  "Aceite os termos para continuar.": { "fr-FR": "Acceptez les conditions pour continuer." },
+  Falha: { "fr-FR": "Échec" },
+  "Como se chama o seu negócio?": { "fr-FR": "Comment s’appelle votre entreprise ?" },
+  "É o nome que aparece para o seu time e nos relatórios. Pode ser clínica, loja, escritório — o que for seu.":
+    {
+      "fr-FR":
+        "C’est le nom affiché à votre équipe et dans les rapports. Il peut s’agir d’une clinique, d’un magasin, d’un cabinet ou de toute autre activité.",
+    },
+  "O que vocês fazem?": { "fr-FR": "Que fait votre entreprise ?" },
+  "Ex.: clínica odontológica, ou venda de roupa fitness pelo WhatsApp": {
+    "fr-FR": "Ex. : cabinet dentaire ou vente de vêtements de sport via WhatsApp",
+  },
+  "Uma linha basta. É com isso que seu funcionário aprende com quem ele está falando — e que a gente monta o quadro de clientes do seu jeito.":
+    {
+      "fr-FR":
+        "Une ligne suffit. Ces informations aident votre assistant à comprendre son interlocuteur et nous permettent d’adapter votre tableau clients.",
+    },
+  "Onde você atende": { "fr-FR": "Où exercez-vous votre activité ?" },
+  "Decide o horário em que seu funcionário pode falar com clientes.": {
+    "fr-FR":
+      "Détermine les horaires pendant lesquels votre assistant peut échanger avec les clients.",
+  },
+  "Li e aceito os": { "fr-FR": "J’ai lu et j’accepte les" },
+  "e a": { "fr-FR": "et la" },
+  "Termos de Uso": { "fr-FR": "Conditions d’utilisation" },
+  "Política de Privacidade": { "fr-FR": "Politique de confidentialité" },
+  Continuar: { "fr-FR": "Continuer" },
+  "São Paulo, Rio, Brasília, Sul e Sudeste": {
+    "fr-FR": "São Paulo, Rio, Brasília, Sud et Sud-Est",
+  },
+  "Recife, Salvador, Fortaleza e Nordeste": { "fr-FR": "Recife, Salvador, Fortaleza et Nord-Est" },
+  "Belém e Pará": { "fr-FR": "Belém et Pará" },
+  "Manaus e Amazonas": { "fr-FR": "Manaus et Amazonas" },
+  "Cuiabá e Mato Grosso": { "fr-FR": "Cuiabá et Mato Grosso" },
+  "Rio Branco e Acre": { "fr-FR": "Rio Branco et Acre" },
+  "Nova York": { "fr-FR": "New York" },
+  "Outro (horário universal)": { "fr-FR": "Autre (temps universel)" },
+  "Tudo pronto!": { "fr-FR": "Tout est prêt !" },
+  "Seu funcionário está montado. Daqui em diante é só acompanhar.": {
+    "fr-FR": "Votre assistant est prêt. Il ne vous reste plus qu’à suivre son activité.",
+  },
+  "Seu funcionário já está de pé. O que ficou para depois continua te esperando.": {
+    "fr-FR":
+      "Votre assistant est déjà opérationnel. Les éléments reportés vous attendent toujours.",
+  },
+  " (você pulou)": { "fr-FR": " (vous avez ignoré cette étape)" },
+  " (ainda não)": { "fr-FR": " (pas encore)" },
+  "O que mais tem aqui": { "fr-FR": "Que trouve-t-on d’autre ici ?" },
+  "Você não precisa mexer em nada disso agora. É só para saber que existe.": {
+    "fr-FR":
+      "Vous n’avez rien à modifier maintenant. Cette section vous présente simplement les fonctionnalités disponibles.",
+  },
+  "Como funciona": { "fr-FR": "Comment ça fonctionne" },
+  "Finalizando...": { "fr-FR": "Finalisation…" },
+  "Começar a usar": { "fr-FR": "Commencer à utiliser" },
+
+  // ─── Test de l’agent ───
+  "seu funcionário": { "fr-FR": "votre assistant" },
+  "Você ainda não montou seu funcionário.": {
+    "fr-FR": "Vous n’avez pas encore configuré votre assistant.",
+  },
+  "Sem ninguém treinado, não há o que testar. Dá para voltar ao passo anterior agora ou fazer isso depois, em IA › Agentes.":
+    {
+      "fr-FR":
+        "Sans assistant formé, rien ne peut être testé. Vous pouvez revenir à l’étape précédente ou le faire plus tard via IA › Agents.",
+    },
+  rascunho: { "fr-FR": "brouillon" },
+  "Rascunho não responde mensagem, então não há o que ensaiar. O passo anterior explicou o que falta; você pode resolver depois em IA › Agentes.":
+    {
+      "fr-FR":
+        "Un brouillon ne répond pas aux messages : rien ne peut donc être testé. L’étape précédente explique ce qui manque ; vous pourrez le résoudre plus tard via IA › Agents.",
+    },
+  "Escreva como se fosse um cliente": { "fr-FR": "Écrivez comme si vous étiez un client" },
+  "Ele está pensando...": { "fr-FR": "Il réfléchit…" },
+  "Mandar mensagem": { "fr-FR": "Envoyer le message" },
+  "a respondeu": { "fr-FR": "a répondu" },
+  "Esta conversa não foi enviada a ninguém e não aparece no seu inbox.": {
+    "fr-FR": "Cette conversation n’a été envoyée à personne et n’apparaît pas dans votre Inbox.",
+  },
+  "Ele não conseguiu responder — e é melhor descobrir isso agora do que com um cliente de verdade.":
+    {
+      "fr-FR":
+        "Il n’a pas pu répondre — mieux vaut le découvrir maintenant qu’avec un vrai client.",
+    },
+  "Motivo:": { "fr-FR": "Motif :" },
+  "As causas mais comuns são a chave da empresa de IA sem saldo ou o modelo indisponível. Dá para conferir em IA › Credenciais e seguir daqui mesmo — o que você montou está salvo.":
+    {
+      "fr-FR":
+        "Les causes les plus fréquentes sont une clé IA sans crédit ou un modèle indisponible. Vérifiez via IA › Identifiants et poursuivez ici : votre configuration est enregistrée.",
+    },
+  "Não consegui salvar este passo.": { "fr-FR": "Impossible d’enregistrer cette étape." },
+  Pular: { "fr-FR": "Ignorer" },
+  "Oi! Vocês atendem hoje? Queria saber o preço.": {
+    "fr-FR": "Bonjour ! Êtes-vous ouverts aujourd’hui ? Je voudrais connaître le prix.",
+  },
+  "Adicione ao menos um email ou clique em Pular.": {
+    "fr-FR": "Ajoutez au moins une adresse e-mail ou cliquez sur Ignorer.",
+  },
+  "Máximo 20 emails por convite.": { "fr-FR": "Maximum 20 adresses e-mail par invitation." },
+  "convite(s) não puderam ser enviados por email. Copie os links abaixo e envie você mesmo.": {
+    "fr-FR":
+      "invitation(s) n’ont pas pu être envoyée(s) par e-mail. Copiez les liens ci-dessous et envoyez-les vous-même.",
+  },
+  "E-mail de quem vai trabalhar com ele": {
+    "fr-FR": "E-mail des personnes qui travailleront avec lui",
+  },
+  "O que essas pessoas podem fazer": { "fr-FR": "Ce que ces personnes peuvent faire" },
+  "Somente leitura": { "fr-FR": "Lecture seule" },
+  Atendente: { "fr-FR": "Agent" },
+  Gerente: { "fr-FR": "Responsable" },
+  Administrador: { "fr-FR": "Administrateur" },
+  "Esta instalação não envia e-mail. Os convites estão prontos — copie o link de cada pessoa e mande por onde você já fala com ela:":
+    {
+      "fr-FR":
+        "Cette installation n’envoie pas d’e-mails. Les invitations sont prêtes : copiez le lien de chaque personne et envoyez-le par votre canal habituel :",
+    },
+  "Link copiado.": { "fr-FR": "Lien copié." },
+  "Não consegui copiar — selecione e copie o link manualmente.": {
+    "fr-FR": "Impossible de copier ; sélectionnez et copiez le lien manuellement.",
+  },
+  "Copiar link": { "fr-FR": "Copier le lien" },
+  "Pular por enquanto": { "fr-FR": "Ignorer pour le moment" },
+  "Enviar convites": { "fr-FR": "Envoyer les invitations" },
+
+  // ─── Contacts ───
+  "Dados inválidos": { "fr-FR": "Données invalides" },
+  "Contato criado": { "fr-FR": "Contact créé" },
+  "Novo contato": { "fr-FR": "Nouveau contact" },
+  "Preencha pelo menos um identificador (email ou telefone).": {
+    "fr-FR": "Renseignez au moins un identifiant (e-mail ou téléphone).",
+  },
+  "Telefone (E.164)": { "fr-FR": "Téléphone (E.164)" },
+  "CPF (opcional)": { "fr-FR": "CPF (facultatif)" },
+  "Criando…": { "fr-FR": "Création…" },
+  "Criar contato": { "fr-FR": "Créer le contact" },
+  "Contato atualizado": { "fr-FR": "Contact mis à jour" },
+  "Editar contato": { "fr-FR": "Modifier le contact" },
+  "Valor inválido": { "fr-FR": "Valeur invalide" },
+  "Valor (R$)": { "fr-FR": "Montant (R$)" },
+  "Lead criado": { "fr-FR": "Lead créé" },
+  "Novo Lead": { "fr-FR": "Nouveau lead" },
+  "Crie um lead manualmente neste pipeline.": {
+    "fr-FR": "Créez un lead manuellement dans ce pipeline.",
+  },
+  "Ex: Pedido Maria — combo presente": { "fr-FR": "Ex. : Commande de Marie — coffret cadeau" },
+  "Contexto, observações, links…": { "fr-FR": "Contexte, remarques, liens…" },
+  Etapa: { "fr-FR": "Étape" },
+  "Selecione a etapa": { "fr-FR": "Sélectionnez l’étape" },
+  "Criar lead": { "fr-FR": "Créer le lead" },
+  "Lead atualizado": { "fr-FR": "Lead mis à jour" },
+  "Marcar como perdido": { "fr-FR": "Marquer comme perdu" },
+  "Informe o motivo. Essa informação ajuda a melhorar o funil.": {
+    "fr-FR": "Indiquez le motif. Cette information aide à améliorer le pipeline.",
+  },
+  Motivo: { "fr-FR": "Motif" },
+  "Cliente solicitou cancelamento": { "fr-FR": "Le client a demandé l’annulation" },
+  Preço: { "fr-FR": "Prix" },
+  "Sem resposta do cliente": { "fr-FR": "Aucune réponse du client" },
+  "Produto indisponível": { "fr-FR": "Produit indisponible" },
+  "Cancelado pela loja": { "fr-FR": "Annulé par le magasin" },
+  "Cancelado pelo cliente": { "fr-FR": "Annulé par le client" },
+  "Falha no pagamento": { "fr-FR": "Échec du paiement" },
+  "Outro motivo": { "fr-FR": "Autre motif" },
+  "Detalhe (opcional)": { "fr-FR": "Détail (facultatif)" },
+  "Ex: Cliente desistiu por X motivo": {
+    "fr-FR": "Ex. : Le client s’est désisté pour telle raison",
+  },
+  Confirmar: { "fr-FR": "Confirmer" },
+  "Editar lead": { "fr-FR": "Modifier le lead" },
+  "Atualize os campos. Mover de etapa ou marcar ganho/perdido tem opções próprias.": {
+    "fr-FR":
+      "Mettez à jour les champs. Le changement d’étape et le marquage gagné/perdu disposent de leurs propres actions.",
+  },
+  "Atualize os dados deste contato.": { "fr-FR": "Mettez à jour les informations de ce contact." },
+  "Não foi possível importar o arquivo.": { "fr-FR": "Impossible d’importer le fichier." },
+  "Importar contatos de planilha": { "fr-FR": "Importer des contacts depuis un tableur" },
+  "Envie um arquivo .csv com cabeçalho — colunas reconhecidas: nome, telefone, email, cpf, nascimento, tags. Excel: use “Salvar como” → “CSV UTF-8”. Máximo de 500 linhas por arquivo.":
+    {
+      "fr-FR":
+        "Envoyez un fichier .csv avec en-têtes — colonnes reconnues : nom, téléphone, e-mail, CPF, date de naissance, étiquettes. Excel : utilisez « Enregistrer sous » → « CSV UTF-8 ». Maximum 500 lignes par fichier.",
+    },
+  "Arquivo CSV": { "fr-FR": "Fichier CSV" },
+  Importar: { "fr-FR": "Importer" },
+  "Importando…": { "fr-FR": "Importation…" },
+  "linha(s) lidas": { "fr-FR": "ligne(s) lue(s)" },
+  "linha(s) com problema": { "fr-FR": "ligne(s) en erreur" },
+  "importado(s)": { "fr-FR": "importé(s)" },
+  "já existente(s)": { "fr-FR": "déjà existant(s)" },
+  "com erro": { "fr-FR": "en erreur" },
+  Linha: { "fr-FR": "Ligne" },
+  "Importar outro arquivo": { "fr-FR": "Importer un autre fichier" },
+  Concluir: { "fr-FR": "Terminer" },
+  "Resolver merge de contatos": { "fr-FR": "Résoudre la fusion de contacts" },
+  "Comparação dos candidatos detectados. A resolução automática via API ainda não está disponível neste MVP — entre em contato com o admin para mesclar via SQL.":
+    {
+      "fr-FR":
+        "Comparaison des candidats détectés. La résolution automatique via API n’est pas encore disponible dans ce MVP ; contactez l’administrateur pour effectuer la fusion via SQL.",
+    },
+  "Nenhum candidato disponível.": { "fr-FR": "Aucun candidat disponible." },
+  "Endpoint de resolução não implementado neste MVP": {
+    "fr-FR": "Le point d’accès de résolution n’est pas implémenté dans ce MVP",
+  },
+  "Resolver via SQL (em breve)": { "fr-FR": "Résoudre via SQL (bientôt disponible)" },
 };
 
 /**

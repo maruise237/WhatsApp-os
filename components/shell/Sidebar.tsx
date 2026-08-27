@@ -76,7 +76,12 @@ export function SidebarContent({
 
   return (
     <>
-      <div className={cn("flex items-center border-b px-4 h-14", collapsed ? "justify-center" : "justify-start")}>
+      <div
+        className={cn(
+          "flex h-14 items-center border-b px-4",
+          collapsed ? "justify-center" : "justify-start",
+        )}
+      >
         {logo && !collapsed ? (
           // <img> em vez de next/image de propósito: a URL vem de quem hospeda
           // (banco ou .env), e next/image exige allowlist de domínios fechada em
@@ -84,15 +89,9 @@ export function SidebarContent({
           // Altura fixa e largura livre porque a arte enviada tem proporção
           // desconhecida; forçar as duas distorceria o logo de quem configurou.
           // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={logo}
-            alt={nome}
-            className="h-7 w-auto max-w-[10rem] object-contain"
-          />
+          <img src={logo} alt={nome} className="h-7 w-auto max-w-[10rem] object-contain" />
         ) : (
-          <span className={cn("font-semibold tracking-tight", collapsed && "sr-only")}>
-            {nome}
-          </span>
+          <span className={cn("font-semibold tracking-tight", collapsed && "sr-only")}>{nome}</span>
         )}
         {collapsed && (
           <span aria-hidden className="text-lg font-bold text-primary">
@@ -116,12 +115,16 @@ export function SidebarContent({
               ) : (
                 <h2
                   id={tituloId}
-                  className="px-3 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60"
+                  className="text-muted-foreground/60 px-3 text-[10px] font-medium uppercase tracking-wider"
                 >
                   {t(group.label)}
                 </h2>
               )}
-              <ul aria-labelledby={collapsed ? undefined : tituloId} aria-label={collapsed ? t(group.label) : undefined} className="space-y-1">
+              <ul
+                aria-labelledby={collapsed ? undefined : tituloId}
+                aria-label={collapsed ? t(group.label) : undefined}
+                className="space-y-1"
+              >
                 {items.map((item) => {
                   const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                   const Icon = item.icon;
@@ -136,7 +139,7 @@ export function SidebarContent({
                           "relative flex items-center gap-3 rounded-md px-3 py-1.5 text-sm transition-colors",
                           isActive
                             ? "bg-accent text-accent-foreground"
-                            : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+                            : "hover:bg-accent/50 text-muted-foreground hover:text-foreground",
                           collapsed && "justify-center px-2",
                         )}
                       >
@@ -162,7 +165,7 @@ export function SidebarContent({
                         "flex items-center gap-3 rounded-md px-3 py-1.5 text-sm transition-colors",
                         pathname === group.hub.href
                           ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+                          : "hover:bg-accent/50 text-muted-foreground hover:text-foreground",
                         collapsed && "justify-center px-2",
                       )}
                     >
@@ -187,12 +190,12 @@ export function SidebarContent({
               "mb-1 flex items-center gap-3 rounded-md px-3 py-1.5 text-sm transition-colors",
               pathname.startsWith(rodape.href)
                 ? "bg-accent text-accent-foreground"
-                : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+                : "hover:bg-accent/50 text-muted-foreground hover:text-foreground",
               collapsed && "justify-center px-2",
             )}
           >
             <Gear size={18} aria-hidden />
-            {!collapsed && <span className="truncate">{rodape.label}</span>}
+            {!collapsed && <span className="truncate">{t(rodape.label)}</span>}
           </Link>
         )}
         <VersionFooter collapsed={collapsed} onNavigate={onNavigate} />
@@ -202,13 +205,17 @@ export function SidebarContent({
             onClick={() => startTransition(() => toggleSidebar(collapsed))}
             disabled={isPending}
             className={cn(
-              "flex w-full items-center gap-2 rounded-md px-3 py-2 text-xs text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+              "hover:bg-accent/50 flex w-full items-center gap-2 rounded-md px-3 py-2 text-xs text-muted-foreground hover:text-foreground",
               collapsed && "justify-center px-2",
             )}
-            aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
+            aria-label={collapsed ? t("Expandir sidebar") : t("Recolher sidebar")}
           >
-            {collapsed ? <CaretDoubleRight size={14} aria-hidden /> : <CaretDoubleLeft size={14} aria-hidden />}
-            {!collapsed && <span>Recolher</span>}
+            {collapsed ? (
+              <CaretDoubleRight size={14} aria-hidden />
+            ) : (
+              <CaretDoubleLeft size={14} aria-hidden />
+            )}
+            {!collapsed && <span>{t("Recolher")}</span>}
           </button>
         )}
       </div>

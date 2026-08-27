@@ -26,6 +26,7 @@ import type { Stage } from "@/lib/kanban/types";
 import { createLeadSchema, type CreateLeadInput } from "@/lib/schemas/leads";
 import { parseReaisToCents } from "@/lib/money";
 import { EcoDoValor } from "./EcoDoValor";
+import { useT } from "@/hooks/i18n/useT";
 
 interface FormShape {
   title: string;
@@ -51,6 +52,7 @@ function defaultStageId(stages: Stage[]): string {
 }
 
 export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactId }: Props) {
+  const t = useT();
   const create = useCreateLead(pipelineId);
   const initialStage = useMemo(() => defaultStageId(stages), [stages]);
 
@@ -83,7 +85,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     if (reais.length > 0) {
       valueCents = parseReaisToCents(reais);
       if (valueCents === null) {
-        form.setError("valueReais", { message: "Valor inválido" });
+        form.setError("valueReais", { message: t("Valor inválido") });
         return;
       }
     }
@@ -104,13 +106,13 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     const parsed = createLeadSchema.safeParse(payload);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(first?.message ?? "Dados inválidos");
+      toast.error(t(first?.message ?? "Dados inválidos"));
       return;
     }
 
     try {
       await create.mutateAsync(parsed.data as CreateLeadInput);
-      toast.success("Lead criado");
+      toast.success(t("Lead criado"));
       form.reset({
         title: "",
         description: "",
@@ -131,39 +133,34 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo Lead</DialogTitle>
-          <DialogDescription>
-            Crie um lead manualmente neste pipeline.
-          </DialogDescription>
+          <DialogTitle>{t("Novo Lead")}</DialogTitle>
+          <DialogDescription>{t("Crie um lead manualmente neste pipeline.")}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
+            <Label htmlFor="title">{t("Título")}</Label>
             <Input
               id="title"
-              placeholder="Ex: Pedido Maria — combo presente"
+              placeholder={t("Ex: Pedido Maria — combo presente")}
               {...form.register("title", { required: true, minLength: 2 })}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Descrição</Label>
+            <Label htmlFor="description">{t("Descrição")}</Label>
             <Textarea
               id="description"
               rows={3}
-              placeholder="Contexto, observações, links…"
+              placeholder={t("Contexto, observações, links…")}
               {...form.register("description")}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Etapa</Label>
-            <Select
-              value={stageId}
-              onValueChange={(v) => form.setValue("stage_id", v)}
-            >
+            <Label>{t("Etapa")}</Label>
+            <Select value={stageId} onValueChange={(v) => form.setValue("stage_id", v)}>
               <SelectTrigger>
-                <SelectValue placeholder="Selecione a etapa" />
+                <SelectValue placeholder={t("Selecione a etapa")} />
               </SelectTrigger>
               <SelectContent>
                 {stages
@@ -179,7 +176,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="valueReais">Valor (R$)</Label>
+              <Label htmlFor="valueReais">{t("Valor (R$)")}</Label>
               <Input
                 id="valueReais"
                 inputMode="decimal"
@@ -188,13 +185,11 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
               />
               <EcoDoValor control={form.control} />
               {form.formState.errors.valueReais && (
-                <p className="text-xs text-error-fg">
-                  {form.formState.errors.valueReais.message}
-                </p>
+                <p className="text-xs text-error-fg">{form.formState.errors.valueReais.message}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="expected_close_date">Fechamento previsto</Label>
+              <Label htmlFor="expected_close_date">{t("Fechamento previsto")}</Label>
               <Input
                 id="expected_close_date"
                 type="date"
@@ -204,12 +199,8 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tagsRaw">Tags (separadas por vírgula)</Label>
-            <Input
-              id="tagsRaw"
-              placeholder="vip, recompra"
-              {...form.register("tagsRaw")}
-            />
+            <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
+            <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
           </div>
 
           <DialogFooter>
@@ -219,10 +210,10 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
               onClick={() => onOpenChange(false)}
               disabled={create.isPending}
             >
-              Cancelar
+              {t("Cancelar")}
             </Button>
             <Button type="submit" disabled={create.isPending || !stageId}>
-              {create.isPending ? "Criando…" : "Criar lead"}
+              {create.isPending ? t("Criando…") : t("Criar lead")}
             </Button>
           </DialogFooter>
         </form>

@@ -22,10 +22,10 @@ export default async function ConnectWhatsappPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h2 className="text-2xl font-semibold tracking-tight">Dê um telefone a ele</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Donnez-lui un numéro de téléphone</h2>
         <p className="text-sm text-muted-foreground">
-          É por este número que ele vai atender seus clientes. Se você conecta pelo
-          celular, tenha ele por perto.
+          C’est par ce numéro qu’il répondra à vos clients. Si vous le connectez depuis un
+          téléphone, gardez-le à portée de main.
         </p>
       </header>
       <ConnectWhatsappClient

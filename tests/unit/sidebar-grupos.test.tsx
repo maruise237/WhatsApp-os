@@ -14,6 +14,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 
 import { Sidebar } from "@/components/shell/Sidebar";
 import type { ActiveOrg, AuthUser } from "@/lib/auth/types";
+import { IdiomaProvider } from "@/lib/i18n/IdiomaProvider";
 
 const authRef: { user: Pick<AuthUser, "is_platform_admin">; activeOrg: ActiveOrg | null } = {
   user: { is_platform_admin: false },
@@ -49,7 +50,11 @@ afterEach(cleanup);
 describe("Sidebar agrupado", () => {
   it("renderiza os títulos de grupo na ordem de uso", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     const titulos = screen
       .getAllByRole("heading")
       .map((el) => el.textContent?.trim())
@@ -61,7 +66,11 @@ describe("Sidebar agrupado", () => {
 
   it("leva às Etapas do funil sem passar por Configurações", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     // O rótulo mudou: "Funis" passou a ser a LISTA (/app/kanban) e esta tela,
     // que configura as colunas, virou "Etapas do funil". Antes as duas
     // disputavam o mesmo nome no mesmo grupo do menu.
@@ -71,13 +80,21 @@ describe("Sidebar agrupado", () => {
 
   it("e os dois itens de funil não disputam o mesmo nome", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     expect(screen.getByRole("link", { name: "Funis" })).toHaveAttribute("href", "/app/kanban");
   });
 
   it("desenterra Nuvemshop e Audit Log", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     // Nuvemshop não tinha link nenhum no app; Audit Log só existia via card em
     // Configurações. Canal oficial não está aqui de propósito: virou aba de
     // Conexões no PR #105, e Conexões é a porta.
@@ -87,7 +104,11 @@ describe("Sidebar agrupado", () => {
 
   it("Configurações fica no rodapé, nunca dependendo de scroll", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     const config = screen.getByRole("link", { name: /Configurações/ });
     expect(config).toHaveAttribute("href", "/app/settings");
     // Fora da <nav> que rola.
@@ -98,7 +119,11 @@ describe("Sidebar agrupado", () => {
   it("não deixa cabeçalho órfão quando a permissão esvazia o grupo", () => {
     // CANAIS é todo manager+/admin. Um agent não pode ver o título sozinho.
     comoPapel("agent");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     const titulos = screen.getAllByRole("heading").map((el) => el.textContent?.trim());
     expect(titulos).not.toContain("Canais");
     expect(titulos).toContain("Atendimento");
@@ -106,20 +131,32 @@ describe("Sidebar agrupado", () => {
 
   it("oferece o hub dos grupos que têm um", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     expect(screen.getByRole("link", { name: /Ver tudo em IA/ })).toHaveAttribute("href", "/app/ai");
   });
 
   it("colapsado esconde os títulos mas mantém os links", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed />
+      </IdiomaProvider>,
+    );
     expect(screen.queryAllByRole("heading")).toHaveLength(0);
     expect(screen.getByRole("link", { name: /Inbox/ })).toBeTruthy();
   });
 
   it("marca a rota atual com aria-current", () => {
     comoPapel("admin");
-    render(<Sidebar collapsed={false} />);
+    render(
+      <IdiomaProvider locale="pt-BR">
+        <Sidebar collapsed={false} />
+      </IdiomaProvider>,
+    );
     expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
     // "Kanban" saiu da interface; o item da mesma URL agora se chama "Funis".
     expect(screen.getByRole("link", { name: "Funis" })).not.toHaveAttribute("aria-current");

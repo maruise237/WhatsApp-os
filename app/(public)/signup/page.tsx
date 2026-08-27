@@ -4,7 +4,7 @@ import { SignupForm } from "@/components/auth/SignupForm";
 import { branding } from "@/lib/branding";
 import { verifyInviteToken } from "@/lib/auth/invite-token";
 
-export const metadata = { title: "Criar conta" };
+export const metadata = { title: "Créer un compte" };
 
 /**
  * Aceita `?invite=<token>`: é o caminho de quem foi convidado e ainda não tem
@@ -28,11 +28,11 @@ export default async function SignupPage({
   return (
     <div className="space-y-6">
       <div className="space-y-1.5 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Criar conta</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Créer un compte</h1>
         <p className="text-sm text-muted-foreground">
           {convite
-            ? "Crie sua senha para entrar na empresa que te convidou"
-            : `Comece a usar o ${branding().name} em minutos`}
+            ? "Créez votre mot de passe pour rejoindre l’entreprise qui vous a invité"
+            : `Commencez à utiliser ${branding().name} en quelques minutes`}
         </p>
       </div>
 
@@ -41,17 +41,18 @@ export default async function SignupPage({
           role="alert"
           className="rounded-md border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm dark:border-amber-500/30 dark:bg-amber-950/20"
         >
-          Esse convite expirou ou não é mais válido. Peça um novo a quem te convidou — criar uma
-          conta agora abriria uma empresa nova, e não é isso que você quer.
+          Cette invitation a expiré ou n’est plus valide. Demandez-en une nouvelle à la personne qui
+          vous a invité : créer un compte maintenant ouvrirait une nouvelle entreprise, ce qui n’est
+          pas souhaité.
         </p>
       )}
 
       <SignupForm convite={convite} />
 
       <p className="text-center text-sm text-muted-foreground">
-        Já tem conta?{" "}
+        Vous avez déjà un compte ?{" "}
         <Link href="/login" className="font-medium text-foreground underline underline-offset-4">
-          Entrar
+          Se connecter
         </Link>
       </p>
     </div>
