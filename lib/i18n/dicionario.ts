@@ -970,6 +970,32 @@ export const DICIONARIO: Traducoes = {
   "Legenda (opcional)": { "fr-FR": "Légende (facultatif)" },
   Legenda: { "fr-FR": "Légende" },
   "Templates de script": { "fr-FR": "Modèles de script" },
+  "Sincronizado:": { "fr-FR": "Synchronisé :" },
+  "novo(s)": { "fr-FR": "nouveau(x)" },
+  "atualizado(s)": { "fr-FR": "mis à jour" },
+  "desativado(s)": { "fr-FR": "désactivé(s)" },
+  "Canal oficial não conectado": { "fr-FR": "Canal officiel non connecté" },
+  "Os templates vivem na sua conta do WhatsApp Business (Meta) — esta tela é um espelho deles. Conecte o canal oficial em Conexões WhatsApp para começar a sincronizar.":
+    {
+      "fr-FR":
+        "Les templates vivent dans votre compte WhatsApp Business (Meta) : cet écran en est le miroir. Connectez le canal officiel dans Connexions WhatsApp pour commencer la synchronisation.",
+    },
+  "Espelho da conta": { "fr-FR": "Miroir du compte" },
+  "template(s)": { "fr-FR": "template(s)" },
+  "Sincronizar com a Meta": { "fr-FR": "Synchroniser avec Meta" },
+  "Nenhum template ainda": { "fr-FR": "Aucun template pour l’instant" },
+  "Crie templates no Gerenciador do WhatsApp e clique em": {
+    "fr-FR": "Créez des templates dans le Gestionnaire WhatsApp et cliquez sur",
+  },
+  "Só templates aprovados podem ser enviados fora da janela de 24 horas.": {
+    "fr-FR":
+      "Seuls les templates approuvés peuvent être envoyés en dehors de la fenêtre de 24 heures.",
+  },
+  "sem parâmetros": { "fr-FR": "sans paramètres" },
+  "parâmetro(s)": { "fr-FR": "paramètre(s)" },
+  "Recusado:": { "fr-FR": "Refusé :" },
+  "arquivo de": { "fr-FR": "fichier de" },
+  "enviado no disparo": { "fr-FR": "envoyé lors de l’envoi" },
   "Nenhum template. Crie em Configurações.": {
     "fr-FR": "Aucun modèle. Créez-en un dans les Paramètres.",
   },
@@ -983,7 +1009,6 @@ export const DICIONARIO: Traducoes = {
         "Aucun modèle approuvé pour le moment. Créez-en un via Connexions → Modèles, puis envoyez-le lorsque la plateforme l’aura approuvé.",
     },
   "Modelo aprovado": { "fr-FR": "Modèle approuvé" },
-  "parâmetro(s)": { "fr-FR": "paramètre(s)" },
   "Este modelo pede {count} valor(es) e ainda não dá para preenchê-los aqui — envie por Conexões → Templates, ou escolha um modelo sem parâmetros.":
     {
       "fr-FR":
