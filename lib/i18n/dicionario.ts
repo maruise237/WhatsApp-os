@@ -1075,6 +1075,22 @@ export const DICIONARIO: Traducoes = {
   "Salvar e validar": { "fr-FR": "Enregistrer et valider" },
   Obrigatório: { "fr-FR": "Obligatoire" },
   "API key muito curta": { "fr-FR": "Clé API trop courte" },
+  "Cole o conteúdo antes de criar.": { "fr-FR": "Collez le contenu avant de créer la source." },
+  "Não consegui criar a fonte.": { "fr-FR": "Impossible de créer la source." },
+  "Fonte criada. A indexação começa em instantes.": {
+    "fr-FR": "Source créée. L’indexation commence dans un instant.",
+  },
+  "Não consegui falar com o servidor.": { "fr-FR": "Impossible de joindre le serveur." },
+  Cadastrar: { "fr-FR": "Enregistrer" },
+  "Cole as perguntas e respostas. O agente passa a consultar isso antes de responder.": {
+    "fr-FR": "Collez les questions et réponses. L’agent les consultera avant de répondre.",
+  },
+  "Nome da fonte": { "fr-FR": "Nom de la source" },
+  "Uma linha": { "fr-FR": "Une ligne" },
+  "e uma": { "fr-FR": "et une" },
+  "por item, separados": { "fr-FR": "par élément, séparées" },
+  "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
+  "Criar fonte": { "fr-FR": "Créer la source" },
   "Perguntas frequentes do tenant.": { "fr-FR": "Questions fréquentes de l’organisation." },
   "Documento PDF de políticas (troca, devolução, privacidade).": {
     "fr-FR": "Document PDF des politiques (échange, retour, confidentialité).",
