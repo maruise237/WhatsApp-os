@@ -1132,6 +1132,15 @@ export const DICIONARIO: Traducoes = {
   Operador: { "fr-FR": "Opérateur" },
   Valor: { "fr-FR": "Valeur" },
   "Ex.: 3": { "fr-FR": "Ex. : 3" },
+  "Modelo da versão publicada — é o que atende o cliente.": {
+    "fr-FR": "Modèle de la version publiée — celui qui répond au client.",
+  },
+  "Modelo do cadastro; nenhuma versão publicada ainda.": {
+    "fr-FR": "Modèle de la fiche ; aucune version publiée pour le moment.",
+  },
+  Tipo: { "fr-FR": "Type" },
+  Prioridade: { "fr-FR": "Priorité" },
+  Visualizar: { "fr-FR": "Afficher" },
   "Nenhum agent configurado": { "fr-FR": "Aucun agent configuré" },
   "Crie um agent para responder a conversas no WhatsApp com IA. Você configura prompt, tools, gatilhos e janela de contexto.":
     {
