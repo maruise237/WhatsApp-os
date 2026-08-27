@@ -1091,6 +1091,9 @@ export const DICIONARIO: Traducoes = {
   "por item, separados": { "fr-FR": "par élément, séparées" },
   "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
   "Criar fonte": { "fr-FR": "Créer la source" },
+  "status:": { "fr-FR": "statut :" },
+  Rascunho: { "fr-FR": "Brouillon" },
+  Desativado: { "fr-FR": "Désactivé" },
   "Novo fluxo": { "fr-FR": "Nouveau flow" },
   "Nenhum fluxo de follow-up ainda": { "fr-FR": "Aucun flow de follow-up pour le moment" },
   "Follow-ups reengajam contatos automaticamente após silêncio, mudança de etapa ou fim de conversa — sem depender de alguém lembrar de mandar mensagem.":
