@@ -91,6 +91,8 @@ services:
     image: ${WAHA_IMAGE:-devlikeapro/waha:latest-2026.7.2}
     restart: unless-stopped
     environment:
+      WHATSAPP_API_HOSTNAME: 0.0.0.0
+      WHATSAPP_API_PORT: 3000
       WAHA_API_KEY: "sha512:${WAHA_API_KEY_SHA512}"
       WHATSAPP_HOOK_URL: http://app:3000/api/v1/webhooks/waha
       WHATSAPP_HOOK_EVENTS: "message.any,message.ack,message.edited,message.revoked,session.status,state.change"
