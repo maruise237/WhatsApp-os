@@ -471,6 +471,226 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "Le point d’accès de résolution n’est pas implémenté dans ce MVP",
   },
   "Resolver via SQL (em breve)": { "fr-FR": "Résoudre via SQL (bientôt disponible)" },
+
+  // ─── Connexion WhatsApp ───
+  "Pronto para conectar": { "fr-FR": "Prêt à connecter" },
+  "Preparando o código…": { "fr-FR": "Préparation du code…" },
+  "Conectado!": { "fr-FR": "Connecté !" },
+  "O código expirou": { "fr-FR": "Le code a expiré" },
+  "Não consegui falar com o WhatsApp": { "fr-FR": "Impossible de communiquer avec WhatsApp" },
+  "Escaneie o código abaixo com o celular que vai atender.": {
+    "fr-FR": "Scannez le code ci-dessous avec le téléphone qui répondra aux clients.",
+  },
+  "Isso leva alguns segundos. O código aparece aqui sozinho.": {
+    "fr-FR": "Cela prend quelques secondes. Le code apparaîtra ici automatiquement.",
+  },
+  "O número está no ar. Seguindo para o próximo passo.": {
+    "fr-FR": "Le numéro est connecté. Passage à l’étape suivante.",
+  },
+  "É normal — ele vale poucos minutos. Dá para gerar outro.": {
+    "fr-FR":
+      "C’est normal : il n’est valable que quelques minutes. Vous pouvez en générer un autre.",
+  },
+  "O serviço roda no seu servidor e não respondeu agora.": {
+    "fr-FR": "Le service fonctionne sur votre serveur et n’a pas répondu cette fois.",
+  },
+  "Falha ao pular:": { "fr-FR": "Impossible d’ignorer l’étape :" },
+  "Falha ao marcar passo:": { "fr-FR": "Impossible de marquer l’étape :" },
+  "Falha ao avançar:": { "fr-FR": "Impossible de continuer :" },
+  "Conectei em outro lugar": { "fr-FR": "Je l’ai connecté ailleurs" },
+  "Escolher outra forma": { "fr-FR": "Choisir une autre méthode" },
+  "Como você já usa esse número?": { "fr-FR": "Comment utilisez-vous déjà ce numéro ?" },
+  "Existe mais de um jeito de ter WhatsApp para empresa, e cada um conecta de um jeito. Se você nunca ouviu falar dos outros dois, é o primeiro.":
+    {
+      "fr-FR":
+        "Il existe plusieurs façons d’utiliser WhatsApp pour une entreprise, chacune avec sa propre connexion. Si vous ne connaissez pas les deux autres, choisissez la première.",
+    },
+  "Leio um código com o celular": { "fr-FR": "Je scanne un code avec mon téléphone" },
+  "É assim para quase todo mundo. Você abre o WhatsApp no celular que vai atender e aponta para um código que aparece aqui.":
+    {
+      "fr-FR":
+        "C’est la méthode la plus courante. Ouvrez WhatsApp sur le téléphone qui répondra aux clients et scannez le code affiché ici.",
+    },
+  "Tenho conta oficial na Meta": { "fr-FR": "J’ai un compte officiel Meta" },
+  "Você cadastrou o número na Meta e tem as credenciais em mãos. Não usa o celular para conectar.":
+    {
+      "fr-FR":
+        "Vous avez enregistré le numéro auprès de Meta et disposez de ses identifiants. Le téléphone n’est pas utilisé pour la connexion.",
+    },
+  "Contrato de um provedor parceiro": { "fr-FR": "J’ai un contrat avec un fournisseur partenaire" },
+  "Uma empresa parceira cuida do seu WhatsApp e te deu uma chave de acesso.": {
+    "fr-FR": "Une entreprise partenaire gère votre WhatsApp et vous a fourni une clé d’accès.",
+  },
+  "Este servidor ainda não está pronto para RECEBER por este caminho.": {
+    "fr-FR": "Ce serveur n’est pas encore prêt à RECEVOIR par cette méthode.",
+  },
+  "Dá para conectar e já enviar, mas as respostas do cliente não vão chegar até quem instalou o sistema completar uma configuração no servidor. Se você quer atender hoje, o caminho do código com o celular funciona agora — e dá para trocar depois, sem perder nada.":
+    {
+      "fr-FR":
+        "Vous pouvez connecter le numéro et envoyer des messages, mais les réponses des clients n’arriveront pas tant qu’une configuration serveur ne sera pas terminée. Si vous devez répondre aujourd’hui, la méthode du code avec le téléphone fonctionne immédiatement et pourra être remplacée plus tard sans perte de données.",
+    },
+  "O WhatsApp desta instalação ainda não subiu.": {
+    "fr-FR": "Le WhatsApp de cette installation n’est pas encore démarré.",
+  },
+  "Ele roda no seu próprio servidor. Dá para seguir sem ele agora e conectar o número depois, em Canais › Conexões — seu funcionário fica pronto de qualquer jeito, só não terá por onde atender ainda.":
+    {
+      "fr-FR":
+        "Il fonctionne sur votre propre serveur. Vous pouvez continuer sans lui et connecter le numéro plus tard via Canaux › Connexions ; votre assistant sera prêt, mais ne pourra pas encore répondre aux clients.",
+    },
+  "Não consegui carregar o código agora. Ele deve reaparecer sozinho em instantes — se não aparecer, gere outro abaixo.":
+    {
+      "fr-FR":
+        "Impossible de charger le code pour le moment. Il devrait réapparaître dans quelques instants ; sinon, générez-en un nouveau ci-dessous.",
+    },
+  "Código QR para conectar o WhatsApp": { "fr-FR": "Code QR pour connecter WhatsApp" },
+  "✓ Conectado! Avançando…": { "fr-FR": "✓ Connecté ! Passage à l’étape suivante…" },
+  "O código expirou antes de alguém escanear. É normal — ele vale só alguns minutos.": {
+    "fr-FR":
+      "Le code a expiré avant d’être scanné. C’est normal : il n’est valable que quelques minutes.",
+  },
+  "Deixe o WhatsApp já aberto em Aparelhos conectados antes de gerar o próximo, que aí dá tempo de sobra.":
+    {
+      "fr-FR":
+        "Laissez WhatsApp ouvert dans « Appareils connectés » avant de générer le prochain code pour avoir suffisamment de temps.",
+    },
+  "Gerando…": { "fr-FR": "Génération…" },
+  "Gerar novo QR Code": { "fr-FR": "Générer un nouveau code QR" },
+  "O serviço de WhatsApp desta instalação não respondeu. Ele roda no seu servidor, junto com o resto do sistema — quem instalou consegue religá-lo.":
+    {
+      "fr-FR":
+        "Le service WhatsApp de cette installation n’a pas répondu. Il fonctionne sur votre serveur avec le reste du système ; la personne qui l’a installé peut le redémarrer.",
+    },
+  "Detalhe técnico:": { "fr-FR": "Détail technique :" },
+  "Tentando…": { "fr-FR": "Nouvelle tentative…" },
+
+  // ─── Configuration de l’agent IA ───
+  "Atendente IA": { "fr-FR": "Assistant IA" },
+  "Como ele vai se chamar": { "fr-FR": "Comment s’appellera-t-il ?" },
+  "É o nome que aparece para o seu time. O cliente vê só a conversa.": {
+    "fr-FR": "C’est le nom affiché à votre équipe. Le client ne voit que la conversation.",
+  },
+  "O jeito dele falar": { "fr-FR": "Sa façon de parler" },
+  "Próximo e caloroso": { "fr-FR": "Chaleureux et accessible" },
+  "Conversa como gente, puxa assunto, tranquiliza. Bom para quem vende no dia a dia.": {
+    "fr-FR":
+      "Il parle naturellement, crée le contact et rassure. Idéal pour les activités commerciales du quotidien.",
+  },
+  "Objetivo e cordial": { "fr-FR": "Direct et cordial" },
+  "Vai direto ao ponto sem ser seco, e sempre indica o próximo passo.": {
+    "fr-FR": "Il va droit au but sans être froid et indique toujours la prochaine étape.",
+  },
+  "Curto e prático": { "fr-FR": "Bref et pratique" },
+  "Frases curtas, pergunta só o essencial e chama uma pessoa cedo.": {
+    "fr-FR":
+      "Il utilise des phrases courtes, pose uniquement les questions essentielles et passe rapidement le relais à une personne.",
+  },
+  "As regras da casa (opcional)": { "fr-FR": "Règles internes (facultatif)" },
+  "Nunca prometa desconto sem confirmar com uma pessoa.\nHorário de atendimento: 9h às 18h, de segunda a sexta.\nSempre chame o cliente pelo primeiro nome.":
+    {
+      "fr-FR":
+        "Ne promettez jamais de remise sans confirmation humaine.\nHoraires d’ouverture : de 9 h à 18 h, du lundi au vendredi.\nAppelez toujours le client par son prénom.",
+    },
+  "O que vale para qualquer atendimento aqui. Pode deixar em branco agora e escrever depois — ele aprende com você ao longo do tempo.":
+    {
+      "fr-FR":
+        "Ces règles s’appliquent à tous les échanges. Vous pouvez laisser ce champ vide et les ajouter plus tard : votre assistant apprend avec vous au fil du temps.",
+    },
+  "Ele já vem sabendo": { "fr-FR": "Ce qu’il sait déjà faire" },
+  "E nunca vai fazer": { "fr-FR": "Ce qu’il ne fera jamais" },
+  "Essas conferências acontecem antes de cada mensagem sair, e não têm interruptor.": {
+    "fr-FR": "Ces contrôles sont effectués avant chaque envoi et ne peuvent pas être désactivés.",
+  },
+  "Falha ao criar agente:": { "fr-FR": "Impossible de créer l’agent :" },
+  "Atendente criado, mas ainda não está no ar.": {
+    "fr-FR": "Assistant créé, mais pas encore publié.",
+  },
+  "Agente criado, mas ainda não publicado.": { "fr-FR": "Agent créé, mais pas encore publié." },
+  "O atendente foi criado, mas as regras da casa não foram gravadas. Copie o que você escreveu antes de sair — e salve de novo em IA › Memória.":
+    {
+      "fr-FR":
+        "L’assistant a été créé, mais les règles internes n’ont pas été enregistrées. Copiez votre texte avant de quitter, puis enregistrez-le à nouveau via IA › Mémoire.",
+    },
+  "Erro do banco de dados:": { "fr-FR": "Erreur de base de données :" },
+  "Seu atendente foi criado, mas ficou como rascunho — ele ainda não tem com o que pensar.": {
+    "fr-FR":
+      "Votre assistant a été créé, mais il est resté en brouillon : il ne dispose pas encore des éléments nécessaires pour réfléchir.",
+  },
+  "Não achei chave de": { "fr-FR": "Aucune clé" },
+  "nem cadastrada aqui, nem vinda da instalação. Cole a chave no campo acima («o cérebro dele») e crie o atendente de novo — ou cadastre em IA › Credenciais.":
+    {
+      "fr-FR":
+        "n’a été trouvée ici ni dans la configuration de l’installation. Collez la clé dans le champ ci-dessus (« son cerveau ») et recréez l’assistant, ou ajoutez-la via IA › Identifiants.",
+    },
+  "Continuar sem publicar": { "fr-FR": "Continuer sans publier" },
+  "Seu atendente foi criado, mas ficou como rascunho — e rascunho não responde mensagem.": {
+    "fr-FR":
+      "Votre assistant a été créé, mais il est resté en brouillon : un brouillon ne répond pas aux messages.",
+  },
+  "Os modelos": { "fr-FR": "Les modèles" },
+  "que esta instalação conhece não sabem usar ferramentas — sem isso ele conversaria bem e nunca criaria um cliente nem moveria um negócio no funil. Escolha outra empresa de IA em":
+    {
+      "fr-FR":
+        "connus de cette installation ne savent pas utiliser les outils : il pourrait converser correctement, mais ne créerait jamais de client ni ne déplacerait de lead dans le pipeline. Choisissez un autre fournisseur IA via",
+    },
+  "Esta instalação ainda não tem a lista de modelos": {
+    "fr-FR": "Cette installation ne possède pas encore la liste des modèles",
+  },
+  "Ela é baixada automaticamente uma vez por dia; depois disso, publique em": {
+    "fr-FR":
+      "Elle est téléchargée automatiquement une fois par jour ; ensuite, publiez l’agent via",
+  },
+  "Seu agente foi criado, mas ficou como rascunho: não consegui ler os números de WhatsApp desta instalação, então não dá pra dizer em qual número ele atenderia — e rascunho não responde mensagem.":
+    {
+      "fr-FR":
+        "Votre agent a été créé, mais il est resté en brouillon : impossible de lire les numéros WhatsApp de cette installation, donc le numéro de réponse ne peut pas être déterminé. Un brouillon ne répond pas aux messages.",
+    },
+  "Tente de novo no botão abaixo (clicar de novo não cria um segundo agente) ou siga agora e publique depois em":
+    {
+      "fr-FR":
+        "Réessayez avec le bouton ci-dessous (un nouveau clic ne crée pas un second agent) ou continuez maintenant et publiez-le plus tard via",
+    },
+  "Criar e continuar": { "fr-FR": "Créer et continuer" },
+  "da inteligência escolhida na instalação": {
+    "fr-FR": "de l’intelligence choisie lors de l’installation",
+  },
+  "Ele ainda não tem cérebro": { "fr-FR": "Il n’a pas encore de cerveau" },
+  "Seu funcionário pensa com a inteligência artificial que você contratar. A instalação não trouxe nenhuma chave — cole a sua aqui e ele já nasce funcionando.":
+    {
+      "fr-FR":
+        "Votre assistant fonctionne avec le service d’intelligence artificielle que vous choisissez. L’installation ne contient aucune clé : collez la vôtre ici pour qu’il soit opérationnel dès sa création.",
+    },
+  "Qual você contratou": { "fr-FR": "Quel service avez-vous choisi ?" },
+  "A chave": { "fr-FR": "La clé" },
+  "Cole aqui a chave que a empresa de IA te deu": {
+    "fr-FR": "Collez ici la clé fournie par le service IA",
+  },
+  "Chave guardada. Agora ele pode pensar.": {
+    "fr-FR": "Clé enregistrée. Il peut maintenant réfléchir.",
+  },
+  "Guardando...": { "fr-FR": "Enregistrement…" },
+  "Guardar a chave": { "fr-FR": "Enregistrer la clé" },
+  "Ela é guardada cifrada — nem nós conseguimos lê-la depois.": {
+    "fr-FR": "Elle est enregistrée de façon chiffrée : même nous ne pouvons pas la lire ensuite.",
+  },
+  "O cérebro dele:": { "fr-FR": "Son cerveau :" },
+  "Conferindo se a chave tem crédito…": { "fr-FR": "Vérification du crédit de la clé…" },
+  "Testei agora: a chave respondeu e tem crédito.": {
+    "fr-FR": "Test effectué : la clé a répondu et dispose de crédit.",
+  },
+  "A chave foi aceita, mas o teste não passou:": {
+    "fr-FR": "La clé a été acceptée, mais le test a échoué :",
+  },
+  "Se for falta de crédito, adicione saldo na conta da empresa de IA — sem isso ele não responde a nenhum cliente.":
+    {
+      "fr-FR":
+        "S’il manque du crédit, rechargez le compte du service IA : sans cela, l’assistant ne répondra à aucun client.",
+    },
+  "Não consegui testar o crédito agora. Dá para seguir — mas confira o saldo na conta da empresa de IA antes de confiar nele.":
+    {
+      "fr-FR":
+        "Impossible de tester le crédit pour le moment. Vous pouvez continuer, mais vérifiez le solde du compte IA avant de lui faire confiance.",
+    },
+  "Pronta para uso.": { "fr-FR": "Prête à l’emploi." },
 };
 
 /**
