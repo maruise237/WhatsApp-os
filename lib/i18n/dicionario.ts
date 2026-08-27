@@ -881,6 +881,11 @@ export const DICIONARIO: Traducoes = {
   "Não consegui acessar o microfone. Verifique a permissão do navegador.": {
     "fr-FR": "Impossible d’accéder au microphone. Vérifiez l’autorisation du navigateur.",
   },
+  Anexar: { "fr-FR": "Joindre" },
+  "Fotos e vídeos": { "fr-FR": "Photos et vidéos" },
+  Documento: { "fr-FR": "Document" },
+  Emoji: { "fr-FR": "Emoji" },
+  "Sugerir resposta": { "fr-FR": "Suggérer une réponse" },
   "Gravar áudio": { "fr-FR": "Enregistrer un audio" },
   "Cancelar gravação": { "fr-FR": "Annuler l’enregistrement" },
   "Enviar áudio": { "fr-FR": "Envoyer l’audio" },
