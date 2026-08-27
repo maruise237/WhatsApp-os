@@ -1144,6 +1144,7 @@ export const DICIONARIO: Traducoes = {
   "Instrução (opcional)": { "fr-FR": "Instruction (facultatif)" },
   "Classes (separadas por vírgula)": { "fr-FR": "Classes (séparées par des virgules)" },
   "interessado, sem interesse": { "fr-FR": "intéressé, pas intéressé" },
+  Sempre: { "fr-FR": "Toujours" },
   "Sem resposta": { "fr-FR": "Sans réponse" },
   "Se o contato não responder dentro desse tempo, o fluxo segue sozinho pelo caminho “Sem resposta”. Mínimo de 15 minutos.":
     {

@@ -6,6 +6,7 @@ import type { FlowBranch } from "@/lib/followup/graph-schema";
 import { rotuloDoRamo } from "@/lib/followup/rotulo-do-ramo";
 import { cn } from "@/lib/utils";
 import type { NodeVisual } from "./nodeVisuals";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   id: string;
@@ -42,6 +43,7 @@ export function NodeCard({
   showSource = true,
   branches,
 }: Props) {
+  const t = useT();
   const Icon = visual.icon;
   const hasError = (errors?.length ?? 0) > 0;
   // Uma saída só continua sendo a bolinha de sempre no rodapé: não há o que
@@ -76,7 +78,7 @@ export function NodeCard({
       </div>
       {hasError && (
         <p
-          className="border-t border-error/30 px-3 py-1.5 text-xs leading-snug text-error-fg"
+          className="border-error/30 border-t px-3 py-1.5 text-xs leading-snug text-error-fg"
           data-testid={`node-error-${id}`}
         >
           {errors![0]}
@@ -88,13 +90,13 @@ export function NodeCard({
             <li
               key={branch.id}
               className={cn(
-                "relative flex items-center gap-1.5 border-t border-border/60 px-3 py-1 first:border-t-0",
+                "border-border/60 relative flex items-center gap-1.5 border-t px-3 py-1 first:border-t-0",
                 // A saída de escape é a única que não veio de uma regra do usuário:
                 // fica em itálico e apagada para se ler como "o resto cai aqui".
                 branch.kind === "fallback" && "italic text-text-muted",
               )}
               data-testid={`node-branch-${id}-${branch.id}`}
-              title={rotuloDoRamo(branch)}
+              title={t(rotuloDoRamo(branch))}
             >
               <span
                 aria-hidden
@@ -103,7 +105,7 @@ export function NodeCard({
                   branch.kind === "fallback" ? "bg-text-muted/50" : "bg-accent-500",
                 )}
               />
-              <span className="truncate text-xs leading-tight">{rotuloDoRamo(branch)}</span>
+              <span className="truncate text-xs leading-tight">{t(rotuloDoRamo(branch))}</span>
               <Handle
                 type="source"
                 id={branch.id}
