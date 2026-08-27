@@ -217,6 +217,15 @@ export const DICIONARIO: Traducoes = {
   "ver a mensagem": { "fr-FR": "voir le message" },
   "registro que sustenta": { "fr-FR": "enregistrement justificatif" },
   "Sem evidências registradas.": { "fr-FR": "Aucune preuve enregistrée." },
+  "Carregando a linha do tempo…": { "fr-FR": "Chargement de la chronologie…" },
+  "Não consegui carregar a linha do tempo. Tente de novo em instantes.": {
+    "fr-FR": "Impossible de charger la chronologie. Réessayez dans quelques instants.",
+  },
+  "Nada aconteceu com este negócio ainda.": {
+    "fr-FR": "Rien ne s’est encore produit pour cette affaire.",
+  },
+  agora: { "fr-FR": "à l’instant" },
+  ações: { "fr-FR": "actions" },
   Responsável: { "fr-FR": "Responsable" },
   "Responsável:": { "fr-FR": "Responsable :" },
   "Retomar contato?": { "fr-FR": "Reprendre le contact ?" },
