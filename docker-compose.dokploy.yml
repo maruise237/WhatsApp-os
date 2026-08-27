@@ -11,6 +11,7 @@ x-logging: &default-logging
 services:
   app:
     image: ${APP_IMAGE:-ghcr.io/maruise237/deskcommcrm:main}
+    pull_policy: always
     restart: unless-stopped
     env_file: .env
     environment:
@@ -52,6 +53,7 @@ services:
 
   worker:
     image: ${WORKER_IMAGE:-ghcr.io/maruise237/deskcomm-worker:main}
+    pull_policy: always
     restart: unless-stopped
     env_file: .env
     environment:
@@ -76,6 +78,7 @@ services:
 
   scheduler:
     image: ${SCHEDULER_IMAGE:-ghcr.io/maruise237/deskcomm-scheduler:main}
+    pull_policy: always
     restart: unless-stopped
     env_file: .env
     environment:
