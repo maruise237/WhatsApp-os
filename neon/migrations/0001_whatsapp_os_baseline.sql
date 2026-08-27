@@ -24,10 +24,28 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
+CREATE SCHEMA IF NOT EXISTS "extensions";
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA extensions;
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
 
 CREATE SCHEMA IF NOT EXISTS "public";
 
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN
+    CREATE ROLE anon NOLOGIN;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+    CREATE ROLE authenticated NOLOGIN;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'service_role') THEN
+    CREATE ROLE service_role NOLOGIN;
+  END IF;
+END
+$$;
 
 ALTER SCHEMA "public" OWNER TO "pg_database_owner";
 
@@ -72,7 +90,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."activate_kb_version"("p_agent_id" "uuid", "p_version_id" "uuid") OWNER TO "postgres";
 
 
 COMMENT ON FUNCTION "public"."activate_kb_version"("p_agent_id" "uuid", "p_version_id" "uuid") IS 'Atomically activate a knowledge_version for an agent. Validates tenant scope.';
@@ -112,7 +129,6 @@ begin
 end $$;
 
 
-ALTER FUNCTION "public"."emit_event"("p_event_type" "text", "p_entity_kind" "text", "p_entity_id" "uuid", "p_payload" "jsonb", "p_metadata" "jsonb", "p_organization_id" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_audit_log_row"() RETURNS "trigger"
@@ -151,7 +167,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_audit_log_row"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_crm_lead_close_on_stage"() RETURNS "trigger"
@@ -187,7 +202,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_crm_lead_close_on_stage"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_decrypt_oauth"("ciphertext" "bytea") RETURNS "text"
@@ -201,7 +215,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_decrypt_oauth"("ciphertext" "bytea") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_emit_channel_session_status_changed"() RETURNS "trigger"
@@ -220,7 +233,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_emit_channel_session_status_changed"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_emit_event_on_lead_change"() RETURNS "trigger"
@@ -267,7 +279,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_emit_event_on_lead_change"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_emit_message_event"() RETURNS "trigger"
@@ -302,7 +313,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_emit_message_event"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_encrypt_oauth"("plaintext" "text") RETURNS "bytea"
@@ -319,7 +329,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_encrypt_oauth"("plaintext" "text") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_is_platform_admin"() RETURNS boolean
@@ -333,7 +342,6 @@ CREATE OR REPLACE FUNCTION "public"."fn_is_platform_admin"() RETURNS boolean
 $$;
 
 
-ALTER FUNCTION "public"."fn_is_platform_admin"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_lgpd_cascade_redact_contact"("p_organization_id" "uuid", "p_contact_id" "uuid", "p_request_id" "uuid") RETURNS "jsonb"
@@ -519,7 +527,6 @@ end;
 $$;
 
 
-ALTER FUNCTION "public"."fn_lgpd_cascade_redact_contact"("p_organization_id" "uuid", "p_contact_id" "uuid", "p_request_id" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_log_event"("p_organization_id" "uuid", "p_event_type" "text", "p_payload" "jsonb" DEFAULT '{}'::"jsonb") RETURNS "uuid"
@@ -548,7 +555,6 @@ begin
 end $$;
 
 
-ALTER FUNCTION "public"."fn_log_event"("p_organization_id" "uuid", "p_event_type" "text", "p_payload" "jsonb") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_publish_ai_agent_version"("p_org_id" "uuid", "p_agent_id" "uuid", "p_version_id" "uuid") RETURNS TABLE("agent_id" "uuid", "version_id" "uuid", "previous_version_id" "uuid", "published_at" timestamp with time zone)
@@ -667,7 +673,6 @@ end;
 $$;
 
 
-ALTER FUNCTION "public"."fn_publish_ai_agent_version"("p_org_id" "uuid", "p_agent_id" "uuid", "p_version_id" "uuid") OWNER TO "postgres";
 
 
 COMMENT ON FUNCTION "public"."fn_publish_ai_agent_version"("p_org_id" "uuid", "p_agent_id" "uuid", "p_version_id" "uuid") IS 'EPIC-13 S-13.06 (fixed in 0025): atomic Save/Publish flip. Column refs qualified to avoid ambiguity with RETURNS TABLE OUT params.';
@@ -691,7 +696,6 @@ CREATE OR REPLACE FUNCTION "public"."fn_role_at_least"("p_org" "uuid", "p_min" "
 $$;
 
 
-ALTER FUNCTION "public"."fn_role_at_least"("p_org" "uuid", "p_min" "text") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_seed_default_pipeline_for_org"() RETURNS "trigger"
@@ -728,7 +732,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_seed_default_pipeline_for_org"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_set_updated_at"() RETURNS "trigger"
@@ -741,7 +744,6 @@ begin
 end $$;
 
 
-ALTER FUNCTION "public"."fn_set_updated_at"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_touch_updated_at"() RETURNS "trigger"
@@ -754,7 +756,6 @@ begin
 end $$;
 
 
-ALTER FUNCTION "public"."fn_touch_updated_at"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_update_budget_consumption"() RETURNS "trigger"
@@ -774,7 +775,6 @@ end;
 $$;
 
 
-ALTER FUNCTION "public"."fn_update_budget_consumption"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_update_last_activity_at"() RETURNS "trigger"
@@ -795,7 +795,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_update_last_activity_at"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_user_org_ids"() RETURNS SETOF "uuid"
@@ -807,7 +806,6 @@ CREATE OR REPLACE FUNCTION "public"."fn_user_org_ids"() RETURNS SETOF "uuid"
 $$;
 
 
-ALTER FUNCTION "public"."fn_user_org_ids"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_user_role_in"("p_org" "uuid") RETURNS integer
@@ -824,7 +822,6 @@ CREATE OR REPLACE FUNCTION "public"."fn_user_role_in"("p_org" "uuid") RETURNS in
 $$;
 
 
-ALTER FUNCTION "public"."fn_user_role_in"("p_org" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_user_role_in_org"("p_org" "uuid") RETURNS "text"
@@ -837,7 +834,6 @@ CREATE OR REPLACE FUNCTION "public"."fn_user_role_in_org"("p_org" "uuid") RETURN
 $$;
 
 
-ALTER FUNCTION "public"."fn_user_role_in_org"("p_org" "uuid") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_validate_activity_lead_org"() RETURNS "trigger"
@@ -858,7 +854,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_validate_activity_lead_org"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."fn_validate_lost_reason_required"() RETURNS "trigger"
@@ -888,7 +883,6 @@ begin
 end$$;
 
 
-ALTER FUNCTION "public"."fn_validate_lost_reason_required"() OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."midpoint"("p_prev" numeric, "p_next" numeric) RETURNS numeric
@@ -904,10 +898,9 @@ CREATE OR REPLACE FUNCTION "public"."midpoint"("p_prev" numeric, "p_next" numeri
 $$;
 
 
-ALTER FUNCTION "public"."midpoint"("p_prev" numeric, "p_next" numeric) OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "public"."vector", "p_k" integer DEFAULT 5, "p_threshold" real DEFAULT 0.72) RETURNS TABLE("chunk_id" "uuid", "knowledge_source_id" "uuid", "content" "text", "similarity" real, "metadata" "jsonb")
+CREATE OR REPLACE FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "extensions"."vector", "p_k" integer DEFAULT 5, "p_threshold" real DEFAULT 0.72) RETURNS TABLE("chunk_id" "uuid", "knowledge_source_id" "uuid", "content" "text", "similarity" real, "metadata" "jsonb")
     LANGUAGE "sql" STABLE SECURITY DEFINER
     SET "search_path" TO 'public', 'pg_temp'
     AS $$
@@ -926,10 +919,9 @@ CREATE OR REPLACE FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" 
 $$;
 
 
-ALTER FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "public"."vector", "p_k" integer, "p_threshold" real) OWNER TO "postgres";
 
 
-COMMENT ON FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "public"."vector", "p_k" integer, "p_threshold" real) IS 'Top-K cosine similarity over ai_chunks. SECURITY DEFINER + programmatic org_id filter. Caller must validate p_organization_id matches authenticated tenant.';
+COMMENT ON FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "extensions"."vector", "p_k" integer, "p_threshold" real) IS 'Top-K cosine similarity over ai_chunks. SECURITY DEFINER + programmatic org_id filter. Caller must validate p_organization_id matches authenticated tenant.';
 
 
 
@@ -962,7 +954,6 @@ END;
 $$;
 
 
-ALTER FUNCTION "public"."rls_auto_enable"() OWNER TO "postgres";
 
 SET default_tablespace = '';
 
@@ -997,7 +988,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_agent_runs" (
 );
 
 
-ALTER TABLE "public"."ai_agent_runs" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_agent_versions" (
@@ -1032,7 +1022,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_agent_versions" (
 );
 
 
-ALTER TABLE "public"."ai_agent_versions" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_agents" (
@@ -1058,7 +1047,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_agents" (
 );
 
 
-ALTER TABLE "public"."ai_agents" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_budgets" (
@@ -1077,7 +1065,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_budgets" (
 );
 
 
-ALTER TABLE "public"."ai_budgets" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_chunks" (
@@ -1089,13 +1076,12 @@ CREATE TABLE IF NOT EXISTS "public"."ai_chunks" (
     "content" "text" NOT NULL,
     "content_hash" "text" NOT NULL,
     "token_count" integer NOT NULL,
-    "embedding" "public"."vector"(1536) NOT NULL,
+    "embedding" "extensions"."vector"(1536) NOT NULL,
     "metadata" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
-ALTER TABLE "public"."ai_chunks" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_faq_items" (
@@ -1112,7 +1098,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_faq_items" (
 );
 
 
-ALTER TABLE "public"."ai_faq_items" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_invocations" (
@@ -1138,7 +1123,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_invocations" (
 );
 
 
-ALTER TABLE "public"."ai_invocations" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_knowledge_sources" (
@@ -1163,7 +1147,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_knowledge_sources" (
 );
 
 
-ALTER TABLE "public"."ai_knowledge_sources" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_knowledge_versions" (
@@ -1185,7 +1168,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_knowledge_versions" (
 );
 
 
-ALTER TABLE "public"."ai_knowledge_versions" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_models" (
@@ -1206,7 +1188,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_models" (
 );
 
 
-ALTER TABLE "public"."ai_models" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_pricing" (
@@ -1220,7 +1201,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_pricing" (
 );
 
 
-ALTER TABLE "public"."ai_pricing" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."ai_provider_credentials" (
@@ -1243,7 +1223,6 @@ CREATE TABLE IF NOT EXISTS "public"."ai_provider_credentials" (
 );
 
 
-ALTER TABLE "public"."ai_provider_credentials" OWNER TO "postgres";
 
 
 CREATE OR REPLACE VIEW "public"."ai_provider_credentials_safe" WITH ("security_invoker"='true') AS
@@ -1262,7 +1241,6 @@ CREATE OR REPLACE VIEW "public"."ai_provider_credentials_safe" WITH ("security_i
    FROM "public"."ai_provider_credentials";
 
 
-ALTER VIEW "public"."ai_provider_credentials_safe" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."api_audit_log" (
@@ -1283,7 +1261,6 @@ CREATE TABLE IF NOT EXISTS "public"."api_audit_log" (
 );
 
 
-ALTER TABLE "public"."api_audit_log" OWNER TO "postgres";
 
 
 COMMENT ON TABLE "public"."api_audit_log" IS 'L-10: Append-only. Retencao 5 anos.';
@@ -1308,7 +1285,6 @@ CREATE TABLE IF NOT EXISTS "public"."api_tokens" (
 );
 
 
-ALTER TABLE "public"."api_tokens" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."channel_session_warmup" (
@@ -1322,7 +1298,6 @@ CREATE TABLE IF NOT EXISTS "public"."channel_session_warmup" (
 );
 
 
-ALTER TABLE "public"."channel_session_warmup" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."channel_sessions" (
@@ -1352,7 +1327,6 @@ CREATE TABLE IF NOT EXISTS "public"."channel_sessions" (
 );
 
 
-ALTER TABLE "public"."channel_sessions" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."contacts" (
@@ -1389,7 +1363,6 @@ CREATE TABLE IF NOT EXISTS "public"."contacts" (
 );
 
 
-ALTER TABLE "public"."contacts" OWNER TO "postgres";
 
 
 COMMENT ON TABLE "public"."contacts" IS 'Pessoa fisica no escopo de um tenant. CPF criptografado at-rest. is_anonymized irreversivel (L-04).';
@@ -1429,7 +1402,6 @@ CREATE TABLE IF NOT EXISTS "public"."conversations" (
 );
 
 
-ALTER TABLE "public"."conversations" OWNER TO "postgres";
 
 
 COMMENT ON CONSTRAINT "conversations_status_check" ON "public"."conversations" IS 'Accepts both legacy (open/pending/resolved) + EPIC-03 spec (claimed/ai_handling/closed/archived). UI/API normalizes; future migration may consolidate.';
@@ -1452,7 +1424,6 @@ CREATE TABLE IF NOT EXISTS "public"."crm_lead_activities" (
 );
 
 
-ALTER TABLE "public"."crm_lead_activities" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."crm_lead_links" (
@@ -1469,7 +1440,6 @@ CREATE TABLE IF NOT EXISTS "public"."crm_lead_links" (
 );
 
 
-ALTER TABLE "public"."crm_lead_links" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."crm_leads" (
@@ -1505,7 +1475,6 @@ CREATE TABLE IF NOT EXISTS "public"."crm_leads" (
 );
 
 
-ALTER TABLE "public"."crm_leads" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."crm_pipelines" (
@@ -1525,7 +1494,6 @@ CREATE TABLE IF NOT EXISTS "public"."crm_pipelines" (
 );
 
 
-ALTER TABLE "public"."crm_pipelines" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."crm_stages" (
@@ -1550,7 +1518,6 @@ CREATE TABLE IF NOT EXISTS "public"."crm_stages" (
 );
 
 
-ALTER TABLE "public"."crm_stages" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."event_log" (
@@ -1573,7 +1540,6 @@ CREATE TABLE IF NOT EXISTS "public"."event_log" (
 );
 
 
-ALTER TABLE "public"."event_log" OWNER TO "postgres";
 
 
 COMMENT ON TABLE "public"."event_log" IS 'Bus interno do CRM. Triggers e ServerActions inserem aqui via emit_event(). Workers consomem.';
@@ -1593,7 +1559,6 @@ CREATE TABLE IF NOT EXISTS "public"."idempotency_keys" (
 );
 
 
-ALTER TABLE "public"."idempotency_keys" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."incidents" (
@@ -1615,7 +1580,6 @@ CREATE TABLE IF NOT EXISTS "public"."incidents" (
 );
 
 
-ALTER TABLE "public"."incidents" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."lgpd_requests" (
@@ -1645,7 +1609,6 @@ CREATE TABLE IF NOT EXISTS "public"."lgpd_requests" (
 );
 
 
-ALTER TABLE "public"."lgpd_requests" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."merge_queue" (
@@ -1664,7 +1627,6 @@ CREATE TABLE IF NOT EXISTS "public"."merge_queue" (
 );
 
 
-ALTER TABLE "public"."merge_queue" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."messages" (
@@ -1701,7 +1663,6 @@ CREATE TABLE IF NOT EXISTS "public"."messages" (
 );
 
 
-ALTER TABLE "public"."messages" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."nuvemshop_products" (
@@ -1724,7 +1685,6 @@ CREATE TABLE IF NOT EXISTS "public"."nuvemshop_products" (
 );
 
 
-ALTER TABLE "public"."nuvemshop_products" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."orders" (
@@ -1753,12 +1713,11 @@ CREATE TABLE IF NOT EXISTS "public"."orders" (
 );
 
 
-ALTER TABLE "public"."orders" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."organizations" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "slug" "public"."citext" NOT NULL,
+    "slug" "extensions"."citext" NOT NULL,
     "legal_name" "text" NOT NULL,
     "display_name" "text" NOT NULL,
     "cnpj" "text",
@@ -1769,7 +1728,7 @@ CREATE TABLE IF NOT EXISTS "public"."organizations" (
     "ai_budget_cents" bigint,
     "media_retention_days" integer DEFAULT 365 NOT NULL,
     "settings" "jsonb" DEFAULT '{}'::"jsonb" NOT NULL,
-    "dpo_email" "public"."citext",
+    "dpo_email" "extensions"."citext",
     "privacy_policy_url" "text",
     "onboarded_at" timestamp with time zone,
     "suspended_at" timestamp with time zone,
@@ -1784,7 +1743,6 @@ CREATE TABLE IF NOT EXISTS "public"."organizations" (
 );
 
 
-ALTER TABLE "public"."organizations" OWNER TO "postgres";
 
 
 COMMENT ON TABLE "public"."organizations" IS 'Tenants do DeskcommCRM. Cada linha = 1 e-commerce cliente.';
@@ -1813,7 +1771,6 @@ CREATE TABLE IF NOT EXISTS "public"."platform_admins" (
 );
 
 
-ALTER TABLE "public"."platform_admins" OWNER TO "postgres";
 
 
 COMMENT ON TABLE "public"."platform_admins" IS 'Super-admins que cruzam tenants. Modificacao SOMENTE via DBA + double-confirmation. T-04.';
@@ -1835,7 +1792,6 @@ CREATE TABLE IF NOT EXISTS "public"."storage_redaction_queue" (
 );
 
 
-ALTER TABLE "public"."storage_redaction_queue" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."tenant_integrations" (
@@ -1861,7 +1817,6 @@ CREATE TABLE IF NOT EXISTS "public"."tenant_integrations" (
 );
 
 
-ALTER TABLE "public"."tenant_integrations" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."user_organizations" (
@@ -1879,7 +1834,6 @@ CREATE TABLE IF NOT EXISTS "public"."user_organizations" (
 );
 
 
-ALTER TABLE "public"."user_organizations" OWNER TO "postgres";
 
 
 COMMENT ON COLUMN "public"."user_organizations"."role" IS '4 roles canônicos: viewer (1) < agent (2) < manager (3) < admin (4). Hierarquia.';
@@ -1896,7 +1850,6 @@ CREATE TABLE IF NOT EXISTS "public"."user_recovery_codes" (
 );
 
 
-ALTER TABLE "public"."user_recovery_codes" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."webhook_events_log" (
@@ -1924,7 +1877,6 @@ CREATE TABLE IF NOT EXISTS "public"."webhook_events_log" (
 );
 
 
-ALTER TABLE "public"."webhook_events_log" OWNER TO "postgres";
 
 
 DO $baseline_guard$ BEGIN
@@ -2549,7 +2501,7 @@ CREATE INDEX IF NOT EXISTS "ai_agents_published_idx" ON "public"."ai_agents" USI
 
 
 
-CREATE INDEX IF NOT EXISTS "ai_chunks_embedding_ivfflat_idx" ON "public"."ai_chunks" USING "ivfflat" ("embedding" "public"."vector_cosine_ops") WITH ("lists"='100');
+CREATE INDEX IF NOT EXISTS "ai_chunks_embedding_ivfflat_idx" ON "public"."ai_chunks" USING "ivfflat" ("embedding" "extensions"."vector_cosine_ops") WITH ("lists"='100');
 
 
 
@@ -2681,7 +2633,7 @@ CREATE INDEX IF NOT EXISTS "idx_contacts_org_last_activity" ON "public"."contact
 
 
 
-CREATE INDEX IF NOT EXISTS "idx_contacts_org_name_trgm" ON "public"."contacts" USING "gin" ("name" "public"."gin_trgm_ops");
+CREATE INDEX IF NOT EXISTS "idx_contacts_org_name_trgm" ON "public"."contacts" USING "gin" ("name" "extensions"."gin_trgm_ops");
 
 
 
@@ -2869,7 +2821,7 @@ CREATE INDEX IF NOT EXISTS "nuvemshop_products_rag_pending_idx" ON "public"."nuv
 
 
 
-CREATE INDEX IF NOT EXISTS "nuvemshop_products_title_trgm" ON "public"."nuvemshop_products" USING "gin" ("title" "public"."gin_trgm_ops");
+CREATE INDEX IF NOT EXISTS "nuvemshop_products_title_trgm" ON "public"."nuvemshop_products" USING "gin" ("title" "extensions"."gin_trgm_ops");
 
 
 
@@ -3202,7 +3154,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'ai_agent_versions_created_by_fkey' AND conrelid = '"public"."ai_agent_versions"'::regclass)
    AND to_regclass('"public"."ai_agent_versions_created_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."ai_agent_versions"
-    ADD CONSTRAINT "ai_agent_versions_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "ai_agent_versions_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3232,7 +3184,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'ai_agents_created_by_fkey' AND conrelid = '"public"."ai_agents"'::regclass)
    AND to_regclass('"public"."ai_agents_created_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."ai_agents"
-    ADD CONSTRAINT "ai_agents_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "ai_agents_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3372,7 +3324,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'ai_knowledge_versions_activated_by_fkey' AND conrelid = '"public"."ai_knowledge_versions"'::regclass)
    AND to_regclass('"public"."ai_knowledge_versions_activated_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."ai_knowledge_versions"
-    ADD CONSTRAINT "ai_knowledge_versions_activated_by_fkey" FOREIGN KEY ("activated_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "ai_knowledge_versions_activated_by_fkey" FOREIGN KEY ("activated_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3402,7 +3354,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'ai_provider_credentials_created_by_fkey' AND conrelid = '"public"."ai_provider_credentials"'::regclass)
    AND to_regclass('"public"."ai_provider_credentials_created_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."ai_provider_credentials"
-    ADD CONSTRAINT "ai_provider_credentials_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "ai_provider_credentials_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3432,7 +3384,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'api_audit_log_actor_user_id_fkey' AND conrelid = '"public"."api_audit_log"'::regclass)
    AND to_regclass('"public"."api_audit_log_actor_user_id_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."api_audit_log"
-    ADD CONSTRAINT "api_audit_log_actor_user_id_fkey" FOREIGN KEY ("actor_user_id") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "api_audit_log_actor_user_id_fkey" FOREIGN KEY ("actor_user_id") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3452,7 +3404,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'api_tokens_created_by_fkey' AND conrelid = '"public"."api_tokens"'::regclass)
    AND to_regclass('"public"."api_tokens_created_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."api_tokens"
-    ADD CONSTRAINT "api_tokens_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+    ADD CONSTRAINT "api_tokens_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id") ON DELETE RESTRICT;
 END IF; END $baseline_guard$;
 
 
@@ -3472,7 +3424,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'api_tokens_revoked_by_fkey' AND conrelid = '"public"."api_tokens"'::regclass)
    AND to_regclass('"public"."api_tokens_revoked_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."api_tokens"
-    ADD CONSTRAINT "api_tokens_revoked_by_fkey" FOREIGN KEY ("revoked_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "api_tokens_revoked_by_fkey" FOREIGN KEY ("revoked_by") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3502,7 +3454,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'channel_sessions_created_by_fkey' AND conrelid = '"public"."channel_sessions"'::regclass)
    AND to_regclass('"public"."channel_sessions_created_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."channel_sessions"
-    ADD CONSTRAINT "channel_sessions_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "channel_sessions_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3542,7 +3494,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'conversations_assigned_to_user_id_fkey' AND conrelid = '"public"."conversations"'::regclass)
    AND to_regclass('"public"."conversations_assigned_to_user_id_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."conversations"
-    ADD CONSTRAINT "conversations_assigned_to_user_id_fkey" FOREIGN KEY ("assigned_to_user_id") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "conversations_assigned_to_user_id_fkey" FOREIGN KEY ("assigned_to_user_id") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3582,7 +3534,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'conversations_usable_for_rag_marked_by_fkey' AND conrelid = '"public"."conversations"'::regclass)
    AND to_regclass('"public"."conversations_usable_for_rag_marked_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."conversations"
-    ADD CONSTRAINT "conversations_usable_for_rag_marked_by_fkey" FOREIGN KEY ("usable_for_rag_marked_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "conversations_usable_for_rag_marked_by_fkey" FOREIGN KEY ("usable_for_rag_marked_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3732,7 +3684,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'incidents_acknowledged_by_fkey' AND conrelid = '"public"."incidents"'::regclass)
    AND to_regclass('"public"."incidents_acknowledged_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."incidents"
-    ADD CONSTRAINT "incidents_acknowledged_by_fkey" FOREIGN KEY ("acknowledged_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "incidents_acknowledged_by_fkey" FOREIGN KEY ("acknowledged_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3752,7 +3704,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'incidents_resolved_by_fkey' AND conrelid = '"public"."incidents"'::regclass)
    AND to_regclass('"public"."incidents_resolved_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."incidents"
-    ADD CONSTRAINT "incidents_resolved_by_fkey" FOREIGN KEY ("resolved_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "incidents_resolved_by_fkey" FOREIGN KEY ("resolved_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3842,7 +3794,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'messages_sent_by_user_id_fkey' AND conrelid = '"public"."messages"'::regclass)
    AND to_regclass('"public"."messages_sent_by_user_id_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."messages"
-    ADD CONSTRAINT "messages_sent_by_user_id_fkey" FOREIGN KEY ("sent_by_user_id") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "messages_sent_by_user_id_fkey" FOREIGN KEY ("sent_by_user_id") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3882,7 +3834,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'organizations_created_by_fkey' AND conrelid = '"public"."organizations"'::regclass)
    AND to_regclass('"public"."organizations_created_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."organizations"
-    ADD CONSTRAINT "organizations_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "organizations_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3892,7 +3844,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'organizations_suspended_by_fkey' AND conrelid = '"public"."organizations"'::regclass)
    AND to_regclass('"public"."organizations_suspended_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."organizations"
-    ADD CONSTRAINT "organizations_suspended_by_fkey" FOREIGN KEY ("suspended_by") REFERENCES "auth"."users"("id");
+    ADD CONSTRAINT "organizations_suspended_by_fkey" FOREIGN KEY ("suspended_by") REFERENCES "neon_auth"."user"("id");
 END IF; END $baseline_guard$;
 
 
@@ -3902,7 +3854,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'platform_admins_granted_by_fkey' AND conrelid = '"public"."platform_admins"'::regclass)
    AND to_regclass('"public"."platform_admins_granted_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."platform_admins"
-    ADD CONSTRAINT "platform_admins_granted_by_fkey" FOREIGN KEY ("granted_by") REFERENCES "auth"."users"("id") ON DELETE RESTRICT;
+    ADD CONSTRAINT "platform_admins_granted_by_fkey" FOREIGN KEY ("granted_by") REFERENCES "neon_auth"."user"("id") ON DELETE RESTRICT;
 END IF; END $baseline_guard$;
 
 
@@ -3912,7 +3864,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'platform_admins_revoked_by_fkey' AND conrelid = '"public"."platform_admins"'::regclass)
    AND to_regclass('"public"."platform_admins_revoked_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."platform_admins"
-    ADD CONSTRAINT "platform_admins_revoked_by_fkey" FOREIGN KEY ("revoked_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "platform_admins_revoked_by_fkey" FOREIGN KEY ("revoked_by") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3922,7 +3874,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'platform_admins_user_id_fkey' AND conrelid = '"public"."platform_admins"'::regclass)
    AND to_regclass('"public"."platform_admins_user_id_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."platform_admins"
-    ADD CONSTRAINT "platform_admins_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+    ADD CONSTRAINT "platform_admins_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE CASCADE;
 END IF; END $baseline_guard$;
 
 
@@ -3962,7 +3914,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'user_organizations_invited_by_fkey' AND conrelid = '"public"."user_organizations"'::regclass)
    AND to_regclass('"public"."user_organizations_invited_by_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."user_organizations"
-    ADD CONSTRAINT "user_organizations_invited_by_fkey" FOREIGN KEY ("invited_by") REFERENCES "auth"."users"("id") ON DELETE SET NULL;
+    ADD CONSTRAINT "user_organizations_invited_by_fkey" FOREIGN KEY ("invited_by") REFERENCES "neon_auth"."user"("id") ON DELETE SET NULL;
 END IF; END $baseline_guard$;
 
 
@@ -3982,7 +3934,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'user_organizations_user_id_fkey' AND conrelid = '"public"."user_organizations"'::regclass)
    AND to_regclass('"public"."user_organizations_user_id_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."user_organizations"
-    ADD CONSTRAINT "user_organizations_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+    ADD CONSTRAINT "user_organizations_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE CASCADE;
 END IF; END $baseline_guard$;
 
 
@@ -3992,7 +3944,7 @@ IF NOT EXISTS (SELECT 1 FROM pg_constraint
                 WHERE conname = 'user_recovery_codes_user_id_fkey' AND conrelid = '"public"."user_recovery_codes"'::regclass)
    AND to_regclass('"public"."user_recovery_codes_user_id_fkey"') IS NULL THEN
 ALTER TABLE ONLY "public"."user_recovery_codes"
-    ADD CONSTRAINT "user_recovery_codes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+    ADD CONSTRAINT "user_recovery_codes_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE CASCADE;
 END IF; END $baseline_guard$;
 
 
@@ -4040,18 +3992,8 @@ ALTER TABLE "public"."ai_models" ENABLE ROW LEVEL SECURITY;
 DO $baseline_guard$ BEGIN
 IF NOT EXISTS (SELECT 1 FROM pg_policy
                 WHERE polname = 'ai_models_read_all' AND polrelid = '"public"."ai_models"'::regclass) THEN
-drop policy if exists "tenant_write_ai_policy" on storage.objects;
-drop policy if exists "tenant_delete_ai_policy" on storage.objects;
--- ---- storage: bucket lgpd-exports + policy (migration 0017) ----
 
-drop policy if exists "tenant_read_lgpd_exports" on storage.objects;
--- ---- bucket de assets de skills (migration 0068) ----
--- Leitura por org (path {org_id}/...) OU plataforma (path platform/...) por qualquer
--- usuário autenticado (assets de plataforma são públicos p/ tenants; conteúdo é curado).
-drop policy if exists "skill_assets_read" on storage.objects;
--- Escrita/DELETE de assets é sempre via service role (rota de import) — sem policy de write.
 
--- ---- realtime: inbox (messages/conversations), kanban (crm_leads) e IA ----
 -- ---- ai_models: catálogo curado global (migration 0023, §Seed Spec 10 §2.2) ----
 -- Também não capturado pelo dump --schema-only. Sem isto, /api/v1/ai/providers/:p/models
 -- devolve lista vazia pra todo provedor e o seletor de modelo do agente fica sem opções.
@@ -4066,6 +4008,7 @@ values
   ('google',    'gemini-2.5-pro',     'Gemini 2.5 Pro',     'Flagship Google',                                          1000000,   125,  500, true, false),
   ('google',    'gemini-2.5-flash',   'Gemini 2.5 Flash',   'Cheap/fast Google',                                        1000000,    30,  120, true, true)
 on conflict (provider, model_id) do nothing;
+END IF; END $baseline_guard$;
 
 -- ---- WhatsApp: unificação de conversas por contato (migration 0027) ----
 -- O dump --schema-only não traz mudanças pós-snapshot. Sem este bloco, clones
@@ -5188,7 +5131,6 @@ begin
 end;
 $$;
 
-alter function public.fn_emit_conversation_routing() owner to postgres;
 
 drop trigger if exists trg_conversation_routing_requested on public.conversations;
 create trigger trg_conversation_routing_requested
@@ -8637,7 +8579,7 @@ set config = jsonb_set(config, '{rag_similarity_threshold}', '0.40'::jsonb)
 where (config->>'rag_similarity_threshold')::numeric = 0.72;
 
 -- Default da função de busca, para quem chama sem passar o limiar.
-CREATE OR REPLACE FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "public"."vector", "p_k" integer DEFAULT 5, "p_threshold" real DEFAULT 0.40) RETURNS TABLE("chunk_id" "uuid", "knowledge_source_id" "uuid", "content" "text", "similarity" real, "metadata" "jsonb")
+CREATE OR REPLACE FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" "uuid", "p_kb_version_id" "uuid", "p_embedding" "extensions"."vector", "p_k" integer DEFAULT 5, "p_threshold" real DEFAULT 0.40) RETURNS TABLE("chunk_id" "uuid", "knowledge_source_id" "uuid", "content" "text", "similarity" real, "metadata" "jsonb")
     LANGUAGE "sql" STABLE SECURITY DEFINER
     SET "search_path" TO 'public', 'pg_temp'
     AS $$
@@ -11060,7 +11002,6 @@ begin
 end;
 $$;
 
-alter function public.fn_emit_agent_case_event() owner to postgres;
 
 -- ⚠️ AS DUAS ORIGENS DE EXECUTE (doutrina de migrations, item 9). Tratar só uma
 -- deixa a função exposta com o gate verde: (A) o grant a PUBLIC que o Postgres
@@ -11168,7 +11109,7 @@ end $$;
 create or replace function public.retrieve_top_k_chunks(
   p_organization_id uuid,
   p_kb_version_id uuid,
-  p_embedding public.vector,
+  p_embedding extensions.vector,
   p_k integer default 5,
   p_threshold real default 0.40
 ) returns table (
@@ -11206,8 +11147,8 @@ end $$;
 revoke execute on function public.emit_event(text, text, uuid, jsonb, jsonb, uuid) from public, anon;
 grant  execute on function public.emit_event(text, text, uuid, jsonb, jsonb, uuid) to authenticated, service_role;
 
-revoke execute on function public.retrieve_top_k_chunks(uuid, uuid, public.vector, integer, real) from public, anon;
-grant  execute on function public.retrieve_top_k_chunks(uuid, uuid, public.vector, integer, real) to authenticated, service_role;
+revoke execute on function public.retrieve_top_k_chunks(uuid, uuid, extensions.vector, integer, real) from public, anon;
+grant  execute on function public.retrieve_top_k_chunks(uuid, uuid, extensions.vector, integer, real) to authenticated, service_role;
 
 do $$
 declare
@@ -13472,6 +13413,35 @@ alter table public.webhook_events_log
 create unique index if not exists webhook_events_log_evolution_external_unique
   on public.webhook_events_log (provider, external_id)
   where provider = 'evolution_go' and external_id is not null;
+
+-- Neon Data API : une policy sans RLS reste une protection inactive. Activer
+-- explicitement toutes les tables qui portent des policies, puis les invariants
+-- critiques même si une future génération de policy change leur ordre.
+DO $$
+DECLARE
+  r record;
+  v_rel regclass;
+BEGIN
+  FOR r IN
+    SELECT DISTINCT c.oid::regclass AS rel
+      FROM pg_policy p
+      JOIN pg_class c ON c.oid = p.polrelid
+      JOIN pg_namespace n ON n.oid = c.relnamespace
+     WHERE n.nspname = 'public' AND c.relkind = 'r'
+  LOOP
+    EXECUTE format('ALTER TABLE %s ENABLE ROW LEVEL SECURITY', r.rel);
+  END LOOP;
+  FOREACH v_rel IN ARRAY ARRAY[
+    'public.conversations'::regclass,
+    'public.messages'::regclass,
+    'public.crm_leads'::regclass,
+    'public.event_log'::regclass,
+    'public.sales_orders'::regclass,
+    'public.payment_proofs'::regclass
+  ] LOOP
+    EXECUTE format('ALTER TABLE %s ENABLE ROW LEVEL SECURITY', v_rel);
+  END LOOP;
+END $$;
 
 -- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 --

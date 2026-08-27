@@ -64,7 +64,7 @@ BEGIN
     FROM pg_proc p
     JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE n.nspname = 'public'
-      AND p.proname IN ('create_sales_order', 'confirm_sales_order_payment', 'mark_sales_order_paid')
+      AND p.proname IN ('fn_create_sales_order', 'fn_approve_sales_payment', 'create_sales_order', 'confirm_sales_order_payment', 'mark_sales_order_paid')
   ) THEN
     RAISE EXCEPTION 'sales_order_rpc_missing';
   END IF;
