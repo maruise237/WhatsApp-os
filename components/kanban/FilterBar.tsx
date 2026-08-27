@@ -15,12 +15,9 @@ import { useAssignableMembers } from "@/hooks/inbox/useAssignableMembers";
 import { useAssignableAgents } from "@/hooks/kanban/useAssignableAgents";
 import type { Lead, OwnerKind } from "@/lib/types/leads";
 import { OwnerBadge } from "./OwnerBadge";
-import {
-  agentOwnerFilter,
-  parseAgentOwnerFilter,
-  type LeadFilters,
-} from "@/lib/kanban/filters";
+import { agentOwnerFilter, parseAgentOwnerFilter, type LeadFilters } from "@/lib/kanban/filters";
 import { cn } from "@/lib/utils";
+import { useT } from "@/hooks/i18n/useT";
 
 interface FilterBarProps {
   filters: LeadFilters;
@@ -36,6 +33,7 @@ const STATUS_OPTIONS: Array<{ value: NonNullable<LeadFilters["status"]>; label: 
 ];
 
 export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
+  const t = useT();
   const user = useUser();
   const { data: members } = useAssignableMembers(true);
   const { data: agents } = useAssignableAgents(true);
@@ -54,7 +52,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
 
   const tagOptions = useMemo(() => {
     const set = new Set<string>();
-    for (const l of leads) for (const t of l.tags) set.add(t);
+    for (const l of leads) for (const tag of l.tags) set.add(tag);
     return Array.from(set).sort();
   }, [leads]);
 
@@ -79,7 +77,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
         .map((m) => ({
           key: `u:${m.user_id}`,
           owner: m.user_id,
-          name: m.full_name ?? "Sem nome",
+          name: m.full_name ?? t("Sem nome"),
           kind: "user" as OwnerKind,
           version: null,
         })),
@@ -92,29 +90,29 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
       })),
     ];
     return rows.sort((x, y) => x.name.localeCompare(y.name, "pt-BR"));
-  }, [members, agents, user.id]);
+  }, [members, agents, user.id, t]);
   const ownerLabel =
     filters.owner === "unassigned"
-      ? "Sem responsável"
+      ? t("Sem responsável")
       : !filters.owner || filters.owner === "any"
-        ? "Todos"
+        ? t("Todos")
         : filteredAgentId
-          ? (agents?.find((a) => a.agent_id === filteredAgentId)?.name ?? "Agente")
+          ? (agents?.find((a) => a.agent_id === filteredAgentId)?.name ?? t("Agente"))
           : filters.owner === user.id
-            ? "Eu"
-            : (members?.find((m) => m.user_id === filters.owner)?.full_name ??
-              "Responsável");
+            ? t("Eu")
+            : (members?.find((m) => m.user_id === filters.owner)?.full_name ?? t("Responsável"));
 
-  const statusLabel =
-    STATUS_OPTIONS.find((o) => o.value === (filters.status ?? "all"))?.label ?? "Todos";
+  const statusLabel = t(
+    STATUS_OPTIONS.find((o) => o.value === (filters.status ?? "all"))?.label ?? "Todos",
+  );
 
-  const tagLabel = filters.tag ?? "Tag: todas";
+  const tagLabel = filters.tag ?? t("Tag: todas");
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-surface p-2">
       <Input
         type="search"
-        placeholder="Buscar por título…"
+        placeholder={t("Buscar por título…")}
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         className="h-9 w-full sm:w-64"
@@ -122,19 +120,21 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">Responsável: {ownerLabel}</Button>
+          <Button variant="outline" size="sm">
+            {t("Responsável:")} {ownerLabel}
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
-          <DropdownMenuLabel>Responsável</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("Responsável")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => onChange({ ...filters, owner: "any" })}>
-            Todos
+            {t("Todos")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onChange({ ...filters, owner: "unassigned" })}>
-            Sem responsável
+            {t("Sem responsável")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onChange({ ...filters, owner: user.id })}>
-            Eu
+            {t("Eu")}
           </DropdownMenuItem>
           {/*
             Humanos e agentes numa lista SÓ, ordenados juntos por nome. Não existe
@@ -150,12 +150,11 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
             <>
               <DropdownMenuSeparator />
               {assignees.map((a) => (
-                <DropdownMenuItem key={a.key} onClick={() => onChange({ ...filters, owner: a.owner })}>
-                  <OwnerBadge
-                    ownerKind={a.kind}
-                    ownerName={a.name}
-                    agentVersion={a.version}
-                  />
+                <DropdownMenuItem
+                  key={a.key}
+                  onClick={() => onChange({ ...filters, owner: a.owner })}
+                >
+                  <OwnerBadge ownerKind={a.kind} ownerName={a.name} agentVersion={a.version} />
                 </DropdownMenuItem>
               ))}
             </>
@@ -165,7 +164,9 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">Status: {statusLabel}</Button>
+          <Button variant="outline" size="sm">
+            Status: {statusLabel}
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           {STATUS_OPTIONS.map((o) => (
@@ -173,7 +174,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
               key={o.value}
               onClick={() => onChange({ ...filters, status: o.value })}
             >
-              {o.label}
+              {t(o.label)}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
@@ -187,7 +188,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => onChange({ ...filters, tag: undefined })}>
-            Todas
+            {t("Todas")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {tagOptions.map((t) => (
@@ -201,7 +202,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
       <label
         className={cn(
           "flex cursor-pointer select-none items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm",
-          filters.overdueOnly && "border-accent bg-accent/10",
+          filters.overdueOnly && "bg-accent/10 border-accent",
         )}
       >
         <input
@@ -209,7 +210,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
           checked={!!filters.overdueOnly}
           onChange={(e) => onChange({ ...filters, overdueOnly: e.target.checked })}
         />
-        Apenas atrasados
+        {t("Apenas atrasados")}
       </label>
 
       {(filters.search ||
@@ -225,7 +226,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
             onChange({ status: "all" });
           }}
         >
-          Limpar filtros
+          {t("Limpar filtros")}
         </Button>
       )}
     </div>
