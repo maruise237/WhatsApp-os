@@ -22,6 +22,7 @@ import {
 import { useUser } from "@/hooks/auth/AuthProvider";
 import { useBulkAction } from "@/hooks/kanban/useBulkAction";
 import type { Stage } from "@/lib/kanban/types";
+import { useT } from "@/hooks/i18n/useT";
 
 interface BulkActionBarProps {
   selectedIds: string[];
@@ -30,12 +31,8 @@ interface BulkActionBarProps {
   onClear: () => void;
 }
 
-export function BulkActionBar({
-  selectedIds,
-  stages,
-  pipelineId,
-  onClear,
-}: BulkActionBarProps) {
+export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: BulkActionBarProps) {
+  const t = useT();
   const user = useUser();
   const bulk = useBulkAction(pipelineId);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -76,8 +73,8 @@ export function BulkActionBar({
           const n = res.data.updated_count;
           toast.success(
             ownerId === null
-              ? `${n} lead${n > 1 ? "s" : ""} sem responsável.`
-              : `${n} lead${n > 1 ? "s" : ""} atribuído${n > 1 ? "s" : ""}.`,
+              ? `${n} ${t("lead(s)")} ${t("Sem responsável")}.`
+              : `${n} ${t("lead(s)")} ${t("atribuído(s)")}.`,
           );
           onClear();
         },
@@ -86,10 +83,10 @@ export function BulkActionBar({
   };
 
   const runTagAdd = () => {
-    const t = tagInput.trim();
-    if (!t) return;
+    const tagValue = tagInput.trim();
+    if (!tagValue) return;
     bulk.mutate(
-      { action: "tag", lead_ids: selectedIds, params: { add: [t] } },
+      { action: "tag", lead_ids: selectedIds, params: { add: [tagValue] } },
       {
         onSuccess: () => {
           setTagInput("");
@@ -121,17 +118,17 @@ export function BulkActionBar({
           quebrar em linhas em vez de vazar. */}
       <div className="sticky bottom-4 z-30 mx-auto flex w-fit max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 shadow-md">
         <span className="text-sm font-medium">
-          {selectedIds.length} selecionado{selectedIds.length > 1 ? "s" : ""}
+          {selectedIds.length} {t("selecionado(s)")}
         </span>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" disabled={bulk.isPending}>
-              Mover para…
+              {t("Mover para…")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>Stage</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("Stage")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {stages.map((s) => (
               <DropdownMenuItem key={s.id} onClick={() => runMove(s.id)}>
@@ -144,13 +141,13 @@ export function BulkActionBar({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" disabled={bulk.isPending}>
-              Atribuir a…
+              {t("Atribuir a…")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={() => runAssign(user.id)}>Eu</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => runAssign(user.id)}>{t("Eu")}</DropdownMenuItem>
             <DropdownMenuItem onClick={() => runAssign(null)}>
-              Remover responsável
+              {t("Remover responsável")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -158,7 +155,7 @@ export function BulkActionBar({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" disabled={bulk.isPending}>
-              Tag…
+              {t("Tag…")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -166,7 +163,7 @@ export function BulkActionBar({
               <Input
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                placeholder="nova tag"
+                placeholder={t("nova tag")}
                 className="h-8 w-40"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -176,7 +173,7 @@ export function BulkActionBar({
                 }}
               />
               <Button size="sm" onClick={runTagAdd} disabled={!tagInput.trim()}>
-                Adicionar
+                {t("Adicionar")}
               </Button>
             </div>
           </DropdownMenuContent>
@@ -188,28 +185,30 @@ export function BulkActionBar({
           onClick={() => setConfirmDelete(true)}
           disabled={bulk.isPending}
         >
-          Excluir
+          {t("Excluir")}
         </Button>
 
         <Button size="sm" variant="ghost" onClick={onClear}>
-          Cancelar
+          {t("Cancelar")}
         </Button>
       </div>
 
       <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Excluir {selectedIds.length} lead(s)?</DialogTitle>
+            <DialogTitle>
+              {t("Excluir")} {selectedIds.length} {t("lead(s)")}&nbsp;?
+            </DialogTitle>
             <DialogDescription>
-              Esta ação remove os leads selecionados. Não pode ser desfeita.
+              {t("Esta ação remove os leads selecionados. Não pode ser desfeita.")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setConfirmDelete(false)}>
-              Cancelar
+              {t("Cancelar")}
             </Button>
             <Button variant="destructive" onClick={runDelete} disabled={bulk.isPending}>
-              Excluir
+              {t("Excluir")}
             </Button>
           </DialogFooter>
         </DialogContent>
