@@ -89,12 +89,43 @@ function mapAuthResult(result: unknown): AuthResult {
   };
 }
 
-async function getAccessToken(): Promise<string | null> {
-  const result = await (neonAuth as unknown as { getAccessToken?: () => Promise<unknown> }).getAccessToken?.();
-  const raw = (result ?? {}) as Record<string, unknown>;
-  const data = (raw.data ?? raw) as Record<string, unknown>;
-  const token = data.access_token ?? data.accessToken ?? data.token;
-  return typeof token === "string" && token.length > 0 ? token : null;
+type NeonAuthCookieStore = Awaited<ReturnType<typeof cookies>>;
+
+function neonAuthCookieHeader(cookieStore: NeonAuthCookieStore): string {
+  return cookieStore
+    .getAll()
+    .filter(({ name }) => name.startsWith("__Secure-neon-auth"))
+    .map(({ name, value }) => `${name}=${value}`)
+    .join("; ");
+}
+
+async function getAccessToken(cookieStore: NeonAuthCookieStore): Promise<string | null> {
+  // Neon documents the RLS JWT in the `set-auth-jwt` response header from
+  // `/get-session`. Fetch it with the current Neon Auth cookies so the Data API
+  // receives a real bearer token instead of an unauthenticated request.
+  const cookieHeader = neonAuthCookieHeader(cookieStore);
+  if (!cookieHeader) return null;
+
+  try {
+    const response = await fetch(
+      `${env.NEON_AUTH_BASE_URL.replace(/\/+$/, "")}/get-session`,
+      {
+        headers: { Accept: "application/json", Cookie: cookieHeader },
+        cache: "no-store",
+      },
+    );
+    const jwt = response.headers.get("set-auth-jwt")?.trim();
+    if (jwt) return jwt;
+
+    if (!response.ok) return null;
+    const body = (await response.json().catch(() => null)) as
+      | { token?: unknown; data?: { token?: unknown } }
+      | null;
+    const token = body?.data?.token ?? body?.token;
+    return typeof token === "string" && token.length > 0 ? token : null;
+  } catch {
+    return null;
+  }
 }
 
 function authCompat() {
@@ -177,7 +208,7 @@ export async function createClient(): Promise<SupabaseClient> {
   const dataClient = createNeonDataClient({
     dataApi: {
       url: env.NEON_DATA_API_URL,
-      getToken: getAccessToken,
+      getToken: () => getAccessToken(cookieStore),
     },
   });
 
