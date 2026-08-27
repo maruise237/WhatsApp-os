@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { CRMSidePanel } from "@/components/inbox/CRMSidePanel";
+import { IdiomaProvider } from "@/lib/i18n/IdiomaProvider";
 
 /**
  * O painel monta `ConversationTagsEditor`, que usa react-query. Sem o provider
@@ -13,9 +14,11 @@ import { CRMSidePanel } from "@/components/inbox/CRMSidePanel";
 function renderPainel() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <QueryClientProvider client={client}>
-      <CRMSidePanel conversation={conversation} />
-    </QueryClientProvider>,
+    <IdiomaProvider locale="pt-BR">
+      <QueryClientProvider client={client}>
+        <CRMSidePanel conversation={conversation} />
+      </QueryClientProvider>
+    </IdiomaProvider>,
   );
 }
 
