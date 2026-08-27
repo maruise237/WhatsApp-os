@@ -147,6 +147,7 @@ export const DICIONARIO: Traducoes = {
   },
   "Marcar próximo passo": { "fr-FR": "Définir la prochaine étape", es: "Marcar próximo paso" },
   Lead: { "fr-FR": "Lead", es: "Lead" },
+  Tags: { "fr-FR": "Tags" },
   Tag: { "fr-FR": "Étiquette", es: "Etiqueta" },
   "Não consegui salvar o próximo passo. Tente de novo.": {
     "fr-FR": "Impossible d’enregistrer la prochaine étape. Réessayez.",
