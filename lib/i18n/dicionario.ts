@@ -691,6 +691,44 @@ export const DICIONARIO: Traducoes = {
         "Impossible de tester le crédit pour le moment. Vous pouvez continuer, mais vérifiez le solde du compte IA avant de lui faire confiance.",
     },
   "Pronta para uso.": { "fr-FR": "Prête à l’emploi." },
+
+  // ─── Détail contact ───
+  "Erro ao carregar contato.": { "fr-FR": "Erreur lors du chargement du contact." },
+  "Contato anonimizado (LGPD)": { "fr-FR": "Contact anonymisé (LGPD)" },
+  Anonimizado: { "fr-FR": "Anonymisé" },
+  "edição bloqueada.": { "fr-FR": "modification bloquée." },
+  "Visão geral": { "fr-FR": "Vue d’ensemble" },
+  Timeline: { "fr-FR": "Chronologie" },
+  LGPD: { "fr-FR": "LGPD" },
+  "Display name": { "fr-FR": "Nom d’affichage" },
+  Origem: { "fr-FR": "Origine" },
+  "Última atividade": { "fr-FR": "Dernière activité" },
+  "Criado em": { "fr-FR": "Créé le" },
+  "Direito ao esquecimento (LGPD)": { "fr-FR": "Droit à l’effacement (LGPD)" },
+  "A anonimização é irreversível. Use somente após confirmação formal do titular ou ordem judicial.":
+    {
+      "fr-FR":
+        "L’anonymisation est irréversible. Utilisez-la uniquement après confirmation formelle de la personne concernée ou sur ordonnance judiciaire.",
+    },
+  "Este contato já foi anonimizado": { "fr-FR": "Ce contact a déjà été anonymisé" },
+  "Anonimizar contato": { "fr-FR": "Anonymiser le contact" },
+  "Contato já estava anonimizado.": { "fr-FR": "Le contact était déjà anonymisé." },
+  "Contato anonimizado.": { "fr-FR": "Contact anonymisé." },
+  "Anonimizar contato (LGPD)": { "fr-FR": "Anonymiser le contact (LGPD)" },
+  'Esta ação é irreversível. O nome será substituído por "Contato Anonimizado #N", email/telefone/CPF serão limpos, e atividades terão conteúdo redigido.':
+    {
+      "fr-FR":
+        "Cette action est irréversible. Le nom sera remplacé par « Contact anonymisé #N », l’e-mail, le téléphone et le CPF seront supprimés, et le contenu des activités sera anonymisé.",
+    },
+  "Justificativa (mínimo 10 caracteres)": { "fr-FR": "Justification (10 caractères minimum)" },
+  "Ex.: Solicitação formal do titular via email em DD/MM/YYYY": {
+    "fr-FR": "Ex. : Demande formelle de la personne concernée par e-mail le JJ/MM/AAAA",
+  },
+  "caracteres mínimos": { "fr-FR": "caractères minimum" },
+  "Para confirmar, digite": { "fr-FR": "Pour confirmer, saisissez" },
+  Confirmação: { "fr-FR": "Confirmation" },
+  "Anonimizando…": { "fr-FR": "Anonymisation…" },
+  "Anonimizar permanentemente": { "fr-FR": "Anonymiser définitivement" },
 };
 
 /**
