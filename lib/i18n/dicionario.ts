@@ -1059,6 +1059,64 @@ export const DICIONARIO: Traducoes = {
   "Nenhum número conectado ainda.": { "fr-FR": "Aucun numéro n’est encore connecté." },
   "número conectado": { "fr-FR": "numéro connecté" },
   "números conectados": { "fr-FR": "numéros connectés" },
+  "Canal conectado.": { "fr-FR": "Canal connecté." },
+  "Não foi possível conectar.": { "fr-FR": "Impossible de connecter le canal." },
+  "provedor parceiro": { "fr-FR": "fournisseur partenaire" },
+  "Conectar por": { "fr-FR": "Connecter via" },
+  "Um número oficial (WhatsApp Business) conectado através do seu provedor. As mensagens entram e saem pelo CRM, e os modelos aprovados são os mesmos da sua conta.":
+    {
+      "fr-FR":
+        "Un numéro officiel (WhatsApp Business) connecté via votre fournisseur. Les messages entrent et sortent par le CRM, et les modèles approuvés sont les mêmes que ceux de votre compte.",
+    },
+  Conectado: { "fr-FR": "Connecté" },
+  "Não conectado": { "fr-FR": "Non connecté" },
+  "Número conectado": { "fr-FR": "Numéro connecté" },
+  "sem número informado": { "fr-FR": "aucun numéro renseigné" },
+  Conta: { "fr-FR": "Compte" },
+  "id da conta conectada no provedor": {
+    "fr-FR": "identifiant du compte connecté chez le fournisseur",
+  },
+  "É o identificador do número no painel do provedor — não o da Meta.": {
+    "fr-FR":
+      "Il s’agit de l’identifiant du numéro dans le panneau du fournisseur, et non de celui de Meta.",
+  },
+  "Chave de API": { "fr-FR": "Clé API" },
+  "gravada — preencha para trocar": { "fr-FR": "enregistrée — remplissez pour la remplacer" },
+  "cole a chave": { "fr-FR": "collez la clé" },
+  "Guardada cifrada. Depois de gravar ela não é mostrada de novo — para trocar, cole a nova.": {
+    "fr-FR":
+      "Conservée chiffrée. Après l’enregistrement, elle n’est plus affichée ; pour la remplacer, collez la nouvelle clé.",
+  },
+  "Verificando…": { "fr-FR": "Vérification…" },
+  "A credencial é testada contra o provedor antes de ser gravada.": {
+    "fr-FR": "L’identifiant est testé auprès du fournisseur avant d’être enregistré.",
+  },
+  "Falta ligar a volta": { "fr-FR": "Il reste à connecter le retour" },
+  "Cole os dois valores abaixo no webhook do seu provedor. Sem isso o CRM": {
+    "fr-FR":
+      "Collez les deux valeurs ci-dessous dans le webhook de votre fournisseur. Sans cela, le CRM",
+  },
+  "envia mas não recebe": { "fr-FR": "envoie mais ne reçoit pas" },
+  "a resposta do cliente não chega, e nada na tela avisa. O segredo aparece": {
+    "fr-FR":
+      "la réponse du client n’arrive pas et rien à l’écran ne l’indique. Le secret s’affiche",
+  },
+  "uma única vez": { "fr-FR": "une seule fois" },
+  "se sair desta tela sem copiá-lo, reconecte para gerar outro.": {
+    "fr-FR":
+      "une seule fois ; si vous quittez cet écran sans le copier, reconnectez-vous pour en générer un autre.",
+  },
+  "URL do webhook": { "fr-FR": "URL du webhook" },
+  "Segredo (assinatura)": { "fr-FR": "Secret (signature)" },
+  "Qualidade do número segundo a plataforma:": {
+    "fr-FR": "Qualité du numéro selon la plateforme :",
+  },
+  Webhook: { "fr-FR": "Webhook" },
+  "O endereço que o provedor usa para entregar as mensagens. O segredo não é mostrado de novo — para obter um novo, reconecte.":
+    {
+      "fr-FR":
+        "L’adresse utilisée par le fournisseur pour livrer les messages. Le secret n’est plus affiché ; pour en obtenir un nouveau, reconnectez-vous.",
+    },
   "Copiado.": { "fr-FR": "Copié." },
   "Conectado:": { "fr-FR": "Connecté :" },
   Copiar: { "fr-FR": "Copier" },
