@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      WAHA_API_BASE_URL: http://waha:3000
+      WAHA_API_BASE_URL: http://waha-internal:3000
       WHATSAPP_GATEWAY_BASE_URL: http://whatsapp-gateway:8788
       WHATSAPP_GATEWAY_TOKEN: ${WHATSAPP_GATEWAY_TOKEN}
     depends_on:
@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      WAHA_API_BASE_URL: http://waha:3000
+      WAHA_API_BASE_URL: http://waha-internal:3000
       WHATSAPP_GATEWAY_BASE_URL: http://whatsapp-gateway:8788
       WHATSAPP_GATEWAY_TOKEN: ${WHATSAPP_GATEWAY_TOKEN}
     depends_on:
@@ -106,7 +106,10 @@ services:
     expose:
       - "3000"
     logging: *default-logging
-    networks: [internal]
+    networks:
+      internal:
+        aliases:
+          - waha-internal
 
   redis:
     image: redis:7-alpine
