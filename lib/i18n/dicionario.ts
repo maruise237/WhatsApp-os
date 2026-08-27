@@ -1096,6 +1096,49 @@ export const DICIONARIO: Traducoes = {
   Condição: { "fr-FR": "Condition" },
   "Classificar (IA)": { "fr-FR": "Classer (IA)" },
   "Enviar mensagem": { "fr-FR": "Envoyer un message" },
+  Manual: { "fr-FR": "Manuel" },
+  Silêncio: { "fr-FR": "Silence" },
+  "Etapa do funil": { "fr-FR": "Étape de l’entonnoir" },
+  "Agente pediu ajuda": { "fr-FR": "L’agent a demandé de l’aide" },
+  "Gatilho: Silêncio": { "fr-FR": "Déclencheur : silence" },
+  "Gatilho: entrou em": { "fr-FR": "Déclencheur : entrée dans" },
+  "Gatilho: Etapa do funil": { "fr-FR": "Déclencheur : étape de l’entonnoir" },
+  "Gatilho: quando o agente pede ajuda": {
+    "fr-FR": "Déclencheur : lorsque l’agent demande de l’aide",
+  },
+  "Gatilho: Manual": { "fr-FR": "Déclencheur : manuel" },
+  indisponível: { "fr-FR": "indisponible" },
+  "Tipo de gatilho": { "fr-FR": "Type de déclencheur" },
+  "Etapa que dispara o fluxo": { "fr-FR": "Étape qui déclenche le flow" },
+  "Carregando etapas…": { "fr-FR": "Chargement des étapes…" },
+  "Escolha a etapa": { "fr-FR": "Choisissez l’étape" },
+  "Nenhuma etapa ativa encontrada — crie o funil antes de armar este gatilho.": {
+    "fr-FR": "Aucune étape active trouvée — créez l’entonnoir avant d’armer ce déclencheur.",
+  },
+  "O fluxo começa quando um negócio entra nesta etapa, por arrasto no quadro ou por automação. A entrada na fila leva poucos minutos, não é instantânea.":
+    {
+      "fr-FR":
+        "Le flow commence lorsqu’une affaire entre dans cette étape, par glisser-déposer dans le tableau ou par automatisation. Son entrée dans la file prend quelques minutes, elle n’est pas instantanée.",
+    },
+  "O fluxo começa quando o agente abre um caso — o momento em que ele diz que precisa de uma pessoa. Não há o que escolher aqui: vale para qualquer caso desta conta.":
+    {
+      "fr-FR":
+        "Le flow commence lorsque l’agent ouvre un dossier — au moment où il indique avoir besoin d’une personne. Il n’y a rien à choisir ici : cela vaut pour tous les dossiers de ce compte.",
+    },
+  "Comece o fluxo por uma espera.": { "fr-FR": "Commencez le flow par une attente." },
+  "O agente continua conversando depois de abrir o caso — sem espera, o cliente recebe duas mensagens ao mesmo tempo.":
+    {
+      "fr-FR":
+        "L’agent continue de converser après l’ouverture du dossier — sans attente, le client reçoit deux messages en même temps.",
+    },
+  "Se o caso for resolvido antes, o follow-up é cancelado sozinho.": {
+    "fr-FR": "Si le dossier est résolu avant, le follow-up est automatiquement annulé.",
+  },
+  "Minutos de silêncio": { "fr-FR": "Minutes de silence" },
+  "Segmentos (tags, opcional)": { "fr-FR": "Segments (étiquettes, facultatif)" },
+  "Mínimo de": { "fr-FR": "Minimum de" },
+  "Cancelar se o lead responder": { "fr-FR": "Annuler si le lead répond" },
+  "Salvar gatilho": { "fr-FR": "Enregistrer le déclencheur" },
   "Adicionar nó": { "fr-FR": "Ajouter un nœud" },
   "Aguardando resposta": { "fr-FR": "En attente de réponse" },
   "Pausado (atendimento humano)": { "fr-FR": "En pause (traitement humain)" },
@@ -1408,7 +1451,6 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "sont dans cette étape. Où doivent-ils aller ?",
   },
   "Para onde vão os negócios de": { "fr-FR": "Où vont les opportunités de" },
-  "Escolha a etapa": { "fr-FR": "Choisissez l’étape" },
   "Esta etapa é a que o assistente usa para «": {
     "fr-FR": "Cette étape est celle que l’assistant utilise pour «",
   },
