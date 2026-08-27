@@ -6,4 +6,4 @@
  * em `lib/i18n/IdiomaProvider`, junto do contexto que ela lê. Separar o hook do
  * seu contexto faria os dois divergirem no dia em que alguém mudasse um.
  */
-export { useT } from "@/lib/i18n/IdiomaProvider";
+export { useIdioma, useT } from "@/lib/i18n/IdiomaProvider";

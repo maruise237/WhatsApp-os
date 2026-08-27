@@ -1091,7 +1091,109 @@ export const DICIONARIO: Traducoes = {
   "por item, separados": { "fr-FR": "par élément, séparées" },
   "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
   "Criar fonte": { "fr-FR": "Créer la source" },
-  "Perguntas frequentes do tenant.": { "fr-FR": "Questions fréquentes de l’organisation." },
+  "Carregando orçamento...": { "fr-FR": "Chargement du budget…" },
+  "Orçamento mensal de IA": { "fr-FR": "Budget mensuel de l’IA" },
+  "Gasto de ": { "fr-FR": "Dépense de " },
+  "valores em dólar (é a moeda em que o provedor de IA cobra)": {
+    "fr-FR": "montants en dollars (la devise facturée par le fournisseur d’IA)",
+  },
+  "IA parada por gasto": { "fr-FR": "IA arrêtée pour dépassement de budget" },
+  "Passou do limite": { "fr-FR": "Limite dépassée" },
+  "gastos de ": { "fr-FR": "dépensés sur " },
+  "gastos este mês": { "fr-FR": "dépensés ce mois-ci" },
+  "do limite": { "fr-FR": "de la limite" },
+  "Sem limite definido — a IA não vai parar sozinha por gasto.": {
+    "fr-FR":
+      "Aucune limite définie — l’IA ne s’arrêtera pas automatiquement pour dépassement de budget.",
+  },
+  "Isto é só acompanhamento. A IA não vai parar sozinha por gasto.": {
+    "fr-FR":
+      "C’est uniquement un suivi. L’IA ne s’arrêtera pas automatiquement pour dépassement de budget.",
+  },
+  "Avisamos ao passar de": { "fr-FR": "Alerte au-delà de" },
+  "do limite. A IA não para.": { "fr-FR": "de la limite. L’IA ne s’arrête pas." },
+  "A parada começa a valer em": { "fr-FR": "L’arrêt prendra effet le" },
+  "Até lá, só avisamos.": { "fr-FR": "D’ici là, seules les alertes sont activées." },
+  "A IA para de responder ao chegar em": { "fr-FR": "L’IA arrête de répondre à" },
+  "Quando isso acontecer, as conversas em andamento vão para a fila de atendimento": {
+    "fr-FR": "À ce moment-là, les conversations en cours sont placées dans la file de traitement",
+  },
+  "humano e voltam ao automático uma a uma, pelo cabeçalho de cada conversa.": {
+    "fr-FR":
+      "humain et reviennent une à une à l’automatique depuis l’en-tête de chaque conversation.",
+  },
+  "Proteção de gasto desligada nesta instalação (AI_BUDGET_ENFORCEMENT=off). O que estiver escolhido aqui não vale enquanto quem cuida do servidor não religar.":
+    {
+      "fr-FR":
+        "La protection contre les dépenses est désactivée sur cette installation (AI_BUDGET_ENFORCEMENT=off). Le choix effectué ici ne s’applique pas tant que l’administrateur du serveur ne la réactive pas.",
+    },
+  'Nesta instalação a proteção só avisa (AI_BUDGET_ENFORCEMENT=avisar): mesmo com "Parar a IA" escolhido, ela vai continuar respondendo.':
+    {
+      "fr-FR":
+        'Sur cette installation, la protection ne fait qu’alerter (AI_BUDGET_ENFORCEMENT=avisar) : même si "Arrêter l’IA" est choisi, elle continuera de répondre.',
+    },
+  "Parte do que a IA gastou este mês não entra nesta conta: o produto ainda não sabe o preço do modelo que está em uso, então o número abaixo é MENOR que o real e a parada no limite pode não acontecer. Enquanto isso, acompanhe o gasto direto no painel do seu provedor de IA.":
+    {
+      "fr-FR":
+        "Une partie des dépenses de l’IA ce mois-ci n’est pas incluse dans ce calcul : le produit ne connaît pas encore le prix du modèle utilisé. Le montant ci-dessous est donc INFÉRIEUR au montant réel et l’arrêt à la limite peut ne pas se déclencher. En attendant, suivez les dépenses directement dans le tableau de bord de votre fournisseur d’IA.",
+    },
+  "Só acompanhar": { "fr-FR": "Uniquement suivre" },
+  "A IA nunca para por gasto. Você vê o número nesta tela e decide o que fazer.": {
+    "fr-FR":
+      "L’IA ne s’arrête jamais pour dépassement de budget. Consultez le montant ici et décidez de la suite.",
+  },
+  "Abrimos um aviso na Central de avisos. A IA continua respondendo normalmente.": {
+    "fr-FR":
+      "Une alerte est ouverte dans le centre des alertes. L’IA continue de répondre normalement.",
+  },
+  "Parar a IA ao chegar em": { "fr-FR": "Arrêter l’IA à" },
+  "As conversas em andamento vão para a fila de atendimento humano — ninguém fica sem resposta, mas alguém precisa responder.":
+    {
+      "fr-FR":
+        "Les conversations en cours sont placées dans la file de traitement humain — personne ne reste sans réponse, mais quelqu’un doit répondre.",
+    },
+  'Cada uma volta ao automático pelo botão "Devolver ao automático" no cabeçalho dela.': {
+    "fr-FR":
+      'Chacune revient à l’automatique avec le bouton "Remettre à l’automatique" dans son en-tête.',
+  },
+  "Atenção: o produto ainda não sabe o preço do modelo em uso, então o gasto medido é menor que o real e esta parada pode não disparar.":
+    {
+      "fr-FR":
+        "Attention : le produit ne connaît pas encore le prix du modèle utilisé ; les dépenses mesurées sont donc inférieures aux dépenses réelles et cet arrêt peut ne pas se déclencher.",
+    },
+  'Disponível depois de salvar "Me avisar" — e, quando você armar a parada, ela só começa a valer 72 horas depois.':
+    {
+      "fr-FR":
+        'Disponible après avoir enregistré "M’alerter" — lorsque vous armez l’arrêt, celui-ci ne prend effet qu’après 72 heures.',
+    },
+  "Limite mensal (US$)": { "fr-FR": "Limite mensuelle (US$)" },
+  "Avisar ao chegar em (% do limite)": { "fr-FR": "Alerter à (% de la limite)" },
+  "Editar limite": { "fr-FR": "Modifier la limite" },
+  "Escolha o que acontece quando o gasto do mês chega no limite. Os valores são em dólar — é a moeda em que o provedor de IA cobra.":
+    {
+      "fr-FR":
+        "Choisissez ce qui se passe lorsque les dépenses du mois atteignent la limite. Les montants sont en dollars — la devise facturée par le fournisseur d’IA.",
+    },
+  "Me avisar ao passar de": { "fr-FR": "M’alerter au-delà de" },
+  "Começar a valer agora, sem esperar as 72 horas": {
+    "fr-FR": "Prendre effet maintenant, sans attendre les 72 heures",
+  },
+  "A parada começa a valer": { "fr-FR": "L’arrêt prendra effet" },
+  "depois de salvar. É o tempo de você ver o aviso chegar antes que alguma conversa pare.": {
+    "fr-FR":
+      "après l’enregistrement. Cela vous laisse le temps de voir l’alerte arriver avant qu’une conversation ne s’arrête.",
+  },
+  "Para avisar ou parar no limite, ele precisa ser de pelo menos": {
+    "fr-FR": "Pour alerter ou arrêter à la limite, celle-ci doit être d’au moins",
+  },
+  "por mês. Abaixo disso não é orçamento de um atendimento — é erro de digitação.": {
+    "fr-FR":
+      "par mois. En dessous, ce n’est pas le budget d’un traitement — c’est probablement une erreur de saisie.",
+  },
+  "Se você só quer acompanhar o gasto sem limite, escolha": {
+    "fr-FR": "Si vous souhaitez uniquement suivre les dépenses sans limite, choisissez",
+  },
+  "Regex output block": { "fr-FR": "Blocage de sortie par regex" },
   "Documento PDF de políticas (troca, devolução, privacidade).": {
     "fr-FR": "Document PDF des politiques (échange, retour, confidentialité).",
   },
@@ -1129,7 +1231,6 @@ export const DICIONARIO: Traducoes = {
   min: { "fr-FR": "min" },
   h: { "fr-FR": "h" },
   d: { "fr-FR": "j" },
-  "Regex output block": { "fr-FR": "Blocage de sortie par regex" },
   "RAG must hit": { "fr-FR": "Résultat RAG obligatoire" },
   "Regex input block": { "fr-FR": "Blocage d’entrée par regex" },
   "Janela horária": { "fr-FR": "Fenêtre horaire" },

@@ -38,6 +38,11 @@ export function IdiomaProvider({
   return <Ctx.Provider value={idioma}>{children}</Ctx.Provider>;
 }
 
+/** Retorna a locale normalizada da interface para formatações localizadas. */
+export function useIdioma(): Idioma {
+  return useContext(Ctx);
+}
+
 /** `t("Assumir")` → "Asumir" para quem escolheu espanhol. */
 export function useT(): (texto: string) => string {
   const idioma = useContext(Ctx);
