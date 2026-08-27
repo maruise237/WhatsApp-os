@@ -13,6 +13,7 @@ import { verifyInviteToken } from "@/lib/auth/invite-token";
 import { audit, hashEmail } from "@/lib/audit";
 import { authRateLimited, AUTH_LIMITS } from "@/lib/auth/rate-limit";
 import { env } from "@/lib/env";
+import { ensureTenantForUser } from "@/lib/auth/provision";
 
 export type SignUpResult =
   | { ok: true }
@@ -23,9 +24,10 @@ export type SignUpResult =
     };
 
 /**
- * Signup self-service: cria o usuário no GoTrue e dispara o e-mail de
- * confirmação. O tenant só é provisionado quando o link é confirmado em
- * /auth/confirm (evita orgs órfãs de cadastros nunca confirmados).
+ * Signup self-service: cria o usuário no Neon Auth e provisiona o tenant
+ * imediatamente quando uma sessão é retornada (caso de confirmação e-mail
+ * désactivée). Si la vérification e-mail est active et qu’aucune session n’est
+ * retournée, /auth/confirm conserve le provisionnement après confirmation.
  *
  * Anti-enumeração: e-mail já cadastrado recebe a MESMA resposta de sucesso —
  * o GoTrue devolve um usuário ofuscado (identities vazio) sem erro, e nós não
@@ -112,6 +114,27 @@ export async function signUp(
       userAgent,
     });
     return { ok: false, error: "signup_failed" };
+  }
+
+  // Avec la vérification e-mail désactivée, Neon Auth renvoie une session dès
+  // l’inscription. Provisionner ici évite que le premier utilisateur tombe sur
+  // une app vide. Le mode invitation ne crée jamais une organisation propre.
+  if (data.user && data.session && !temConvite) {
+    try {
+      await ensureTenantForUser(data.user);
+    } catch (provisionError) {
+      await audit({
+        action: "auth.signup_provision_failed",
+        actorUserId: data.user.id,
+        metadata: {
+          reason: provisionError instanceof Error ? provisionError.message : String(provisionError),
+        },
+        requestId,
+        ip,
+        userAgent,
+      });
+      return { ok: false, error: "signup_failed" };
+    }
   }
 
   await audit({
