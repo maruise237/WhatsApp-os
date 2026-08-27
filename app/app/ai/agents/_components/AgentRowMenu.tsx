@@ -32,12 +32,14 @@ import {
   unpauseAgentAction,
 } from "../_actions";
 import { RenameAgentDialog } from "./RenameAgentDialog";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   agent: AgentRow;
 }
 
 export function AgentRowMenu({ agent }: Props) {
+  const t = useT();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [renameOpen, setRenameOpen] = useState(false);
@@ -47,7 +49,10 @@ export function AgentRowMenu({ agent }: Props) {
   const isPaused = status === "paused" || status === "draft";
   const isArchived = status === "archived";
 
-  const run = (label: string, action: () => Promise<{ ok: boolean; error?: string; message?: string }>) => {
+  const run = (
+    label: string,
+    action: () => Promise<{ ok: boolean; error?: string; message?: string }>,
+  ) => {
     startTransition(async () => {
       try {
         const res = await action();
@@ -55,10 +60,10 @@ export function AgentRowMenu({ agent }: Props) {
           toast.success(label);
           router.refresh();
         } else {
-          toast.error(res.message ?? `Falha: ${res.error ?? "unknown"}`);
+          toast.error(res.message ?? `${t("Falha:")} ${res.error ?? "unknown"}`);
         }
       } catch {
-        toast.error("Erro ao executar ação.");
+        toast.error(t("Erro ao executar ação."));
       }
     });
   };
@@ -70,7 +75,7 @@ export function AgentRowMenu({ agent }: Props) {
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Menu de ações"
+            aria-label={t("Menu de ações")}
             disabled={isPending}
             className="size-8"
           >
@@ -80,14 +85,14 @@ export function AgentRowMenu({ agent }: Props) {
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem asChild>
             <Link href={`/app/ai/agents/${agent.id}`} className="flex items-center gap-2">
-              <PencilSimple size={14} aria-hidden /> Editar
+              <PencilSimple size={14} aria-hidden /> {t("Editar")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isArchived}
-            onSelect={() => run("Agent duplicado.", () => duplicateAgentAction(agent.id))}
+            onSelect={() => run(t("Agent duplicado."), () => duplicateAgentAction(agent.id))}
           >
-            <Copy size={14} aria-hidden className="mr-2" /> Duplicar
+            <Copy size={14} aria-hidden className="mr-2" /> {t("Duplicar")}
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isArchived}
@@ -96,21 +101,21 @@ export function AgentRowMenu({ agent }: Props) {
               setRenameOpen(true);
             }}
           >
-            <PencilSimple size={14} aria-hidden className="mr-2" /> Renomear
+            <PencilSimple size={14} aria-hidden className="mr-2" /> {t("Renomear")}
           </DropdownMenuItem>
           {isPaused ? (
             <DropdownMenuItem
               disabled={isArchived || agent.kind === "mcp_agent"}
-              onSelect={() => run("Agent reativado.", () => unpauseAgentAction(agent.id))}
+              onSelect={() => run(t("Agent reativado."), () => unpauseAgentAction(agent.id))}
             >
-              <Play size={14} aria-hidden className="mr-2" /> Despausar
+              <Play size={14} aria-hidden className="mr-2" /> {t("Despausar")}
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem
               disabled={isArchived}
-              onSelect={() => run("Agent pausado.", () => pauseAgentAction(agent.id))}
+              onSelect={() => run(t("Agent pausado."), () => pauseAgentAction(agent.id))}
             >
-              <Pause size={14} aria-hidden className="mr-2" /> Pausar
+              <Pause size={14} aria-hidden className="mr-2" /> {t("Pausar")}
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -122,35 +127,31 @@ export function AgentRowMenu({ agent }: Props) {
             }}
             className="text-destructive focus:text-destructive"
           >
-            <Archive size={14} aria-hidden className="mr-2" /> Arquivar
+            <Archive size={14} aria-hidden className="mr-2" /> {t("Arquivar")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <RenameAgentDialog
-        agent={agent}
-        open={renameOpen}
-        onOpenChange={setRenameOpen}
-      />
+      <RenameAgentDialog agent={agent} open={renameOpen} onOpenChange={setRenameOpen} />
 
       <AlertDialog open={archiveOpen} onOpenChange={setArchiveOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Arquivar &ldquo;{agent.name}&rdquo;?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t("Arquivar “")} {agent.name} »?
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              O agent deixa de responder gatilhos e some das listas ativas.
-              Versões publicadas são preservadas para auditoria. Não é possível
-              desarquivar pela UI nesta versão.
+              {t(
+                "O agent deixa de responder gatilhos e some das listas ativas. Versões publicadas são preservadas para auditoria. Não é possível desarquivar pela UI nesta versão.",
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("Cancelar")}</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() =>
-                run("Agent arquivado.", () => archiveAgentAction(agent.id))
-              }
+              onClick={() => run(t("Agent arquivado."), () => archiveAgentAction(agent.id))}
             >
-              Arquivar
+              {t("Arquivar")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -1132,6 +1132,22 @@ export const DICIONARIO: Traducoes = {
   Operador: { "fr-FR": "Opérateur" },
   Valor: { "fr-FR": "Valeur" },
   "Ex.: 3": { "fr-FR": "Ex. : 3" },
+  "Menu de ações": { "fr-FR": "Menu des actions" },
+  Duplicar: { "fr-FR": "Dupliquer" },
+  "Agent duplicado.": { "fr-FR": "Agent dupliqué." },
+  Renomear: { "fr-FR": "Renommer" },
+  Despausar: { "fr-FR": "Reprendre" },
+  "Agent reativado.": { "fr-FR": "Agent réactivé." },
+  Pausar: { "fr-FR": "Mettre en pause" },
+  "Agent pausado.": { "fr-FR": "Agent mis en pause." },
+  Arquivar: { "fr-FR": "Archiver" },
+  "Arquivar “": { "fr-FR": "Archiver « " },
+  "O agent deixa de responder gatilhos e some das listas ativas. Versões publicadas são preservadas para auditoria. Não é possível desarquivar pela UI nesta versão.":
+    {
+      "fr-FR":
+        "L’agent cesse de répondre aux déclencheurs et disparaît des listes actives. Les versions publiées sont conservées pour l’audit. Il n’est pas possible de désarchiver depuis l’interface dans cette version.",
+    },
+  "Agent arquivado.": { "fr-FR": "Agent archivé." },
   "Modelo da versão publicada — é o que atende o cliente.": {
     "fr-FR": "Modèle de la version publiée — celui qui répond au client.",
   },
@@ -1610,7 +1626,6 @@ export const DICIONARIO: Traducoes = {
   "uma coluna para frente": { "fr-FR": "d’une colonne vers l’avant" },
   "Papel de «": { "fr-FR": "Rôle de «" },
   "» no funil": { "fr-FR": " » dans le pipeline" },
-  Arquivar: { "fr-FR": "Archiver" },
   "Mudar isso": { "fr-FR": "Modifier cela" },
   "Marcar mesmo assim": { "fr-FR": "Marquer quand même" },
   "Acrescentar etapa ao fim": { "fr-FR": "Ajouter une étape à la fin" },
