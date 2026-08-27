@@ -1060,6 +1060,91 @@ export const DICIONARIO: Traducoes = {
   "número conectado": { "fr-FR": "numéro connecté" },
   "números conectados": { "fr-FR": "numéros connectés" },
   "Proteção de envio": { "fr-FR": "Protection des envois" },
+  "Proteção de envio atualizada.": { "fr-FR": "Protection des envois mise à jour." },
+  "Salvar proteção": { "fr-FR": "Enregistrer la protection" },
+  "Não foi possível salvar.": { "fr-FR": "Impossible d’enregistrer." },
+  "Estes limites protegem o número contra bloqueio do WhatsApp. Campo vazio usa o padrão seguro do sistema (mostrado no campo).":
+    {
+      "fr-FR":
+        "Ces limites protègent le numéro contre le blocage de WhatsApp. Un champ vide utilise la valeur sûre par défaut du système (affichée dans le champ).",
+    },
+  "Este número é usado desde": { "fr-FR": "Ce numéro est utilisé depuis" },
+  "A conexão pode ser nova sem que o número seja. O aquecimento conta a idade do NÚMERO — se você deixar em branco, ele é tratado como recém-criado e começa liberando pouco por dia.":
+    {
+      "fr-FR":
+        "La connexion peut être nouvelle sans que le numéro le soit. Le réchauffement tient compte de l’âge du NUMÉRO : si vous laissez ce champ vide, il est considéré comme nouveau et commence avec un faible plafond quotidien.",
+    },
+  "Este número já está aquecido — pular o aquecimento": {
+    "fr-FR": "Ce numéro est déjà réchauffé — ignorer le réchauffement",
+  },
+  "Vale só o teto diário abaixo. Use apenas se o número já envia há semanas: pular o aquecimento num número novo é o caminho mais rápido para o bloqueio.":
+    {
+      "fr-FR":
+        "Seul le plafond quotidien ci-dessous s’applique. Utilisez cette option uniquement si le numéro envoie depuis plusieurs semaines : ignorer le réchauffement d’un nouveau numéro est le chemin le plus rapide vers le blocage.",
+    },
+  "Número com": { "fr-FR": "Numéro utilisé depuis" },
+  "dia(s) de uso — já formado. Vale só o teto diário abaixo.": {
+    "fr-FR": "jour(s) — déjà établi. Seul le plafond quotidien ci-dessous s’applique.",
+  },
+  "Hoje o aquecimento libera": { "fr-FR": "Aujourd’hui, le réchauffement autorise" },
+  "envio(s) — o número tem": { "fr-FR": "envoi(s) — le numéro est utilisé depuis" },
+  "dia(s) de uso.": { "fr-FR": "jour(s)." },
+  "Enquanto esse número for menor que o teto diário, é ELE que limita, e mexer no teto diário não muda nada.":
+    {
+      "fr-FR":
+        "Tant que ce nombre est inférieur au plafond quotidien, c’est lui qui limite l’envoi ; modifier le plafond quotidien ne change rien.",
+    },
+  "Janela de envio (horário local)": { "fr-FR": "Fenêtre d’envoi (heure locale)" },
+  "Hora de início da janela": { "fr-FR": "Heure de début de la fenêtre" },
+  "h até": { "fr-FR": "h à" },
+  "Hora de fim da janela": { "fr-FR": "Heure de fin de la fenêtre" },
+  "O assistente só envia mensagens dentro desta janela. Fora dela, a resposta fica agendada para a próxima abertura — você vê o motivo na conversa.":
+    {
+      "fr-FR":
+        "L’assistant n’envoie des messages que pendant cette fenêtre. En dehors, la réponse est planifiée pour la prochaine ouverture ; la raison apparaît dans la conversation.",
+    },
+  "Enviar aos domingos": { "fr-FR": "Envoyer le dimanche" },
+  "Ligado por padrão: quem escreve no domingo espera resposta no domingo. Desligue se você faz prospecção ativa e prefere não incomodar no fim de semana.":
+    {
+      "fr-FR":
+        "Activé par défaut : une personne qui écrit le dimanche attend une réponse le dimanche. Désactivez cette option si vous prospectez activement et préférez ne pas déranger le week-end.",
+    },
+  "Ritmo entre envios (segundos)": { "fr-FR": "Intervalle entre les envois (secondes)" },
+  "Intervalo mínimo entre envios em segundos": {
+    "fr-FR": "Intervalle minimal entre les envois, en secondes",
+  },
+  "+ variação de até": { "fr-FR": "+ variation maximale de" },
+  "Variação aleatória máxima em segundos": { "fr-FR": "Variation aléatoire maximale, en secondes" },
+  "Intervalo mínimo entre mensagens do mesmo número, mais uma variação aleatória — ritmo cravado parece robô para o WhatsApp.":
+    {
+      "fr-FR":
+        "Intervalle minimal entre les messages du même numéro, avec une variation aléatoire : un rythme parfaitement régulier ressemble à un robot pour WhatsApp.",
+    },
+  "Teto diário de envios": { "fr-FR": "Plafond quotidien d’envois" },
+  "sem teto definido": { "fr-FR": "aucun plafond défini" },
+  "Teto diário de mensagens": { "fr-FR": "Plafond quotidien de messages" },
+  "Máximo de mensagens que este número envia por dia. Números novos também respeitam o aquecimento automático abaixo, o que for menor.":
+    {
+      "fr-FR":
+        "Nombre maximal de messages envoyés par ce numéro chaque jour. Les nouveaux numéros respectent également le réchauffement automatique ci-dessous ; la limite la plus basse s’applique.",
+    },
+  "Fuso horário IANA": { "fr-FR": "Fuseau horaire IANA" },
+  "Usar o padrão": { "fr-FR": "Utiliser la valeur par défaut" },
+  "A janela de envio é avaliada neste fuso (ex.: America/Sao_Paulo).": {
+    "fr-FR": "La fenêtre d’envoi est évaluée dans ce fuseau (ex. : America/Sao_Paulo).",
+  },
+  "Aquecimento automático de número novo": {
+    "fr-FR": "Réchauffement automatique d’un nouveau numéro",
+  },
+  "a partir de": { "fr-FR": "à partir de" },
+  "dias: sem limite de aquecimento": { "fr-FR": "jours : aucun plafond de réchauffement" },
+  "+ dias: até": { "fr-FR": "+ jours : jusqu’à" },
+  "/dia": { "fr-FR": "/jour" },
+  "Número recém-conectado envia pouco e sobe aos poucos — enviar demais no início é a causa nº 1 de bloqueio.":
+    {
+      "fr-FR":
+        "Un numéro nouvellement connecté envoie peu de messages et augmente progressivement ; envoyer trop au début est la première cause de blocage.",
+    },
   "Ainda não verificado": { "fr-FR": "Pas encore vérifié" },
   "Número sem nome": { "fr-FR": "Numéro sans nom" },
   "WhatsApp conectado!": { "fr-FR": "WhatsApp connecté !" },
