@@ -1,0 +1,112 @@
+# Overlay opt-in AI WhatsApp Sales OS.
+# Usage : docker compose -f docker-compose.prod.yml -f docker-compose.sales-os.yml --env-file .env up -d
+services:
+  app:
+    depends_on:
+      whatsapp-gateway:
+        condition: service_healthy
+    environment:
+      WHATSAPP_GATEWAY_BASE_URL: http://whatsapp-gateway:8788
+
+  worker:
+    depends_on:
+      whatsapp-gateway:
+        condition: service_healthy
+    environment:
+      WHATSAPP_GATEWAY_BASE_URL: http://whatsapp-gateway:8788
+
+  evolution-go:
+    image: ${EVOLUTION_GO_IMAGE:-evoapicloud/evolution-go:latest}
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      CLIENT_NAME: evolution
+      GLOBAL_API_KEY: ${EVOLUTION_GO_API_KEY}
+      POSTGRES_AUTH_DB: ${EVOLUTION_GO_POSTGRES_AUTH_DB}
+      POSTGRES_USERS_DB: ${EVOLUTION_GO_POSTGRES_USERS_DB}
+      DATABASE_SAVE_MESSAGES: "false"
+      WEBHOOK_GLOBAL_ENABLED: "true"
+      WEBHOOK_GLOBAL_URL: http://whatsapp-gateway:8788/webhooks/evolution-go
+      WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS: "false"
+      WEBHOOK_EVENTS_MESSAGES_UPSERT: "true"
+      WEBHOOK_EVENTS_MESSAGES_UPDATE: "true"
+      WEBHOOK_EVENTS_CONNECTION_UPDATE: "true"
+      WEBHOOK_EVENTS_QRCODE_UPDATED: "true"
+      WEBHOOK_EVENTS_MESSAGES_SET: "false"
+      WEBHOOK_EVENTS_CONTACTS_SET: "false"
+      WEBHOOK_EVENTS_CHATS_SET: "false"
+      WEBHOOK_GLOBAL_HEADERS: '{"Authorization":"Bearer ${EVOLUTION_GO_WEBHOOK_SECRET}"}'
+    volumes:
+      - evolution-go-data:/app/data
+    expose:
+      - "8080"
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8080/swagger/index.html"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  seaweedfs-master:
+    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
+    command: ["master", "-ip=seaweedfs-master", "-ip.bind=0.0.0.0"]
+    expose: ["9333"]
+    networks: [internal]
+
+  seaweedfs-volume:
+    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
+    command: ["volume", "-mserver=seaweedfs-master:9333", "-ip=seaweedfs-volume", "-ip.bind=0.0.0.0", "-dir=/data"]
+    depends_on: [seaweedfs-master]
+    volumes: ["seaweedfs-volume-data:/data"]
+    expose: ["8080"]
+    networks: [internal]
+
+  seaweedfs-filer:
+    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
+    command: ["filer", "-master=seaweedfs-master:9333", "-ip.bind=0.0.0.0"]
+    depends_on: [seaweedfs-master, seaweedfs-volume]
+    expose: ["8888"]
+    networks: [internal]
+
+  seaweedfs-s3:
+    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
+    command: ["s3", "-filer=seaweedfs-filer:8888", "-ip.bind=0.0.0.0", "-port=8333"]
+    depends_on: [seaweedfs-filer]
+    expose: ["8333"]
+    networks: [internal]
+
+  whatsapp-gateway:
+    build:
+      context: ./services/whatsapp-gateway
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      GATEWAY_PORT: 8788
+      WHATSAPP_GATEWAY_TOKEN: ${WHATSAPP_GATEWAY_TOKEN}
+      EVOLUTION_GO_BASE_URL: http://evolution-go:8080
+      EVOLUTION_GO_API_KEY: ${EVOLUTION_GO_API_KEY}
+      EVOLUTION_GO_WEBHOOK_SECRET: ${EVOLUTION_GO_WEBHOOK_SECRET}
+      SEAWEEDFS_S3_ENDPOINT: http://seaweedfs-s3:8333
+      SEAWEEDFS_S3_ACCESS_KEY: ${SEAWEEDFS_S3_ACCESS_KEY}
+      SEAWEEDFS_S3_SECRET_KEY: ${SEAWEEDFS_S3_SECRET_KEY}
+      SEAWEEDFS_MEDIA_BUCKET: ${SEAWEEDFS_MEDIA_BUCKET:-media-bucket}
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+    depends_on:
+      evolution-go:
+        condition: service_healthy
+    expose:
+      - "8788"
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8788/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  evolution-go-data:
+  seaweedfs-volume-data:
