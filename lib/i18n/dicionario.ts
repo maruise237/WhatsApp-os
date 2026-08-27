@@ -817,6 +817,23 @@ export const DICIONARIO: Traducoes = {
   "Mostrar atalhos": { "fr-FR": "Afficher les raccourcis" },
   "Atalhos de teclado": { "fr-FR": "Raccourcis clavier" },
   "Enviar contato": { "fr-FR": "Envoyer un contact" },
+  "Modelo enviado — a janela reabre quando o cliente responder.": {
+    "fr-FR": "Modèle envoyé : la fenêtre se rouvrira lorsque le client répondra.",
+  },
+  "Não consegui enviar o modelo.": { "fr-FR": "Impossible d’envoyer le modèle." },
+  "Nenhum modelo aprovado ainda. Crie um em Conexões → Templates e envie quando a plataforma aprovar.":
+    {
+      "fr-FR":
+        "Aucun modèle approuvé pour le moment. Créez-en un via Connexions → Modèles, puis envoyez-le lorsque la plateforme l’aura approuvé.",
+    },
+  "Modelo aprovado": { "fr-FR": "Modèle approuvé" },
+  "parâmetro(s)": { "fr-FR": "paramètre(s)" },
+  "Este modelo pede {count} valor(es) e ainda não dá para preenchê-los aqui — envie por Conexões → Templates, ou escolha um modelo sem parâmetros.":
+    {
+      "fr-FR":
+        "Ce modèle demande {count} valeur(s), mais il n’est pas encore possible de les renseigner ici. Envoyez-le via Connexions → Modèles ou choisissez un modèle sans paramètres.",
+    },
+  "Enviando…": { "fr-FR": "Envoi…" },
   "Escolha alguém da base ou informe nome e telefone — como no WhatsApp.": {
     "fr-FR":
       "Choisissez une personne dans la base ou saisissez son nom et son téléphone, comme dans WhatsApp.",

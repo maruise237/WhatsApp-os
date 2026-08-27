@@ -10,6 +10,7 @@ import { useSendMessage } from "@/hooks/inbox/useSendMessage";
 import { fonteDeTemplates, rotaDeTemplates } from "@/lib/channels/templates-fonte";
 import { lerConteudo } from "@/lib/channels/template-conteudo";
 import { cn } from "@/lib/utils";
+import { useT } from "@/hooks/i18n/useT";
 
 /**
  * A janela fechou — e aqui está o caminho de volta.
@@ -66,6 +67,7 @@ export function JanelaFechadaAviso({
   provider: string | null;
   motivo: string;
 }) {
+  const t = useT();
   const send = useSendMessage();
   const [escolhido, setEscolhido] = useState("");
 
@@ -113,10 +115,10 @@ export function JanelaFechadaAviso({
       {
         onSuccess: () => {
           setEscolhido("");
-          toast.success("Modelo enviado — a janela reabre quando o cliente responder.");
+          toast.success(t("Modelo enviado — a janela reabre quando o cliente responder."));
         },
         onError: (e: unknown) =>
-          toast.error(e instanceof Error ? e.message : "Não consegui enviar o modelo."),
+          toast.error(e instanceof Error ? e.message : t("Não consegui enviar o modelo.")),
       },
     );
   }
@@ -129,8 +131,9 @@ export function JanelaFechadaAviso({
         // Sem modelo aprovado não há saída por aqui, e dizer isso é melhor que
         // um seletor vazio que se lê como "ainda não carregou".
         <p className="text-xs text-amber-900/80 dark:text-amber-200/80">
-          Nenhum modelo aprovado ainda. Crie um em <strong>Conexões → Templates</strong> e envie
-          quando a plataforma aprovar.
+          {t(
+            "Nenhum modelo aprovado ainda. Crie um em Conexões → Templates e envie quando a plataforma aprovar.",
+          )}
         </p>
       ) : (
         <div className="flex flex-wrap items-center gap-2">
@@ -138,22 +141,27 @@ export function JanelaFechadaAviso({
             value={escolhido}
             onChange={(e) => setEscolhido(e.target.value)}
             disabled={send.isPending}
-            aria-label="Modelo aprovado"
+            aria-label={t("Modelo aprovado")}
             className={cn(
               "h-9 min-w-[16rem] flex-1 rounded-md border border-input bg-background px-2 text-sm",
               "focus:outline-none focus:ring-1 focus:ring-ring",
             )}
           >
-            <option value="">Escolha um modelo aprovado…</option>
-            {aprovados.map((t) => (
-              <option key={`${t.name}|${t.language}`} value={`${t.name}|${t.language}`}>
-                {t.name} ({t.language})
-                {(t.slots?.length ?? 0) > 0 ? ` · ${t.slots!.length} parâmetro(s)` : ""}
+            <option value="">{t("Escolha um modelo aprovado…")}</option>
+            {aprovados.map((modelo) => (
+              <option
+                key={`${modelo.name}|${modelo.language}`}
+                value={`${modelo.name}|${modelo.language}`}
+              >
+                {modelo.name} ({modelo.language})
+                {(modelo.slots?.length ?? 0) > 0
+                  ? ` · ${modelo.slots!.length} ${t("parâmetro(s)")}`
+                  : ""}
               </option>
             ))}
           </select>
           <Button type="button" size="sm" onClick={enviar} disabled={!atual || send.isPending}>
-            {send.isPending ? "Enviando…" : "Enviar modelo"}
+            {send.isPending ? t("Enviando…") : t("Enviar modelo")}
           </Button>
         </div>
       )}
@@ -162,8 +170,9 @@ export function JanelaFechadaAviso({
         // Avisa ANTES do clique: este modelo precisa de valores e este seletor
         // ainda não os coleta, então o envio vai falhar na plataforma.
         <p className="mt-2 text-[11px] text-amber-900/80 dark:text-amber-200/80">
-          Este modelo pede {atual?.slots?.length} valor(es) e ainda não dá para preenchê-los aqui —
-          envie por <strong>Conexões → Templates</strong>, ou escolha um modelo sem parâmetros.
+          {t(
+            "Este modelo pede {count} valor(es) e ainda não dá para preenchê-los aqui — envie por Conexões → Templates, ou escolha um modelo sem parâmetros.",
+          ).replace("{count}", String(atual?.slots?.length ?? 0))}
         </p>
       )}
     </div>
