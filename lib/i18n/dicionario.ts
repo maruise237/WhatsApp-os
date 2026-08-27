@@ -729,6 +729,27 @@ export const DICIONARIO: Traducoes = {
   Confirmação: { "fr-FR": "Confirmation" },
   "Anonimizando…": { "fr-FR": "Anonymisation…" },
   "Anonimizar permanentemente": { "fr-FR": "Anonymiser définitivement" },
+  "Não foi possível carregar as sugestões agora.": {
+    "fr-FR": "Impossible de charger les suggestions pour le moment.",
+  },
+  "Não foi possível registrar a decisão.": { "fr-FR": "Impossible d’enregistrer la décision." },
+  "O assistente ouviu isto na conversa": {
+    "fr-FR": "L’assistant a relevé ceci dans la conversation",
+  },
+  "aguardando você": { "fr-FR": "en attente de votre validation" },
+  "Nada foi salvo ainda. Confira o que a pessoa escreveu e decida.": {
+    "fr-FR": "Rien n’a encore été enregistré. Vérifiez ce que la personne a écrit et décidez.",
+  },
+  "(hoje:": { "fr-FR": "(actuellement :" },
+  "Está certo, salvar": { "fr-FR": "C’est correct, enregistrer" },
+  Descartar: { "fr-FR": "Rejeter" },
+  "Salvando…": { "fr-FR": "Enregistrement…" },
+  Hoje: { "fr-FR": "Aujourd’hui" },
+  Ontem: { "fr-FR": "Hier" },
+  "Erro ao carregar timeline.": { "fr-FR": "Erreur lors du chargement de la chronologie." },
+  "Nenhuma atividade registrada ainda.": { "fr-FR": "Aucune activité n’a encore été enregistrée." },
+  "Carregar mais": { "fr-FR": "Charger davantage" },
+  "Tentar novamente": { "fr-FR": "Réessayer" },
 };
 
 /**
