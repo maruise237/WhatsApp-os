@@ -748,6 +748,10 @@ export const DICIONARIO: Traducoes = {
   Ontem: { "fr-FR": "Hier" },
   "Erro ao carregar timeline.": { "fr-FR": "Erreur lors du chargement de la chronologie." },
   "Erro ao carregar conversas.": { "fr-FR": "Erreur lors du chargement des conversations." },
+  "Selecione uma conversa": { "fr-FR": "Sélectionnez une conversation" },
+  "Erro ao carregar mensagens.": { "fr-FR": "Erreur lors du chargement des messages." },
+  "Nenhuma mensagem nesta conversa.": { "fr-FR": "Aucun message dans cette conversation." },
+  "Carregar mais antigas": { "fr-FR": "Charger les messages plus anciens" },
   "Sem conversas por aqui": { "fr-FR": "Aucune conversation ici" },
   "Quando chegarem mensagens, elas aparecem aqui em tempo real.": {
     "fr-FR": "Lorsque des messages arriveront, ils apparaîtront ici en temps réel.",
@@ -787,6 +791,12 @@ export const DICIONARIO: Traducoes = {
   "Contatos duplicados aparecerão aqui pra revisão.": {
     "fr-FR": "Les contacts en double apparaîtront ici pour vérification.",
   },
+  "Remover tag": { "fr-FR": "Supprimer l’étiquette" },
+  "Sem tags no contato.": { "fr-FR": "Aucune étiquette sur ce contact." },
+  "Adicionar tag ao contato": { "fr-FR": "Ajouter une étiquette au contact" },
+  "Adicionar tag": { "fr-FR": "Ajouter une étiquette" },
+  "Tags da conversa": { "fr-FR": "Étiquettes de la conversation" },
+  "Adicionar tag à conversa": { "fr-FR": "Ajouter une étiquette à la conversation" },
   "Tente ajustar os filtros ou a busca.": {
     "fr-FR": "Essayez d’ajuster les filtres ou la recherche.",
   },

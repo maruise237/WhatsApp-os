@@ -13,6 +13,7 @@ import { useDebugToggle } from "@/hooks/ai/useDebugToggle";
 import { useActiveOrg, useUser } from "@/hooks/auth/AuthProvider";
 import { ROLE_RANK } from "@/lib/auth/types";
 import type { Message, Note } from "@/lib/types/messaging";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   conversationId: string | null;
@@ -22,8 +23,7 @@ interface Props {
 
 /** Onda 5.2: union de item do thread — mensagem real ou nota interna (nunca vai ao cliente). */
 export type ThreadItem =
-  | { kind: "message"; ts: string; data: Message }
-  | { kind: "note"; ts: string; data: Note };
+  { kind: "message"; ts: string; data: Message } | { kind: "note"; ts: string; data: Note };
 
 /** Intercala mensagens e notas por timestamp asc (puro, sem I/O — testado em thread-merge.test.ts). */
 export function mergeThreadItems(messages: Message[], notes: Note[]): ThreadItem[] {
@@ -37,13 +37,14 @@ export function mergeThreadItems(messages: Message[], notes: Note[]): ThreadItem
   return items;
 }
 
-function dayLabel(d: Date): string {
-  if (isToday(d)) return "Hoje";
-  if (isYesterday(d)) return "Ontem";
+function dayLabel(d: Date, t: (texto: string) => string): string {
+  if (isToday(d)) return t("Hoje");
+  if (isYesterday(d)) return t("Ontem");
   return format(d, "dd/MM/yyyy", { locale: ptBR });
 }
 
 export function ChatThread({ conversationId, onResponder }: Props) {
+  const t = useT();
   const q = useMessagesRealtime(conversationId);
   const notes = useConversationNotes(conversationId);
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -55,10 +56,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
   const canManage = activeOrg != null && ROLE_RANK[activeOrg.role] >= ROLE_RANK.manager;
   const { enabled: debugCitations } = useDebugToggle(activeOrg?.role ?? null);
 
-  const messages: Message[] = useMemo(
-    () => q.data?.pages.flatMap((p) => p.data) ?? [],
-    [q.data],
-  );
+  const messages: Message[] = useMemo(() => q.data?.pages.flatMap((p) => p.data) ?? [], [q.data]);
 
   /**
    * As mensagens por id, para resolver a CITADA sem ir ao servidor.
@@ -70,10 +68,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
    */
   const porId = useMemo(() => new Map(messages.map((m) => [m.id, m])), [messages]);
 
-  const items: ThreadItem[] = useMemo(
-    () => mergeThreadItems(messages, notes),
-    [messages, notes],
-  );
+  const items: ThreadItem[] = useMemo(() => mergeThreadItems(messages, notes), [messages, notes]);
 
   const paginas = q.data?.pages.length ?? 0;
 
@@ -144,7 +139,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {...sinalDoCanal}
         className="flex h-full items-center justify-center text-sm text-muted-foreground"
       >
-        Selecione uma conversa
+        {t("Selecione uma conversa")}
       </div>
     );
   }
@@ -165,9 +160,9 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {...sinalDoCanal}
         className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground"
       >
-        <p>Erro ao carregar mensagens.</p>
+        <p>{t("Erro ao carregar mensagens.")}</p>
         <Button size="sm" variant="outline" onClick={() => q.refetch()}>
-          Tentar novamente
+          {t("Tentar novamente")}
         </Button>
       </div>
     );
@@ -179,7 +174,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {...sinalDoCanal}
         className="flex h-full items-center justify-center text-sm text-muted-foreground"
       >
-        Nenhuma mensagem nesta conversa.
+        {t("Nenhuma mensagem nesta conversa.")}
       </div>
     );
   }
@@ -205,7 +200,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
               onClick={() => q.fetchNextPage()}
               disabled={q.isFetchingNextPage}
             >
-              {q.isFetchingNextPage ? "Carregando…" : "Carregar mais antigas"}
+              {q.isFetchingNextPage ? t("Carregando…") : t("Carregar mais antigas")}
             </Button>
           </div>
         )}
@@ -213,8 +208,8 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {groups.map((g) => (
           <div key={g.key} className="space-y-1">
             <div className="sticky top-0 z-10 flex justify-center py-1">
-              <span className="rounded-full bg-background/80 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground backdrop-blur">
-                {dayLabel(g.date)}
+              <span className="bg-background/80 rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground backdrop-blur">
+                {dayLabel(g.date, t)}
               </span>
             </div>
             {g.items.map((item) =>

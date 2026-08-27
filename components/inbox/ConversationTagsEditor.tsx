@@ -8,6 +8,7 @@ import {
   useUpdateConversationTags,
   useConversationTagVocabulary,
 } from "@/hooks/inbox/useConversationTags";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   conversationId: string;
@@ -17,6 +18,7 @@ interface Props {
 
 /** G3-05: aplica/remove tags de atendimento na conversa, com sugestão canônica. */
 export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
+  const t = useT();
   const [draft, setDraft] = useState("");
   const mutation = useUpdateConversationTags();
   const { data: vocabulary } = useConversationTagVocabulary(orgId);
@@ -42,19 +44,19 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
   return (
     <section>
       <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Tags da conversa
+        {t("Tags da conversa")}
       </h3>
 
       <div className="mt-2 flex flex-wrap gap-1">
         {tags.length > 0 ? (
-          tags.map((t) => (
-            <Badge key={t} variant="secondary" className="h-5 gap-1 px-1.5 text-[10px]">
-              {t}
+          tags.map((tag) => (
+            <Badge key={tag} variant="secondary" className="h-5 gap-1 px-1.5 text-[10px]">
+              {tag}
               <button
                 type="button"
-                onClick={() => remove(t)}
+                onClick={() => remove(tag)}
                 disabled={mutation.isPending}
-                aria-label={`Remover tag ${t}`}
+                aria-label={`${t("Remover tag")} ${tag}`}
                 className="rounded-sm hover:text-destructive"
               >
                 <X size={10} weight="bold" aria-hidden />
@@ -62,7 +64,7 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
             </Badge>
           ))
         ) : (
-          <span className="text-xs text-muted-foreground">Sem tags.</span>
+          <span className="text-xs text-muted-foreground">{t("Sem tags.")}</span>
         )}
       </div>
 
@@ -76,11 +78,11 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
               add(draft);
             }
           }}
-          placeholder="Nova tag…"
+          placeholder={t("Nova tag…")}
           maxLength={40}
           disabled={mutation.isPending || tags.length >= 20}
           className="h-7 text-xs"
-          aria-label="Adicionar tag à conversa"
+          aria-label={t("Adicionar tag à conversa")}
         />
         <Button
           size="sm"
@@ -88,7 +90,7 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
           className="h-7 px-2"
           onClick={() => add(draft)}
           disabled={mutation.isPending || !draft.trim() || tags.length >= 20}
-          aria-label="Adicionar tag"
+          aria-label={t("Adicionar tag")}
         >
           <Plus size={12} weight="regular" aria-hidden />
         </Button>
