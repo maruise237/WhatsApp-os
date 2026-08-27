@@ -1,9 +1,13 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { MediaRenderer } from "@/components/inbox/media/MediaRenderer";
 import { MessageBubble } from "@/components/inbox/MessageBubble";
 import type { Message } from "@/lib/types/messaging";
+
+vi.mock("@/hooks/i18n/useT", () => ({
+  useT: () => (source: string) => source,
+}));
 
 function msg(over: Partial<Message>): Message {
   return {

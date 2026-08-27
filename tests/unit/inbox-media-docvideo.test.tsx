@@ -1,8 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { DocumentCard } from "@/components/inbox/media/DocumentCard";
 import { VideoMedia } from "@/components/inbox/media/VideoMedia";
+
+vi.mock("@/hooks/i18n/useT", () => ({
+  useT: () => (source: string) => source,
+}));
 
 describe("VideoMedia", () => {
   it("renderiza <video> com controles apontando pro endpoint", () => {

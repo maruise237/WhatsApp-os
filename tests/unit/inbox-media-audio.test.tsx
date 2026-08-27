@@ -3,6 +3,10 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import { AudioPlayer } from "@/components/inbox/media/AudioPlayer";
 
+vi.mock("@/hooks/i18n/useT", () => ({
+  useT: () => (source: string) => source,
+}));
+
 beforeAll(() => {
   // jsdom não implementa playback — mocka o mínimo do HTMLMediaElement.
   Object.defineProperty(window.HTMLMediaElement.prototype, "play", {
