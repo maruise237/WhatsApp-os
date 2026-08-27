@@ -10,13 +10,7 @@ x-logging: &default-logging
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        APP_VERSION: ${APP_VERSION:-sales-os-main}
-        NEXT_PUBLIC_NEON_AUTH_BASE_URL: ${NEON_AUTH_BASE_URL:-https://placeholder.invalid}
-        NEXT_PUBLIC_NEON_DATA_API_URL: ${NEON_DATA_API_URL:-https://placeholder.invalid}
+    image: ${APP_IMAGE:-ghcr.io/maruise237/deskcommcrm:latest}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -56,11 +50,7 @@ services:
       traefik.http.services.whatsapp-os.loadbalancer.server.port: "3000"
 
   worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.worker
-      args:
-        APP_VERSION: ${APP_VERSION:-sales-os-main}
+    image: ${WORKER_IMAGE:-ghcr.io/maruise237/deskcomm-worker:latest}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -84,11 +74,7 @@ services:
     networks: [internal]
 
   scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile.scheduler
-      args:
-        APP_VERSION: ${APP_VERSION:-sales-os-main}
+    image: ${SCHEDULER_IMAGE:-ghcr.io/maruise237/deskcomm-scheduler:latest}
     restart: unless-stopped
     env_file: .env
     environment:
