@@ -1059,6 +1059,44 @@ export const DICIONARIO: Traducoes = {
   "Nenhum número conectado ainda.": { "fr-FR": "Aucun numéro n’est encore connecté." },
   "número conectado": { "fr-FR": "numéro connecté" },
   "números conectados": { "fr-FR": "numéros connectés" },
+  "Copiado.": { "fr-FR": "Copié." },
+  "Conectado:": { "fr-FR": "Connecté :" },
+  Copiar: { "fr-FR": "Copier" },
+  "não configurado nesta instalação — defina no servidor antes de continuar": {
+    "fr-FR":
+      "non configuré dans cette installation — définissez-le sur le serveur avant de continuer",
+  },
+  "credencial guardada": { "fr-FR": "identifiant enregistré" },
+  "sem credencial": { "fr-FR": "sans identifiant" },
+  número: { "fr-FR": "numéro" },
+  "Cole isto no painel da Meta": { "fr-FR": "Collez ceci dans le panneau Meta" },
+  Configuração: { "fr-FR": "Configuration" },
+  "na seção de Webhook. Sem esse passo o canal envia, mas não recebe — as respostas do cliente não chegam e a janela de 24 horas nunca abre.":
+    {
+      "fr-FR":
+        "dans la section Webhook. Sans cette étape, le canal envoie mais ne reçoit pas : les réponses du client n’arrivent pas et la fenêtre de 24 heures ne s’ouvre jamais.",
+    },
+  "URL de callback": { "fr-FR": "URL de rappel" },
+  "Token de verificação": { "fr-FR": "Jeton de vérification" },
+  "Campos a assinar": { "fr-FR": "Champs à signer" },
+  "Trocar credencial": { "fr-FR": "Remplacer l’identifiant" },
+  "Conectar canal oficial": { "fr-FR": "Connecter le canal officiel" },
+  "Os três valores vêm do seu app na Meta (WhatsApp → Configuração da API). A credencial é validada com a Meta antes de ser gravada — se o número não responder, nada é salvo.":
+    {
+      "fr-FR":
+        "Les trois valeurs proviennent de votre application Meta (WhatsApp → Configuration de l’API). L’identifiant est validé auprès de Meta avant d’être enregistré : si le numéro ne répond pas, rien n’est sauvegardé.",
+    },
+  "ID do número de telefone": { "fr-FR": "ID du numéro de téléphone" },
+  "ID da conta do WhatsApp Business": { "fr-FR": "ID du compte WhatsApp Business" },
+  "Token de acesso": { "fr-FR": "Jeton d’accès" },
+  "•••• (já guardado — preencha para trocar)": {
+    "fr-FR": "•••• (déjà enregistré — remplissez pour remplacer)",
+  },
+  "Guardado cifrado. Não é exibido de volta em nenhum momento.": {
+    "fr-FR": "Enregistré chiffré. Il n’est jamais réaffiché.",
+  },
+  "Validando com a Meta…": { "fr-FR": "Validation auprès de Meta…" },
+  "Validar e conectar": { "fr-FR": "Valider et connecter" },
   "Proteção de envio": { "fr-FR": "Protection des envois" },
   "Proteção de envio atualizada.": { "fr-FR": "Protection des envois mise à jour." },
   "Salvar proteção": { "fr-FR": "Enregistrer la protection" },
