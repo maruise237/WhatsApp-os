@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { format, formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { es, fr, ptBR } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -35,6 +35,8 @@ import {
 import { Clock, MagnifyingGlass, Trash } from "@/lib/ui/icons";
 import { rotuloDoStatus, tomDoStatus } from "@/lib/followup/eventos-legiveis";
 import { useFollowupFlows } from "@/hooks/followup/useFollowupFlows";
+import { useIdioma, useT } from "@/hooks/i18n/useT";
+import type { Idioma } from "@/lib/i18n/idiomas";
 import {
   useCancelFollowupEnrollment,
   useCancelFollowupPromise,
@@ -63,7 +65,12 @@ const STATUS_OPTIONS: FollowupEnrollmentStatus[] = [
   "dead",
 ];
 
-const LIVE_ENROLLMENT_STATUSES = new Set(["active", "waiting_reply", "paused_handoff", "paused_manual"]);
+const LIVE_ENROLLMENT_STATUSES = new Set([
+  "active",
+  "waiting_reply",
+  "paused_handoff",
+  "paused_manual",
+]);
 
 /**
  * O que ainda dá para desmarcar.
@@ -80,19 +87,33 @@ function podeCancelar(row: FollowupQueueRow): boolean {
     : row.status === "agendada";
 }
 
-function QueueStatusBadge({ status }: { status: string }) {
+function QueueStatusBadge({ status, t }: { status: string; t: (text: string) => string }) {
+  const label = t(rotuloDoStatus(status));
   return (
-    <Badge variant={tomDoStatus(status)} aria-label={`status: ${rotuloDoStatus(status)}`}>
-      {rotuloDoStatus(status)}
+    <Badge variant={tomDoStatus(status)} aria-label={`${t("status:")} ${label}`}>
+      {label}
     </Badge>
   );
 }
 
-function NextFireCell({ iso }: { iso: string | null }) {
+function dateFnsLocale(idioma: Idioma) {
+  return idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+}
+
+function NextFireCell({
+  iso,
+  idioma,
+  t,
+}: {
+  iso: string | null;
+  idioma: Idioma;
+  t: (text: string) => string;
+}) {
   if (!iso) return <span className="text-text-muted">—</span>;
   const d = new Date(iso);
-  const relative = formatDistanceToNowStrict(d, { addSuffix: true, locale: ptBR });
-  const absolute = format(d, "dd/MM/yyyy HH:mm", { locale: ptBR });
+  const locale = dateFnsLocale(idioma);
+  const relative = formatDistanceToNowStrict(d, { addSuffix: true, locale });
+  const absolute = format(d, "dd/MM/yyyy HH:mm", { locale });
   return (
     <div title={absolute} className="flex flex-col">
       <span className="text-sm">{relative}</span>
@@ -102,6 +123,8 @@ function NextFireCell({ iso }: { iso: string | null }) {
 }
 
 export function QueueTab({ canWrite }: Props) {
+  const t = useT();
+  const idioma = useIdioma();
   const [status, setStatus] = useState<FollowupEnrollmentStatus | "all">("all");
   const [pointerId, setPointerId] = useState<string>("all");
   const [searchInput, setSearchInput] = useState("");
@@ -122,7 +145,8 @@ export function QueueTab({ canWrite }: Props) {
     }),
     [status, pointerId, q],
   );
-  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useFollowupQueue(filters);
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useFollowupQueue(filters);
   const cancelEnrollment = useCancelFollowupEnrollment();
   const cancelPromise = useCancelFollowupPromise();
 
@@ -140,32 +164,35 @@ export function QueueTab({ canWrite }: Props) {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Buscar contato…"
+            placeholder={t("Buscar contato…")}
             className="h-9 w-full pl-8 text-sm"
-            aria-label="Buscar contato"
+            aria-label={t("Buscar contato")}
           />
         </div>
 
-        <Select value={status} onValueChange={(v) => setStatus(v as FollowupEnrollmentStatus | "all")}>
-          <SelectTrigger className="h-9 w-48 text-sm" aria-label="Filtrar por status">
-            <SelectValue placeholder="Todos os status" />
+        <Select
+          value={status}
+          onValueChange={(v) => setStatus(v as FollowupEnrollmentStatus | "all")}
+        >
+          <SelectTrigger className="h-9 w-48 text-sm" aria-label={t("Filtrar por status")}>
+            <SelectValue placeholder={t("Todos os status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos os status</SelectItem>
+            <SelectItem value="all">{t("Todos os status")}</SelectItem>
             {STATUS_OPTIONS.map((s) => (
               <SelectItem key={s} value={s}>
-                {rotuloDoStatus(s)}
+                {t(rotuloDoStatus(s))}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
         <Select value={pointerId} onValueChange={setPointerId}>
-          <SelectTrigger className="h-9 w-48 text-sm" aria-label="Filtrar por fluxo">
-            <SelectValue placeholder="Todos os fluxos" />
+          <SelectTrigger className="h-9 w-48 text-sm" aria-label={t("Filtrar por fluxo")}>
+            <SelectValue placeholder={t("Todos os fluxos")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos os fluxos</SelectItem>
+            <SelectItem value="all">{t("Todos os fluxos")}</SelectItem>
             {(flows ?? []).map((f) => (
               <SelectItem key={f.id} value={f.id}>
                 {f.name}
@@ -178,9 +205,9 @@ export function QueueTab({ canWrite }: Props) {
       {!isLoading && rows.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-md border border-border py-16 text-center">
           <Clock size={36} className="text-text-muted" aria-hidden />
-          <h2 className="font-medium">Nenhum item na fila</h2>
+          <h2 className="font-medium">{t("Nenhum item na fila")}</h2>
           <p className="max-w-sm text-sm text-text-muted">
-            Enrollments ativos e promessas de retorno agendadas pela IA aparecem aqui.
+            {t("Enrollments ativos e promessas de retorno agendadas pela IA aparecem aqui.")}
           </p>
         </div>
       ) : (
@@ -188,11 +215,11 @@ export function QueueTab({ canWrite }: Props) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Contato</TableHead>
-                <TableHead>Fluxo / Promessa</TableHead>
-                <TableHead>Nó atual / Motivo</TableHead>
-                <TableHead>Próximo disparo</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t("Contato")}</TableHead>
+                <TableHead>{t("Fluxo / Promessa")}</TableHead>
+                <TableHead>{t("Nó atual / Motivo")}</TableHead>
+                <TableHead>{t("Próximo disparo")}</TableHead>
+                <TableHead>{t("Status")}</TableHead>
                 {canWrite && <TableHead className="w-[100px]" />}
               </TableRow>
             </TableHeader>
@@ -222,20 +249,29 @@ export function QueueTab({ canWrite }: Props) {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span>{row.flow_name ?? <span className="text-text-muted">Promessa</span>}</span>
+                        <span>
+                          {row.flow_name ?? (
+                            <span className="text-text-muted">{t("Promessa")}</span>
+                          )}
+                        </span>
                         {row.agent_name && (
-                          <span className="text-xs text-text-muted">agente {row.agent_name}</span>
+                          <span className="text-xs text-text-muted">
+                            {t("agente")} {row.agent_name}
+                          </span>
                         )}
                       </div>
                     </TableCell>
-                    <TableCell className="max-w-[280px] truncate text-sm" title={row.node_or_reason}>
+                    <TableCell
+                      className="max-w-[280px] truncate text-sm"
+                      title={row.node_or_reason}
+                    >
                       {row.node_or_reason}
                     </TableCell>
                     <TableCell>
-                      <NextFireCell iso={row.next_fire_at} />
+                      <NextFireCell iso={row.next_fire_at} idioma={idioma} t={t} />
                     </TableCell>
                     <TableCell>
-                      <QueueStatusBadge status={row.status} />
+                      <QueueStatusBadge status={row.status} t={t} />
                     </TableCell>
                     {canWrite && (
                       <TableCell>
@@ -245,11 +281,14 @@ export function QueueTab({ canWrite }: Props) {
                             size="sm"
                             data-testid="cancelar-item-da-fila"
                             aria-label={
-                              row.source === "promise" ? "Cancelar retorno" : "Cancelar follow-up"
+                              row.source === "promise"
+                                ? t("Cancelar retorno")
+                                : t("Cancelar follow-up")
                             }
                             onClick={() => setPendingCancel(row)}
                           >
-                            <Trash size={14} aria-hidden className="mr-1 text-error" /> Cancelar
+                            <Trash size={14} aria-hidden className="mr-1 text-error" />{" "}
+                            {t("Cancelar")}
                           </Button>
                         )}
                       </TableCell>
@@ -264,28 +303,40 @@ export function QueueTab({ canWrite }: Props) {
 
       {hasNextPage && (
         <div className="flex justify-center">
-          <Button variant="outline" size="sm" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? t("Carregando...") : t("Carregar mais")}
           </Button>
         </div>
       )}
 
-      <AlertDialog open={pendingCancel !== null} onOpenChange={(open) => !open && setPendingCancel(null)}>
+      <AlertDialog
+        open={pendingCancel !== null}
+        onOpenChange={(open) => !open && setPendingCancel(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
               {pendingCancel?.source === "promise"
-                ? "Cancelar este retorno?"
-                : "Cancelar este follow-up?"}
+                ? t("Cancelar este retorno?")
+                : t("Cancelar este follow-up?")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {pendingCancel?.source === "promise"
-                ? "O agente não voltará a falar com esta pessoa no horário combinado, e vai saber que você desmarcou."
-                : "O lead não receberá mais mensagens deste fluxo. Essa ação não pode ser desfeita."}
+                ? t(
+                    "O agente não voltará a falar com esta pessoa no horário combinado, e vai saber que você desmarcou.",
+                  )
+                : t(
+                    "O lead não receberá mais mensagens deste fluxo. Essa ação não pode ser desfeita.",
+                  )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogCancel>{t("Voltar")}</AlertDialogCancel>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
               onClick={() => {
@@ -294,7 +345,9 @@ export function QueueTab({ canWrite }: Props) {
                 setPendingCancel(null);
               }}
             >
-              {pendingCancel?.source === "promise" ? "Cancelar retorno" : "Cancelar follow-up"}
+              {pendingCancel?.source === "promise"
+                ? t("Cancelar retorno")
+                : t("Cancelar follow-up")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
