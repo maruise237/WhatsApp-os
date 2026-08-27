@@ -34,6 +34,7 @@ import {
   Warning,
 } from "@/lib/ui/icons";
 import { lerEstadoDoCanal } from "@/lib/channels/estado";
+import { useT } from "@/hooks/i18n/useT";
 
 type Variant = "success" | "warning" | "error" | "neutral";
 
@@ -44,9 +45,12 @@ type Variant = "success" | "warning" | "error" | "neutral";
  * `{ label: status }`, ou seja, o enum cru na tela no dia em que aparecesse um
  * estado fora da lista.
  */
-function statusInfo(status: string): { label: string; variant: Variant } {
+function statusInfo(
+  status: string,
+  t: (texto: string) => string,
+): { label: string; variant: Variant } {
   const l = lerEstadoDoCanal(status);
-  return { label: l.rotulo, variant: l.tom };
+  return { label: t(l.rotulo), variant: l.tom };
 }
 
 function errMsg(err: unknown, fallback: string): string {
@@ -89,6 +93,7 @@ function enumerar(partes: (string | null)[]): string {
 }
 
 export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean }) {
+  const t = useT();
   const qc = useQueryClient();
   const {
     data: sessions,
@@ -138,14 +143,11 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
   const handleConnectNew = useCallback(async () => {
     setCreating(true);
     try {
-      const res = await apiClient.post<{ data: ChannelSession }>(
-        "/api/v1/channel-sessions",
-        {},
-      );
+      const res = await apiClient.post<{ data: ChannelSession }>("/api/v1/channel-sessions", {});
       invalidate();
-      setQr({ sessionId: res.data.id, title: "Conectar novo WhatsApp" });
+      setQr({ sessionId: res.data.id, title: t("Conectar novo WhatsApp") });
     } catch (err) {
-      toast.error(errMsg(err, "Não foi possível iniciar a conexão."));
+      toast.error(errMsg(err, t("Não foi possível iniciar a conexão.")));
     } finally {
       setCreating(false);
     }
@@ -162,9 +164,9 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
       try {
         await apiClient.post(`/api/v1/channel-sessions/${c.id}/reconnect`, {});
         invalidate();
-        setQr({ sessionId: c.id, title: `Reconectar ${channelLabel(c)}` });
+        setQr({ sessionId: c.id, title: `${t("Reconectar")} ${t(channelLabel(c))}` });
       } catch (err) {
-        toast.error(errMsg(err, "Não foi possível reconectar."));
+        toast.error(errMsg(err, t("Não foi possível reconectar.")));
       } finally {
         setBusyId(null);
       }
@@ -186,7 +188,7 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
   }, [invalidate]);
 
   const handleConnected = useCallback(() => {
-    toast.success("WhatsApp conectado!");
+    toast.success(t("WhatsApp conectado!"));
     setQr(null);
     invalidate();
   }, [invalidate]);
@@ -198,10 +200,10 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
           {isError
-            ? "Não foi possível carregar seus números."
+            ? t("Não foi possível carregar seus números.")
             : list.length === 0
-              ? "Nenhum número conectado ainda."
-              : `${list.length} ${list.length === 1 ? "número conectado" : "números conectados"}.`}
+              ? t("Nenhum número conectado ainda.")
+              : `${list.length} ${t(list.length === 1 ? "número conectado" : "números conectados")}.`}
         </p>
         <div className="flex gap-2">
           {list.length > 0 && (
@@ -216,7 +218,7 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
                 className={checking ? "animate-spin" : undefined}
                 aria-hidden
               />
-              Atualizar saúde
+              {t("Atualizar saúde")}
             </Button>
           )}
           <Button size="sm" disabled={creating || !wahaConfigured} onClick={handleConnectNew}>
@@ -225,41 +227,43 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
             ) : (
               <Plus size={14} aria-hidden />
             )}
-            Conectar novo WhatsApp
+            {t("Conectar novo WhatsApp")}
           </Button>
         </div>
       </div>
 
       {!wahaConfigured && (
         <div className="rounded-md border border-warning bg-warning-bg p-4 text-sm text-warning-fg">
-          <p className="font-medium">O serviço do WhatsApp não está configurado.</p>
+          <p className="font-medium">{t("O serviço do WhatsApp não está configurado.")}</p>
           <p className="mt-1">
-            Faltam o endereço e a chave do serviço (<code>WAHA_API_BASE_URL</code> e{" "}
-            <code>WAHA_API_KEY</code>) nas variáveis de ambiente desta instalação. Enquanto isso,
-            não dá para conectar, reconectar nem excluir os números pareados por QR — excluir um
-            número também o desconecta do aparelho, e sem o serviço isso não acontece.
+            L’adresse et la clé du service (<code>WAHA_API_BASE_URL</code> et{" "}
+            <code>WAHA_API_KEY</code>) manquent dans les variables d’environnement de cette
+            installation. En attendant, il est impossible de connecter, reconnecter ou supprimer les
+            numéros appairés par QR : supprimer un numéro le déconnecte aussi du téléphone, ce qui
+            nécessite le service.
           </p>
           <p className="mt-1">
-            Se você roda tudo na mesma máquina, o container sobe com{" "}
-            <code>docker compose up -d waha</code>. Já apareceu aqui o caso oposto: o container
-            no ar e o endereço configurado apontando para um lugar que não existe — subir o
-            container de novo não conserta isso.
+            Si tout fonctionne sur la même machine, démarrez le conteneur avec{" "}
+            <code>docker compose up -d waha</code>. Il peut aussi arriver que le conteneur
+            fonctionne alors que l’adresse configurée pointe vers un emplacement inexistant :
+            redémarrer le conteneur ne corrigera pas cette configuration.
           </p>
         </div>
       )}
 
       {schemaOutdated && (
         <div className="rounded-md border border-warning bg-warning-bg p-4 text-sm text-warning-fg">
-          <p className="font-medium">Esta instalação está com o banco atrasado.</p>
+          <p className="font-medium">{t("Esta instalação está com o banco atrasado.")}</p>
           <p className="mt-1">
-            Falta aplicar a migration que registra canal excluído. Até lá, um número que você
-            excluir continua aparecendo nesta lista.
+            {t(
+              "Falta aplicar a migration que registra canal excluído. Até lá, um número que você excluir continua aparecendo nesta lista.",
+            )}
           </p>
         </div>
       )}
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Carregando conexões…</p>
+        <p className="text-sm text-muted-foreground">{t("Carregando conexões…")}</p>
       ) : isError ? (
         // Lista vazia por falha de carregamento renderizava a tela de primeira
         // instalação ("conecte seu primeiro número") para quem já tem número no
@@ -268,24 +272,27 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
         <Card className="flex flex-col items-center gap-3 p-8 text-center">
           <Warning size={28} className="text-error-fg" aria-hidden />
           <p className="text-sm text-error-fg">
-            Não foi possível carregar seus números — esta lista não está mostrando o que existe.
+            {t(
+              "Não foi possível carregar seus números — esta lista não está mostrando o que existe.",
+            )}
           </p>
           <p className="text-xs text-muted-foreground">
-            Não conecte um número novo por causa disto: recarregue a página. Se persistir, o
-            servidor do sistema está fora do ar.
+            {t(
+              "Não conecte um número novo por causa disto: recarregue a página. Se persistir, o servidor do sistema está fora do ar.",
+            )}
           </p>
         </Card>
       ) : list.length === 0 ? (
         <Card className="flex flex-col items-center gap-3 p-8 text-center">
           <Phone size={28} className="text-muted-foreground" aria-hidden />
           <p className="text-sm text-muted-foreground">
-            Conecte seu primeiro número de WhatsApp para começar a atender.
+            {t("Conecte seu primeiro número de WhatsApp para começar a atender.")}
           </p>
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {list.map((c) => {
-            const info = statusInfo(c.status);
+            const info = statusInfo(c.status, t);
             // Sem o serviço no ar a rota de exclusão falha fechado (503) para
             // quem depende dele: oferecer o botão seria prometer uma ação que
             // não acontece. O canal oficial não passa pelo transporte e continua
@@ -310,8 +317,8 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
                 </div>
                 <p className="text-[11px] text-muted-foreground">
                   {c.last_health_check_at
-                    ? `Verificado ${new Date(c.last_health_check_at).toLocaleString("pt-BR")}`
-                    : "Ainda não verificado"}
+                    ? `Vérifié ${new Date(c.last_health_check_at).toLocaleString("fr-FR")}`
+                    : t("Ainda não verificado")}
                 </p>
                 <div className="mt-auto flex gap-2">
                   {/* Some no canal oficial em vez de aparecer desabilitado: não é
@@ -330,12 +337,12 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
                       ) : (
                         <ArrowsClockwise size={14} aria-hidden />
                       )}
-                      Reconectar
+                      {t("Reconectar")}
                     </Button>
                   )}
                   <Button variant="outline" size="sm" onClick={() => setAntiBanId(c.id)}>
                     <ShieldCheck size={14} aria-hidden />
-                    Proteção de envio
+                    {t("Proteção de envio")}
                   </Button>
                   <Button
                     variant="outline"
@@ -343,8 +350,8 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
                     disabled={!podeExcluir}
                     aria-label={
                       podeExcluir
-                        ? `Excluir ${channelLabel(c)}`
-                        : `Excluir ${channelLabel(c)} — indisponível enquanto o serviço do WhatsApp não estiver ativo`
+                        ? `${t("Excluir")} ${t(channelLabel(c))}`
+                        : `${t("Excluir")} ${t(channelLabel(c))} — ${t("indisponível enquanto o serviço do WhatsApp não estiver ativo")}`
                     }
                     onClick={() => setToDelete(c)}
                   >
@@ -394,33 +401,47 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
  * traduz o preflight dela. Contagem zero não vira frase — "0 conversas" ocupa
  * espaço e não informa nada.
  */
-export function frasesDoImpacto(impact: ChannelDeletionImpact): string[] {
+export function frasesDoImpacto(
+  impact: ChannelDeletionImpact,
+  translate: (texto: string) => string = (texto) => texto,
+): string[] {
   if (impact.outcome === "delete") {
-    return ["Este número não tem conversa, mensagem nem configuração ligada a ele."];
+    return [translate("Este número não tem conversa, mensagem nem configuração ligada a ele.")];
   }
 
   const noInbox = enumerar([
-    contar(impact.history.conversations, "conversa", "conversas"),
-    contar(impact.history.messages, "mensagem", "mensagens"),
+    contar(impact.history.conversations, translate("conversa"), translate("conversas")),
+    contar(impact.history.messages, translate("mensagem"), translate("mensagens")),
   ]);
   const semNumero = enumerar([
-    contar(impact.history.agent_versions, "versão de agente", "versões de agente"),
-    contar(impact.configuration.ai_routers, "roteador de IA", "roteadores de IA"),
+    contar(
+      impact.history.agent_versions,
+      translate("versão de agente"),
+      translate("versões de agente"),
+    ),
+    contar(
+      impact.configuration.ai_routers,
+      translate("roteador de IA"),
+      translate("roteadores de IA"),
+    ),
     contar(
       impact.configuration.channel_knobs,
-      "ajuste de proteção de envio",
-      "ajustes de proteção de envio",
+      translate("ajuste de proteção de envio"),
+      translate("ajustes de proteção de envio"),
     ),
   ]);
 
   const frases: string[] = [];
-  if (noInbox) frases.push(`Continua no inbox: ${noInbox}.`);
-  if (semNumero) frases.push(`Fica salvo, mas sem número — para de atender: ${semNumero}.`);
+  if (noInbox) frases.push(`${translate("Continua no inbox:")} ${noInbox}.`);
+  if (semNumero)
+    frases.push(`${translate("Fica salvo, mas sem número — para de atender:")} ${semNumero}.`);
   // Sobra o caso em que só há registro interno (auditoria de envio): nada a
   // listar, mas o canal continua sendo arquivado, e prometer "não tem nada
   // ligado" seria falso.
   if (frases.length === 0) {
-    frases.push("Este canal tem registros internos, por isso ele é arquivado em vez de apagado.");
+    frases.push(
+      translate("Este canal tem registros internos, por isso ele é arquivado em vez de apagado."),
+    );
   }
   return frases;
 }
@@ -445,6 +466,7 @@ function ExcluirCanalDialog({
   onCancel: () => void;
   onDeleted: () => void;
 }) {
+  const t = useT();
   const [excluindo, setExcluindo] = useState(false);
   const {
     data: impact,
@@ -472,14 +494,14 @@ function ExcluirCanalDialog({
       const conversas = res.data.impact.history.conversations;
       toast.success(
         !res.data.archived
-          ? "Canal excluído."
+          ? t("Canal excluído.")
           : conversas > 0
-            ? `Canal removido. ${contar(conversas, "conversa continua", "conversas continuam")} no inbox.`
-            : "Canal removido. O que estava ligado a ele continua guardado.",
+            ? `${t("Canal removido.")} ${contar(conversas, t("conversa continua"), t("conversas continuam"))} ${t("no inbox.")}`
+            : `${t("Canal removido.")} ${t("O que estava ligado a ele continua guardado.")}`,
       );
       onDeleted();
     } catch (err) {
-      toast.error(errMsg(err, "Não foi possível excluir o canal."));
+      toast.error(errMsg(err, t("Não foi possível excluir o canal.")));
     } finally {
       setExcluindo(false);
     }
@@ -489,32 +511,34 @@ function ExcluirCanalDialog({
     <Dialog open onOpenChange={(o) => !o && !excluindo && onCancel()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Excluir {channelLabel(canal)}?</DialogTitle>
+          <DialogTitle>
+            {t("Excluir")} {t(channelLabel(canal))} ?
+          </DialogTitle>
           <DialogDescription asChild>
             <div className="space-y-2">
-              <p>O número será desconectado do WhatsApp e sai desta lista.</p>
+              <p>{t("O número será desconectado do WhatsApp e sai desta lista.")}</p>
               {isPending ? (
-                <p>Verificando o que está ligado a este número…</p>
+                <p>{t("Verificando o que está ligado a este número…")}</p>
               ) : isError || !impact ? (
                 <p>
-                  Não foi possível verificar o que está ligado a este número. A exclusão continua
-                  possível — quem decide apagar ou arquivar é o servidor, e ele preserva o
-                  histórico quando existe.
+                  {t(
+                    "Não foi possível verificar o que está ligado a este número. A exclusão continua possível — quem decide apagar ou arquivar é o servidor, e ele preserva o histórico quando existe.",
+                  )}
                 </p>
               ) : (
                 <ul className="list-disc space-y-1 pl-5">
-                  {frasesDoImpacto(impact).map((frase) => (
+                  {frasesDoImpacto(impact, t).map((frase) => (
                     <li key={frase}>{frase}</li>
                   ))}
                 </ul>
               )}
-              <p>Para usar este número de novo, será preciso conectá-lo outra vez.</p>
+              <p>{t("Para usar este número de novo, será preciso conectá-lo outra vez.")}</p>
             </div>
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end gap-2 pt-2">
           <Button variant="outline" disabled={excluindo} onClick={onCancel}>
-            Cancelar
+            {t("Cancelar")}
           </Button>
           {/* Enquanto o preflight não volta, confirmar seria confirmar no escuro:
               o diálogo ainda não sabe o que vai acontecer, então não pode pedir
@@ -525,7 +549,7 @@ function ExcluirCanalDialog({
             ) : (
               <Trash size={14} aria-hidden />
             )}
-            Excluir
+            {t("Excluir")}
           </Button>
         </div>
       </DialogContent>
@@ -627,8 +651,8 @@ function QrDialog({
             // única ação que de fato resolve.
             <div className="flex flex-col items-center gap-3 text-center">
               <p className="text-sm text-error-fg">
-                Este número foi desvinculado do WhatsApp. Para usá-lo de novo é preciso parear
-                outra vez.
+                Este número foi desvinculado do WhatsApp. Para usá-lo de novo é preciso parear outra
+                vez.
               </p>
               <Button
                 size="sm"

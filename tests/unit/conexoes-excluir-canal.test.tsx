@@ -13,6 +13,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { IdiomaProvider } from "@/lib/i18n/IdiomaProvider";
 
 import type { ChannelDeletionImpact } from "@/app/api/v1/channel-sessions/[id]/route";
 import type * as CanaisModule from "@/hooks/channels/useChannelSessions";
@@ -81,7 +82,11 @@ const IMPACTO_ARQUIVA: ChannelDeletionImpact = {
 
 function wrap(ui: React.ReactNode) {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  return <QueryClientProvider client={qc}>{ui}</QueryClientProvider>;
+  return (
+    <IdiomaProvider locale="pt-BR">
+      <QueryClientProvider client={qc}>{ui}</QueryClientProvider>
+    </IdiomaProvider>
+  );
 }
 
 beforeEach(() => {
@@ -185,7 +190,9 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
     await waitFor(() =>
       expect(getMock).toHaveBeenCalledWith("/api/v1/channel-sessions/canal-1?impact=1"),
     );
-    expect(await screen.findByText("Continua no inbox: 12 conversas e 340 mensagens.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Continua no inbox: 12 conversas e 340 mensagens."),
+    ).toBeInTheDocument();
     expect(
       screen.getByText("Fica salvo, mas sem número — para de atender: 1 roteador de IA."),
     ).toBeInTheDocument();
@@ -212,7 +219,9 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
     render(wrap(<ConnectionsClient wahaConfigured />));
     fireEvent.click(screen.getByRole("button", { name: "Excluir Vendas" }));
 
-    expect(await screen.findByText(/Não foi possível verificar o que está ligado/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Não foi possível verificar o que está ligado/),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Excluir" })).toBeEnabled();
   });
 
@@ -230,9 +239,7 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
       expect(deleteMock).toHaveBeenCalledWith("/api/v1/channel-sessions/canal-1"),
     );
     await waitFor(() =>
-      expect(toastSuccess).toHaveBeenCalledWith(
-        "Canal removido. 12 conversas continuam no inbox.",
-      ),
+      expect(toastSuccess).toHaveBeenCalledWith("Canal removido. 12 conversas continuam no inbox."),
     );
   });
 });

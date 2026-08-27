@@ -750,6 +750,98 @@ export const DICIONARIO: Traducoes = {
   "Nenhuma atividade registrada ainda.": { "fr-FR": "Aucune activité n’a encore été enregistrée." },
   "Carregar mais": { "fr-FR": "Charger davantage" },
   "Tentar novamente": { "fr-FR": "Réessayer" },
+  "Conectar novo WhatsApp": { "fr-FR": "Connecter un nouveau WhatsApp" },
+  "Atualizar saúde": { "fr-FR": "Actualiser l’état" },
+  "Escaneie o QR": { "fr-FR": "Scannez le QR" },
+  "Conectando…": { "fr-FR": "Connexion en cours…" },
+  Parado: { "fr-FR": "Arrêté" },
+  Caiu: { "fr-FR": "Déconnecté" },
+  "Situação desconhecida": { "fr-FR": "Situation inconnue" },
+  "O serviço do WhatsApp não está configurado.": {
+    "fr-FR": "Le service WhatsApp n’est pas configuré.",
+  },
+  "Faltam o endereço e a chave do serviço": {
+    "fr-FR": "L’adresse et la clé du service sont absentes",
+  },
+  "Esta instalação está com o banco atrasado.": {
+    "fr-FR": "Cette installation utilise une base de données obsolète.",
+  },
+  "Falta aplicar a migration que registra canal excluído. Até lá, um número que você excluir continua aparecendo nesta lista.":
+    {
+      "fr-FR":
+        "La migration qui enregistre les canaux supprimés doit encore être appliquée. D’ici là, un numéro supprimé continuera d’apparaître dans cette liste.",
+    },
+  "Não foi possível carregar seus números — esta lista não está mostrando o que existe.": {
+    "fr-FR":
+      "Impossible de charger vos numéros : cette liste ne reflète peut-être pas les numéros existants.",
+  },
+  "Não conecte um número novo por causa disto: recarregue a página. Se persistir, o servidor do sistema está fora do ar.":
+    {
+      "fr-FR":
+        "Ne connectez pas un nouveau numéro pour l’instant : rechargez la page. Si le problème persiste, le serveur de l’installation est peut-être indisponible.",
+    },
+  "Conecte seu primeiro número de WhatsApp para começar a atender.": {
+    "fr-FR": "Connectez votre premier numéro WhatsApp pour commencer à répondre aux clients.",
+  },
+  "Carregando conexões…": { "fr-FR": "Chargement des connexions…" },
+  "Não foi possível carregar seus números.": { "fr-FR": "Impossible de charger vos numéros." },
+  "Nenhum número conectado ainda.": { "fr-FR": "Aucun numéro n’est encore connecté." },
+  "número conectado": { "fr-FR": "numéro connecté" },
+  "números conectados": { "fr-FR": "numéros connectés" },
+  "Proteção de envio": { "fr-FR": "Protection des envois" },
+  "Ainda não verificado": { "fr-FR": "Pas encore vérifié" },
+  "Número sem nome": { "fr-FR": "Numéro sans nom" },
+  "WhatsApp conectado!": { "fr-FR": "WhatsApp connecté !" },
+  "Não foi possível iniciar a conexão.": { "fr-FR": "Impossible de démarrer la connexion." },
+  "Não foi possível reconectar.": { "fr-FR": "Impossible de reconnecter." },
+  "Não foi possível excluir o canal.": { "fr-FR": "Impossible de supprimer le canal." },
+  "no inbox.": { "fr-FR": "dans l’Inbox." },
+  "indisponível enquanto o serviço do WhatsApp não estiver ativo": {
+    "fr-FR": "indisponible tant que le service WhatsApp n’est pas actif",
+  },
+  "Este número não tem conversa, mensagem nem configuração ligada a ele.": {
+    "fr-FR": "Ce numéro n’a aucune conversation, aucun message ni aucune configuration associée.",
+  },
+  conversa: { "fr-FR": "conversation" },
+  conversas: { "fr-FR": "conversations" },
+  mensagem: { "fr-FR": "message" },
+  mensagens: { "fr-FR": "messages" },
+  "versão de agente": { "fr-FR": "version d’agent" },
+  "versões de agente": { "fr-FR": "versions d’agent" },
+  "roteador de IA": { "fr-FR": "routeur IA" },
+  "roteadores de IA": { "fr-FR": "routeurs IA" },
+  "ajuste de proteção de envio": { "fr-FR": "réglage de protection des envois" },
+  "ajustes de proteção de envio": { "fr-FR": "réglages de protection des envois" },
+  "Continua no inbox:": { "fr-FR": "Reste dans l’Inbox :" },
+  "Fica salvo, mas sem número — para de atender:": {
+    "fr-FR": "Reste enregistré, mais sans numéro — il cesse de répondre :",
+  },
+  "Este canal tem registros internos, por isso ele é arquivado em vez de apagado.": {
+    "fr-FR":
+      "Ce canal contient des enregistrements internes ; il est donc archivé au lieu d’être supprimé.",
+  },
+  "Canal excluído.": { "fr-FR": "Canal supprimé." },
+  "Canal removido.": { "fr-FR": "Canal retiré." },
+  "conversa continua": { "fr-FR": "conversation continue" },
+  "conversas continuam": { "fr-FR": "conversations continuent" },
+  "O que estava ligado a ele continua guardado.": {
+    "fr-FR": "Les éléments qui lui étaient liés restent enregistrés.",
+  },
+  "Excluir canal": { "fr-FR": "Supprimer le canal" },
+  "O número será desconectado do WhatsApp e sai desta lista.": {
+    "fr-FR": "Le numéro sera déconnecté de WhatsApp et retiré de cette liste.",
+  },
+  "Verificando o que está ligado a este número…": {
+    "fr-FR": "Vérification des éléments liés à ce numéro…",
+  },
+  "Não foi possível verificar o que está ligado a este número. A exclusão continua possível — quem decide apagar ou arquivar é o servidor, e ele preserva o histórico quando existe.":
+    {
+      "fr-FR":
+        "Impossible de vérifier les éléments liés à ce numéro. La suppression reste possible : le serveur décide de supprimer ou d’archiver et préserve l’historique lorsqu’il existe.",
+    },
+  "Para usar este número de novo, será preciso conectá-lo outra vez.": {
+    "fr-FR": "Pour utiliser à nouveau ce numéro, vous devrez le reconnecter.",
+  },
   "Por onde seu negócio fala com o cliente. Conecte números por QR ou o número oficial da Meta, e acompanhe a saúde de cada um.":
     {
       "fr-FR":
