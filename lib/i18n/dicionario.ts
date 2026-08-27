@@ -1132,6 +1132,16 @@ export const DICIONARIO: Traducoes = {
   Operador: { "fr-FR": "Opérateur" },
   Valor: { "fr-FR": "Valeur" },
   "Ex.: 3": { "fr-FR": "Ex. : 3" },
+  "Nenhum agent configurado": { "fr-FR": "Aucun agent configuré" },
+  "Crie um agent para responder a conversas no WhatsApp com IA. Você configura prompt, tools, gatilhos e janela de contexto.":
+    {
+      "fr-FR":
+        "Créez un agent pour répondre aux conversations WhatsApp avec l’IA. Vous configurez le prompt, les outils, les déclencheurs et la fenêtre de contexte.",
+    },
+  "Novo agente": { "fr-FR": "Nouvel agent" },
+  "Nenhum agent corresponde aos filtros atuais.": {
+    "fr-FR": "Aucun agent ne correspond aux filtres actuels.",
+  },
   Resultado: { "fr-FR": "Résultat" },
   "Nota (opcional)": { "fr-FR": "Note (facultatif)" },
   Convertido: { "fr-FR": "Converti" },
