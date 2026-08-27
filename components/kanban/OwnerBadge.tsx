@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import type { OwnerKind } from "@/lib/types/leads";
+import { useT } from "@/hooks/i18n/useT";
 
 /** Iniciais a partir do nome (primeira + última palavra). */
 export function ownerInitials(name: string): string {
@@ -39,38 +40,39 @@ export function OwnerBadge({
    */
   compacto?: boolean;
 }) {
+  const t = useT();
   if (!ownerKind) {
     // Mesma geometria dos outros dois estados (disco de 24px + rótulo), para o
     // rodapé do card não mudar de altura conforme o lead tem dono ou não.
     return (
-      <div className="flex items-center gap-1.5" aria-label="Sem responsável">
+      <div className="flex items-center gap-1.5" aria-label={t("Sem responsável")}>
         <span
           className={`${compacto ? "h-4 w-4" : "h-6 w-6"} shrink-0 rounded-full border border-dashed border-border-strong`}
           aria-hidden
         />
         <span className={`truncate text-text-muted ${compacto ? "text-[10px]" : "text-xs"}`}>
-          Sem responsável
+          {t("Sem responsável")}
         </span>
       </div>
     );
   }
 
   const isAgent = ownerKind === "ai";
-  const label = ownerName ?? (isAgent ? "Agente" : "Responsável");
+  const label = ownerName ?? (isAgent ? t("Agente") : t("Responsável"));
   const versionSuffix = isAgent && agentVersion != null ? ` · v${agentVersion}` : "";
   const fullLabel = `${label}${versionSuffix}`;
 
   return (
     <div
       className="flex items-center gap-1.5"
-      aria-label={`Responsável: ${fullLabel}`}
+      aria-label={`${t("Responsável")}: ${fullLabel}`}
       title={fullLabel}
     >
       <span
         className={
           isAgent
             ? // Vazado com anel: o fundo do card atravessa o disco.
-              `flex ${compacto ? "h-4 w-4 text-[8px]" : "h-6 w-6 text-[10px]"} shrink-0 items-center justify-center rounded-full border border-accent bg-surface font-mono font-semibold text-accent ring-1 ring-inset ring-accent/40`
+              `flex ${compacto ? "h-4 w-4 text-[8px]" : "h-6 w-6 text-[10px]"} ring-accent/40 shrink-0 items-center justify-center rounded-full border border-accent bg-surface font-mono font-semibold text-accent ring-1 ring-inset`
             : // Preenchido SÓLIDO: a um metro, o humano é uma mancha escura e o
               // agente é um anel claro. Contraste que não depende da borda —
               // fundo suave fazia os dois lerem como "círculo claro".

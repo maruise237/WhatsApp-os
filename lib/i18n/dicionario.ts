@@ -209,6 +209,16 @@ export const DICIONARIO: Traducoes = {
   "Pausou o automático": { "fr-FR": "A mis l’automatisation en pause" },
 
   // ─── Kanban ───
+  Frio: { "fr-FR": "Froid" },
+  Morno: { "fr-FR": "Tiède" },
+  Quente: { "fr-FR": "Chaud" },
+  Probabilidade: { "fr-FR": "Probabilité" },
+  "Ver o porquê.": { "fr-FR": "Voir pourquoi." },
+  "ver a mensagem": { "fr-FR": "voir le message" },
+  "registro que sustenta": { "fr-FR": "enregistrement justificatif" },
+  "Sem evidências registradas.": { "fr-FR": "Aucune preuve enregistrée." },
+  Responsável: { "fr-FR": "Responsable" },
+  "Responsável:": { "fr-FR": "Responsable :" },
   "Apenas atrasados": { "fr-FR": "Uniquement en retard", es: "Solo atrasados" },
   "Sem responsável": { "fr-FR": "Aucun responsable", es: "Sin responsable" },
   "Editar campos": { "fr-FR": "Modifier les champs", es: "Editar campos" },
