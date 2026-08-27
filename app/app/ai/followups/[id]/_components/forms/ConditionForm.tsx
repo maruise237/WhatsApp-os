@@ -25,6 +25,7 @@ import {
   type OperadorDaCondicao,
 } from "@/lib/followup/vocabulario";
 import { Plus, Trash } from "@/lib/ui/icons";
+import { useT } from "@/hooks/i18n/useT";
 
 import type { ConfigOf } from "./shared";
 
@@ -73,12 +74,15 @@ export function ConditionForm({
   /** Ramos deste nó que hoje têm aresta — para avisar antes de deixar alguma órfã. */
   ramosLigados?: string[];
 }) {
+  const t = useT();
   const [combinator, setCombinator] = useState(config.combinator);
   const [branching, setBranching] = useState<Branching>(config.branching ?? "combined");
   const [checks, setChecks] = useState(config.checks);
   const [error, setError] = useState<string | null>(null);
   /** Troca de modo pendente de confirmação, com quantas ligações ela deixa órfãs. */
-  const [trocaPendente, setTrocaPendente] = useState<{ modo: Branching; orfas: number } | null>(null);
+  const [trocaPendente, setTrocaPendente] = useState<{ modo: Branching; orfas: number } | null>(
+    null,
+  );
 
   /**
    * Recebe um OBJETO com o que mudou, e não a lista posicional de campos: era
@@ -87,11 +91,7 @@ export function ConditionForm({
    * sozinho e as bolinhas sumiam. Campo novo aqui entra como chave, não como
    * mais um parâmetro que alguém esquece de repassar.
    */
-  const commit = (next: {
-    combinator?: Combinador;
-    branching?: Branching;
-    checks?: Check[];
-  }) => {
+  const commit = (next: { combinator?: Combinador; branching?: Branching; checks?: Check[] }) => {
     const modo = next.branching ?? branching;
     const candidato: ConditionConfig = {
       combinator: next.combinator ?? combinator,
@@ -102,7 +102,7 @@ export function ConditionForm({
     };
     const parsed = conditionConfigSchema.safeParse(candidato);
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Configuração inválida.");
+      setError(t(parsed.error.issues[0]?.message ?? "Configuração inválida."));
       return;
     }
     setError(null);
@@ -113,9 +113,10 @@ export function ConditionForm({
   const orfasSe = (modo: Branching): number => {
     const checksDoModo = modo === "per_check" ? comIdsEstaveis(checks) : checks;
     const idsDepois = new Set(
-      nodeBranches({ type: "condition", config: { combinator, branching: modo, checks: checksDoModo } }).map(
-        (b) => b.id,
-      ),
+      nodeBranches({
+        type: "condition",
+        config: { combinator, branching: modo, checks: checksDoModo },
+      }).map((b) => b.id),
     );
     return ramosLigados.filter((id) => !idsDepois.has(id)).length;
   };
@@ -143,31 +144,38 @@ export function ConditionForm({
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label htmlFor="cond-branching">Como as regras decidem o caminho</Label>
+        <Label htmlFor="cond-branching">{t("Como as regras decidem o caminho")}</Label>
         <Select value={branching} onValueChange={(v) => pedirModo(v as Branching)}>
           <SelectTrigger id="cond-branching">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="combined">Avaliar as regras juntas (uma saída de sim e uma de não)</SelectItem>
-            <SelectItem value="per_check">Uma saída por regra</SelectItem>
+            <SelectItem value="combined">
+              {t("Avaliar as regras juntas (uma saída de sim e uma de não)")}
+            </SelectItem>
+            <SelectItem value="per_check">{t("Uma saída por regra")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       {trocaPendente && (
-        <div className="space-y-2 rounded-sm border border-warning bg-warning-bg p-2" data-testid="cond-troca-aviso">
+        <div
+          className="space-y-2 rounded-sm border border-warning bg-warning-bg p-2"
+          data-testid="cond-troca-aviso"
+        >
           <p className="text-xs leading-snug text-warning-fg">
-            Trocar de modo deixa {trocaPendente.orfas}{" "}
-            {trocaPendente.orfas === 1 ? "ligação sem saída" : "ligações sem saída"} neste nó. Elas continuam
-            desenhadas, mas param de levar a lugar nenhum até você religá-las.
+            {t("Trocar de modo deixa")} {trocaPendente.orfas}{" "}
+            {t(trocaPendente.orfas === 1 ? "ligação sem saída" : "ligações sem saída")}{" "}
+            {t(
+              "neste nó. Elas continuam desenhadas, mas param de levar a lugar nenhum até você religá-las.",
+            )}
           </p>
           <div className="flex gap-2">
             <Button type="button" size="sm" onClick={() => aplicarModo(trocaPendente.modo)}>
-              Trocar mesmo assim
+              {t("Trocar mesmo assim")}
             </Button>
             <Button type="button" size="sm" variant="ghost" onClick={() => setTrocaPendente(null)}>
-              Cancelar
+              {t("Cancelar")}
             </Button>
           </div>
         </div>
@@ -179,7 +187,7 @@ export function ConditionForm({
           que o subtítulo do card tinha. O texto é o do vocabulário, não meu. */}
       {!porRegra && (
         <div className="space-y-2">
-          <Label htmlFor="cond-combinator">Seguir por aqui quando</Label>
+          <Label htmlFor="cond-combinator">{t("Seguir por aqui quando")}</Label>
           <Select
             value={combinator}
             onValueChange={(v) => {
@@ -194,7 +202,7 @@ export function ConditionForm({
             <SelectContent>
               {opcoes(COMBINADORES).map(({ valor, rotulo }) => (
                 <SelectItem key={valor} value={valor}>
-                  {rotulo}
+                  {t(rotulo)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -204,14 +212,20 @@ export function ConditionForm({
 
       <div className="space-y-3">
         {checks.map((check, idx) => (
-          <div key={check.id ?? idx} className="space-y-2 rounded-sm border border-border p-2" data-testid={`condition-check-${idx}`}>
+          <div
+            key={check.id ?? idx}
+            className="space-y-2 rounded-sm border border-border p-2"
+            data-testid={`condition-check-${idx}`}
+          >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-text-muted">Condição {idx + 1}</span>
+              <span className="text-xs font-medium text-text-muted">
+                {t("Condição")} {idx + 1}
+              </span>
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
-                aria-label="Remover condição"
+                aria-label={t("Remover condição")}
                 disabled={checks.length <= 1}
                 onClick={() => {
                   const next = checks.filter((_, i) => i !== idx);
@@ -224,8 +238,8 @@ export function ConditionForm({
             </div>
             {porRegra && (
               <Input
-                aria-label={`Nome da saída ${idx + 1}`}
-                placeholder="Nome desta saída (opcional)"
+                aria-label={`${t("Nome da saída")} ${idx + 1}`}
+                placeholder={t("Nome desta saída (opcional)")}
                 value={check.label ?? ""}
                 onChange={(e) => {
                   const texto = e.target.value;
@@ -233,7 +247,9 @@ export function ConditionForm({
                     // Sem texto o campo SOME da regra em vez de virar string vazia:
                     // o schema pede 1 a 60, e um rótulo vazio reprovaria a config
                     // inteira só porque o usuário apagou o que tinha escrito.
-                    i === idx ? { ...c, ...(texto === "" ? { label: undefined } : { label: texto }) } : c,
+                    i === idx
+                      ? { ...c, ...(texto === "" ? { label: undefined } : { label: texto }) }
+                      : c,
                   );
                   setChecks(next);
                   commit({ checks: next });
@@ -251,13 +267,13 @@ export function ConditionForm({
                 commit({ checks: next });
               }}
             >
-              <SelectTrigger aria-label="Campo">
+              <SelectTrigger aria-label={t("Campo")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {(Object.keys(CAMPOS_DA_CONDICAO) as CampoDaCondicao[]).map((f) => (
                   <SelectItem key={f} value={f}>
-                    {CAMPOS_DA_CONDICAO[f].rotulo}
+                    {t(CAMPOS_DA_CONDICAO[f].rotulo)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -265,35 +281,43 @@ export function ConditionForm({
             <Select
               value={check.op}
               onValueChange={(v) => {
-                const next = checks.map((c, i) => (i === idx ? { ...c, op: v as OperadorDaCondicao } : c));
+                const next = checks.map((c, i) =>
+                  i === idx ? { ...c, op: v as OperadorDaCondicao } : c,
+                );
                 setChecks(next);
                 commit({ checks: next });
               }}
             >
-              <SelectTrigger aria-label="Operador">
+              <SelectTrigger aria-label={t("Operador")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {comparadoresDoCampo(check.field).map(({ op, rotulo }) => (
                   <SelectItem key={op} value={op}>
-                    {rotulo}
+                    {t(rotulo)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Input
-              aria-label="Valor"
-              placeholder={CAMPOS_DA_CONDICAO[check.field].tipoDeValor === "numero" ? "Ex.: 3" : "Valor"}
+              aria-label={t("Valor")}
+              placeholder={
+                CAMPOS_DA_CONDICAO[check.field].tipoDeValor === "numero" ? t("Ex.: 3") : t("Valor")
+              }
               value={String(check.value)}
               onChange={(e) => {
-                const next = checks.map((c, i) => (i === idx ? { ...c, value: e.target.value } : c));
+                const next = checks.map((c, i) =>
+                  i === idx ? { ...c, value: e.target.value } : c,
+                );
                 setChecks(next);
                 commit({ checks: next });
               }}
             />
             {/* A frase inteira, para quem não tem certeza do que os três campos
                 acima somam — e o aviso quando o motor nunca satisfaz o par. */}
-            <p className="text-xs text-text-muted">{fraseDaCondicao(check.field, check.op, check.value)}</p>
+            <p className="text-xs text-text-muted">
+              {fraseDaCondicao(check.field, check.op, check.value)}
+            </p>
             {comparador(check.field, check.op).aviso && (
               <p className="text-xs text-warning-fg">{comparador(check.field, check.op).aviso}</p>
             )}
@@ -308,16 +332,14 @@ export function ConditionForm({
         disabled={checks.length >= 10}
         onClick={() => {
           const nova: Check = { field: "steps_taken", op: "gte", value: 0 };
-          const next = porRegra
-            ? comIdsEstaveis([...checks, nova])
-            : [...checks, nova];
+          const next = porRegra ? comIdsEstaveis([...checks, nova]) : [...checks, nova];
           setChecks(next);
           commit({ checks: next });
         }}
       >
-        <Plus size={14} aria-hidden className="mr-1" /> Condição
+        <Plus size={14} aria-hidden className="mr-1" /> {t("Condição")}
       </Button>
-      {error && <p className="text-xs text-error-fg">{error}</p>}
+      {error && <p className="text-xs text-error-fg">{t(error)}</p>}
     </div>
   );
 }
