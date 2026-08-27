@@ -1096,6 +1096,19 @@ export const DICIONARIO: Traducoes = {
   Condição: { "fr-FR": "Condition" },
   "Classificar (IA)": { "fr-FR": "Classer (IA)" },
   "Enviar mensagem": { "fr-FR": "Envoyer un message" },
+  "Rótulo precisa ter 1 a 60 caracteres.": {
+    "fr-FR": "Le libellé doit contenir entre 1 et 60 caractères.",
+  },
+  "Alterações aplicam no rascunho ao digitar — salve na barra de publicação.": {
+    "fr-FR":
+      "Les modifications s’appliquent au brouillon pendant la saisie — enregistrez-les dans la barre de publication.",
+  },
+  Rótulo: { "fr-FR": "Libellé" },
+  "Início do fluxo — sem configuração adicional. O disparo (manual, mudança de etapa, silêncio ou fim de conversa) é definido nas configurações do fluxo.":
+    {
+      "fr-FR":
+        "Début du flow — aucune configuration supplémentaire. Le déclenchement (manuel, changement d’étape, silence ou fin de conversation) est défini dans les paramètres du flow.",
+    },
   "Condição da aresta": { "fr-FR": "Condition de l’arête" },
   "Quando seguir por esta aresta": { "fr-FR": "Quand suivre cette arête" },
   "São as saídas do nó": { "fr-FR": "Ce sont les sorties du nœud" },
