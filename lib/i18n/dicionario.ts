@@ -1057,7 +1057,33 @@ export const DICIONARIO: Traducoes = {
   "Enviar anexo": { "fr-FR": "Envoyer la pièce jointe" },
   "Legenda (opcional)": { "fr-FR": "Légende (facultatif)" },
   Legenda: { "fr-FR": "Légende" },
-  "Escolhas salvas.": { "fr-FR": "Choix enregistrés." },
+  "Etapa atualizada.": { "fr-FR": "Étape mise à jour." },
+  "saiu do quadro.": { "fr-FR": "a quitté le tableau." },
+  "entrou no fim do funil.": { "fr-FR": "a été ajoutée à la fin du pipeline." },
+  "O assistente usa esta etapa para «": { "fr-FR": "L’assistant utilise cette étape pour «" },
+  "». ": { "fr-FR": " ». " },
+  "Etapas deste funil": { "fr-FR": "Étapes de ce pipeline" },
+  "Estas são as colunas do seu quadro, na ordem em que o cliente avança. Você pode renomear, criar, reordenar e arquivar.":
+    {
+      "fr-FR":
+        "Voici les colonnes de votre tableau, dans l’ordre de progression du client. Vous pouvez les renommer, en créer, les réordonner et les archiver.",
+    },
+  "Duas colunas têm papel especial: a de fechamento é onde o negócio vira venda, e a de perda é onde ele se perde. Cada funil precisa de uma de cada — por isso a marcação se muda de lugar, não se apaga.":
+    {
+      "fr-FR":
+        "Deux colonnes ont un rôle spécial : la conclusion est celle où l’opportunité devient une vente, et la perte est celle où elle est abandonnée. Chaque pipeline en exige une de chaque ; le rôle est donc déplacé, jamais supprimé.",
+    },
+  Mover: { "fr-FR": "Déplacer" },
+  "uma coluna para trás": { "fr-FR": "d’une colonne vers l’arrière" },
+  "uma coluna para frente": { "fr-FR": "d’une colonne vers l’avant" },
+  "Papel de «": { "fr-FR": "Rôle de «" },
+  "» no funil": { "fr-FR": " » dans le pipeline" },
+  Arquivar: { "fr-FR": "Archiver" },
+  "Mudar isso": { "fr-FR": "Modifier cela" },
+  "Marcar mesmo assim": { "fr-FR": "Marquer quand même" },
+  "Acrescentar etapa ao fim": { "fr-FR": "Ajouter une étape à la fin" },
+  "Nome da nova coluna": { "fr-FR": "Nom de la nouvelle colonne" },
+  "Nome da nova etapa": { "fr-FR": "Nom de la nouvelle étape" },
   "Não foi possível carregar as etapas deste funil agora. Recarregue a página.": {
     "fr-FR": "Impossible de charger les étapes de ce pipeline pour le moment. Rechargez la page.",
   },
