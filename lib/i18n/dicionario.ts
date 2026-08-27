@@ -898,6 +898,14 @@ export const DICIONARIO: Traducoes = {
   Entregue: { "fr-FR": "Livrée" },
   Enviada: { "fr-FR": "Envoyée" },
   "Responder a esta mensagem": { "fr-FR": "Répondre à ce message" },
+  Mensagem: { "fr-FR": "Message" },
+  "Cancelar resposta": { "fr-FR": "Annuler la réponse" },
+  "Enter salva a nota · Shift+Enter quebra linha": {
+    "fr-FR": "Entrée enregistre la note · Maj+Entrée insère un retour à la ligne",
+  },
+  "Enter envia · Shift+Enter quebra linha": {
+    "fr-FR": "Entrée envoie · Maj+Entrée insère un retour à la ligne",
+  },
   Você: { "fr-FR": "Vous" },
   Cliente: { "fr-FR": "Client" },
   "Esta mensagem foi apagada": { "fr-FR": "Ce message a été supprimé" },

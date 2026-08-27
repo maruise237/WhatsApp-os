@@ -201,7 +201,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
 
   if (blockedReason) {
     return (
-      <div className="border-t border-border bg-muted/40 px-4 py-3 text-center text-xs text-muted-foreground">
+      <div className="bg-muted/40 border-t border-border px-4 py-3 text-center text-xs text-muted-foreground">
         {blockedReason}
       </div>
     );
@@ -259,7 +259,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
           relê-la — ela está logo acima, no fio.
         */}
         {respondendo && mode === "reply" && (
-          <div className="mb-1 flex items-start gap-2 rounded-md border-l-2 border-primary bg-muted/60 px-2 py-1.5">
+          <div className="bg-muted/60 mb-1 flex items-start gap-2 rounded-md border-l-2 border-primary px-2 py-1.5">
             <div className="min-w-0 flex-1">
               <div className="text-[11px] font-medium text-primary">
                 {respondendo.direction === "outbound" ? t("Você") : t("Cliente")}
@@ -287,7 +287,11 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
             />
           )}
           {mode === "reply" && (
-            <DraftReplyButton conversationId={conversationId} disabled={isDisabled} onDraft={applyDraft} />
+            <DraftReplyButton
+              conversationId={conversationId}
+              disabled={isDisabled}
+              onDraft={applyDraft}
+            />
           )}
           <EmojiButton
             disabled={isDisabled}
@@ -330,19 +334,21 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
             // uma nota interna precisa saber que ela não vai para o cliente, e
             // essa informação não pode depender de abrir um diálogo.
             placeholder={
-              mode === "note" ? t("Escreva uma nota interna… (só o time vê)") : t("Escreva uma mensagem…")
+              mode === "note"
+                ? t("Escreva uma nota interna… (só o time vê)")
+                : t("Escreva uma mensagem…")
             }
             title={
               mode === "note"
-                ? "Enter salva a nota · Shift+Enter quebra linha"
-                : "Enter envia · Shift+Enter quebra linha"
+                ? t("Enter salva a nota · Shift+Enter quebra linha")
+                : t("Enter envia · Shift+Enter quebra linha")
             }
             className={cn(
-              "min-h-9 max-h-40 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm",
+              "max-h-40 min-h-9 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm",
               "placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring",
             )}
             disabled={mode === "note" ? isDisabled : respostaBarrada}
-            aria-label="Mensagem"
+            aria-label={t("Mensagem")}
           />
           {text.trim() || mode === "note" ? (
             <Button
@@ -351,7 +357,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
               className="h-9 w-9 shrink-0"
               onClick={handleSubmit}
               disabled={(mode === "note" ? isDisabled : respostaBarrada) || !text.trim()}
-              aria-label="Enviar"
+              aria-label={t("Enviar")}
             >
               <PaperPlaneTilt size={16} weight="fill" aria-hidden />
             </Button>
