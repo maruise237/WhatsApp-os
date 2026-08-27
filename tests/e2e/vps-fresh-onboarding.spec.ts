@@ -24,8 +24,8 @@ const OWNER_STATE_PATH = path.join(process.cwd(), ".e2e-owner.json");
 const EVIDENCE_DIR = path.join(process.cwd(), ".superpowers/evidence/vps-qa");
 
 const svc = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  process.env.NEON_DATA_API_URL!,
+  process.env.NEON_SERVICE_ROLE_JWT!,
   { auth: { persistSession: false } },
 );
 

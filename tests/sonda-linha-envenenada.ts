@@ -16,7 +16,7 @@ import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
 const creds = JSON.parse(fs.readFileSync(".e2e-creds.json", "utf8"));
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { persistSession: false },
 });
 const PIPES: Record<string, string> = {
@@ -25,7 +25,7 @@ const PIPES: Record<string, string> = {
 };
 
 async function main(): Promise<void> {
-  const user = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const user = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { persistSession: false },
   });
   const { data: sessao } = await user.auth.signInWithPassword({

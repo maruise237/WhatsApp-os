@@ -64,9 +64,9 @@ if (!container) {
   throw new Error("TEST_DB_CONTAINER not set — rode via `pnpm test:db` (scripts/test-db.sh)");
 }
 
-process.env.NEXT_PUBLIC_SUPABASE_URL ??= "https://placeholder.supabase.co";
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??= "placeholder-anon";
-process.env.SUPABASE_SERVICE_ROLE_KEY ??= "placeholder-service";
+process.env.NEON_DATA_API_URL ??= "https://placeholder.supabase.co";
+process.env.NEON_SERVICE_ROLE_JWT ??= "placeholder-anon";
+process.env.NEON_SERVICE_ROLE_JWT ??= "placeholder-service";
 
 const PORT = Number(process.env.TEST_DB_PORT ?? 54329);
 const pool = new pg.Pool({

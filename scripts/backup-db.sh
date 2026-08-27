@@ -2,23 +2,23 @@
 # Backup do Postgres (Supabase) do DeskcommCRM — schema public completo
 # (CRM + harness do agente). Roda no host ou num cron da VPS:
 #   0 3 * * * /path/repo/scripts/backup-db.sh /var/backups/deskcomm
-# Requer: pg_dump no PATH (major compatível) e SUPABASE_DB_URL no .env/.env.local.
+# Requer: pg_dump no PATH (major compatível) e NEON_DATABASE_URL no .env/.env.local.
 set -euo pipefail
 
 DIR="${1:-./backups}"
 RETENTION_DAYS="${RETENTION_DAYS:-14}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-URL="${SUPABASE_DB_URL:-}"
+URL="${NEON_DATABASE_URL:-}"
 if [ -z "$URL" ]; then
   for f in "$ROOT/.env.local" "$ROOT/.env"; do
     if [ -f "$f" ]; then
-      URL=$(grep -E '^SUPABASE_DB_URL=' "$f" | head -1 | cut -d= -f2- || true)
+      URL=$(grep -E '^NEON_DATABASE_URL=' "$f" | head -1 | cut -d= -f2- || true)
       [ -n "$URL" ] && break
     fi
   done
 fi
-[ -n "$URL" ] || { echo "FATAL: SUPABASE_DB_URL ausente (env ou .env/.env.local)" >&2; exit 1; }
+[ -n "$URL" ] || { echo "FATAL: NEON_DATABASE_URL ausente (env ou .env/.env.local)" >&2; exit 1; }
 
 mkdir -p "$DIR"
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)

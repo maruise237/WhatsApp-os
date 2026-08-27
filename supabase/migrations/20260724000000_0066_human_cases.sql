@@ -30,7 +30,7 @@ create table if not exists agent_case_events (
   kind text not null check (kind in
     ('opened','human_replied','lead_asked','lead_provided','lead_unresponsive','resolved','escalated','cancelled')),
   actor_kind text not null check (actor_kind in ('agent','human','system','lead')),
-  actor_user_id uuid references auth.users(id) on delete set null,
+  actor_user_id uuid references neon_auth.user(id) on delete set null,
   human_action text check (human_action in ('resolved','need_lead_info','escalate')),
   body text,
   metadata jsonb not null default '{}'::jsonb,

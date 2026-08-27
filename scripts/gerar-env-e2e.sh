@@ -93,10 +93,10 @@ cat > .env.e2e <<EOF
 # ── Ambiente do E2E — LOCAL, nunca a nuvem ──────────────────────────────────
 # GERADO por 'pnpm e2e:env'. Não versionado (.gitignore cobre '.env*').
 # Antes de rodar a suíte: pnpm e2e:build && pnpm test:e2e
-NEXT_PUBLIC_SUPABASE_URL=$API_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON
-SUPABASE_SERVICE_ROLE_KEY=$SERVICE
-SUPABASE_DB_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+NEON_DATA_API_URL=$API_URL
+NEON_TEST_JWT=$ANON
+NEON_SERVICE_ROLE_JWT=$SERVICE
+NEON_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
 
 # Precisa bater com o baseURL real do Playwright (ver comentário acima).
 NEXT_PUBLIC_APP_URL=http://localhost:$E2E_PORT

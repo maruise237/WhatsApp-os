@@ -29,7 +29,7 @@
  * inteiro — quem investigar lê `payload_parsed->>'event'` e tem a mesma
  * resposta, sem que ninguém precise ensinar o formato a este arquivo.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 

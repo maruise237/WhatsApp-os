@@ -10,12 +10,12 @@ import { baseDoStorage } from "@/lib/branding/logo";
  * ─── O defeito, medido no contêiner de produção ─────────────────────────────
  *
  * A imagem Docker é genérica: uma só serve qualquer projeto Supabase. Por isso
- * o Dockerfile builda com `ARG NEXT_PUBLIC_SUPABASE_URL=https://placeholder.
+ * o Dockerfile builda com `ARG NEON_DATA_API_URL=https://placeholder.
  * supabase.co`, e os valores reais entram em RUNTIME.
  *
  * Só que o Next substitui todo acesso ESTÁTICO a `process.env.NEXT_PUBLIC_*`
  * pelo valor do build — inclusive no bundle do SERVIDOR. `baseDoStorage()` lia
- * `process.env.NEXT_PUBLIC_SUPABASE_URL` direto, e o compilador dobrou a função
+ * `process.env.NEON_DATA_API_URL` direto, e o compilador dobrou a função
  * inteira numa constante:
  *
  *   function n(){return"https://placeholder.supabase.co".trim()}
@@ -48,7 +48,7 @@ import { baseDoStorage } from "@/lib/branding/logo";
  *
  * A regra é sobre o que o compilador vê, e o compilador não vê prosa. Sem esta
  * limpeza o teste reprovaria o próprio docblock que EXPLICA o defeito — citar
- * `process.env.NEXT_PUBLIC_SUPABASE_URL` para dizer "não faça isto" viraria
+ * `process.env.NEON_DATA_API_URL` para dizer "não faça isto" viraria
  * violação. Um gate que proíbe descrever o bug empurra a explicação para fora
  * do arquivo, que é onde ela morre.
  */
@@ -65,7 +65,7 @@ describe("a base do Storage vem de runtime, nunca do build", () => {
 
   it("no servidor, devolve o valor que o process.env tem AGORA", () => {
     // Controle positivo de COMPORTAMENTO, não de texto. O caso anterior era
-    // `expect(FONTE).toMatch(/NEXT_PUBLIC_SUPABASE_URL/)` e NÃO segurava o que
+    // `expect(FONTE).toMatch(/NEON_DATA_API_URL/)` e NÃO segurava o que
     // dizia segurar: trocando o ramo do servidor por `return ""` — exatamente a
     // sabotagem que o comentário descrevia — o teste ficava VERDE, porque o
     // literal sobrevive na linha do NAVEGADOR (`window.__PUBLIC_ENV__?.…`), que
@@ -74,13 +74,13 @@ describe("a base do Storage vem de runtime, nunca do build", () => {
     // Medido: (a) fonte do PR → passa; (b) com `return ""` no ramo do servidor →
     // `AssertionError: expected '' to be 'https://o-supabase-do-cliente…'`;
     // (c) restaurado → passa.
-    const antes = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://o-supabase-do-cliente.supabase.co";
+    const antes = process.env.NEON_DATA_API_URL;
+    process.env.NEON_DATA_API_URL = "https://o-supabase-do-cliente.supabase.co";
     try {
       expect(baseDoStorage()).toBe("https://o-supabase-do-cliente.supabase.co");
     } finally {
-      if (antes === undefined) delete process.env.NEXT_PUBLIC_SUPABASE_URL;
-      else process.env.NEXT_PUBLIC_SUPABASE_URL = antes;
+      if (antes === undefined) delete process.env.NEON_DATA_API_URL;
+      else process.env.NEON_DATA_API_URL = antes;
     }
   });
 

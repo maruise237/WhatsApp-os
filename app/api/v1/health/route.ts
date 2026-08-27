@@ -64,16 +64,16 @@ function motivoDoStatusHttp(status: number): MotivoDeFalha {
   return status === 401 || status === 403 ? "credencial_recusada" : "resposta_inesperada";
 }
 
-async function checkSupabase(): Promise<Check> {
+async function checkNeon(): Promise<Check> {
   const t0 = Date.now();
-  const url = env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = env.NEON_DATA_API_URL;
   try {
-    // Ping leve via REST com anon key — não precisa de service_role pra health check.
-    // Se chegar 200/401/empty body, conexão e API key estão OK.
-    const key = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    // Ping leve via Neon Data API com o JWT de service, uniquement côté serveur.
+    // Uma resposta 200 confirma endpoint, JWT e grants operacionais.
+    const key = env.NEON_SERVICE_ROLE_JWT;
     const res = await withTimeout(
       fetch(`${url}/rest/v1/organizations?select=id&limit=1`, {
-        headers: { apikey: key, Authorization: `Bearer ${key}` },
+        headers: { Authorization: `Bearer ${key}` },
         cache: "no-store",
       }),
     );
@@ -200,15 +200,15 @@ function semAlvo(check: Check): Check {
 }
 
 export async function GET(req: NextRequest) {
-  const [supabase, redis, waha] = await Promise.all([
-    checkSupabase(),
+  const [neon, redis, waha] = await Promise.all([
+    checkNeon(),
     checkRedis(),
     checkWaha(),
   ]);
 
   const verboso = req.nextUrl.searchParams.get("verbose") === "1" && segredoInternoConfere(req);
   const filtrar = verboso ? (c: Check) => c : semAlvo;
-  const checks = { supabase: filtrar(supabase), redis: filtrar(redis), waha: filtrar(waha) };
+  const checks = { neon: filtrar(neon), redis: filtrar(redis), waha: filtrar(waha) };
 
   const anyDown = Object.values(checks).some((c) => c.status === "down");
   const anyDegraded = Object.values(checks).some((c) => c.status === "degraded");

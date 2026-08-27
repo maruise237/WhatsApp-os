@@ -16,7 +16,7 @@ import { env } from "@/lib/env";
 import type { AuditAction } from "./actions";
 
 export function isServiceRoleConfigured(): boolean {
-  const key = env.SUPABASE_SERVICE_ROLE_KEY.trim();
+  const key = env.NEON_SERVICE_ROLE_JWT.trim();
   // NUNCA infira validade pelo comprimento. O Supabase emitia só JWT (200+
   // caracteres) — daí o `length > 50` original — e passou a emitir também a
   // chave curta `sb_secret_...` (~41 caracteres), que esse corte rejeitava

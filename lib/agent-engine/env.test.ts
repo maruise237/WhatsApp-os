@@ -9,9 +9,9 @@ import { loadEnv } from "./env";
  */
 const REQUIRED: NodeJS.ProcessEnv = {
   NODE_ENV: "test",
-  SUPABASE_DB_URL: "postgresql://u:p@localhost:5432/db",
-  NEXT_PUBLIC_SUPABASE_URL: "https://x.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "service-key",
+  NEON_DATABASE_URL: "postgresql://u:p@localhost:5432/db",
+  NEON_DATA_API_URL: "https://x.supabase.co",
+  NEON_SERVICE_ROLE_JWT: "service-key",
 };
 
 describe("loadEnv — vazio é ausente (contrato BYOK do README)", () => {
@@ -28,14 +28,14 @@ describe("loadEnv — vazio é ausente (contrato BYOK do README)", () => {
   });
 
   it("obrigatória VAZIA = erro claro nomeando a var (fail-fast preservado)", () => {
-    expect(() => loadEnv({ ...REQUIRED, SUPABASE_DB_URL: "" })).toThrowError(
-      /SUPABASE_DB_URL/,
+    expect(() => loadEnv({ ...REQUIRED, NEON_DATABASE_URL: "" })).toThrowError(
+      /NEON_DATABASE_URL/,
     );
   });
 
   it("obrigatória ausente = mesmo erro claro", () => {
-    const { SUPABASE_DB_URL: _omit, ...rest } = REQUIRED;
-    expect(() => loadEnv(rest)).toThrowError(/SUPABASE_DB_URL/);
+    const { NEON_DATABASE_URL: _omit, ...rest } = REQUIRED;
+    expect(() => loadEnv(rest)).toThrowError(/NEON_DATABASE_URL/);
   });
 });
 

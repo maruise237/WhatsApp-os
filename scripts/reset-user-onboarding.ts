@@ -2,7 +2,7 @@
  * Move um user para uma org NOVA sem onboarded_at, pra forçar o fluxo de onboarding.
  * Run: npx tsx scripts/reset-user-onboarding.ts <email> [org-slug]
  */
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
@@ -11,7 +11,7 @@ const EMAIL = process.argv[2] ?? "teste@gmail.com";
 const ORG_SLUG = process.argv[3] ?? `onboarding-${EMAIL.split("@")[0]}`;
 const ORG_NAME = `Onboarding ${EMAIL.split("@")[0]}`;
 
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

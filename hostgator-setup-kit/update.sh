@@ -138,13 +138,13 @@ fi
 # `.env` como recomendamos, este passo passava a falhar em silêncio a cada
 # atualização — e é o update.sh que entrega migration nova ao clone (issue #192).
 step "Atualizando o banco de dados"
-if [ -f supabase/baseline.sql ]; then
+if [ -f neon/migrations/0001_whatsapp_os_baseline.sql ]; then
   # Extensões que o schema exige (idempotente; iguais ao install.sh).
   docker run --rm postgres:17-alpine psql "$(url_do_schema)" -c \
     "create extension if not exists vector with schema public; create extension if not exists citext with schema public; create extension if not exists pg_trgm with schema public;" \
     >/dev/null 2>&1 || true
 
-  raw="$(docker run --rm -i -v "$PROJECT_DIR/supabase/baseline.sql:/b.sql:ro" \
+  raw="$(docker run --rm -i -v "$PROJECT_DIR/neon/migrations/0001_whatsapp_os_baseline.sql:/b.sql:ro" \
         postgres:17-alpine psql "$(url_do_schema)" -f /b.sql 2>&1 || true)"
 
   # Erros benignos ao re-aplicar sobre uma base existente:
@@ -158,28 +158,20 @@ if [ -f supabase/baseline.sql ]; then
     case "$unexpected" in
       *permission\ denied*|*must\ be\ owner*|*permissão\ negada*)
         c_ylw "  Os erros são de PERMISSÃO: a conexão do .env não é o dono do banco. Num Supabase"
-        c_ylw "  próprio, declare SUPABASE_DB_ADMIN_URL no .env — é ela que roda o schema." ;;
+        c_ylw "  próprio, declare NEON_DATABASE_ADMIN_URL no .env — é ela que roda o schema." ;;
     esac
   else
     c_grn "✓ banco atualizado (e conversas reorganizadas, se havia bagunça)."
   fi
 else
-  c_ylw "⚠ supabase/baseline.sql não encontrado — pulei a parte do banco."
+  c_ylw "⚠ neon/migrations/0001_whatsapp_os_baseline.sql não encontrado — pulei a parte do banco."
 fi
 [ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" banco
 
-# ── 4.5 E-mails de acesso, para quem já estava instalado ────────────────────
-# Só COM o token no ambiente, e por isso duas coisas:
-#
-#  - é assim que um clone ANTIGO recebe os e-mails com a marca dele. O
-#    `install.sh` dele nunca chamou este passo (ele não existia), e nenhuma
-#    atualização toca em config de auth por conta própria;
-#  - sem o token, o script imprimiria o passo manual — útil UMA vez, na
-#    instalação, e ruído em toda atualização a partir daí. Atualização que
-#    resmunga toda vez ensina a ignorar a saída dela.
-if [ -n "${SUPABASE_ACCESS_TOKEN:-}" ]; then
-  bash "$KIT_DIR/marca-emails.sh" --projeto "$PROJECT_DIR" || true
-fi
+# ── 4.5 E-mails Neon Auth ────────────────────────────────────────────────────
+# Les templates et la confirmation email restent gérés dans Neon Managed Better
+# Auth. Aucune mise à jour ne tente d’appeler une API admin beta non validée.
+c_ylw "⚠ Vérifiez la configuration des emails Neon Auth dans le panneau Neon si elle a changé."
 
 # ── 5. App novo ──────────────────────────────────────────────────────────────
 step "Baixando a versão nova do app e reiniciando"

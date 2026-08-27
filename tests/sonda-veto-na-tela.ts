@@ -40,7 +40,7 @@ const env = carregarEnvLocal();
 const ORG = CREDS.org_id as string;
 
 async function main(): Promise<void> {
-  const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL });
+  const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL });
   const traceId = randomUUID();
   let emitiu = false;
 

@@ -23,10 +23,10 @@ const newPassword = "SenhaNova!456";
 
 test.beforeAll(async () => {
   const envLocal = loadEnvLocal();
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? envLocal.NEXT_PUBLIC_SUPABASE_URL;
+  const url = process.env.NEON_DATA_API_URL ?? envLocal.NEON_DATA_API_URL;
   const serviceKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? envLocal.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceKey) throw new Error("SUPABASE_URL/SERVICE_ROLE_KEY ausentes (.env.local)");
+    process.env.NEON_SERVICE_ROLE_JWT ?? envLocal.NEON_SERVICE_ROLE_JWT;
+  if (!url || !serviceKey) throw new Error("NEON_DATA_API_URL/SERVICE_ROLE_KEY ausentes (.env.local)");
 
   const admin = createClient(url, serviceKey, {
     auth: { autoRefreshToken: false, persistSession: false },

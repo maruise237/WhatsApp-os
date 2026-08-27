@@ -48,7 +48,7 @@ import { resolveBand, type ScoreBand } from "@/lib/kanban/score-band";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const envVars = carregarEnvLocal();
-const pool = new pg.Pool({ connectionString: envVars.SUPABASE_DB_URL });
+const pool = new pg.Pool({ connectionString: envVars.NEON_DATABASE_URL });
 const ORG = CREDS.org_id as string;
 
 type Estado = "PASS" | "FALHA" | "BLOQUEADO";

@@ -7,7 +7,7 @@
  * user_metadata completo, tokens ou qualquer outra PII do usuário. Mesmo mínimo
  * que /api/v1/team/assignable já expõe.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 export async function resolveUserNames(
   supabase: SupabaseClient,

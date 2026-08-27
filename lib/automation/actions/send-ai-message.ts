@@ -63,7 +63,7 @@ async function execute(ctx: ActionCtx, config: Record<string, unknown>): Promise
   try {
     pool = getRequestPool();
   } catch {
-    // `SUPABASE_DB_URL` ausente. É config da instalação, não erro deste lead —
+    // `NEON_DATABASE_URL` ausente. É config da instalação, não erro deste lead —
     // a frase precisa dizer isso para quem lê a aba Atividade.
     return { type: TIPO, status: "failed", error: "ia_indisponivel", detail: { reason: "ia_indisponivel" } };
   }

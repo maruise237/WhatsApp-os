@@ -33,7 +33,7 @@
  * Run: npx tsx scripts/seed-e2e-credentials.ts
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -49,12 +49,12 @@ import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste"
 // existia no banco local porque tinha sido criado na nuvem.
 const credenciais = credenciaisSupabaseDeTeste();
 anunciarDestino("seed-e2e-credentials", credenciais);
-const SUPABASE_URL = credenciais.url;
+const NEON_DATA_API_URL = credenciais.url;
 const SERVICE_ROLE = credenciais.serviceRole;
 const ANON_KEY = credenciais.anonKey;
 const APP_URL = credenciais.appUrl;
 
-const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -259,7 +259,7 @@ async function garantirTotp(
     console.log(`[seed] ${campoNoCreds} factor removed (rotating): ${f.id}`);
   }
 
-  const anon = createClient(SUPABASE_URL, ANON_KEY, {
+  const anon = createClient(NEON_DATA_API_URL, ANON_KEY, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const { error: signInErr } = await anon.auth.signInWithPassword({
@@ -316,7 +316,7 @@ async function main(): Promise<void> {
     dono_totp: donoTotp,
     default_agent_id: agentId,
     app_url: APP_URL,
-    supabase_url: SUPABASE_URL,
+    supabase_url: NEON_DATA_API_URL,
     supabase_anon_key: ANON_KEY,
   };
 

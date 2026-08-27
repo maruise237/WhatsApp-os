@@ -57,8 +57,8 @@ const { base, inv } = load();
 
 // service-role client (mesmo env do dev) — pra provar estado no banco e resetar
 const svc = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  process.env.NEON_DATA_API_URL!,
+  process.env.NEON_SERVICE_ROLE_JWT!,
   { auth: { persistSession: false } },
 );
 

@@ -39,7 +39,7 @@
  * efeito — falha fechada na ação e fechada também na informação, que é o pior
  * dos dois mundos.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 import {

@@ -18,7 +18,7 @@
  * embuta um código de rastreio na mensagem pré-preenchida, e essa LP ainda não
  * existe.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 

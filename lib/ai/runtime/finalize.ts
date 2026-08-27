@@ -6,7 +6,7 @@
  * outbound row insert, retry, idempotency_keys) so we never duplicate
  * dispatch logic here.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { sendMessageHandler } from "@/app/api/v1/messages/_handler";
 import type { Actor } from "@/lib/api/handlers/types";

@@ -4,7 +4,7 @@ create table if not exists followup_flow_versions (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
   graph jsonb not null,
-  created_by uuid references auth.users(id) on delete set null,
+  created_by uuid references neon_auth.user(id) on delete set null,
   created_at timestamptz not null default now()
 );
 

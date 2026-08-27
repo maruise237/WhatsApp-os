@@ -9,7 +9,7 @@
  * the pg-backed adapter used by the DB test) as well as production, where
  * `createSupabaseAdminClient` below adapts the real service-role client.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 

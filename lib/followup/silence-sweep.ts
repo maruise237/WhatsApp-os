@@ -35,7 +35,7 @@
  * como overlap entre `trigger_config.params.segments` e `contacts.tags`.
  * `segments` vazio/ausente = todos os contatos silenciosos da org.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { flowGraphSchema } from "./graph-schema";
 import { triggerConfigSchema } from "./api-schemas";

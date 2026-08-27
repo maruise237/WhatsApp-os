@@ -40,7 +40,7 @@
  * já escreve para a marca ("resolvedor NUNCA lança"), aplicada onde também vale:
  * o laço se desliga sozinho, avisa, e o resto do worker sobe.
  */
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Logger } from '@/lib/agent-engine/obs/logger';
 // `import type` e nunca import de valor: em runtime esta linha desaparece, e é

@@ -5,7 +5,7 @@
  * `unassigned` em /conversations/counts e da aba fila do InboxLayout — o número
  * que o manager vê é o mesmo). Read-only; org-scoping explícita em toda query.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { CONVERSATION_QUEUE_STATUSES } from "@/lib/schemas";
 

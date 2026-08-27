@@ -4,7 +4,7 @@
  * Run: npx tsx scripts/qa-wave-08.ts
  */
 import { chromium, type BrowserContext, type APIRequestContext } from "@playwright/test";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "fs";
 import * as path from "path";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
@@ -25,8 +25,8 @@ const AGENT_EMAIL: string = creds.users.agent.email;
 const DEFAULT_AGENT_ID: string = creds.default_agent_id;
 const ORG_ID: string = creds.org_id;
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const NEON_DATA_API_URL = process.env.NEON_DATA_API_URL!;
+const SERVICE_KEY = process.env.NEON_SERVICE_ROLE_JWT!;
 
 type Result = { ac: string; pass: boolean; evidence: string };
 const results: Result[] = [];
@@ -234,7 +234,7 @@ async function main() {
 
   // Verify audit_log row via service role
   try {
-    const sb = createClient(SUPABASE_URL, SERVICE_KEY, {
+    const sb = createClient(NEON_DATA_API_URL, SERVICE_KEY, {
       auth: { persistSession: false },
     });
     // Try common table names
@@ -354,7 +354,7 @@ async function main() {
   // ---------- Restore original system_prompt ----------
   if (patchOk) {
     try {
-      const sb = createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: false } });
+      const sb = createClient(NEON_DATA_API_URL, SERVICE_KEY, { auth: { persistSession: false } });
       await sb
         .from("ai_agents")
         .update({ system_prompt: "Default seeded prompt (restored by E2E wave-8 cleanup)" })

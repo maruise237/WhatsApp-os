@@ -5,7 +5,7 @@
  * carregados em Server Components via cookie session. Este handler existe
  * para o MCP server (S-13.04) ler pipelines como uma tool de leitura.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ApiError } from "@/lib/api/types";
 import type { HandlerCtx } from "@/lib/api/handlers/types";

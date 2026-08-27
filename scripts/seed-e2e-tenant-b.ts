@@ -14,7 +14,7 @@
  * Run: npx tsx scripts/seed-e2e-tenant-b.ts
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -28,14 +28,14 @@ import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste"
 const credenciais = credenciaisSupabaseDeTeste();
 anunciarDestino("seed-e2e-tenant-b", credenciais);
 const env = {
-  NEXT_PUBLIC_SUPABASE_URL: credenciais.url,
-  SUPABASE_SERVICE_ROLE_KEY: credenciais.serviceRole,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: credenciais.anonKey,
+  NEON_DATA_API_URL: credenciais.url,
+  NEON_SERVICE_ROLE_JWT: credenciais.serviceRole,
+  NEON_TEST_JWT: credenciais.anonKey,
   NEXT_PUBLIC_APP_URL: credenciais.appUrl,
-  SUPABASE_DB_URL: credenciais.dbUrl,
+  NEON_DATABASE_URL: credenciais.dbUrl,
 } as Record<string, string>;
 
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -84,7 +84,7 @@ async function ensureTotp(
     if (error) throw new Error(`deleteFactor ${f.id}: ${error.message}`);
   }
 
-  const anon = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const anon = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const { error: signInErr } = await anon.auth.signInWithPassword({ email: EMAIL, password: PASSWORD });

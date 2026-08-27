@@ -9,9 +9,9 @@ create table if not exists public.incidents (
   payload jsonb not null default '{}'::jsonb,
   status text not null default 'open' check (status in ('open','acknowledged','resolved')),
   acknowledged_at timestamptz,
-  acknowledged_by uuid references auth.users(id),
+  acknowledged_by uuid references neon_auth.user(id),
   resolved_at timestamptz,
-  resolved_by uuid references auth.users(id),
+  resolved_by uuid references neon_auth.user(id),
   resolution_note text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()

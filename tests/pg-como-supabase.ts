@@ -4,7 +4,7 @@
  * ═══ POR QUE ISTO EXISTE ═══
  *
  * `pnpm test:db` sobe Postgres puro, **sem PostgREST** — de propósito
- * (`vitest.db.config.ts` aponta `NEXT_PUBLIC_SUPABASE_URL` para uma porta
+ * (`vitest.db.config.ts` aponta `NEON_DATA_API_URL` para uma porta
  * inalcançável). Então código que fala `supabase.from(...)` não tinha como ser
  * exercitado ali: só dava para reescrever a consulta em SQL ao lado e conferir
  * que o banco se defende — o que prova o BANCO, nunca o CÓDIGO.

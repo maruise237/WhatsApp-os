@@ -13,7 +13,7 @@
 # de um VPS IPv4, era a armadilha número um).
 #
 # USO
-#   export SUPABASE_ACCESS_TOKEN=sbp_...      # Personal Access Token
+#   export NEON_MANAGEMENT_TOKEN=sbp_...      # Personal Access Token
 #   bash supabase-provision.sh "Nome do Projeto" [regiao]
 #
 # Escreve as 4 variáveis em stdout no formato `CHAVE='valor'`, prontas para
@@ -34,7 +34,7 @@ set -euo pipefail
 
 API="https://api.supabase.com/v1"
 PROJECT_NAME="${1:-DeskcommCRM}"
-REGION="${2:-${SUPABASE_REGION:-sa-east-1}}"
+REGION="${2:-${NEON_REGION:-sa-east-1}}"
 
 c_red() { printf '\033[31m%s\033[0m\n' "$*" >&2; }
 c_grn() { printf '\033[32m%s\033[0m\n' "$*" >&2; }
@@ -100,12 +100,12 @@ moldura() {
 
 moldura "DeskcommCRM · criando seu banco no Supabase"
 
-if [ -z "${SUPABASE_ACCESS_TOKEN:-}" ]; then
+if [ -z "${NEON_MANAGEMENT_TOKEN:-}" ]; then
   c_red "✖ Falta o token de acesso do Supabase."
   printf '\n' >&2
   c_dim "  1. Abra https://supabase.com/dashboard/account/tokens"
   c_dim "  2. Generate new token, dê um nome (ex.: deskcommcrm) e copie"
-  c_dim "  3. Rode:  export SUPABASE_ACCESS_TOKEN=sbp_...  e tente de novo"
+  c_dim "  3. Rode:  export NEON_MANAGEMENT_TOKEN=sbp_...  e tente de novo"
   printf '\n' >&2
   exit 1
 fi
@@ -126,10 +126,10 @@ api() {
   local method="$1" path="$2" body="${3:-}"
   if [ -n "$body" ]; then
     curl -sS -X "$method" "$API$path" \
-      -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+      -H "Authorization: Bearer $NEON_MANAGEMENT_TOKEN" \
       -H "Content-Type: application/json" -d "$body"
   else
-    curl -sS -X "$method" "$API$path" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN"
+    curl -sS -X "$method" "$API$path" -H "Authorization: Bearer $NEON_MANAGEMENT_TOKEN"
   fi
 }
 
@@ -240,7 +240,7 @@ printf '\n' >&2
 
 # stdout limpo: só as 4 linhas, para `bash supabase-provision.sh ... >> .env`
 # funcionar. Todo o visual acima foi para stderr de propósito.
-printf "NEXT_PUBLIC_SUPABASE_URL='https://%s.supabase.co'\n" "$REF"
-printf "NEXT_PUBLIC_SUPABASE_ANON_KEY='%s'\n" "$ANON"
-printf "SUPABASE_SERVICE_ROLE_KEY='%s'\n" "$SERVICE"
-printf "SUPABASE_DB_URL='%s'\n" "$DB_URL"
+printf "NEON_DATA_API_URL='https://%s.supabase.co'\n" "$REF"
+printf "NEON_TEST_JWT='%s'\n" "$ANON"
+printf "NEON_SERVICE_ROLE_JWT='%s'\n" "$SERVICE"
+printf "NEON_DATABASE_URL='%s'\n" "$DB_URL"

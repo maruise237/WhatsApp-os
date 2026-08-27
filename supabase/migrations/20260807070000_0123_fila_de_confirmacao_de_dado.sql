@@ -61,7 +61,7 @@ create table if not exists public.contact_field_proposals (
   proposed_at timestamptz not null default now(),
   expires_at timestamptz not null,
   decided_at timestamptz,
-  decided_by_user_id uuid references auth.users(id) on delete set null,
+  decided_by_user_id uuid references neon_auth.user(id) on delete set null,
   -- Por que foi recusada. É o LAÇO DE RETORNO (invariante 7): proposta que o
   -- humano rejeita diz onde a IA erra, e sem o motivo o sinal é só um número.
   motivo_recusa text,

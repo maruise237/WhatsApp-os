@@ -27,7 +27,7 @@
  * `.env`. Filtro aqui, índice único parcial na migration 0165, invariante em
  * `tests/unit/canal-consulta-por-organizacao.test.ts`.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { decryptWebhookSecret } from "@/lib/webhooks/secrets";

@@ -21,7 +21,7 @@
  *    `unique (organization_id, external_id)` não é higiene, é obrigatória: sem ela a
  *    mesma mensagem aparece N vezes no inbox depois de qualquer instabilidade.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { phoneLookupVariants } from "../phone-variants";

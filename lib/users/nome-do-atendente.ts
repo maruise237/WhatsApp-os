@@ -30,7 +30,7 @@
  * ## Sem service role, o `null` é DECLARADO
  *
  * Mesma escolha de `/api/v1/team/assignable`: num self-host sem
- * `SUPABASE_SERVICE_ROLE_KEY` o campo vem `null` porque **decidimos**, com log,
+ * `NEON_SERVICE_ROLE_JWT` o campo vem `null` porque **decidimos**, com log,
  * não porque uma chamada falhou sem ninguém ver. A tela cai no rótulo genérico e
  * continua dizendo que há um responsável — o `assigned_to_user_id` é a verdade; o
  * nome é a cortesia.

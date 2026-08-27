@@ -20,7 +20,7 @@
  * hora da chamada. O que esta lista garante é que não oferecemos um caminho que
  * NUNCA teria como funcionar.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 /** Um modelo oferecível, já com o provedor que precisa viajar junto dele. */
 export interface ClassifierModelOption {

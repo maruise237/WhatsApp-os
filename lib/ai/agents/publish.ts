@@ -5,7 +5,7 @@
  * Returns a discriminated result so the caller maps validation errors to 422
  * with a stable error code, and unknown errors to 500.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import { PUBLISH_ERROR_CODES, type PublishErrorCode } from "./validation";
 
 export interface PublishOk {

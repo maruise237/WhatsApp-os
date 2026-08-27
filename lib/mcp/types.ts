@@ -6,7 +6,7 @@
  * server core (org, role, actor, supabase admin client).
  */
 import type { z } from "zod";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import type { Role } from "@/lib/auth/types";

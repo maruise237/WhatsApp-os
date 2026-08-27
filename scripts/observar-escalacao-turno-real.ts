@@ -20,7 +20,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { randomUUID } from "node:crypto";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import pg from "pg";
 
 import { bufToBytea, encryptKey } from "../lib/crypto/aes_gcm";
@@ -28,10 +28,10 @@ import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
 
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
-const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL! });
+const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL! });
 
 const SESSAO = "w3-observacao";
 const TELEFONE = "+5531955554444";

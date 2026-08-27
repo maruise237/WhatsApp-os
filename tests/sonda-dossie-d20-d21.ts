@@ -17,7 +17,7 @@ import { execFileSync } from "node:child_process";
 import { BASE, CARD_ATTR, login } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
-const DB = carregarEnvLocal().SUPABASE_DB_URL!;
+const DB = carregarEnvLocal().NEON_DATABASE_URL!;
 
 const sql = (q: string): string =>
   execFileSync("psql", [DB, "-tA", "-c", q], { encoding: "utf8" }).trim();

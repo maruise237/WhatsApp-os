@@ -134,7 +134,7 @@ printf 'select 1;\n' > "$PROJ/supabase/baseline.sql"
 cat > "$PROJ/.env" <<ENV
 APP_IMAGE=ghcr.io/melgarafael/deskcommcrm:latest
 APP_PULL_POLICY=always
-SUPABASE_DB_URL=postgresql://x/y
+NEON_DATABASE_URL=postgresql://x/y
 NEXT_PUBLIC_APP_URL=https://crm.exemplo.com.br
 INTERNAL_SECRET=segredo
 NUVEMSHOP_OAUTH_ENCRYPTION_KEY=chave
@@ -248,7 +248,7 @@ clona_raso() {  # clona_raso <destino> — igual ao install.sh: --depth 1
   cat > "$1/.env" <<ENV
 APP_IMAGE=ghcr.io/melgarafael/deskcommcrm:latest
 APP_PULL_POLICY=always
-SUPABASE_DB_URL=postgresql://x/y
+NEON_DATABASE_URL=postgresql://x/y
 NEXT_PUBLIC_APP_URL=https://crm.exemplo.com.br
 INTERNAL_SECRET=segredo
 NUVEMSHOP_OAUTH_ENCRYPTION_KEY=chave

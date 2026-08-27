@@ -28,7 +28,7 @@ carimbar([
   "lib/agent-engine/edge/crm/get-lead-context.ts",
 ]);
 
-const DB = carregarEnvLocal().SUPABASE_DB_URL!;
+const DB = carregarEnvLocal().NEON_DATABASE_URL!;
 
 const ATAQUE = process.env.ATAQUE === "1";
 

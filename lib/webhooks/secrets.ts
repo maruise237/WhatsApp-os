@@ -9,7 +9,7 @@
  * decide — rotas de escrita respondem 422 com instrução); decrypt que falha
  * retorna null (o caller aplica o precedente WAHA: hmacSkipped, nunca 500).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import { logger } from "@/lib/logger";
 
 /** Cifra um secret. Retorna o bytea (formato hex "\x…" do PostgREST) ou null se a chave estiver ausente/erro. */

@@ -65,10 +65,12 @@ const schema = z.object({
   // Node
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
-  // Supabase — obrigatórias sempre (até pra dev local)
-  NEXT_PUBLIC_SUPABASE_URL: requiredAlways("NEXT_PUBLIC_SUPABASE_URL").url(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: requiredAlways("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
-  SUPABASE_SERVICE_ROLE_KEY: requiredAlways("SUPABASE_SERVICE_ROLE_KEY"),
+  // Neon — Auth, Data API et JWT admin séparé
+  NEON_AUTH_BASE_URL: requiredAlways("NEON_AUTH_BASE_URL").url(),
+  NEON_DATA_API_URL: requiredAlways("NEON_DATA_API_URL").url(),
+  NEON_DATABASE_URL: requiredAlways("NEON_DATABASE_URL").url(),
+  NEON_SERVICE_ROLE_JWT: required("NEON_SERVICE_ROLE_JWT"),
+  NEON_AUTH_COOKIE_SECRET: requiredAlways("NEON_AUTH_COOKIE_SECRET").min(32),
 
   // Cron / interno
   INTERNAL_SECRET: required("INTERNAL_SECRET"),
@@ -121,20 +123,9 @@ const schema = z.object({
    */
   AI_CRED_AES_KEY: required("AI_CRED_AES_KEY"),
 
-  // Postgres direto do Supabase (Settings → Database) — só as rotas de skills
-  // instaláveis (import/install) usam `pg` cru (mesmo pool do agent-engine).
-  SUPABASE_DB_URL: required("SUPABASE_DB_URL"),
-  /**
-   * A conexão de DDL do KIT (install.sh/update.sh/backup.sh), não do app —
-   * declarada aqui só porque o `docker-compose.prod.yml` entrega o `.env`
-   * inteiro ao app e ao worker (`env_file`), e uma chave que chega ao processo
-   * merece estar no contrato em vez de ser um desconhecido tolerado.
-   *
-   * NENHUM código de app pode lê-la: ela é o DONO do banco quando a instalação
-   * é num Supabase próprio, e `SUPABASE_DB_URL` é a role menor de propósito
-   * (issue #192). Vigiado por `tests/unit/env-ddl-fora-do-app.test.ts`.
-   */
-  SUPABASE_DB_ADMIN_URL: z.string().optional().default(""),
+  // Neon Postgres direct : workers et tâches SQL côté serveur.
+  // La connexion d’administration DDL reste séparée et ne doit pas être lue par les routes utilisateur.
+  NEON_DATABASE_ADMIN_URL: z.string().optional().default(""),
 
   // Gateway WhatsApp interne — l’app connaît uniquement ce proxy, jamais Evolution Go.
   WHATSAPP_GATEWAY_BASE_URL: required("WHATSAPP_GATEWAY_BASE_URL"),
@@ -334,14 +325,16 @@ const schema = z.object({
   APP_ACCENT_HEX: z.string().optional().default(""),
 });
 
-let parsed = schema.safeParse(process.env);
+const envInput = { ...process.env };
+
+let parsed = schema.safeParse(envInput);
 
 // Na fase de build da imagem Docker, semeia placeholders pras vars que faltam
 // (URL válida, passa .url()/.min(1)) e revalida — permite `next build` sem os
 // segredos de runtime. NUNCA acontece em runtime: lá process.env está completo
 // e este bloco não roda, então o boot real continua cobrando tudo.
 if (!parsed.success && isBuildPhase) {
-  const seeded: Record<string, string | undefined> = { ...process.env };
+  const seeded: Record<string, string | undefined> = { ...envInput };
   for (const key of Object.keys(parsed.error.flatten().fieldErrors)) {
     if (!seeded[key]) seeded[key] = "https://build-placeholder.invalid";
   }

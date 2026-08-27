@@ -10,7 +10,7 @@
  * olha pra dentro do pkg em busca de tenant.
  */
 import type pg from 'pg';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { insertSkillVersion, setSkillPointer, type SkillMatcher } from '../../agent-engine/agent/skills';
 import type { ParsedSkillPackage } from './package';

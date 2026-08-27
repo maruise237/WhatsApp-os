@@ -33,7 +33,7 @@ import { CREDS, carimbar } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 const ORG = CREDS.org_id as string;
@@ -42,7 +42,7 @@ const DOENTE = "35bf4ac9-c5e0-4f7d-846a-99b1bcc92d69";
 const RUN = randomUUID().slice(0, 6);
 
 async function rodada(i: number, bom: string, ruim: string): Promise<string[]> {
-  const cli = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const cli = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const vistos: string[] = [];

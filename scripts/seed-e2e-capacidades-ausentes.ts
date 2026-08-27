@@ -30,14 +30,14 @@ import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste"
 const credenciais = credenciaisSupabaseDeTeste();
 anunciarDestino("seed-e2e-capacidades-ausentes", credenciais);
 const env = {
-  NEXT_PUBLIC_SUPABASE_URL: credenciais.url,
-  SUPABASE_SERVICE_ROLE_KEY: credenciais.serviceRole,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: credenciais.anonKey,
+  NEON_DATA_API_URL: credenciais.url,
+  NEON_SERVICE_ROLE_JWT: credenciais.serviceRole,
+  NEON_TEST_JWT: credenciais.anonKey,
   NEXT_PUBLIC_APP_URL: credenciais.appUrl,
-  SUPABASE_DB_URL: credenciais.dbUrl,
+  NEON_DATABASE_URL: credenciais.dbUrl,
 } as Record<string, string>;
 
-const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL! });
+const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL! });
 
 /** O erro EXATO que apareceu no turno real que originou o ACH-04. */
 const MOTIVO_REAL =

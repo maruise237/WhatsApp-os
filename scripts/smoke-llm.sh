@@ -37,7 +37,7 @@ echo "==> smoke contra o modelo real"
 # lib/env (importado transitivamente por aes_gcm) valida vars do APP que o
 # smoke não usa — placeholders bastam, nada disso é chamado no caminho do LLM.
 SMOKE_DB_URL="postgresql://postgres:postgres@127.0.0.1:${PORT}/postgres" \
-  NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL:-https://placeholder.supabase.co}" \
-  NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY:-placeholder-anon}" \
-  SUPABASE_SERVICE_ROLE_KEY="${SUPABASE_SERVICE_ROLE_KEY:-placeholder-service}" \
+  NEON_DATA_API_URL="${NEON_DATA_API_URL:-https://placeholder.supabase.co}" \
+  NEON_TEST_JWT="${NEON_TEST_JWT:-placeholder-anon}" \
+  NEON_SERVICE_ROLE_JWT="${NEON_SERVICE_ROLE_JWT:-placeholder-service}" \
   pnpm exec tsx "$ROOT/scripts/smoke-llm.ts"

@@ -5271,9 +5271,9 @@ create table if not exists public.conversation_assignment_events (
   id              uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
   conversation_id uuid not null references public.conversations(id) on delete cascade,
-  from_user_id    uuid references auth.users(id) on delete set null,
-  to_user_id      uuid references auth.users(id) on delete set null,
-  changed_by      uuid references auth.users(id) on delete set null,
+  from_user_id    uuid references neon_auth.user(id) on delete set null,
+  to_user_id      uuid references neon_auth.user(id) on delete set null,
+  changed_by      uuid references neon_auth.user(id) on delete set null,
   reason          text not null
                   check (reason in ('claim','transfer','release','routing','handoff')),
   created_at      timestamptz not null default now()
@@ -6042,7 +6042,7 @@ create policy "automation_rule_runs_select" on public.automation_rule_runs
 create table if not exists public.attendant_availability (
   id                uuid primary key default gen_random_uuid(),
   organization_id   uuid not null references public.organizations(id) on delete cascade,
-  user_id           uuid not null references auth.users(id) on delete cascade,
+  user_id           uuid not null references neon_auth.user(id) on delete cascade,
   is_available      boolean not null default false,
   capacity          integer not null default 5 check (capacity > 0),
   schedule          jsonb not null default '{}',
@@ -6106,7 +6106,7 @@ create policy "attendant_availability_delete" on public.attendant_availability
 create table if not exists public.attendant_availability (
   id                uuid primary key default gen_random_uuid(),
   organization_id   uuid not null references public.organizations(id) on delete cascade,
-  user_id           uuid not null references auth.users(id) on delete cascade,
+  user_id           uuid not null references neon_auth.user(id) on delete cascade,
   is_available      boolean not null default false,
   capacity          integer not null default 5 check (capacity > 0),
   schedule          jsonb not null default '{}',
@@ -7338,7 +7338,7 @@ create table if not exists followup_flow_versions (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
   graph jsonb not null,
-  created_by uuid references auth.users(id) on delete set null,
+  created_by uuid references neon_auth.user(id) on delete set null,
   created_at timestamptz not null default now()
 );
 
@@ -7613,11 +7613,11 @@ alter table ai_agent_versions
 create table if not exists message_templates (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
-  owner_user_id uuid references auth.users(id) on delete cascade,
+  owner_user_id uuid references neon_auth.user(id) on delete cascade,
   title text not null,
   body text not null,
   shortcut text,
-  created_by_user_id uuid references auth.users(id) on delete set null,
+  created_by_user_id uuid references neon_auth.user(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -7655,7 +7655,7 @@ create policy "message_templates_write" on message_templates
 -- ---- snooze por conversa (migration 0062) ----
 alter table conversations
   add column if not exists snooze_until timestamptz,
-  add column if not exists snoozed_by_user_id uuid references auth.users(id) on delete set null,
+  add column if not exists snoozed_by_user_id uuid references neon_auth.user(id) on delete set null,
   add column if not exists snoozed_at timestamptz;
 
 create index if not exists idx_conversations_snooze_until
@@ -7670,7 +7670,7 @@ create table if not exists conversation_notes (
   organization_id uuid not null references organizations(id) on delete cascade,
   conversation_id uuid not null references conversations(id) on delete cascade,
   body text not null,
-  created_by_user_id uuid references auth.users(id) on delete set null,
+  created_by_user_id uuid references neon_auth.user(id) on delete set null,
   created_by_name text,
   created_at timestamptz not null default now()
 );
@@ -7726,7 +7726,7 @@ create table if not exists agent_case_events (
   kind text not null check (kind in
     ('opened','human_replied','lead_asked','lead_provided','lead_unresponsive','resolved','escalated','cancelled')),
   actor_kind text not null check (actor_kind in ('agent','human','system','lead')),
-  actor_user_id uuid references auth.users(id) on delete set null,
+  actor_user_id uuid references neon_auth.user(id) on delete set null,
   human_action text check (human_action in ('resolved','need_lead_info','escalate')),
   body text,
   metadata jsonb not null default '{}'::jsonb,
@@ -8915,7 +8915,7 @@ create table if not exists public.crm_lead_reactivations (
   -- dado do lead entra aqui por cópia.
   draft text,
   decided_at timestamptz,
-  decided_by_user_id uuid references auth.users(id) on delete set null,
+  decided_by_user_id uuid references neon_auth.user(id) on delete set null,
   updated_at timestamptz not null default now()
 );
 
@@ -9291,7 +9291,7 @@ create table if not exists public.system_version (
   changelog_raw       text not null default '',
   agent_last_seen_at  timestamptz,
   update_requested_at timestamptz,
-  update_requested_by uuid references auth.users(id) on delete set null,
+  update_requested_by uuid references neon_auth.user(id) on delete set null,
   updated_at          timestamptz not null default now()
 );
 comment on table public.system_version is
@@ -9304,7 +9304,7 @@ create table if not exists public.system_update_runs (
   status        text not null default 'dispatched'
                 check (status in ('dispatched','success','failed','failed_rolled_back')),
   last_step     text check (last_step in ('backup','codigo','banco')),
-  requested_by  uuid references auth.users(id) on delete set null,
+  requested_by  uuid references neon_auth.user(id) on delete set null,
   dispatched_at timestamptz not null default now(),
   finished_at   timestamptz,
   log_tail      text not null default ''
@@ -10304,7 +10304,7 @@ create table if not exists public.demandas (
   -- de "vai morrer". Se ninguém assumiu, o dono é a automação — e isso é uma
   -- decisão registrada, não um vazio que ninguém nota.
   dono_kind text not null default 'ia' check (dono_kind in ('ia', 'humano')),
-  dono_user_id uuid references auth.users(id) on delete set null,
+  dono_user_id uuid references neon_auth.user(id) on delete set null,
 
   -- PRÓXIMO PASSO é CAMPO, não derivação (cap. 5 §5.3): derivado, ele
   -- desapareceria nos casos em que a derivação falha — que são exatamente os
@@ -11501,7 +11501,7 @@ create table if not exists public.contact_field_proposals (
   proposed_at timestamptz not null default now(),
   expires_at timestamptz not null,
   decided_at timestamptz,
-  decided_by_user_id uuid references auth.users(id) on delete set null,
+  decided_by_user_id uuid references neon_auth.user(id) on delete set null,
   -- Por que foi recusada. É o LAÇO DE RETORNO (invariante 7): proposta que o
   -- humano rejeita diz onde a IA erra, e sem o motivo o sinal é só um número.
   motivo_recusa text,
@@ -14307,9 +14307,9 @@ create table if not exists public.sales_orders (
     check (status in ('en_cours', 'en_attente_paiement', 'payée', 'a_livrer', 'livree', 'refusee', 'annulee')),
   total_cents bigint not null check (total_cents >= 0),
   currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
-  created_by_user_id uuid references auth.users(id) on delete set null,
+  created_by_user_id uuid references neon_auth.user(id) on delete set null,
   paid_at timestamptz,
-  paid_by_user_id uuid references auth.users(id) on delete set null,
+  paid_by_user_id uuid references neon_auth.user(id) on delete set null,
   fulfillment_note text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -14354,7 +14354,7 @@ create table if not exists public.payment_proofs (
   operator text,
   confidence numeric(5, 4) check (confidence is null or (confidence >= 0 and confidence <= 1)),
   extraction jsonb not null default '{}'::jsonb,
-  reviewed_by_user_id uuid references auth.users(id) on delete set null,
+  reviewed_by_user_id uuid references neon_auth.user(id) on delete set null,
   reviewed_at timestamptz,
   review_note text,
   created_at timestamptz not null default now(),

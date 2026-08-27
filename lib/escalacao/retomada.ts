@@ -29,7 +29,7 @@
  * quem chama isto decide devolver, e a tool que expõe esta função ao modelo é
  * marcada como capacidade de risco crítico — não entra ligada por pacote.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import { audit } from "@/lib/audit";

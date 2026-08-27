@@ -74,7 +74,7 @@ ok() {
 }
 
 # A anon/service_role e a db_url comparam contra o projeto declarado.
-NEXT_PUBLIC_SUPABASE_URL="https://abcdefghijklmnop.supabase.co"
+NEON_DATA_API_URL="https://abcdefghijklmnop.supabase.co"
 
 # JWT falso: header.payload.assinatura, payload com role e ref.
 mkjwt() {
@@ -168,7 +168,7 @@ echo "connection string: Supabase PRÓPRIO não tem <ref> de projeto"
 # ele prova que o banco RESPONDE, não que é o banco certo: medido, uma string
 # apontando para o banco de outra pessoa passa. Isto está no relatório da
 # triagem como achado — não é um teste vermelho aqui de propósito.
-db_ok() {  # db_ok <descrição> <pass|reject> <NEXT_PUBLIC_SUPABASE_URL> <string> [trecho esperado]
+db_ok() {  # db_ok <descrição> <pass|reject> <NEON_DATA_API_URL> <string> [trecho esperado]
   local desc="$1" expect="$2" sburl="$3" conn="$4" want="${5-}" dir out rc tocou
   dir="$(mktemp -d)"; mkdir -p "$dir/bin"
   # O `select 1` roda via `docker run postgres:17-alpine`. O dublê não é
@@ -177,7 +177,7 @@ db_ok() {  # db_ok <descrição> <pass|reject> <NEXT_PUBLIC_SUPABASE_URL> <strin
   # Ele deixa um rastro para a asserção de vacuidade logo abaixo.
   printf '#!/usr/bin/env bash\ntouch "%s/tocou-no-banco"\nprintf 1\n' "$dir" > "$dir/bin/docker"
   chmod +x "$dir/bin/docker"
-  out="$(env PATH="$dir/bin:$PATH" NEXT_PUBLIC_SUPABASE_URL="$sburl" bash -c '
+  out="$(env PATH="$dir/bin:$PATH" NEON_DATA_API_URL="$sburl" bash -c '
       INSTALL_SH_LIB=1 . ./install.sh
       set +e
       v_db_url "$1"' _ "$conn" 2>&1)"; rc=$?
@@ -270,7 +270,7 @@ rede_morta() {  # rede_morta <descrição> <pass|reject> <validador> <valor> [tr
   shift 4
   out="$(bash -c '
       INSTALL_SH_LIB=1 . ./install.sh
-      NEXT_PUBLIC_SUPABASE_URL="https://abcdefghijklmnop.supabase.co"
+      NEON_DATA_API_URL="https://abcdefghijklmnop.supabase.co"
       set +e
       # curl real com -w: imprime 000 E devolve exit != 0.
       curl() { printf 000; return 6; }
@@ -340,7 +340,7 @@ rm -rf "$TMP"
 echo "credenciais do provisionamento (sb_carrega_credenciais)"
 # Este bloco existe porque a leitura já foi feita com `eval`, e com `eval` ela
 # EXECUTAVA o conteúdo: o provisionamento imprime `CHAVE='valor'` sem escapar a
-# aspa simples, e SUPABASE_REGION — que vem do ambiente — é interpolada dentro da
+# aspa simples, e NEON_REGION — que vem do ambiente — é interpolada dentro da
 # connection string. Medido: com `eval`, o marcador abaixo era criado.
 TMP2="$(mktemp -d)"
 (
@@ -348,24 +348,24 @@ TMP2="$(mktemp -d)"
   # Exatamente o que o provisionamento emite quando a região traz uma aspa simples.
   VENENO="postgresql://postgres.ref:senha@aws-0-sa-east-1'\$(touch $MARCA)'.pooler.supabase.com:5432/postgres"
   PATH_ANTES="$PATH"
-  unset NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY SUPABASE_DB_URL
+  unset NEON_DATA_API_URL NEON_TEST_JWT NEON_SERVICE_ROLE_JWT NEON_DATABASE_URL
 
-  sb_carrega_credenciais "$(printf "SUPABASE_DB_URL='%s'\n" "$VENENO")"
+  sb_carrega_credenciais "$(printf "NEON_DATABASE_URL='%s'\n" "$VENENO")"
 
   eq() { if [ "$2" = "$3" ]; then printf '  ✓ %s\n' "$1"; else printf '  ✗ %s  esperava [%s] obteve [%s]\n' "$1" "$3" "$2"; exit 1; fi; }
   if [ -e "$MARCA" ]; then printf '  ✗ aspa simples no valor EXECUTOU comando\n'; exit 1; fi
   printf '  ✓ aspa simples no valor não executa comando\n'
-  eq "valor com aspa chega literal"    "${SUPABASE_DB_URL:-}"  "$VENENO"
+  eq "valor com aspa chega literal"    "${NEON_DATABASE_URL:-}"  "$VENENO"
 
   # Chave fora da lista fixa é ignorada — a saída não pode criar variável qualquer.
   sb_carrega_credenciais "PATH='/pwn'"
   eq "chave desconhecida é ignorada"   "$PATH"                 "$PATH_ANTES"
 
   # E o caminho feliz continua inteiro.
-  unset SUPABASE_DB_URL
-  sb_carrega_credenciais "$(printf "NEXT_PUBLIC_SUPABASE_URL='https://abc.supabase.co'\nSUPABASE_DB_URL='postgresql://u:p@h:5432/postgres'\n")"
-  eq "url normal chega íntegra"        "${NEXT_PUBLIC_SUPABASE_URL:-}" "https://abc.supabase.co"
-  eq "db_url normal chega íntegra"     "${SUPABASE_DB_URL:-}"          "postgresql://u:p@h:5432/postgres"
+  unset NEON_DATABASE_URL
+  sb_carrega_credenciais "$(printf "NEON_DATA_API_URL='https://abc.supabase.co'\nNEON_DATABASE_URL='postgresql://u:p@h:5432/postgres'\n")"
+  eq "url normal chega íntegra"        "${NEON_DATA_API_URL:-}" "https://abc.supabase.co"
+  eq "db_url normal chega íntegra"     "${NEON_DATABASE_URL:-}"          "postgresql://u:p@h:5432/postgres"
 ) || fail=1
 rm -rf "$TMP2"
 
@@ -388,17 +388,17 @@ TMP3="$(mktemp -d)"
   printf '#!/usr/bin/env bash\nexit 0\n' > "$TMP3/bin/docker"; chmod +x "$TMP3/bin/docker"
   cat > "$TMP3/supabase-provision.sh" <<'PROV'
 #!/usr/bin/env bash
-# O que o provisionamento emite quando SUPABASE_REGION (que vem do ambiente)
+# O que o provisionamento emite quando NEON_REGION (que vem do ambiente)
 # traz uma aspa simples: ela fecha o literal do printf e o resto vira código.
 VENENO="postgresql://u:p@aws-0-x'\$(touch $MARCA)'.pooler.supabase.com:5432/postgres"
-printf "NEXT_PUBLIC_SUPABASE_URL='https://ref.supabase.co'\n"
-printf "NEXT_PUBLIC_SUPABASE_ANON_KEY='a'\n"
-printf "SUPABASE_SERVICE_ROLE_KEY='s'\n"
-printf "SUPABASE_DB_URL='%s'\n" "$VENENO"
+printf "NEON_DATA_API_URL='https://ref.supabase.co'\n"
+printf "NEON_TEST_JWT='a'\n"
+printf "NEON_SERVICE_ROLE_JWT='s'\n"
+printf "NEON_DATABASE_URL='%s'\n" "$VENENO"
 PROV
 
   saida="$(cd "$TMP3/proj" && env PATH="$TMP3/bin:$PATH" MARCA="$MARCA" \
-    SUPABASE_ACCESS_TOKEN=fake NEXT_PUBLIC_SUPABASE_URL= \
+    NEON_MANAGEMENT_TOKEN=fake NEON_DATA_API_URL= \
     bash "$TMP3/install.sh" --yes 2>&1 || true)"
 
   # Sem esta checagem o teste passaria por VACUIDADE: se o install.sh morresse
@@ -842,7 +842,7 @@ echo "provisionamento do Supabase: senha do banco"
 #     rodar o script e exigir que ele CHEGUE ao passo seguinte.
 #     O passo 3 imprime o título antes de tocar a rede, então a asserção não
 #     depende de a API responder (e o token aqui é propositalmente inválido).
-saida="$(SUPABASE_ACCESS_TOKEN=token-invalido-de-teste SUPABASE_ORG_ID=org-de-teste \
+saida="$(NEON_MANAGEMENT_TOKEN=token-invalido-de-teste SUPABASE_ORG_ID=org-de-teste \
          bash ./supabase-provision.sh "Projeto de Teste" sa-east-1 2>&1 || true)"
 if printf '%s' "$saida" | grep -q 'Criando o projeto'; then
   printf '  ✓ o script passa da geração da senha e chega ao passo de criar\n'
@@ -877,16 +877,16 @@ ME_TMP="$(mktemp -d)"
 
 # (1) Sem token, sai 0 e ENSINA o passo manual. Este é o caso comum: quem cria
 #     o projeto no painel e cola as 4 credenciais nunca teve token nenhum.
-saida_me="$(SUPABASE_ACCESS_TOKEN= bash ./marca-emails.sh --env /dev/null 2>&1)"; rc_me=$?
+saida_me="$(NEON_MANAGEMENT_TOKEN= bash ./marca-emails.sh --env /dev/null 2>&1)"; rc_me=$?
 if [ $rc_me -ne 0 ]; then
   printf '  ✗ sem token o script saiu %s — ele NÃO pode derrubar o install.sh\n' "$rc_me"; fail=1
 else
   printf '  ✓ sem token: sai 0 (a instalação continua)\n'
 fi
-if printf '%s' "$saida_me" | grep -q 'SUPABASE_ACCESS_TOKEN'; then
+if printf '%s' "$saida_me" | grep -q 'NEON_MANAGEMENT_TOKEN'; then
   printf '  ✓ sem token: diz qual é a chave que falta\n'
 else
-  printf '  ✗ sem token: a mensagem não nomeia SUPABASE_ACCESS_TOKEN\n'; fail=1
+  printf '  ✗ sem token: a mensagem não nomeia NEON_MANAGEMENT_TOKEN\n'; fail=1
 fi
 # O passo manual tem de ensinar `&`. Foi um `?` nesta mesma receita (na doc de
 # deploy) que gravou o link quebrado no projeto de produção.
@@ -898,7 +898,7 @@ fi
 
 # (2) Supabase PRÓPRIO (self-hosted) não tem Management API: com token e tudo,
 #     o certo é ensinar o caminho do GoTrue, não tentar um PATCH que não existe.
-saida_me="$(SUPABASE_ACCESS_TOKEN=sbp_de_teste NEXT_PUBLIC_SUPABASE_URL=https://supabase.meucliente.com.br \
+saida_me="$(NEON_MANAGEMENT_TOKEN=sbp_de_teste NEON_DATA_API_URL=https://supabase.meucliente.com.br \
             bash ./marca-emails.sh --env /dev/null 2>&1)"; rc_me=$?
 if [ $rc_me -eq 0 ] && printf '%s' "$saida_me" | grep -q 'GOTRUE_MAILER_TEMPLATES'; then
   printf '  ✓ Supabase próprio: sai 0 e manda para o caminho do GoTrue\n'
@@ -920,7 +920,7 @@ done
 #     `${x//p/r}` no bash 5.2) vale como "o trecho casado" — medido: `Loja
 #     <b>Top</b> & Cia` saía `Loja <lt;b>gt;Top…`. E `<b>` cru injetaria markup
 #     no corpo do e-mail de todo cliente do revendedor.
-SUPABASE_ACCESS_TOKEN= APP_NAME='Loja <b>Top</b> & Cia' APP_ACCENT_HEX='#f2c94c' \
+NEON_MANAGEMENT_TOKEN= APP_NAME='Loja <b>Top</b> & Cia' APP_ACCENT_HEX='#f2c94c' \
   bash ./marca-emails.sh --env /dev/null --render-em "$ME_TMP/render" >/dev/null 2>&1
 rend="$ME_TMP/render/confirmation.html"
 if [ ! -f "$rend" ]; then
@@ -954,7 +954,7 @@ fi
 
 # (5) O par claro/escuro: accent escuro tem de escolher BRANCO. Sem este caso,
 #     um `frente_sobre` que devolvesse sempre "#171f15" passaria no caso (4).
-SUPABASE_ACCESS_TOKEN= APP_NAME='Marca Escura' APP_ACCENT_HEX='#0b3d2e' \
+NEON_MANAGEMENT_TOKEN= APP_NAME='Marca Escura' APP_ACCENT_HEX='#0b3d2e' \
   bash ./marca-emails.sh --env /dev/null --render-em "$ME_TMP/escuro" >/dev/null 2>&1
 if grep -q 'color: #ffffff' "$ME_TMP/escuro/confirmation.html" 2>/dev/null; then
   printf '  ✓ accent escuro (#0b3d2e) escolhe texto BRANCO\n'
@@ -964,7 +964,7 @@ fi
 
 # (6) Hex inválido no .env não pode virar CSS quebrado no e-mail: cai no accent
 #     do produto, que é o mesmo piso de lib/branding/saida.ts.
-SUPABASE_ACCESS_TOKEN= APP_NAME='Marca Torta' APP_ACCENT_HEX='verde-limão' \
+NEON_MANAGEMENT_TOKEN= APP_NAME='Marca Torta' APP_ACCENT_HEX='verde-limão' \
   bash ./marca-emails.sh --env /dev/null --render-em "$ME_TMP/torto" >/dev/null 2>&1
 if grep -q 'background: #506d48; background: #506d48' "$ME_TMP/torto/confirmation.html" 2>/dev/null; then
   printf '  ✓ APP_ACCENT_HEX inválido cai no accent do produto\n'
@@ -1277,10 +1277,10 @@ cf_ok "eleito pela varredura host, --yes → recusa"          recusa   1 1
 # rodada não estaria mais decidindo nada.
 BASE_ENV="DOMAIN='crm.exemplo.com.br'
 ACME_EMAIL='eu@exemplo.com.br'
-NEXT_PUBLIC_SUPABASE_URL='https://abcdefghijklmnop.supabase.co'
-NEXT_PUBLIC_SUPABASE_ANON_KEY='$(mkjwt anon abcdefghijklmnop)'
-SUPABASE_SERVICE_ROLE_KEY='$(mkjwt service_role abcdefghijklmnop)'
-SUPABASE_DB_URL='postgresql://postgres.abcdefghijklmnop:senha@aws-1-sa-east-1.pooler.supabase.com:5432/postgres'
+NEON_DATA_API_URL='https://abcdefghijklmnop.supabase.co'
+NEON_TEST_JWT='$(mkjwt anon abcdefghijklmnop)'
+NEON_SERVICE_ROLE_JWT='$(mkjwt service_role abcdefghijklmnop)'
+NEON_DATABASE_URL='postgresql://postgres.abcdefghijklmnop:senha@aws-1-sa-east-1.pooler.supabase.com:5432/postgres'
 ANTHROPIC_API_KEY='sk-ant-teste'
 OWNER_EMAIL='eu@exemplo.com.br'
 OWNER_PASSWORD='senha12345'"
@@ -1358,7 +1358,7 @@ STUB
 # esconderia a trava que o dublê de crontab acima existe para não ter (era
 # `cat >/dev/null` incondicional, e num tty a suíte nunca terminava). Com
 # respostas, lê de um arquivo — é o único jeito de exercitar uma PERGUNTA.
-# `SUPABASE_ACCESS_TOKEN=` no `env`: o install.sh chama o marca-emails.sh, e um
+# `NEON_MANAGEMENT_TOKEN=` no `env`: o install.sh chama o marca-emails.sh, e um
 # token EXPORTADO no shell de quem roda a suíte entraria no cenário sem ninguém
 # pedir — o teste passaria a depender da máquina, e faria chamada de rede a
 # partir de um .env de mentira. O cenário declara o próprio ambiente.
@@ -1369,11 +1369,11 @@ rodar() {
   if [ $# -ge 4 ]; then
     printf '%s' "$4" > "$VPS_RAIZ/respostas.txt"
     (cd "$VPS_PROJ" && env PATH="$VPS_RAIZ/bin:$PATH" DOCKER_LOG="$VPS_LOG" CRONTAB_SANDBOX="$CRONTAB_SANDBOX" \
-      SUPABASE_ACCESS_TOKEN= \
+      NEON_MANAGEMENT_TOKEN= \
       bash "$VPS_RAIZ/$script" $flags <"$VPS_RAIZ/respostas.txt" 2>&1 || true) | sed -E 's/\x1b\[[0-9;]*m//g'
   else
     (cd "$VPS_PROJ" && env PATH="$VPS_RAIZ/bin:$PATH" DOCKER_LOG="$VPS_LOG" CRONTAB_SANDBOX="$CRONTAB_SANDBOX" \
-      SUPABASE_ACCESS_TOKEN= \
+      NEON_MANAGEMENT_TOKEN= \
       bash "$VPS_RAIZ/$script" $flags 2>&1 || true) | sed -E 's/\x1b\[[0-9;]*m//g'
   fi
 }
@@ -2027,7 +2027,7 @@ STUB
 rm -rf "$TMP5"
 
 echo "DDL: a conexão do schema é separada da que vai para os contêineres (issue #192)"
-# `SUPABASE_DB_URL` acumulava dois papéis numa string só: ela vai para o `.env`
+# `NEON_DATABASE_URL` acumulava dois papéis numa string só: ela vai para o `.env`
 # — e o compose entrega o `.env` inteiro ao `app` e ao `worker` (`env_file`) —
 # E era a mesma que rodava `create extension`, o `baseline.sql` e a promoção do
 # dono. Na nuvem passa despercebido: a string do pooler já vem privilegiada. Num
@@ -2055,7 +2055,7 @@ strings_de_schema() {
 }
 # Derivada do BASE_ENV, não copiada: duas cópias do mesmo literal desincronizam
 # no dia em que o cenário-base trocar de string, e aí o teste reprova por engano.
-URL_DO_APP="$(printf '%s\n' "$BASE_ENV" | sed -n "s/^SUPABASE_DB_URL='\(.*\)'$/\1/p")"
+URL_DO_APP="$(printf '%s\n' "$BASE_ENV" | sed -n "s/^NEON_DATABASE_URL='\(.*\)'$/\1/p")"
 URL_DO_DONO='postgresql://supabase_admin:senhadodono@db-proprio.exemplo.com.br:5432/postgres'
 
 TMP_DDL_A="$(mktemp -d)"
@@ -2080,7 +2080,7 @@ STUB
   fi
   vistas="$(strings_de_banco)"
   if [ "$vistas" != "$URL_DO_APP" ]; then
-    printf '  ✗ sem SUPABASE_DB_ADMIN_URL o kit deixou de usar a string de sempre — quem já instalou quebra:\n'
+    printf '  ✗ sem NEON_DATABASE_ADMIN_URL o kit deixou de usar a string de sempre — quem já instalou quebra:\n'
     printf '%s\n' "$vistas" | sed 's/^/       /'; exit 1
   fi
   printf '  ✓ sem a variável nova: as %s conversas com o Postgres usam a string de sempre\n' "$n"
@@ -2102,9 +2102,9 @@ STUB
   # credencial do dono no arquivo que o compose entrega aos contêineres. Se o
   # cenário a declarasse no `.env`, o laço de preservação do install.sh a
   # copiaria de volta e a asserção de baixo mediria o teste, não o kit.
-  export SUPABASE_DB_ADMIN_URL="$URL_DO_DONO"
+  export NEON_DATABASE_ADMIN_URL="$URL_DO_DONO"
   rodar install.sh --yes >/dev/null
-  unset SUPABASE_DB_ADMIN_URL
+  unset NEON_DATABASE_ADMIN_URL
 
   n="$(grep -cE '(psql|pg_dump) ' "$VPS_LOG")"
   if [ "${n:-0}" -lt 5 ]; then
@@ -2112,7 +2112,7 @@ STUB
   fi
   vistas="$(strings_de_schema)"
   if [ "$vistas" != "$URL_DO_DONO" ]; then
-    printf '  ✗ com SUPABASE_DB_ADMIN_URL declarada, o schema NÃO foi por ela:\n'
+    printf '  ✗ com NEON_DATABASE_ADMIN_URL declarada, o schema NÃO foi por ela:\n'
     printf '%s\n' "$vistas" | sed 's/^/       /'
     printf '     esperava só: %s\n' "$URL_DO_DONO"
     grep -nE '(psql|pg_dump) ' "$VPS_LOG" | sed 's/^/       /'; exit 1
@@ -2130,7 +2130,7 @@ STUB
   fi
   printf '  ✓ e a conferência da conexão do app continua sendo feita com a do app\n'
 
-  gravada="$(valor_no_env "$VPS_PROJ/.env" SUPABASE_DB_URL)"
+  gravada="$(valor_no_env "$VPS_PROJ/.env" NEON_DATABASE_URL)"
   if [ "$gravada" != "$URL_DO_APP" ]; then
     printf '  ✗ o .env não recebeu a string do APP: [%s]\n' "$gravada"; exit 1
   fi
@@ -2139,9 +2139,9 @@ STUB
   # A metade que dá sentido à separação: se a credencial do dono for parar no
   # `.env`, o compose a entrega ao app e ao worker por `env_file` — e o app volta
   # a ter na mão o poder que esta issue tirou dele.
-  if grep -q 'SUPABASE_DB_ADMIN_URL' "$VPS_PROJ/.env"; then
+  if grep -q 'NEON_DATABASE_ADMIN_URL' "$VPS_PROJ/.env"; then
     printf '  ✗ a credencial do DONO foi gravada no .env — o compose a entrega aos contêineres:\n'
-    printf '       %s\n' "$(grep -m1 'SUPABASE_DB_ADMIN_URL' "$VPS_PROJ/.env")"; exit 1
+    printf '       %s\n' "$(grep -m1 'NEON_DATABASE_ADMIN_URL' "$VPS_PROJ/.env")"; exit 1
   fi
   printf '  ✓ e NÃO grava a do dono no .env (que o compose entregaria aos contêineres)\n'
 ) || fail=1
@@ -2176,7 +2176,7 @@ STUB
     && git -c user.email=t@exemplo -c user.name=teste commit -qm base \
     && git tag v9.9.9) >/dev/null 2>&1
 
-  saida="$(rodar update.sh "" "SUPABASE_DB_ADMIN_URL='$URL_DO_DONO'
+  saida="$(rodar update.sh "" "NEON_DATABASE_ADMIN_URL='$URL_DO_DONO'
 INTERNAL_SECRET='segredo-de-teste'
 NEXT_PUBLIC_APP_URL='https://crm.exemplo.com.br'")"
 
@@ -2200,11 +2200,11 @@ echo "DDL: nenhum script do kit manda a string do APP para o Postgres"
 # A guarda de CLASSE. Os três cenários acima provam o install.sh e o update.sh
 # pelo comportamento; esta linha alcança os irmãos que nenhuma fixture roda
 # (backup.sh, restore.sh, reset-mfa.sh via psql_run) — onde o mesmo defeito
-# reapareceria sem ninguém ver. Um sítio que volte a `psql "$SUPABASE_DB_URL"`
+# reapareceria sem ninguém ver. Um sítio que volte a `psql "$NEON_DATABASE_URL"`
 # reprova aqui.
 # `--exclude` para não casar as próprias frases deste arquivo — que fala do
 # defeito para explicá-lo, e ficaria eternamente vermelho por citar o que vigia.
-sobrando="$(grep -nE --exclude='test-validators.sh' '(psql|pg_dump) "\$SUPABASE_DB_URL"' ./*.sh 2>/dev/null || true)"
+sobrando="$(grep -nE --exclude='test-validators.sh' '(psql|pg_dump) "\$NEON_DATABASE_URL"' ./*.sh 2>/dev/null || true)"
 convertidos="$(grep -hoE --exclude='test-validators.sh' '(psql|pg_dump) "\$\(url_do_schema\)"' ./*.sh 2>/dev/null | grep -c . || true)"
 if [ -n "$sobrando" ]; then
   printf '  ✗ script do kit ainda manda a string do app para o Postgres:\n'

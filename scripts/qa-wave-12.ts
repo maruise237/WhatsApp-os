@@ -4,7 +4,7 @@
  * Run: npx tsx scripts/qa-wave-12.ts
  */
 import { chromium, type BrowserContext, type Page } from "@playwright/test";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@/lib/neon/script-client";
 import * as fs from "fs";
 import * as path from "path";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
@@ -23,8 +23,8 @@ const PASSWORD: string = creds.password;
 const MANAGER_EMAIL: string = creds.users.manager.email;
 const ORG_ID: string = creds.org_id;
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const NEON_DATA_API_URL = process.env.NEON_DATA_API_URL!;
+const SERVICE_KEY = process.env.NEON_SERVICE_ROLE_JWT!;
 
 type Result = { ac: string; pass: boolean; evidence: string };
 const results: Result[] = [];
@@ -243,7 +243,7 @@ function bubbleByText(page: Page, text: string) {
 }
 
 async function main() {
-  const sb = createClient(SUPABASE_URL, SERVICE_KEY, {
+  const sb = createClient(NEON_DATA_API_URL, SERVICE_KEY, {
     auth: { persistSession: false },
   });
 

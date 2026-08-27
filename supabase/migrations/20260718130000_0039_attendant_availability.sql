@@ -24,7 +24,7 @@
 create table if not exists public.attendant_availability (
   id                uuid primary key default gen_random_uuid(),
   organization_id   uuid not null references public.organizations(id) on delete cascade,
-  user_id           uuid not null references auth.users(id) on delete cascade,
+  user_id           uuid not null references neon_auth.user(id) on delete cascade,
   is_available      boolean not null default false,
   capacity          integer not null default 5 check (capacity > 0),
   schedule          jsonb not null default '{}',

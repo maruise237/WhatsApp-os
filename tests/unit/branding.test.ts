@@ -233,12 +233,6 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
       "nome do servidor MCP, que o cliente (Claude Desktop e afins) grava na própria configuração. Renomear derruba as conexões já configuradas de quem usa",
     marcas: ["deskcomm-crm"],
   },
-  "lib/supabase/admin.ts": {
-    categoria: "PROTOCOLO",
-    motivo:
-      "`X-Client-Info` enviado ao Supabase — identifica o cliente nos logs e na telemetria DELES. Não é texto de interface e nunca chega ao usuário",
-    marcas: ["deskcomm-crm"],
-  },
   "lib/nuvemshop/config.ts": {
     categoria: "PROTOCOLO",
     motivo:
@@ -257,17 +251,6 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "INFRA",
     motivo: "a mesma chave de localStorage do script do layout; as duas são um par só",
     marcas: ["deskcomm-theme"],
-  },
-  "lib/supabase/browser.ts": {
-    categoria: "INFRA",
-    motivo:
-      "nome do cookie de sessão. Renomear invalida a sessão de todo usuário logado no momento da atualização — o `update.sh` do clone viraria um logout em massa",
-    marcas: ["sb-deskcomm-auth"],
-  },
-  "lib/supabase/server.ts": {
-    categoria: "INFRA",
-    motivo: "o mesmo cookie de sessão, lido no servidor; tem de casar com o do browser",
-    marcas: ["sb-deskcomm-auth"],
   },
   "lib/impersonate/cookie.ts": {
     categoria: "INFRA",

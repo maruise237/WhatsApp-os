@@ -9,7 +9,7 @@
  * o envio automatizado falharia pra sempre. Reabrir é também o comportamento
  * certo de produto: a conversa É o thread com aquele contato naquele número.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 const OPEN_STATUSES = ["open", "pending", "claimed", "ai_handling"];
 

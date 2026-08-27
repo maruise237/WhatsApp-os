@@ -204,68 +204,31 @@ v_hex() {
   return 1
 }
 
-v_supabase_url() {
+v_url() {
   case "$1" in
-    https://*.supabase.co) ;;
-    # Supabase SELF-HOSTED (ex.: https://db-crm.exemplo.com.br). A prova é a
-    # chamada a /auth/v1/health logo abaixo, que vale para qualquer host — o
-    # que se dispensa aqui é só a suposição de que todo Supabase é o da nuvem.
     https://*) ;;
-    *supabase.co*) echo "Cole a URL completa, começando com https:// — ex.: https://abcdefgh.supabase.co"; return 1;;
-    *) echo "A URL precisa começar com https://. Na nuvem ela fica em Settings > API > Project URL (termina em .supabase.co); num Supabase próprio, é o endereço do seu servidor."; return 1;;
+    *) echo "L’URL doit commencer par https://."; return 1;;
   esac
   local code
-  code="$(curl -s -o /dev/null -w '%{http_code}' -m 15 "$1/auth/v1/health" 2>/dev/null)" || code=000
+  code="$(curl -s -o /dev/null -w '%{http_code}' -m 15 "$1" 2>/dev/null)" || code=000
   if [ "$code" = "000" ]; then
-    echo "Não consegui alcançar $1 — confira se o projeto existe, está ativo (projeto pausado não responde) e se o VPS tem internet."
+    echo "Impossible d’atteindre $1 — vérifiez le domaine et le réseau du VPS."
     return 1
   fi
   return 0
 }
 
-# Confere formato + faz a chamada real que só a chave certa responde.
-# $2 = papel esperado ('anon' ou 'service_role')
-v_sb_key() {
-  local key="$1" want="$2" url="${NEXT_PUBLIC_SUPABASE_URL:-}"
-  case "$key" in
-    eyJ*)
-      local role ref
-      role="$(jwt_claim "$key" role)"; ref="$(jwt_claim "$key" ref)"
-      if [ -n "$role" ] && [ "$role" != "$want" ]; then
-        echo "Essa é a chave '${role}', e aqui eu preciso da '${want}'. Em Settings > API elas ficam uma embaixo da outra — confira qual copiou."
-        return 1
-      fi
-      if [ -n "$ref" ] && [ -n "$url" ] && [ "$ref" != "$(sb_ref "$url")" ]; then
-        echo "Essa chave é de OUTRO projeto Supabase (${ref}), e a URL que você deu é do projeto $(sb_ref "$url"). Copie as duas do mesmo projeto."
-        return 1
-      fi;;
-    sb_publishable_*|sb_secret_*) : ;;  # formato novo do Supabase — a prova é a chamada HTTP
-    *) echo "Isso não parece uma chave do Supabase (elas começam com 'eyJ' ou 'sb_'). Pegue em Settings > API."; return 1;;
-  esac
-  [ -z "$url" ] && return 0
-  local code
-  if [ "$want" = "service_role" ]; then
-    # Rota de administração: a anon leva 401 aqui. É o que separa uma da outra.
-    code="$(curl -s -o /dev/null -w '%{http_code}' -m 20 \
-      -H "apikey: $key" -H "Authorization: Bearer $key" \
-      "$url/auth/v1/admin/users?page=1&per_page=1" 2>/dev/null)" || code=000
-  else
-    # /auth/v1/settings é a rota que a anon PODE abrir. Não use /rest/v1/: ele
-    # responde 401 "Only the service_role API key can be used for this endpoint"
-    # até para a anon correta — validador que reprova o dado certo é pior que
-    # nenhum. Provado nesta VPS: settings dá 200 para as chaves do projeto e 401
-    # para lixo e para JWT de outro projeto.
-    code="$(curl -s -o /dev/null -w '%{http_code}' -m 20 -H "apikey: $key" "$url/auth/v1/settings" 2>/dev/null)" || code=000
-  fi
-  case "$code" in
-    2*) return 0;;
-    000) c_ylw "  ⚠ não consegui checar a chave online (sem resposta do Supabase); sigo com ela."; return 0;;
-    401|403) echo "O Supabase recusou essa chave (resposta ${code}). Confira se copiou a '${want}' inteira, sem espaço no fim."; return 1;;
-    *) echo "Resposta inesperada do Supabase ao testar a chave (${code}). Confira a chave e o projeto."; return 1;;
+# Neon Auth JWT : la signature et les claims sont vérifiés par Neon. Ici le kit
+# refuse seulement les valeurs manifestement tronquées et ne tente jamais un
+# endpoint admin beta avec un secret fourni par l’opérateur.
+v_neon_jwt() {
+  case "$1" in
+    eyJ*.*.*) return 0;;
+    *) echo "Le JWT Neon semble tronqué (format attendu : trois segments séparés par des points)."; return 1;;
   esac
 }
-v_anon()    { v_sb_key "$1" anon; }
-v_service() { v_sb_key "$1" service_role; }
+v_anon()    { v_neon_jwt "$1"; }
+v_service() { v_neon_jwt "$1"; }
 
 v_db_url() {
   case "$1" in
@@ -290,14 +253,14 @@ v_db_url() {
   # navegador entrega. Medido: com `https://<ref>.supabase.co/` a comparação era
   # pulada e uma connection string de OUTRO projeto passava, o que instala o
   # baseline.sql num banco e deixa o app falando com outro.
-  local sbhost="${NEXT_PUBLIC_SUPABASE_URL:-}"
+  local sbhost="${NEON_DATA_API_URL:-}"
   sbhost="${sbhost#*://}"; sbhost="${sbhost%%/*}"
   sbhost="${sbhost%%[[:space:]]*}"; sbhost="${sbhost%%:*}"
   case "$sbhost" in
     *.supabase.co)
       if [ "$dbref" != "postgres" ] \
-         && [ "$dbref" != "$(sb_ref "$NEXT_PUBLIC_SUPABASE_URL")" ]; then
-        echo "Essa connection string é do projeto '${dbref}', mas a URL que você deu é do projeto '$(sb_ref "$NEXT_PUBLIC_SUPABASE_URL")'. Precisam ser o mesmo projeto."
+         && [ "$dbref" != "$(sb_ref "$NEON_DATA_API_URL")" ]; then
+        echo "Essa connection string é do projeto '${dbref}', mas a URL que você deu é do projeto '$(sb_ref "$NEON_DATA_API_URL")'. Precisam ser o mesmo projeto."
         return 1
       fi;;
   esac
@@ -672,7 +635,7 @@ mask() {
 #
 # Por que não `eval`: os valores saem de `printf "%s='%s'"` sem escapar a aspa
 # simples, então um valor que contenha `'` fecha o literal e o resto da linha
-# volta a ser CÓDIGO — e `SUPABASE_REGION`, que vem do ambiente, é interpolada
+# volta a ser CÓDIGO — e `NEON_REGION`, que vem do ambiente, é interpolada
 # dentro da connection string que sai de lá. Mesma postura do `load_env`
 # (_common.sh): casa a chave contra uma lista fixa e copia o valor como texto.
 # Chave fora da lista é ignorada, então a saída nunca cria variável arbitrária.
@@ -681,10 +644,10 @@ sb_carrega_credenciais() {
   while IFS= read -r linha; do
     val="${linha#*=\'}"; val="${val%\'}"
     case "$linha" in
-      NEXT_PUBLIC_SUPABASE_URL=\'*\')      NEXT_PUBLIC_SUPABASE_URL="$val";;
-      NEXT_PUBLIC_SUPABASE_ANON_KEY=\'*\') NEXT_PUBLIC_SUPABASE_ANON_KEY="$val";;
-      SUPABASE_SERVICE_ROLE_KEY=\'*\')     SUPABASE_SERVICE_ROLE_KEY="$val";;
-      SUPABASE_DB_URL=\'*\')               SUPABASE_DB_URL="$val";;
+      NEON_DATA_API_URL=\'*\')      NEON_DATA_API_URL="$val";;
+      NEON_TEST_JWT=\'*\') NEON_TEST_JWT="$val";;
+      NEON_SERVICE_ROLE_JWT=\'*\')     NEON_SERVICE_ROLE_JWT="$val";;
+      NEON_DATABASE_URL=\'*\')               NEON_DATABASE_URL="$val";;
     esac
   done <<<"$1"
 }
@@ -995,33 +958,14 @@ if [ "${REVERSE_PROXY:-}" = "traefik" ] && [ -z "$traefik_container" ]; then
   fi
 fi
 
-# ── Supabase automático (opcional) ──────────────────────────────────────────
-# Criar o projeto no navegador e copiar 4 campos era o passo mais LENTO da
-# instalação (medido: ~59min de preparação contra ~3min de script) e o mais
-# fácil de errar — copiar a "Direct connection", que é IPv6-only e não conecta
-# de um VPS IPv4, é a armadilha campeã.
-#
-# Com SUPABASE_ACCESS_TOKEN no ambiente e as credenciais ainda vazias, o
-# projeto é criado aqui e as 4 variáveis entram direto no fluxo, sem copiar e
-# colar. Sem o token, nada muda: seguem as perguntas de sempre.
-if [ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" ] && [ -n "${SUPABASE_ACCESS_TOKEN:-}" ]; then
-  step "Criando o projeto Supabase automaticamente"
-  _sb_out="$(bash "$KIT_DIR/supabase-provision.sh" "${APP_NAME:-DeskcommCRM}" "${SUPABASE_REGION:-sa-east-1}")" \
-    || die "Não consegui criar o projeto Supabase. Crie no painel e rode de novo sem SUPABASE_ACCESS_TOKEN."
-  # O script imprime `CHAVE='valor'` em stdout (o visual dele vai para stderr).
-  # A leitura é por parse, não por `eval` — o porquê está em
-  # sb_carrega_credenciais(), e `test-validators.sh` cobra isso.
-  sb_carrega_credenciais "$_sb_out"
-  unset _sb_out
-
-  # Credencial que não chegou tem que parar AQUI. Sem esta checagem o install
-  # seguiria com a variável vazia e morreria lá na frente, longe da causa — e a
-  # pessoa veria "erro de conexão" em vez de "o provisionamento não devolveu X".
-  if [ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" ] || [ -z "${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}" ] \
-     || [ -z "${SUPABASE_SERVICE_ROLE_KEY:-}" ] || [ -z "${SUPABASE_DB_URL:-}" ]; then
-    die "O provisionamento não devolveu as 4 credenciais. Crie o projeto no painel e rode de novo sem SUPABASE_ACCESS_TOKEN."
-  fi
-  c_grn "✓ Supabase pronto — as 4 credenciais entraram sozinhas"
+# ── Neon pré-provisionné ─────────────────────────────────────────────────────
+# Neon Managed Better Auth, Data API et la branche PostgreSQL doivent être
+# créés/configurés avant l’installation. Le kit ne tente pas de créer un projet
+# ni de manipuler un token de management : cela évite d’exposer une clé de
+# provisioning et garantit que l’opérateur choisit explicitement la région,
+# le domaine de confiance, les grants et la branche vierge.
+if [ -z "${NEON_DATA_API_URL:-}" ] || [ -z "${NEON_DATABASE_URL:-}" ]; then
+  c_ylw "⚠ Configurez d’abord NEON_DATA_API_URL et NEON_DATABASE_URL pour votre projet Neon."
 fi
 
 # Cada linha: VARIÁVEL|pergunta|padrão|validador|secret|opcional
@@ -1154,10 +1098,11 @@ FIELDS=(
   "DOMAIN|Domínio do CRM (ex: crm.suaempresa.com.br)||v_domain||"
   "ACME_EMAIL|Seu e-mail (avisos de SSL)||v_email||"
   "APP_IMAGE|Imagem Docker do app|${IMAGEM_APP_DEFAULT}|||"
-  "NEXT_PUBLIC_SUPABASE_URL|Supabase Project URL (Settings > API)||v_supabase_url||"
-  "NEXT_PUBLIC_SUPABASE_ANON_KEY|Supabase anon key (Settings > API)||v_anon||"
-  "SUPABASE_SERVICE_ROLE_KEY|Supabase service_role key (Settings > API)||v_service|secret|"
-  "SUPABASE_DB_URL|Supabase connection string — Session pooler, modo URI (Settings > Database)||v_db_url|secret|"
+  "NEON_AUTH_BASE_URL|Neon Managed Better Auth base URL||v_url||"
+  "NEON_DATA_API_URL|Neon Data API/PostgREST URL||v_url||"
+  "NEON_SERVICE_ROLE_JWT|Neon service-role JWT||v_service|secret|"
+  "NEON_AUTH_COOKIE_SECRET|Neon Better Auth cookie secret (min 32 chars)||v_service|secret|"
+  "NEON_DATABASE_URL|Neon pooled PostgreSQL connection string||v_db_url|secret|"
   "$CAMPO_IA"
   ${CAMPO_OPENAI_EXTRA:+"$CAMPO_OPENAI_EXTRA"}
   "OWNER_EMAIL|E-mail do primeiro admin (dono)||v_email||"
@@ -1450,10 +1395,13 @@ esac
   envq TRAEFIK_ENTRYPOINT_HTTP "${TRAEFIK_ENTRYPOINT_HTTP:-web}"
   envq TRAEFIK_ENTRYPOINT "${TRAEFIK_ENTRYPOINT:-websecure}"
   envq TRAEFIK_CERTRESOLVER "${TRAEFIK_CERTRESOLVER:-letsencrypt}"
-  envq NEXT_PUBLIC_SUPABASE_URL "$NEXT_PUBLIC_SUPABASE_URL"
-  envq NEXT_PUBLIC_SUPABASE_ANON_KEY "$NEXT_PUBLIC_SUPABASE_ANON_KEY"
-  envq SUPABASE_SERVICE_ROLE_KEY "$SUPABASE_SERVICE_ROLE_KEY"
-  envq SUPABASE_DB_URL "$SUPABASE_DB_URL"
+  envq NEON_AUTH_BASE_URL "$NEON_AUTH_BASE_URL"
+  envq NEON_DATA_API_URL "$NEON_DATA_API_URL"
+  envq NEON_SERVICE_ROLE_JWT "$NEON_SERVICE_ROLE_JWT"
+  envq NEON_AUTH_COOKIE_SECRET "$NEON_AUTH_COOKIE_SECRET"
+  envq NEON_DATABASE_URL "$NEON_DATABASE_URL"
+  # NEON_DATABASE_ADMIN_URL n’est jamais écrit dans le .env des conteneurs.
+  # Il reste fourni ponctuellement à url_do_schema/update.sh par l’opérateur.
   envq NEXT_PUBLIC_APP_URL "$NEXT_PUBLIC_APP_URL"
   envq NEXT_PUBLIC_ADMIN_URL "$NEXT_PUBLIC_ADMIN_URL"
   printf '# Marca da instalação (white-label). Preencha APP_LOGO_URL com a URL de uma\n'
@@ -1607,8 +1555,8 @@ step "Aplicando o schema no Supabase (baseline.sql)"
 # (_common.sh), não pela string que vai para o `.env`: criar extensão, aplicar o
 # baseline e promover o dono exigem o DONO do banco, e num Supabase próprio a
 # string do app é — por recomendação nossa — uma role menor. Sem
-# `SUPABASE_DB_ADMIN_URL` declarada as duas são a mesma, que é o caso da nuvem.
-if [ -f supabase/baseline.sql ]; then
+# `NEON_DATABASE_ADMIN_URL` declarada as duas são a mesma, que é o caso da nuvem.
+if [ -f neon/migrations/0001_whatsapp_os_baseline.sql ]; then
   # O baseline é um pg_dump: referencia public.vector, public.citext e gin_trgm_ops
   # (pg_trgm) mas NÃO cria as extensões. Supabase não as habilita no schema public por
   # padrão — criamos aqui, senão o schema quebra no meio (ex.: "type public.vector does
@@ -1619,7 +1567,7 @@ if [ -f supabase/baseline.sql ]; then
     && c_grn "✓ extensões (vector, citext, pg_trgm) habilitadas no public" \
     || { c_ylw "⚠ não consegui habilitar as extensões — o schema pode falhar abaixo."
          c_ylw "  Supabase próprio? Criar extensão exige o dono do banco: rode de novo com"
-         c_ylw "  SUPABASE_DB_ADMIN_URL='postgresql://<dono>:<senha>@<host>:5432/postgres'"; }
+         c_ylw "  NEON_DATABASE_ADMIN_URL='postgresql://<dono>:<senha>@<host>:5432/postgres'"; }
   SCHEMA_LOG="$PROJECT_DIR/baseline-apply.log"
   # Banco novo ou re-execução? Re-aplicar com ON_ERROR_STOP pararia no primeiro
   # "já existe" (ex.: multiple primary keys) e PULARIA o resto do arquivo —
@@ -1635,7 +1583,7 @@ if [ -f supabase/baseline.sql ]; then
 
   if [ "$has_schema" = "1" ]; then
     c_ylw "• schema já existe — re-aplicando em modo update (erros 'já existe' são esperados e ficam no log)"
-    raw="$(docker run --rm -i -v "$PROJECT_DIR/supabase/baseline.sql:/baseline.sql:ro" \
+    raw="$(docker run --rm -i -v "$PROJECT_DIR/neon/migrations/0001_whatsapp_os_baseline.sql:/baseline.sql:ro" \
           postgres:17-alpine psql "$(url_do_schema)" -q -f /baseline.sql 2>&1 || true)"
     printf '%s\n' "$raw" > "$SCHEMA_LOG"
     benign='already exists|multiple primary keys|multiple default values|is already a member|already a partition'
@@ -1647,7 +1595,7 @@ if [ -f supabase/baseline.sql ]; then
       c_grn "✓ schema re-aplicado (apêndice de migrations incluído)"
     fi
   else
-    if docker run --rm -i -v "$PROJECT_DIR/supabase/baseline.sql:/baseline.sql:ro" \
+    if docker run --rm -i -v "$PROJECT_DIR/neon/migrations/0001_whatsapp_os_baseline.sql:/baseline.sql:ro" \
         postgres:17-alpine psql "$(url_do_schema)" -v ON_ERROR_STOP=1 -f /baseline.sql \
         > "$SCHEMA_LOG" 2>&1; then
       c_grn "✓ schema aplicado (log: $SCHEMA_LOG)"
@@ -1655,7 +1603,7 @@ if [ -f supabase/baseline.sql ]; then
       tail -5 "$SCHEMA_LOG"
       die "baseline falhou num banco NOVO — o schema ficaria incompleto (sem RLS). Log completo: $SCHEMA_LOG
      Se o erro fala em permissão: o baseline exige o DONO do banco. Num Supabase próprio,
-     rode de novo com SUPABASE_DB_ADMIN_URL='postgresql://<dono>:<senha>@<host>:5432/postgres'
+     rode de novo com NEON_DATABASE_ADMIN_URL='postgresql://<dono>:<senha>@<host>:5432/postgres'
      — ela roda só o schema e NÃO é gravada no .env dos contêineres."
     fi
   fi
@@ -1669,81 +1617,27 @@ if [ -f supabase/baseline.sql ]; then
     c_ylw "⚠ verificação: só ${n_tables:-0} tabelas no schema public — confira $SCHEMA_LOG"
   fi
 else
-  c_ylw "⚠ supabase/baseline.sql não encontrado — pulei (aplique o schema manualmente)."
+  c_ylw "⚠ neon/migrations/0001_whatsapp_os_baseline.sql não encontrado — pulei (aplique o schema manualmente)."
 fi
 
-# ── 7.5 E-mails de acesso (criar conta / recuperar senha) ───────────────────
-# O e-mail de confirmação de conta é o PRIMEIRO artefato que qualquer usuário
-# recebe. Sem este passo ele chega no modelo padrão do Supabase — em inglês,
-# "Confirm Your Signup", sem marca nenhuma — numa instalação em que tudo o mais
-# já está com a marca de quem hospeda.
-#
-# Chamado SEMPRE, com ou sem token: sem `SUPABASE_ACCESS_TOKEN` o script imprime
-# o passo manual do painel e sai 0. É informação que vale mais aqui, no fim da
-# instalação, do que num documento que ninguém vai abrir.
-#
-# `|| true` como cinto de segurança: o script já promete nunca sair diferente de
-# 0, e mesmo assim a instalação não pode morrer por causa do e-mail.
-bash "$KIT_DIR/marca-emails.sh" --projeto "$PROJECT_DIR" || true
+# ── 7.5 E-mails Neon Auth ────────────────────────────────────────────────────
+# Les templates d’email et le domaine de confiance doivent être configurés dans
+# Neon Managed Better Auth. Le kit n’appelle plus l’ancien script Supabase : la
+# forme de l’API d’administration Neon Auth beta n’est pas supposée.
+c_ylw "⚠ Configurez les emails, le domaine de confiance et la confirmation de compte dans Neon Auth."
 
-# ── 8. Bootstrap do 1º dono (cria no Auth + promove via psql) ───────────────
-step "Criando o primeiro admin (${OWNER_EMAIL})"
-# 1) Cria o usuário no Supabase Auth. Se já existe, a API responde 422 — ignoramos
-#    (|| true): a re-execução é idempotente, o passo seguinte encontra o usuário.
-curl -fsS -X POST "${NEXT_PUBLIC_SUPABASE_URL}/auth/v1/admin/users" \
-  -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"${OWNER_EMAIL}\",\"password\":\"${OWNER_PASSWORD}\",\"email_confirm\":true}" \
-  >/dev/null 2>&1 || true
-
-# 2) Resolve o id direto do auth.users e cria org + membership + platform_admin.
-#    Resolver o uid DENTRO do SQL evita parsing frágil de JSON e funciona tanto para
-#    usuário recém-criado quanto para um que já existia (re-execução).
-docker run --rm -i postgres:17-alpine psql "$(url_do_schema)" -v ON_ERROR_STOP=1 <<SQL \
-  && c_grn "✓ dono criado e promovido a super-admin" \
-  || die "Não consegui promover o admin. Confira a service_role key, a URL e a connection string do Supabase.
-     Este passo lê auth.users e escreve em public: num Supabase próprio ele precisa do dono do
-     banco — declare SUPABASE_DB_ADMIN_URL e rode de novo."
-do \$\$
-declare v_org uuid; v_uid uuid;
-begin
-  select id into v_uid from auth.users where email = '${OWNER_EMAIL}';
-  if v_uid is null then
-    raise exception 'usuário % não encontrado no auth.users (a criação no Auth falhou?)', '${OWNER_EMAIL}';
-  end if;
-  select id into v_org from public.organizations where slug='minha-empresa';
-  if v_org is null then
-    insert into public.organizations (slug, display_name, legal_name, created_by)
-    values ('minha-empresa','Minha Empresa','Minha Empresa', v_uid) returning id into v_org;
-  end if;
-  -- O provedor que a pessoa ESCOLHEU passa a valer no banco. O trigger
-  -- fn_seed_org_llm_defaults semeia 'anthropic' fixo — o que estava certo
-  -- enquanto a Anthropic era a única chave que este script pedia. Desde que
-  -- ele pergunta qual IA vai atender, ignorar a resposta significava: quem
-  -- escolhe OpenRouter instala, cadastra a chave, e todo caminho que passa
-  -- pelo agent-engine resolve 'anthropic' — sem chave da Anthropic, erro de
-  -- "IA não configurada" em tudo, mandando cadastrar a chave que ele decidiu
-  -- não usar. Só o provider: o modelo padrão fica com o que o trigger semeou
-  -- até alguém escolher em Agente de IA -> Provedores, porque adivinhar um id
-  -- de modelo de outro provedor aqui seria inventar um valor não verificado.
-  if '${AI_PROVIDER}' not in ('', 'anthropic') then
-    update public.organizations
-       set settings = jsonb_set(
-             coalesce(settings, '{}'::jsonb), '{llm,provider}',
-             to_jsonb('${AI_PROVIDER}'::text), true)
-     where id = v_org;
-  end if;
-  insert into public.user_organizations (user_id, organization_id, role, accepted_at)
-  values (v_uid, v_org, 'admin', now())
-  on conflict (user_id, organization_id) do update set role='admin', revoked_at=null;
-  if not exists (select 1 from public.platform_admins where user_id=v_uid and revoked_at is null) then
-    insert into public.platform_admins (user_id, granted_by, scope, reason)
-    values (v_uid, v_uid, 'full', 'Bootstrap inicial do self-host');
-  end if;
-end \$\$;
-SQL
-
+# ── 8. Préparation du premier admin Neon ─────────────────────────────────────
+# Neon Managed Better Auth gère la création de session et la confirmation email.
+# Le kit ne simule pas une API admin dont la forme dépend de la beta Neon Auth.
+# Après le démarrage, créez le premier compte via l’interface /signup puis
+# associez-le à la première organisation depuis le panneau admin. Cette étape
+# évite de stocker un mot de passe ou un token Auth dans le shell et échoue
+# explicitement si l’instance Neon n’est pas configurée.
+if [ -z "${NEON_AUTH_BASE_URL:-}" ] || [ -z "${NEON_DATA_API_URL:-}" ] || [ -z "${NEON_SERVICE_ROLE_JWT:-}" ]; then
+  c_ylw "⚠ Neon Auth/Data API/JWT non configurés : création du premier admin à faire après configuration de Dokploy."
+else
+  c_grn "✓ Neon Auth et Data API configurés — créez le premier compte depuis l’interface après le démarrage"
+fi
 # ── 9. Sobe a stack ─────────────────────────────────────────────────────────
 fase 4 "Colocando o CRM no ar"
 step "Puxando a imagem e subindo os serviços"

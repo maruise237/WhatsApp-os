@@ -27,7 +27,7 @@
  * Só a leitura da linha é reescrita, contra a MESMA tabela e com os MESMOS
  * defaults. É a ponte mínima, no mesmo espírito de `lib/ai/gateway-binding.ts`.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { PACING_DEFAULTS, type PacingKnobs } from "@/lib/agent-engine/pacing/defaults";
 import {

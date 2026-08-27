@@ -7,7 +7,7 @@
  * is not yet provisioned — see follow-up note in EPIC-05 commit message.
  */
 import { createHash } from "node:crypto";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 export function normalizeCpf(raw: string): string {
   return raw.replace(/\D/g, "");

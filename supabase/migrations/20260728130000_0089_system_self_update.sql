@@ -14,7 +14,7 @@ create table if not exists public.system_version (
   changelog_raw       text not null default '',
   agent_last_seen_at  timestamptz,
   update_requested_at timestamptz,
-  update_requested_by uuid references auth.users(id) on delete set null,
+  update_requested_by uuid references neon_auth.user(id) on delete set null,
   updated_at          timestamptz not null default now()
 );
 
@@ -30,7 +30,7 @@ create table if not exists public.system_update_runs (
   status        text not null default 'dispatched'
                 check (status in ('dispatched','success','failed','failed_rolled_back')),
   last_step     text check (last_step in ('backup','codigo','banco')),
-  requested_by  uuid references auth.users(id) on delete set null,
+  requested_by  uuid references neon_auth.user(id) on delete set null,
   dispatched_at timestamptz not null default now(),
   finished_at   timestamptz,
   log_tail      text not null default ''

@@ -24,7 +24,7 @@ import { CREDS, carimbar } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -44,8 +44,8 @@ async function rodada(quantos: number, leadId: string, semFiltro = false): Promi
   // rodada anterior para dentro da próxima medição — e o efeito que eu procuro
   // é justamente de acúmulo.
   const cli: SupabaseClient = createClient(
-    env.NEXT_PUBLIC_SUPABASE_URL!,
-    env.SUPABASE_SERVICE_ROLE_KEY!,
+    env.NEON_DATA_API_URL!,
+    env.NEON_SERVICE_ROLE_JWT!,
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
   // O CANAL OBSERVADO É SEMPRE O PRIMEIRO, com o mesmo filtro em todas as

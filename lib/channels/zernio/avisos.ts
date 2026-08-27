@@ -25,7 +25,7 @@
  * Marcar tudo como crítico é o mesmo que não marcar nada: o operador aprende a
  * ignorar a cor.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { SaudeObservada } from "../health";
 

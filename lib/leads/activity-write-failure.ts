@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 /**
  * O que fazer quando GRAVAR A ATIVIDADE falha — e o rastro não pode sumir.

@@ -45,7 +45,7 @@
  * A fila lê essa timeline; uma coluna `origem` em `followup_enrollments` seria
  * uma segunda verdade sobre o mesmo fato.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { EventRow } from "@/lib/event-log/dispatcher";
 import { flowGraphSchema } from "./graph-schema";

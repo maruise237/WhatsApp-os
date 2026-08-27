@@ -1,0 +1,93 @@
+6:app/actions/auth/useRecoveryCode.ts(69,39): error TS7006: Parameter 'u' implicitly has an 'any' type.
+7:app/actions/onboarding/createDefaultAgent.ts(432,66): error TS2345: Argument of type 'AgenteDoOnboarding | null' is not assignable to parameter of type 'AgenteDoOnboarding'.
+9:app/actions/onboarding/createDefaultAgent.ts(440,23): error TS18047: 'agent' is possibly 'null'.
+10:app/actions/onboarding/createDefaultAgent.ts(452,17): error TS18047: 'agent' is possibly 'null'.
+11:app/actions/onboarding/createDefaultAgent.ts(465,26): error TS18047: 'agent' is possibly 'null'.
+12:app/actions/onboarding/createDefaultAgent.ts(475,17): error TS18047: 'agent' is possibly 'null'.
+13:app/actions/onboarding/createDefaultAgent.ts(491,17): error TS18047: 'agent' is possibly 'null'.
+14:app/actions/onboarding/createDefaultAgent.ts(501,17): error TS18047: 'agent' is possibly 'null'.
+15:app/actions/onboarding/createDefaultAgent.ts(513,34): error TS18047: 'agent' is possibly 'null'.
+16:app/actions/onboarding/montarQuadro.ts(112,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+17:app/actions/onboarding/montarQuadro.ts(228,25): error TS7006: Parameter 'p' implicitly has an 'any' type.
+18:app/actions/settings/updateTenant.ts(109,21): error TS7031: Binding element 'e' implicitly has an 'any' type.
+19:app/api/v1/admin/dashboard/kpis/route.ts(237,11): error TS7006: Parameter 'row' implicitly has an 'any' type.
+20:app/api/v1/admin/dashboard/kpis/route.ts(249,14): error TS7006: Parameter 'r' implicitly has an 'any' type.
+21:app/api/v1/admin/dashboard/kpis/route.ts(254,14): error TS7006: Parameter 'r' implicitly has an 'any' type.
+22:app/api/v1/admin/dashboard/kpis/route.ts(255,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
+23:app/api/v1/admin/dashboard/kpis/route.ts(255,15): error TS7006: Parameter 'b' implicitly has an 'any' type.
+24:app/api/v1/admin/incidents/route.ts(118,28): error TS7006: Parameter 'row' implicitly has an 'any' type.
+25:app/api/v1/admin/lgpd/requests/route.ts(159,30): error TS7006: Parameter 'r' implicitly has an 'any' type.
+26:app/api/v1/admin/lgpd/requests/route.ts(173,24): error TS7006: Parameter 'r' implicitly has an 'any' type.
+27:app/api/v1/admin/platform-admins/route.ts(134,28): error TS7006: Parameter 'pa' implicitly has an 'any' type.
+28:app/api/v1/admin/usage/route.ts(194,27): error TS2339: Property 'display_name' does not exist on type '{}'.
+29:app/api/v1/admin/usage/route.ts(195,27): error TS2339: Property 'slug' does not exist on type '{}'.
+30:app/api/v1/admin/users/[id]/route.ts(103,44): error TS7006: Parameter 'f' implicitly has an 'any' type.
+31:app/api/v1/ai/agents/[id]/publish/route.ts(111,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+32:app/api/v1/ai/pacing/route.ts(56,24): error TS7006: Parameter 'k' implicitly has an 'any' type.
+33:app/api/v1/ai/pacing/route.ts(58,39): error TS7006: Parameter 's' implicitly has an 'any' type.
+34:app/api/v1/ai/routers/route.ts(65,39): error TS7006: Parameter 'r' implicitly has an 'any' type.
+35:app/api/v1/ai/routers/route.ts(113,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+36:app/api/v1/channels/official/route.ts(93,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+37:app/api/v1/channels/official/route.ts(164,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+38:app/api/v1/channels/partner/templates/route.ts(116,36): error TS7006: Parameter 't' implicitly has an 'any' type.
+39:app/api/v1/channels/templates/route.ts(109,55): error TS7006: Parameter 'row' implicitly has an 'any' type.
+40:app/api/v1/contacts/_handler.ts(380,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+41:app/api/v1/contacts/_handler.ts(545,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+42:app/api/v1/contacts/_handler.ts(562,18): error TS7031: Binding element 'error' implicitly has an 'any' type.
+43:app/api/v1/leads/_handler.ts(326,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+44:app/api/v1/leads/_handler.ts(484,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+45:app/api/v1/leads/_handler.ts(501,18): error TS7031: Binding element 'error' implicitly has an 'any' type.
+46:app/api/v1/leads/_handler.ts(632,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+47:app/api/v1/messages/_handler.ts(273,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+48:app/api/v1/messages/_handler.ts(279,73): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | undefined'.
+50:app/api/v1/messages/_handler.ts(809,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+51:app/api/v1/webhooks/channel/[token]/route.ts(62,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+52:app/api/v1/webhooks/waha/[token]/route.ts(93,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+53:app/api/v1/webhooks/waha/[token]/route.ts(99,35): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'.
+55:app/api/v1/webhooks/waha/route.ts(90,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+56:app/api/v1/webhooks/waha/route.ts(96,35): error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string'.
+58:app/app/ai/agents/[id]/_actions.ts(266,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+59:app/app/ai/agents/[id]/_actions.ts(462,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+60:app/app/ai/skills/page.tsx(35,56): error TS7006: Parameter 'v' implicitly has an 'any' type.
+61:app/app/ai/skills/page.tsx(37,60): error TS7006: Parameter 'p' implicitly has an 'any' type.
+62:app/app/ai/skills/page.tsx(41,23): error TS2339: Property 'description' does not exist on type '{}'.
+63:app/app/ai/skills/page.tsx(43,19): error TS2339: Property 'forked_from_version_id' does not exist on type '{}'.
+64:app/app/ai/skills/page.tsx(50,14): error TS7006: Parameter 'p' implicitly has an 'any' type.
+65:app/app/ai/skills/page.tsx(51,11): error TS7006: Parameter 'p' implicitly has an 'any' type.
+66:app/app/ai/skills/page.tsx(51,78): error TS2339: Property 'description' does not exist on type '{}'.
+67:lib/ai/credentials.ts(59,33): error TS2347: Untyped function calls may not accept type arguments.
+68:lib/channels/connect.ts(176,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+69:lib/channels/health.ts(186,28): error TS7006: Parameter 's' implicitly has an 'any' type.
+70:lib/channels/meta/credentials.ts(109,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+71:lib/channels/meta/ingest.ts(75,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+72:lib/channels/meta/session.ts(52,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+73:lib/channels/meta/session.ts(87,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+74:lib/channels/retencao-do-arquivo.ts(97,34): error TS7006: Parameter 'r' implicitly has an 'any' type.
+75:lib/channels/selectable.ts(58,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+76:lib/channels/zernio/credentials.ts(98,11): error TS2339: Property 'data' does not exist on type '{ error: DbErrorLike | null; } & { schemaOutdated: boolean; }'.
+77:lib/followup/reactivity.ts(398,55): error TS7006: Parameter 'e' implicitly has an 'any' type.
+78:lib/followup/reactivity.ts(405,55): error TS7006: Parameter 'p' implicitly has an 'any' type.
+79:lib/followup/reactivity.ts(407,31): error TS7006: Parameter 'e' implicitly has an 'any' type.
+80:lib/followup/reactivity.ts(415,31): error TS2339: Property 'handoff_policy' does not exist on type '{}'.
+81:lib/followup/reactivity.ts(416,30): error TS2339: Property 'trigger_config' does not exist on type '{}'.
+82:lib/instalacao/retrato.ts(96,48): error TS7006: Parameter 'c' implicitly has an 'any' type.
+83:lib/instalacao/retrato.ts(98,46): error TS7006: Parameter 'c' implicitly has an 'any' type.
+84:lib/leads/encerramento.ts(172,14): error TS7031: Binding element 'error' implicitly has an 'any' type.
+85:lib/leads/radar-de-risco.ts(122,26): error TS7006: Parameter 'l' implicitly has an 'any' type.
+86:lib/leads/radar-de-risco.ts(122,58): error TS7006: Parameter 'a' implicitly has an 'any' type.
+87:lib/leads/radar-de-risco.ts(139,42): error TS7006: Parameter 'l' implicitly has an 'any' type.
+88:lib/leads/radar-de-risco.ts(155,26): error TS7006: Parameter 'l' implicitly has an 'any' type.
+89:lib/leads/radar-de-risco.ts(155,54): error TS7006: Parameter 'c' implicitly has an 'any' type.
+90:lib/leads/radar-de-risco.ts(257,75): error TS7006: Parameter 'd' implicitly has an 'any' type.
+91:lib/lgpd/export-collector.ts(286,33): error TS7006: Parameter 'c' implicitly has an 'any' type.
+92:lib/lgpd/export-collector.ts(331,35): error TS7006: Parameter 'm' implicitly has an 'any' type.
+93:lib/lgpd/export-collector.ts(390,26): error TS7006: Parameter 'o' implicitly has an 'any' type.
+94:lib/lgpd/export-collector.ts(438,37): error TS7006: Parameter 'a' implicitly has an 'any' type.
+95:lib/mcp/auth.ts(119,21): error TS7031: Binding element 'updErr' implicitly has an 'any' type.
+96:lib/mcp/tools/comercio.ts(49,34): error TS7006: Parameter 'p' implicitly has an 'any' type.
+97:lib/mcp/tools/messages.ts(108,18): error TS7031: Binding element 'error' implicitly has an 'any' type.
+98:lib/mcp/tools/privacidade.ts(57,8): error TS7006: Parameter 'l' implicitly has an 'any' type.
+99:lib/neon/server-client.ts(178,43): error TS2769: No overload matches this call.
+102:lib/routing/worker.ts(93,6): error TS7006: Parameter 'e' implicitly has an 'any' type.
+103:lib/waha/ingest.ts(614,18): error TS7031: Binding element 'error' implicitly has an 'any' type.
+104:lib/waha/ingest.ts(766,16): error TS7031: Binding element 'error' implicitly has an 'any' type.

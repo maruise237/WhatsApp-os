@@ -20,7 +20,7 @@ import { CREDS, carimbar } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -88,7 +88,7 @@ async function main(): Promise<void> {
   // recebe — e fazer isso fora do navegador tira a UI, o hook e o setAuth da
   // equação. Se aqui também não chegar, o defeito é de autorização e não tem
   // nada a ver com a tela.
-  const anon = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const anon = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const login = await anon.auth.signInWithPassword({

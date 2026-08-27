@@ -33,7 +33,7 @@
  * momento da configuração, que é outra peça. Está escrito aqui para ninguém ler
  * este arquivo e concluir que a terceira falha da lista acima está coberta.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { missingSlots } from "./meta/build-components";
 import { bindingState } from "./meta/template-binding";

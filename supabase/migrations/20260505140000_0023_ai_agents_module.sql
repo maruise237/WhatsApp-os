@@ -104,7 +104,7 @@ create table if not exists public.ai_provider_credentials (
   models_available text[],
 
   is_active boolean not null default true,
-  created_by uuid references auth.users(id),
+  created_by uuid references neon_auth.user(id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
 
@@ -192,7 +192,7 @@ create table if not exists public.ai_agent_versions (
   superseded_at timestamptz,
 
   created_at timestamptz not null default now(),
-  created_by uuid references auth.users(id),
+  created_by uuid references neon_auth.user(id),
 
   constraint ai_agent_versions_unique_number unique (agent_id, version_number)
 );

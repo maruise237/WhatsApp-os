@@ -18,7 +18,7 @@ import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
 const creds = JSON.parse(fs.readFileSync(".e2e-creds.json", "utf8"));
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { persistSession: false },
 });
 const PIPE = "35bf4ac9-c5e0-4f7d-846a-99b1bcc92d69"; // CRM Vivo — Clínica
@@ -34,7 +34,7 @@ async function main(): Promise<void> {
   // defeito do produto. É o MESMO defeito que consertei no hook, cometido por
   // mim no instrumento: o socket assina com o papel que tinha no instante do
   // subscribe, e autenticar depois não volta atrás.
-  const user = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const user = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { persistSession: false },
   });
   const m = creds.users.manager;
@@ -42,7 +42,7 @@ async function main(): Promise<void> {
   let token: string;
   if (PAPEL === "service") {
     // O MESMO papel que o assinante independente do QAVivo usa.
-    token = env.SUPABASE_SERVICE_ROLE_KEY!;
+    token = env.NEON_SERVICE_ROLE_JWT!;
   } else {
     const { data: sessao, error: authErr } = await user.auth.signInWithPassword({
       email: m.email,

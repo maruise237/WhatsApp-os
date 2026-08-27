@@ -124,7 +124,7 @@
 --
 -- ─── `updated_by` sem FK ────────────────────────────────────────────────────
 --
--- É carimbo de PROVENIÊNCIA, não vínculo. Um `references auth.users on delete
+-- É carimbo de PROVENIÊNCIA, não vínculo. Um `references neon_auth.user on delete
 -- set null` apagaria o autor quando a conta dele fosse removida — e a pergunta
 -- "quem trocou a marca desta instalação?" é feita justamente depois de a pessoa
 -- sair. Mesma razão pela qual a linha não é apagada quando o autor some.

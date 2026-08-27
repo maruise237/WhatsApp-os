@@ -14,15 +14,15 @@ import { carregarEnvLocal } from "./lib/env-de-teste";
 
 const env = carregarEnvLocal();
 const APP = process.env.APP_URL ?? "http://localhost:3021";
-const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL!;
-const SERVICE = env.SUPABASE_SERVICE_ROLE_KEY!;
+const NEON_DATA_API_URL = env.NEON_DATA_API_URL!;
+const SERVICE = env.NEON_SERVICE_ROLE_JWT!;
 const INTERNAL = env.INTERNAL_SECRET!;
 
 async function pg<T = unknown>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+  const res = await fetch(`${NEON_DATA_API_URL}/rest/v1/${path}`, {
     ...init,
     headers: {
       apikey: SERVICE,

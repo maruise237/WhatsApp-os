@@ -15,7 +15,7 @@
  *
  * Run: npx tsx scripts/seed-e2e-nascimento-do-lead.ts
  */
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "node:fs";
 import * as path from "node:path";
 

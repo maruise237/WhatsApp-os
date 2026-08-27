@@ -14,7 +14,7 @@
  * Admin client bypassa RLS: TODA query filtra `organization_id`, sempre resolvido
  * de fonte confiável pelo chamador (JWT ou contexto do agente), nunca do body.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import {
   classifyRisk,

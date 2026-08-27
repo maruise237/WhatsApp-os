@@ -16,7 +16,7 @@
  *   OWNER_ORG_NAME='Minha Empresa' npx tsx scripts/bootstrap-owner.ts
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -36,14 +36,14 @@ function loadEnv(): Record<string, string> {
 
 const env = loadEnv();
 
-const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL;
-const SERVICE_ROLE = env.SUPABASE_SERVICE_ROLE_KEY;
+const NEON_DATA_API_URL = env.NEON_DATA_API_URL;
+const SERVICE_ROLE = env.NEON_SERVICE_ROLE_JWT;
 const OWNER_EMAIL = env.OWNER_EMAIL;
 const OWNER_PASSWORD = env.OWNER_PASSWORD;
 const ORG_NAME = env.OWNER_ORG_NAME || "Minha Empresa";
 
-if (!SUPABASE_URL || !SERVICE_ROLE) {
-  throw new Error("Faltam NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY.");
+if (!NEON_DATA_API_URL || !SERVICE_ROLE) {
+  throw new Error("Faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT.");
 }
 if (!OWNER_EMAIL || !OWNER_PASSWORD) {
   throw new Error("Faltam OWNER_EMAIL / OWNER_PASSWORD.");
@@ -60,7 +60,7 @@ function slugify(s: string): string {
     .slice(0, 40) || "minha-empresa";
 }
 
-const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

@@ -5,7 +5,7 @@
 alter table public.conversations
   add column if not exists usable_for_rag boolean not null default false,
   add column if not exists usable_for_rag_marked_at timestamptz,
-  add column if not exists usable_for_rag_marked_by uuid references auth.users(id),
+  add column if not exists usable_for_rag_marked_by uuid references neon_auth.user(id),
   add column if not exists rag_review_status text;
 
 alter table public.conversations

@@ -15,7 +15,7 @@
  * Run: npx tsx scripts/seed-e2e-invite.ts
  */
 import { execFileSync } from "node:child_process";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste";
@@ -25,7 +25,7 @@ anunciarDestino("seed-e2e-invite", credenciais);
 const url = credenciais.url;
 const serviceKey = credenciais.serviceRole;
 if (!url || !serviceKey) {
-  console.error("[seed-invite] faltam NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY");
+  console.error("[seed-invite] faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT");
   process.exit(1);
 }
 const admin = createClient(url, serviceKey, { auth: { persistSession: false } });

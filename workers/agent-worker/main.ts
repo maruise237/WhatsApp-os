@@ -170,7 +170,7 @@ export async function startWorker(
   handlers: Map<JobKind, JobHandler>,
   log: Logger = createLogger(),
 ): Promise<void> {
-  const pool = createPool(env.SUPABASE_DB_URL, (err) =>
+  const pool = createPool(env.NEON_DATABASE_URL, (err) =>
     log.error('pool: conexão caiu — recria no próximo uso', { error: errMsg(err) }),
   );
   const workerId = `agent-engine-${hostname()}-${process.pid}`;
@@ -456,8 +456,8 @@ export async function main(): Promise<void> {
   const handlers = new Map<JobKind, JobHandler>();
   const turnDeps: FollowupTurnDeps = {
     crmCfg: crmEdgeConfigFromEnv({
-      SUPABASE_URL: env.NEXT_PUBLIC_SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY: env.SUPABASE_SERVICE_ROLE_KEY,
+      NEON_DATA_API_URL: env.NEON_DATA_API_URL,
+      NEON_SERVICE_ROLE_JWT: env.NEON_SERVICE_ROLE_JWT,
     }),
     llmCfg: llmEdgeConfigFromEnv(env),
     knobs: {

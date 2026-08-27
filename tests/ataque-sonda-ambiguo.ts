@@ -42,7 +42,7 @@ async function main(): Promise<void> {
     "app/api/v1/pipelines/[id]/board/route.ts",
     "lib/ai/agent-inbox-copy.ts",
   ]);
-  const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL });
+  const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL });
   let plantado: string | null = null;
 
   try {

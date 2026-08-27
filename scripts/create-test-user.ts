@@ -2,7 +2,7 @@
  * Cria/atualiza um usuário Supabase já confirmado e o anexa à E2E Test Org como admin.
  * Run: npx tsx scripts/create-test-user.ts <email> [password]
  */
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
@@ -11,7 +11,7 @@ const EMAIL = process.argv[2] ?? "teste@gmail.com";
 const PASSWORD = process.argv[3] ?? "E2E!Test1234";
 const ORG_SLUG = "e2e-test-org";
 
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

@@ -16,7 +16,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import pg from "pg";
 
 import { openCase } from "../lib/agent-engine/agent/human-cases";
@@ -31,17 +31,17 @@ import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste"
 const credenciais = credenciaisSupabaseDeTeste();
 anunciarDestino("seed-e2e-escalacao", credenciais);
 const env = {
-  NEXT_PUBLIC_SUPABASE_URL: credenciais.url,
-  SUPABASE_SERVICE_ROLE_KEY: credenciais.serviceRole,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: credenciais.anonKey,
+  NEON_DATA_API_URL: credenciais.url,
+  NEON_SERVICE_ROLE_JWT: credenciais.serviceRole,
+  NEON_TEST_JWT: credenciais.anonKey,
   NEXT_PUBLIC_APP_URL: credenciais.appUrl,
-  SUPABASE_DB_URL: credenciais.dbUrl,
+  NEON_DATABASE_URL: credenciais.dbUrl,
 } as Record<string, string>;
 
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
-const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL! });
+const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL! });
 
 const CREDS = path.join(process.cwd(), ".e2e-creds.json");
 const TELEFONE = "+5531977776666";

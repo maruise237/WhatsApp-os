@@ -3,7 +3,7 @@
  * sessão pra `email` cai quando vai pra /app/inbox.
  * Run: npx tsx scripts/probe-redirect.ts <email> <password>
  */
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 async function main() {
@@ -11,7 +11,7 @@ async function main() {
   const email = process.argv[2] ?? "demo@deskcomm.com.br";
   const password = process.argv[3] ?? "Demo!Live2026";
 
-  const sb = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const sb = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
@@ -22,7 +22,7 @@ async function main() {
   console.log("✓ login ok, user:", data.user.id);
 
   // Cookie format que o @supabase/ssr usa
-  const projectRef = new URL(env.NEXT_PUBLIC_SUPABASE_URL!).hostname.split(".")[0];
+  const projectRef = new URL(env.NEON_DATA_API_URL!).hostname.split(".")[0];
   const cookieName = `sb-${projectRef}-auth-token`;
   const session = data.session;
   // ssr usa cookie chunked json — vamos fingir um base64 simples (pode falhar)

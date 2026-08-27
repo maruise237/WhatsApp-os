@@ -25,7 +25,7 @@
  * `send_ai_message`), e a segunda nasceu depois. Traduzir o desfecho em cada
  * uma seria plantar o mesmo defeito na irmã no dia em que ela foi escrita.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 import type { ActionResultDetail } from "@/lib/automation/types";

@@ -16,7 +16,7 @@
  * que verificasse teria que perguntar de quem é o payload — o `if (provider ===
  * ...)` que a doutrina existe para impedir.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { CHANNEL_PROVIDER_ZERNIO } from "./capabilities";
 import { sincronizarSaudeDaConexao } from "./health";

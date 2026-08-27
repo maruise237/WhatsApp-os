@@ -27,7 +27,7 @@ carimbar([
   "app/api/v1/leads/_handler.ts",
 ]);
 
-const DB = carregarEnvLocal().SUPABASE_DB_URL!;
+const DB = carregarEnvLocal().NEON_DATABASE_URL!;
 
 const sql = (q: string): string =>
   execFileSync("psql", [DB, "-tA", "-c", q], { encoding: "utf8" }).trim();
@@ -57,8 +57,8 @@ async function main(): Promise<void> {
     // RLS filtra tudo, que foi o defeito da wave 3).
     // `process.env` vence o `.env.local` (scripts/lib/env-de-teste.ts).
     const amb = carregarEnvLocal();
-    const url = amb.NEXT_PUBLIC_SUPABASE_URL!;
-    const anon = amb.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const url = amb.NEON_DATA_API_URL!;
+    const anon = amb.NEON_TEST_JWT!;
 
     const assinou = await page.evaluate(async ({ contato, url, anon }) => {
       const w = window as unknown as { __eventos: string[]; __status: string };

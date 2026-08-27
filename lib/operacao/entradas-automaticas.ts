@@ -18,7 +18,7 @@
  * rota sempre fez: o plaintext aparece uma vez, na resposta de quem o definiu.
  */
 import { randomBytes } from "node:crypto";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor } from "@/lib/api/handlers/types";

@@ -33,7 +33,7 @@ set -a
 . ./.env.e2e
 set +a
 
-echo "==> Buildando contra ${NEXT_PUBLIC_SUPABASE_URL}"
+echo "==> Buildando contra ${NEON_DATA_API_URL}"
 pnpm exec next build
 
 # A PROVA, e não a suposição: se a URL de produção sobreviveu em qualquer
@@ -44,7 +44,7 @@ pnpm exec next build
 # O host vem do PRÓPRIO .env.local, então a guarda continua valendo se alguém
 # apontar aquele arquivo para outro projeto.
 if [ -f .env.local ]; then
-  HOST_PROD="$(grep -E '^NEXT_PUBLIC_SUPABASE_URL=' .env.local | cut -d= -f2- | sed -E 's#https?://##; s#/.*##')"
+  HOST_PROD="$(grep -E '^NEON_DATA_API_URL=' .env.local | cut -d= -f2- | sed -E 's#https?://##; s#/.*##')"
   if [ -n "$HOST_PROD" ] && [ "$HOST_PROD" != "127.0.0.1:54321" ]; then
     if grep -rqF "$HOST_PROD" .next/static 2>/dev/null; then
       echo "==> FALHOU: o bundle do browser contém o host de produção ($HOST_PROD)." >&2
@@ -57,7 +57,7 @@ fi
 
 # Controle POSITIVO do mesmo grep: se a URL local também não aparecesse, o
 # "não achei produção" acima não valeria nada — seria um grep que não acha nada.
-HOST_LOCAL="$(printf '%s' "$NEXT_PUBLIC_SUPABASE_URL" | sed -E 's#https?://##; s#/.*##')"
+HOST_LOCAL="$(printf '%s' "$NEON_DATA_API_URL" | sed -E 's#https?://##; s#/.*##')"
 if grep -rqF "$HOST_LOCAL" .next/static 2>/dev/null; then
   echo "==> OK (controle): o host local ($HOST_LOCAL) ESTÁ no bundle — o grep está vivo."
 else

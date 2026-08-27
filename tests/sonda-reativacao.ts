@@ -15,7 +15,7 @@ import { observaTravessias } from "@/lib/leads/risk-worker";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const e = carregarEnvLocal();
-const admin = createClient(e.NEXT_PUBLIC_SUPABASE_URL!, e.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(e.NEON_DATA_API_URL!, e.NEON_SERVICE_ROLE_JWT!, {
   auth: { persistSession: false },
 });
 

@@ -73,39 +73,39 @@ function lerArquivo(arquivo: string): Record<string, string> {
  */
 export function credenciaisSupabaseDeTeste(): CredenciaisSupabase {
   const doAmbiente = {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-    serviceRole: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
+    url: process.env.NEON_DATA_API_URL ?? "",
+    serviceRole: process.env.NEON_SERVICE_ROLE_JWT ?? "",
   };
   if (doAmbiente.url !== "" && doAmbiente.serviceRole !== "") {
     return {
       ...doAmbiente,
-      anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+      anonKey: process.env.NEON_SERVICE_ROLE_JWT ?? "",
       appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
       // Cai no arquivo antes de desistir: quem exporta URL + service role no
       // ambiente (o CI faz isso) não necessariamente exporta a conexão direta,
       // e ela costuma estar no `.env.local` do lado. Só o ambiente venceria a
       // regra desta função; nada aqui a contradiz — `process.env` continua
       // tendo precedência quando existe.
-      dbUrl: process.env.SUPABASE_DB_URL ?? lerArquivo(".env.local").SUPABASE_DB_URL ?? "",
+      dbUrl: process.env.NEON_DATABASE_URL ?? lerArquivo(".env.local").NEON_DATABASE_URL ?? "",
       origem: "ambiente",
     };
   }
 
   const arquivo = lerArquivo(".env.local");
-  const url = arquivo.NEXT_PUBLIC_SUPABASE_URL ?? "";
-  const serviceRole = arquivo.SUPABASE_SERVICE_ROLE_KEY ?? "";
+  const url = arquivo.NEON_DATA_API_URL ?? "";
+  const serviceRole = arquivo.NEON_SERVICE_ROLE_JWT ?? "";
   if (url === "" || serviceRole === "") {
     throw new Error(
-      "Sem credenciais do Supabase: defina NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY " +
+      "Sem credenciais do Supabase: defina NEON_DATA_API_URL e NEON_SERVICE_ROLE_JWT " +
         "no ambiente (ex.: `set -a; . ./.env.e2e; set +a`) ou no .env.local.",
     );
   }
   return {
     url,
     serviceRole,
-    anonKey: arquivo.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    anonKey: arquivo.NEON_SERVICE_ROLE_JWT ?? "",
     appUrl: arquivo.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-    dbUrl: arquivo.SUPABASE_DB_URL ?? "",
+    dbUrl: arquivo.NEON_DATABASE_URL ?? "",
     origem: "arquivo",
   };
 }
@@ -190,7 +190,7 @@ export function anunciarDestino(script: string, c: CredenciaisSupabase): void {
  * ═══ POR QUE ESTA FUNÇÃO EXISTE (e não só `credenciaisSupabaseDeTeste`) ═══
  *
  * As ~96 sondas e provas do repo não leem só as credenciais do Supabase: cada
- * uma pega o que precisa (`WAHA_API_KEY`, `OPENAI_API_KEY`, `SUPABASE_DB_URL`…)
+ * uma pega o que precisa (`WAHA_API_KEY`, `OPENAI_API_KEY`, `NEON_DATABASE_URL`…)
  * de um `Record<string,string>` que elas montavam à mão lendo o arquivo. Trocar
  * isso por um acessor tipado exigiria reescrever 96 arquivos com oito formatos
  * diferentes — risco desproporcional ao problema.

@@ -6,7 +6,7 @@
  * - Lançam `ApiError` em caso de erro estruturado; sucesso retorna data.
  * - Audit + emit_event são responsabilidade do handler (DRY entre REST e MCP).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";

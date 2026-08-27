@@ -17,7 +17,7 @@
  * não existir (código novo, banco sem a migration 0106): aí nada está arquivado,
  * e a lista sem o filtro é a lista exata (ver `./archived`).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { nomeDoCanal } from "@/lib/channels/estado";
 

@@ -13,7 +13,7 @@
  * seria falso. Ver `lib/leads/risk-seed.ts` para as três decisões.
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 
 import { semeiaEstadosDeRisco } from "@/lib/leads/risk-seed";
 import { carregarEnvLocal } from "./lib/env-de-teste";
@@ -26,7 +26,7 @@ function env(): Record<string, string> {
 
 async function main(): Promise<void> {
   const e = env();
-  const admin = createClient(e.NEXT_PUBLIC_SUPABASE_URL!, e.SUPABASE_SERVICE_ROLE_KEY!, {
+  const admin = createClient(e.NEON_DATA_API_URL!, e.NEON_SERVICE_ROLE_JWT!, {
     auth: { persistSession: false },
   });
 

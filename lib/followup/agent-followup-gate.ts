@@ -18,7 +18,7 @@
  * coluna `published_at` (que a tabela não tem por versão publicada) e sem
  * ambiguidade; documentada e testada.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 /** Um agente publicado da org com follow-up habilitado + os pointers que ele arma. */
 export interface EnabledFollowupAgent {

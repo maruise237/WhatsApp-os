@@ -4,7 +4,7 @@
  * aceitá-los; caso contrário [] e o derivado textual (já no contexto) cobre.
  * Usa signed URL curta do bucket privado — o provider baixa, nunca base64.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { LeadContextMessage } from "@/lib/agent-engine/edge/crm/get-lead-context";
 import { modelCapabilities } from "@/lib/agent-engine/edge/llm/capabilities";

@@ -28,7 +28,7 @@ interface Creds {
 function readServiceEnv(): { url: string; serviceRole: string } {
   // `process.env` vence o `.env.local` — ver scripts/lib/env-de-teste.ts.
   const env = carregarEnvLocal();
-  return { url: env.NEXT_PUBLIC_SUPABASE_URL!, serviceRole: env.SUPABASE_SERVICE_ROLE_KEY! };
+  return { url: env.NEON_DATA_API_URL!, serviceRole: env.NEON_SERVICE_ROLE_JWT! };
 }
 
 const creds: Creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8"));

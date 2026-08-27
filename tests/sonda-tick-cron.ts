@@ -19,7 +19,7 @@ const log = {
 } as unknown as Parameters<typeof tickCron>[2];
 
 async function main(): Promise<void> {
-  const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL });
+  const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL });
   const q = async (sql: string): Promise<string> => (await pool.query(sql)).rows[0]?.r ?? "";
 
   console.info("ANTES");

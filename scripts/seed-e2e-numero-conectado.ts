@@ -27,7 +27,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 
 import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste";
 

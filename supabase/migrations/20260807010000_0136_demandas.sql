@@ -51,7 +51,7 @@ create table if not exists public.demandas (
   -- de "vai morrer". Se ninguém assumiu, o dono é a automação — e isso é uma
   -- decisão registrada, não um vazio que ninguém nota.
   dono_kind text not null default 'ia' check (dono_kind in ('ia', 'humano')),
-  dono_user_id uuid references auth.users(id) on delete set null,
+  dono_user_id uuid references neon_auth.user(id) on delete set null,
 
   -- PRÓXIMO PASSO é CAMPO, não derivação (cap. 5 §5.3): derivado, ele
   -- desapareceria nos casos em que a derivação falha — que são exatamente os

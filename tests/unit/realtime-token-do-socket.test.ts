@@ -103,8 +103,8 @@ describe("a callback do token", () => {
     vi.doMock("@supabase/ssr", () => ({
       createBrowserClient: vi.fn(() => ({ realtime: {} })),
     }));
-    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://localhost:54321");
-    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "anon-key-de-teste");
+    vi.stubEnv("NEON_DATA_API_URL", "http://localhost:54321");
+    vi.stubEnv("NEON_TEST_JWT", "anon-key-de-teste");
     const browser = await import("@/lib/supabase/browser");
     createClient = browser.createClient;
     __resetTokenDoRealtime = browser.__resetTokenDoRealtime;

@@ -24,7 +24,7 @@ import { CREDS, carimbar } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -73,7 +73,7 @@ async function main(): Promise<void> {
   console.info(`[novo]   ${novo.id.slice(0, 8)} pipeline=${novo.pipeline_id.slice(0, 8)} stage=${novo.stage_id.slice(0, 8)}`);
 
   const chegaram: string[] = [];
-  const cli = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const cli = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const canal = cli

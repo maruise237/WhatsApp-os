@@ -74,7 +74,7 @@ export type { RiskBucket };
 
 /* ────────────────────────────────────────────────────────────────────────── */
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";

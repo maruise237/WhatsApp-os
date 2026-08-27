@@ -14,7 +14,7 @@
  * Run: npx tsx scripts/e2e-chega-mensagem.ts <conversation_id> <corpo>
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 
 import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste";
 

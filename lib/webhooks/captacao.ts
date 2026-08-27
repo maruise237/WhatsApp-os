@@ -11,7 +11,7 @@
  * body. Nunca lança: um erro ao gravar histórico não pode derrubar a captação
  * do lead, que é o que o cliente do outro lado está esperando.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 

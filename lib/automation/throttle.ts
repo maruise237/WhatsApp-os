@@ -20,7 +20,7 @@
  * de `lib/agent-engine/pacing/`. Precisa de janela? Use aquele módulo — não
  * ressuscite uma régua local aqui.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 export interface ThrottleVerdict {
   allowed: boolean;

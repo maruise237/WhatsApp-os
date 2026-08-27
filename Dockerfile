@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
-# DeskcommCRM — imagem de produção self-host (Next.js standalone).
-# Build: docker build --build-arg NEXT_PUBLIC_SUPABASE_URL=... -t deskcomm-app .
+# WhatsApp OS — imagem de produção self-host (Next.js standalone).
+# Build: docker build --build-arg NEXT_PUBLIC_NEON_DATA_API_URL=... -t whatsapp-os .
 
 # ---- deps: instala dependências (layer cacheável) ----
 FROM node:22-alpine AS deps
@@ -19,10 +19,10 @@ COPY . .
 # IMAGEM GENÉRICA: os NEXT_PUBLIC_* recebem placeholders no build. Os valores
 # REAIS do usuário são injetados em RUNTIME — no browser via <PublicEnvScript/>
 # (window.__PUBLIC_ENV__) e no servidor via lib/env.ts (parseia process.env em
-# runtime). Assim UMA imagem serve qualquer projeto Supabase, sem rebuild.
+# runtime). Assim UMA imagem serve qualquer projeto Neon, sem rebuild.
 # (Segredos de runtime NUNCA entram no build — guarda de fase em lib/env.ts.)
-ARG NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder-anon-key
+ARG NEXT_PUBLIC_NEON_AUTH_BASE_URL=https://placeholder.invalid
+ARG NEXT_PUBLIC_NEON_DATA_API_URL=https://placeholder.invalid
 ARG NEXT_PUBLIC_APP_URL=https://placeholder.invalid
 ARG NEXT_PUBLIC_ADMIN_URL=https://placeholder.invalid
 # O build do Next é faminto: o heap default do Node (~2GB) estoura. NODE_OPTIONS
@@ -30,8 +30,8 @@ ARG NEXT_PUBLIC_ADMIN_URL=https://placeholder.invalid
 # caminho normal do self-hoster é `docker compose pull`, e o install.sh não
 # builda o app. Buildar na VPS é o override opcional de docker-compose.build.yml,
 # e é lá que o requisito de RAM de build se aplica (docs/runbooks/deploy.md §4).
-ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
-    NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
+ENV NEXT_PUBLIC_NEON_AUTH_BASE_URL=$NEXT_PUBLIC_NEON_AUTH_BASE_URL \
+    NEXT_PUBLIC_NEON_DATA_API_URL=$NEXT_PUBLIC_NEON_DATA_API_URL \
     NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL \
     NEXT_PUBLIC_ADMIN_URL=$NEXT_PUBLIC_ADMIN_URL \
     NODE_ENV=production \
@@ -52,9 +52,9 @@ WORKDIR /app
 # OCI via docker/metadata-action; estes aqui são defesa em profundidade — valem
 # para qualquer build, inclusive o local de docker-compose.build.yml, que não
 # passa pelo metadata-action e sem isto sairia sem origem nenhuma.
-LABEL org.opencontainers.image.source="https://github.com/melgarafael/DeskcommCRM" \
+LABEL org.opencontainers.image.source="https://github.com/maruise237/WhatsApp-os" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.title="DeskcommCRM"
+      org.opencontainers.image.title="WhatsApp OS"
 
 # A versão que /api/v1/health reporta (invariante 7). Precisa vir por ARG: a
 # alternativa anterior era `process.env.npm_package_version`, que é `undefined`

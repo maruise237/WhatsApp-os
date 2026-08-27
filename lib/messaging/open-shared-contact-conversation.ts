@@ -2,7 +2,7 @@
  * Abre (ou reabre) a conversa 1:1 com um contato compartilhado no cartão do inbox.
  * Usa a mesma sessão de canal da mensagem onde o cartão apareceu.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ensureConversation } from "@/lib/automation/start-conversation";
 import { phoneLookupVariants } from "@/lib/channels/phone-variants";

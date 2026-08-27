@@ -65,7 +65,7 @@ function carregarEnv(): Record<string, string> {
 }
 
 const env = carregarEnv();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -96,7 +96,7 @@ function blocoDeAberturaDoTurno(orgId: string, contactId: string): string {
   const script = [
     `import pg from 'pg';`,
     `import { latestCheckpoint, ritualBlocks } from './lib/agent-engine/agent/inbound-turn';`,
-    `const pool = new pg.Pool({ connectionString: process.env.SUPABASE_DB_URL });`,
+    `const pool = new pg.Pool({ connectionString: process.env.NEON_DATABASE_URL });`,
     `const cp = await latestCheckpoint(pool, process.argv[2], process.argv[3]);`,
     `const blocos = ritualBlocks(cp, null, { contato: {}, mensagens: [] }, '(sem notas)');`,
     `process.stdout.write(blocos.join('\\n'));`,

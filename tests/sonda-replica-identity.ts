@@ -17,7 +17,7 @@ import { createClient } from "@supabase/supabase-js";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const e = carregarEnvLocal();
-const admin = createClient(e.NEXT_PUBLIC_SUPABASE_URL!, e.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(e.NEON_DATA_API_URL!, e.NEON_SERVICE_ROLE_JWT!, {
   auth: { persistSession: false },
 });
 const PIPE = "35bf4ac9-c5e0-4f7d-846a-99b1bcc92d69";

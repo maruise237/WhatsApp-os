@@ -49,11 +49,11 @@ import {
 } from "../../scripts/lib/env-de-teste";
 
 const VARS = [
-  "NEXT_PUBLIC_SUPABASE_URL",
-  "SUPABASE_SERVICE_ROLE_KEY",
-  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "NEON_DATA_API_URL",
+  "NEON_SERVICE_ROLE_JWT",
+  "NEON_TEST_JWT",
   "NEXT_PUBLIC_APP_URL",
-  "SUPABASE_DB_URL",
+  "NEON_DATABASE_URL",
 ] as const;
 
 const DB_URL = "postgresql://postgres:postgres@127.0.0.1:54322/postgres";
@@ -98,9 +98,9 @@ function travessiaCompleta(c: CredenciaisSupabase): string[] {
 describe("credenciaisSupabaseDeTeste — a travessia chega inteira", () => {
   it("ramo ARQUIVO devolve dbUrl", () => {
     escreverEnvLocal({
-      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
-      SUPABASE_SERVICE_ROLE_KEY: "srk-arquivo",
-      SUPABASE_DB_URL: DB_URL,
+      NEON_DATA_API_URL: "http://127.0.0.1:54321",
+      NEON_SERVICE_ROLE_JWT: "srk-arquivo",
+      NEON_DATABASE_URL: DB_URL,
     });
     const c = credenciaisSupabaseDeTeste();
     expect(c.origem).toBe("arquivo");
@@ -112,9 +112,9 @@ describe("credenciaisSupabaseDeTeste — a travessia chega inteira", () => {
     // O workflow exporta URL + service role para `$GITHUB_ENV`. Sem este caso,
     // o defeito original passa: o ramo do arquivo cobre a máquina do dev e o
     // vermelho só aparece no CI.
-    process.env.NEXT_PUBLIC_SUPABASE_URL = "http://127.0.0.1:54321";
-    process.env.SUPABASE_SERVICE_ROLE_KEY = "srk-ambiente";
-    process.env.SUPABASE_DB_URL = DB_URL;
+    process.env.NEON_DATA_API_URL = "http://127.0.0.1:54321";
+    process.env.NEON_SERVICE_ROLE_JWT = "srk-ambiente";
+    process.env.NEON_DATABASE_URL = DB_URL;
     const c = credenciaisSupabaseDeTeste();
     expect(c.origem).toBe("ambiente");
     expect(
@@ -124,22 +124,22 @@ describe("credenciaisSupabaseDeTeste — a travessia chega inteira", () => {
     expect(travessiaCompleta(c)).toEqual([]);
   });
 
-  it("ambiente sem SUPABASE_DB_URL cai no arquivo em vez de devolver vazio", () => {
+  it("ambiente sem NEON_DATABASE_URL cai no arquivo em vez de devolver vazio", () => {
     // O caso EXATO do CI: as credenciais vêm do ambiente, a conexão direta não.
     // Desistir aqui é o que produzia o ECONNREFUSED.
-    process.env.NEXT_PUBLIC_SUPABASE_URL = "http://127.0.0.1:54321";
-    process.env.SUPABASE_SERVICE_ROLE_KEY = "srk-ambiente";
-    escreverEnvLocal({ SUPABASE_DB_URL: DB_URL });
+    process.env.NEON_DATA_API_URL = "http://127.0.0.1:54321";
+    process.env.NEON_SERVICE_ROLE_JWT = "srk-ambiente";
+    escreverEnvLocal({ NEON_DATABASE_URL: DB_URL });
     const c = credenciaisSupabaseDeTeste();
     expect(c.origem).toBe("ambiente");
     expect(c.dbUrl).toBe(DB_URL);
   });
 
   it("process.env continua vencendo o arquivo (a regra da função não mudou)", () => {
-    process.env.NEXT_PUBLIC_SUPABASE_URL = "http://127.0.0.1:54321";
-    process.env.SUPABASE_SERVICE_ROLE_KEY = "srk-ambiente";
-    process.env.SUPABASE_DB_URL = DB_URL;
-    escreverEnvLocal({ SUPABASE_DB_URL: "postgresql://nao-use@producao:5432/postgres" });
+    process.env.NEON_DATA_API_URL = "http://127.0.0.1:54321";
+    process.env.NEON_SERVICE_ROLE_JWT = "srk-ambiente";
+    process.env.NEON_DATABASE_URL = DB_URL;
+    escreverEnvLocal({ NEON_DATABASE_URL: "postgresql://nao-use@producao:5432/postgres" });
     expect(credenciaisSupabaseDeTeste().dbUrl).toBe(DB_URL);
   });
 

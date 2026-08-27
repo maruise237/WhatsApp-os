@@ -58,7 +58,7 @@ import {
 } from "./qa-helpers";
 
 const envVars = carregarEnvLocal();
-const admin = createClient(envVars.NEXT_PUBLIC_SUPABASE_URL!, envVars.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(envVars.NEON_DATA_API_URL!, envVars.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

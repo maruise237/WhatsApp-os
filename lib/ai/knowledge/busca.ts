@@ -12,7 +12,7 @@
  * exige que quem chama valide o tenant: aqui `organizationId` SEMPRE vem de
  * fonte confiavel (token/cookie), nunca do corpo da requisicao.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { embedText } from "@/lib/ai/embed";
 

@@ -42,7 +42,7 @@ create table if not exists public.crm_lead_reactivations (
   -- dado do lead entra aqui por cópia.
   draft text,
   decided_at timestamptz,
-  decided_by_user_id uuid references auth.users(id) on delete set null,
+  decided_by_user_id uuid references neon_auth.user(id) on delete set null,
   updated_at timestamptz not null default now()
 );
 

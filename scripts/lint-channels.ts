@@ -172,7 +172,6 @@ const KNOWN_DEBT: { reason: string; files: string[] }[] = [
       "lib/messaging/media/types.ts",
       "lib/messaging/media/waha-source.ts",
       "lib/schemas/channels.ts",
-      "lib/supabase/admin.ts",
       "lib/types/messaging.ts",
       "lib/webhooks/secrets.ts",
       "workers/agent-worker/main.ts",

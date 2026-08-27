@@ -33,7 +33,7 @@ import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 const hashDoRecorte = (b: Buffer): string => createHash("sha1").update(b).digest("hex").slice(0, 12);
 
 const envVars = carregarEnvLocal();
-const admin = createClient(envVars.NEXT_PUBLIC_SUPABASE_URL!, envVars.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(envVars.NEON_DATA_API_URL!, envVars.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -1004,7 +1004,7 @@ async function main(): Promise<void> {
   //
   // O veto é criado pelo EMISSOR DE PRODUÇÃO (mesmo código de um veto real), e
   // removido ao fim: prova não pode deixar resíduo num lead que outras sessões usam.
-  const pool = new pg.Pool({ connectionString: envVars.SUPABASE_DB_URL });
+  const pool = new pg.Pool({ connectionString: envVars.NEON_DATABASE_URL });
   const traceId = randomUUID();
   try {
     const alvo = await pool.query(

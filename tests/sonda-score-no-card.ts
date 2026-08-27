@@ -30,7 +30,7 @@ const sufixo = carimbar([
   "app/api/v1/pipelines/[id]/board/route.ts",
 ]);
 
-const DB = carregarEnvLocal().SUPABASE_DB_URL!;
+const DB = carregarEnvLocal().NEON_DATABASE_URL!;
 
 /**
  * Onde a sonda anota o que tirou, ANTES de tirar.

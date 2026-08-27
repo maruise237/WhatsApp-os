@@ -34,7 +34,7 @@
  * detecção é a mesma de `./archived` — estreita, pelo nome da coluna na
  * mensagem de erro.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { audit } from "@/lib/audit";
 

@@ -18,7 +18,7 @@
  * só existia em `event_log` e `api_audit_log` — nenhum dos dois aparece na tela.
  * O dossiê de um negócio fechado terminava sem dizer que fechou.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";
 import { ApiError } from "@/lib/api/types";

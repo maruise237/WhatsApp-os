@@ -46,10 +46,10 @@ import {
 } from "./qa-helpers";
 
 const envVars = carregarEnvLocal();
-const admin = createClient(envVars.NEXT_PUBLIC_SUPABASE_URL!, envVars.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(envVars.NEON_DATA_API_URL!, envVars.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
-const pool = new pg.Pool({ connectionString: envVars.SUPABASE_DB_URL });
+const pool = new pg.Pool({ connectionString: envVars.NEON_DATABASE_URL });
 
 const ORG = CREDS.org_id as string;
 const PIPELINE = (CREDS.crm_vivo as { pipeline_id: string }).pipeline_id;

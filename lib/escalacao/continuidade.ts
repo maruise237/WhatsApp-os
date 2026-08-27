@@ -17,7 +17,7 @@
  * quem for programar em cima) e `resumo`, um texto em português corrido — é o
  * `resumo` que entra no ritual de abertura do turno, porque é lá que o modelo lê.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 /** O que a pessoa decidiu num chamado, na linguagem de quem vai ler. */
 export interface DecisaoHumana {

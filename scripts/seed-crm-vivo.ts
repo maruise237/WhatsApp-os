@@ -22,20 +22,20 @@
  * Run: npx tsx scripts/seed-crm-vivo.ts
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
 
-const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL!;
-const SERVICE_ROLE = env.SUPABASE_SERVICE_ROLE_KEY!;
-if (!SUPABASE_URL || !SERVICE_ROLE) {
-  throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY in .env.local");
+const NEON_DATA_API_URL = env.NEON_DATA_API_URL!;
+const SERVICE_ROLE = env.NEON_SERVICE_ROLE_JWT!;
+if (!NEON_DATA_API_URL || !SERVICE_ROLE) {
+  throw new Error("Missing NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT in .env.local");
 }
 
-const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

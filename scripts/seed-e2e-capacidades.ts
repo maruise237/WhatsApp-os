@@ -20,7 +20,7 @@
  *
  * Run: npx tsx scripts/seed-e2e-capacidades.ts
  */
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import { execFileSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -31,10 +31,10 @@ import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste"
 // dedicado de e2e, onde a ausência dele é a proteção. O helper trata os dois.
 const credenciais = credenciaisSupabaseDeTeste();
 anunciarDestino("seed-e2e-capacidades", credenciais);
-const SUPABASE_URL = credenciais.url;
+const NEON_DATA_API_URL = credenciais.url;
 const SERVICE_ROLE = credenciais.serviceRole;
 
-const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

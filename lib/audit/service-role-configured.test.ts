@@ -4,7 +4,7 @@ import { env } from "@/lib/env";
 import { isServiceRoleConfigured } from "./index";
 
 vi.mock("@/lib/env", () => ({
-  env: { SUPABASE_SERVICE_ROLE_KEY: "" },
+  env: { NEON_SERVICE_ROLE_JWT: "" },
 }));
 
 /**
@@ -22,24 +22,24 @@ vi.mock("@/lib/env", () => ({
  */
 describe("isServiceRoleConfigured — presença de chave, não comprimento", () => {
   it("chave sb_secret_ (~41 chars, formato novo do Supabase) → true", () => {
-    env.SUPABASE_SERVICE_ROLE_KEY = "sb_secret_abcdefghijklmnopqrstuvwxyz012345";
-    expect(env.SUPABASE_SERVICE_ROLE_KEY.length).toBeLessThan(50);
+    env.NEON_SERVICE_ROLE_JWT = "sb_secret_abcdefghijklmnopqrstuvwxyz012345";
+    expect(env.NEON_SERVICE_ROLE_JWT.length).toBeLessThan(50);
     expect(isServiceRoleConfigured()).toBe(true);
   });
 
   it("JWT longo (formato legado do Supabase) → true", () => {
-    env.SUPABASE_SERVICE_ROLE_KEY =
+    env.NEON_SERVICE_ROLE_JWT =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNzAwMDAwMDAwfQ.abcdefghijklmnopqrstuvwxyz0123456789ABCDEF";
     expect(isServiceRoleConfigured()).toBe(true);
   });
 
   it("string vazia → false (ausência de verdade)", () => {
-    env.SUPABASE_SERVICE_ROLE_KEY = "";
+    env.NEON_SERVICE_ROLE_JWT = "";
     expect(isServiceRoleConfigured()).toBe(false);
   });
 
   it("marcador de placeholder → false", () => {
-    env.SUPABASE_SERVICE_ROLE_KEY = "PLACEHOLDER_SUPABASE_SERVICE_ROLE_KEY";
+    env.NEON_SERVICE_ROLE_JWT = "PLACEHOLDER_NEON_SERVICE_ROLE_JWT";
     expect(isServiceRoleConfigured()).toBe(false);
   });
 });

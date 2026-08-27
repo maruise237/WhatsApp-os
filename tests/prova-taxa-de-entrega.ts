@@ -22,7 +22,7 @@ import { CREDS, carimbar } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -41,7 +41,7 @@ const SEM_FILTRO = process.env.SEM_FILTRO === "1";
  *  de latência e a espera do teste é que está curta — hipótese diferente, e
  *  invisível num contador de sim/não. */
 async function rodada(i: number, leadId: string, esperaMs: number): Promise<number | null> {
-  const cli = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const cli = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   let chegouEm: number | null = null;

@@ -11,7 +11,7 @@
  * ponteiro. Nada é sobrescrito — é o que permite ver o que a organização
  * ensinou ao funcionário, e quando.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 export type ResultadoDaPublicacao =
   | { ok: true; versionId: string; versionNumber: number }

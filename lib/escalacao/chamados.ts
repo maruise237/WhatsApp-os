@@ -11,7 +11,7 @@
  * `lib/agent-engine/agent/human-cases.ts` (transições sobre `pg`, atômicas) —
  * duplicá-la em PostgREST daria dois donos para a mesma regra.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 export const ESTADOS_ABERTOS = ["awaiting_human", "awaiting_lead"] as const;
 export const ESTADOS_FECHADOS = ["resolved", "escalated", "cancelled"] as const;

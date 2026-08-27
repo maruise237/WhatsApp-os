@@ -116,7 +116,7 @@ describe("o workflow do e2e honra o contrato de ambiente que a suíte exige", ()
       "AI_CRED_AES_KEY",
       "WAHA_API_KEY",
       "UPSTASH_REDIS_REST_TOKEN",
-      "SUPABASE_DB_URL",
+      "NEON_DATABASE_URL",
     ];
 
     // Só linhas de conteúdo: um comentário que MENCIONA a variável (e vários

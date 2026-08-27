@@ -13,7 +13,7 @@
  * entity_kind='crm_lead'. Sem este filtro o motor rodaria a regra 2x por
  * mudança de lead (uma vez por linha de event_log duplicada).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import type { EventRow, HandlerResult } from "@/lib/event-log/dispatcher";
 import { evaluateConditions, type RuleCondition } from "@/lib/automation/conditions";
 import { getAction } from "@/lib/automation/actions";

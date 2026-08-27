@@ -386,7 +386,7 @@ enter_project() {
 }
 
 # ── As DUAS conexões: a do app e a do schema ─────────────────────────────────
-# `SUPABASE_DB_URL` tinha dois papéis numa string só: ela vai para o `.env` dos
+# `NEON_DATABASE_URL` tinha dois papéis numa string só: ela vai para o `.env` dos
 # contêineres (o app fala com o banco por ela) E era a mesma que rodava
 # `create extension`, o `baseline.sql` e a promoção do dono.
 #
@@ -397,15 +397,15 @@ enter_project() {
 #
 # Daqui em diante: quem mexe no schema (e quem faz backup/restore, que precisam
 # ler tudo) passa por esta função; o `.env` continua recebendo só a do app.
-# `SUPABASE_DB_ADMIN_URL` ausente OU vazia cai na de sempre — quem já instalou
+# `NEON_DATABASE_ADMIN_URL` ausente OU vazia cai na de sempre — quem já instalou
 # não muda de comportamento.
 #
 # É FUNÇÃO, e não uma atribuição no topo deste arquivo, porque o `_common.sh` é
 # *sourced* ANTES do `load_env` nos dois scripts (install.sh e update.sh), e ele
-# abre com `set -euo pipefail`: uma linha `X="${SUPABASE_DB_ADMIN_URL:-$SUPABASE_DB_URL}"`
+# abre com `set -euo pipefail`: uma linha `X="${NEON_DATABASE_ADMIN_URL:-$NEON_DATABASE_URL}"`
 # aqui morre em "variável não associada" e leva o kit inteiro junto (medido: a
 # suíte de shell inteira foi a EXIT=1 com 0 casos executados). E com guarda
-# (`${SUPABASE_DB_URL:-}`) seria pior: o valor CONGELA vazio e todo sítio de DDL
+# (`${NEON_DATABASE_URL:-}`) seria pior: o valor CONGELA vazio e todo sítio de DDL
 # passa a rodar `psql ""`. A resolução tem de acontecer na hora do uso.
 #
 # `:?` e não `:-`: sem NENHUMA das duas, o certo é parar com uma frase que diz o
@@ -414,7 +414,7 @@ enter_project() {
 # pai; o que a mensagem garante é que a causa apareça na tela antes do erro de
 # conexão que os chamadores já tratam.
 url_do_schema() {
-  printf '%s' "${SUPABASE_DB_ADMIN_URL:-${SUPABASE_DB_URL:?sem connection string de banco no .env — rode o install.sh}}"
+  printf '%s' "${NEON_DATABASE_ADMIN_URL:-${NEON_DATABASE_URL:?sem connection string de banco no .env — rode o install.sh}}"
 }
 
 # psql efêmero via container (não exige psql no host). Usa a conexão de schema:
@@ -633,13 +633,11 @@ set_env_var() {
   mv "$tmp" "$envfile"
 }
 
-# Resolve o UUID de um usuário pelo e-mail (admin API do Supabase).
+# L’administration des utilisateurs passe par Neon Managed Better Auth.
+# Aucun endpoint admin supposé n’est appelé depuis le kit : cette opération doit
+# échouer explicitement plutôt que de dégrader la sécurité ou retourner un UID vide.
 owner_id_by_email() {
-  local email="$1"
-  curl -fsS "${NEXT_PUBLIC_SUPABASE_URL}/auth/v1/admin/users?filter=email.eq.${email}" \
-    -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
-    -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" 2>/dev/null \
-    | grep -o '"id":"[0-9a-f-]\{36\}"' | head -1 | sed 's/.*:"//;s/"//'
+  die "La recherche admin d’utilisateur n’est pas disponible dans le kit Neon. Utilisez Neon Auth et le panneau applicatif."
 }
 
 # Ativa (idempotente) o cron que dispara o drain de eventos a cada minuto. SEM

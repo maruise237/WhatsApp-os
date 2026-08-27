@@ -50,7 +50,7 @@
  *      usado em ~30 rotas deste repo). Resume `paused_handoff` → `active` com
  *      grace de 30min (RESUME_GRACE_MS).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { EventRow } from "@/lib/event-log/dispatcher";
 import type { EnrollmentPatch } from "./engine";

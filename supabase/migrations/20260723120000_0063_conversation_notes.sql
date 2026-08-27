@@ -5,7 +5,7 @@ create table if not exists conversation_notes (
   organization_id uuid not null references organizations(id) on delete cascade,
   conversation_id uuid not null references conversations(id) on delete cascade,
   body text not null,
-  created_by_user_id uuid references auth.users(id) on delete set null,
+  created_by_user_id uuid references neon_auth.user(id) on delete set null,
   created_by_name text,
   created_at timestamptz not null default now()
 );

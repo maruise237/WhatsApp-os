@@ -40,7 +40,7 @@
  * (select ... limit n)`: primeiro escolhe os ids, depois esvazia por id. As
  * duas idas custam menos que a trava que a alternativa pediria.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 

@@ -26,7 +26,7 @@ import { CREDS, carimbar } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 const ORG = CREDS.org_id as string;
@@ -34,7 +34,7 @@ const PIPELINE_VIVO = "48c02b4a-0ca1-4bca-8ef0-206b6d240d23";
 const RUN = randomUUID().slice(0, 6);
 
 async function rodada(i: number, lead: { id: string; title: string }): Promise<string> {
-  const cli = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+  const cli = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const chegou = { leads: 0, atividades: 0, leadsAuth: 0 };
@@ -43,7 +43,7 @@ async function rodada(i: number, lead: { id: string; title: string }): Promise<s
   // um assinante privilegiado não pode testá-la nem para confirmar nem para
   // negar. Medir só com ele seria responder a outra pergunta e chamar de
   // resposta. É o papel que a hipótese nomeia que precisa estar no experimento.
-  const autenticado = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const autenticado = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const entrada = await autenticado.auth.signInWithPassword({

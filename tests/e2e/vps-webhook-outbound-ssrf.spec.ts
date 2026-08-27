@@ -215,8 +215,8 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
     } finally {
       const svc = await import("@supabase/supabase-js").then((m) =>
         m.createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.SUPABASE_SERVICE_ROLE_KEY!,
+          process.env.NEON_DATA_API_URL!,
+          process.env.NEON_SERVICE_ROLE_JWT!,
           { auth: { persistSession: false } },
         ),
       );

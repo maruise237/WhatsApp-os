@@ -71,8 +71,8 @@ export async function POST(_req: NextRequest, { params }: RouteParams): Promise<
     pool,
     llmEdgeConfigFromEnv(env),
     crmEdgeConfigFromEnv({
-      SUPABASE_URL: env.NEXT_PUBLIC_SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY: env.SUPABASE_SERVICE_ROLE_KEY,
+      NEON_DATA_API_URL: env.NEON_DATA_API_URL,
+      NEON_SERVICE_ROLE_JWT: env.NEON_SERVICE_ROLE_JWT,
     }),
     {
       tenantId: org.orgId,

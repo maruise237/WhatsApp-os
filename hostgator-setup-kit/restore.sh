@@ -9,7 +9,7 @@ enter_project
 DUMP="${1:-}"
 [ -n "$DUMP" ] && [ -f "$DUMP" ] || die "Uso: restore.sh <arquivo-db-*.sql.gz>"
 
-c_ylw "⚠ Isto vai SOBRESCREVER o banco em $NEXT_PUBLIC_SUPABASE_URL."
+c_ylw "⚠ Isto vai SOBRESCREVER o banco em $NEON_DATA_API_URL."
 read -r -p "Digite 'RESTAURAR' para confirmar: " a
 [ "$a" = "RESTAURAR" ] || die "Cancelado."
 

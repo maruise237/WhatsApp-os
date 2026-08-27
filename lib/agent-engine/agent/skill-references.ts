@@ -10,7 +10,7 @@
  *      — path fora do manifesto (ou kind:'asset') é rejeitado antes do download.
  * Erros são sempre de ENSINO ({ ok:false, error }), nunca throw (convenção do run).
  */
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import type { LoadedSkill } from './skills';
 
 const SKILL_ASSETS_BUCKET = 'skill-assets';

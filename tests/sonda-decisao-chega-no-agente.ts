@@ -24,7 +24,7 @@ carimbar([
   "app/api/v1/leads/[id]/next-action/route.ts",
 ]);
 
-const DB = carregarEnvLocal().SUPABASE_DB_URL!;
+const DB = carregarEnvLocal().NEON_DATABASE_URL!;
 
 async function main(): Promise<void> {
   const pool = new Pool({ connectionString: DB });

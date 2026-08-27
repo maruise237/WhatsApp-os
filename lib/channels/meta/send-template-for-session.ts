@@ -13,7 +13,7 @@
  * salva (a Fase 4b, quando o follow-up guardar um bind), não um envio pedido agora,
  * com o contrato lido no mesmo instante.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { sendTemplate } from "./send-template";
 

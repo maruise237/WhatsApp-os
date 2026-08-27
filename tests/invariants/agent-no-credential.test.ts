@@ -21,9 +21,9 @@ if (!container) {
 
 // Placeholders ANTES dos imports dinâmicos do engine (módulos da borda leem env
 // de app no uso; nada disso é chamado antes do erro de credencial).
-process.env.NEXT_PUBLIC_SUPABASE_URL ??= "https://placeholder.supabase.co";
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??= "placeholder-anon";
-process.env.SUPABASE_SERVICE_ROLE_KEY ??= "placeholder-service";
+process.env.NEON_DATA_API_URL ??= "https://placeholder.supabase.co";
+process.env.NEON_SERVICE_ROLE_JWT ??= "placeholder-anon";
+process.env.NEON_SERVICE_ROLE_JWT ??= "placeholder-service";
 
 const PORT = Number(process.env.TEST_DB_PORT ?? 54329);
 const pool = new pg.Pool({
@@ -103,8 +103,8 @@ describe("4B — turno sem credencial NENHUMA (nem env, nem BYOK)", () => {
     const log = m.createLogger();
     const handler = m.createInboundTurnHandler({
       crmCfg: m.crmEdgeConfigFromEnv({
-        SUPABASE_URL: "https://placeholder.supabase.co",
-        SUPABASE_SERVICE_ROLE_KEY: "placeholder-service",
+        NEON_DATA_API_URL: "https://placeholder.invalid",
+        NEON_SERVICE_ROLE_JWT: "placeholder-service",
       }),
       llmCfg: {}, // SEM anthropicApiKey — e o banco não tem BYOK para a org
       knobs: {

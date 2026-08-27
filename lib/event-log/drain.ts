@@ -5,7 +5,7 @@
  * dedicados (ex. ai_agent.dispatch_requested → agent-dispatcher) não têm
  * handler no registry e ficam intocados.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import {
   dispatchEvent,
   getRegisteredHandlers,

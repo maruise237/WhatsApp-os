@@ -3,7 +3,7 @@
  *
  * Reusados pelo Route Handler REST e por MCP tools (S-13.03/04).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";

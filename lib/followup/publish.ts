@@ -4,7 +4,7 @@
  * activate pointer happen atomically inside the SECURITY DEFINER function,
  * called via the admin client since EXECUTE is revoked from authenticated.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import type { FlowGraph } from "./graph-schema";
 
 export interface PublishFlowOk {

@@ -28,7 +28,7 @@
  * morto; só vigia demora até a próxima rodada. Os dois chamam esta mesma
  * função, então a regra de quando avisar existe uma vez só.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 /** Único estado em que mensagem entra e sai. Contrato do CRM (uppercase). */
 export const STATUS_SAUDAVEL = "WORKING";

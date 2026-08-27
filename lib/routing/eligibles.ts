@@ -9,7 +9,7 @@
  * O client é injetado (worker passa admin; tools MCP passam ctx.supabase admin),
  * mantendo a org-scoping explícita em toda query (service role bypassa RLS).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { isAttendantEligible, OPEN_LOAD_STATUSES } from "./eligibility";
 import type { RoutingCandidate } from "./decide";

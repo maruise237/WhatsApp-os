@@ -17,9 +17,9 @@ create table if not exists public.conversation_assignment_events (
   id              uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
   conversation_id uuid not null references public.conversations(id) on delete cascade,
-  from_user_id    uuid references auth.users(id) on delete set null, -- null = sem dono / com a IA
-  to_user_id      uuid references auth.users(id) on delete set null, -- null = liberada (volta à fila/IA)
-  changed_by      uuid references auth.users(id) on delete set null, -- null = sistema (worker de routing / agente IA)
+  from_user_id    uuid references neon_auth.user(id) on delete set null, -- null = sem dono / com a IA
+  to_user_id      uuid references neon_auth.user(id) on delete set null, -- null = liberada (volta à fila/IA)
+  changed_by      uuid references neon_auth.user(id) on delete set null, -- null = sistema (worker de routing / agente IA)
   reason          text not null
                   check (reason in ('claim','transfer','release','routing','handoff')),
   created_at      timestamptz not null default now()

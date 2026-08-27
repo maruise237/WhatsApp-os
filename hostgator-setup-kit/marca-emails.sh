@@ -231,20 +231,20 @@ if [ -n "$RENDER_EM" ]; then
 fi
 
 # ── 3. Dá para subir? ──────────────────────────────────────────────────────
-[ -n "${SUPABASE_ACCESS_TOKEN:-}" ] || instrua_e_saia \
-  "sem SUPABASE_ACCESS_TOKEN — não dá para configurar os e-mails de acesso sozinho.
+[ -n "${NEON_MANAGEMENT_TOKEN:-}" ] || instrua_e_saia \
+  "sem NEON_MANAGEMENT_TOKEN — não dá para configurar os e-mails de acesso sozinho.
     Pegue um token em https://supabase.com/dashboard/account/tokens, rode
-    \`export SUPABASE_ACCESS_TOKEN=sbp_...\` e chame este script de novo."
+    \`export NEON_MANAGEMENT_TOKEN=sbp_...\` e chame este script de novo."
 
 # O ref do projeto sai da URL: https://<ref>.supabase.co. Supabase PRÓPRIO
 # (self-hosted) não tem Management API nenhuma — e nesse caso o passo é por env
 # do GoTrue, não por API.
 REF=""
-case "${NEXT_PUBLIC_SUPABASE_URL:-}" in
-  https://*.supabase.co*) REF="${NEXT_PUBLIC_SUPABASE_URL#https://}"; REF="${REF%%.supabase.co*}";;
+case "${NEON_DATA_API_URL:-}" in
+  https://*.supabase.co*) REF="${NEON_DATA_API_URL#https://}"; REF="${REF%%.supabase.co*}";;
 esac
 [ -n "$REF" ] || instrua_e_saia \
-  "NEXT_PUBLIC_SUPABASE_URL não é um projeto da nuvem do Supabase (${NEXT_PUBLIC_SUPABASE_URL:-vazio}).
+  "NEON_DATA_API_URL não é um projeto da nuvem do Supabase (${NEON_DATA_API_URL:-vazio}).
     Num Supabase próprio, use GOTRUE_MAILER_TEMPLATES_* apontando para os
     arquivos de \`marca-emails.sh --render-em <dir>\`."
 
@@ -252,10 +252,10 @@ api() {  # api <método> <caminho> [corpo]
   local method="$1" path="$2" body="${3:-}"
   if [ -n "$body" ]; then
     curl -sS -X "$method" "$API$path" \
-      -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+      -H "Authorization: Bearer $NEON_MANAGEMENT_TOKEN" \
       -H "Content-Type: application/json" -d "$body"
   else
-    curl -sS -X "$method" "$API$path" -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN"
+    curl -sS -X "$method" "$API$path" -H "Authorization: Bearer $NEON_MANAGEMENT_TOKEN"
   fi
 }
 

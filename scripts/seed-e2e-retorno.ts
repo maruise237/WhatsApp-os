@@ -21,7 +21,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 
 import type { McpContext } from "../lib/mcp/types";
 import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste";
@@ -34,21 +34,21 @@ import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste"
 const credenciais = credenciaisSupabaseDeTeste();
 anunciarDestino("seed-e2e-retorno", credenciais);
 const env = {
-  NEXT_PUBLIC_SUPABASE_URL: credenciais.url,
-  SUPABASE_SERVICE_ROLE_KEY: credenciais.serviceRole,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: credenciais.anonKey,
+  NEON_DATA_API_URL: credenciais.url,
+  NEON_SERVICE_ROLE_JWT: credenciais.serviceRole,
+  NEON_TEST_JWT: credenciais.anonKey,
   NEXT_PUBLIC_APP_URL: credenciais.appUrl,
-  SUPABASE_DB_URL: credenciais.dbUrl,
+  NEON_DATABASE_URL: credenciais.dbUrl,
 } as Record<string, string>;
 for (const [k, v] of Object.entries(env)) process.env[k] ??= v;
 
-const SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL!;
-const SERVICE_ROLE = env.SUPABASE_SERVICE_ROLE_KEY!;
-if (!SUPABASE_URL || !SERVICE_ROLE) {
-  throw new Error("Faltam NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY em .env.local");
+const NEON_DATA_API_URL = env.NEON_DATA_API_URL!;
+const SERVICE_ROLE = env.NEON_SERVICE_ROLE_JWT!;
+if (!NEON_DATA_API_URL || !SERVICE_ROLE) {
+  throw new Error("Faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT em .env.local");
 }
 
-const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 

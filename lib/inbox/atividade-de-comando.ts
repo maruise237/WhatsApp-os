@@ -28,7 +28,7 @@
  * Fire-and-forget, como todo o resto da timeline: a linha do tempo não pode
  * derrubar a operação que ela descreve.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import { isServiceRoleConfigured } from "@/lib/audit";

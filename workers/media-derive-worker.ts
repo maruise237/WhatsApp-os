@@ -28,11 +28,11 @@ const DRAIN_MAX_ATTEMPTS = 5; // espelho de lib/event-log/drain.ts
 // ponytail: singleton lazy — o drain só nos dá o admin client; resolveOrgLlmConfig
 // exige pg.Pool direto. Sem pool global no processo Next.js, então criamos um sob
 // demanda (nunca no import). `pg.Pool` só conecta na primeira query — se
-// SUPABASE_DB_URL faltar, o erro aparece ali (capturado pelo try/catch abaixo),
+// NEON_DATABASE_URL faltar, o erro aparece ali (capturado pelo try/catch abaixo),
 // não na construção.
 let _pool: pg.Pool | null = null;
 function derivePool(): pg.Pool {
-  if (!_pool) _pool = createPool(process.env.SUPABASE_DB_URL ?? "");
+  if (!_pool) _pool = createPool(process.env.NEON_DATABASE_URL ?? "");
   return _pool;
 }
 

@@ -5,7 +5,7 @@
  * oldest-first) and trims to fit `tokenWindow`. Token estimation is the
  * cheap-and-cheerful len/4 heuristic — within the noise of the runtime budget.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 export interface HistoryMessage {
   role: "user" | "assistant";

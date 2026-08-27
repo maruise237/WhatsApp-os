@@ -2,20 +2,16 @@ import { headers } from "next/headers";
 import { env } from "@/lib/env";
 
 /**
- * Injeta a config pública do Supabase em runtime, antes do JS da app rodar.
- *
- * Por que existe: numa imagem Docker genérica (self-host) as NEXT_PUBLIC_* **SÃO**
- * queimadas no bundle com o valor do BUILD — que no `Dockerfile` é
- * `https://placeholder.supabase.co`. Este componente lê os valores REAIS do
- * projeto do usuário (via `env`, que parseia `process.env` INTEIRO em runtime no
- * servidor) e os entrega ao browser em `window.__PUBLIC_ENV__`.
- * `lib/supabase/browser.ts` lê dali.
+ * Injects the public Neon Auth/Data API endpoints at runtime, before the browser
+ * bundle starts. Private database URLs, admin JWTs and cookie secrets never cross
+ * this boundary. The values are read from the runtime environment so one Docker
+ * image can serve multiple Neon projects without rebuilding.
  *
  * ⚠️ ESTE PARÁGRAFO AFIRMAVA O CONTRÁRIO ("NÃO são queimadas"), e a frase errada
  * é o que escondeu um bug por meses. Medido no build de produção deste repo
  * (Next 16.3.1, Turbopack): `lib/branding/logo.ts` acessava
- * `process.env.NEXT_PUBLIC_SUPABASE_URL` de forma ESTÁTICA e o compilador dobrou
- * a função inteira em `function n(){return"https://placeholder.supabase.co".trim()}`.
+ * `process.env.NEON_DATA_API_URL` de forma ESTÁTICA e o compilador dobrou
+ * a função inteira em `function n(){return"https://placeholder.neon.tech".trim()`.
  * Toda instalação Docker que subisse um logo recebia `<img>` quebrado — na barra
  * lateral, na fachada do `/login` e no e-mail de convite.
  *
@@ -27,7 +23,7 @@ import { env } from "@/lib/env";
  * `await headers()` força render dinâmico: garante que o script use o env de
  * runtime, nunca o placeholder embutido durante `next build`.
  *
- * ── Por que a MARCA entra por prop, e o Supabase não ─────────────────────────
+ * ── Por que a MARCA entra por prop, e os endpoints Neon não ──────────────────
  *
  * Até esta onda as duas chaves de marca eram `env.APP_NAME` e `env.APP_LOGO_URL`
  * — o arquivo de instalação CRU. Consequência medida: `platform_branding.logo_url`
@@ -41,24 +37,24 @@ import { env } from "@/lib/env";
  * já resolvida, montada pela mesma função que o título da aba e o CSS da marca
  * usam (`marcaResolvida()`, em `app/layout.tsx`) — três montagens da pilha
  * divergiriam, e a divergência apareceria como aba com uma marca e barra lateral
- * com outra. As chaves do Supabase continuam vindo de `env` porque não têm
- * camada nenhuma acima: não há "URL do Supabase da organização".
+ * com outra. Os endpoints Neon continuam vindo de `env` porque não têm
+ * camada de marca por organização.
  */
 export async function PublicEnvScript({
   marca,
 }: {
   /**
-   * A marca da INSTALAÇÃO já resolvida (banco acima, `.env` embaixo). Quem
-   * resolve é o layout raiz; recebê-la pronta é o que impede este componente de
-   * virar uma segunda fonte de verdade sobre precedência de marca.
+   * The installation branding is resolved by the root layout and passed here so
+   * this component remains a single source of truth for runtime public config.
    */
   readonly marca: { readonly name: string; readonly logoUrl: string | null };
 }) {
   await headers();
 
   const payload = JSON.stringify({
-    NEXT_PUBLIC_SUPABASE_URL: env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEON_AUTH_BASE_URL: env.NEON_AUTH_BASE_URL,
+    NEON_DATA_API_URL: env.NEON_DATA_API_URL,
+    NEXT_PUBLIC_APP_URL: env.NEXT_PUBLIC_APP_URL,
     // Exposto pro Sentry do browser respeitar o opt-out (SENTRY_DSN=off) em runtime,
     // sem rebuild. DSN não é segredo. Ver lib/sentry/dsn.ts.
     SENTRY_DSN: env.SENTRY_DSN,

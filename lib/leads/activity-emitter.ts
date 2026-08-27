@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import type { ActivityType } from "@/lib/leads/activity-vocabulary";

@@ -25,7 +25,7 @@
  * Run: npx tsx scripts/seed-e2e-catalogo-openrouter.ts
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 
 import { anunciarDestino, credenciaisSupabaseDeTeste } from "./lib/env-de-teste";
 

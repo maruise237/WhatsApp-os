@@ -32,7 +32,7 @@ const env = carregarEnvLocal();
 const RUN = randomUUID().slice(0, 6);
 
 async function entrar() {
-  const cli = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const cli = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const r = await cli.auth.signInWithPassword({

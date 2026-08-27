@@ -12,7 +12,7 @@
  * descobrir depois é o que faz o operador achar que conectou e só entender que
  * não na primeira mensagem que não sai — com o lead do outro lado esperando.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "./archived";
 import { CHANNEL_PROVIDER_ZERNIO } from "./capabilities";

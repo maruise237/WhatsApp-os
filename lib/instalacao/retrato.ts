@@ -7,7 +7,7 @@
  * rede por nada — e, pior, cria uma segunda montagem do mesmo retrato, que é
  * como as respostas do produto começaram a divergir em primeiro lugar.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { PROVEDOR_POR_ID } from "@/lib/ai/pontos/provedores";
 import { lerAmbiente, nomeAindaEhPlaceholder, type FonteDeAmbiente } from "@/lib/instalacao/ambiente";

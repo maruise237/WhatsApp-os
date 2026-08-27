@@ -6,7 +6,7 @@
  * fn_publish_ai_agent_version. O gate humano é o clique de aplicar — nada
  * auto-aplica; o rastro fica em applied_at/applied_version_id/applied_by (0053).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { publishAgentVersion } from "@/lib/ai/agents/publish";
 

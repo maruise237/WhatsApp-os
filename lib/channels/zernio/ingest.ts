@@ -20,7 +20,7 @@
  * do `23505`, exatamente como o canal por QR faz. Sem isso, uma retentativa
  * duplica a mensagem no inbox do cliente.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { logger } from "@/lib/logger";
 

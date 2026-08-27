@@ -36,7 +36,7 @@
  * o invariante `tests/unit/canal-consulta-por-organizacao.test.ts` (o quarto
  * canal não repete).
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { decryptWebhookSecret } from "@/lib/webhooks/secrets";

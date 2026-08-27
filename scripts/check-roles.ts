@@ -1,9 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import * as fs from "fs";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 const envEfetivo = carregarEnvLocal();
-const url = envEfetivo.NEXT_PUBLIC_SUPABASE_URL!.trim();
-const key = envEfetivo.SUPABASE_SERVICE_ROLE_KEY!.trim();
+const url = envEfetivo.NEON_DATA_API_URL!.trim();
+const key = envEfetivo.NEON_SERVICE_ROLE_JWT!.trim();
 const sb = createClient(url, key, { auth: { persistSession: false } });
 const creds = JSON.parse(fs.readFileSync(".e2e-creds.json", "utf8"));
 (async () => {

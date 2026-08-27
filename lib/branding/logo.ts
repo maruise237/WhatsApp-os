@@ -113,11 +113,12 @@ export function caminhoNovoDoLogo(prefixo: string, extensao: ExtensaoDeLogo): st
  * A URL pública de um caminho. PURA: recebe a base, não a procura.
  *
  * Base sem barra no fim e caminho sem barra no começo — as duas normalizações
- * aqui, e não em cada chamador, porque `NEXT_PUBLIC_SUPABASE_URL` com barra final
+ * aqui, e não em cada chamador, porque `NEON_DATA_API_URL` com barra final
  * é grafia legítima que o operador escreve no `.env` e produziria `//storage`.
  */
 export function urlPublicaDoLogo(caminho: string, base: string): string {
-  return `${base.replace(/\/+$/, "")}/storage/v1/object/public/${BUCKET_DE_LOGOS}/${caminho.replace(/^\/+/, "")}`;
+  const path = caminho.replace(/^\/+/, "");
+  return `${base.replace(/\/+$/, "")}/api/v1/marca/logo/public?path=${encodeURIComponent(path)}`;
 }
 
 /**
@@ -134,19 +135,19 @@ export function urlPublicaDoLogo(caminho: string, base: string): string {
  */
 export function baseDoStorage(): string {
   if (typeof window !== "undefined") {
-    return (window.__PUBLIC_ENV__?.NEXT_PUBLIC_SUPABASE_URL ?? "").trim();
+    return (window.__PUBLIC_ENV__?.NEXT_PUBLIC_APP_URL ?? window.location.origin ?? "").trim();
   }
-  // ⚠️ O `process.env` INTEIRO, e NUNCA `process.env.NEXT_PUBLIC_SUPABASE_URL`.
+  // ⚠️ O `process.env` INTEIRO, e NUNCA `process.env.NEON_DATA_API_URL`.
   //
   // O Next substitui todo acesso ESTÁTICO a `process.env.NEXT_PUBLIC_*` pelo
   // valor do BUILD — inclusive no bundle do servidor. E o Dockerfile builda com
-  // `ARG NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co`, porque a
+  // `ARG NEON_DATA_API_URL=https://placeholder.neon.invalid`, porque a
   // imagem é genérica. Resultado, medido no contêiner de produção:
   //
-  //   function n(){return"https://placeholder.supabase.co".trim()}
+  //   function n(){return"https://placeholder.neon.invalid".trim()}
   //
   // A função inteira virou constante. Toda instalação que subisse um logo
-  // recebia `https://placeholder.supabase.co/storage/...` no `<img>` — imagem
+  // recebia `https://placeholder.neon.invalid/storage/...` no `<img>` — imagem
   // quebrada, com o arquivo intacto no Storage e o caminho certo no banco. O
   // comentário do Dockerfile ("no servidor via lib/env.ts, que parseia
   // process.env em runtime") descrevia o que DEVIA acontecer; este arquivo não
@@ -158,19 +159,19 @@ export function baseDoStorage(): string {
   // A chave é MONTADA em tempo de execução, e isso não é firula.
   //
   // A primeira tentativa foi ler por uma variável (`const ambiente =
-  // process.env; ambiente.NEXT_PUBLIC_SUPABASE_URL`). Não bastou — o compilador
+  // process.env; ambiente.NEON_DATA_API_URL`). Não bastou — o compilador
   // segue o alias. Medido no bundle da imagem publicada com o conserto dentro:
   //
-  //   function d(a,b,c=(process.env,"https://placeholder.supabase.co".trim()))
+  //   function d(a,b,c=(process.env,"https://placeholder.neon.invalid".trim()))
   //
   // Ele avaliou `process.env` pelo efeito colateral e substituiu o acesso do
   // mesmo jeito. A substituição casa o NOME da propriedade, então a única forma
   // de escapar é o nome não existir no código: montado assim, não há literal
-  // `NEXT_PUBLIC_SUPABASE_URL` para casar.
+  // `NEON_DATA_API_URL` para casar.
   //
   // Verificado do jeito que importa — buildando com o placeholder do Dockerfile
   // e procurando no `.next`, que é como o defeito foi encontrado.
-  const chave = ["NEXT", "PUBLIC", "SUPABASE", "URL"].join("_");
+  const chave = ["NEXT", "PUBLIC", "APP", "URL"].join("_");
   return ((process.env as Record<string, string | undefined>)[chave] ?? "").trim();
 }
 

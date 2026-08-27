@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ingestZernioInbound, type ZernioIngestResult } from "@/lib/channels/zernio/ingest";
 

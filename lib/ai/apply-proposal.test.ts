@@ -4,7 +4,7 @@ vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/ai/agents/publish", () => ({ publishAgentVersion: vi.fn() }));
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { publishAgentVersion } from "@/lib/ai/agents/publish";
 import { applyProposal, composeAppliedPrompt } from "./apply-proposal";

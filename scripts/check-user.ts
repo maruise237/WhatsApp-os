@@ -1,9 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/neon/script-client";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 async function main() {
   const env = carregarEnvLocal();
-  const a = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!,{ auth:{autoRefreshToken:false,persistSession:false}});
+  const a = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!,{ auth:{autoRefreshToken:false,persistSession:false}});
   const email = process.argv[2] ?? "demo@deskcomm.com.br";
   const { data: u } = await a.auth.admin.listUsers({ perPage: 200 });
   const user = u.users.find((x) => x.email === email);

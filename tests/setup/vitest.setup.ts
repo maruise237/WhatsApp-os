@@ -39,9 +39,12 @@ for (const envFile of [".env", ".env.local"]) {
  * bater em algum lugar existente.
  */
 const PLACEHOLDERS: Record<string, string> = {
-  NEXT_PUBLIC_SUPABASE_URL: "https://test-placeholder.invalid",
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: "test-placeholder-anon-key",
-  SUPABASE_SERVICE_ROLE_KEY: "test-placeholder-service-role-key",
+  NEON_AUTH_BASE_URL: "https://test-placeholder.invalid",
+  NEON_DATA_API_URL: "https://test-placeholder.invalid",
+  NEON_DATABASE_URL: "postgresql://test:test@test-placeholder.invalid:5432/test",
+  NEON_AUTH_COOKIE_SECRET: "test-placeholder-cookie-secret-32-characters",
+  NEON_TEST_JWT: "test-placeholder-anon-key",
+  NEON_SERVICE_ROLE_JWT: "test-placeholder-service-role-key",
 };
 for (const [chave, valor] of Object.entries(PLACEHOLDERS)) {
   process.env[chave] ??= valor;

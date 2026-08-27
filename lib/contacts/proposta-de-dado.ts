@@ -11,7 +11,7 @@
  * nascido custa atenção humana — e atenção gasta com ruído é o que faz uma fila
  * de confirmação virar um botão que todo mundo aprova sem ler.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 /** Os campos que a IA pode propor. Fechado, e igual ao CHECK da 0123. */
 export const CAMPOS_PROPONIVEIS = ["email", "name", "phone_number"] as const;

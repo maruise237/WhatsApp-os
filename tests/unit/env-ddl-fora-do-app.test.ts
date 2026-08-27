@@ -6,13 +6,13 @@ import { describe, expect, it } from "vitest";
 const RAIZ = process.cwd();
 
 /**
- * `SUPABASE_DB_ADMIN_URL` é a conexão de DDL do KIT (issue #192): num Supabase
- * próprio ela é o DONO do banco, enquanto `SUPABASE_DB_URL` é a role menor que
+ * `NEON_DATABASE_ADMIN_URL` é a conexão de DDL do KIT (issue #192): num Supabase
+ * próprio ela é o DONO do banco, enquanto `NEON_DATABASE_URL` é a role menor que
  * o app usa — a separação inteira existe para que o app NÃO tenha esse poder.
  *
  * Só que o `docker-compose.prod.yml` entrega o `.env` inteiro ao `app` e ao
  * `worker` (`env_file: .env`), e `lib/env.ts` a declara. Ou seja: a chave está
- * ao alcance da mão de qualquer código do app, e um `env.SUPABASE_DB_ADMIN_URL`
+ * ao alcance da mão de qualquer código do app, e um `env.NEON_DATABASE_ADMIN_URL`
  * escrito por engano devolveria ao processo exatamente o privilégio que a
  * issue tirou dele — sem erro nenhum, porque funciona.
  *
@@ -37,7 +37,7 @@ describe("a conexão de DDL não vaza para o código do app", () => {
   const porRaiz = new Map(RAIZES.map((r) => [r, arquivosVarridos(r)]));
   const alvos = [...porRaiz.values()].flat();
   const citam = alvos.filter((f) =>
-    fs.readFileSync(path.join(RAIZ, f), "utf8").includes("SUPABASE_DB_ADMIN_URL"),
+    fs.readFileSync(path.join(RAIZ, f), "utf8").includes("NEON_DATABASE_ADMIN_URL"),
   );
 
   it("a varredura alcança as cinco raízes e enxerga a chave onde ela está", () => {
@@ -51,7 +51,7 @@ describe("a conexão de DDL não vaza para o código do app", () => {
     expect(citam).toContain(DECLARACAO);
   });
 
-  it("nenhum arquivo além da declaração nomeia SUPABASE_DB_ADMIN_URL", () => {
+  it("nenhum arquivo além da declaração nomeia NEON_DATABASE_ADMIN_URL", () => {
     expect(citam.filter((f) => f !== DECLARACAO)).toEqual([]);
   });
 });

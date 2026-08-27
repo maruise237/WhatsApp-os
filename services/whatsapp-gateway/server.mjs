@@ -5,8 +5,8 @@ const PORT = Number(process.env.GATEWAY_PORT || 8788);
 const GATEWAY_TOKEN = process.env.WHATSAPP_GATEWAY_TOKEN || "";
 const EVOLUTION_BASE_URL = (process.env.EVOLUTION_GO_BASE_URL || "http://evolution-go:8080").replace(/\/$/, "");
 const EVOLUTION_API_KEY = process.env.EVOLUTION_GO_API_KEY || "";
-const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const NEON_DATA_API_URL = (process.env.NEON_DATA_API_URL || "").replace(/\/$/, "");
+const NEON_SERVICE_ROLE_JWT = process.env.NEON_SERVICE_ROLE_JWT || "";
 const EVOLUTION_WEBHOOK_SECRET = process.env.EVOLUTION_GO_WEBHOOK_SECRET || "";
 
 function json(res, status, body) {
@@ -74,39 +74,38 @@ async function evolutionRequest(path, init = {}) {
   return body;
 }
 
-function supabaseHeaders(extra = {}) {
+function neonHeaders(extra = {}) {
   return {
-    apikey: SUPABASE_SERVICE_ROLE_KEY,
-    authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    authorization: `Bearer ${NEON_SERVICE_ROLE_JWT}`,
     "content-type": "application/json",
     ...extra,
   };
 }
 
-async function supabaseQuery(table, params) {
-  const url = new URL(`${SUPABASE_URL}/rest/v1/${table}`);
+async function neonQuery(table, params) {
+  const url = new URL(`${NEON_DATA_API_URL}/rest/v1/${table}`);
   for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-  const response = await fetch(url, { headers: supabaseHeaders() });
-  if (!response.ok) throw new Error(`supabase_${table}_${response.status}`);
+  const response = await fetch(url, { headers: neonHeaders() });
+  if (!response.ok) throw new Error(`neon_${table}_${response.status}`);
   return response.json();
 }
 
-async function supabaseInsert(table, row, prefer = "return=minimal") {
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+async function neonInsert(table, row, prefer = "return=minimal") {
+  const response = await fetch(`${NEON_DATA_API_URL}/rest/v1/${table}`, {
     method: "POST",
-    headers: supabaseHeaders({ Prefer: prefer }),
+    headers: neonHeaders({ Prefer: prefer }),
     body: JSON.stringify(row),
   });
   if (!response.ok && response.status !== 409) {
     const detail = (await response.text()).slice(0, 400);
-    throw new Error(`supabase_${table}_${response.status}:${detail}`);
+    throw new Error(`neon_${table}_${response.status}:${detail}`);
   }
   return response.status;
 }
 
 async function resolveInstance(instance, expectedOrganizationId = null) {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) throw new Error("gateway_database_not_configured");
-  const rows = await supabaseQuery("channel_sessions", {
+  if (!NEON_DATA_API_URL || !NEON_SERVICE_ROLE_JWT) throw new Error("gateway_database_not_configured");
+  const rows = await neonQuery("channel_sessions", {
     select: "id,organization_id,evolution_instance_name",
     provider: "eq.evolution_go",
     evolution_instance_name: `eq.${instance}`,
@@ -148,7 +147,7 @@ async function recordWebhook(payload, headers) {
   const externalId = extractExternalId(payload?.data) || null;
   const rawBody = JSON.stringify(payload);
   const eventType = String(payload?.event || "UNKNOWN").toUpperCase();
-  const status = await supabaseInsert("webhook_events_log", {
+  const status = await neonInsert("webhook_events_log", {
     organization_id: session.organization_id,
     channel_session_id: session.id,
     provider: "evolution_go",

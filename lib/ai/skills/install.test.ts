@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type pg from 'pg';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { importSkillPackage, installPlatformSkill } from './install';
 import type { ParsedSkillPackage } from './package';

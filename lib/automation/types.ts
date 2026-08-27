@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 import type { EventRow } from "@/lib/event-log/dispatcher";
 
 export interface ActionResultDetail {

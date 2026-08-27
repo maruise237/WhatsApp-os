@@ -12,7 +12,7 @@ create extension if not exists "vector";
 -- TODO: aplicar Spec 01 — Plataforma Base
 --   - organizations
 --   - user_organizations (role: viewer|agent|manager|admin)
---   - platform_admins (ou coluna is_platform_admin em auth.users)
+--   - platform_admins (ou coluna is_platform_admin em neon_auth.user)
 --   - api_tokens (hash SHA256, plaintext só na criação)
 --   - api_audit_log (append-only; sem RLS de UPDATE/DELETE)
 --   - fn_user_org_ids() helper

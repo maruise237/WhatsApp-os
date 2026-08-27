@@ -20,7 +20,7 @@
  *      CONTROLADO. Tudo o resto (build/publish/link na UI, engine avançando
  *      nó a nó via `runFollowupTick`, roteamento de aresta, fila) é real.
  *
- * Conecta em Postgres DIRETO via `SUPABASE_DB_URL` (mesmo padrão de
+ * Conecta em Postgres DIRETO via `NEON_DATABASE_URL` (mesmo padrão de
  * `lib/agent-engine/db/pool.ts` / `scripts/flywheel-judge-live.ts`) — não
  * usa o client service-role supabase-js porque `createPgAdminClient`
  * (turn-bridge.ts) só existe em sabor `pg.Pool` (é o adapter que o worker
@@ -41,8 +41,8 @@ import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
 
-const DB_URL = env.SUPABASE_DB_URL;
-if (!DB_URL) throw new Error("Missing SUPABASE_DB_URL in .env.local");
+const DB_URL = env.NEON_DATABASE_URL;
+if (!DB_URL) throw new Error("Missing NEON_DATABASE_URL in .env.local");
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
 

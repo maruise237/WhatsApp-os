@@ -19,7 +19,7 @@
  * texto escrito para o dono da clínica e vai inteiro para a tela — e para o
  * modelo, que precisa entender por que não pôde.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor } from "@/lib/api/handlers/types";

@@ -15,7 +15,7 @@ async function main(): Promise<void> {
   const limit = limitArg > -1 ? Number(process.argv[limitArg + 1]) : 5;
   const env = loadEnv();
   const log = createLogger();
-  const pool = createPool(env.SUPABASE_DB_URL);
+  const pool = createPool(env.NEON_DATABASE_URL);
   const result = await runFlywheelOnce(pool, llmEdgeConfigFromEnv(env), { limit, log });
   log.info('flywheel: rodada concluída', result as unknown as Record<string, unknown>);
   await pool.end();

@@ -2,7 +2,7 @@
 -- responder em X h"; cron reabre a conversa + cria aviso interno. Nada ao cliente.
 alter table conversations
   add column if not exists snooze_until timestamptz,
-  add column if not exists snoozed_by_user_id uuid references auth.users(id) on delete set null,
+  add column if not exists snoozed_by_user_id uuid references neon_auth.user(id) on delete set null,
   add column if not exists snoozed_at timestamptz;
 
 -- índice parcial p/ o cron varrer só o que tem snooze ativo

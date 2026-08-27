@@ -19,14 +19,14 @@ import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
 const creds = JSON.parse(fs.readFileSync(".e2e-creds.json", "utf8"));
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { persistSession: false },
 });
 const ORG = "6e567068-fd1c-4f94-ae1f-40e0334be190";
 const VIVO = "35bf4ac9-c5e0-4f7d-846a-99b1bcc92d69";
 
 async function main(): Promise<void> {
-  const user = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const user = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
     auth: { persistSession: false },
   });
   const { data: s } = await user.auth.signInWithPassword({

@@ -34,7 +34,7 @@ import { BASE, CREDS, carimbar, login } from "./qa-helpers";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
 
 const env = carregarEnvLocal();
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
@@ -48,7 +48,7 @@ const SLUG = `qa-assinatura-${RUN}`;
 async function medir(leadId: string, n: number): Promise<string> {
   const resultados: (number | null)[] = [];
   for (let i = 0; i < n; i++) {
-    const cli = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+    const cli = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
       auth: { autoRefreshToken: false, persistSession: false },
     });
     let chegou: number | null = null;

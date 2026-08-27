@@ -81,7 +81,7 @@ const CRED = {
   api_key_last4: "ygAA",
 };
 
-const SEM_AMBIENTE = { NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321" };
+const SEM_AMBIENTE = { NEON_DATA_API_URL: "http://127.0.0.1:54321" };
 
 describe("o retrato da instalação", () => {
   it("credencial confirmada é a chave da organização", async () => {

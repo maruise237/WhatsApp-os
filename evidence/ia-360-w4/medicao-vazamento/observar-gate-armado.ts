@@ -38,10 +38,10 @@ for (const line of envFile.split('\n')) {
   if (m) env[m[1]!] = m[2]!.replace(/^"(.*)"$/, '$1');
 }
 
-const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY!, {
+const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
-const pool = new pg.Pool({ connectionString: env.SUPABASE_DB_URL! });
+const pool = new pg.Pool({ connectionString: env.NEON_DATABASE_URL! });
 
 const SESSAO = 'w4-vazamento';
 const TELEFONE = '+5531944443333';

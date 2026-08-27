@@ -44,9 +44,9 @@ import { loadEnv } from "@/lib/agent-engine/env";
 
 const ENV_MINIMO_DO_WORKER: NodeJS.ProcessEnv = {
   NODE_ENV: "test",
-  SUPABASE_DB_URL: "postgresql://u:p@localhost:5432/db",
-  NEXT_PUBLIC_SUPABASE_URL: "https://x.supabase.co",
-  SUPABASE_SERVICE_ROLE_KEY: "service-key",
+  NEON_DATABASE_URL: "postgresql://u:p@localhost:5432/db",
+  NEON_DATA_API_URL: "https://x.supabase.co",
+  NEON_SERVICE_ROLE_JWT: "service-key",
 };
 
 describe("normalizarChaveDeOrcamento — o operador escreve, e o produto entende", () => {

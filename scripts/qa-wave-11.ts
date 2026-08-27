@@ -4,7 +4,7 @@
  * Run: npx tsx scripts/qa-wave-11.ts
  */
 import { chromium, type BrowserContext } from "@playwright/test";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@/lib/neon/script-client";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SB = SupabaseClient<any, any, any>;
@@ -28,8 +28,8 @@ const MANAGER_EMAIL: string = creds.users.manager.email;
 const AGENT_EMAIL: string = creds.users.agent.email;
 const ORG_ID: string = creds.org_id;
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const NEON_DATA_API_URL = process.env.NEON_DATA_API_URL!;
+const SERVICE_KEY = process.env.NEON_SERVICE_ROLE_JWT!;
 
 type Result = { ac: string; pass: boolean; evidence: string };
 const results: Result[] = [];
@@ -96,7 +96,7 @@ async function readBudget(sb: SB) {
 }
 
 async function main() {
-  const sb = createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: false } });
+  const sb = createClient(NEON_DATA_API_URL, SERVICE_KEY, { auth: { persistSession: false } });
 
   // ---- Setup: ensure budget row exists ----
   await seedBudget(sb);

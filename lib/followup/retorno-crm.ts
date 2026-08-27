@@ -11,7 +11,7 @@
  * explicitamente, e o id da organização vem sempre de fonte confiável (JWT do
  * humano ou contexto do agente), nunca do payload de quem chamou.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import { resolveActiveLeadForContact, type LeadCandidate } from "@/lib/leads/active-lead";

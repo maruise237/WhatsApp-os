@@ -12,7 +12,7 @@
  * (lib/routing/eligibility) — o mesmo predicado do worker de roteamento; aqui só
  * se junta o roster ao cálculo.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { ROLE_RANK, type Role } from "@/lib/auth/types";
 import { isAttendantEligible, OPEN_LOAD_STATUSES } from "@/lib/routing/eligibility";

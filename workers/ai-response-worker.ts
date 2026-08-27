@@ -361,7 +361,7 @@ async function vetoPorTetoDeGasto(alvo: {
   let status: BudgetStatus;
   try {
     // `getBudgetStatus` degrada em vez de lançar, mas o `createAdminClient()` de
-    // dentro dele lança quando falta `SUPABASE_SERVICE_ROLE_KEY` — e ficar sem
+    // dentro dele lança quando falta `NEON_SERVICE_ROLE_JWT` — e ficar sem
     // agente por env faltando de uma FEATURE seria o erro caro.
     status = await getBudgetStatus(orgId);
   } catch (err) {

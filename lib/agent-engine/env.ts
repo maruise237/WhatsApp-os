@@ -1,7 +1,7 @@
 /**
  * Validação Zod do env do WORKER (agent-engine) — lança no startup se faltar
  * variável crítica. Pós-fusão: o worker fala com o MESMO Supabase do app —
- * SUPABASE_DB_URL (Postgres direto, padrão do kit self-host) para o motor, e
+ * NEON_DATABASE_URL (Postgres direto, padrão do kit self-host) para o motor, e
  * URL + service role para os handlers do app (envio).
  */
 import { z } from 'zod';
@@ -13,13 +13,11 @@ import {
 } from '@/lib/followup/janela';
 
 const envSchema = z.object({
-  // Postgres do Supabase (connection string — Settings → Database). O motor usa
-  // `pg` direto: FOR UPDATE SKIP LOCKED, advisory locks, FTS.
-  SUPABASE_DB_URL: z.string().url(),
-  // Supabase API — os handlers do app (sendMessageHandler) exigem o client
-  // service-role. Mesmos valores do .env.local do app.
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+  // Neon Postgres direct — FOR UPDATE SKIP LOCKED, advisory locks and FTS.
+  NEON_DATABASE_URL: z.string().url(),
+  // Neon Data API — handlers that need an authenticated service JWT.
+  NEON_DATA_API_URL: z.string().url(),
+  NEON_SERVICE_ROLE_JWT: z.string().min(1),
   // Chave LLM de plataforma (fallback quando a org não tem BYOK em
   // ai_provider_credentials). Opcional no boot: sem ela e sem BYOK, o turno
   // falha com erro instrutivo — nunca silêncio.
@@ -204,7 +202,7 @@ export type Env = z.infer<typeof envSchema>;
 
 /**
  * O erro lista SÓ os nomes das variáveis inválidas — nunca valores
- * (SUPABASE_DB_URL carrega credencial; credencial fora de log).
+ * (NEON_DATABASE_URL carrega credencial; credencial fora de log).
  */
 export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   // Var VAZIA = ausente (padrão de env files): o template gera `CHAVE=` e o
