@@ -14,6 +14,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
+      WAHA_API_BASE_URL: http://waha:3000
       WHATSAPP_GATEWAY_BASE_URL: http://whatsapp-gateway:8788
       WHATSAPP_GATEWAY_TOKEN: ${WHATSAPP_GATEWAY_TOKEN}
     depends_on:
