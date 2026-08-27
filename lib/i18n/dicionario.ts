@@ -1091,6 +1091,28 @@ export const DICIONARIO: Traducoes = {
   "por item, separados": { "fr-FR": "par élément, séparées" },
   "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
   "Criar fonte": { "fr-FR": "Créer la source" },
+  "Novo fluxo": { "fr-FR": "Nouveau flow" },
+  "Nenhum fluxo de follow-up ainda": { "fr-FR": "Aucun flow de follow-up pour le moment" },
+  "Follow-ups reengajam contatos automaticamente após silêncio, mudança de etapa ou fim de conversa — sem depender de alguém lembrar de mandar mensagem.":
+    {
+      "fr-FR":
+        "Les follow-ups réengagent automatiquement les contacts après un silence, un changement d’étape ou la fin d’une conversation — sans dépendre de la mémoire de l’équipe.",
+    },
+  Versão: { "fr-FR": "Version" },
+  publicada: { "fr-FR": "publiée" },
+  Handoff: { "fr-FR": "Relais humain" },
+  "Atualizado em": { "fr-FR": "Mis à jour le" },
+  "Novo fluxo de follow-up": { "fr-FR": "Nouveau flow de follow-up" },
+  "Nasce como rascunho. Você monta as etapas no editor visual em seguida.": {
+    "fr-FR":
+      "Le flow est créé comme brouillon. Vous pourrez ensuite construire ses étapes dans l’éditeur visuel.",
+  },
+  "Ex: Recuperação de carrinho abandonado": { "fr-FR": "Ex. : Récupération d’un panier abandonné" },
+  "Não consegui criar o fluxo. Tente de novo.": {
+    "fr-FR": "Impossible de créer le flow. Réessayez.",
+  },
+  "Criar fluxo": { "fr-FR": "Créer le flow" },
+  "Carregando fluxo…": { "fr-FR": "Chargement du flow…" },
   Guardrails: { "fr-FR": "Garde-fous" },
   "Carregando agent…": { "fr-FR": "Chargement de l’agent…" },
   "Agent default · ": { "fr-FR": "Agent par défaut · " },

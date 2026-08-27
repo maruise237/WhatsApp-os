@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateFollowupFlow } from "@/hooks/followup/useFollowupFlows";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   open: boolean;
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export function NewFlowDialog({ open, onOpenChange }: Props) {
+  const t = useT();
   const [name, setName] = useState("");
   const create = useCreateFollowupFlow();
 
@@ -39,7 +41,11 @@ export function NewFlowDialog({ open, onOpenChange }: Props) {
       // erro fica DENTRO do diálogo (não num toast que some) porque é ali que
       // ele está olhando, e o diálogo NÃO fecha — fechar apagaria o nome digitado.
       onError: (err: unknown) => {
-        setErro(err instanceof Error && err.message ? err.message : "Não consegui criar o fluxo. Tente de novo.");
+        setErro(
+          err instanceof Error && err.message
+            ? err.message
+            : t("Não consegui criar o fluxo. Tente de novo."),
+        );
       },
     });
   };
@@ -57,19 +63,19 @@ export function NewFlowDialog({ open, onOpenChange }: Props) {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo fluxo de follow-up</DialogTitle>
+          <DialogTitle>{t("Novo fluxo de follow-up")}</DialogTitle>
           <DialogDescription>
-            Nasce como rascunho. Você monta as etapas no editor visual em seguida.
+            {t("Nasce como rascunho. Você monta as etapas no editor visual em seguida.")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="flow-name">Nome</Label>
+            <Label htmlFor="flow-name">{t("Nome")}</Label>
             <Input
               id="flow-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex: Recuperação de carrinho abandonado"
+              placeholder={t("Ex: Recuperação de carrinho abandonado")}
               maxLength={80}
               required
               autoFocus
@@ -87,10 +93,10 @@ export function NewFlowDialog({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               disabled={create.isPending}
             >
-              Cancelar
+              {t("Cancelar")}
             </Button>
             <Button type="submit" disabled={create.isPending || name.trim().length === 0}>
-              {create.isPending ? "Criando…" : "Criar fluxo"}
+              {create.isPending ? t("Criando…") : t("Criar fluxo")}
             </Button>
           </DialogFooter>
         </form>
