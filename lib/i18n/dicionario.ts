@@ -750,6 +750,11 @@ export const DICIONARIO: Traducoes = {
   "Nenhuma atividade registrada ainda.": { "fr-FR": "Aucune activité n’a encore été enregistrée." },
   "Carregar mais": { "fr-FR": "Charger davantage" },
   "Tentar novamente": { "fr-FR": "Réessayer" },
+  "Por onde seu negócio fala com o cliente. Conecte números por QR ou o número oficial da Meta, e acompanhe a saúde de cada um.":
+    {
+      "fr-FR":
+        "Les canaux par lesquels votre entreprise échange avec ses clients. Connectez des numéros par QR ou le numéro officiel Meta et surveillez l’état de chacun.",
+    },
 };
 
 /**

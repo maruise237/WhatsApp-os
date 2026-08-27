@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
 import { ConexoesShell } from "@/components/connections/ConexoesShell";
+import { traduzir } from "@/lib/i18n/dicionario";
+import { normalizarIdioma } from "@/lib/i18n/idiomas";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,7 @@ export default async function ConnectionsPage() {
     redirect("/403");
   }
 
+  const idioma = normalizarIdioma(user.locale);
   const key = process.env.WAHA_API_KEY;
   const wahaConfigured = Boolean(
     process.env.WAHA_API_BASE_URL && key && key !== "dev_plaintext_change_me",
@@ -22,10 +25,12 @@ export default async function ConnectionsPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Conexões</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Conexões", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          Por onde seu negócio fala com o cliente. Conecte números por QR ou o número oficial
-          da Meta, e acompanhe a saúde de cada um.
+          {traduzir(
+            "Por onde seu negócio fala com o cliente. Conecte números por QR ou o número oficial da Meta, e acompanhe a saúde de cada um.",
+            idioma,
+          )}
         </p>
       </header>
       <ConexoesShell wahaConfigured={wahaConfigured} />
