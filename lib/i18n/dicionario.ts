@@ -308,6 +308,27 @@ export const DICIONARIO: Traducoes = {
 
   // ─── Estados e avisos que aparecem em várias telas ───
   "Carregando…": { "fr-FR": "Chargement…", es: "Cargando…" },
+  "Iniciando…": { "fr-FR": "Démarrage…" },
+  "Guardando uma cópia de segurança dos seus dados": { "fr-FR": "Sauvegarde de vos données" },
+  "Baixando a versão nova": { "fr-FR": "Téléchargement de la nouvelle version" },
+  "Atualizando o banco de dados": { "fr-FR": "Mise à jour de la base de données" },
+  "Reiniciando o sistema": { "fr-FR": "Redémarrage du système" },
+  "Atualizar agora": { "fr-FR": "Mettre à jour maintenant" },
+  "O sistema sai do ar por cerca de 2 minutos e volta sozinho. Faço uma cópia de segurança dos seus dados antes.":
+    {
+      "fr-FR":
+        "Le système sera indisponible pendant environ 2 minutes, puis redémarrera seul. Une sauvegarde de vos données sera effectuée avant.",
+    },
+  "Detalhes técnicos (útil se for pedir ajuda)": {
+    "fr-FR": "Détails techniques (utile pour demander de l’aide)",
+  },
+  "Atualização do sistema": { "fr-FR": "Mise à jour du système" },
+  "Reiniciando…": { "fr-FR": "Redémarrage…" },
+  "O sistema está voltando. Esta página se atualiza sozinha em alguns instantes.": {
+    "fr-FR":
+      "Le système redémarre. Cette page se mettra à jour automatiquement dans quelques instants.",
+  },
+  Copiado: { "fr-FR": "Copié" },
   "Nenhum resultado": { "fr-FR": "Aucun résultat", es: "Ningún resultado" },
   Erro: { "fr-FR": "Erreur", es: "Error" },
   Excluir: { "fr-FR": "Supprimer", es: "Eliminar" },

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { apiClient } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/types";
 import { copyToClipboard } from "@/lib/clipboard";
+import { useT } from "@/hooks/i18n/useT";
 import { useSystemVersion } from "@/hooks/system/useSystemVersion";
 import { markdownParaTextoSimples } from "@/lib/system/changelog";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,7 @@ const PASSOS = [
 ] as const;
 
 export function UpdatePanel() {
+  const t = useT();
   const { data, isError } = useSystemVersion({ refetchInterval: 5_000 });
   const queryClient = useQueryClient();
   const [erro, setErro] = useState<string | null>(null);
@@ -77,7 +79,7 @@ export function UpdatePanel() {
   if (!data) {
     return (
       <Layout>
-        <p className="text-sm text-muted-foreground">Carregando…</p>
+        <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>
       </Layout>
     );
   }
@@ -95,7 +97,7 @@ export function UpdatePanel() {
             const feito = indice >= 0 && atual <= indice;
             return (
               <li key={passo.chave} className={feito ? "text-foreground" : "text-muted-foreground"}>
-                {feito ? "✓" : "○"} {passo.texto}
+                {feito ? "✓" : "○"} {t(passo.texto)}
               </li>
             );
           })}
@@ -246,8 +248,8 @@ export function UpdatePanel() {
       return (
         <Layout titulo="Ainda não há nenhuma versão publicada">
           <p className="text-sm">
-            Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação
-            — normal em um fork novo ou recém-criado a partir do código-fonte.{" "}
+            Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação —
+            normal em um fork novo ou recém-criado a partir do código-fonte.{" "}
             <strong>Não há nada a atualizar agora</strong>, e isso não é um problema.
           </p>
           <p className="mt-3 text-sm">
@@ -304,7 +306,11 @@ export function UpdatePanel() {
         </div>
       )}
 
-      <BotaoAtualizar mutate={() => atualizar.mutate()} isPending={atualizar.isPending} erro={erro} />
+      <BotaoAtualizar
+        mutate={() => atualizar.mutate()}
+        isPending={atualizar.isPending}
+        erro={erro}
+      />
     </Layout>
   );
 }
@@ -318,15 +324,17 @@ function BotaoAtualizar({
   isPending: boolean;
   erro: string | null;
 }) {
+  const t = useT();
   return (
     <>
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={mutate} disabled={isPending}>
-          {isPending ? "Iniciando…" : "Atualizar agora"}
+          {isPending ? t("Iniciando…") : t("Atualizar agora")}
         </Button>
         <span className="text-sm text-muted-foreground">
-          O sistema sai do ar por cerca de 2 minutos e volta sozinho. Faço uma cópia de segurança
-          dos seus dados antes.
+          {t(
+            "O sistema sai do ar por cerca de 2 minutos e volta sozinho. Faço uma cópia de segurança dos seus dados antes.",
+          )}
         </span>
       </div>
       {erro && <p className="mt-3 text-sm text-error-fg">{erro}</p>}
@@ -379,11 +387,12 @@ function Saida({
  * existe para eliminar.
  */
 function DetalhesTecnicos({ texto }: { texto: string | undefined }) {
+  const t = useT();
   if (!texto?.trim()) return null;
   return (
     <details className="mt-4 rounded-md border">
       <summary className="cursor-pointer px-3 py-2 text-sm text-muted-foreground">
-        Detalhes técnicos (útil se for pedir ajuda)
+        {t("Detalhes técnicos (útil se for pedir ajuda)")}
       </summary>
       <pre className="max-h-72 overflow-auto whitespace-pre-wrap px-3 pb-3 font-mono text-xs text-muted-foreground">
         {texto}
@@ -393,11 +402,12 @@ function DetalhesTecnicos({ texto }: { texto: string | undefined }) {
 }
 
 function Layout({ titulo, children }: { titulo?: string; children: React.ReactNode }) {
+  const t = useT();
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">
-          {titulo ?? "Atualização do sistema"}
+          {titulo ?? t("Atualização do sistema")}
         </h1>
       </header>
       <Card className="p-6">{children}</Card>
@@ -406,20 +416,24 @@ function Layout({ titulo, children }: { titulo?: string; children: React.ReactNo
 }
 
 function Reiniciando() {
+  const t = useT();
   return (
-    <Layout titulo="Reiniciando…">
+    <Layout titulo={t("Reiniciando…")}>
       <p className="text-sm text-muted-foreground">
-        O sistema está voltando. Esta página se atualiza sozinha em alguns instantes.
+        {t("O sistema está voltando. Esta página se atualiza sozinha em alguns instantes.")}
       </p>
     </Layout>
   );
 }
 
 function Comando({ comando }: { comando: string }) {
+  const t = useT();
   const [copiado, setCopiado] = useState(false);
   return (
     <div className="mt-3 flex items-center gap-2">
-      <code className="flex-1 overflow-x-auto rounded-md bg-muted px-3 py-2 text-xs">{comando}</code>
+      <code className="flex-1 overflow-x-auto rounded-md bg-muted px-3 py-2 text-xs">
+        {comando}
+      </code>
       <Button
         variant="outline"
         size="sm"
@@ -429,7 +443,7 @@ function Comando({ comando }: { comando: string }) {
           setTimeout(() => setCopiado(false), 2000);
         }}
       >
-        {copiado ? "Copiado" : "Copiar"}
+        {copiado ? t("Copiado") : t("Copiar")}
       </Button>
     </div>
   );
