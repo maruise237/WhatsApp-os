@@ -24,10 +24,16 @@ type RelationSelection = {
 };
 
 type AdminQuery = PromiseLike<PgResponse> & {
-  select: (columns?: string, options?: { count?: "exact" | "planned" | "estimated"; head?: boolean }) => AdminQuery;
+  select: (
+    columns?: string,
+    options?: { count?: "exact" | "planned" | "estimated"; head?: boolean },
+  ) => AdminQuery;
   insert: (values: PgRow | PgRow[]) => AdminQuery;
   update: (values: PgRow) => AdminQuery;
-  upsert: (values: PgRow | PgRow[], options?: { onConflict?: string; ignoreDuplicates?: boolean }) => AdminQuery;
+  upsert: (
+    values: PgRow | PgRow[],
+    options?: { onConflict?: string; ignoreDuplicates?: boolean },
+  ) => AdminQuery;
   delete: () => AdminQuery;
   eq: (column: string, value: unknown) => AdminQuery;
   neq: (column: string, value: unknown) => AdminQuery;
@@ -66,7 +72,10 @@ function unsupported(operation: string): never {
 
 function normalizeDatabaseError(error: unknown): Error {
   const normalized = error instanceof Error ? error : new Error(String(error));
-  const code = typeof error === "object" && error !== null && "code" in error ? (error as { code?: unknown }).code : undefined;
+  const code =
+    typeof error === "object" && error !== null && "code" in error
+      ? (error as { code?: unknown }).code
+      : undefined;
   if (typeof code === "string") Object.assign(normalized, { code });
   return normalized;
 }
@@ -87,11 +96,14 @@ function authAdminSurface() {
 
   return {
     admin: {
-      getUserById: (userId: string) => invoke("getUserById", ["getUserById", "getUser"], { userId }),
+      getUserById: (userId: string) =>
+        invoke("getUserById", ["getUserById", "getUser"], { userId }),
       listUsers: (input?: unknown) => invoke("listUsers", ["listUsers"], input),
       createUser: (input?: unknown) => invoke("createUser", ["createUser"], input),
-      updateUserById: (input?: unknown) => invoke("updateUserById", ["updateUser", "updateUserById"], input),
-      deleteUser: (userId: string) => invoke("deleteUser", ["removeUser", "deleteUser"], { userId }),
+      updateUserById: (input?: unknown) =>
+        invoke("updateUserById", ["updateUser", "updateUserById"], input),
+      deleteUser: (userId: string) =>
+        invoke("deleteUser", ["removeUser", "deleteUser"], { userId }),
     },
   };
 }
@@ -126,7 +138,8 @@ function columnList(columns: string | undefined): string {
       const asAlias = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s+as\s+([A-Za-z_][A-Za-z0-9_]*)$/i);
       if (asAlias) return `${identifier(asAlias[1] ?? "")} AS ${identifier(asAlias[2] ?? "")}`;
       const colonAlias = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*):([A-Za-z_][A-Za-z0-9_]*)$/);
-      if (colonAlias) return `${identifier(colonAlias[2] ?? "")} AS ${identifier(colonAlias[1] ?? "")}`;
+      if (colonAlias)
+        return `${identifier(colonAlias[2] ?? "")} AS ${identifier(colonAlias[1] ?? "")}`;
       return identifier(trimmed);
     })
     .join(", ");
@@ -154,7 +167,17 @@ function parsePostgrestCondition(expression: string, bind: (value: unknown) => s
   const group = trimmed.match(/^(and|or)\((.*)\)$/i);
   if (group) {
     const joiner = group[1]?.toUpperCase() === "OR" ? " OR " : " AND ";
-    return `(${splitTopLevel(group[2] ?? "").map((item) => parsePostgrestCondition(item, bind)).join(joiner)})`;
+    return `(${splitTopLevel(group[2] ?? "")
+      .map((item) => parsePostgrestCondition(item, bind))
+      .join(joiner)})`;
+  }
+  // Supabase/PostgREST also accepts a bare comma-separated list for `.or(...)`,
+  // e.g. `next_attempt_at.is.null,next_attempt_at.lte.<iso>`. Parse the list
+  // before matching a single condition; otherwise the greedy value group turns
+  // the first value into `null,next_attempt_at...`.
+  const clauses = splitTopLevel(trimmed);
+  if (clauses.length > 1) {
+    return `(${clauses.map((item) => parsePostgrestCondition(item, bind)).join(" OR ")})`;
   }
   const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\.(eq|neq|gt|gte|lt|lte|in|is)\.(.*)$/i);
   if (!match) throw new Error(`neon_admin_invalid_or_filter:${trimmed}`);
@@ -169,15 +192,28 @@ function parsePostgrestCondition(expression: string, bind: (value: unknown) => s
     throw new Error(`neon_admin_invalid_is_filter:${value}`);
   }
   if (operator === "in") {
-    if (!value.startsWith("(") || !value.endsWith(")")) throw new Error(`neon_admin_invalid_in_filter:${value}`);
+    if (!value.startsWith("(") || !value.endsWith(")"))
+      throw new Error(`neon_admin_invalid_in_filter:${value}`);
     const values = splitTopLevel(value.slice(1, -1));
     return `${column} = ANY(${bind(values)})`;
   }
-  const sqlOperator = operator === "eq" ? "=" : operator === "neq" ? "!=" : operator.toUpperCase();
+  const sqlOperator = {
+    eq: "=",
+    neq: "!=",
+    gt: ">",
+    gte: ">=",
+    lt: "<",
+    lte: "<=",
+  }[operator];
+  if (!sqlOperator) throw new Error(`neon_admin_invalid_filter_operator:${operator}`);
   return `${column} ${sqlOperator} ${bind(value)}`;
 }
 
-function relationForeignKey(sourceTable: string, targetTable: string, explicitKey?: string): string {
+function relationForeignKey(
+  sourceTable: string,
+  targetTable: string,
+  explicitKey?: string,
+): string {
   if (explicitKey) return explicitKey;
   if (targetTable === "organizations") return "organization_id";
   if (targetTable === "crm_stages") return "stage_id";
@@ -189,7 +225,8 @@ function relationForeignKey(sourceTable: string, targetTable: string, explicitKe
 
 function parseSelection(columns: string): { base: string; relations: RelationSelection[] } {
   const relations: RelationSelection[] = [];
-  const relationPattern = /([A-Za-z_][A-Za-z0-9_]*)(!inner)?(?::([A-Za-z_][A-Za-z0-9_]*))?\(([^()]*)\)/g;
+  const relationPattern =
+    /([A-Za-z_][A-Za-z0-9_]*)(!inner)?(?::([A-Za-z_][A-Za-z0-9_]*))?\(([^()]*)\)/g;
   const baseParts: string[] = [];
   let cursor = 0;
   let match: RegExpExecArray | null;
@@ -262,7 +299,10 @@ class PostgresQuery implements AdminQuery {
 
   constructor(private readonly table: string) {}
 
-  select(columns = "*", options?: { count?: "exact" | "planned" | "estimated"; head?: boolean }): AdminQuery {
+  select(
+    columns = "*",
+    options?: { count?: "exact" | "planned" | "estimated"; head?: boolean },
+  ): AdminQuery {
     const parsed = parseSelection(columns);
     this.returning = columnList(parsed.base);
     this.relations = parsed.relations;
@@ -282,7 +322,10 @@ class PostgresQuery implements AdminQuery {
     return this;
   }
 
-  upsert(values: PgRow | PgRow[], options?: { onConflict?: string; ignoreDuplicates?: boolean }): AdminQuery {
+  upsert(
+    values: PgRow | PgRow[],
+    options?: { onConflict?: string; ignoreDuplicates?: boolean },
+  ): AdminQuery {
     this.operation = "upsert";
     this.payload = values;
     this.upsertOptions = options ?? {};
@@ -306,13 +349,27 @@ class PostgresQuery implements AdminQuery {
     return this;
   }
 
-  eq(column: string, value: unknown): AdminQuery { return this.addFilter(column, "=", value); }
-  neq(column: string, value: unknown): AdminQuery { return this.addFilter(column, "!=", value); }
-  gt(column: string, value: unknown): AdminQuery { return this.addFilter(column, ">", value); }
-  gte(column: string, value: unknown): AdminQuery { return this.addFilter(column, ">=", value); }
-  lt(column: string, value: unknown): AdminQuery { return this.addFilter(column, "<", value); }
-  lte(column: string, value: unknown): AdminQuery { return this.addFilter(column, "<=", value); }
-  is(column: string, value: null | boolean): AdminQuery { return this.addFilter(column, "=", value); }
+  eq(column: string, value: unknown): AdminQuery {
+    return this.addFilter(column, "=", value);
+  }
+  neq(column: string, value: unknown): AdminQuery {
+    return this.addFilter(column, "!=", value);
+  }
+  gt(column: string, value: unknown): AdminQuery {
+    return this.addFilter(column, ">", value);
+  }
+  gte(column: string, value: unknown): AdminQuery {
+    return this.addFilter(column, ">=", value);
+  }
+  lt(column: string, value: unknown): AdminQuery {
+    return this.addFilter(column, "<", value);
+  }
+  lte(column: string, value: unknown): AdminQuery {
+    return this.addFilter(column, "<=", value);
+  }
+  is(column: string, value: null | boolean): AdminQuery {
+    return this.addFilter(column, "=", value);
+  }
 
   in(column: string, values: unknown[]): AdminQuery {
     const safeColumn = identifier(column);
@@ -320,20 +377,50 @@ class PostgresQuery implements AdminQuery {
     return this;
   }
 
-  like(column: string, value: string): AdminQuery { return this.addFilter(column, "LIKE", value); }
-  ilike(column: string, value: string): AdminQuery { return this.addFilter(column, "ILIKE", value); }
+  like(column: string, value: string): AdminQuery {
+    return this.addFilter(column, "LIKE", value);
+  }
+  ilike(column: string, value: string): AdminQuery {
+    return this.addFilter(column, "ILIKE", value);
+  }
 
   not(column: string, operator: string, value: unknown): AdminQuery {
-    if (operator === "in") {
-      const values = typeof value === "string" && value.startsWith("(") && value.endsWith(")")
-        ? splitTopLevel(value.slice(1, -1))
-        : Array.isArray(value) ? value : [value];
+    const normalizedOperator = operator.toLowerCase();
+    if (normalizedOperator === "is") {
+      const safeColumn = identifier(column);
+      if (value === null || String(value).toLowerCase() === "null") {
+        this.filters.push({ sql: `${safeColumn} IS NOT NULL`, values: [] });
+        return this;
+      }
+      if (String(value).toLowerCase() === "true") {
+        this.filters.push({ sql: `${safeColumn} IS NOT TRUE`, values: [] });
+        return this;
+      }
+      if (String(value).toLowerCase() === "false") {
+        this.filters.push({ sql: `${safeColumn} IS NOT FALSE`, values: [] });
+        return this;
+      }
+      throw new Error(`neon_admin_invalid_is_filter:${value}`);
+    }
+    if (normalizedOperator === "in") {
+      const values =
+        typeof value === "string" && value.startsWith("(") && value.endsWith(")")
+          ? splitTopLevel(value.slice(1, -1))
+          : Array.isArray(value)
+            ? value
+            : [value];
       this.filters.push({ sql: `NOT (${identifier(column)} = ANY($VALUE))`, values: [values] });
       return this;
     }
-    const allowed = new Set(["eq", "neq", "gt", "gte", "lt", "lte", "like", "ilike", "is"]);
-    if (!allowed.has(operator)) throw new Error(`neon_admin_invalid_filter_operator: ${operator}`);
-    const sqlOperator = operator === "eq" ? "!=" : operator === "neq" ? "=" : operator.toUpperCase();
+    const allowed = new Set(["eq", "neq", "gt", "gte", "lt", "lte", "like", "ilike"]);
+    if (!allowed.has(normalizedOperator))
+      throw new Error(`neon_admin_invalid_filter_operator: ${operator}`);
+    const sqlOperator =
+      normalizedOperator === "eq"
+        ? "!="
+        : normalizedOperator === "neq"
+          ? "="
+          : normalizedOperator.toUpperCase();
     return this.addFilter(column, sqlOperator, value);
   }
 
@@ -349,19 +436,35 @@ class PostgresQuery implements AdminQuery {
 
   order(column: string, options?: { ascending?: boolean; nullsFirst?: boolean }): AdminQuery {
     const direction = options?.ascending === false ? "DESC" : "ASC";
-    const nulls = options?.nullsFirst === true ? " NULLS FIRST" : options?.nullsFirst === false ? " NULLS LAST" : "";
+    const nulls =
+      options?.nullsFirst === true
+        ? " NULLS FIRST"
+        : options?.nullsFirst === false
+          ? " NULLS LAST"
+          : "";
     this.orders.push(`${identifier(column)} ${direction}${nulls}`);
     return this;
   }
 
-  limit(count: number): AdminQuery { this.limitValue = Math.max(0, count); return this; }
+  limit(count: number): AdminQuery {
+    this.limitValue = Math.max(0, count);
+    return this;
+  }
   range(from: number, to: number): AdminQuery {
     this.offsetValue = Math.max(0, from);
     this.limitValue = Math.max(0, to - from + 1);
     return this;
   }
-  single(): AdminQuery { this.singleMode = "single"; this.limitValue = 2; return this; }
-  maybeSingle(): AdminQuery { this.singleMode = "maybe"; this.limitValue = 2; return this; }
+  single(): AdminQuery {
+    this.singleMode = "single";
+    this.limitValue = 2;
+    return this;
+  }
+  maybeSingle(): AdminQuery {
+    this.singleMode = "maybe";
+    this.limitValue = 2;
+    return this;
+  }
 
   async throwOnError(): Promise<unknown> {
     const result = await this.execute();
@@ -383,9 +486,18 @@ class PostgresQuery implements AdminQuery {
         params.push(value);
         return `$${params.length}`;
       };
-      const conditions = this.filters.map((filter) => filter.sql.replace("$VALUE", bind(filter.values[0])));
-      if (this.orExpression) conditions.push(parsePostgrestCondition(this.orExpression, bind));
-      const where = conditions.length ? ` WHERE ${conditions.join(" AND ")}` : "";
+      // L’appel doit être fait après les valeurs d’UPDATE : PostgreSQL numérote
+      // les paramètres selon leur position dans le SQL final, pas selon l’ordre
+      // dans lequel le builder a reçu les méthodes Supabase.
+      const buildWhere = (): string => {
+        const conditions = this.filters.map((filter) =>
+          filter.sql.includes("$VALUE")
+            ? filter.sql.replace("$VALUE", bind(filter.values[0]))
+            : filter.sql,
+        );
+        if (this.orExpression) conditions.push(parsePostgrestCondition(this.orExpression, bind));
+        return conditions.length ? ` WHERE ${conditions.join(" AND ")}` : "";
+      };
       const order = this.orders.length ? ` ORDER BY ${this.orders.join(", ")}` : "";
       const limit = this.limitValue === null ? "" : ` LIMIT ${this.limitValue}`;
       const offset = this.offsetValue === null ? "" : ` OFFSET ${this.offsetValue}`;
@@ -393,6 +505,7 @@ class PostgresQuery implements AdminQuery {
       let sql: string;
 
       if (this.operation === "select") {
+        const where = buildWhere();
         sql = this.headOnly
           ? `SELECT count(*)::int AS count FROM ${table}${where}`
           : `SELECT ${this.returning} FROM ${table}${where}${order}${limit}${offset}`;
@@ -407,12 +520,17 @@ class PostgresQuery implements AdminQuery {
         sql = `INSERT INTO ${table} (${first.keys.map(identifier).join(", ")}) VALUES ${rowSql.join(", ")} `;
         if (this.operation === "upsert") {
           const conflict = this.upsertOptions.onConflict
-            ? ` (${this.upsertOptions.onConflict.split(",").map((item) => identifier(item.trim())).join(", ")})`
+            ? ` (${this.upsertOptions.onConflict
+                .split(",")
+                .map((item) => identifier(item.trim()))
+                .join(", ")})`
             : "";
           if (this.upsertOptions.ignoreDuplicates) {
             sql += `ON CONFLICT${conflict} DO NOTHING `;
           } else {
-            const updates = first.keys.map((key) => `${identifier(key)} = EXCLUDED.${identifier(key)}`).join(", ");
+            const updates = first.keys
+              .map((key) => `${identifier(key)} = EXCLUDED.${identifier(key)}`)
+              .join(", ");
             sql += `ON CONFLICT${conflict} DO UPDATE SET ${updates} `;
           }
         }
@@ -420,9 +538,13 @@ class PostgresQuery implements AdminQuery {
       } else if (this.operation === "update") {
         const values = valuesForRow(this.payload as PgRow);
         if (values.keys.length === 0) throw new Error("neon_admin_empty_update");
-        const assignments = values.keys.map((key, index) => `${identifier(key)} = ${bind(values.values[index])}`).join(", ");
+        const assignments = values.keys
+          .map((key, index) => `${identifier(key)} = ${bind(values.values[index])}`)
+          .join(", ");
+        const where = buildWhere();
         sql = `UPDATE ${table} SET ${assignments}${where} RETURNING ${this.returning}`;
       } else {
+        const where = buildWhere();
         sql = `DELETE FROM ${table}${where} RETURNING ${this.returning}`;
       }
 
@@ -438,12 +560,19 @@ class PostgresQuery implements AdminQuery {
         if (rows.length !== 1) throw new Error(`neon_admin_single_expected_one_row:${rows.length}`);
         data = rows[0];
       } else if (this.singleMode === "maybe") {
-        if (rows.length > 1) throw new Error(`neon_admin_maybe_single_expected_at_most_one:${rows.length}`);
+        if (rows.length > 1)
+          throw new Error(`neon_admin_maybe_single_expected_at_most_one:${rows.length}`);
         data = rows[0] ?? null;
       }
       return { data, error: null, count: result.rowCount, status: 200, statusText: "OK" };
     } catch (error) {
-      return { data: null, error: normalizeDatabaseError(error), count: null, status: 500, statusText: "PostgreSQL error" };
+      return {
+        data: null,
+        error: normalizeDatabaseError(error),
+        count: null,
+        status: 500,
+        statusText: "PostgreSQL error",
+      };
     }
   }
 }
@@ -453,16 +582,33 @@ function createDirectAdminClient(): AdminClient {
     from: (table) => new PostgresQuery(table),
     rpc: async (functionName, args = {}) => {
       try {
-        const safeName = identifier(functionName.includes(".") ? functionName : `public.${functionName}`);
+        const safeName = identifier(
+          functionName.includes(".") ? functionName : `public.${functionName}`,
+        );
         const entries = Object.entries(args);
         const sql = `SELECT * FROM ${safeName}(${entries
           .map(([key], index) => `${identifier(key)} => $${index + 1}`)
           .join(", ")})`;
-        const result = await getPool().query<PgRow>(sql, entries.map(([, value]) => value));
-        return { data: result.rows, error: null, count: result.rowCount, status: 200, statusText: "OK" };
+        const result = await getPool().query<PgRow>(
+          sql,
+          entries.map(([, value]) => value),
+        );
+        return {
+          data: result.rows,
+          error: null,
+          count: result.rowCount,
+          status: 200,
+          statusText: "OK",
+        };
       } catch (error) {
         const normalized = error instanceof Error ? error : new Error(String(error));
-        return { data: null, error: normalized, count: null, status: 500, statusText: "PostgreSQL error" };
+        return {
+          data: null,
+          error: normalized,
+          count: null,
+          status: 500,
+          statusText: "PostgreSQL error",
+        };
       }
     },
     auth: authAdminSurface(),
