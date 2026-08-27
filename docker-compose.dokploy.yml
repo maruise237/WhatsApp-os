@@ -142,6 +142,40 @@ services:
     logging: *default-logging
     networks: [internal]
 
+  evolution-postgres-auth:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: ${EVOLUTION_GO_POSTGRES_PASSWORD}
+      POSTGRES_DB: evo_auth
+    volumes:
+      - evolution-postgres-auth-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evolution -d evo_auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging: *default-logging
+    networks: [internal]
+
+  evolution-postgres-users:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: ${EVOLUTION_GO_POSTGRES_PASSWORD}
+      POSTGRES_DB: evo_users
+    volumes:
+      - evolution-postgres-users-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evolution -d evo_users"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging: *default-logging
+    networks: [internal]
+
   evolution-go:
     image: ${EVOLUTION_GO_IMAGE:-evoapicloud/evolution-go:latest}
     restart: unless-stopped
@@ -149,8 +183,8 @@ services:
       SERVER_PORT: 8080
       CLIENT_NAME: evolution
       GLOBAL_API_KEY: ${EVOLUTION_GO_API_KEY}
-      POSTGRES_AUTH_DB: ${EVOLUTION_GO_POSTGRES_AUTH_DB}
-      POSTGRES_USERS_DB: ${EVOLUTION_GO_POSTGRES_USERS_DB}
+      POSTGRES_AUTH_DB: postgresql://evolution:${EVOLUTION_GO_POSTGRES_PASSWORD}@evolution-postgres-auth:5432/evo_auth?sslmode=disable
+      POSTGRES_USERS_DB: postgresql://evolution:${EVOLUTION_GO_POSTGRES_PASSWORD}@evolution-postgres-users:5432/evo_users?sslmode=disable
       DATABASE_SAVE_MESSAGES: "false"
       WEBHOOK_GLOBAL_ENABLED: "true"
       WEBHOOK_GLOBAL_URL: http://whatsapp-gateway:8788/webhooks/evolution-go
@@ -167,6 +201,11 @@ services:
       - evolution-go-data:/app/data
     expose:
       - "8080"
+    depends_on:
+      evolution-postgres-auth:
+        condition: service_healthy
+      evolution-postgres-users:
+        condition: service_healthy
     healthcheck:
       test:
         [
@@ -257,6 +296,8 @@ volumes:
   waha-data:
   waha-media:
   evolution-go-data:
+  evolution-postgres-auth-data:
+  evolution-postgres-users-data:
   seaweedfs-volume-data:
 
 networks:
