@@ -1057,6 +1057,76 @@ export const DICIONARIO: Traducoes = {
   "Enviar anexo": { "fr-FR": "Envoyer la pièce jointe" },
   "Legenda (opcional)": { "fr-FR": "Légende (facultatif)" },
   Legenda: { "fr-FR": "Légende" },
+  "Escolhas salvas.": { "fr-FR": "Choix enregistrés." },
+  "Não foi possível carregar as etapas deste funil agora. Recarregue a página.": {
+    "fr-FR": "Impossible de charger les étapes de ce pipeline pour le moment. Rechargez la page.",
+  },
+  "Carregando as etapas deste funil…": { "fr-FR": "Chargement des étapes de ce pipeline…" },
+  "Nome da coluna (clique para renomear)": { "fr-FR": "Nom de la colonne (cliquez pour renommer)" },
+  Ordem: { "fr-FR": "Ordre" },
+  "O que acontece nesta coluna": { "fr-FR": "Ce qui se passe dans cette colonne" },
+  "Nada especial": { "fr-FR": "Rien de particulier" },
+  "Aqui o cliente fecha": { "fr-FR": "Ici, le client conclut" },
+  "Aqui o cliente desiste": { "fr-FR": "Ici, le client abandonne" },
+  "a pessoa acabou de chamar e ninguém respondeu ainda": {
+    "fr-FR": "la personne vient de contacter l’entreprise et personne n’a encore répondu",
+  },
+  "o agente já respondeu pela primeira vez": {
+    "fr-FR": "l’agent a déjà répondu pour la première fois",
+  },
+  "o agente está entendendo o que a pessoa precisa": {
+    "fr-FR": "l’agent cherche à comprendre le besoin de la personne",
+  },
+  "o agente já entendeu a necessidade": { "fr-FR": "l’agent a déjà compris le besoin" },
+  "conversa de preço, proposta ou agendamento": {
+    "fr-FR": "discussion de prix, de proposition ou de rendez-vous",
+  },
+  "a pessoa fechou": { "fr-FR": "la personne a conclu" },
+  "a pessoa desistiu ou parou de responder": {
+    "fr-FR": "la personne a abandonné ou a cessé de répondre",
+  },
+  "As etapas que serviriam para este passo já estão sendo usadas por outros passos. Libere uma delas para poder escolhê-la aqui.":
+    {
+      "fr-FR":
+        "Les étapes adaptées à ce passage sont déjà utilisées par d’autres passages. Libérez-en une pour pouvoir la choisir ici.",
+    },
+  "Este funil não tem nenhuma etapa marcada como fechamento, então não há para onde levar o card quando a pessoa fecha. Marque uma etapa como «aqui o cliente fecha» em «Etapas deste funil».":
+    {
+      "fr-FR":
+        "Ce pipeline ne contient aucune étape marquée comme conclusion ; le card ne peut donc être déplacé lorsque la personne conclut. Marquez une étape comme « ici, le client conclut » dans « Étapes de ce pipeline ».",
+    },
+  "Este funil não tem nenhuma etapa marcada como perda, então não há para onde levar o card quando a pessoa desiste. Marque uma etapa como «aqui o cliente desiste» em «Etapas deste funil».":
+    {
+      "fr-FR":
+        "Ce pipeline ne contient aucune étape marquée comme perte ; le card ne peut donc être déplacé lorsque la personne abandonne. Marquez une étape comme « ici, le client abandonne » dans « Étapes de ce pipeline ».",
+    },
+  "Este funil só tem etapas de fechamento e de perda, então não há etapa comum para receber o card neste passo. Crie as etapas do meio do caminho em «Etapas deste funil».":
+    {
+      "fr-FR":
+        "Ce pipeline ne contient que des étapes de conclusion et de perte ; aucune étape commune ne peut donc recevoir le card à ce passage. Créez les étapes intermédiaires dans « Étapes de ce pipeline ».",
+    },
+  "Sua sessão expirou. Entre de novo para salvar suas escolhas.": {
+    "fr-FR": "Votre session a expiré. Reconnectez-vous pour enregistrer vos choix.",
+  },
+  "Você não tem permissão para mudar a configuração deste funil.": {
+    "fr-FR": "Vous n’avez pas l’autorisation de modifier la configuration de ce pipeline.",
+  },
+  "Não deu para salvar agora. Tente de novo em instantes.": {
+    "fr-FR": "Impossible d’enregistrer pour le moment. Réessayez dans quelques instants.",
+  },
+  "Para onde o card vai em cada passo": { "fr-FR": "Où va le card à chaque étape" },
+  "Quando o agente avança no atendimento, o card do cliente pode andar sozinho no seu funil. Escolha para qual etapa ele vai em cada momento. Deixar em «não mover» é uma escolha válida — o card fica onde está e o agente segue trabalhando.":
+    {
+      "fr-FR":
+        "Lorsque l’agent avance dans le traitement, le card du client peut se déplacer automatiquement dans votre pipeline. Choisissez l’étape correspondante à chaque moment. Laisser « ne pas déplacer » est un choix valide : le card reste où il est et l’agent continue son travail.",
+    },
+  "Ir para as etapas do funil": { "fr-FR": "Accéder aux étapes du pipeline" },
+  "Não mover o card": { "fr-FR": "Ne pas déplacer le card" },
+  "As escolhas voltaram para o que está gravado agora — confira e escolha de novo.": {
+    "fr-FR":
+      "Les choix ont été rétablis selon les données actuellement enregistrées : vérifiez-les et choisissez à nouveau.",
+  },
+  "Salvar estas escolhas": { "fr-FR": "Enregistrer ces choix" },
   "Ação contém": { "fr-FR": "L’action contient" },
   "Tipo de recurso": { "fr-FR": "Type de ressource" },
   De: { "fr-FR": "Du" },

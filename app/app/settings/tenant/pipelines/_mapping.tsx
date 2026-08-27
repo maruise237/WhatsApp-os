@@ -21,6 +21,7 @@ import { LEAD_STAGES, type LeadStage } from "@/lib/agent-engine/agent/lead-state
 import { ApiError } from "@/lib/api/types";
 import { ROTULO_DO_PASSO } from "@/lib/leads/agent-mapping";
 import { ArrowRight, Warning } from "@/lib/ui/icons";
+import { useT } from "@/hooks/i18n/useT";
 
 /**
  * Onde o dono do negócio diz ao agente para onde levar o card em cada momento do
@@ -165,6 +166,7 @@ export function AgentMappingSection({
   /** Onde o dono do funil cria a etapa que falta ou marca a de fechamento/perda. */
   ancoraEtapas: string;
 }) {
+  const t = useT();
   const consulta = useAgentMapping(pipelineId);
   const salvar = useSaveAgentMapping(pipelineId);
   const [rascunho, setRascunho] = useState<MapaDoAgente | null>(null);
@@ -187,14 +189,14 @@ export function AgentMappingSection({
   if (consulta.isError) {
     return (
       <p className="text-sm text-text-muted" data-testid="mapeamento-erro-leitura">
-        Não foi possível carregar as etapas deste funil agora. Recarregue a página.
+        {t("Não foi possível carregar as etapas deste funil agora. Recarregue a página.")}
       </p>
     );
   }
   if (!data || !rascunho) {
     return (
       <p className="text-sm text-text-muted" data-testid="mapeamento-carregando">
-        Carregando as etapas deste funil…
+        {t("Carregando as etapas deste funil…")}
       </p>
     );
   }
@@ -219,7 +221,7 @@ export function AgentMappingSection({
       // Sucesso em toast, igual ao resto da tela (e do app). O ERRO fica inline
       // e persistente de propósito: ele explica por que as escolhas na frente do
       // usuário mudaram sozinhas, e um toast some antes de ele ler.
-      onSuccess: () => toast.success("Escolhas salvas."),
+      onSuccess: () => toast.success(t("Escolhas salvas.")),
       onError: (e) => setErro(mensagemDeErro(e)),
     });
   }
@@ -235,11 +237,11 @@ export function AgentMappingSection({
             se chama Funis e trata dos funis do tenant. Duas coisas diferentes
             com o mesmo nome, na mesma tela, fazem o dono da clínica procurar um
             segundo funil que não existe. O título diz o que a seção FAZ. */}
-        <h3 className="text-sm font-semibold">Para onde o card vai em cada passo</h3>
+        <h3 className="text-sm font-semibold">{t("Para onde o card vai em cada passo")}</h3>
         <p className="max-w-3xl text-sm leading-relaxed text-text-muted">
-          Quando o agente avança no atendimento, o card do cliente pode andar sozinho no seu
-          funil. Escolha para qual etapa ele vai em cada momento. Deixar em «não mover» é uma
-          escolha válida — o card fica onde está e o agente segue trabalhando.
+          {t(
+            "Quando o agente avança no atendimento, o card do cliente pode andar sozinho no seu funil. Escolha para qual etapa ele vai em cada momento. Deixar em «não mover» é uma escolha válida — o card fica onde está e o agente segue trabalhando.",
+          )}
         </p>
       </div>
 
@@ -257,8 +259,8 @@ export function AgentMappingSection({
               data-testid={`passo-${passo}`}
             >
               <div className="min-w-0 sm:w-64">
-                <p className="text-sm font-medium">{ROTULO_DO_PASSO[passo]}</p>
-                <p className="text-xs text-text-muted">{QUANDO_ACONTECE[passo]}</p>
+                <p className="text-sm font-medium">{t(ROTULO_DO_PASSO[passo])}</p>
+                <p className="text-xs text-text-muted">{t(QUANDO_ACONTECE[passo])}</p>
               </div>
               <ArrowRight
                 size={16}
@@ -267,8 +269,11 @@ export function AgentMappingSection({
               />
               <div className="min-w-0 flex-1">
                 {opcoes.length === 0 ? (
-                  <p className="text-xs leading-relaxed text-text-muted" data-testid={`vazio-${passo}`}>
-                    {motivoDaListaVazia(passo, etapas)}
+                  <p
+                    className="text-xs leading-relaxed text-text-muted"
+                    data-testid={`vazio-${passo}`}
+                  >
+                    {t(motivoDaListaVazia(passo, etapas))}
                     {/* O ciclo se fecha aqui: o mapeamento APONTA a lacuna, a
                         seção de etapas RESOLVE. Sem o link, o texto acima é um
                         diagnóstico que manda o usuário procurar sozinho a tela
@@ -282,17 +287,14 @@ export function AgentMappingSection({
                           href={`#${ancoraEtapas}`}
                           data-testid={`ir-para-etapas-${passo}`}
                         >
-                          Ir para as etapas do funil
+                          {t("Ir para as etapas do funil")}
                         </a>
                         .
                       </>
                     )}
                   </p>
                 ) : (
-                  <Select
-                    value={escolhida ?? SEM_ETAPA}
-                    onValueChange={(v) => escolher(passo, v)}
-                  >
+                  <Select value={escolhida ?? SEM_ETAPA} onValueChange={(v) => escolher(passo, v)}>
                     <SelectTrigger
                       aria-label={`Etapa para «${ROTULO_DO_PASSO[passo]}»`}
                       data-testid={`etapa-${passo}`}
@@ -300,7 +302,7 @@ export function AgentMappingSection({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={SEM_ETAPA}>Não mover o card</SelectItem>
+                      <SelectItem value={SEM_ETAPA}>{t("Não mover o card")}</SelectItem>
                       {opcoes.map((e) => (
                         <SelectItem key={e.id} value={e.id}>
                           {e.name}
@@ -322,15 +324,15 @@ export function AgentMappingSection({
         >
           <Warning size={18} className="mt-0.5 shrink-0 text-warning-fg" aria-hidden />
           <p className="text-sm leading-relaxed">
-            {erro} As escolhas voltaram para o que está gravado agora — confira e escolha de
-            novo.
+            {erro}{" "}
+            {t("As escolhas voltaram para o que está gravado agora — confira e escolha de novo.")}
           </p>
         </Card>
       )}
 
       <div className="flex items-center justify-end gap-3">
         <Button onClick={enviar} disabled={!mudou || gravando} data-testid="salvar-mapeamento">
-          {gravando ? "Salvando…" : "Salvar estas escolhas"}
+          {gravando ? t("Salvando…") : t("Salvar estas escolhas")}
         </Button>
       </div>
     </div>
