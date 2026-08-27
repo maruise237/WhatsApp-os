@@ -10,7 +10,7 @@ x-logging: &default-logging
 
 services:
   app:
-    image: ${APP_IMAGE:-ghcr.io/maruise237/deskcommcrm:latest}
+    image: ${APP_IMAGE:-ghcr.io/maruise237/deskcommcrm:main}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -51,7 +51,7 @@ services:
       traefik.http.services.whatsapp-os.loadbalancer.server.port: "3000"
 
   worker:
-    image: ${WORKER_IMAGE:-ghcr.io/maruise237/deskcomm-worker:latest}
+    image: ${WORKER_IMAGE:-ghcr.io/maruise237/deskcomm-worker:main}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -75,7 +75,7 @@ services:
     networks: [internal]
 
   scheduler:
-    image: ${SCHEDULER_IMAGE:-ghcr.io/maruise237/deskcomm-scheduler:latest}
+    image: ${SCHEDULER_IMAGE:-ghcr.io/maruise237/deskcomm-scheduler:main}
     restart: unless-stopped
     env_file: .env
     environment:
