@@ -816,6 +816,21 @@ export const DICIONARIO: Traducoes = {
   "Fechar conversa": { "fr-FR": "Fermer la conversation" },
   "Mostrar atalhos": { "fr-FR": "Afficher les raccourcis" },
   "Atalhos de teclado": { "fr-FR": "Raccourcis clavier" },
+  "Enviar contato": { "fr-FR": "Envoyer un contact" },
+  "Escolha alguém da base ou informe nome e telefone — como no WhatsApp.": {
+    "fr-FR":
+      "Choisissez une personne dans la base ou saisissez son nom et son téléphone, comme dans WhatsApp.",
+  },
+  "Buscar por nome ou telefone…": { "fr-FR": "Rechercher par nom ou téléphone…" },
+  "Nenhum contato encontrado na base.": { "fr-FR": "Aucun contact trouvé dans la base." },
+  "Nenhum contato com telefone na base.": {
+    "fr-FR": "Aucun contact avec un numéro de téléphone dans la base.",
+  },
+  "Enviar número informado": { "fr-FR": "Envoyer le numéro saisi" },
+  "Ou informe um contato": { "fr-FR": "Ou saisir un contact" },
+  "Nome (opcional)": { "fr-FR": "Nom (facultatif)" },
+  "Como aparece no cartão": { "fr-FR": "Nom affiché sur la fiche" },
+  "Sem nome": { "fr-FR": "Sans nom" },
   "Transferir conversa": { "fr-FR": "Transférer la conversation" },
   "A transferência é imediata: o atendente escolhido vira o responsável agora e a mudança fica registrada no histórico.":
     {
