@@ -1096,6 +1096,24 @@ export const DICIONARIO: Traducoes = {
   Condição: { "fr-FR": "Condition" },
   "Classificar (IA)": { "fr-FR": "Classer (IA)" },
   "Enviar mensagem": { "fr-FR": "Envoyer un message" },
+  "Carregando seus modelos…": { "fr-FR": "Chargement de vos modèles…" },
+  "Não consegui carregar seus modelos de mensagem. Recarregue a página.": {
+    "fr-FR": "Impossible de charger vos modèles de messages. Rechargez la page.",
+  },
+  "Você ainda não tem modelos de mensagem. Crie um em Ajustes → Modelos e ele aparece aqui.": {
+    "fr-FR":
+      "Vous n’avez encore aucun modèle de message. Créez-en un dans Paramètres → Modèles pour le voir ici.",
+  },
+  "Escolha um modelo": { "fr-FR": "Choisissez un modèle" },
+  Nenhum: { "fr-FR": "Aucun" },
+  "Como escrever a mensagem": { "fr-FR": "Comment rédiger le message" },
+  "Instrução para a IA": { "fr-FR": "Instruction pour l’IA" },
+  "Se a IA não conseguir escrever, mandar este modelo": {
+    "fr-FR": "Si l’IA ne peut pas rédiger le message, envoyer ce modèle",
+  },
+  "Modelo de mensagem": { "fr-FR": "Modèle de message" },
+  "Mensagem escrita pela IA": { "fr-FR": "Message rédigé par l’IA" },
+  "Modelo de mensagem pronto": { "fr-FR": "Modèle de message prédéfini" },
   "Tempo fixo": { "fr-FR": "Durée fixe" },
   "A IA escolhe a hora": { "fr-FR": "L’IA choisit l’heure" },
   "Como calcular a espera": { "fr-FR": "Comment calculer l’attente" },
