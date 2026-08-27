@@ -251,6 +251,7 @@ export const DICIONARIO: Traducoes = {
   },
   Salvar: { "fr-FR": "Enregistrer", es: "Guardar" },
   vazio: { "fr-FR": "vide", es: "vacío" },
+  "sem ler": { "fr-FR": "non lu(s)" },
   "Abrir conversa no Inbox": {
     "fr-FR": "Ouvrir la conversation dans Inbox",
     es: "Abrir conversación en el Inbox",

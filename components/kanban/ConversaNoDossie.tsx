@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ArrowRight, ChatCircle } from "@/lib/ui/icons";
 import type { Contact } from "@/lib/types/contacts";
+import { useT } from "@/hooks/i18n/useT";
 
 /**
  * A porta para a conversa, dentro do dossiê.
@@ -34,6 +35,7 @@ export function ConversaNoDossie({
 }: {
   conversa: Contact["conversa"] | null | undefined;
 }) {
+  const t = useT();
   if (!conversa) return null;
 
   const preview = conversa.preview?.trim();
@@ -41,11 +43,11 @@ export function ConversaNoDossie({
   return (
     <Link
       href={`/app/inbox?id=${conversa.id}`}
-      className="group mt-3 flex items-center gap-2.5 rounded-md border border-border bg-muted/40 px-3 py-2 transition-colors hover:border-primary/40 hover:bg-muted"
+      className="bg-muted/40 hover:border-primary/40 group mt-3 flex items-center gap-2.5 rounded-md border border-border px-3 py-2 transition-colors hover:bg-muted"
     >
       <ChatCircle size={16} weight="regular" className="shrink-0 text-text-muted" aria-hidden />
       <span className="min-w-0 flex-1">
-        <span className="block text-xs font-medium text-text">Abrir conversa no Inbox</span>
+        <span className="block text-xs font-medium text-text">{t("Abrir conversa no Inbox")}</span>
         {preview && (
           // A última mensagem responde "vale a pena entrar agora?" sem entrar —
           // sem ela o botão é uma aposta, e o dossiê já existe para não obrigar
@@ -57,8 +59,8 @@ export function ConversaNoDossie({
         // O número, não um ponto: "3 sem ler" e "12 sem ler" pedem urgências
         // diferentes, e um ponto colapsa as duas.
         <span
-          className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground tabular-nums"
-          aria-label={`${conversa.unread} sem ler`}
+          className="shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-primary-foreground"
+          aria-label={`${conversa.unread} ${t("sem ler")}`}
         >
           {conversa.unread}
         </span>
