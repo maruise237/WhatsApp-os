@@ -24,6 +24,7 @@ import {
   type FollowupFlowDetailRow,
 } from "@/hooks/followup/useFollowupFlow";
 import { FlowStatusBadge } from "../../_components/FlowStatusBadge";
+import { useT } from "@/hooks/i18n/useT";
 import { TriggerConfigControl } from "./TriggerConfigControl";
 
 interface Props {
@@ -42,7 +43,16 @@ const HANDOFF_LABEL: Record<FollowupFlowDetailRow["handoff_policy"], string> = {
   allow: "Permitir durante handoff",
 };
 
-export function PublishBar({ flowId, flow, graph, dirty, onSaved, onPublishErrors, onPublishSuccess }: Props) {
+export function PublishBar({
+  flowId,
+  flow,
+  graph,
+  dirty,
+  onSaved,
+  onPublishErrors,
+  onPublishSuccess,
+}: Props) {
+  const t = useT();
   const save = useSaveFollowupFlowDraft(flowId);
   const publish = usePublishFollowupFlow(flowId);
   const disable = useDisableFollowupFlow(flowId);
@@ -73,7 +83,7 @@ export function PublishBar({ flowId, flow, graph, dirty, onSaved, onPublishError
             else flowLevel.push(e.message);
           }
           onPublishErrors(byNode);
-          toast.error("Fluxo reprovado na validação — corrija os nós destacados.", {
+          toast.error(t("Fluxo reprovado na validação — corrija os nós destacados."), {
             description: flowLevel.length > 0 ? flowLevel.join(" ") : undefined,
           });
           return;
@@ -100,7 +110,7 @@ export function PublishBar({ flowId, flow, graph, dirty, onSaved, onPublishError
         <FlowStatusBadge status={flow.status} />
         {dirty && (
           <Badge variant="warning" data-testid="dirty-indicator">
-            Alterações não salvas
+            {t("Alterações não salvas")}
           </Badge>
         )}
       </div>
@@ -108,24 +118,39 @@ export function PublishBar({ flowId, flow, graph, dirty, onSaved, onPublishError
       <div className="flex flex-wrap items-center gap-2">
         <TriggerConfigControl flowId={flowId} triggerConfig={flow.trigger_config} />
 
-        <Select value={flow.handoff_policy} onValueChange={(v) => handoffPolicy.mutate(v as FollowupFlowDetailRow["handoff_policy"])}>
-          <SelectTrigger className="w-56" aria-label="Política de handoff">
+        <Select
+          value={flow.handoff_policy}
+          onValueChange={(v) => handoffPolicy.mutate(v as FollowupFlowDetailRow["handoff_policy"])}
+        >
+          <SelectTrigger className="w-56" aria-label={t("Política de handoff")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {(Object.keys(HANDOFF_LABEL) as Array<keyof typeof HANDOFF_LABEL>).map((k) => (
               <SelectItem key={k} value={k}>
-                {HANDOFF_LABEL[k]}
+                {t(HANDOFF_LABEL[k])}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
-        <Button type="button" variant="secondary" size="sm" disabled={!dirty || busy} onClick={onSave}>
-          {save.isPending ? "Salvando…" : "Salvar"}
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          disabled={!dirty || busy}
+          onClick={onSave}
+        >
+          {save.isPending ? t("Salvando…") : t("Salvar")}
         </Button>
-        <Button type="button" size="sm" disabled={busy} onClick={onPublish} data-testid="publish-button">
-          {publish.isPending ? "Publicando…" : "Publicar"}
+        <Button
+          type="button"
+          size="sm"
+          disabled={busy}
+          onClick={onPublish}
+          data-testid="publish-button"
+        >
+          {publish.isPending ? t("Publicando…") : t("Publicar")}
         </Button>
         <Button
           type="button"
@@ -134,7 +159,7 @@ export function PublishBar({ flowId, flow, graph, dirty, onSaved, onPublishError
           disabled={busy || flow.status === "disabled"}
           onClick={onDisable}
         >
-          Desativar
+          {t("Desativar")}
         </Button>
         <Button
           type="button"
@@ -144,7 +169,7 @@ export function PublishBar({ flowId, flow, graph, dirty, onSaved, onPublishError
           onClick={onRollback}
           data-testid="rollback-button"
         >
-          Rollback
+          {t("Rollback")}
         </Button>
       </div>
     </div>
