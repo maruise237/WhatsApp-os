@@ -3,6 +3,7 @@ import type { MouseEvent } from "react";
 
 import { cn } from "@/lib/utils";
 import { useDecidirReativacao } from "@/hooks/kanban/useReativacao";
+import { useT } from "@/hooks/i18n/useT";
 
 interface ReactivationSlotProps {
   leadId: string;
@@ -40,6 +41,7 @@ export function ReactivationSlot({
   pipelineId,
   expiresAt,
 }: ReactivationSlotProps) {
+  const t = useT();
   const decidir = useDecidirReativacao(pipelineId);
 
   const decide = (e: MouseEvent<HTMLButtonElement>, decision: "accept" | "dismiss") => {
@@ -52,9 +54,12 @@ export function ReactivationSlot({
 
   return (
     <>
-      <span className="min-w-0 flex-1 truncate text-warning-fg" title="Este negócio parou de responder">
-        Retomar contato?{" "}
-        <span className="text-text-muted" title={`A sugestão vence em ${resta}`}>
+      <span
+        className="min-w-0 flex-1 truncate text-warning-fg"
+        title={t("Este negócio parou de responder")}
+      >
+        {t("Retomar contato?")}{" "}
+        <span className="text-text-muted" title={`${t("A sugestão vence em")} ${resta}`}>
           · {resta}
         </span>
       </span>
@@ -63,14 +68,14 @@ export function ReactivationSlot({
           type="button"
           disabled={decidir.isPending}
           onClick={(e) => decide(e, "accept")}
-          aria-label="Retomar contato com este negócio"
+          aria-label={t("Retomar contato com este negócio")}
           className={cn(
             "rounded px-1.5 py-0.5 text-[11px] font-medium transition-colors",
-            "bg-warning-fg/10 text-warning-fg hover:bg-warning-fg/20",
+            "bg-warning-fg/10 hover:bg-warning-fg/20 text-warning-fg",
             "disabled:opacity-50",
           )}
         >
-          Retomar
+          {t("Retomar")}
         </button>
         <button
           type="button"
@@ -79,14 +84,14 @@ export function ReactivationSlot({
           // "Encerrar" e não "Ignorar": ignorar não é decisão, e a recusa AQUI é
           // decisão registrada — o que distingue negócio encerrado com critério
           // de negócio esquecido.
-          aria-label="Encerrar: não retomar este negócio"
+          aria-label={t("Encerrar: não retomar este negócio")}
           className={cn(
             "rounded px-1.5 py-0.5 text-[11px] transition-colors",
-            "text-text-muted hover:bg-surface-muted hover:text-text",
+            "hover:bg-surface-muted text-text-muted hover:text-text",
             "disabled:opacity-50",
           )}
         >
-          Encerrar
+          {t("Encerrar")}
         </button>
       </span>
     </>

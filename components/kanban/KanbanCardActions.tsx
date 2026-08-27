@@ -19,6 +19,7 @@ import { usePermission } from "@/hooks/auth/AuthProvider";
 import { LoseLeadDialog } from "./LoseLeadDialog";
 import { EditLeadDialog } from "./EditLeadDialog";
 import type { Lead } from "@/lib/types/leads";
+import { useT } from "@/hooks/i18n/useT";
 
 interface KanbanCardActionsProps {
   lead: Lead;
@@ -26,6 +27,7 @@ interface KanbanCardActionsProps {
 }
 
 export function KanbanCardActions({ lead, pipelineId }: KanbanCardActionsProps) {
+  const t = useT();
   const [loseOpen, setLoseOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const winMutation = useWinLead(pipelineId);
@@ -65,26 +67,23 @@ export function KanbanCardActions({ lead, pipelineId }: KanbanCardActionsProps) 
             size="icon"
             className="h-7 w-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 data-[state=open]:opacity-100"
             onClick={(e) => e.stopPropagation()}
-            aria-label="Ações do lead"
+            aria-label={t("Ações do lead")}
           >
             <DotsThree size={16} weight="bold" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuItem
             onSelect={() => {
               setEditOpen(true);
             }}
           >
-            <PencilSimple size={14} className="mr-2" /> Editar
+            <PencilSimple size={14} className="mr-2" /> {t("Editar")}
           </DropdownMenuItem>
           {canAssign && (
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
-                <Users size={14} className="mr-2" /> Responsável
+                <Users size={14} className="mr-2" /> {t("Responsável")}
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
@@ -94,7 +93,7 @@ export function KanbanCardActions({ lead, pipelineId }: KanbanCardActionsProps) 
                   }
                   onSelect={clearOwner}
                 >
-                  Sem responsável
+                  {t("Sem responsável")}
                 </DropdownMenuItem>
                 {(members ?? []).length > 0 && <DropdownMenuSeparator />}
                 {(members ?? []).map((m) => (
@@ -103,7 +102,7 @@ export function KanbanCardActions({ lead, pipelineId }: KanbanCardActionsProps) 
                     disabled={editMutation.isPending || m.user_id === lead.owner_user_id}
                     onSelect={() => reassignToUser(m.user_id)}
                   >
-                    {m.full_name ?? "Sem nome"}
+                    {m.full_name ?? t("Sem nome")}
                   </DropdownMenuItem>
                 ))}
                 {(agents ?? []).length > 0 && <DropdownMenuSeparator />}
@@ -130,14 +129,14 @@ export function KanbanCardActions({ lead, pipelineId }: KanbanCardActionsProps) 
               winMutation.mutate({ leadId: lead.id });
             }}
           >
-            Marcar como ganho
+            {t("Marcar como ganho")}
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
               setLoseOpen(true);
             }}
           >
-            Marcar como perdido
+            {t("Marcar como perdido")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
