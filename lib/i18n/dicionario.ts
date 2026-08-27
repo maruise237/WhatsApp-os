@@ -747,10 +747,83 @@ export const DICIONARIO: Traducoes = {
   Hoje: { "fr-FR": "Aujourd’hui" },
   Ontem: { "fr-FR": "Hier" },
   "Erro ao carregar timeline.": { "fr-FR": "Erreur lors du chargement de la chronologie." },
-  "Nenhuma atividade registrada ainda.": { "fr-FR": "Aucune activité n’a encore été enregistrée." },
-  "Carregar mais": { "fr-FR": "Charger davantage" },
-  "Tentar novamente": { "fr-FR": "Réessayer" },
-  "Conectar novo WhatsApp": { "fr-FR": "Connecter un nouveau WhatsApp" },
+  "Erro ao carregar conversas.": { "fr-FR": "Erreur lors du chargement des conversations." },
+  "Sem conversas por aqui": { "fr-FR": "Aucune conversation ici" },
+  "Quando chegarem mensagens, elas aparecem aqui em tempo real.": {
+    "fr-FR": "Lorsque des messages arriveront, ils apparaîtront ici en temps réel.",
+  },
+  "Quadro vazio": { "fr-FR": "Tableau vide" },
+  "Ainda não há nenhum cliente aqui. Assim que a primeira conversa começar, o cartão aparece nesta coluna.":
+    {
+      "fr-FR":
+        "Aucun client ici pour le moment. Dès que la première conversation commencera, la carte apparaîtra dans cette colonne.",
+    },
+  "Nenhum contato ainda": { "fr-FR": "Aucun contact pour le moment" },
+  "Contatos chegam automaticamente via WhatsApp ou Nuvemshop.": {
+    "fr-FR": "Les contacts arrivent automatiquement via WhatsApp ou Nuvemshop.",
+  },
+  "Sem eventos no período": { "fr-FR": "Aucun événement sur la période" },
+  "Ajuste o filtro de datas ou a busca pra ver eventos.": {
+    "fr-FR": "Ajustez le filtre de dates ou la recherche pour afficher des événements.",
+  },
+  "Nenhum funil ainda": { "fr-FR": "Aucun pipeline pour le moment" },
+  "Um funil é o caminho que o cliente percorre até fechar. Crie o primeiro para ter um quadro.": {
+    "fr-FR":
+      "Un pipeline représente le parcours du client jusqu’à la conversion. Créez le premier pour obtenir un tableau.",
+  },
+  "Sem membros no time": { "fr-FR": "Aucun membre dans l’équipe" },
+  "Convide colegas pra atender em conjunto.": {
+    "fr-FR": "Invitez des collègues à répondre ensemble.",
+  },
+  "Nenhum token criado": { "fr-FR": "Aucun jeton créé" },
+  "Tokens permitem integrações server-to-server.": {
+    "fr-FR": "Les jetons permettent les intégrations de serveur à serveur.",
+  },
+  "Sem atividades registradas": { "fr-FR": "Aucune activité enregistrée" },
+  "A timeline mostra mensagens, mudanças de stage e notas.": {
+    "fr-FR": "La chronologie affiche les messages, les changements d’étape et les notes.",
+  },
+  "Sem candidatos a merge": { "fr-FR": "Aucun candidat à la fusion" },
+  "Contatos duplicados aparecerão aqui pra revisão.": {
+    "fr-FR": "Les contacts en double apparaîtront ici pour vérification.",
+  },
+  "Tente ajustar os filtros ou a busca.": {
+    "fr-FR": "Essayez d’ajuster les filtres ou la recherche.",
+  },
+  "Buscar conversas": { "fr-FR": "Rechercher des conversations" },
+  "Filtrar por número de WhatsApp": { "fr-FR": "Filtrer par numéro WhatsApp" },
+  "Filtrar por tag": { "fr-FR": "Filtrer par étiquette" },
+  "Número removido": { "fr-FR": "Numéro supprimé" },
+  Alguém: { "fr-FR": "Quelqu’un" },
+  "Nota interna · só o time vê": { "fr-FR": "Note interne · visible par l’équipe uniquement" },
+  "Excluir nota": { "fr-FR": "Supprimer la note" },
+  "Próxima conversa": { "fr-FR": "Conversation suivante" },
+  "Conversa anterior": { "fr-FR": "Conversation précédente" },
+  "Focar resposta": { "fr-FR": "Placer le curseur dans la réponse" },
+  "Enviar a mensagem": { "fr-FR": "Envoyer le message" },
+  "Quebrar linha sem enviar": { "fr-FR": "Insérer un retour à la ligne sans envoyer" },
+  "Assumir conversa": { "fr-FR": "Prendre la conversation" },
+  "Fechar conversa": { "fr-FR": "Fermer la conversation" },
+  "Mostrar atalhos": { "fr-FR": "Afficher les raccourcis" },
+  "Atalhos de teclado": { "fr-FR": "Raccourcis clavier" },
+  "Transferir conversa": { "fr-FR": "Transférer la conversation" },
+  "A transferência é imediata: o atendente escolhido vira o responsável agora e a mudança fica registrada no histórico.":
+    {
+      "fr-FR":
+        "Le transfert est immédiat : l’agent choisi devient responsable dès maintenant et la modification est enregistrée dans l’historique.",
+    },
+  "Transferir para": { "fr-FR": "Transférer à" },
+  "Carregando atendentes…": { "fr-FR": "Chargement des agents…" },
+  "Escolha o atendente": { "fr-FR": "Choisissez l’agent" },
+  "Nenhum outro atendente disponível nesta organização.": {
+    "fr-FR": "Aucun autre agent n’est disponible dans cette organisation.",
+  },
+  "Motivo (opcional)": { "fr-FR": "Motif (facultatif)" },
+  "Ex.: cliente pediu falar com o financeiro": {
+    "fr-FR": "Ex. : le client souhaite parler au service financier",
+  },
+  "Transferindo…": { "fr-FR": "Transfert…" },
+  Gestor: { "fr-FR": "Responsable" },
   "Atualizar saúde": { "fr-FR": "Actualiser l’état" },
   "Escaneie o QR": { "fr-FR": "Scannez le QR" },
   "Conectando…": { "fr-FR": "Connexion en cours…" },

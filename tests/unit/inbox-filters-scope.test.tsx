@@ -16,7 +16,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 
-import { InboxFilters, visibleInboxTabs, type InboxFiltersValue } from "@/components/inbox/InboxFilters";
+import {
+  InboxFilters,
+  visibleInboxTabs,
+  type InboxFiltersValue,
+} from "@/components/inbox/InboxFilters";
 import type * as CanaisModule from "@/hooks/channels/useChannelSessions";
 import type { ChannelSession } from "@/hooks/channels/useChannelSessions";
 import type { ActiveOrg } from "@/lib/auth/types";
@@ -27,6 +31,9 @@ const canaisRef: { current: ChannelSession[] | undefined } = { current: [] };
 
 vi.mock("@/hooks/auth/AuthProvider", () => ({
   useAuth: () => ({ activeOrg: activeOrgRef.current }),
+}));
+vi.mock("@/hooks/i18n/useT", () => ({
+  useT: () => (chave: string) => chave,
 }));
 // Só a listagem é dublada: `channelLabel` do módulo real é o que resolve o rótulo
 // de cada opção do seletor, e é parte do que está sob teste aqui.
@@ -146,7 +153,10 @@ describe("InboxFilters — seletor de número e o filtro órfão", () => {
     setOrg("manager", "all");
     canaisRef.current = [canal()];
     render(
-      <InboxFilters value={{ ...VALUE, channel_session_id: "canal-excluido" }} onChange={() => {}} />,
+      <InboxFilters
+        value={{ ...VALUE, channel_session_id: "canal-excluido" }}
+        onChange={() => {}}
+      />,
     );
     const seletor = screen.getByLabelText(SELETOR);
     expect(seletor).toBeInTheDocument();
@@ -156,7 +166,9 @@ describe("InboxFilters — seletor de número e o filtro órfão", () => {
   it("filtro que casa com a lista: nada de 'Número removido'", () => {
     setOrg("manager", "all");
     canaisRef.current = [canal(), canal({ id: "canal-2", display_name: "Suporte" })];
-    render(<InboxFilters value={{ ...VALUE, channel_session_id: "canal-2" }} onChange={() => {}} />);
+    render(
+      <InboxFilters value={{ ...VALUE, channel_session_id: "canal-2" }} onChange={() => {}} />,
+    );
     const seletor = screen.getByLabelText(SELETOR);
     expect(seletor).toHaveTextContent("Suporte");
     expect(seletor).not.toHaveTextContent("Número removido");

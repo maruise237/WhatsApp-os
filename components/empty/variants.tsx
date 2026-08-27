@@ -13,6 +13,7 @@ import {
   Users,
 } from "@phosphor-icons/react";
 import { EmptyState, type EmptyStateAction } from "./EmptyState";
+import { useT } from "@/hooks/i18n/useT";
 
 interface VariantProps {
   primary?: EmptyStateAction;
@@ -20,11 +21,12 @@ interface VariantProps {
 }
 
 export function EmptyInbox({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={ChatCircle}
-      headline="Sem conversas por aqui"
-      subcopy="Quando chegarem mensagens, elas aparecem aqui em tempo real."
+      headline={t("Sem conversas por aqui")}
+      subcopy={t("Quando chegarem mensagens, elas aparecem aqui em tempo real.")}
       primary={primary}
       secondary={secondary}
     />
@@ -32,11 +34,14 @@ export function EmptyInbox({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyKanban({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={Kanban}
-      headline="Quadro vazio"
-      subcopy="Ainda não há nenhum cliente aqui. Assim que a primeira conversa começar, o cartão aparece nesta coluna."
+      headline={t("Quadro vazio")}
+      subcopy={t(
+        "Ainda não há nenhum cliente aqui. Assim que a primeira conversa começar, o cartão aparece nesta coluna.",
+      )}
       primary={primary}
       secondary={secondary}
     />
@@ -44,11 +49,12 @@ export function EmptyKanban({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyContacts({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={UsersThree}
-      headline="Nenhum contato ainda"
-      subcopy="Contatos chegam automaticamente via WhatsApp ou Nuvemshop."
+      headline={t("Nenhum contato ainda")}
+      subcopy={t("Contatos chegam automaticamente via WhatsApp ou Nuvemshop.")}
       primary={primary}
       secondary={secondary}
     />
@@ -56,11 +62,12 @@ export function EmptyContacts({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyAudit({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={ListMagnifyingGlass}
-      headline="Sem eventos no período"
-      subcopy="Ajuste o filtro de datas ou a busca pra ver eventos."
+      headline={t("Sem eventos no período")}
+      subcopy={t("Ajuste o filtro de datas ou a busca pra ver eventos.")}
       primary={primary}
       secondary={secondary}
     />
@@ -68,11 +75,14 @@ export function EmptyAudit({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyPipeline({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={GitBranch}
-      headline="Nenhum funil ainda"
-      subcopy="Um funil é o caminho que o cliente percorre até fechar. Crie o primeiro para ter um quadro."
+      headline={t("Nenhum funil ainda")}
+      subcopy={t(
+        "Um funil é o caminho que o cliente percorre até fechar. Crie o primeiro para ter um quadro.",
+      )}
       primary={primary}
       secondary={secondary}
     />
@@ -80,11 +90,12 @@ export function EmptyPipeline({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyTeam({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={Users}
-      headline="Sem membros no time"
-      subcopy="Convide colegas pra atender em conjunto."
+      headline={t("Sem membros no time")}
+      subcopy={t("Convide colegas pra atender em conjunto.")}
       primary={primary}
       secondary={secondary}
     />
@@ -92,11 +103,12 @@ export function EmptyTeam({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyApiTokens({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={Key}
-      headline="Nenhum token criado"
-      subcopy="Tokens permitem integrações server-to-server."
+      headline={t("Nenhum token criado")}
+      subcopy={t("Tokens permitem integrações server-to-server.")}
       primary={primary}
       secondary={secondary}
     />
@@ -104,11 +116,12 @@ export function EmptyApiTokens({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyTimeline({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={ClockCounterClockwise}
-      headline="Sem atividades registradas"
-      subcopy="A timeline mostra mensagens, mudanças de stage e notas."
+      headline={t("Sem atividades registradas")}
+      subcopy={t("A timeline mostra mensagens, mudanças de stage e notas.")}
       primary={primary}
       secondary={secondary}
     />
@@ -116,11 +129,12 @@ export function EmptyTimeline({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyMergeQueue({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={ArrowsLeftRight}
-      headline="Sem candidatos a merge"
-      subcopy="Contatos duplicados aparecerão aqui pra revisão."
+      headline={t("Sem candidatos a merge")}
+      subcopy={t("Contatos duplicados aparecerão aqui pra revisão.")}
       primary={primary}
       secondary={secondary}
     />
@@ -128,11 +142,12 @@ export function EmptyMergeQueue({ primary, secondary }: VariantProps = {}) {
 }
 
 export function EmptyFilterResults({ primary, secondary }: VariantProps = {}) {
+  const t = useT();
   return (
     <EmptyState
       icon={Funnel}
-      headline="Nenhum resultado"
-      subcopy="Tente ajustar os filtros ou a busca."
+      headline={t("Nenhum resultado")}
+      subcopy={t("Tente ajustar os filtros ou a busca.")}
       primary={primary}
       secondary={secondary}
     />
