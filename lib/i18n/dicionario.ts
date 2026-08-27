@@ -814,6 +814,21 @@ export const DICIONARIO: Traducoes = {
   "Display name": { "fr-FR": "Nom d’affichage" },
   Origem: { "fr-FR": "Origine" },
   "Última atividade": { "fr-FR": "Dernière activité" },
+  Membro: { "fr-FR": "Membre" },
+  Role: { "fr-FR": "Rôle" },
+  Status: { "fr-FR": "Statut" },
+  "Papel de": { "fr-FR": "Rôle de" },
+  Aceito: { "fr-FR": "Accepté" },
+  Pendente: { "fr-FR": "En attente" },
+  Ações: { "fr-FR": "Actions" },
+  "Revogar acesso": { "fr-FR": "Révoquer l’accès" },
+  "perderá acesso ao tenant. Esta ação pode ser desfeita reconvidando o membro.": {
+    "fr-FR":
+      "perdra l’accès au tenant. Cette action peut être annulée en renvoyant une invitation au membre.",
+  },
+  você: { "fr-FR": "vous" },
+  "Acesso revogado.": { "fr-FR": "Accès révoqué." },
+  Revogar: { "fr-FR": "Révoquer" },
   "Criado em": { "fr-FR": "Créé le" },
   "Direito ao esquecimento (LGPD)": { "fr-FR": "Droit à l’effacement (LGPD)" },
   "A anonimização é irreversível. Use somente após confirmação formal do titular ou ordem judicial.":
