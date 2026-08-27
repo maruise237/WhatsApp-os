@@ -1091,6 +1091,34 @@ export const DICIONARIO: Traducoes = {
   "por item, separados": { "fr-FR": "par élément, séparées" },
   "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
   "Criar fonte": { "fr-FR": "Créer la source" },
+  "System prompt": { "fr-FR": "Prompt système" },
+  "Você é um assistente da loja. Responda com clareza e cordialidade…": {
+    "fr-FR": "Vous êtes un assistant de boutique. Répondez avec clarté et courtoisie…",
+  },
+  "Mínimo 20 caracteres, máximo 10.000. Use placeholders para injetar contexto dinâmico.": {
+    "fr-FR":
+      "20 caractères minimum, 10 000 maximum. Utilisez des placeholders pour injecter le contexte dynamique.",
+  },
+  Placeholders: { "fr-FR": "Placeholders" },
+  Inserir: { "fr-FR": "Insérer" },
+  "Vocabulário do tenant para 'lead' (ex: cliente)": {
+    "fr-FR": "Vocabulaire de l’organisation pour « lead » (ex. : client)",
+  },
+  "Vocabulário do tenant para 'deal' (ex: pedido)": {
+    "fr-FR": "Vocabulaire de l’organisation pour « deal » (ex. : commande)",
+  },
+  "Vocabulário do tenant para 'won' (ex: pago)": {
+    "fr-FR": "Vocabulaire de l’organisation pour « won » (ex. : payé)",
+  },
+  "Vocabulário do tenant para 'lost' (ex: cancelado)": {
+    "fr-FR": "Vocabulaire de l’organisation pour « lost » (ex. : annulé)",
+  },
+  "Nome do contato em atendimento": { "fr-FR": "Nom du contact pris en charge" },
+  "Locale do contato (ex: pt-BR)": { "fr-FR": "Locale du contact (ex. : pt-BR)" },
+  "Últimas N mensagens da conversa": { "fr-FR": "N derniers messages de la conversation" },
+  "Trechos da base de conhecimento (RAG)": {
+    "fr-FR": "Extraits de la base de connaissances (RAG)",
+  },
   "Carregando orçamento...": { "fr-FR": "Chargement du budget…" },
   "Orçamento mensal de IA": { "fr-FR": "Budget mensuel de l’IA" },
   "Gasto de ": { "fr-FR": "Dépense de " },
