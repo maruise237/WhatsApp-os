@@ -1,12 +1,8 @@
 "use client";
 import type { Citation } from "@/lib/ai/citations/types";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   open: boolean;
@@ -24,35 +20,28 @@ const SOURCE_LABEL: Record<string, string> = {
   nuvemshop_catalog: "Catálogo",
 };
 
-export function CitationsPanel({
-  open,
-  onOpenChange,
-  citations,
-  messageId,
-}: Props) {
+export function CitationsPanel({ open, onOpenChange, citations, messageId }: Props) {
+  const t = useT();
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-md">
         <SheetHeader>
-          <SheetTitle>Citações da resposta IA</SheetTitle>
+          <SheetTitle>{t("Citações da resposta IA")}</SheetTitle>
         </SheetHeader>
         <div className="mt-4 space-y-4 overflow-y-auto pr-2">
           {citations.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              Resposta sem RAG hits — modelo respondeu sem usar a base de
-              conhecimento.
+              {t("Resposta sem RAG hits — modelo respondeu sem usar a base de conhecimento.")}
             </p>
           ) : (
             citations.map((c, i) => (
-              <div
-                key={c.chunk_id ?? `cit-${i}`}
-                className="rounded-md border p-3 text-sm"
-              >
+              <div key={c.chunk_id ?? `cit-${i}`} className="rounded-md border p-3 text-sm">
                 <div className="mb-1 flex items-center justify-between">
                   <Badge variant="secondary">
-                    {SOURCE_LABEL[c.source_type ?? ""] ??
-                      c.source_type ??
-                      "Fonte"}
+                    {(() => {
+                      const label = SOURCE_LABEL[c.source_type ?? ""];
+                      return label ? t(label) : (c.source_type ?? t("Fonte"));
+                    })()}
                   </Badge>
                   {typeof c.score === "number" && (
                     <span className="text-xs text-muted-foreground">
@@ -61,12 +50,10 @@ export function CitationsPanel({
                   )}
                 </div>
                 {c.source_anchor && (
-                  <p className="mb-1 text-xs text-muted-foreground">
-                    {c.source_anchor}
-                  </p>
+                  <p className="mb-1 text-xs text-muted-foreground">{c.source_anchor}</p>
                 )}
                 {(c.snippet ?? c.text) && (
-                  <p className="line-clamp-4 text-foreground/90">
+                  <p className="text-foreground/90 line-clamp-4">
                     {(c.snippet ?? c.text ?? "").slice(0, 200)}
                   </p>
                 )}
@@ -74,9 +61,7 @@ export function CitationsPanel({
             ))
           )}
           {messageId && (
-            <p className="pt-2 text-[10px] text-muted-foreground">
-              message_id: {messageId}
-            </p>
+            <p className="pt-2 text-[10px] text-muted-foreground">message_id: {messageId}</p>
           )}
         </div>
       </SheetContent>

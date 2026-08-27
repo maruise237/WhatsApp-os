@@ -1056,6 +1056,16 @@ export const DICIONARIO: Traducoes = {
   "Erro desconhecido": { "fr-FR": "Erreur inconnue" },
   "Enviar anexo": { "fr-FR": "Envoyer la pièce jointe" },
   "Legenda (opcional)": { "fr-FR": "Légende (facultatif)" },
+  "Mostrar citações da resposta": { "fr-FR": "Afficher les citations de la réponse" },
+  "Citações da resposta IA": { "fr-FR": "Citations de la réponse IA" },
+  "Resposta sem RAG hits — modelo respondeu sem usar a base de conhecimento.": {
+    "fr-FR":
+      "Réponse sans résultats RAG : le modèle a répondu sans utiliser la base de connaissances.",
+  },
+  Política: { "fr-FR": "Politique" },
+  Conversa: { "fr-FR": "Conversation" },
+  Catálogo: { "fr-FR": "Catalogue" },
+  Fonte: { "fr-FR": "Source" },
   Legenda: { "fr-FR": "Légende" },
   "Etapa atualizada.": { "fr-FR": "Étape mise à jour." },
   "A coluna sai do quadro e para de receber negócios novos. Nada é apagado — o histórico de quem passou por ela continua guardado —, mas":
