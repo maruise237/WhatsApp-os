@@ -1062,6 +1062,78 @@ export const DICIONARIO: Traducoes = {
   "Proteção de envio": { "fr-FR": "Protection des envois" },
   "Proteção de envio atualizada.": { "fr-FR": "Protection des envois mise à jour." },
   "Salvar proteção": { "fr-FR": "Enregistrer la protection" },
+  "sincronizada(s)": { "fr-FR": "synchronisée(s)" },
+  de: { "fr-FR": "sur" },
+  "Não consegui falar com a plataforma.": { "fr-FR": "Impossible de joindre la plateforme." },
+  "Não consegui subir a imagem.": { "fr-FR": "Impossible d’envoyer l’image." },
+  "Utilidade — aviso de pedido, agendamento, cobrança": {
+    "fr-FR": "Utilité — avis de commande, rendez-vous, facturation",
+  },
+  "Marketing — promoção, novidade, reengajamento": {
+    "fr-FR": "Marketing — promotion, nouveauté, réengagement",
+  },
+  "Autenticação — código de verificação": { "fr-FR": "Authentification — code de vérification" },
+  "Nenhum modelo espelhado ainda.": { "fr-FR": "Aucun modèle synchronisé pour l’instant." },
+  "Clique em": { "fr-FR": "Cliquez sur" },
+  "para trazer os que já existem na plataforma.": {
+    "fr-FR": "pour importer ceux qui existent déjà sur la plateforme.",
+  },
+  "O que a plataforma aprovou para este número. É daqui que sai a mensagem quando a janela de 24h fecha.":
+    {
+      "fr-FR":
+        "Ce que la plateforme a approuvé pour ce numéro. C’est ici que vient le message lorsque la fenêtre de 24 h est fermée.",
+    },
+  "Sincronizando…": { "fr-FR": "Synchronisation…" },
+  "Nome do modelo": { "fr-FR": "Nom du modèle" },
+  Idioma: { "fr-FR": "Langue" },
+  Categoria: { "fr-FR": "Catégorie" },
+  "Cabeçalho de texto (opcional)": { "fr-FR": "En-tête texte (facultatif)" },
+  "Cabeçalho de texto": { "fr-FR": "En-tête texte" },
+  "Subindo…": { "fr-FR": "Envoi…" },
+  "Trocar imagem": { "fr-FR": "Remplacer l’image" },
+  "Subir imagem (JPG/PNG)": { "fr-FR": "Envoyer une image (JPG/PNG)" },
+  "Imagem do cabeçalho": { "fr-FR": "Image de l’en-tête" },
+  "Texto da mensagem. Use {{1}}, {{2}} para os valores que mudam.": {
+    "fr-FR": "Texte du message. Utilisez {{1}}, {{2}} pour les valeurs variables.",
+  },
+  Conteúdo: { "fr-FR": "Contenu" },
+  "Rodapé (opcional) — texto pequeno no fim da mensagem": {
+    "fr-FR": "Pied de page (facultatif) — petit texte à la fin du message",
+  },
+  Rodapé: { "fr-FR": "Pied de page" },
+  "Resposta rápida": { "fr-FR": "Réponse rapide" },
+  "Abrir link": { "fr-FR": "Ouvrir un lien" },
+  Ligar: { "fr-FR": "Appeler" },
+  "Tipo do botão": { "fr-FR": "Type du bouton" },
+  "Texto do botão": { "fr-FR": "Texte du bouton" },
+  "URL do botão": { "fr-FR": "URL du bouton" },
+  "Telefone do botão": { "fr-FR": "Téléphone du bouton" },
+  "Remover botão": { "fr-FR": "Supprimer le bouton" },
+  remover: { "fr-FR": "supprimer" },
+  "Adicionar botão": { "fr-FR": "Ajouter un bouton" },
+  "A revisão exige um exemplo de cada valor. Sem eles o modelo é recusado.": {
+    "fr-FR": "La révision exige un exemple pour chaque valeur. Sans eux, le modèle est refusé.",
+  },
+  "Exemplo do valor": { "fr-FR": "Exemple de la valeur" },
+  "ex.: María": { "fr-FR": "ex. : María" },
+  "A plataforma revisa antes de aprovar — o modelo nasce pendente e some da lista de envio até ela decidir.":
+    {
+      "fr-FR":
+        "La plateforme vérifie avant d’approuver : le modèle est créé en attente et reste absent de la liste d’envoi jusqu’à sa décision.",
+    },
+  "Nenhum modelo espelhado ainda. Clique em Sincronizar para trazer os que já existem na plataforma.":
+    {
+      "fr-FR":
+        "Aucun modèle synchronisé pour l’instant. Cliquez sur Synchroniser pour importer ceux qui existent déjà sur la plateforme.",
+    },
+  "valor(es)": { "fr-FR": "valeur(s)" },
+  Cabeçalho: { "fr-FR": "En-tête" },
+  mídia: { "fr-FR": "média" },
+  "Sem corpo espelhado — sincronize para trazer o conteúdo.": {
+    "fr-FR": "Aucun corps synchronisé — synchronisez pour importer le contenu.",
+  },
+  "Sincronizado em": { "fr-FR": "Synchronisé le" },
+  "Tipo do botão ": { "fr-FR": "Type du bouton " },
   "Não foi possível salvar.": { "fr-FR": "Impossible d’enregistrer." },
   "Estes limites protegem o número contra bloqueio do WhatsApp. Campo vazio usa o padrão seguro do sistema (mostrado no campo).":
     {
