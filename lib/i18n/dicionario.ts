@@ -40,6 +40,9 @@ export const DICIONARIO: Traducoes = {
   Canais: { "fr-FR": "Canaux", es: "Canales" },
   Análise: { "fr-FR": "Analyse", es: "Análisis" },
   Organização: { "fr-FR": "Organisation", es: "Organización" },
+  "Dados da empresa, retenção de mídia, DPO. Admin only.": {
+    "fr-FR": "Données de l’entreprise, rétention des médias et DPO. Réservé aux administrateurs.",
+  },
 
   // ─── Navegação (a barra lateral, presente em toda tela) ───
   Inbox: { "fr-FR": "Inbox", es: "Inbox" },

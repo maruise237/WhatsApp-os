@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
+import { traduzir } from "@/lib/i18n/dicionario";
+import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { createClient } from "@/lib/supabase/server";
 import { TenantForm } from "./_form";
 
@@ -22,6 +24,7 @@ interface OrgRow {
 export default async function TenantSettingsPage() {
   const user = await requireAuth();
   const activeOrg = await resolveActiveOrg(user);
+  const idioma = normalizarIdioma(user.locale);
   if (!activeOrg) redirect("/app");
   if (!user.is_platform_admin && ROLE_RANK[activeOrg.role] < ROLE_RANK.admin) {
     redirect("/403");
@@ -37,17 +40,19 @@ export default async function TenantSettingsPage() {
     .maybeSingle();
 
   const row = (data ?? null) as OrgRow | null;
-  const lostReasonsExtra =
-    (row?.settings && Array.isArray((row.settings as { lost_reasons_extra?: unknown }).lost_reasons_extra)
+  const lostReasonsExtra = (
+    row?.settings &&
+    Array.isArray((row.settings as { lost_reasons_extra?: unknown }).lost_reasons_extra)
       ? ((row.settings as { lost_reasons_extra?: string[] }).lost_reasons_extra ?? [])
-      : []) as string[];
+      : []
+  ) as string[];
 
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Organização</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Organização", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          Dados da empresa, retenção de mídia, DPO. Admin only.
+          {traduzir("Dados da empresa, retenção de mídia, DPO. Admin only.", idioma)}
         </p>
       </header>
       {row && (
@@ -59,7 +64,7 @@ export default async function TenantSettingsPage() {
             timezone: row.timezone,
             // `en-US` saiu da lista (nunca teve tradução). Uma linha antiga
             // com ele cai no padrão em vez de quebrar a tela.
-            locale: row.locale === "es" ? "es" : "pt-BR",
+            locale: row.locale === "es" ? "es" : row.locale === "fr-FR" ? "fr-FR" : "pt-BR",
             media_retention_days: row.media_retention_days,
             dpo_email: row.dpo_email,
             privacy_policy_url: row.privacy_policy_url,
