@@ -24,7 +24,7 @@ import type { AgentRow } from "@/hooks/ai/useAgent";
 import type { AgentVersionRow } from "@/hooks/ai/useAgentVersions";
 
 import { RunTrace } from "./RunTrace";
-import { useT } from "@/hooks/i18n/useT";
+import { useIdioma, useT } from "@/hooks/i18n/useT";
 
 interface Props {
   agent: AgentRow;
@@ -129,6 +129,7 @@ function Verificacoes({ g }: { g: NonNullable<TestResponse["data"]["guardrails"]
 
 export function TestPanel({ agent, draft, published, readOnly }: Props) {
   const t = useT();
+  const idioma = useIdioma();
   const target = draft ?? published;
   const qc = useQueryClient();
 
@@ -276,8 +277,8 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
                 {typeof result.latency_ms === "number" ? `${result.latency_ms}ms` : "—"}
               </Cell>
               <Cell label={t("Tokens in/out")}>
-                {(result.tokens_in ?? 0).toLocaleString()} /{" "}
-                {(result.tokens_out ?? 0).toLocaleString()}
+                {(result.tokens_in ?? 0).toLocaleString(idioma)} /{" "}
+                {(result.tokens_out ?? 0).toLocaleString(idioma)}
               </Cell>
               <Cell label={t("Custo (cents)")}>{result.cost_cents ?? 0}</Cell>
             </div>
