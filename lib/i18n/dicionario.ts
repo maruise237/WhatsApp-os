@@ -56,6 +56,12 @@ export const DICIONARIO: Traducoes = {
   // "Kanban" saiu do menu (a tela virou "Funis"); "Etapas do funil" é o nome novo
   // da tela de configuração, que antes disputava "Funis" com ela.
   Funis: { "fr-FR": "Entonnoirs", es: "Embudos" },
+  "Para onde o agente leva o card em cada passo do atendimento": {
+    "fr-FR": "L’étape vers laquelle l’agent déplace l’affaire à chaque étape du traitement",
+  },
+  ", vocabulário, custom fields e motivos de perda": {
+    "fr-FR": ", vocabulaire, champs personnalisés et motifs de perte",
+  },
   "Etapas do funil": { "fr-FR": "Étapes de l'entonnoir", es: "Etapas del embudo" },
   Agentes: { "fr-FR": "Agents", es: "Agentes" },
   "Follow-ups": { "fr-FR": "Follow-ups", es: "Seguimientos" },
