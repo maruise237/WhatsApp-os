@@ -138,7 +138,7 @@ export function AgentRowMenu({ agent }: Props) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t("Arquivar “")} {agent.name} »?
+              {t("Arquivar “{name}”?").replace("{name}", agent.name)}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {t(

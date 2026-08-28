@@ -2023,6 +2023,7 @@ export const DICIONARIO: Traducoes = {
   "Agent pausado.": { "fr-FR": "Agent mis en pause." },
   Arquivar: { "fr-FR": "Archiver" },
   "Arquivar “": { "fr-FR": "Archiver « " },
+  "Arquivar “{name}”?": { "fr-FR": "Archiver « {name} » ?" },
   "O agent deixa de responder gatilhos e some das listas ativas. Versões publicadas são preservadas para auditoria. Não é possível desarquivar pela UI nesta versão.":
     {
       "fr-FR":
