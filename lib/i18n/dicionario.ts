@@ -3447,6 +3447,55 @@ export const DICIONARIO: Traducoes = {
       "fr-FR":
         "Les canaux par lesquels votre entreprise échange avec ses clients. Connectez des numéros par QR ou le numéro officiel Meta et surveillez l’état de chacun.",
     },
+  "Radar de risco": { "fr-FR": "Radar de risque" },
+  "Crítico": { "fr-FR": "Critique" },
+  "Em risco": { "fr-FR": "À risque" },
+  "Em voo": { "fr-FR": "En vol" },
+  "parado há": { "fr-FR": "inactif depuis" },
+  "Nenhuma demanda em risco": { "fr-FR": "Aucune demande à risque" },
+  "Toda demanda aberta teve atividade recente ou já tem um retorno agendado.": {
+    "fr-FR": "Toute demande ouverte a eu une activité récente ou a déjà un retour planifié.",
+  },
+  "demanda aberta sem próximo passo": { "fr-FR": "demande ouverte sans prochaine étape" },
+  "demandas abertas sem próximo passo": { "fr-FR": "demandes ouvertes sans prochaine étape" },
+  "Ninguém marcou o que acontece a seguir. Cada uma é alguém esperando sem que nada esteja combinado.": {
+    "fr-FR":
+      "Personne n’a indiqué la suite. Chacune de ces demandes est une personne qui attend sans qu’aucune échéance ne soit fixée.",
+  },
+  "aberta há": { "fr-FR": "ouverte depuis" },
+  "crítico": { "fr-FR": "critique" },
+  "em risco": { "fr-FR": "à risque" },
+  "em voo": { "fr-FR": "en vol" },
+  "Agente:": { "fr-FR": "Agent :" },
+  "sem nome": { "fr-FR": "sans nom" },
+  "Com atendente": { "fr-FR": "Avec un agent" },
+  "Assistente na conversa": { "fr-FR": "Assistant dans la conversation" },
+  "Sem dono": { "fr-FR": "Sans propriétaire" },
+  "Assistente retorna": { "fr-FR": "L’assistant revient" },
+  "Sem próximo passo agendado": { "fr-FR": "Aucune prochaine étape planifiée" },
+  "Você assumiu a demanda": { "fr-FR": "Vous avez pris en charge la demande" },
+  "Demandas abertas que esfriaram e precisam de você. Se o assistente já agendou um retorno, aparece como “em voo”; sem próximo passo, é risco de perder o cliente.":
+    {
+      "fr-FR":
+        "Les demandes ouvertes qui ont refroidi et ont besoin de vous. Si l’assistant a déjà planifié un retour, elle apparaît « en vol » ; sans prochaine étape, c’est un risque de perdre le client.",
+    },
+  "Customer 360 — busque, filtre e gerencie contatos.": {
+    "fr-FR": "Customer 360 — recherchez, filtrez et gérez vos contacts.",
+  },
+  "Importar CSV": { "fr-FR": "Importer un CSV" },
+  "Buscar por nome, email ou telefone…": {
+    "fr-FR": "Rechercher par nom, e-mail ou téléphone…",
+  },
+  "Tag:": { "fr-FR": "Tag :" },
+  "Todas as origens": { "fr-FR": "Toutes les origines" },
+  "Importado (CSV)": { "fr-FR": "Importé (CSV)" },
+  "por página": { "fr-FR": "par page" },
+  "Itens por página": { "fr-FR": "Éléments par page" },
+  "Erro ao carregar contatos.": { "fr-FR": "Erreur lors du chargement des contacts." },
+  "Tentar novamente": { "fr-FR": "Réessayer" },
+  "contato": { "fr-FR": "contact" },
+  "contatos": { "fr-FR": "contacts" },
+  "carregados — há mais resultados": { "fr-FR": "chargés — il y a plus de résultats" },
 };
 
 /**

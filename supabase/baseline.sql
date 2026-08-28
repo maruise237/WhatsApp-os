@@ -14517,6 +14517,54 @@ create unique index if not exists webhook_events_log_evolution_external_unique
   on public.webhook_events_log (provider, external_id)
   where provider = 'evolution_go' and external_id is not null;
 
+-- APÊNDICE 2026-08-28 — 0180: garantia de privilégios para os papéis da Data API
+-- (mesmo bloco da migração 0180; idempotente — seguro reaplicar)
+-- ============================================================================
+grant all on all tables in schema public to anon;
+grant all on all tables in schema public to authenticated;
+grant all on all tables in schema public to service_role;
+
+revoke all on table public.event_log from anon, authenticated;
+revoke all on table public.webhook_events_log from anon, authenticated;
+grant select, references, trigger, truncate, maintain on table public.event_log to anon, authenticated;
+grant select, references, trigger, truncate, maintain on table public.webhook_events_log to anon, authenticated;
+
+revoke all on table public.ai_agent_runs from anon;
+revoke all on table public.ai_agent_versions from anon;
+revoke all on table public.ai_provider_credentials from anon;
+revoke all on table public.ai_provider_credentials_safe from anon;
+revoke all on table public.crm_lead_activities from anon;
+revoke all on table public.storage_redaction_queue from anon;
+grant all on table public.ai_agent_runs to authenticated, service_role;
+grant all on table public.ai_agent_versions to authenticated, service_role;
+grant all on table public.ai_provider_credentials to authenticated, service_role;
+grant all on table public.ai_provider_credentials_safe to authenticated, service_role;
+grant all on table public.crm_lead_activities to authenticated, service_role;
+grant all on table public.storage_redaction_queue to authenticated, service_role;
+
+grant usage on schema public to anon, authenticated, service_role;
+grant all on all sequences in schema public to anon, authenticated, service_role;
+grant execute on all functions in schema public to authenticated, service_role;
+
+revoke execute on function public.fn_audit_log_row() from authenticated;
+revoke execute on function public.fn_decrypt_oauth(bytea) from authenticated;
+revoke execute on function public.fn_encrypt_oauth(text) from authenticated;
+revoke execute on function public.fn_lgpd_cascade_redact_contact(uuid, uuid, uuid) from authenticated;
+revoke execute on function public.fn_update_budget_consumption() from authenticated;
+
+do $$
+declare v_owner name;
+begin
+  select tableowner into v_owner
+    from pg_tables
+   where schemaname = 'public'
+   limit 1;
+  if v_owner is not null then
+    execute format('alter default privileges for role %I in schema public grant all on tables to anon, authenticated, service_role', v_owner);
+    execute format('alter default privileges for role %I in schema public grant all on sequences to anon, authenticated, service_role', v_owner);
+    execute format('alter default privileges for role %I in schema public grant all on functions to anon, authenticated, service_role', v_owner);
+  end if;
+end $$;
 -- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 --
 -- ⚠️ ESTE BLOCO É, DE PROPÓSITO, O ÚLTIMO DO ARQUIVO. Apêndice novo entra ANTES
@@ -14592,51 +14640,3 @@ grant execute on function public.fn_lgpd_cascade_redact_contact(uuid, uuid, uuid
 grant execute on function public.fn_update_budget_consumption() to service_role;
 
 -- ============================================================================
--- APÊNDICE 2026-08-28 — 0180: garantia de privilégios para os papéis da Data API
--- (mesmo bloco da migração 0180; idempotente — seguro reaplicar)
--- ============================================================================
-grant all on all tables in schema public to anon;
-grant all on all tables in schema public to authenticated;
-grant all on all tables in schema public to service_role;
-
-revoke all on table public.event_log from anon, authenticated;
-revoke all on table public.webhook_events_log from anon, authenticated;
-grant select, references, trigger, truncate, maintain on table public.event_log to anon, authenticated;
-grant select, references, trigger, truncate, maintain on table public.webhook_events_log to anon, authenticated;
-
-revoke all on table public.ai_agent_runs from anon;
-revoke all on table public.ai_agent_versions from anon;
-revoke all on table public.ai_provider_credentials from anon;
-revoke all on table public.ai_provider_credentials_safe from anon;
-revoke all on table public.crm_lead_activities from anon;
-revoke all on table public.storage_redaction_queue from anon;
-grant all on table public.ai_agent_runs to authenticated, service_role;
-grant all on table public.ai_agent_versions to authenticated, service_role;
-grant all on table public.ai_provider_credentials to authenticated, service_role;
-grant all on table public.ai_provider_credentials_safe to authenticated, service_role;
-grant all on table public.crm_lead_activities to authenticated, service_role;
-grant all on table public.storage_redaction_queue to authenticated, service_role;
-
-grant usage on schema public to anon, authenticated, service_role;
-grant all on all sequences in schema public to anon, authenticated, service_role;
-grant execute on all functions in schema public to authenticated, service_role;
-
-revoke execute on function public.fn_audit_log_row() from authenticated;
-revoke execute on function public.fn_decrypt_oauth(bytea) from authenticated;
-revoke execute on function public.fn_encrypt_oauth(text) from authenticated;
-revoke execute on function public.fn_lgpd_cascade_redact_contact(uuid, uuid, uuid) from authenticated;
-revoke execute on function public.fn_update_budget_consumption() from authenticated;
-
-do $$
-declare v_owner name;
-begin
-  select tableowner into v_owner
-    from pg_tables
-   where schemaname = 'public'
-   limit 1;
-  if v_owner is not null then
-    execute format('alter default privileges for role %I in schema public grant all on tables to anon, authenticated, service_role', v_owner);
-    execute format('alter default privileges for role %I in schema public grant all on sequences to anon, authenticated, service_role', v_owner);
-    execute format('alter default privileges for role %I in schema public grant all on functions to anon, authenticated, service_role', v_owner);
-  end if;
-end $$;

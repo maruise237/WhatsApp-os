@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { format, formatRelative, isToday, isYesterday } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { format, formatRelative, isToday, isYesterday, type Locale } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import { CaretDown, CaretUp, ChatCircle } from "@/lib/ui/icons";
 import {
   Table,
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useIdioma } from "@/hooks/i18n/useT";
+import { useT } from "@/hooks/i18n/useT";
 import type { ContactOrderBy } from "@/lib/schemas/contacts";
 import type { Contact } from "@/lib/types/contacts";
 import { rotuloDoContato } from "@/lib/contacts/rotulo-do-contato";
@@ -29,12 +31,12 @@ function displayName(c: Contact): string {
 }
 
 /** Hoje/ontem: relativo ("há 2 horas", "ontem"). Mais antigo: data, não dia da semana. */
-function formatUltimaAtividade(iso: string, now = new Date()): string {
+function formatUltimaAtividade(iso: string, locale: Locale, now = new Date()): string {
   const d = new Date(iso);
   if (isToday(d) || isYesterday(d)) {
-    return formatRelative(d, now, { locale: ptBR });
+    return formatRelative(d, now, { locale });
   }
-  return format(d, "dd/MM/yyyy", { locale: ptBR });
+  return format(d, "dd/MM/yyyy", { locale });
 }
 
 function SortableHead({
@@ -83,42 +85,46 @@ function SortableHead({
 }
 
 export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
+  const t = useT();
+  const idioma = useIdioma();
+  const locale = idioma === "en-US" ? enUS : fr;
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <SortableHead
-            label="Nome"
+            label={t("Nome")}
             column="display_name"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
           />
           <SortableHead
-            label="Email"
+            label={t("Email")}
             column="email"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
           />
           <SortableHead
-            label="Telefone"
+            label={t("Telefone")}
             column="phone_number"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
           />
-          <TableHead>Tags</TableHead>
+          <TableHead>{t("Tags")}</TableHead>
           <SortableHead
-            label="Última atividade"
+            label={t("Última atividade")}
             column="last_activity_at"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
           />
-          <TableHead>Status</TableHead>
+          <TableHead>{t("Status")}</TableHead>
           <TableHead className="w-[52px]">
-            <span className="sr-only">Conversa</span>
+            <span className="sr-only">{t("Conversa")}</span>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -147,15 +153,15 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
             </TableCell>
             <TableCell className="text-muted-foreground text-sm">
               {c.last_activity_at
-                ? formatUltimaAtividade(c.last_activity_at)
+                ? formatUltimaAtividade(c.last_activity_at, locale)
                 : "—"}
             </TableCell>
             <TableCell>
               <div className="flex flex-wrap gap-1">
-                {c.is_anonymized && <Badge variant="destructive">Anonimizado</Badge>}
-                {c.is_blocked && <Badge variant="warning">Bloqueado</Badge>}
+                {c.is_anonymized && <Badge variant="destructive">{t("Anonimizado")}</Badge>}
+                {c.is_blocked && <Badge variant="warning">{t("Bloqueado")}</Badge>}
                 {!c.is_anonymized && !c.is_blocked && (
-                  <Badge variant="success">Ativo</Badge>
+                  <Badge variant="success">{t("Ativo")}</Badge>
                 )}
               </div>
             </TableCell>
