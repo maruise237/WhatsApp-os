@@ -73,6 +73,10 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": ", vocabulaire, champs personnalisés et motifs de perte",
   },
   "Etapas do funil": { "fr-FR": "Étapes de l'entonnoir", es: "Etapas del embudo" },
+  "Agents de IA": { "fr-FR": "Agents IA" },
+  "Configure o comportamento dos agents que respondem no WhatsApp.": {
+    "fr-FR": "Configurez le comportement des agents qui répondent sur WhatsApp.",
+  },
   Agentes: { "fr-FR": "Agents", es: "Agentes" },
   "Follow-ups": { "fr-FR": "Follow-ups", es: "Seguimientos" },
   Roteadores: { "fr-FR": "Routeurs", es: "Enrutadores" },

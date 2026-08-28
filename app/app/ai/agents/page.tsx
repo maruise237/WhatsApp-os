@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
+import { traduzir } from "@/lib/i18n/dicionario";
+import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { createClient } from "@/lib/supabase/server";
 import type { AgentRow } from "@/hooks/ai/useAgent";
 import { AgentsList } from "./_components/AgentsList";
@@ -22,6 +24,7 @@ const AGENT_COLUMNS =
 export default async function AgentsListPage() {
   const user = await requireAuth();
   const activeOrg = await resolveActiveOrg(user);
+  const idioma = normalizarIdioma(user.locale);
   if (!activeOrg) redirect("/app");
   if (ROLE_RANK[activeOrg.role] < ROLE_RANK.manager) {
     redirect("/403");
@@ -54,9 +57,11 @@ export default async function AgentsListPage() {
     <div className="flex h-full flex-col gap-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Agents de IA</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {traduzir("Agents de IA", idioma)}
+          </h1>
           <p className="text-sm text-muted-foreground">
-            Configure o comportamento dos agents que respondem no WhatsApp.
+            {traduzir("Configure o comportamento dos agents que respondem no WhatsApp.", idioma)}
           </p>
         </div>
       </header>
