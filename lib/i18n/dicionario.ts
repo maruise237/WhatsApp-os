@@ -1246,6 +1246,144 @@ export const DICIONARIO: Traducoes = {
       "Pour voir la liste complète de ce qui est vérifié — et ce que protège chaque vérification —",
   },
   "abra a aba": { "fr-FR": "ouvrez l’onglet" },
+  "Respeitar quem pediu para parar": { "fr-FR": "Respecter la personne qui a demandé l’arrêt" },
+  "Se a pessoa respondeu STOP, SAIR ou pediu para não receber mais, nada é enviado a ela.": {
+    "fr-FR":
+      "Si la personne a répondu STOP, SAIR ou demandé à ne plus recevoir de messages, rien ne lui est envoyé.",
+  },
+  "Quem pediu para parar tem o direito de ser deixado em paz — e insistir é infração, não estratégia.":
+    {
+      "fr-FR":
+        "Toute personne qui a demandé l’arrêt a le droit d’être laissée en paix — insister est une infraction, pas une stratégie.",
+    },
+  "Respeitar dados apagados e a base legal": {
+    "fr-FR": "Respecter les données supprimées et la base légale",
+  },
+  "Contato anonimizado a pedido não recebe mensagem, e prospecção sem base legal não sai.": {
+    "fr-FR":
+      "Un contact anonymisé à sa demande ne reçoit aucun message, et une prospection sans base légale n’est pas envoyée.",
+  },
+  "É obrigação legal. Apagar dados é irreversível por desenho, e escrever para quem foi apagado desfaria isso.":
+    {
+      "fr-FR":
+        "C’est une obligation légale. La suppression des données est irréversible par conception, et écrire à une personne supprimée l’annulerait.",
+    },
+  "Segurar o ritmo de envio": { "fr-FR": "Ralentir le rythme d’envoi" },
+  "Espaça as mensagens para o seu número não parecer robô e ser bloqueado pelo WhatsApp.": {
+    "fr-FR":
+      "Les messages sont espacés pour que votre numéro ne ressemble pas à un robot et ne soit pas bloqué par WhatsApp.",
+  },
+  "É o que impede seu número de ser bloqueado — e o número é o seu negócio.": {
+    "fr-FR":
+      "C’est ce qui empêche votre numéro d’être bloqué — et ce numéro, c’est votre activité.",
+  },
+  "Respeitar a janela do WhatsApp": { "fr-FR": "Respecter la fenêtre WhatsApp" },
+  "Fora da janela de 24 horas, só modelo aprovado sai — é o que o próprio WhatsApp permite.": {
+    "fr-FR":
+      "En dehors de la fenêtre de 24 heures, seul un modèle approuvé est envoyé — c’est ce que WhatsApp autorise.",
+  },
+  "Quem impõe é o WhatsApp, não nós. Desligar aqui não libera nada: a mensagem seria recusada lá, ou cobrada.":
+    {
+      "fr-FR":
+        "C’est WhatsApp qui l’impose, pas nous. Désactiver cette vérification ne libère rien : le message serait refusé ou facturé là-bas.",
+    },
+  "Variar o texto das mensagens iguais": { "fr-FR": "Varier le texte des messages identiques" },
+  "Evita mandar a mesma frase idêntica para muita gente, que é o padrão que denuncia disparo em massa.":
+    {
+      "fr-FR":
+        "Évite d’envoyer exactement la même phrase à de nombreuses personnes, un schéma qui signale un envoi massif.",
+    },
+  "Texto idêntico em massa é o gatilho de spam do WhatsApp — mesmo risco do ritmo de envio.": {
+    "fr-FR":
+      "Un texte identique envoyé en masse déclenche le filtre anti-spam de WhatsApp — le même risque que le rythme d’envoi.",
+  },
+  "Não prometer preço ou prazo por conta própria": {
+    "fr-FR": "Ne pas promettre de prix ou de délai de son propre chef",
+  },
+  "Barra a mensagem em que o assistente inventa desconto, valor ou data de entrega.": {
+    "fr-FR":
+      "Bloque les messages dans lesquels l’assistant invente une remise, un prix ou une date de livraison.",
+  },
+  "Uma promessa escrita obriga o seu negócio. A conferência é uma regra fixa, não custa nada e não tem troca a oferecer.":
+    {
+      "fr-FR":
+        "Une promesse écrite engage votre entreprise. Cette vérification est une règle fixe, ne coûte rien et n’a pas d’option de désactivation.",
+    },
+  "Conferir promessas em texto livre": { "fr-FR": "Vérifier les promesses en texte libre" },
+  "Uma segunda leitura, feita por um modelo, para pegar a promessa escrita de um jeito que a regra fixa não reconhece.":
+    {
+      "fr-FR":
+        "Une seconde lecture, effectuée par un modèle, détecte les promesses formulées d’une manière que la règle fixe ne reconnaît pas.",
+    },
+  "+1 consulta ao modelo por mensagem enviada": {
+    "fr-FR": "+1 requête au modèle par message envoyé",
+  },
+  "Não prometer atendimento humano que não existe": {
+    "fr-FR": "Ne pas promettre un traitement humain qui n’existe pas",
+  },
+  'Impede o "vou pedir para o responsável te ligar" quando nenhum chamado foi aberto de verdade.': {
+    "fr-FR":
+      "Empêche de dire « je vais demander au responsable de vous appeler » lorsqu’aucune demande n’a réellement été créée.",
+  },
+  "É promessa que só você pode cumprir, e o cliente fica esperando. Regra fixa, sem custo.": {
+    "fr-FR":
+      "C’est une promesse que vous seul pouvez tenir, et le client attend. Règle fixe, sans coût.",
+  },
+  "Não falar a nossa língua com o seu cliente": {
+    "fr-FR": "Ne pas parler notre langage à votre client",
+  },
+  "Barra nome de ferramenta, nome de tabela e código de erro na mensagem que o cliente lê.": {
+    "fr-FR":
+      "Bloque les noms d’outils, de tables et les codes d’erreur dans le message lu par le client.",
+  },
+  "É a conferência que derrubou o vazamento medido de 30% para zero. Desligar reabre exatamente o defeito que ela existe para fechar.":
+    {
+      "fr-FR":
+        "C’est la vérification qui a réduit la fuite mesurée de 30 % à zéro. La désactiver rouvrirait précisément le défaut qu’elle est conçue à fermer.",
+    },
+  "Dizer que é um assistente quando perguntam": {
+    "fr-FR": "Dire qu’il s’agit d’un assistant lorsqu’on le demande",
+  },
+  "Se o cliente pergunta se está falando com um robô, a resposta não pode enganar.": {
+    "fr-FR": "Si le client demande s’il parle à un robot, la réponse ne peut pas le tromper.",
+  },
+  "Esconder que é um assistente é enganar o cliente.": {
+    "fr-FR": "Cacher qu’il s’agit d’un assistant revient à tromper le client.",
+  },
+  "Detectar tentativa de manipular o assistente": {
+    "fr-FR": "Détecter une tentative de manipulation de l’assistant",
+  },
+  "Lê a mensagem que chega e reconhece quem está tentando fazer o assistente ignorar as suas instruções.":
+    {
+      "fr-FR":
+        "Lit le message reçu et reconnaît les tentatives de faire ignorer ses instructions à l’assistant.",
+    },
+  "+1 consulta ao modelo por mensagem recebida": {
+    "fr-FR": "+1 requête au modèle par message reçu",
+  },
+  "Isto não se desliga.": { "fr-FR": "Cette vérification ne peut pas être désactivée." },
+  "carregando…": { "fr-FR": "chargement…" },
+  Ligada: { "fr-FR": "Activée" },
+  Desligada: { "fr-FR": "Désactivée" },
+  "vem da configuração do servidor": { "fr-FR": "provient de la configuration du serveur" },
+  "Ligada por você": { "fr-FR": "Activée par vous" },
+  "Desligada por você": { "fr-FR": "Désactivée par vous" },
+  Custa: { "fr-FR": "Coût" },
+  "O modelo usado se escolhe em": { "fr-FR": "Le modèle utilisé se choisit dans" },
+  "Provedores de IA": { "fr-FR": "Fournisseurs d’IA" },
+  São: { "fr-FR": "Il y a" },
+  verificações: { "fr-FR": "vérifications" },
+  "Antes de cada mensagem sair": { "fr-FR": "Avant l’envoi de chaque message" },
+  "nesta ordem — a primeira que barra interrompe as seguintes, e o assistente recebe de volta o motivo para reescrever.":
+    {
+      "fr-FR":
+        "dans cet ordre — la première qui bloque interrompt les suivantes, et l’assistant reçoit le motif pour réécrire.",
+    },
+  "Antes de o assistente ler": { "fr-FR": "Avant que l’assistant ne lise" },
+  "Esta roda sobre a mensagem que chega, antes das outras — por isso aparece separada.": {
+    "fr-FR":
+      "Elle s’applique au message reçu, avant les autres — c’est pourquoi elle apparaît séparément.",
+  },
   "Confere antes de enviar": { "fr-FR": "Vérifications avant envoi" },
   "Configure e salve uma versão antes de testar.": {
     "fr-FR": "Configurez et enregistrez une version avant de la tester.",
