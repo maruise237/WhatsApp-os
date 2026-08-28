@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { useT } from "@/hooks/i18n/useT";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,11 +49,7 @@ import { PainelDoOperador } from "./PainelDoOperador";
 import { PainelDeSeguranca } from "./PainelDeSeguranca";
 import { FunisDoAgente, type CoberturaPorFunil } from "./FunisDoAgente";
 import { PublishConfirmDialog } from "./PublishConfirmDialog";
-import {
-  saveAgentDraftAction,
-  publishAgentAction,
-  createMcpAgentAction,
-} from "../_actions";
+import { saveAgentDraftAction, publishAgentAction, createMcpAgentAction } from "../_actions";
 
 import { versionCreateSchema, agentMcpCreateSchema } from "@/lib/ai/agents/validation";
 import type { SelectableChannel as ChannelSessionLite } from "@/lib/channels/selectable";
@@ -164,10 +161,7 @@ const DEFAULT_TRIGGER: TriggerValue = {
   concurrency: "one_per_conversation",
 };
 
-function buildState(args: {
-  agent?: AgentRow;
-  version: AgentVersionRow | null;
-}): FormState {
+function buildState(args: { agent?: AgentRow; version: AgentVersionRow | null }): FormState {
   const { agent, version } = args;
   return {
     name: agent?.name ?? "",
@@ -180,8 +174,7 @@ function buildState(args: {
     credential_id: version ? (version.credential_id ?? CHAVE_DA_INSTALACAO) : "",
     channel_session_id: version?.channel_session_id ?? "",
     system_prompt:
-      version?.system_prompt ??
-      "Você é um atendente. Responda de forma educada e clara, em pt-BR.",
+      version?.system_prompt ?? "Você é um atendente. Responda de forma educada e clara, em pt-BR.",
     tool_ids: version?.tool_ids ?? [],
     trigger_config: (version?.trigger_config as unknown as TriggerValue) ?? DEFAULT_TRIGGER,
     max_steps: version?.max_steps ?? 10,
@@ -189,11 +182,7 @@ function buildState(args: {
     cost_budget_cents: version?.cost_budget_cents ?? 50,
     history_message_window: version?.history_message_window ?? 20,
     history_token_window: version?.history_token_window ?? 8_000,
-    handoff_keywords: version?.handoff_keywords ?? [
-      "falar com humano",
-      "atendente",
-      "pessoa real",
-    ],
+    handoff_keywords: version?.handoff_keywords ?? ["falar com humano", "atendente", "pessoa real"],
     handoff_tool_enabled: version?.handoff_tool_enabled ?? true,
     cases_enabled: version?.cases_enabled ?? false,
     split_messages: version?.split_messages ?? false,
@@ -244,6 +233,7 @@ export function AgentForm(props: Props) {
   const router = useRouter();
   const isEdit = props.mode === "edit";
   const readOnly = props.readOnly ?? false;
+  const t = useT();
 
   const baseline = React.useMemo(() => {
     if (isEdit) {
@@ -418,13 +408,13 @@ export function AgentForm(props: Props) {
 
   // Status badge
   const statusBadge = (() => {
-    if (!isEdit) return <Badge variant="secondary">Novo</Badge>;
+    if (!isEdit) return <Badge variant="secondary">{t("Novo")}</Badge>;
     const pubN = props.published?.version_number;
     const draftN = props.draft?.version_number;
     if (pubN && draftN) {
       return (
         <Badge variant="secondary">
-          Publicado v{pubN} + Rascunho v{draftN}
+          {t("Publicado")} v{pubN} + {t("Rascunho")} v{draftN}
         </Badge>
       );
     }
@@ -434,20 +424,36 @@ export function AgentForm(props: Props) {
       // que acha ter perdido. Ele continua no Histórico.
       const obsoleta = props.draftObsoleto?.version_number;
       return (
-        <Badge variant="default" title={obsoleta ? `O rascunho v${obsoleta} é anterior a esta versão e foi superado por ela — ele continua no Histórico.` : undefined}>
-          Publicado v{pubN}
-          {obsoleta ? ` (rascunho v${obsoleta} superado)` : ""}
+        <Badge
+          variant="default"
+          title={
+            obsoleta
+              ? `O rascunho v${obsoleta} é anterior a esta versão e foi superado por ela — ele continua no Histórico.`
+              : undefined
+          }
+        >
+          {t("Publicado")} v{pubN}
+          {obsoleta ? ` (${t("rascunho")} v${obsoleta} ${t("superado")})` : ""}
         </Badge>
       );
     }
-    if (draftN) return <Badge variant="outline">Rascunho v{draftN}</Badge>;
+    if (draftN)
+      return (
+        <Badge variant="outline">
+          {t("Rascunho")} v{draftN}
+        </Badge>
+      );
     // Sem rascunho e sem publicada: o formulário abriu da última versão que
     // existiu (props.base), e não do texto padrão. Dizer isso é o que impede o
     // autor de achar que o prompt sumiu — e de salvar por cima achando que não.
     if (props.base) {
-      return <Badge variant="outline">Pausado · editando a v{props.base.version_number}</Badge>;
+      return (
+        <Badge variant="outline">
+          {t("Pausado · editando a v")} {props.base.version_number}
+        </Badge>
+      );
     }
-    return <Badge variant="outline">Sem versão</Badge>;
+    return <Badge variant="outline">{t("Sem versão")}</Badge>;
   })();
 
   return (
@@ -457,7 +463,7 @@ export function AgentForm(props: Props) {
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold tracking-tight">
-              {isEdit ? props.agent.name : "Novo agente"}
+              {isEdit ? props.agent.name : t("Novo agente")}
             </h2>
             {statusBadge}
           </div>
@@ -468,16 +474,12 @@ export function AgentForm(props: Props) {
 
         <div className="flex flex-wrap items-center gap-2">
           {isEdit ? (
-            <Button
-              variant="outline"
-              onClick={handleReset}
-              disabled={!dirty || disabled}
-            >
-              Descartar alterações
+            <Button variant="outline" onClick={handleReset} disabled={!dirty || disabled}>
+              {t("Descartar alterações")}
             </Button>
           ) : null}
           <Button onClick={handleSave} disabled={(!dirty && isEdit) || disabled || !isValid}>
-            {saving ? "Salvando…" : isEdit ? "Salvar rascunho" : "Criar agente"}
+            {saving ? t("Salvando…") : isEdit ? t("Salvar rascunho") : t("Criar agente")}
           </Button>
           {isEdit ? (
             <span title={publishBlockReason ?? undefined}>
@@ -487,10 +489,10 @@ export function AgentForm(props: Props) {
                 disabled={disabled || publishBlockReason !== null}
               >
                 {publishing
-                  ? "Publicando…"
+                  ? t("Publicando…")
                   : props.draft
-                    ? `Publicar v${props.draft.version_number}`
-                    : "Publicar"}
+                    ? `${t("Publicar")} v${props.draft.version_number}`
+                    : t("Publicar")}
               </Button>
             </span>
           ) : null}
@@ -507,7 +509,11 @@ export function AgentForm(props: Props) {
         vocabulário interno; quem configura pensa em "quem fala com meu cliente" e
         "quem organiza minha casa".
       */}
-      <div className="flex flex-wrap gap-1 border-b" role="tablist" aria-label="Papéis do agente">
+      <div
+        className="flex flex-wrap gap-1 border-b"
+        role="tablist"
+        aria-label={t("Papéis do agente")}
+      >
         {(
           [
             ["conversa", "Conversa com o cliente"],
@@ -531,7 +537,7 @@ export function AgentForm(props: Props) {
                 : "border-b-2 border-transparent px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
             }
           >
-            {rotulo}
+            {t(rotulo)}
           </button>
         ))}
       </div>
@@ -571,9 +577,9 @@ export function AgentForm(props: Props) {
         <div className="space-y-4">
           {/* Identification */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Quem é este agente</h3>
+            <h3 className="text-sm font-medium">{t("Quem é este agente")}</h3>
             <div className="space-y-1">
-              <Label htmlFor="name">Nome</Label>
+              <Label htmlFor="name">{t("Nome")}</Label>
               <Input
                 id="name"
                 value={form.name}
@@ -587,7 +593,7 @@ export function AgentForm(props: Props) {
               ) : null}
             </div>
             <div className="space-y-1">
-              <Label htmlFor="description">Descrição</Label>
+              <Label htmlFor="description">{t("Descrição")}</Label>
               <Textarea
                 id="description"
                 value={form.description}
@@ -598,7 +604,7 @@ export function AgentForm(props: Props) {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="priority">Ordem de preferência (0 a 1000)</Label>
+              <Label htmlFor="priority">{t("Ordem de preferência (0 a 1000)")}</Label>
               <Input
                 id="priority"
                 type="number"
@@ -610,17 +616,18 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <p className="text-xs text-muted-foreground">
-                Quando mais de um agente puder atender a mesma conversa, o de número
-                maior tenta primeiro. Se você só tem um agente, pode deixar como está.
+                {t(
+                  "Quando mais de um agente puder atender a mesma conversa, o de número maior tenta primeiro. Se você só tem um agente, pode deixar como está.",
+                )}
               </p>
             </div>
           </Card>
 
           {/* Provider + credential + model */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">A inteligência que ele usa</h3>
+            <h3 className="text-sm font-medium">{t("A inteligência que ele usa")}</h3>
             <div className="space-y-1">
-              <Label htmlFor="provider">Empresa de inteligência artificial</Label>
+              <Label htmlFor="provider">{t("Empresa de inteligência artificial")}</Label>
               <Select
                 value={form.provider}
                 onValueChange={(v) => changeProvider(v as Provider)}
@@ -640,7 +647,7 @@ export function AgentForm(props: Props) {
                   */}
                   {PROVEDORES.map((p) => (
                     <SelectItem key={p.id} value={p.id}>
-                      {p.rotulo}
+                      {t(p.rotulo)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -679,31 +686,31 @@ export function AgentForm(props: Props) {
 
           {/* WhatsApp session */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Por qual número ele atende</h3>
+            <h3 className="text-sm font-medium">{t("Por qual número ele atende")}</h3>
             {props.routerMembership && (
               <div className="flex items-start gap-2 rounded-md bg-accent-soft p-3 text-xs text-text-muted">
                 <Info className="mt-0.5 shrink-0" aria-hidden />
                 <p>
-                  Este agente é acionado pelo roteador{" "}
+                  {t("Este agente é acionado pelo roteador")}{" "}
                   <Link
                     href={`/app/ai/routers/${props.routerMembership.routerId}`}
                     className="font-medium underline underline-offset-2"
                   >
                     «{props.routerMembership.routerName}»
                   </Link>{" "}
-                  — o campo de número abaixo não se aplica.
+                  {t("— o campo de número abaixo não se aplica.")}
                 </p>
               </div>
             )}
             <div className="space-y-1">
-              <Label htmlFor="channel_session_id">Número conectado</Label>
+              <Label htmlFor="channel_session_id">{t("Número conectado")}</Label>
               <Select
                 value={form.channel_session_id || undefined}
                 onValueChange={(v) => patch({ channel_session_id: v })}
                 disabled={disabled}
               >
                 <SelectTrigger id="channel_session_id">
-                  <SelectValue placeholder="Selecione um número" />
+                  <SelectValue placeholder={t("Selecione um número")} />
                 </SelectTrigger>
                 <SelectContent>
                   {props.channelSessions.map((s) => (
@@ -722,7 +729,7 @@ export function AgentForm(props: Props) {
                   ))}
                   {props.channelSessions.length === 0 ? (
                     <SelectItem value="__none__" disabled>
-                      Nenhum número conectado
+                      {t("Nenhum número conectado")}
                     </SelectItem>
                   ) : null}
                 </SelectContent>
@@ -782,9 +789,7 @@ export function AgentForm(props: Props) {
                   min={0}
                   max={200}
                   value={form.history_message_window}
-                  onChange={(e) =>
-                    patch({ history_message_window: Number(e.target.value) })
-                  }
+                  onChange={(e) => patch({ history_message_window: Number(e.target.value) })}
                   disabled={disabled}
                 />
               </div>
@@ -797,9 +802,7 @@ export function AgentForm(props: Props) {
                   max={50000}
                   step={500}
                   value={form.history_token_window}
-                  onChange={(e) =>
-                    patch({ history_token_window: Number(e.target.value) })
-                  }
+                  onChange={(e) => patch({ history_token_window: Number(e.target.value) })}
                   disabled={disabled}
                 />
               </div>
@@ -877,9 +880,9 @@ export function AgentForm(props: Props) {
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Em vez de um bloco único, a resposta sai em bolhas separadas, espaçadas pelo
-              mesmo ritmo anti-banimento do envio. O agente também é instruído a escrever
-              em parágrafos curtos.
+              Em vez de um bloco único, a resposta sai em bolhas separadas, espaçadas pelo mesmo
+              ritmo anti-banimento do envio. O agente também é instruído a escrever em parágrafos
+              curtos.
             </p>
             {form.split_messages ? (
               <div className="space-y-1">
@@ -906,8 +909,8 @@ export function AgentForm(props: Props) {
           <Card className="space-y-2 p-4">
             <h3 className="text-sm font-medium">O que o agente pode fazer</h3>
             <p className="text-xs text-muted-foreground">
-              Ligue por jornada de trabalho. O agente só consegue fazer o que estiver
-              ligado aqui — e o que estiver ligado, ele fará sozinho durante o atendimento.
+              Ligue por jornada de trabalho. O agente só consegue fazer o que estiver ligado aqui —
+              e o que estiver ligado, ele fará sozinho durante o atendimento.
             </p>
             <ToolPicker
               value={form.tool_ids}
@@ -965,9 +968,9 @@ export function AgentForm(props: Props) {
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Diferente de passar a conversa: aqui o agente continua atendendo. Quando
-              esbarra em algo que só uma pessoa resolve — aprovar um desconto, por
-              exemplo — ele abre um pedido interno e retoma assim que for respondido.
+              Diferente de passar a conversa: aqui o agente continua atendendo. Quando esbarra em
+              algo que só uma pessoa resolve — aprovar um desconto, por exemplo — ele abre um pedido
+              interno e retoma assim que for respondido.
             </p>
           </Card>
 
@@ -975,31 +978,25 @@ export function AgentForm(props: Props) {
           <Card className="space-y-3 p-4">
             <h3 className="text-sm font-medium">Follow-up</h3>
             <p className="text-xs text-muted-foreground">
-              Retomar sozinho quem parou de responder, para o interessado não sumir
-              sem ninguém perceber.
+              Retomar sozinho quem parou de responder, para o interessado não sumir sem ninguém
+              perceber.
             </p>
             <div className="flex items-center gap-2">
               <Switch
                 id="followup_enabled"
                 checked={form.followup.enabled}
-                onCheckedChange={(v) =>
-                  patch({ followup: { ...form.followup, enabled: v } })
-                }
+                onCheckedChange={(v) => patch({ followup: { ...form.followup, enabled: v } })}
                 disabled={disabled}
               />
-              <Label htmlFor="followup_enabled">
-                Habilitar gatilhos automáticos de follow-up
-              </Label>
+              <Label htmlFor="followup_enabled">Habilitar gatilhos automáticos de follow-up</Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Os fluxos abaixo só entram em ação para um cliente se
-              este agente estiver publicado com follow-up habilitado.
+              Os fluxos abaixo só entram em ação para um cliente se este agente estiver publicado
+              com follow-up habilitado.
             </p>
             <FollowupFlowPicker
               value={form.followup.flow_pointer_ids}
-              onChange={(ids) =>
-                patch({ followup: { ...form.followup, flow_pointer_ids: ids } })
-              }
+              onChange={(ids) => patch({ followup: { ...form.followup, flow_pointer_ids: ids } })}
               disabled={disabled}
             />
           </Card>

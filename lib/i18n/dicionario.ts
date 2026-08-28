@@ -1166,6 +1166,18 @@ export const DICIONARIO: Traducoes = {
   Histórico: { "fr-FR": "Historique" },
   Propostas: { "fr-FR": "Propositions" },
   Publicado: { "fr-FR": "Publié" },
+  superado: { "fr-FR": "dépassé" },
+  "Pausado · editando a v": { "fr-FR": "En pause · modification de la v" },
+  "Sem versão": { "fr-FR": "Aucune version" },
+  "Quando mais de um agente puder atender a mesma conversa, o de número maior tenta primeiro. Se você só tem um agente, pode deixar como está.":
+    {
+      "fr-FR":
+        "Lorsque plusieurs agents peuvent traiter la même conversation, celui qui a le numéro le plus élevé essaie en premier. Si vous n’avez qu’un agent, vous pouvez laisser cette valeur telle quelle.",
+    },
+  "Este agente é acionado pelo roteador": { "fr-FR": "Cet agent est déclenché par le routeur" },
+  "— o campo de número abaixo não se aplica.": {
+    "fr-FR": "— le champ de numéro ci-dessous ne s’applique pas.",
+  },
   Pausado: { "fr-FR": "En pause" },
   Arquivado: { "fr-FR": "Archivé" },
   Inválido: { "fr-FR": "Invalide" },
@@ -1537,6 +1549,19 @@ export const DICIONARIO: Traducoes = {
         "Créez un agent pour répondre aux conversations WhatsApp avec l’IA. Vous configurez le prompt, les outils, les déclencheurs et la fenêtre de contexte.",
     },
   "Novo agente": { "fr-FR": "Nouvel agent" },
+  "Descartar alterações": { "fr-FR": "Annuler les modifications" },
+  "Salvar rascunho": { "fr-FR": "Enregistrer le brouillon" },
+  "Criar agente": { "fr-FR": "Créer l’agent" },
+  Publicar: { "fr-FR": "Publier" },
+  "Papéis do agente": { "fr-FR": "Rôles de l’agent" },
+  "Conversa com o cliente": { "fr-FR": "Échange avec le client" },
+  "Organiza o sistema": { "fr-FR": "Organisation du système" },
+  "Quem é este agente": { "fr-FR": "Présentation de l’agent" },
+  "Ordem de preferência (0 a 1000)": { "fr-FR": "Ordre de priorité (de 0 à 1000)" },
+  "A inteligência que ele usa": { "fr-FR": "Intelligence utilisée" },
+  "Empresa de inteligência artificial": { "fr-FR": "Fournisseur d’intelligence artificielle" },
+  "Por qual número ele atende": { "fr-FR": "Numéro utilisé pour répondre" },
+  "Selecione um número": { "fr-FR": "Sélectionnez un numéro" },
   "Nenhum agent corresponde aos filtros atuais.": {
     "fr-FR": "Aucun agent ne correspond aux filtres actuels.",
   },
