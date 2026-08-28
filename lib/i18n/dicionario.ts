@@ -472,6 +472,65 @@ export const DICIONARIO: Traducoes = {
     "fr-FR":
       "Utilisez l’un des 10 codes enregistrés lors de la configuration de la validation en deux étapes.",
   },
+  "Gerar novos códigos invalida TODOS os atuais. Tem certeza?": {
+    "fr-FR": "Générer de nouveaux codes invalidera TOUS les codes actuels. Êtes-vous sûr ?",
+  },
+  "Novos códigos gerados.": { "fr-FR": "Nouveaux codes générés." },
+  "Sair de TODOS os dispositivos? Você precisará fazer login de novo.": {
+    "fr-FR": "Se déconnecter de TOUS les appareils ? Vous devrez vous reconnecter.",
+  },
+  "Verificação em duas etapas": {
+    "fr-FR":
+      "Utilisez l’un des 10 codes enregistrés lors de la configuration de la validation en deux étapes.",
+  },
+  Ativada: { "fr-FR": "Activée" },
+  Desativada: { "fr-FR": "Désactivée" },
+  "Além da senha, o sistema pede um código de 6 dígitos que só existe no seu celular. É a proteção que segura uma senha vazada.":
+    {
+      "fr-FR":
+        "En plus du mot de passe, le système demande un code à 6 chiffres disponible uniquement sur votre téléphone. C’est la protection qui limite les risques liés à un mot de passe compromis.",
+    },
+  "Ela é obrigatória para administradores desta empresa, então não dá para desligar aqui. Um administrador pode mudar essa regra abaixo.":
+    {
+      "fr-FR":
+        "Elle est obligatoire pour les administrateurs de cette entreprise et ne peut donc pas être désactivée ici. Un administrateur peut modifier cette règle ci-dessous.",
+    },
+  "Desligar a verificação em duas etapas desta conta?": {
+    "fr-FR": "Désactiver la validation en deux étapes de ce compte ?",
+  },
+  "Verificação desligada.": { "fr-FR": "Validation désactivée." },
+  "Desligando…": { "fr-FR": "Désactivation…" },
+  Desligar: { "fr-FR": "Désactiver" },
+  Ativar: { "fr-FR": "Activer" },
+  "Exigir de quem administra": { "fr-FR": "L’exiger des administrateurs" },
+  "Agora os administradores precisam da verificação.": {
+    "fr-FR": "Les administrateurs doivent désormais utiliser la validation.",
+  },
+  "A verificação deixou de ser obrigatória.": { "fr-FR": "La validation n’est plus obligatoire." },
+  "Todo administrador desta empresa precisa configurar a verificação em duas etapas.": {
+    "fr-FR":
+      "Chaque administrateur de cette entreprise doit configurer la validation en deux étapes.",
+  },
+  "Quando ligado, quem administra vê uma tela pedindo a configuração antes de usar o sistema. Ligue se a sua equipe mexe com dados de clientes — é a diferença entre uma senha vazada virar um susto ou virar um vazamento.":
+    {
+      "fr-FR":
+        "Lorsqu’elle est activée, les administrateurs voient un écran demandant la configuration avant d’utiliser le système. Activez-la si votre équipe traite des données clients : cela peut faire la différence entre une alerte et une fuite après la compromission d’un mot de passe.",
+    },
+  "Códigos de recuperação": { "fr-FR": "Codes de récupération" },
+  "Use se perder acesso ao autenticador. Cada código é de uso único.": {
+    "fr-FR":
+      "À utiliser si vous perdez l’accès à l’application d’authentification. Chaque code ne peut servir qu’une seule fois.",
+  },
+  "Gerando…": { "fr-FR": "Génération…" },
+  "Regenerar códigos de recuperação": { "fr-FR": "Régénérer les codes de récupération" },
+  "Habilite MFA antes de gerar códigos.": { "fr-FR": "Activez la MFA avant de générer des codes." },
+  "Sessões ativas": { "fr-FR": "Sessions actives" },
+  "Listagem de sessões — em breve. Por enquanto, deslogue todos os dispositivos:": {
+    "fr-FR":
+      "Liste des sessions — bientôt disponible. Pour l’instant, déconnectez tous les appareils :",
+  },
+  "Saindo…": { "fr-FR": "Déconnexion…" },
+  "Sair de todos os dispositivos": { "fr-FR": "Déconnecter tous les appareils" },
   "Validando...": { "fr-FR": "Validation…" },
   "Recuperar acesso": { "fr-FR": "Récupérer l’accès" },
   "Nova senha": { "fr-FR": "Nouveau mot de passe" },
@@ -861,7 +920,6 @@ export const DICIONARIO: Traducoes = {
       "fr-FR":
         "Laissez WhatsApp ouvert dans « Appareils connectés » avant de générer le prochain code pour avoir suffisamment de temps.",
     },
-  "Gerando…": { "fr-FR": "Génération…" },
   "Gerar novo QR Code": { "fr-FR": "Générer un nouveau code QR" },
   "O serviço de WhatsApp desta instalação não respondeu. Ele roda no seu servidor, junto com o resto do sistema — quem instalou consegue religá-lo.":
     {
@@ -1521,7 +1579,6 @@ export const DICIONARIO: Traducoes = {
   "Elas continuam salvas, mas o agente não consegue usá-las.": {
     "fr-FR": "Elles restent enregistrées, mais l’agent ne peut pas les utiliser.",
   },
-  Desligar: { "fr-FR": "Désactiver" },
   "essa capacidade": { "fr-FR": "cette capacité" },
   "essas capacidades": { "fr-FR": "ces capacités" },
   "Carregando o uso das capacidades…": { "fr-FR": "Chargement de l’utilisation des capacités…" },
