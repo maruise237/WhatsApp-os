@@ -84,6 +84,10 @@ export const DICIONARIO: Traducoes = {
   "Ver tudo em IA": { "fr-FR": "Voir tout en IA", es: "Ver todo en IA" },
   Conexões: { "fr-FR": "Connexions", es: "Conexiones" },
   Webhooks: { "fr-FR": "Webhooks", es: "Webhooks" },
+  "Receba contatos de fora (landing pages, formulários) e crie automações que agem sozinhas.": {
+    "fr-FR":
+      "Recevez des contacts externes (pages d’atterrissage, formulaires) et créez des automatisations qui agissent seules.",
+  },
   Desempenho: { "fr-FR": "Performance", es: "Rendimiento" },
   "Evolução da IA": { "fr-FR": "Évolution de l'IA", es: "Evolución de la IA" },
   "Audit Log": { "fr-FR": "Journal d'audit", es: "Registro de auditoría" },
