@@ -371,6 +371,12 @@ export const DICIONARIO: Traducoes = {
 
   // ─── Contatos ───
   "Buscar contatos…": { "fr-FR": "Rechercher des contacts…", es: "Buscar contactos…" },
+  "Renomeado.": { "fr-FR": "Nom modifié." },
+  "Renomear agent": { "fr-FR": "Renommer l’agent" },
+  "Apenas o nome interno muda. Versões publicadas e histórico são preservados.": {
+    "fr-FR":
+      "Seul le nom interne est modifié. Les versions publiées et l’historique sont préservés.",
+  },
   Nome: { "fr-FR": "Nom", es: "Nombre" },
   Telefone: { "fr-FR": "Téléphone", es: "Teléfono" },
   "Nenhum contato": { "fr-FR": "Aucun contact", es: "Ningún contacto" },
