@@ -89,7 +89,7 @@ export function UpdatePanel() {
 
   if (rodando) {
     return (
-      <Layout titulo={`Atualizando para a versão ${nova}`}>
+      <Layout titulo={t("Atualizando para a versão {version}").replace("{version}", nova)}>
         <ol className="space-y-2 text-sm">
           {PASSOS.map((passo) => {
             const indice = PASSOS.findIndex((p) => p.chave === data.run?.last_step);
@@ -103,7 +103,9 @@ export function UpdatePanel() {
           })}
         </ol>
         <p className="mt-4 text-sm text-muted-foreground">
-          O sistema sai do ar por alguns instantes e volta sozinho. Pode deixar esta página aberta.
+          {t(
+            "O sistema sai do ar por alguns instantes e volta sozinho. Pode deixar esta página aberta.",
+          )}
         </p>
       </Layout>
     );
@@ -118,13 +120,20 @@ export function UpdatePanel() {
 
   if (data.run?.status === "failed_rolled_back") {
     return (
-      <Layout titulo={`A atualização para a versão ${alvo} não deu certo`}>
+      <Layout
+        titulo={t("A atualização para a versão {version} não deu certo").replace("{version}", alvo)}
+      >
         <p className="text-sm">
-          Voltei o sistema para a versão {anterior}, que é a que está no ar agora, e os seus dados
-          estão intactos. O banco de dados já tinha sido atualizado e permanece assim — isso é
-          seguro, a versão {anterior} funciona com ele. Se quiser desfazer também o banco, use a
-          cópia de segurança feita antes da tentativa (
-          <code>bash hostgator-setup-kit/restore.sh</code>).
+          {t(
+            "Voltei o sistema para a versão {version}, que é a que está no ar agora, e os seus dados estão intactos.",
+          ).replace("{version}", anterior)}{" "}
+          {t(
+            "O banco de dados já tinha sido atualizado e permanece assim — isso é seguro, a versão {version} funciona com ele.",
+          ).replace("{version}", anterior)}{" "}
+          {t(
+            "Se quiser desfazer também o banco, use a cópia de segurança feita antes da tentativa",
+          )}{" "}
+          (<code>bash hostgator-setup-kit/restore.sh</code>).
         </p>
         <DetalhesTecnicos texto={data.run.log_tail} />
         <Saida
@@ -132,7 +141,9 @@ export function UpdatePanel() {
           mutate={() => atualizar.mutate()}
           isPending={atualizar.isPending}
           erro={erro}
-          texto={`Para deixar o servidor inteiro de volta na versão ${anterior} — inclusive o código, que já foi trocado —, quem tem acesso pode rodar:`}
+          texto={t(
+            "Para deixar o servidor inteiro de volta na versão {version} — inclusive o código, que já foi trocado —, quem tem acesso pode rodar:",
+          ).replace("{version}", anterior)}
           comando={comandoDeVolta(data.run.from_version)}
         />
       </Layout>
@@ -149,7 +160,9 @@ export function UpdatePanel() {
     // comando de volta. A cópia alarmante erra para o lado de fazer conferir, e
     // o log logo abaixo explica em português quando foi só uma recusa.
     return (
-      <Layout titulo={`A atualização para a versão ${alvo} não deu certo`}>
+      <Layout
+        titulo={t("A atualização para a versão {version} não deu certo").replace("{version}", alvo)}
+      >
         <p className="text-sm">
           E eu <strong>não consegui</strong> voltar sozinho para a versão {anterior}: o sistema pode
           estar rodando a versão {alvo} com defeito, ou fora do ar. Seus dados estão intactos e a

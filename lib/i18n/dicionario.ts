@@ -323,6 +323,33 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "Détails techniques (utile pour demander de l’aide)",
   },
   "Atualização do sistema": { "fr-FR": "Mise à jour du système" },
+  "Atualizando para a versão {version}": { "fr-FR": "Mise à jour vers la version {version}" },
+  "O sistema sai do ar por alguns instantes e volta sozinho. Pode deixar esta página aberta.": {
+    "fr-FR":
+      "Le système sera indisponible quelques instants, puis redémarrera seul. Vous pouvez laisser cette page ouverte.",
+  },
+  "A atualização para a versão {version} não deu certo": {
+    "fr-FR": "La mise à jour vers la version {version} a échoué",
+  },
+  "Voltei o sistema para a versão {version}, que é a que está no ar agora, e os seus dados estão intactos.":
+    {
+      "fr-FR":
+        "Le système a été restauré vers la version {version}, actuellement en service, et vos données sont intactes.",
+    },
+  "O banco de dados já tinha sido atualizado e permanece assim — isso é seguro, a versão {version} funciona com ele.":
+    {
+      "fr-FR":
+        "La base de données avait déjà été mise à jour et le reste — c’est sans danger, la version {version} fonctionne avec elle.",
+    },
+  "Se quiser desfazer também o banco, use a cópia de segurança feita antes da tentativa": {
+    "fr-FR":
+      "Si vous souhaitez également annuler la mise à jour de la base de données, utilisez la sauvegarde créée avant la tentative",
+  },
+  "Para deixar o servidor inteiro de volta na versão {version} — inclusive o código, que já foi trocado —, quem tem acesso pode rodar:":
+    {
+      "fr-FR":
+        "Pour restaurer entièrement le serveur vers la version {version} — y compris le code déjà remplacé —, une personne ayant accès peut exécuter :",
+    },
   "Reiniciando…": { "fr-FR": "Redémarrage…" },
   "O sistema está voltando. Esta página se atualiza sozinha em alguns instantes.": {
     "fr-FR":
