@@ -2044,7 +2044,11 @@ export const DICIONARIO: Traducoes = {
   'Ex: {"key": "size", "label": "Tamanho", "type": "text" }': {
     "fr-FR": 'Ex. : {"key": "size", "label": "Taille", "type": "text" }',
   },
-  "Pipeline atualizado.": { "fr-FR": "Pipeline mis à jour." },
+  Profil: { "fr-FR": "Profil" },
+  "Informations personnelles. Le changement d’e-mail sera bientôt disponible.": {
+    "fr-FR": "Informations personnelles. Le changement d’e-mail sera bientôt disponible.",
+  },
+  "Perfil atualizado.": { "fr-FR": "Profil mis à jour." },
   "Custom fields: JSON inválido. Esperado um array.": {
     "fr-FR": "Champs personnalisés : JSON invalide. Un tableau est attendu.",
   },
