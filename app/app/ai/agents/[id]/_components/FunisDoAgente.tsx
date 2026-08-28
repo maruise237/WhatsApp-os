@@ -21,6 +21,7 @@
 import * as React from "react";
 
 import { Card } from "@/components/ui/card";
+import { useT } from "@/hooks/i18n/useT";
 import { Label } from "@/components/ui/label";
 import type { FunilDaResposta } from "@/hooks/pipelines/usePipelines";
 
@@ -42,6 +43,7 @@ interface Props {
 }
 
 export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = false }: Props) {
+  const t = useT();
   const marcados = new Set(value);
 
   function alternar(id: string, marcado: boolean): void {
@@ -56,7 +58,9 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
   // onde o sistema cria um card por conversa nova (spec 17 passo 1). Se ele
   // ficar de fora, o assistente conversa e os cards se acumulam sem que ele
   // possa tocá-los.
-  const entradaDeFora = Boolean(funilDeEntrada && !marcados.has(funilDeEntrada.id) && value.length > 0);
+  const entradaDeFora = Boolean(
+    funilDeEntrada && !marcados.has(funilDeEntrada.id) && value.length > 0,
+  );
 
   // Funis que o assistente cuida e não sabe percorrer: promessa que não se
   // cumpre. O dono marcou achando que ele ia organizar, e ele não vai.
@@ -67,16 +71,17 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
   return (
     <Card className="space-y-3 p-4">
       <div>
-        <h3 className="text-sm font-medium">Em que negócios ele pode mexer</h3>
+        <h3 className="text-sm font-medium">{t("Em que negócios ele pode mexer")}</h3>
         <p className="text-xs text-muted-foreground">
-          Marque os funis que este assistente cuida. Ele conversa com qualquer cliente, mas só
-          move, edita ou encerra negócio dos funis marcados aqui.
+          {t(
+            "Marque os funis que este assistente cuida. Ele conversa com qualquer cliente, mas só move, edita ou encerra negócio dos funis marcados aqui.",
+          )}
         </p>
       </div>
 
       {funis.length === 0 ? (
         <p className="text-xs text-muted-foreground">
-          Você ainda não tem nenhum funil. Crie um em Funis para poder liberar o assistente.
+          {t("Você ainda não tem nenhum funil. Crie um em Funis para poder liberar o assistente.")}
         </p>
       ) : (
         <div className="space-y-2" data-testid="agente-funis">
@@ -99,18 +104,15 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
                 {f.name}
                 {f.is_default ? (
                   <span className="ml-2 text-xs text-muted-foreground">
-                    (é para cá que vão as conversas novas)
+                    {t("(é para cá que vão as conversas novas)")}
                   </span>
                 ) : null}
                 {/* A lacuna de tradução só aparece no funil MARCADO: fora do
                     escopo ela não custa nada, e mostrá-la ali seria cobrar uma
                     configuração que ninguém prometeu. */}
                 {marcados.has(f.id) && cobertura?.[f.id]?.mudo ? (
-                  <span
-                    data-testid={`funil-mudo-${f.id}`}
-                    className="ml-2 text-xs text-warning-fg"
-                  >
-                    — ele não sabe organizar este funil ainda
+                  <span data-testid={`funil-mudo-${f.id}`} className="ml-2 text-xs text-warning-fg">
+                    {t("— ele não sabe organizar este funil ainda")}
                   </span>
                 ) : null}
               </Label>
@@ -121,25 +123,30 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
 
       {value.length === 0 ? (
         <p data-testid="agente-sem-funil" className="text-xs text-muted-foreground">
-          Sem nenhum funil marcado, ele conversa com os clientes normalmente, mas não mexe em
-          negócio nenhum — nem move, nem encerra, nem marca.
+          {t(
+            "Sem nenhum funil marcado, ele conversa com os clientes normalmente, mas não mexe em negócio nenhum — nem move, nem encerra, nem marca.",
+          )}
         </p>
       ) : null}
 
       {mudosMarcados.length > 0 ? (
         <p data-testid="agente-funis-mudos" className="text-xs text-warning-fg">
           {mudosMarcados.length === 1
-            ? `Você marcou ${mudosMarcados[0]}, mas ninguém disse ao assistente o que cada etapa desse funil significa — ele vai atender e deixar os negócios parados onde estão.`
-            : `Você marcou ${mudosMarcados.length} funis em que ninguém disse ao assistente o que cada etapa significa — ele vai atender e deixar os negócios parados onde estão.`}{" "}
-          Isso se configura em Configurações › Funis.
+            ? t(
+                "Você marcou {name}, mas ninguém disse ao assistente o que cada etapa desse funil significa — ele vai atender e deixar os negócios parados onde estão.",
+              ).replace("{name}", mudosMarcados[0] ?? "")
+            : t(
+                "Você marcou {count} funis em que ninguém disse ao assistente o que cada etapa significa — ele vai atender e deixar os negócios parados onde estão.",
+              ).replace("{count}", String(mudosMarcados.length))}{" "}
+          {t("Isso se configura em Configurações › Funis.")}
         </p>
       ) : null}
 
       {entradaDeFora ? (
         <p data-testid="agente-entrada-de-fora" className="text-xs text-warning-fg">
-          As conversas novas viram negócio em <strong>{funilDeEntrada?.name}</strong>, que não está
-          marcado. O assistente vai atender e os negócios vão se acumular ali sem que ele possa
-          organizá-los.
+          {t(
+            "As conversas novas viram negócio em {name}, que não está marcado. O assistente vai atender e os negócios vão se acumular ali sem que ele possa organizá-los.",
+          ).replace("{name}", funilDeEntrada?.name ?? "")}
         </p>
       ) : null}
     </Card>

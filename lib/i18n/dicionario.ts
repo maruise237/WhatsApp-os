@@ -1625,6 +1625,47 @@ export const DICIONARIO: Traducoes = {
   "Mensagens anteriores que ele lê": { "fr-FR": "Messages précédents lus par l’agent" },
   "Tamanho máximo desse histórico": { "fr-FR": "Taille maximale de cet historique" },
   "As instruções dele": { "fr-FR": "Ses instructions" },
+  "Em que negócios ele pode mexer": {
+    "fr-FR": "Dans quelles affaires l’agent peut-il intervenir ?",
+  },
+  "Marque os funis que este assistente cuida. Ele conversa com qualquer cliente, mas só move, edita ou encerra negócio dos funis marcados aqui.":
+    {
+      "fr-FR":
+        "Sélectionnez les pipelines pris en charge par cet assistant. Il peut échanger avec n’importe quel client, mais il ne déplace, ne modifie ou ne clôture que les affaires des pipelines sélectionnés ici.",
+    },
+  "Você ainda não tem nenhum funil. Crie um em Funis para poder liberar o assistente.": {
+    "fr-FR":
+      "Vous n’avez encore aucun pipeline. Créez-en un dans Pipelines pour pouvoir activer l’assistant.",
+  },
+  "(é para cá que vão as conversas novas)": {
+    "fr-FR": "(c’est ici qu’arrivent les nouvelles conversations)",
+  },
+  "— ele não sabe organizar este funil ainda": {
+    "fr-FR": "— il ne sait pas encore organiser ce pipeline",
+  },
+  "Sem nenhum funil marcado, ele conversa com os clientes normalmente, mas não mexe em negócio nenhum — nem move, nem encerra, nem marca.":
+    {
+      "fr-FR":
+        "Sans pipeline sélectionné, il échange normalement avec les clients, mais n’intervient dans aucune affaire — il ne la déplace, ne la clôture et ne l’étiquette pas.",
+    },
+  "Você marcou {name}, mas ninguém disse ao assistente o que cada etapa desse funil significa — ele vai atender e deixar os negócios parados onde estão.":
+    {
+      "fr-FR":
+        "Vous avez sélectionné {name}, mais personne n’a indiqué à l’assistant la signification de ses étapes — il répondra aux clients, mais laissera les affaires là où elles se trouvent.",
+    },
+  "Você marcou {count} funis em que ninguém disse ao assistente o que cada etapa significa — ele vai atender e deixar os negócios parados onde estão.":
+    {
+      "fr-FR":
+        "Vous avez sélectionné {count} pipelines dont les étapes n’ont pas été expliquées à l’assistant — il répondra aux clients, mais laissera les affaires là où elles se trouvent.",
+    },
+  "Isso se configura em Configurações › Funis.": {
+    "fr-FR": "Cette configuration se fait dans Paramètres › Pipelines.",
+  },
+  "As conversas novas viram negócio em {name}, que não está marcado. O assistente vai atender e os negócios vão se acumular ali sem que ele possa organizá-los.":
+    {
+      "fr-FR":
+        "Les nouvelles conversations créent une affaire dans {name}, qui n’est pas sélectionné. L’assistant répondra aux clients, mais les affaires s’y accumuleront sans pouvoir être organisées.",
+    },
   "Estilo de resposta": { "fr-FR": "Style de réponse" },
   "Responder em várias mensagens curtas (como uma pessoa digita)": {
     "fr-FR": "Répondre en plusieurs messages courts (comme une personne qui écrit)",
