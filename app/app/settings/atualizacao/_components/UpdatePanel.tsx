@@ -164,9 +164,11 @@ export function UpdatePanel() {
         titulo={t("A atualização para a versão {version} não deu certo").replace("{version}", alvo)}
       >
         <p className="text-sm">
-          E eu <strong>não consegui</strong> voltar sozinho para a versão {anterior}: o sistema pode
-          estar rodando a versão {alvo} com defeito, ou fora do ar. Seus dados estão intactos e a
-          cópia de segurança feita antes da tentativa continua guardada no servidor.
+          {t(
+            "Não consegui voltar sozinho para a versão {previous}: o sistema pode estar rodando a versão {target} com defeito, ou fora do ar. Seus dados estão intactos e a cópia de segurança feita antes da tentativa continua guardada no servidor.",
+          )
+            .replace("{previous}", anterior)
+            .replace("{target}", alvo)}
         </p>
         <DetalhesTecnicos texto={data.run.log_tail} />
         <Saida
@@ -174,7 +176,9 @@ export function UpdatePanel() {
           mutate={() => atualizar.mutate()}
           isPending={atualizar.isPending}
           erro={erro}
-          texto={`Para colocar o sistema de volta no ar na versão ${anterior}, quem tem acesso ao servidor precisa rodar:`}
+          texto={t(
+            "Para colocar o sistema de volta no ar na versão {version}, quem tem acesso ao servidor precisa rodar:",
+          ).replace("{version}", anterior)}
           comando={comandoDeVolta(data.run.from_version)}
         />
       </Layout>
@@ -183,10 +187,11 @@ export function UpdatePanel() {
 
   if (data.run?.status === "unknown") {
     return (
-      <Layout titulo="Não sei dizer como terminou">
+      <Layout titulo={t("Não sei dizer como terminou")}>
         <p className="text-sm">
-          Comecei a atualização para a versão {alvo} mas perdi contato com o servidor antes do fim.
-          Confira se o sistema está funcionando normalmente — se estiver, provavelmente deu certo.
+          {t(
+            "Comecei a atualização para a versão {version} mas perdi contato com o servidor antes do fim. Confira se o sistema está funcionando normalmente — se estiver, provavelmente deu certo.",
+          ).replace("{version}", alvo)}
         </p>
         <DetalhesTecnicos texto={data.run.log_tail} />
         <Saida
@@ -194,7 +199,7 @@ export function UpdatePanel() {
           mutate={() => atualizar.mutate()}
           isPending={atualizar.isPending}
           erro={erro}
-          texto="Para conferir pelo servidor, quem tem acesso pode rodar:"
+          texto={t("Para conferir pelo servidor, quem tem acesso pode rodar:")}
           comando={COMANDO_MANUAL}
         />
       </Layout>
@@ -203,15 +208,16 @@ export function UpdatePanel() {
 
   if (!data.agent_online) {
     return (
-      <Layout titulo="Atualização automática indisponível">
+      <Layout titulo={t("Atualização automática indisponível")}>
         <p className="text-sm">
-          Não estou conseguindo falar com o servidor onde o sistema está instalado, então não posso
-          atualizar sozinho. Quem tem acesso ao servidor pode entrar na pasta onde o sistema foi
-          instalado e rodar este comando — se for a primeira vez, rode duas vezes: a primeira baixa
-          o programa novo e a segunda liga o botão desta tela.
+          {t(
+            "Não estou conseguindo falar com o servidor onde o sistema está instalado, então não posso atualizar sozinho. Quem tem acesso ao servidor pode entrar na pasta onde o sistema foi instalado e rodar este comando — se for a primeira vez, rode duas vezes: a primeira baixa o programa novo e a segunda liga o botão desta tela.",
+          )}
         </p>
         <Comando comando={COMANDO_MANUAL} />
-        <p className="mt-3 text-sm text-muted-foreground">Versão instalada: {versao}.</p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {t("Versão instalada: {version}.").replace("{version}", versao)}
+        </p>
       </Layout>
     );
   }

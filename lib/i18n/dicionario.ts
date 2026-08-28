@@ -328,6 +328,41 @@ export const DICIONARIO: Traducoes = {
     "fr-FR":
       "Le système sera indisponible quelques instants, puis redémarrera seul. Vous pouvez laisser cette page ouverte.",
   },
+  "Não consegui voltar sozinho para a versão {previous}: o sistema pode estar rodando a versão {target} com defeito, ou fora do ar. Seus dados estão intactos e a cópia de segurança feita antes da tentativa continua guardada no servidor.":
+    {
+      "fr-FR":
+        "Je n’ai pas réussi à restaurer automatiquement la version {previous} : le système peut fonctionner avec la version {target} défectueuse ou être indisponible. Vos données sont intactes et la sauvegarde créée avant la tentative reste conservée sur le serveur.",
+    },
+  "Para colocar o sistema de volta no ar na versão {version}, quem tem acesso ao servidor precisa rodar:":
+    {
+      "fr-FR":
+        "Pour remettre le système en service avec la version {version}, une personne ayant accès au serveur doit exécuter :",
+    },
+  "Não sei dizer como terminou": {
+    "fr-FR": "Impossible de déterminer comment elle s’est terminée",
+  },
+  "Comecei a atualização para a versão {version} mas perdi contato com o servidor antes do fim. Confira se o sistema está funcionando normalmente — se estiver, provavelmente deu certo.":
+    {
+      "fr-FR":
+        "J’ai commencé la mise à jour vers la version {version}, mais j’ai perdu le contact avec le serveur avant la fin. Vérifiez que le système fonctionne normalement — si c’est le cas, la mise à jour a probablement réussi.",
+    },
+  "Para conferir pelo servidor, quem tem acesso pode rodar:": {
+    "fr-FR": "Pour vérifier depuis le serveur, une personne disposant d’un accès peut exécuter :",
+  },
+  "Não estou conseguindo falar com o servidor onde o sistema está instalado, então não posso atualizar sozinho. Quem tem acesso ao servidor pode entrar na pasta onde o sistema foi instalado e rodar este comando — se for a primeira vez, rode duas vezes: a primeira baixa o programa novo e a segunda liga o botão desta tela.":
+    {
+      "fr-FR":
+        "Je n’arrive pas à communiquer avec le serveur où le système est installé et je ne peux donc pas le mettre à jour automatiquement. Une personne ayant accès au serveur peut ouvrir le dossier d’installation et exécuter cette commande — s’il s’agit de la première fois, exécutez-la deux fois : la première télécharge le nouveau programme et la seconde active le bouton de cette page.",
+    },
+  "Versão instalada: {version}.": { "fr-FR": "Version installée : {version}." },
+  "Atualização automática indisponível": { "fr-FR": "Mise à jour automatique indisponible" },
+  "Não consegui checar se há versão nova": {
+    "fr-FR": "Impossible de vérifier s’il existe une nouvelle version",
+  },
+  "Você está na versão {version}": { "fr-FR": "Vous utilisez la version {version}" },
+  "É a mais recente. Não há nada a fazer.": {
+    "fr-FR": "C’est la version la plus récente. Aucune action n’est nécessaire.",
+  },
   "A atualização para a versão {version} não deu certo": {
     "fr-FR": "La mise à jour vers la version {version} a échoué",
   },
