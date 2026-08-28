@@ -1886,7 +1886,26 @@ export const DICIONARIO: Traducoes = {
   "DPO email": { "fr-FR": "E-mail du DPO" },
   "Retenção de mídia (dias)": { "fr-FR": "Rétention des médias (jours)" },
   "URL política de privacidade": { "fr-FR": "URL de la politique de confidentialité" },
-  "Motivos de perda extras (separados por vírgula)": {
+  "Você ainda não tem nenhum funil. Enquanto for assim, o agente atende normalmente, mas não tem para onde levar o card de ninguém — não há etapas para onde mover. Criar o funil é feito por quem instalou o sistema, direto no banco; depois ele aparece aqui para você escolher a etapa de cada passo.":
+    {
+      "fr-FR":
+        "Vous n’avez encore aucun pipeline. Dans cette situation, l’agent répond normalement, mais aucune étape ne permet de déplacer les affaires — il n’y a pas d’étape où les envoyer. Le pipeline est créé directement dans la base de données par la personne qui a installé le système ; il apparaîtra ensuite ici pour que vous puissiez choisir l’étape de chaque action.",
+    },
+  "Custom fields (JSON array)": { "fr-FR": "Champs personnalisés (tableau JSON)" },
+  "Salvar vocabulário e campos": { "fr-FR": "Enregistrer le vocabulaire et les champs" },
+  'Ex: [{ "key": "size", "label": "Tamanho", "type": "text" }]': {
+    "fr-FR": 'Ex. : [{ "key": "size", "label": "Taille", "type": "text" }]',
+  },
+  "{name} atualizado.": { "fr-FR": "{name} mis à jour." },
+  'Ex: {"key": "size", "label": "Tamanho", "type": "text" }': {
+    "fr-FR": 'Ex. : {"key": "size", "label": "Taille", "type": "text" }',
+  },
+  "Pipeline atualizado.": { "fr-FR": "Pipeline mis à jour." },
+  "Custom fields: JSON inválido. Esperado um array.": {
+    "fr-FR": "Champs personnalisés : JSON invalide. Un tableau est attendu.",
+  },
+  "Vocabulário e campos": { "fr-FR": "Vocabulaire et champs" },
+  "Motivos de perda (separados por vírgula)": {
     "fr-FR": "Motifs de perte supplémentaires (séparés par des virgules)",
   },
   "ex: Sem orçamento, Concorrente": { "fr-FR": "ex. : Budget insuffisant, Concurrent" },

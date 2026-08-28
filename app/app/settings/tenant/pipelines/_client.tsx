@@ -3,6 +3,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { useT } from "@/hooks/i18n/useT";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,6 +47,7 @@ export function PipelinesClient({
   /** Vocabulário/custom fields são admin (a server action recusa o resto). */
   podeEditarConfig: boolean;
 }) {
+  const t = useT();
   if (pipelines.length === 0) {
     // ⚠️ NÃO PROMETA UM CAMINHO QUE NÃO EXISTE. Criar funil não é feito por
     // nenhuma tela, rota ou action deste produto — só por script de instalação;
@@ -55,10 +57,9 @@ export function PipelinesClient({
     // procurando um botão que não existe em lugar nenhum.
     return (
       <Card className="p-6 text-sm leading-relaxed text-muted-foreground">
-        Você ainda não tem nenhum funil. Enquanto for assim, o agente atende normalmente, mas não
-        tem para onde levar o card de ninguém — não há etapas para onde mover. Criar o funil é
-        feito por quem instalou o sistema, direto no banco; depois ele aparece aqui para você
-        escolher a etapa de cada passo.
+        {t(
+          "Você ainda não tem nenhum funil. Enquanto for assim, o agente atende normalmente, mas não tem para onde levar o card de ninguém — não há etapas para onde mover. Criar o funil é feito por quem instalou o sistema, direto no banco; depois ele aparece aqui para você escolher a etapa de cada passo.",
+        )}
       </Card>
     );
   }
@@ -87,6 +88,7 @@ export function PipelinesClient({
 }
 
 function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
+  const t = useT();
   const v = pipeline.vocabulary ?? {};
   const [lead, setLead] = useState(v.lead ?? "Lead");
   const [deal, setDeal] = useState(v.deal ?? "Deal");
@@ -105,7 +107,7 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
       if (!Array.isArray(parsed)) throw new Error("not_array");
       fields = parsed as CustomFieldDef[];
     } catch {
-      toast.error("Custom fields: JSON inválido. Esperado um array.");
+      toast.error(t("Custom fields: JSON inválido. Esperado um array."));
       return;
     }
     const reasons = reasonsText
@@ -120,41 +122,41 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
     };
     startTransition(async () => {
       const r = await updatePipelineConfig(pipeline.id, patch);
-      if (r.ok) toast.success(`${pipeline.name} atualizado.`);
+      if (r.ok) toast.success(t("{name} atualizado.").replace("{name}", pipeline.name));
       else toast.error(`Erro: ${r.error}`);
     });
   }
 
   return (
     <div className="space-y-4 border-t border-border pt-6">
-      <h3 className="text-sm font-semibold">Vocabulário e campos</h3>
+      <h3 className="text-sm font-semibold">{t("Vocabulário e campos")}</h3>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="space-y-1">
-          <Label className="text-xs">Lead</Label>
+          <Label className="text-xs">{t("Lead")}</Label>
           <Input value={lead} onChange={(e) => setLead(e.target.value)} />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">Deal</Label>
+          <Label className="text-xs">{t("Deal")}</Label>
           <Input value={deal} onChange={(e) => setDeal(e.target.value)} />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">Won</Label>
+          <Label className="text-xs">{t("Won")}</Label>
           <Input value={won} onChange={(e) => setWon(e.target.value)} />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">Lost</Label>
+          <Label className="text-xs">{t("Lost")}</Label>
           <Input value={lost} onChange={(e) => setLost(e.target.value)} />
         </div>
       </div>
 
       <div className="space-y-1">
-        <Label className="text-xs">Motivos de perda (separados por vírgula)</Label>
+        <Label className="text-xs">{t("Motivos de perda (separados por vírgula)")}</Label>
         <Input value={reasonsText} onChange={(e) => setReasonsText(e.target.value)} />
       </div>
 
       <div className="space-y-1">
-        <Label className="text-xs">Custom fields (JSON array)</Label>
+        <Label className="text-xs">{t("Custom fields (JSON array)")}</Label>
         <textarea
           value={fieldsJson}
           onChange={(e) => setFieldsJson(e.target.value)}
@@ -162,13 +164,13 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
           spellCheck={false}
         />
         <p className="text-xs text-muted-foreground">
-          Ex: <code>{`[{ "key": "size", "label": "Tamanho", "type": "text" }]`}</code>
+          {t('Ex: [{ "key": "size", "label": "Tamanho", "type": "text" }]')}
         </p>
       </div>
 
       <div className="flex sm:justify-end">
         <Button onClick={handleSave} disabled={isPending} className="w-full sm:w-auto">
-          {isPending ? "Salvando…" : "Salvar vocabulário e campos"}
+          {isPending ? t("Salvando…") : t("Salvar vocabulário e campos")}
         </Button>
       </div>
     </div>
