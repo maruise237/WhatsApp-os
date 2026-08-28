@@ -30,7 +30,7 @@ import {
 import type { AgentVersionRow } from "@/hooks/ai/useAgentVersions";
 import { revertToVersionAction } from "../_actions";
 import { VersionDiff } from "./VersionDiff";
-import { useT } from "@/hooks/i18n/useT";
+import { useIdioma, useT } from "@/hooks/i18n/useT";
 
 interface Props {
   agentId: string;
@@ -66,6 +66,7 @@ function pickCounterpart(
 
 export function VersionHistory({ agentId, versions, readOnly }: Props) {
   const t = useT();
+  const idioma = useIdioma();
   const router = useRouter();
   const [diffOpen, setDiffOpen] = React.useState(false);
   const [diffPair, setDiffPair] = React.useState<{
@@ -135,14 +136,14 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
               </Badge>
               <span className="font-mono">v{v.version_number}</span>
               <span className="text-xs text-muted-foreground">
-                {new Date(v.created_at).toLocaleString()}
+                {new Date(v.created_at).toLocaleString(idioma)}
               </span>
               <span className="font-mono text-xs text-muted-foreground">
                 {v.provider}/{v.model}
               </span>
               {v.published_at ? (
                 <span className="text-xs text-muted-foreground">
-                  {t("publicada em")} {new Date(v.published_at).toLocaleString()}
+                  {t("publicada em")} {new Date(v.published_at).toLocaleString(idioma)}
                 </span>
               ) : null}
               <div className="ml-auto flex gap-2">
