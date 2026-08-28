@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
+import { traduzir } from "@/lib/i18n/dicionario";
+import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { createClient } from "@/lib/supabase/server";
 import type { CredentialRow } from "@/hooks/ai/useCredentials";
 import { CredentialsList } from "./_components/CredentialsList";
@@ -14,6 +16,7 @@ const SAFE_COLUMNS =
 export default async function CredentialsPage() {
   const user = await requireAuth();
   const activeOrg = await resolveActiveOrg(user);
+  const idioma = normalizarIdioma(user.locale);
   if (!activeOrg) redirect("/app");
   if (ROLE_RANK[activeOrg.role] < ROLE_RANK.manager) {
     redirect("/403");
@@ -38,7 +41,10 @@ export default async function CredentialsPage() {
         "credential_id, ai_agents!ai_agent_versions_agent_id_fkey!inner(archived_at, published_version_id)",
       )
       .eq("organization_id", activeOrg.orgId)
-      .in("credential_id", credentials.map((c) => c.id));
+      .in(
+        "credential_id",
+        credentials.map((c) => c.id),
+      );
 
     type LinkedRow = {
       credential_id: string;
@@ -61,18 +67,17 @@ export default async function CredentialsPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Chaves de acesso à IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {traduzir("Chaves de acesso à IA", idioma)}
+        </h1>
         <p className="text-sm text-muted-foreground">
-          A conta de inteligência artificial é sua: você contrata direto na Anthropic,
-          OpenAI ou Google e cola a chave aqui. Ela é guardada criptografada e nunca
-          mais aparece na tela depois de salva — nem para você.
+          {traduzir(
+            "A conta de inteligência artificial é sua: você contrata direto na Anthropic, OpenAI ou Google e cola a chave aqui. Ela é guardada criptografada e nunca mais aparece na tela depois de salva — nem para você.",
+            idioma,
+          )}
         </p>
       </header>
-      <CredentialsList
-        initialData={credentials}
-        canWrite={canWrite}
-        usageMap={usageMap}
-      />
+      <CredentialsList initialData={credentials} canWrite={canWrite} usageMap={usageMap} />
     </div>
   );
 }

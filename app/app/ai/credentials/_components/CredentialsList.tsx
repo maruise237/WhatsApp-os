@@ -8,6 +8,7 @@ import { PROVEDORES } from "@/lib/ai/pontos/provedores";
 import { useCredentialsList, type CredentialRow, type Provider } from "@/hooks/ai/useCredentials";
 import { CredentialCard } from "./CredentialCard";
 import { AddCredentialDialog } from "./AddCredentialDialog";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   initialData: CredentialRow[];
@@ -24,6 +25,7 @@ const PROVIDER_LABELS: Record<string, string> = Object.fromEntries(
 const PROVIDER_ORDER: Provider[] = PROVEDORES.map((p) => p.id);
 
 export function CredentialsList({ initialData, canWrite, usageMap }: Props) {
+  const t = useT();
   const { data } = useCredentialsList({ initialData });
   const [addOpen, setAddOpen] = useState(false);
 
@@ -43,15 +45,16 @@ export function CredentialsList({ initialData, canWrite, usageMap }: Props) {
     return (
       <>
         <Card className="flex flex-col items-center gap-3 p-10 text-center">
-          <h2 className="font-medium">Nenhuma chave cadastrada ainda</h2>
+          <h2 className="font-medium">{t("Nenhuma chave cadastrada ainda")}</h2>
           <p className="max-w-md text-sm text-muted-foreground">
-            Seus agentes só conseguem pensar depois que você cola aqui uma chave da
-            Anthropic, da OpenAI ou do Google. A cobrança vai direto para a sua conta
-            no provedor, e a chave fica guardada criptografada.
+            {t(
+              "Seus agentes só conseguem pensar depois que você cola aqui uma chave da Anthropic, da OpenAI ou do Google. A cobrança vai direto para a sua conta no provedor, e a chave fica guardada criptografada.",
+            )}
           </p>
           {canWrite && (
             <Button className="mt-1" onClick={() => setAddOpen(true)}>
-              <Plus size={14} aria-hidden className="mr-2" /> Adicionar credencial
+              <Plus size={14} aria-hidden className="mr-2" />
+              {t("Adicionar credencial")}
             </Button>
           )}
         </Card>
@@ -77,9 +80,7 @@ export function CredentialsList({ initialData, canWrite, usageMap }: Props) {
         if (rows.length === 0) return null;
         return (
           <section key={p} className="space-y-2">
-            <h2 className="text-sm font-medium text-muted-foreground">
-              {PROVIDER_LABELS[p]}
-            </h2>
+            <h2 className="text-sm font-medium text-muted-foreground">{PROVIDER_LABELS[p]}</h2>
             <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {rows.map((row) => (
                 <li key={row.id}>

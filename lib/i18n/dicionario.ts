@@ -1466,6 +1466,18 @@ export const DICIONARIO: Traducoes = {
   Validada: { "fr-FR": "Validée" },
   "modelos disponíveis.": { "fr-FR": "modèles disponibles." },
   "Validação falhou": { "fr-FR": "Échec de la validation" },
+  "Chaves de acesso à IA": { "fr-FR": "Clés d’accès à l’IA" },
+  "A conta de inteligência artificial é sua: você contrata direto na Anthropic, OpenAI ou Google e cola a chave aqui. Ela é guardada criptografada e nunca mais aparece na tela depois de salva — nem para você.":
+    {
+      "fr-FR":
+        "Votre compte d’intelligence artificielle vous appartient : vous souscrivez directement auprès d’Anthropic, d’OpenAI ou de Google et collez la clé ici. Elle est stockée chiffrée et ne réapparaît jamais à l’écran après son enregistrement, pas même pour vous.",
+    },
+  "Nenhuma chave cadastrada ainda": { "fr-FR": "Aucune clé enregistrée pour le moment" },
+  "Seus agentes só conseguem pensar depois que você cola aqui uma chave da Anthropic, da OpenAI ou do Google. A cobrança vai direto para a sua conta no provedor, e a chave fica guardada criptografada.":
+    {
+      "fr-FR":
+        "Vos agents ne peuvent raisonner qu’après que vous avez collé ici une clé Anthropic, OpenAI ou Google. La facturation est directement portée à votre compte auprès du fournisseur et la clé est stockée chiffrée.",
+    },
   "Adicionar credencial": { "fr-FR": "Ajouter un identifiant" },
   "A chave é cifrada (AES-GCM) antes de gravar e nunca é retornada em texto claro.": {
     "fr-FR":
