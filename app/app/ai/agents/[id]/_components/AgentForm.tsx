@@ -755,10 +755,10 @@ export function AgentForm(props: Props) {
 
           {/* Limits */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Freios de segurança</h3>
+            <h3 className="text-sm font-medium">{t("Freios de segurança")}</h3>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label htmlFor="max_steps">Ações por atendimento (1 a 25)</Label>
+                <Label htmlFor="max_steps">{t("Ações por atendimento (1 a 25)")}</Label>
                 <Input
                   id="max_steps"
                   type="number"
@@ -770,7 +770,7 @@ export function AgentForm(props: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="token_budget">Volume de texto por atendimento</Label>
+                <Label htmlFor="token_budget">{t("Volume de texto por atendimento")}</Label>
                 <Input
                   id="token_budget"
                   type="number"
@@ -783,7 +783,9 @@ export function AgentForm(props: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="cost_budget_cents">Custo máximo por atendimento (centavos)</Label>
+                <Label htmlFor="cost_budget_cents">
+                  {t("Custo máximo por atendimento (centavos)")}
+                </Label>
                 <Input
                   id="cost_budget_cents"
                   type="number"
@@ -795,7 +797,9 @@ export function AgentForm(props: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="history_message_window">Mensagens anteriores que ele lê</Label>
+                <Label htmlFor="history_message_window">
+                  {t("Mensagens anteriores que ele lê")}
+                </Label>
                 <Input
                   id="history_message_window"
                   type="number"
@@ -807,7 +811,7 @@ export function AgentForm(props: Props) {
                 />
               </div>
               <div className="col-span-2 space-y-1">
-                <Label htmlFor="history_token_window">Tamanho máximo desse histórico</Label>
+                <Label htmlFor="history_token_window">{t("Tamanho máximo desse histórico")}</Label>
                 <Input
                   id="history_token_window"
                   type="number"
@@ -828,7 +832,7 @@ export function AgentForm(props: Props) {
           {/* Prompt */}
           <Card className="space-y-2 p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">As instruções dele</h3>
+              <h3 className="text-sm font-medium">{t("As instruções dele")}</h3>
               <div className="flex items-center gap-2">
                 {/* O contador é o aviso que chega ANTES do erro: quem cola um
                     texto grande vê na hora que ele não vai caber, em vez de
@@ -841,7 +845,7 @@ export function AgentForm(props: Props) {
                       : "text-xs text-muted-foreground"
                   }
                 >
-                  {form.system_prompt.trim().length.toLocaleString("pt-BR")}/20.000
+                  {form.system_prompt.trim().length.toLocaleString(idioma)}/20.000
                 </span>
                 <TokenCounter
                   text={form.system_prompt}
