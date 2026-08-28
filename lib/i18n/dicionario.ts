@@ -1516,6 +1516,27 @@ export const DICIONARIO: Traducoes = {
   "e uma": { "fr-FR": "et une" },
   "por item, separados": { "fr-FR": "par élément, séparées" },
   "por uma linha em branco.": { "fr-FR": "par une ligne vide." },
+  "Escolha o funil e o estágio de entrada.": {
+    "fr-FR": "Choisissez l’entonnoir et l’étape d’entrée.",
+  },
+  "Fonte criada. Agora é só conectar seu site.": {
+    "fr-FR": "Source créée. Il ne reste plus qu’à connecter votre site.",
+  },
+  "Nova fonte de captação": { "fr-FR": "Nouvelle source d’acquisition" },
+  "Landing page de Black Friday": { "fr-FR": "Page d’atterrissage Black Friday" },
+  "Dê um nome e diga em qual funil o contato deve entrar quando alguém preencher seu formulário.": {
+    "fr-FR":
+      "Donnez-lui un nom et indiquez dans quel entonnoir le contact doit être ajouté lorsqu’il remplira votre formulaire.",
+  },
+  "Funil de entrada": { "fr-FR": "Entonnoir d’entrée" },
+  "Escolha o funil": { "fr-FR": "Choisissez l’entonnoir" },
+  "Estágio de entrada": { "fr-FR": "Étape d’entrée" },
+  "Escolha o estágio": { "fr-FR": "Choisissez l’étape" },
+  "Escolha o funil primeiro": { "fr-FR": "Choisissez d’abord l’entonnoir" },
+  "URL de obrigado (opcional)": { "fr-FR": "URL de remerciement (facultative)" },
+  "Para onde enviar a pessoa depois que ela preencher seu formulário.": {
+    "fr-FR": "URL vers laquelle rediriger la personne après le remplissage du formulaire.",
+  },
   "Criar fonte": { "fr-FR": "Créer la source" },
   Gatilho: { "fr-FR": "Déclencheur" },
   Aguardar: { "fr-FR": "Attendre" },
