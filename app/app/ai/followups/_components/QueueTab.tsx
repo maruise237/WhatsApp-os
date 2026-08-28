@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { format, formatDistanceToNowStrict } from "date-fns";
-import { es, fr, ptBR } from "date-fns/locale";
+import { enUS, fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -97,7 +97,7 @@ function QueueStatusBadge({ status, t }: { status: string; t: (text: string) => 
 }
 
 function dateFnsLocale(idioma: Idioma) {
-  return idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+  return idioma === "fr-FR" ? fr : enUS;
 }
 
 function NextFireCell({

@@ -22,12 +22,12 @@
  *
  * ─── Evolução progressiva ───────────────────────────────────────────────────
  *
- * O francês devient la langue de repli de l’interface. Les préférences existantes
- * `pt-BR` et `es` restent valides afin de ne pas modifier silencieusement le choix
- * des utilisateurs qui l’ont déjà enregistré.
+ * L’interface sert uniquement le français et l’anglais. Les anciennes préférences
+ * portugaises ou espagnoles sont normalisées vers le français afin de ne pas
+ * laisser l’utilisateur dans une locale qui n’est plus proposée.
  */
 
-export const IDIOMAS = ["fr-FR", "pt-BR", "es"] as const;
+export const IDIOMAS = ["fr-FR", "en-US"] as const;
 export type Idioma = (typeof IDIOMAS)[number];
 
 export const IDIOMA_PADRAO: Idioma = "fr-FR";
@@ -41,5 +41,6 @@ export const IDIOMA_PADRAO: Idioma = "fr-FR";
  */
 export function normalizarIdioma(bruto: string | null | undefined): Idioma {
   if (bruto === "fr") return "fr-FR";
+  if (bruto === "en") return "en-US";
   return (IDIOMAS as readonly string[]).includes(bruto ?? "") ? (bruto as Idioma) : IDIOMA_PADRAO;
 }

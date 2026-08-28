@@ -5,9 +5,8 @@
  * humano; aplicar cria uma versão NOVA do agente (publish-por-ponteiro).
  */
 import { formatDistanceToNowStrict } from "date-fns";
-import { es } from "date-fns/locale/es";
+import { enUS } from "date-fns/locale/en-US";
 import { fr } from "date-fns/locale/fr";
-import { ptBR } from "date-fns/locale/pt-BR";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -87,7 +86,7 @@ export function ProposalsPanel({
       {items.map((p) => {
         const when = formatDistanceToNowStrict(new Date(p.proposed_at), {
           addSuffix: true,
-          locale: idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR,
+          locale: idioma === "fr-FR" ? fr : enUS,
         });
         return (
           <li key={p.id} className="flex items-start gap-3 px-4 py-3" data-testid="proposal-item">

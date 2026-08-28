@@ -26,9 +26,9 @@ import { NAV_DESTINATIONS, NAV_GROUPS } from "@/lib/navigation/registry";
 import { DICIONARIO } from "@/lib/i18n/dicionario";
 
 describe("traduzir", () => {
-  it("devolve o espanhol quando existe", () => {
-    expect(traduzir("Assumir", "es")).toBe("Asumir");
-    expect(traduzir("Contatos", "es")).toBe("Contactos");
+  it("sert l’anglais lorsqu’une traduction anglaise existe", () => {
+    expect(traduzir("Assumir", "en-US")).toBe("Prendre en charge");
+    expect(traduzir("Contatos", "en-US")).toBe("Contacts");
   });
 
   it("devolve le français quand il est demandé", () => {
@@ -36,14 +36,8 @@ describe("traduzir", () => {
     expect(traduzir("Contatos", "fr-FR")).toBe("Contacts");
   });
 
-  it("em português devolve a própria chave — ela É o texto", () => {
-    expect(traduzir("Assumir", "pt-BR")).toBe("Assumir");
-  });
-
-  it("sem tradução DEGRADA para português, não para a chave", () => {
-    // A tradução é parcial de propósito. Um texto ainda não traduzido tem de
-    // aparecer legível — nunca `inbox.claim`, nunca vazio.
-    expect(traduzir("Um texto que ninguém traduziu ainda", "es")).toBe(
+  it("utilise le français comme fallback lorsqu’une traduction anglaise manque", () => {
+    expect(traduzir("Um texto que ninguém traduziu ainda", "en-US")).toBe(
       "Um texto que ninguém traduziu ainda",
     );
   });
@@ -62,14 +56,14 @@ describe("normalizar o idioma que veio do perfil", () => {
   it("aceita os que sabemos servir", () => {
     expect(normalizarIdioma("fr-FR")).toBe("fr-FR");
     expect(normalizarIdioma("fr")).toBe("fr-FR");
-    expect(normalizarIdioma("es")).toBe("es");
-    expect(normalizarIdioma("pt-BR")).toBe("pt-BR");
+    expect(normalizarIdioma("en-US")).toBe("en-US");
+    expect(normalizarIdioma("en")).toBe("en-US");
   });
 
   it("fecha no padrão para o que não conhece", () => {
-    // `en-US` esteve no seletor por muito tempo e nunca teve tradução. Um
-    // perfil antigo ainda o traz, e deixá-lo passar mostraria a CHAVE na tela.
-    expect(normalizarIdioma("en-US")).toBe(IDIOMA_PADRAO);
+    // Les anciennes préférences portugaises et espagnoles reviennent au français.
+    expect(normalizarIdioma("pt-BR")).toBe(IDIOMA_PADRAO);
+    expect(normalizarIdioma("es")).toBe(IDIOMA_PADRAO);
     expect(normalizarIdioma("klingon")).toBe(IDIOMA_PADRAO);
     expect(normalizarIdioma(null)).toBe(IDIOMA_PADRAO);
     expect(normalizarIdioma(undefined)).toBe(IDIOMA_PADRAO);
@@ -107,12 +101,10 @@ describe("os elos que somem sem barulho", () => {
   });
 
   it("o seletor oferece só o que MUDA a tela", () => {
-    // `en-US` saiu: nunca teve tradução. Oferecer um idioma que não muda nada é
-    // prometer o que a tela não cumpre.
     const perfil = readFileSync("app/app/settings/profile/_form.tsx", "utf8");
     expect(perfil).toMatch(/value="fr-FR">Français/);
-    expect(perfil).toMatch(/value="es">Español/);
-    expect(perfil, "ainda oferece um idioma sem tradução").not.toMatch(/value="en-US"/);
+    expect(perfil).toMatch(/value="en-US">English/);
+    expect(perfil).not.toMatch(/value="pt-BR"|value="es"/);
   });
 
   it("a barra lateral traduz — ela aparece em TODA tela", () => {

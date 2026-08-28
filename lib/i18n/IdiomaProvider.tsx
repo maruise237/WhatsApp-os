@@ -21,9 +21,9 @@ import { normalizarIdioma, IDIOMA_PADRAO, type Idioma } from "./idiomas";
  *
  * ─── Ausência é o padrão, nunca erro ───────────────────────────────────────
  *
- * Sem provider, `t` devolve português. Um componente renderizado fora da árvore
- * — num teste, num e-mail, num fragmento isolado — continua mostrando texto
- * legível. A tradução não pode ser o motivo de nada quebrar.
+ * Sans provider, `t` renvoie le texte source. Un composant rendu hors de l’arbre
+ * — dans un test, un e-mail ou un fragment isolé — continue d’afficher un texte
+ * lisible. La traduction ne peut pas être la cause d’une régression.
  */
 const Ctx = createContext<Idioma>(IDIOMA_PADRAO);
 
@@ -43,7 +43,7 @@ export function useIdioma(): Idioma {
   return useContext(Ctx);
 }
 
-/** `t("Assumir")` → "Asumir" para quem escolheu espanhol. */
+/** Traduit le texte selon la locale d’interface active. */
 export function useT(): (texto: string) => string {
   const idioma = useContext(Ctx);
   // Identidade estável: sem isto, todo `useMemo`/`useEffect` que dependa de `t`

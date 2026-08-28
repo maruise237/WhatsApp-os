@@ -87,13 +87,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="fr-FR">Français</SelectItem>
-                <SelectItem value="pt-BR">Português (BR)</SelectItem>
-                {/* Espanhol entrou quando passou a MUDAR alguma coisa. Enquanto
-                    o campo era guardado e ninguém o lia, oferecer um idioma a
-                    mais era prometer o que a tela não cumpre — e o operador
-                    conclui que o sistema está quebrado.
-                    `en-US` saiu pela mesma razão: nunca teve tradução. */}
-                <SelectItem value="es">Español</SelectItem>
+                <SelectItem value="en-US">English</SelectItem>
               </SelectContent>
             </Select>
           </div>

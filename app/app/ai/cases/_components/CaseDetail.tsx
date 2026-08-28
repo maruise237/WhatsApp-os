@@ -1,6 +1,6 @@
 "use client";
 import { formatDistanceToNowStrict } from "date-fns";
-import { es, fr, ptBR } from "date-fns/locale";
+import { enUS, fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,7 +12,7 @@ import { useIdioma, useT } from "@/hooks/i18n/useT";
 export function CaseDetail({ caseId }: { caseId: string | null }) {
   const t = useT();
   const idioma = useIdioma();
-  const dateLocale = idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+  const dateLocale = idioma === "fr-FR" ? fr : enUS;
   const { data, isLoading } = useCase(caseId);
 
   if (caseId === null) {

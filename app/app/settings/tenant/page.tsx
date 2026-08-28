@@ -62,9 +62,8 @@ export default async function TenantSettingsPage() {
             legal_name: row.legal_name,
             cnpj: row.cnpj,
             timezone: row.timezone,
-            // `en-US` saiu da lista (nunca teve tradução). Uma linha antiga
-            // com ele cai no padrão em vez de quebrar a tela.
-            locale: row.locale === "es" ? "es" : row.locale === "fr-FR" ? "fr-FR" : "pt-BR",
+            // Les anciennes locales non proposées sont normalisées vers le français.
+            locale: normalizarIdioma(row.locale),
             media_retention_days: row.media_retention_days,
             dpo_email: row.dpo_email,
             privacy_policy_url: row.privacy_policy_url,

@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { es, fr, ptBR } from "date-fns/locale";
+import { enUS, fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { useIdioma, useT } from "@/hooks/i18n/useT";
 
 function lastReceivedLabel(iso: string | null, t: ReturnType<typeof useT>, idioma: string): string {
   if (!iso) return t("nunca recebeu");
-  const locale = idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+  const locale = idioma === "fr-FR" ? fr : enUS;
   return `${t("último recebimento")} ${formatDistanceToNowStrict(new Date(iso), {
     addSuffix: true,
     locale,

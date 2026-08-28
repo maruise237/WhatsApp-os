@@ -3,7 +3,7 @@
  *
  * ─── A regra de ouro deste arquivo ─────────────────────────────────────────
  *
- * A CHAVE é o texto em português. Não `inbox.filtro.todas`, não `INBOX_ALL`.
+ * La clé est le texte source historique de l’interface. Elle n’est pas un identifiant de route ou d’API.
  *
  * Duas razões, e as duas doem quando se descobre tarde:
  *
@@ -11,9 +11,8 @@
  *      continua legível; `t("inbox.tags.all")` obriga a abrir outro arquivo
  *      para saber o que a tela diz.
  *   2. Falta de tradução DEGRADA para português em vez de mostrar a chave. Um
- *      `t("Assumir")` sem entrada em espanhol devolve "Assumir" — feio, mas
- *      compreensível. Com chave simbólica devolveria `inbox.claim`, que não é
- *      nada para ninguém.
+ *      `t("Assumir")` sans traduction renvoie la clé source, ce qui conserve un
+ *      texte compréhensible pendant la couverture progressive des locales.
  *
  * ─── Parcial, e de propósito ───────────────────────────────────────────────
  *
@@ -24,8 +23,8 @@
  */
 import type { Idioma } from "./idiomas";
 
-/** `pt-BR` não aparece: é a chave. Só o que DIFERE precisa de linha. */
-type Traducoes = Record<string, Partial<Record<Exclude<Idioma, "pt-BR">, string>>>;
+/** Les traductions disponibles sont limitées aux locales exposées par `idiomas.ts`. */
+type Traducoes = Record<string, Partial<Record<Idioma, string>>>;
 
 export const DICIONARIO: Traducoes = {
   // ─── Cabeçalhos de grupo da barra lateral ───
@@ -44,46 +43,46 @@ export const DICIONARIO: Traducoes = {
   "Para questões de pagamento, fale com quem administra este sistema.": {
     "fr-FR": "Pour les questions de paiement, contactez la personne qui administre ce système.",
   },
-  Atendimento: { "fr-FR": "Assistance", es: "Atención" },
-  CRM: { "fr-FR": "CRM", es: "CRM" },
-  "Agente de IA": { "fr-FR": "Agent IA", es: "Agente de IA" },
-  Canais: { "fr-FR": "Canaux", es: "Canales" },
-  Análise: { "fr-FR": "Analyse", es: "Análisis" },
-  Organização: { "fr-FR": "Organisation", es: "Organización" },
+  Atendimento: { "fr-FR": "Assistance" },
+  CRM: { "fr-FR": "CRM" },
+  "Agente de IA": { "fr-FR": "Agent IA" },
+  Canais: { "fr-FR": "Canaux" },
+  Análise: { "fr-FR": "Analyse" },
+  Organização: { "fr-FR": "Organisation" },
   "Dados da empresa, retenção de mídia, DPO. Admin only.": {
     "fr-FR": "Données de l’entreprise, rétention des médias et DPO. Réservé aux administrateurs.",
   },
 
   // ─── Navegação (a barra lateral, presente em toda tela) ───
-  Inbox: { "fr-FR": "Inbox", es: "Inbox" },
-  Radar: { "fr-FR": "Radar", es: "Radar" },
-  "Respostas rápidas": { "fr-FR": "Réponses rapides", es: "Respuestas rápidas" },
-  Contatos: { "fr-FR": "Contacts", es: "Contactos" },
-  Ventes: { "fr-FR": "Ventes", es: "Ventas" },
+  Inbox: { "fr-FR": "Inbox" },
+  Radar: { "fr-FR": "Radar" },
+  "Respostas rápidas": { "fr-FR": "Réponses rapides" },
+  Contatos: { "fr-FR": "Contacts" },
+  Ventes: { "fr-FR": "Ventes" },
   // A CHAVE É O TEXTO PT-BR, então renomear um rótulo no registro de navegação
   // sem mexer aqui NÃO quebra teste nenhum — degrada em silêncio: `traduzir()`
   // devolve a chave ausente como português e o espanhol da barra lateral some.
   // "Kanban" saiu do menu (a tela virou "Funis"); "Etapas do funil" é o nome novo
   // da tela de configuração, que antes disputava "Funis" com ela.
-  Funis: { "fr-FR": "Entonnoirs", es: "Embudos" },
+  Funis: { "fr-FR": "Entonnoirs" },
   "Para onde o agente leva o card em cada passo do atendimento": {
     "fr-FR": "L’étape vers laquelle l’agent déplace l’affaire à chaque étape du traitement",
   },
   ", vocabulário, custom fields e motivos de perda": {
     "fr-FR": ", vocabulaire, champs personnalisés et motifs de perte",
   },
-  "Etapas do funil": { "fr-FR": "Étapes de l'entonnoir", es: "Etapas del embudo" },
+  "Etapas do funil": { "fr-FR": "Étapes de l'entonnoir" },
   "Agents de IA": { "fr-FR": "Agents IA" },
-  default: { "fr-FR": "Par défaut", es: "Predeterminado" },
+  default: { "fr-FR": "Par défaut" },
   "Configure o comportamento dos agents que respondem no WhatsApp.": {
     "fr-FR": "Configurez le comportement des agents qui répondent sur WhatsApp.",
   },
-  Agentes: { "fr-FR": "Agents", es: "Agentes" },
-  "Follow-ups": { "fr-FR": "Follow-ups", es: "Seguimientos" },
-  Roteadores: { "fr-FR": "Routeurs", es: "Enrutadores" },
-  "Ver tudo em IA": { "fr-FR": "Voir tout en IA", es: "Ver todo en IA" },
-  Conexões: { "fr-FR": "Connexions", es: "Conexiones" },
-  Webhooks: { "fr-FR": "Webhooks", es: "Webhooks" },
+  Agentes: { "fr-FR": "Agents" },
+  "Follow-ups": { "fr-FR": "Follow-ups" },
+  Roteadores: { "fr-FR": "Routeurs" },
+  "Ver tudo em IA": { "fr-FR": "Voir tout en IA" },
+  Conexões: { "fr-FR": "Connexions" },
+  Webhooks: { "fr-FR": "Webhooks" },
   "Receber dados": { "fr-FR": "Recevoir des données" },
   "Leads recebidos": { "fr-FR": "Leads reçus" },
   Automações: { "fr-FR": "Automatisations" },
@@ -91,95 +90,88 @@ export const DICIONARIO: Traducoes = {
     "fr-FR":
       "Recevez des contacts externes (pages d’atterrissage, formulaires) et créez des automatisations qui agissent seules.",
   },
-  Desempenho: { "fr-FR": "Performance", es: "Rendimiento" },
-  "Evolução da IA": { "fr-FR": "Évolution de l'IA", es: "Evolución de la IA" },
-  "Audit Log": { "fr-FR": "Journal d'audit", es: "Registro de auditoría" },
-  Configurações: { "fr-FR": "Paramètres", es: "Configuración" },
-  Recolher: { "fr-FR": "Réduire", es: "Contraer" },
-  Buscar: { "fr-FR": "Rechercher", es: "Buscar" },
+  Desempenho: { "fr-FR": "Performance" },
+  "Evolução da IA": { "fr-FR": "Évolution de l'IA" },
+  "Audit Log": { "fr-FR": "Journal d'audit" },
+  Configurações: { "fr-FR": "Paramètres" },
+  Recolher: { "fr-FR": "Réduire" },
+  Buscar: { "fr-FR": "Rechercher" },
 
   // ─── Inbox: filtros e lista ───
-  "Buscar mensagens…": { "fr-FR": "Rechercher des messages…", es: "Buscar mensajes…" },
-  "Todos os números": { "fr-FR": "Tous les numéros", es: "Todos los números" },
-  "Todas as tags": { "fr-FR": "Toutes les étiquettes", es: "Todas las etiquetas" },
-  "Apenas não lidos": { "fr-FR": "Uniquement non lus", es: "Solo no leídos" },
-  Fila: { "fr-FR": "File d'attente", es: "Cola" },
-  Minhas: { "fr-FR": "Mes", es: "Mías" },
-  Todas: { "fr-FR": "Toutes", es: "Todas" },
-  Fechadas: { "fr-FR": "Fermées", es: "Cerradas" },
-  IA: { "fr-FR": "IA", es: "IA" },
-  "Sem mensagens": { "fr-FR": "Sans messages", es: "Sin mensajes" },
-  "Nenhuma conversa": { "fr-FR": "Aucune conversation", es: "Ninguna conversación" },
+  "Buscar mensagens…": { "fr-FR": "Rechercher des messages…" },
+  "Todos os números": { "fr-FR": "Tous les numéros" },
+  "Todas as tags": { "fr-FR": "Toutes les étiquettes" },
+  "Apenas não lidos": { "fr-FR": "Uniquement non lus" },
+  Fila: { "fr-FR": "File d'attente" },
+  Minhas: { "fr-FR": "Mes" },
+  Todas: { "fr-FR": "Toutes" },
+  Fechadas: { "fr-FR": "Fermées" },
+  IA: { "fr-FR": "IA" },
+  "Sem mensagens": { "fr-FR": "Sans messages" },
+  "Nenhuma conversa": { "fr-FR": "Aucune conversation" },
 
   // ─── Inbox: cabeçalho e ações da conversa ───
-  Assumir: { "fr-FR": "Prendre en charge", es: "Asumir" },
-  Liberar: { "fr-FR": "Libérer", es: "Liberar" },
-  Transferir: { "fr-FR": "Transférer", es: "Transferir" },
-  Lembrar: { "fr-FR": "Rappeler", es: "Recordar" },
-  Fechar: { "fr-FR": "Fermer", es: "Cerrar" },
-  "Devolver ao automático": { "fr-FR": "Remettre à l'automatique", es: "Devolver al automático" },
-  Aberta: { "fr-FR": "Ouverte", es: "Abierta" },
-  Fechada: { "fr-FR": "Fermée", es: "Cerrada" },
-  "Em atendimento": { "fr-FR": "En cours", es: "En atención" },
-  "Aguardando atendente": { "fr-FR": "En attente d'un agent", es: "Esperando agente" },
-  "Automático atendendo": { "fr-FR": "Automatique en cours", es: "Automático atendiendo" },
-  "Automático pausado": { "fr-FR": "Automatique en pause", es: "Automático pausado" },
+  Assumir: { "fr-FR": "Prendre en charge" },
+  Liberar: { "fr-FR": "Libérer" },
+  Transferir: { "fr-FR": "Transférer" },
+  Lembrar: { "fr-FR": "Rappeler" },
+  Fechar: { "fr-FR": "Fermer" },
+  "Devolver ao automático": { "fr-FR": "Remettre à l'automatique" },
+  Aberta: { "fr-FR": "Ouverte" },
+  Fechada: { "fr-FR": "Fermée" },
+  "Em atendimento": { "fr-FR": "En cours" },
+  "Aguardando atendente": { "fr-FR": "En attente d'un agent" },
+  "Automático atendendo": { "fr-FR": "Automatique en cours" },
+  "Automático pausado": { "fr-FR": "Automatique en pause" },
   // Os motivos do silêncio (lib/inbox/comando-da-conversa.ts). "Automático
   // pausado" sozinho respondia a três situações que pedem ações diferentes:
   // alguém assumiu, o cliente inteiro está travado, ou foi pausa explícita.
   "Automático pausado — alguém assumiu": {
     "fr-FR": "Automatique en pause — quelqu'un a pris le relais",
-    es: "Automático pausado — alguien la asumió",
   },
   "Automático pausado para este cliente": {
     "fr-FR": "Automatique en pause pour ce client",
-    es: "Automático pausado para este cliente",
   },
   "Automático volta em instantes": {
     "fr-FR": "Automatique revient dans un instant",
-    es: "El automático vuelve en instantes",
   },
-  "Pausar o automático": { "fr-FR": "Mettre l'automatique en pause", es: "Pausar el automático" },
-  "Ver contato": { "fr-FR": "Voir le contact", es: "Ver contacto" },
+  "Pausar o automático": { "fr-FR": "Mettre l'automatique en pause" },
+  "Ver contato": { "fr-FR": "Voir le contact" },
 
   // ─── Inbox: composer ───
-  Responder: { "fr-FR": "Répondre", es: "Responder" },
-  "Nota interna": { "fr-FR": "Note interne", es: "Nota interna" },
-  "Escreva uma mensagem…": { "fr-FR": "Écrivez un message…", es: "Escribí un mensaje…" },
+  Responder: { "fr-FR": "Répondre" },
+  "Nota interna": { "fr-FR": "Note interne" },
+  "Escreva uma mensagem…": { "fr-FR": "Écrivez un message…" },
   "Escreva uma nota interna… (só o time vê)": {
     "fr-FR": "Écrivez une note interne… (seulement l'équipe la voit)",
-    es: "Escribí una nota interna… (solo la ve el equipo)",
   },
-  Enviar: { "fr-FR": "Envoyer", es: "Enviar" },
-  "Enviar modelo": { "fr-FR": "Envoyer un modèle", es: "Enviar plantilla" },
+  Enviar: { "fr-FR": "Envoyer" },
+  "Enviar modelo": { "fr-FR": "Envoyer un modèle" },
   "Escolha um modelo aprovado…": {
     "fr-FR": "Choisissez un modèle approuvé…",
-    es: "Elegí una plantilla aprobada…",
   },
 
   // ─── Painel do contato ───
-  CONTATO: { "fr-FR": "CONTACT", es: "CONTACTO" },
+  CONTATO: { "fr-FR": "CONTACT" },
   "TAGS DA CONVERSA": {
     "fr-FR": "ÉTIQUETTES DE LA CONVERSATION",
-    es: "ETIQUETAS DE LA CONVERSACIÓN",
   },
-  "DEMANDAS ABERTAS": { "fr-FR": "DEMANDES OUVERTES", es: "PEDIDOS ABIERTOS" },
-  "LEADS RECENTES": { "fr-FR": "LEADS RÉCENTS", es: "LEADS RECIENTES" },
-  "PEDIDOS RECENTES": { "fr-FR": "COMMANDES RÉCENTES", es: "PEDIDOS RECIENTES" },
-  ATIVIDADE: { "fr-FR": "ACTIVITÉ", es: "ACTIVIDAD" },
-  "Sem tags.": { "fr-FR": "Aucune étiquette.", es: "Sin etiquetas." },
-  "Sem leads.": { "fr-FR": "Aucun lead.", es: "Sin leads." },
-  "Sem pedidos.": { "fr-FR": "Aucune commande.", es: "Sin pedidos." },
-  "Sem atividade.": { "fr-FR": "Aucune activité.", es: "Sin actividad." },
-  "Nova tag…": { "fr-FR": "Nouvelle étiquette…", es: "Nueva etiqueta…" },
+  "DEMANDAS ABERTAS": { "fr-FR": "DEMANDES OUVERTES" },
+  "LEADS RECENTES": { "fr-FR": "LEADS RÉCENTS" },
+  "PEDIDOS RECENTES": { "fr-FR": "COMMANDES RÉCENTES" },
+  ATIVIDADE: { "fr-FR": "ACTIVITÉ" },
+  "Sem tags.": { "fr-FR": "Aucune étiquette." },
+  "Sem leads.": { "fr-FR": "Aucun lead." },
+  "Sem pedidos.": { "fr-FR": "Aucune commande." },
+  "Sem atividade.": { "fr-FR": "Aucune activité." },
+  "Nova tag…": { "fr-FR": "Nouvelle étiquette…" },
   "Sem próximo passo definido": {
     "fr-FR": "Aucune prochaine étape définie",
-    es: "Sin próximo paso definido",
   },
-  "Marcar próximo passo": { "fr-FR": "Définir la prochaine étape", es: "Marcar próximo paso" },
-  Lead: { "fr-FR": "Lead", es: "Lead" },
+  "Marcar próximo passo": { "fr-FR": "Définir la prochaine étape" },
+  Lead: { "fr-FR": "Lead" },
   Tags: { "fr-FR": "Tags" },
-  Tag: { "fr-FR": "Étiquette", es: "Etiqueta" },
+  Tag: { "fr-FR": "Étiquette" },
   "Não consegui salvar o próximo passo. Tente de novo.": {
     "fr-FR": "Impossible d’enregistrer la prochaine étape. Réessayez.",
   },
@@ -314,9 +306,9 @@ export const DICIONARIO: Traducoes = {
   "Esta ação remove os leads selecionados. Não pode ser desfeita.": {
     "fr-FR": "Cette action supprime les leads sélectionnés. Elle est irréversible.",
   },
-  "Apenas atrasados": { "fr-FR": "Uniquement en retard", es: "Solo atrasados" },
-  "Sem responsável": { "fr-FR": "Aucun responsable", es: "Sin responsable" },
-  "Editar campos": { "fr-FR": "Modifier les champs", es: "Editar campos" },
+  "Apenas atrasados": { "fr-FR": "Uniquement en retard" },
+  "Sem responsável": { "fr-FR": "Aucun responsable" },
+  "Editar campos": { "fr-FR": "Modifier les champs" },
   "Selecione um caso à esquerda": { "fr-FR": "Sélectionnez un cas à gauche" },
   "Os detalhes e a resposta aparecem aqui.": {
     "fr-FR": "Les détails et la réponse apparaîtront ici.",
@@ -360,57 +352,54 @@ export const DICIONARIO: Traducoes = {
   },
   "O que o cliente precisa": { "fr-FR": "Ce dont le client a besoin" },
   "Por que a IA travou": { "fr-FR": "Pourquoi l’IA s’est interrompue" },
-  "Linha do tempo": { "fr-FR": "Chronologie", es: "Línea de tiempo" },
-  "DADOS DO NEGÓCIO": { "fr-FR": "DONNÉES DE L'AFFAIRE", es: "DATOS DEL NEGOCIO" },
-  Título: { "fr-FR": "Titre", es: "Título" },
-  Descrição: { "fr-FR": "Description", es: "Descripción" },
-  "Fechamento previsto": { "fr-FR": "Clôture prévue", es: "Cierre previsto" },
+  "Linha do tempo": { "fr-FR": "Chronologie" },
+  "DADOS DO NEGÓCIO": { "fr-FR": "DONNÉES DE L'AFFAIRE" },
+  Título: { "fr-FR": "Titre" },
+  Descrição: { "fr-FR": "Description" },
+  "Fechamento previsto": { "fr-FR": "Clôture prévue" },
   "Tags (separadas por vírgula)": {
     "fr-FR": "Étiquettes (séparées par des virgules)",
-    es: "Etiquetas (separadas por coma)",
   },
-  Salvar: { "fr-FR": "Enregistrer", es: "Guardar" },
-  vazio: { "fr-FR": "vide", es: "vacío" },
+  Salvar: { "fr-FR": "Enregistrer" },
+  vazio: { "fr-FR": "vide" },
   "sem ler": { "fr-FR": "non lu(s)" },
   "Abrir conversa no Inbox": {
     "fr-FR": "Ouvrir la conversation dans Inbox",
-    es: "Abrir conversación en el Inbox",
   },
 
   // ─── Contatos ───
-  "Buscar contatos…": { "fr-FR": "Rechercher des contacts…", es: "Buscar contactos…" },
+  "Buscar contatos…": { "fr-FR": "Rechercher des contacts…" },
   "Renomeado.": { "fr-FR": "Nom modifié." },
   "Renomear agent": { "fr-FR": "Renommer l’agent" },
   "Apenas o nome interno muda. Versões publicadas e histórico são preservados.": {
     "fr-FR":
       "Seul le nom interne est modifié. Les versions publiées et l’historique sont préservés.",
   },
-  Nome: { "fr-FR": "Nom", es: "Nombre" },
-  Telefone: { "fr-FR": "Téléphone", es: "Teléfono" },
-  "Nenhum contato": { "fr-FR": "Aucun contact", es: "Ningún contacto" },
-  Bloqueado: { "fr-FR": "Bloqué", es: "Bloqueado" },
+  Nome: { "fr-FR": "Nom" },
+  Telefone: { "fr-FR": "Téléphone" },
+  "Nenhum contato": { "fr-FR": "Aucun contact" },
+  Bloqueado: { "fr-FR": "Bloqué" },
 
   // ─── Conexões ───
-  "Números por QR": { "fr-FR": "Numéros via QR", es: "Números por QR" },
-  "API Oficial (Meta)": { "fr-FR": "API Officielle (Meta)", es: "API Oficial (Meta)" },
-  "Provedor parceiro": { "fr-FR": "Fournisseur partenaire", es: "Proveedor asociado" },
-  Conexão: { "fr-FR": "Connexion", es: "Conexión" },
-  "Modelos do parceiro": { "fr-FR": "Modèles du partenaire", es: "Plantillas del asociado" },
-  "Templates da Meta": { "fr-FR": "Modèles de Meta", es: "Plantillas de Meta" },
-  Sincronizar: { "fr-FR": "Synchroniser", es: "Sincronizar" },
-  "Criar modelo": { "fr-FR": "Créer un modèle", es: "Crear plantilla" },
-  Cancelar: { "fr-FR": "Annuler", es: "Cancelar" },
-  "Enviar para revisão": { "fr-FR": "Envoyer pour révision", es: "Enviar a revisión" },
-  Reconectar: { "fr-FR": "Reconnecter", es: "Reconectar" },
-  Conectar: { "fr-FR": "Connecter", es: "Conectar" },
-  Desconectar: { "fr-FR": "Déconnecter", es: "Desconectar" },
+  "Números por QR": { "fr-FR": "Numéros via QR" },
+  "API Oficial (Meta)": { "fr-FR": "API Officielle (Meta)" },
+  "Provedor parceiro": { "fr-FR": "Fournisseur partenaire" },
+  Conexão: { "fr-FR": "Connexion" },
+  "Modelos do parceiro": { "fr-FR": "Modèles du partenaire" },
+  "Templates da Meta": { "fr-FR": "Modèles de Meta" },
+  Sincronizar: { "fr-FR": "Synchroniser" },
+  "Criar modelo": { "fr-FR": "Créer un modèle" },
+  Cancelar: { "fr-FR": "Annuler" },
+  "Enviar para revisão": { "fr-FR": "Envoyer pour révision" },
+  Reconectar: { "fr-FR": "Reconnecter" },
+  Conectar: { "fr-FR": "Connecter" },
+  Desconectar: { "fr-FR": "Déconnecter" },
   "Fuso horário da janela": {
     "fr-FR": "Fuseau horaire de la fenêtre",
-    es: "Huso horario de la ventana",
   },
 
   // ─── Estados e avisos que aparecem em várias telas ───
-  "Carregando…": { "fr-FR": "Chargement…", es: "Cargando…" },
+  "Carregando…": { "fr-FR": "Chargement…" },
   "Iniciando…": { "fr-FR": "Démarrage…" },
   "Guardando uma cópia de segurança dos seus dados": { "fr-FR": "Sauvegarde de vos données" },
   "Baixando a versão nova": { "fr-FR": "Téléchargement de la nouvelle version" },
@@ -539,11 +528,11 @@ export const DICIONARIO: Traducoes = {
       "Le système redémarre. Cette page se mettra à jour automatiquement dans quelques instants.",
   },
   Copiado: { "fr-FR": "Copié" },
-  "Nenhum resultado": { "fr-FR": "Aucun résultat", es: "Ningún resultado" },
-  Erro: { "fr-FR": "Erreur", es: "Error" },
-  Excluir: { "fr-FR": "Supprimer", es: "Eliminar" },
-  Editar: { "fr-FR": "Modifier", es: "Editar" },
-  Voltar: { "fr-FR": "Retour", es: "Volver" },
+  "Nenhum resultado": { "fr-FR": "Aucun résultat" },
+  Erro: { "fr-FR": "Erreur" },
+  Excluir: { "fr-FR": "Supprimer" },
+  Editar: { "fr-FR": "Modifier" },
+  Voltar: { "fr-FR": "Retour" },
 
   // ─── Récupération de compte et MFA ───
   "Email inválido. Confira o campo.": { "fr-FR": "E-mail invalide. Vérifiez le champ." },
@@ -3460,11 +3449,10 @@ export const DICIONARIO: Traducoes = {
 /**
  * Traduz, ou devolve o próprio texto.
  *
- * Nunca lança e nunca devolve vazio: um texto sem tradução aparece em
- * português, que é exatamente o comportamento de antes desta feature. Uma
- * tradução parcial não pode deixar a tela PIOR do que estava.
+ * Ne lève jamais d’erreur et ne renvoie jamais une chaîne vide. Une traduction
+ * anglaise absente utilise la traduction française lorsqu’elle existe, afin de
+ * ne pas réafficher silencieusement du portugais dans l’interface anglaise.
  */
 export function traduzir(texto: string, idioma: Idioma): string {
-  if (idioma === "pt-BR") return texto;
-  return DICIONARIO[texto]?.[idioma] ?? texto;
+  return DICIONARIO[texto]?.[idioma] ?? DICIONARIO[texto]?.["fr-FR"] ?? texto;
 }

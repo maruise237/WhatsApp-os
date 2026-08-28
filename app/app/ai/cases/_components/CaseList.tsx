@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { es, fr, ptBR } from "date-fns/locale";
+import { enUS, fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,7 +16,7 @@ import { useIdioma, useT } from "@/hooks/i18n/useT";
 export function CaseList() {
   const t = useT();
   const idioma = useIdioma();
-  const dateLocale = idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+  const dateLocale = idioma === "fr-FR" ? fr : enUS;
   const [tab, setTab] = useState<"open" | "resolved">("open");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { data, isLoading } = useCases(tab);
@@ -83,7 +83,7 @@ function CaseRow({
 }) {
   const t = useT();
   const idioma = useIdioma();
-  const dateLocale = idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+  const dateLocale = idioma === "fr-FR" ? fr : enUS;
   const when = formatDistanceToNowStrict(new Date(item.opened_at), {
     addSuffix: true,
     locale: dateLocale,

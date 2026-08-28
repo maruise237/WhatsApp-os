@@ -14,12 +14,9 @@ import { IDIOMAS } from "@/lib/i18n/idiomas";
 import { conversationTagSchema } from "./messaging";
 
 /**
- * Os idiomas que a interface REALMENTE serve.
- *
- * `en-US` saiu: esteve na lista desde sempre e nunca teve uma linha de
- * tradução — escolhê-lo não mudava nada. Espanhol entrou quando passou a mudar.
- * A fonte é `lib/i18n/idiomas`, para a validação e o dicionário não divergirem:
- * um idioma aceito aqui e desconhecido lá cairia no padrão em silêncio.
+ * Les seules langues que l’interface propose réellement sont définies dans
+ * `lib/i18n/idiomas`. La validation et le dictionnaire réutilisent cette source
+ * pour éviter qu’une locale acceptée ici ne soit inconnue du provider.
  */
 const LOCALES = IDIOMAS;
 
@@ -131,9 +128,7 @@ const customFieldSchema = z.object({
     "url",
   ]),
   required: z.boolean().optional(),
-  options: z
-    .array(z.object({ value: z.string().min(1), label: z.string().min(1) }))
-    .optional(),
+  options: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).optional(),
 });
 
 export const pipelineConfigPatchSchema = z.object({
