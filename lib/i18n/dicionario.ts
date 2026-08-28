@@ -1194,6 +1194,29 @@ export const DICIONARIO: Traducoes = {
   failed: { "fr-FR": "échouée" },
   aborted: { "fr-FR": "abandonnée" },
   timeout: { "fr-FR": "délai dépassé" },
+  "Regra de playbook": { "fr-FR": "Règle de playbook" },
+  "Caso exemplar": { "fr-FR": "Cas exemplaire" },
+  "Gatilho de reengajamento": { "fr-FR": "Déclencheur de réengagement" },
+  "Memória da organização": { "fr-FR": "Mémoire de l’organisation" },
+  "Proposta aplicada como memória da organização.": {
+    "fr-FR": "Proposition appliquée comme mémoire de l’organisation.",
+  },
+  "Proposta aplicada como versão nova do agente.": {
+    "fr-FR": "Proposition appliquée comme nouvelle version de l’agent.",
+  },
+  "Não foi possível aplicar a proposta.": { "fr-FR": "Impossible d’appliquer la proposition." },
+  "Nenhuma proposta ainda": { "fr-FR": "Aucune proposition pour le moment" },
+  "O assistente aprende com as conversas reais e propõe melhorias aqui. Você decide o que entra — nada é aplicado sozinho.":
+    {
+      "fr-FR":
+        "L’assistant apprend des conversations réelles et propose ici des améliorations. Vous décidez de ce qui entre — rien n’est appliqué automatiquement.",
+    },
+  aplicada: { "fr-FR": "appliquée" },
+  pendente: { "fr-FR": "en attente" },
+  proposta: { "fr-FR": "proposition" },
+  "Aplicar como memória da org": { "fr-FR": "Appliquer comme mémoire de l’organisation" },
+  "Aplicar como versão nova": { "fr-FR": "Appliquer comme nouvelle version" },
+  "proposta {when}": { "fr-FR": "proposition {when}" },
   "Sem trace disponível.": { "fr-FR": "Aucune trace disponible." },
   "(sem nome)": { "fr-FR": "(sans nom)" },
   erro: { "fr-FR": "erreur" },
