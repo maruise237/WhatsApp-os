@@ -1561,6 +1561,22 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "Source créée. Il ne reste plus qu’à connecter votre site.",
   },
   "Nova fonte de captação": { "fr-FR": "Nouvelle source d’acquisition" },
+  "nunca recebeu": { "fr-FR": "n’a jamais reçu de données" },
+  "último recebimento": { "fr-FR": "dernier envoi reçu" },
+  "Conecte sua landing page em 2 minutos": {
+    "fr-FR": "Connectez votre page d’atterrissage en 2 minutes",
+  },
+  "1. Crie uma fonte e diga em qual funil o contato entra.": {
+    "fr-FR": "1. Créez une source et indiquez dans quel entonnoir le contact entre.",
+  },
+  "2. Copie o endereço ou o formulário pronto.": {
+    "fr-FR": "2. Copiez l’adresse ou le formulaire prêt à l’emploi.",
+  },
+  "3. Cole no seu site — cada envio vira um lead aqui dentro.": {
+    "fr-FR": "3. Collez-le sur votre site — chaque envoi devient un lead ici.",
+  },
+  "Criar primeira fonte": { "fr-FR": "Créer la première source" },
+  Pausada: { "fr-FR": "En pause" },
   "Landing page de Black Friday": { "fr-FR": "Page d’atterrissage Black Friday" },
   "Dê um nome e diga em qual funil o contato deve entrar quando alguém preencher seu formulário.": {
     "fr-FR":
