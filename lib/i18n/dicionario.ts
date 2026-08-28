@@ -1214,6 +1214,21 @@ export const DICIONARIO: Traducoes = {
   "Rascunho v{version} salvo.": { "fr-FR": "Brouillon v{version} enregistré." },
   "v{version} publicada e ativa.": { "fr-FR": "v{version} publiée et active." },
   "Falha ao publicar:": { "fr-FR": "Échec de la publication :" },
+  "Publicar v{version}?": { "fr-FR": "Publier la v{version} ?" },
+  "Publicar v{version}": { "fr-FR": "Publier la v{version}" },
+  "Esta versão se tornará a ativa no atendimento. A versão atual ({current}) será marcada como superseded.":
+    {
+      "fr-FR":
+        "Cette version deviendra active pour le traitement. La version actuelle ({current}) sera marquée comme remplacée.",
+    },
+  "Tools adicionadas:": { "fr-FR": "Capacités ajoutées :" },
+  "Tools removidas:": { "fr-FR": "Capacités supprimées :" },
+  "Prompt:": { "fr-FR": "Prompt :" },
+  "+{count} chars": { "fr-FR": "+{count} caractères" },
+  "{count} chars": { "fr-FR": "{count} caractères" },
+  "sem alteração": { "fr-FR": "aucun changement" },
+  nenhuma: { "fr-FR": "aucune" },
+  substituída: { "fr-FR": "remplacée" },
   "Credencial selecionada está com status {status}. Publish bloqueado até validar.": {
     "fr-FR":
       "L’identifiant sélectionné a le statut {status}. La publication est bloquée jusqu’à sa validation.",
