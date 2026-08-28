@@ -28,14 +28,17 @@ import {
 } from "@/hooks/webhooks/useAutomationRules";
 import { TRIGGER_LABELS, type TriggerEvent } from "./labels";
 import { RuleEditor } from "./RuleEditor";
+import { useT } from "@/hooks/i18n/useT";
 
 const RULES_QUERY_KEY = ["automation-rules"];
 
-function triggerLabel(trigger: string): string {
-  return TRIGGER_LABELS[trigger as TriggerEvent] ?? trigger;
+function triggerLabel(trigger: string, t: ReturnType<typeof useT>): string {
+  const label = TRIGGER_LABELS[trigger as TriggerEvent] ?? trigger;
+  return t(label);
 }
 
 export function RulesTab() {
+  const t = useT();
   const { data, isLoading } = useAutomationRules();
   const update = useUpdateAutomationRule();
   const del = useDeleteAutomationRule();
@@ -49,12 +52,14 @@ export function RulesTab() {
 
   const toggleActive = (rule: AutomationRuleRow, checked: boolean) => {
     qc.setQueryData<{ data: AutomationRuleRow[] }>(RULES_QUERY_KEY, (old) =>
-      old ? { data: old.data.map((r) => (r.id === rule.id ? { ...r, is_active: checked } : r)) } : old,
+      old
+        ? { data: old.data.map((r) => (r.id === rule.id ? { ...r, is_active: checked } : r)) }
+        : old,
     );
     update.mutate(
       { id: rule.id, is_active: checked },
       {
-        onSuccess: () => toast.success(checked ? "Automação ligada." : "Automação pausada."),
+        onSuccess: () => toast.success(checked ? t("Automação ligada.") : t("Automação pausada.")),
         onError: () => qc.invalidateQueries({ queryKey: RULES_QUERY_KEY }),
       },
     );
@@ -85,14 +90,14 @@ export function RulesTab() {
         <Card className="max-w-md">
           <CardHeader className="items-center text-center">
             <Robot className="mb-2 h-10 w-10 text-accent" />
-            <CardTitle>Crie sua primeira automação</CardTitle>
+            <CardTitle>{t("Crie sua primeira automação")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground">
-              Ex.: quando entrar um contato novo, enviar uma mensagem de boas-vindas.
+              {t("Ex.: quando entrar um contato novo, enviar uma mensagem de boas-vindas.")}
             </p>
             <Button onClick={openCreate}>
-              <Plus /> Nova automação
+              <Plus /> {t("Nova automação")}
             </Button>
           </CardContent>
         </Card>
@@ -115,12 +120,12 @@ export function RulesTab() {
               <div className="flex items-center justify-between gap-2">
                 <CardTitle className="truncate">{r.name}</CardTitle>
                 <Badge variant={r.is_active ? "success" : "neutral"}>
-                  {r.is_active ? "Ativa" : "Pausada"}
+                  {r.is_active ? t("Ativa") : t("Pausada")}
                 </Badge>
               </div>
-              <p className="text-xs text-muted-foreground">{triggerLabel(r.trigger_event)}</p>
+              <p className="text-xs text-muted-foreground">{triggerLabel(r.trigger_event, t)}</p>
               <p className="text-xs text-muted-foreground">
-                {r.actions.length} {r.actions.length === 1 ? "ação" : "ações"}
+                {r.actions.length} {r.actions.length === 1 ? t("ação") : t("ações")}
               </p>
               {/* Uma regra ligada roda sozinha para sempre: quem a ligou é parte
                   do estado dela, não um detalhe de auditoria. */}
@@ -131,7 +136,7 @@ export function RulesTab() {
                 checked={r.is_active}
                 disabled={update.isPending}
                 onCheckedChange={(checked) => toggleActive(r, checked)}
-                aria-label={`${r.is_active ? "Pausar" : "Ligar"} ${r.name}`}
+                aria-label={`${r.is_active ? t("Pausar") : t("Ativar")} ${r.name}`}
               />
               <div className="flex items-center gap-1">
                 <Button
@@ -139,7 +144,7 @@ export function RulesTab() {
                   variant="ghost"
                   size="icon"
                   onClick={() => openEdit(r)}
-                  aria-label="Editar automação"
+                  aria-label={t("Editar automação")}
                 >
                   <PencilSimple />
                 </Button>
@@ -148,7 +153,7 @@ export function RulesTab() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setDeleting(r)}
-                  aria-label="Excluir automação"
+                  aria-label={t("Excluir automação")}
                 >
                   <Trash />
                 </Button>
@@ -163,22 +168,22 @@ export function RulesTab() {
       <AlertDialog open={!!deleting} onOpenChange={(o) => !o && setDeleting(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir esta automação?</AlertDialogTitle>
+            <AlertDialogTitle>{t("Excluir esta automação?")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {deleting?.name} para de rodar imediatamente. Essa ação não pode ser desfeita.
+              {deleting?.name} {t("para de rodar imediatamente. Essa ação não pode ser desfeita.")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("Cancelar")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
                 if (!deleting) return;
                 await del.mutateAsync(deleting.id);
-                toast.success("Automação excluída.");
+                toast.success(t("Automação excluída."));
                 setDeleting(null);
               }}
             >
-              Excluir
+              {t("Excluir")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
