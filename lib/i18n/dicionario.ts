@@ -676,6 +676,11 @@ export const DICIONARIO: Traducoes = {
       "fr-FR":
         "Avec « les siens uniquement » et la distribution manuelle, personne ne voit la file pour prendre un client — aucun client n’est donc pris en charge. Activez la rotation pour qu’un agent en reçoive un.",
     },
+  "Quem recebe cada cliente novo, e o que cada atendente enxerga. As duas decisões andam juntas: distribuir sem restringir deixa todo mundo vendo a carteira do colega; restringir sem distribuir deixa o funil de cada um vazio.":
+    {
+      "fr-FR":
+        "Qui reçoit chaque nouveau client et ce que chaque agent peut voir. Les deux décisions vont ensemble : distribuer sans restreindre laisse chacun voir le portefeuille de ses collègues ; restreindre sans distribuer laisse le pipeline de chacun vide.",
+    },
   "Distribuição de atendimento salva.": { "fr-FR": "Distribution des demandes enregistrée." },
   "Não consegui salvar.": { "fr-FR": "Impossible d’enregistrer." },
   "Há mudanças não salvas.": { "fr-FR": "Des modifications ne sont pas enregistrées." },
