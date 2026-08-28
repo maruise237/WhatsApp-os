@@ -275,6 +275,14 @@ export const DICIONARIO: Traducoes = {
   "Remover responsável": { "fr-FR": "Retirer le responsable" },
   "Tag…": { "fr-FR": "Tag…" },
   "nova tag": { "fr-FR": "nouveau tag" },
+  "Palavras que chamam uma pessoa na hora": {
+    "fr-FR": "Mots qui appellent immédiatement une personne",
+  },
+  "Remover {kw}": { "fr-FR": "Supprimer {kw}" },
+  "Sem palavras-chave.": { "fr-FR": "Aucun mot-clé." },
+  "Digite uma expressão e aperte Enter": {
+    "fr-FR": "Saisissez une expression et appuyez sur Entrée",
+  },
   Adicionar: { "fr-FR": "Ajouter" },
   "Esta ação remove os leads selecionados. Não pode ser desfeita.": {
     "fr-FR": "Cette action supprime les leads sélectionnés. Elle est irréversible.",
