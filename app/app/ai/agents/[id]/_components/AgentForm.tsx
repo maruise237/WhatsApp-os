@@ -884,7 +884,7 @@ export function AgentForm(props: Props) {
 
           {/* Estilo de resposta (split de mensagens — Onda 4) */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Estilo de resposta</h3>
+            <h3 className="text-sm font-medium">{t("Estilo de resposta")}</h3>
             <div className="flex items-center gap-2">
               <Switch
                 id="split_messages"
@@ -893,17 +893,17 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="split_messages">
-                Responder em várias mensagens curtas (como uma pessoa digita)
+                {t("Responder em várias mensagens curtas (como uma pessoa digita)")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Em vez de um bloco único, a resposta sai em bolhas separadas, espaçadas pelo mesmo
-              ritmo anti-banimento do envio. O agente também é instruído a escrever em parágrafos
-              curtos.
+              {t(
+                "Em vez de um bloco único, a resposta sai em bolhas separadas, espaçadas pelo mesmo ritmo anti-banimento do envio. O agente também é instruído a escrever em parágrafos curtos.",
+              )}
             </p>
             {form.split_messages ? (
               <div className="space-y-1">
-                <Label htmlFor="split_max_chars">Tamanho máximo por bolha (80–4000)</Label>
+                <Label htmlFor="split_max_chars">{t("Tamanho máximo por bolha (80–4000)")}</Label>
                 <Input
                   id="split_max_chars"
                   type="number"
@@ -924,10 +924,11 @@ export function AgentForm(props: Props) {
 
           {/* Capacidades */}
           <Card className="space-y-2 p-4">
-            <h3 className="text-sm font-medium">O que o agente pode fazer</h3>
+            <h3 className="text-sm font-medium">{t("O que o agente pode fazer")}</h3>
             <p className="text-xs text-muted-foreground">
-              Ligue por jornada de trabalho. O agente só consegue fazer o que estiver ligado aqui —
-              e o que estiver ligado, ele fará sozinho durante o atendimento.
+              {t(
+                "Ligue por jornada de trabalho. O agente só consegue fazer o que estiver ligado aqui — e o que estiver ligado, ele fará sozinho durante o atendimento.",
+              )}
             </p>
             <ToolPicker
               value={form.tool_ids}
@@ -941,7 +942,7 @@ export function AgentForm(props: Props) {
 
           {/* Triggers */}
           <Card className="space-y-2 p-4">
-            <h3 className="text-sm font-medium">Quando ele entra em ação</h3>
+            <h3 className="text-sm font-medium">{t("Quando ele entra em ação")}</h3>
             <TriggerEditor
               value={form.trigger_config}
               onChange={(v) => patch({ trigger_config: v })}
@@ -951,7 +952,7 @@ export function AgentForm(props: Props) {
 
           {/* Handoff */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Passar para uma pessoa</h3>
+            <h3 className="text-sm font-medium">{t("Passar para uma pessoa")}</h3>
             <div className="flex items-center gap-2">
               <Switch
                 id="handoff_tool_enabled"
@@ -960,7 +961,7 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="handoff_tool_enabled">
-                Deixar o agente chamar uma pessoa quando perceber que não é caso dele
+                {t("Deixar o agente chamar uma pessoa quando perceber que não é caso dele")}
               </Label>
             </div>
             <HandoffKeywordsInput
@@ -972,7 +973,7 @@ export function AgentForm(props: Props) {
 
           {/* Casos humanos */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Pedir ajuda sem sair da conversa</h3>
+            <h3 className="text-sm font-medium">{t("Pedir ajuda sem sair da conversa")}</h3>
             <div className="flex items-center gap-2">
               <Switch
                 id="cases_enabled"
@@ -981,22 +982,23 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="cases_enabled">
-                Deixar o agente pedir uma tarefa a alguém e seguir conversando
+                {t("Deixar o agente pedir uma tarefa a alguém e seguir conversando")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Diferente de passar a conversa: aqui o agente continua atendendo. Quando esbarra em
-              algo que só uma pessoa resolve — aprovar um desconto, por exemplo — ele abre um pedido
-              interno e retoma assim que for respondido.
+              {t(
+                "Diferente de passar a conversa: aqui o agente continua atendendo. Quando esbarra em algo que só uma pessoa resolve — aprovar um desconto, por exemplo — ele abre um pedido interno e retoma assim que for respondido.",
+              )}
             </p>
           </Card>
 
           {/* Follow-up */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Follow-up</h3>
+            <h3 className="text-sm font-medium">{t("Follow-up")}</h3>
             <p className="text-xs text-muted-foreground">
-              Retomar sozinho quem parou de responder, para o interessado não sumir sem ninguém
-              perceber.
+              {t(
+                "Retomar sozinho quem parou de responder, para o interessado não sumir sem ninguém perceber.",
+              )}
             </p>
             <div className="flex items-center gap-2">
               <Switch
@@ -1005,11 +1007,14 @@ export function AgentForm(props: Props) {
                 onCheckedChange={(v) => patch({ followup: { ...form.followup, enabled: v } })}
                 disabled={disabled}
               />
-              <Label htmlFor="followup_enabled">Habilitar gatilhos automáticos de follow-up</Label>
+              <Label htmlFor="followup_enabled">
+                {t("Habilitar gatilhos automáticos de follow-up")}
+              </Label>
             </div>
             <p className="text-xs text-muted-foreground">
-              Os fluxos abaixo só entram em ação para um cliente se este agente estiver publicado
-              com follow-up habilitado.
+              {t(
+                "Os fluxos abaixo só entram em ação para um cliente se este agente estiver publicado com follow-up habilitado.",
+              )}
             </p>
             <FollowupFlowPicker
               value={form.followup.flow_pointer_ids}

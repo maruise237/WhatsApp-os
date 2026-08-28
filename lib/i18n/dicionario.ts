@@ -1613,6 +1613,52 @@ export const DICIONARIO: Traducoes = {
   "Mensagens anteriores que ele lê": { "fr-FR": "Messages précédents lus par l’agent" },
   "Tamanho máximo desse histórico": { "fr-FR": "Taille maximale de cet historique" },
   "As instruções dele": { "fr-FR": "Ses instructions" },
+  "Estilo de resposta": { "fr-FR": "Style de réponse" },
+  "Responder em várias mensagens curtas (como uma pessoa digita)": {
+    "fr-FR": "Répondre en plusieurs messages courts (comme une personne qui écrit)",
+  },
+  "Tamanho máximo por bolha (80–4000)": { "fr-FR": "Taille maximale d’une bulle (80–4000)" },
+  "O que o agente pode fazer": { "fr-FR": "Ce que l’agent peut faire" },
+  "Quando ele entra em ação": { "fr-FR": "Quand il intervient" },
+  "Passar para uma pessoa": { "fr-FR": "Transmettre à une personne" },
+  "Deixar o agente chamar uma pessoa quando perceber que não é caso dele": {
+    "fr-FR":
+      "Autoriser l’agent à appeler une personne lorsqu’il comprend que la situation dépasse son rôle",
+  },
+  "Pedir ajuda sem sair da conversa": {
+    "fr-FR": "Demander de l’aide sans quitter la conversation",
+  },
+  "Diferente de passar a conversa: aqui o agente continua atendendo. Quando esbarra em algo que só uma pessoa resolve — aprovar um desconto, por exemplo — ele abre um pedido interno e retoma assim que for respondido.":
+    {
+      "fr-FR":
+        "Contrairement au transfert de conversation, l’agent continue ici à répondre. Lorsqu’il rencontre une situation qu’une personne seule peut résoudre — approuver une remise, par exemple — il ouvre une demande interne et reprend dès qu’une réponse est apportée.",
+    },
+  "Deixar o agente pedir uma tarefa a alguém e seguir conversando": {
+    "fr-FR":
+      "Autoriser l’agent à demander une tâche à quelqu’un tout en poursuivant la conversation",
+  },
+  "Habilitar gatilhos automáticos de follow-up": {
+    "fr-FR": "Activer les déclencheurs automatiques de suivi",
+  },
+  "Em vez de um bloco único, a resposta sai em bolhas separadas, espaçadas pelo mesmo ritmo anti-banimento do envio. O agente também é instruído a escrever em parágrafos curtos.":
+    {
+      "fr-FR":
+        "Au lieu d’un bloc unique, la réponse est envoyée en plusieurs bulles séparées, avec le même rythme d’envoi anti-blocage. L’agent est également invité à écrire des paragraphes courts.",
+    },
+  "Ligue por jornada de trabalho. O agente só consegue fazer o que estiver ligado aqui — e o que estiver ligado, ele fará sozinho durante o atendimento.":
+    {
+      "fr-FR":
+        "Activez les capacités par parcours de travail. L’agent ne peut faire que ce qui est activé ici — et il exécutera automatiquement ce qui est activé pendant la conversation.",
+    },
+  "Retomar sozinho quem parou de responder, para o interessado não sumir sem ninguém perceber.": {
+    "fr-FR":
+      "Relancer automatiquement les personnes qui ont cessé de répondre, afin qu’aucun intéressé ne disparaisse sans que personne ne le remarque.",
+  },
+  "Os fluxos abaixo só entram em ação para um cliente se este agente estiver publicado com follow-up habilitado.":
+    {
+      "fr-FR":
+        "Les flux ci-dessous ne s’appliquent à un client que si cet agent est publié avec le suivi activé.",
+    },
   "Empresa de inteligência artificial": { "fr-FR": "Fournisseur d’intelligence artificielle" },
   "Por qual número ele atende": { "fr-FR": "Numéro utilisé pour répondre" },
   "Selecione um número": { "fr-FR": "Sélectionnez un numéro" },
