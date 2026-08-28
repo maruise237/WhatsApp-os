@@ -1014,6 +1014,29 @@ export const DICIONARIO: Traducoes = {
       "fr-FR":
         "Si rien n’est sélectionné, il vous avertit lorsqu’une promesse faite à un client n’est pas tenue — mais il ne peut pas la résoudre seul.",
     },
+  "O que faz ele responder": { "fr-FR": "Ce qui le fait répondre" },
+  "Uma mensagem nova do cliente": { "fr-FR": "Un nouveau message du client" },
+  "Não responder em grupos": { "fr-FR": "Ne pas répondre dans les groupes" },
+  "Não responder às mensagens que saem do seu próprio número": {
+    "fr-FR": "Ne pas répondre aux messages envoyés depuis votre propre numéro",
+  },
+  "Só responder quando a mensagem falar de algo específico (opcional)": {
+    "fr-FR": "Répondre uniquement lorsque le message concerne un sujet précis (facultatif)",
+  },
+  "Deixe em branco para o agente responder a tudo. Se preencher, ele só entra quando a mensagem contiver uma dessas palavras — separe por barra vertical (|). Aceita expressão regular, para quem já conhece.":
+    {
+      "fr-FR":
+        "Laissez vide pour que l’agent réponde à tout. Si vous renseignez ce champ, il intervient uniquement lorsque le message contient l’un de ces mots — séparez-les par une barre verticale (|). Les expressions régulières sont acceptées.",
+    },
+  "Quantos atendimentos ao mesmo tempo": {
+    "fr-FR": "Combien de conversations traiter en même temps",
+  },
+  "Um de cada vez por conversa": { "fr-FR": "Une à la fois par conversation" },
+  "Um de cada vez por cliente": { "fr-FR": "Une à la fois par client" },
+  "Só atender em horário de funcionamento": {
+    "fr-FR": "Répondre uniquement pendant les heures d’ouverture",
+  },
+  Dias: { "fr-FR": "Jours" },
   "Atendente IA": { "fr-FR": "Assistant IA" },
   "Como ele vai se chamar": { "fr-FR": "Comment s’appellera-t-il ?" },
   "É o nome que aparece para o seu time. O cliente vê só a conversa.": {
