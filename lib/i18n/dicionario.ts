@@ -2931,6 +2931,17 @@ export const DICIONARIO: Traducoes = {
   "Sincronizando…": { "fr-FR": "Synchronisation…" },
   "Nome do modelo": { "fr-FR": "Nom du modèle" },
   Idioma: { "fr-FR": "Langue" },
+  Notificações: { "fr-FR": "Notifications" },
+  "Canais e categorias.": { "fr-FR": "Canaux et catégories." },
+  "Preferências de notificação em breve. Por enquanto, alertas críticos são enviados por email.": {
+    "fr-FR":
+      "Les préférences de notification seront bientôt disponibles. Pour l’instant, les alertes critiques sont envoyées par e-mail.",
+  },
+  "Lead atribuído a você": { "fr-FR": "Affaire qui vous est attribuée" },
+  "Lead ganho": { "fr-FR": "Affaire gagnée" },
+  "Lead perdido": { "fr-FR": "Affaire perdue" },
+  "Você foi mencionado": { "fr-FR": "Vous avez été mentionné" },
+  "In-app": { "fr-FR": "Dans l’application" },
   Categoria: { "fr-FR": "Catégorie" },
   "Cabeçalho de texto (opcional)": { "fr-FR": "En-tête texte (facultatif)" },
   "Cabeçalho de texto": { "fr-FR": "En-tête texte" },
