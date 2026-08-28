@@ -2645,6 +2645,7 @@ export const DICIONARIO: Traducoes = {
         "Lorsque l’agent avance dans le traitement, le card du client peut se déplacer automatiquement dans votre pipeline. Choisissez l’étape correspondante à chaque moment. Laisser « ne pas déplacer » est un choix valide : le card reste où il est et l’agent continue son travail.",
     },
   "Ir para as etapas do funil": { "fr-FR": "Accéder aux étapes du pipeline" },
+  "Etapa para «{step}»": { "fr-FR": "Étape pour « {step} »" },
   "Não mover o card": { "fr-FR": "Ne pas déplacer le card" },
   "As escolhas voltaram para o que está gravado agora — confira e escolha de novo.": {
     "fr-FR":

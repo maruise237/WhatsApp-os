@@ -222,7 +222,7 @@ export function AgentMappingSection({
       // e persistente de propósito: ele explica por que as escolhas na frente do
       // usuário mudaram sozinhas, e um toast some antes de ele ler.
       onSuccess: () => toast.success(t("Escolhas salvas.")),
-      onError: (e) => setErro(mensagemDeErro(e)),
+      onError: (e) => setErro(t(mensagemDeErro(e))),
     });
   }
 
@@ -296,7 +296,10 @@ export function AgentMappingSection({
                 ) : (
                   <Select value={escolhida ?? SEM_ETAPA} onValueChange={(v) => escolher(passo, v)}>
                     <SelectTrigger
-                      aria-label={`Etapa para «${ROTULO_DO_PASSO[passo]}»`}
+                      aria-label={t("Etapa para «{step}»").replace(
+                        "{step}",
+                        t(ROTULO_DO_PASSO[passo]),
+                      )}
                       data-testid={`etapa-${passo}`}
                     >
                       <SelectValue />
