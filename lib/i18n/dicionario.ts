@@ -34,6 +34,16 @@ export const DICIONARIO: Traducoes = {
   // chamava `t(group.label)`, então o espanhol recebia os cabeçalhos em
   // português e nada ficava vermelho — `traduzir()` devolve a chave ausente
   // como está. Achado pelo cruzamento novo entre DICIONARIO e NAV_GROUPS.
+  Billing: { "fr-FR": "Facturation" },
+  "Planos, faturas e cobrança.": { "fr-FR": "Plans, factures et facturation." },
+  "Em breve — Fase 2": { "fr-FR": "Bientôt — Phase 2" },
+  "Billing entra na Fase 2 do roadmap.": {
+    "fr-FR": "La facturation est prévue en phase 2 de la feuille de route.",
+  },
+  "Para questões de pagamento, contate": { "fr-FR": "Pour les questions de paiement, contactez" },
+  "Para questões de pagamento, fale com quem administra este sistema.": {
+    "fr-FR": "Pour les questions de paiement, contactez la personne qui administre ce système.",
+  },
   Atendimento: { "fr-FR": "Assistance", es: "Atención" },
   CRM: { "fr-FR": "CRM", es: "CRM" },
   "Agente de IA": { "fr-FR": "Agent IA", es: "Agente de IA" },
