@@ -1172,6 +1172,57 @@ export const DICIONARIO: Traducoes = {
   "Buscar por nome…": { "fr-FR": "Rechercher par nom…" },
   "Buscar agents": { "fr-FR": "Rechercher des agents" },
   "Incluir arquivados": { "fr-FR": "Inclure les agents archivés" },
+  "A resposta não usa palavras internas do sistema.": {
+    "fr-FR": "La réponse n’utilise pas de termes internes au système.",
+  },
+  "Esta resposta usa palavras que o cliente não deveria ver.": {
+    "fr-FR": "Cette réponse contient des termes que le client ne devrait pas voir.",
+  },
+  "Em produção ela seria barrada e o assistente teria que reescrever. Encontrado:": {
+    "fr-FR":
+      "En production, elle serait bloquée et l’assistant devrait la réécrire. Termes trouvés :",
+  },
+  "O teste não consegue verificar tudo": { "fr-FR": "Le test ne peut pas tout vérifier" },
+  "verificações ficam de fora": { "fr-FR": "vérifications ne sont pas évaluées" },
+  "Estas só acontecem numa conversa real, com um cliente de verdade do outro lado.": {
+    "fr-FR":
+      "Ces vérifications n’ont lieu que dans une conversation réelle, avec un vrai client à l’autre bout.",
+  },
+  "Para ver a lista inteira do que é conferido — e o que cada verificação protege —": {
+    "fr-FR":
+      "Pour voir la liste complète de ce qui est vérifié — et ce que protège chaque vérification —",
+  },
+  "abra a aba": { "fr-FR": "ouvrez l’onglet" },
+  "Confere antes de enviar": { "fr-FR": "Vérifications avant envoi" },
+  "Configure e salve uma versão antes de testar.": {
+    "fr-FR": "Configurez et enregistrez une version avant de la tester.",
+  },
+  "Informe uma mensagem de teste.": { "fr-FR": "Saisissez un message de test." },
+  "Teste executado.": { "fr-FR": "Test exécuté." },
+  "Erro inesperado.": { "fr-FR": "Erreur inattendue." },
+  "Versão alvo": { "fr-FR": "Version cible" },
+  "Modo teste consome créditos do provider.": {
+    "fr-FR": "Le mode test consomme des crédits du fournisseur.",
+  },
+  "Nenhuma mensagem é enviada via WhatsApp. O run é registrado como dry-run.": {
+    "fr-FR": "Aucun message n’est envoyé via WhatsApp. L’exécution est enregistrée comme dry-run.",
+  },
+  "Oi, quanto custa X?": { "fr-FR": "Bonjour, combien coûte X ?" },
+  "Mensagem do cliente (sample)": { "fr-FR": "Message du client (exemple)" },
+  "Telefone (opcional)": { "fr-FR": "Téléphone (facultatif)" },
+  "Executando…": { "fr-FR": "Exécution…" },
+  "Executar teste": { "fr-FR": "Exécuter le test" },
+  "Nenhum teste executado ainda.": { "fr-FR": "Aucun test exécuté pour le moment." },
+  "Executando dry-run…": { "fr-FR": "Exécution du dry-run…" },
+  "Stub: o runtime real é entregue na S-13.08. O trace abaixo é simulado.": {
+    "fr-FR": "Stub : le runtime réel sera livré dans S-13.08. La trace ci-dessous est simulée.",
+  },
+  "Sem tool calls (resposta direta do LLM).": {
+    "fr-FR": "Aucun appel d’outil (réponse directe du LLM).",
+  },
+  Latência: { "fr-FR": "Latence" },
+  "Tokens in/out": { "fr-FR": "Tokens entrée/sortie" },
+  "Custo (cents)": { "fr-FR": "Coût (centimes)" },
   "Carregando fluxos publicados…": { "fr-FR": "Chargement des flows publiés…" },
   "Erro ao carregar fluxos.": { "fr-FR": "Erreur lors du chargement des flows." },
   "Nenhum fluxo publicado ainda.": { "fr-FR": "Aucun flow publié pour le moment." },
