@@ -1681,6 +1681,69 @@ export const DICIONARIO: Traducoes = {
       "fr-FR":
         "Les nouvelles conversations créent une affaire dans {name}, qui n’est pas sélectionné. L’assistant répondra aux clients, mais les affaires s’y accumuleront sans pouvoir être organisées.",
     },
+  "Algum campo não está no formato esperado.": {
+    "fr-FR": "Un champ n’est pas dans le format attendu.",
+  },
+  "Sua sessão expirou. Entre de novo para salvar.": {
+    "fr-FR": "Votre session a expiré. Reconnectez-vous pour enregistrer.",
+  },
+  "Não consegui identificar sua empresa. Recarregue a página.": {
+    "fr-FR": "Impossible d’identifier votre entreprise. Rechargez la page.",
+  },
+  "Só quem administra esta empresa pode mudar a marca.": {
+    "fr-FR": "Seul l’administrateur de cette entreprise peut modifier la marque.",
+  },
+  "Confirme o código do seu aplicativo de duas etapas e tente de novo.": {
+    "fr-FR":
+      "Confirmez le code de votre application d’authentification à deux facteurs, puis réessayez.",
+  },
+  "A alteração não chegou ao banco — nada foi mudado. Tente de novo.": {
+    "fr-FR": "La modification n’a pas atteint la base de données — rien n’a changé. Réessayez.",
+  },
+  "Sua cor": { "fr-FR": "Votre couleur" },
+  "fora da escala — fica só no logo": { "fr-FR": "hors échelle — utilisée uniquement sur le logo" },
+  "Botões no modo claro": { "fr-FR": "Boutons en mode clair" },
+  "Botões no modo escuro": { "fr-FR": "Boutons en mode sombre" },
+  "Marca salva.": { "fr-FR": "Marque enregistrée." },
+  "Como sua empresa aparece": { "fr-FR": "Apparence de votre entreprise" },
+  "Aparece no menu lateral, para quem trabalha aqui. Deixe em branco para usar {name}.": {
+    "fr-FR":
+      "S’affiche dans la barre latérale pour les membres de cette entreprise. Laissez vide pour utiliser {name}.",
+  },
+  "Não consegui salvar a marca agora.": {
+    "fr-FR": "Impossible d’enregistrer la marque pour le moment.",
+  },
+  "Confira os campos: algum valor não está no formato esperado.": {
+    "fr-FR": "Vérifiez les champs : une valeur n’est pas dans le format attendu.",
+  },
+  "você definiu aqui": { "fr-FR": "vous l’avez défini ici" },
+  "é o padrão do sistema": { "fr-FR": "c’est la valeur par défaut du système" },
+  "veio de quem instalou o sistema": { "fr-FR": "provient de l’installation du système" },
+  "Escolher a cor visualmente": { "fr-FR": "Choisir la couleur visuellement" },
+  "Use um código de cor como #7a5cd6.": { "fr-FR": "Utilisez un code couleur comme #7a5cd6." },
+  "Deixe em branco para voltar à cor que o sistema já usa.": {
+    "fr-FR": "Laissez vide pour revenir à la couleur déjà utilisée par le système.",
+  },
+  "A partir da sua cor o sistema monta esta escala e escolhe, dentro dela, o tom que vai nos botões:":
+    {
+      "fr-FR":
+        "À partir de votre couleur, le système construit cette échelle et choisit le ton utilisé pour les boutons :",
+    },
+  "No modo escuro o sistema usa naturalmente um tom mais claro da escala, para a cor não se perder no fundo escuro.":
+    {
+      "fr-FR":
+        "En mode sombre, le système utilise naturellement un ton plus clair de l’échelle afin que la couleur reste visible sur le fond sombre.",
+    },
+  "De onde vem cada coisa": { "fr-FR": "Origine de chaque élément" },
+  "Considerando o que está nos campos acima.": {
+    "fr-FR": "D’après les valeurs des champs ci-dessus.",
+  },
+  "Do jeito que está, esta cor não chegaria à tela: o sistema continuaria com a cor que já usa.": {
+    "fr-FR":
+      "En l’état, cette couleur n’atteindrait pas l’interface : le système conserverait la couleur déjà utilisée.",
+  },
+  "Nome da sua empresa": { "fr-FR": "Nom de votre entreprise" },
+  "Cor da sua marca": { "fr-FR": "Couleur de votre marque" },
   "Estilo de resposta": { "fr-FR": "Style de réponse" },
   "Responder em várias mensagens curtas (como uma pessoa digita)": {
     "fr-FR": "Répondre en plusieurs messages courts (comme une personne qui écrit)",
