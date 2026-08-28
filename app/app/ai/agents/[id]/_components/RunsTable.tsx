@@ -19,6 +19,7 @@ import {
 
 import { useAgentRuns, type AgentRunRow } from "@/hooks/ai/useAgentRuns";
 import { RunDetailDrawer } from "./RunDetailDrawer";
+import { useT } from "@/hooks/i18n/useT";
 
 interface Props {
   agentId: string;
@@ -46,6 +47,7 @@ function fmtCost(cents: number | null): string {
 }
 
 export function RunsTable({ agentId, active }: Props) {
+  const t = useT();
   const { data, isLoading, error, refetch, isFetching } = useAgentRuns(agentId, {
     enabled: active,
     realtime: active,
@@ -59,43 +61,38 @@ export function RunsTable({ agentId, active }: Props) {
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {isLoading ? "Carregando…" : `${rows.length} execuções recentes`}
+          {isLoading ? t("Carregando…") : `${rows.length} ${t("execuções recentes")}`}
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => refetch()}
-          disabled={isFetching}
-        >
-          {isFetching ? "Atualizando…" : "Atualizar"}
+        <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
+          {isFetching ? t("Atualizando…") : t("Atualizar")}
         </Button>
       </div>
 
       {error ? (
-        <p className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-          Erro ao carregar execuções.
+        <p className="border-destructive/40 bg-destructive/10 rounded-md border p-3 text-sm text-destructive">
+          {t("Erro ao carregar execuções.")}
         </p>
       ) : null}
 
-      <div className="rounded-md border border-border/60">
+      <div className="border-border/60 rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[170px]">Início</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Tokens (in/out)</TableHead>
-              <TableHead>Custo</TableHead>
-              <TableHead>Latência</TableHead>
-              <TableHead>Steps</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
+              <TableHead className="w-[170px]">{t("Início")}</TableHead>
+              <TableHead>{t("Status")}</TableHead>
+              <TableHead>{t("Tipo")}</TableHead>
+              <TableHead>{t("Tokens (in/out)")}</TableHead>
+              <TableHead>{t("Custo")}</TableHead>
+              <TableHead>{t("Latência")}</TableHead>
+              <TableHead>{t("Steps")}</TableHead>
+              <TableHead className="text-right">{t("Ações")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {rows.length === 0 && !isLoading ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-muted-foreground">
-                  Nenhuma execução ainda.
+                  {t("Nenhuma execução ainda.")}
                 </TableCell>
               </TableRow>
             ) : null}
@@ -114,21 +111,20 @@ export function RunsTable({ agentId, active }: Props) {
                 </TableCell>
                 <TableCell>
                   <Badge variant={STATUS_VARIANT[r.status] ?? "outline"} className="text-xs">
-                    {r.status}
+                    {t(r.status)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-xs">
                   {r.is_dry_run ? (
                     <Badge variant="outline" className="text-xs">
-                      teste
+                      {t("teste")}
                     </Badge>
                   ) : (
-                    <span className="text-muted-foreground">produção</span>
+                    <span className="text-muted-foreground">{t("produção")}</span>
                   )}
                 </TableCell>
                 <TableCell className="font-mono text-xs">
-                  {(r.tokens_in ?? 0).toLocaleString()} /{" "}
-                  {(r.tokens_out ?? 0).toLocaleString()}
+                  {(r.tokens_in ?? 0).toLocaleString()} / {(r.tokens_out ?? 0).toLocaleString()}
                 </TableCell>
                 <TableCell className="font-mono text-xs">{fmtCost(r.cost_cents)}</TableCell>
                 <TableCell className="font-mono text-xs">{fmtLatency(r.latency_ms)}</TableCell>
@@ -143,7 +139,7 @@ export function RunsTable({ agentId, active }: Props) {
                       setOpen(true);
                     }}
                   >
-                    Detalhes
+                    {t("Detalhes")}
                   </Button>
                 </TableCell>
               </TableRow>
