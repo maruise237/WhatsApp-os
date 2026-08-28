@@ -961,6 +961,10 @@ export const DICIONARIO: Traducoes = {
         "Sans plage horaire, disponibilité 24 h/24 et 7 j/7. Ajoutez des plages pour limiter le routage à des horaires précis.",
     },
   "Fuso horário": { "fr-FR": "Fuseau horaire" },
+  "Avatar URL": { "fr-FR": "URL de l’avatar" },
+  "Upload de arquivo — em breve. Cole uma URL pública.": {
+    "fr-FR": "Téléversement de fichier — bientôt disponible. Collez une URL publique.",
+  },
   "Nenhuma janela — disponível 24/7.": { "fr-FR": "Aucune plage — disponible 24 h/24 et 7 j/7." },
   "Dia da semana": { "fr-FR": "Jour de la semaine" },
   Início: { "fr-FR": "Début" },

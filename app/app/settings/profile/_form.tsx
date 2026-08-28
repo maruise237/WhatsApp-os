@@ -114,7 +114,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="avatar_url">Avatar URL</Label>
+          <Label htmlFor="avatar_url">{t("Avatar URL")}</Label>
           <Input
             id="avatar_url"
             type="url"
