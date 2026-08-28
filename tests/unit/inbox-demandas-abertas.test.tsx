@@ -145,7 +145,7 @@ describe("painel do inbox — demandas abertas", () => {
     renderPainel();
 
     const sem = await screen.findByTestId("demanda-sem-proximo-passo");
-    expect(sem.textContent).toMatch(/sem próximo passo definido/i);
+    expect(sem.textContent).toMatch(/aucune prochaine étape définie/i);
     // E a que TEM mostra qual é — listar sem dizer o que foi combinado obrigaria
     // o atendente a abrir outra tela para descobrir.
     const com = await screen.findByTestId("demanda-com-proximo-passo");
@@ -157,7 +157,7 @@ describe("painel do inbox — demandas abertas", () => {
     renderPainel();
 
     const secao = await screen.findByTestId("inbox-demandas");
-    await waitFor(() => expect(secao.textContent).toMatch(/não consegui ler/i));
+    await waitFor(() => expect(secao.textContent).toMatch(/impossible de lire ces données/i));
     // A afirmação sobre o negócio não pode ser feita em cima de um erro de
     // leitura — é o defeito que a rota `crm-summary` inteira veio curar.
     expect(secao.textContent).not.toMatch(/nenhuma demanda aberta/i);
@@ -227,7 +227,7 @@ describe("painel do inbox — demandas abertas", () => {
     renderPainel();
 
     const secao = await screen.findByTestId("inbox-demandas");
-    const leads = screen.getByText("Leads recentes");
+    const leads = screen.getByText("Leads récents");
     // `compareDocumentPosition` mede a ordem no documento, não a aparência —
     // medida por ferramenta, nunca a olho.
     const posicao = secao.compareDocumentPosition(leads);

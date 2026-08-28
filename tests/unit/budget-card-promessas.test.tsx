@@ -71,11 +71,11 @@ describe("o card diz a verdade sobre a MEDIÇÃO", () => {
   it("com modelo sem preço conhecido, avisa que o gasto está incompleto", () => {
     montar(estado({ gasto_incompleto: true }));
     const aviso = screen.getByTestId("aviso-medicao-incompleta");
-    expect(aviso.textContent ?? "").toMatch(/não sabe.*preço do modelo/iu);
+    expect(aviso.textContent ?? "").toMatch(/ne connaît pas.*prix du modèle/iu);
     expect(
       aviso.textContent ?? "",
       "a ressalva precisa dizer a CONSEQUÊNCIA — o número é menor e a parada pode não disparar",
-    ).toMatch(/menor que o real/iu);
+    ).toMatch(/inférieur au montant réel/iu);
   });
 
   it("com a medição completa, o aviso NÃO aparece (controle negativo)", () => {
@@ -98,9 +98,11 @@ describe("o card diz a verdade sobre o PERÍODO", () => {
   it("nomeia o mês corrente, derivado do mesmo relógio da régua", () => {
     montar(estado());
     const agora = new Date();
-    const mes = new Date(Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), 1))
-      .toLocaleDateString("pt-BR", { month: "long", year: "numeric", timeZone: "UTC" });
-    expect(screen.getByText(new RegExp(`Gasto de ${mes}`, "iu"))).toBeInTheDocument();
+    const mes = new Date(Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), 1)).toLocaleDateString(
+      "fr-FR",
+      { month: "long", year: "numeric", timeZone: "UTC" },
+    );
+    expect(screen.getByText(new RegExp(`Dépense de ${mes}`, "iu"))).toBeInTheDocument();
   });
 });
 
@@ -116,12 +118,12 @@ describe("o card diz a verdade sobre a PARADA", () => {
         enforcement_effective_at: "2026-01-01T00:00:00.000Z",
       }),
     );
-    const frase = screen.getByText(/A IA para de responder ao chegar em/);
-    expect(frase.textContent ?? "").toMatch(/fila de atendimento humano/iu);
+    const frase = screen.getByText(/L['’]IA arrête de répondre/iu);
+    expect(frase.textContent ?? "").toMatch(/file de traitement humain/iu);
     expect(
       frase.textContent ?? "",
       "sem o caminho de volta, quem lê acha que aumentar o limite religa as conversas paradas",
-    ).toMatch(/uma a uma/iu);
+    ).toMatch(/une à une/iu);
   });
 
   it("a faixa do kill switch aparece quando a instalação afrouxa a proteção", () => {

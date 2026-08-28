@@ -80,8 +80,8 @@ describe("NovaFonteDialog — o tipo escolhido é o tipo enviado", () => {
         />,
       );
 
-      fireEvent.change(screen.getByLabelText("Conteúdo"), { target: { value: CONTEUDO } });
-      fireEvent.click(screen.getByRole("button", { name: "Criar fonte" }));
+      fireEvent.change(screen.getByLabelText("Contenu"), { target: { value: CONTEUDO } });
+      fireEvent.click(screen.getByRole("button", { name: "Créer la source" }));
 
       await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
       expect(spy.mock.calls[0]?.[0]).toBe("/api/v1/ai/knowledge/sources");
@@ -114,8 +114,8 @@ describe("NovaFonteDialog — o tipo escolhido é o tipo enviado", () => {
         onCriada={() => {}}
       />,
     );
-    fireEvent.change(screen.getByLabelText("Conteúdo"), { target: { value: CONTEUDO } });
-    fireEvent.click(screen.getByRole("button", { name: "Criar fonte" }));
+    fireEvent.change(screen.getByLabelText("Contenu"), { target: { value: CONTEUDO } });
+    fireEvent.click(screen.getByRole("button", { name: "Créer la source" }));
 
     await waitFor(() => expect(toastErro).toHaveBeenCalledTimes(1));
     expect(toastErro.mock.calls[0]?.[0]).toContain("Já existe uma fonte de FAQ ativa");
@@ -128,9 +128,9 @@ describe("KnowledgeSourceCard — só oferece cadastro onde existe cadastro", ()
     it(`"${tipo}" vazio oferece o botão, e o botão abre o formulário`, () => {
       render(<KnowledgeSourceCard type={tipo} source={null} agentId={AGENT_ID} />);
 
-      const botao = screen.getByRole("button", { name: /^Configurar / });
+      const botao = screen.getByRole("button", { name: /^Configurer / });
       fireEvent.click(botao);
-      expect(screen.getByLabelText("Conteúdo")).toBeInTheDocument();
+      expect(screen.getByLabelText("Contenu")).toBeInTheDocument();
     });
   }
 
@@ -138,18 +138,20 @@ describe("KnowledgeSourceCard — só oferece cadastro onde existe cadastro", ()
     it(`"${tipo}" não oferece cadastro à mão e explica como se preenche`, () => {
       render(<KnowledgeSourceCard type={tipo} source={null} agentId={AGENT_ID} />);
 
-      expect(screen.queryByRole("button", { name: /^Configurar / })).toBeNull();
+      expect(screen.queryByRole("button", { name: /^Configurer / })).toBeNull();
       // Tirar o botão sem dizer nada deixaria um cartão vazio sem saída: a
       // explicação é o que sobra no lugar do controle que não existia.
       expect(screen.queryByText("Nenhuma fonte configurada.")).toBeNull();
       const explicacao =
-        tipo === "catalog" ? /sincronização com o e-commerce/i : /anonimizadas e indexadas/i;
+        tipo === "catalog"
+          ? /synchronisation avec le commerce en ligne/i
+          : /anonymisées et indexées/i;
       expect(screen.getByText(explicacao)).toBeInTheDocument();
     });
   }
 
   it("sem agentId nenhum botão é oferecido — ele não teria formulário para abrir", () => {
     render(<KnowledgeSourceCard type="faq" source={null} />);
-    expect(screen.queryByRole("button", { name: /^Configurar / })).toBeNull();
+    expect(screen.queryByRole("button", { name: /^Configurer / })).toBeNull();
   });
 });

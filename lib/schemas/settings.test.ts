@@ -8,10 +8,10 @@ import {
 } from "./settings";
 
 describe("profileSchema", () => {
-  it("accepts pt-BR locale + valid timezone", () => {
+  it("accepts fr-FR locale + valid timezone", () => {
     const r = profileSchema.safeParse({
       full_name: "Rafael",
-      locale: "pt-BR",
+      locale: "fr-FR",
       timezone: "America/Sao_Paulo",
       avatar_url: null,
     });
@@ -21,7 +21,7 @@ describe("profileSchema", () => {
   it("rejects unknown locale", () => {
     const r = profileSchema.safeParse({
       full_name: "x",
-      locale: "fr-FR",
+      locale: "xx-XX",
       timezone: "America/Sao_Paulo",
     });
     expect(r.success).toBe(false);
@@ -29,7 +29,7 @@ describe("profileSchema", () => {
 
   it("rejects invalid avatar_url", () => {
     const r = profileSchema.safeParse({
-      locale: "pt-BR",
+      locale: "fr-FR",
       timezone: "UTC",
       avatar_url: "not a url",
     });
@@ -38,7 +38,7 @@ describe("profileSchema", () => {
 
   it("coerces empty avatar_url to null", () => {
     const r = profileSchema.safeParse({
-      locale: "pt-BR",
+      locale: "fr-FR",
       timezone: "UTC",
       avatar_url: "",
     });
@@ -54,7 +54,7 @@ describe("tenantSchema", () => {
       legal_name: "Acme LTDA",
       cnpj: "12345678000190",
       timezone: "America/Sao_Paulo",
-      locale: "pt-BR",
+      locale: "fr-FR",
       media_retention_days: 90,
       dpo_email: "dpo@acme.com",
       privacy_policy_url: "https://acme.com/privacy",
@@ -68,7 +68,7 @@ describe("tenantSchema", () => {
       display_name: "Acme",
       legal_name: "Acme",
       timezone: "UTC",
-      locale: "pt-BR",
+      locale: "fr-FR",
       media_retention_days: 5,
       lost_reasons_extra: [],
     });
@@ -80,7 +80,7 @@ describe("tenantSchema", () => {
       display_name: "Acme",
       legal_name: "Acme",
       timezone: "UTC",
-      locale: "pt-BR",
+      locale: "fr-FR",
       media_retention_days: 90,
     });
     expect(r.success).toBe(true);

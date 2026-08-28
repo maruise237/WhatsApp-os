@@ -48,7 +48,7 @@ function montar() {
  * novo — sem isso a 2ª submissão falha só em máquina carregada.
  */
 async function enviar() {
-  fireEvent.click(await screen.findByRole("button", { name: /criar e continuar/i }));
+  fireEvent.click(await screen.findByRole("button", { name: /créer et continuer/i }));
 }
 
 afterEach(() => {
@@ -70,11 +70,11 @@ describe("setup de IA: o que a tela diz quando o agente fica rascunho", () => {
     await enviar();
 
     const aviso = await screen.findByRole("alert");
-    expect(aviso).toHaveTextContent(/rascunho/i);
+    expect(aviso).toHaveTextContent(/brouillon/i);
     // A causa técnica aparece: quem instalou numa VPS é quem pode consertar.
     expect(aviso).toHaveTextContent(/permission denied for table channel_sessions/);
     // E há como sair do passo sem fingir que publicou.
-    expect(screen.getByRole("button", { name: /continuar sem publicar/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /continuer sans publier/i })).toBeInTheDocument();
     expect(toastWarning).toHaveBeenCalled();
   });
 
@@ -111,12 +111,12 @@ describe("setup de IA: o que a tela diz quando o agente fica rascunho", () => {
     await enviar();
 
     const aviso = await screen.findByRole("alert");
-    expect(aviso).toHaveTextContent(/rascunho/i);
+    expect(aviso).toHaveTextContent(/brouillon/i);
     // A causa certa, nomeando o provedor que a pessoa escolheu no instalador.
     expect(aviso).toHaveTextContent(/openrouter/i);
     // E NUNCA a causa errada: o número de WhatsApp não tem nada a ver com isto.
     expect(aviso).not.toHaveTextContent(/números de WhatsApp/i);
-    expect(screen.getByRole("button", { name: /continuar sem publicar/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /continuer sans publier/i })).toBeInTheDocument();
     expect(toastWarning).toHaveBeenCalled();
   });
 

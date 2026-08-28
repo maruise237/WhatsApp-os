@@ -190,7 +190,11 @@ describe("StagesSection — a linha se explica sozinha", () => {
 
     // Desktop: o cabeçalho de colunas.
     const cabecalho = within(screen.getByTestId("etapas-cabecalho"));
-    for (const texto of [ROTULO.nome, ROTULO.ordem, ROTULO.papel]) {
+    for (const texto of [
+      "Nom de la colonne (cliquez pour renommer)",
+      "Ordre",
+      "Ce qui se passe dans cette colonne",
+    ]) {
       expect(cabecalho.getByText(texto)).toBeInTheDocument();
     }
 
@@ -199,13 +203,13 @@ describe("StagesSection — a linha se explica sozinha", () => {
     // cabeçalho consertou fica intacto num viewport inteiro, e `aria-label` não
     // cobre: é invisível para quem enxerga.
     const linha = within(screen.getByTestId("etapa-e1"));
-    expect(linha.getByText(ROTULO.nome)).toBeInTheDocument();
-    expect(linha.getByText(ROTULO.ordem)).toBeInTheDocument();
-    expect(linha.getByText(ROTULO.papel)).toBeInTheDocument();
+    expect(linha.getByText("Nom de la colonne (cliquez pour renommer)")).toBeInTheDocument();
+    expect(linha.getByText("Ordre")).toBeInTheDocument();
+    expect(linha.getByText("Ce qui se passe dans cette colonne")).toBeInTheDocument();
 
     // E o seletor mostra o rótulo que só faz sentido debaixo deles.
-    expect(screen.getByTestId("papel-e3")).toHaveTextContent("Aqui o cliente fecha");
-    expect(screen.getByTestId("papel-e1")).toHaveTextContent("Nada especial");
+    expect(screen.getByTestId("papel-e3")).toHaveTextContent("Ici, le client conclut");
+    expect(screen.getByTestId("papel-e1")).toHaveTextContent("Rien de particulier");
   });
 });
 
@@ -285,12 +289,12 @@ describe("StagesSection — a marcação de fechamento", () => {
     await screen.findByTestId("nome-e1");
 
     await user.click(screen.getByTestId("papel-e2"));
-    await user.click(await screen.findByRole("option", { name: "Aqui o cliente fecha" }));
+    await user.click(await screen.findByRole("option", { name: "Ici, le client conclut" }));
 
     const aviso = await screen.findByTestId("confirmar-papel-e2");
     // O nome, não um aviso genérico: «Pago» é a coluna que vai deixar de fechar.
-    expect(aviso).toHaveTextContent("Só uma etapa pode ser a de fechamento.");
-    expect(aviso).toHaveTextContent("desmarca «Pago»");
+    expect(aviso).toHaveTextContent("Une seule étape peut correspondre à la clôture.");
+    expect(aviso).toHaveTextContent("retirera ce rôle à « Pago »");
     expect(apiClient.patch).not.toHaveBeenCalled();
 
     await user.click(screen.getByTestId("confirmar-papel-sim-e2"));
@@ -304,8 +308,8 @@ describe("StagesSection — a marcação de fechamento", () => {
     await screen.findByTestId("nome-e1");
 
     await user.click(screen.getByTestId("papel-e2"));
-    await user.click(await screen.findByRole("option", { name: "Aqui o cliente fecha" }));
-    await user.click(within(await screen.findByTestId("confirmar-papel-e2")).getByText("Cancelar"));
+    await user.click(await screen.findByRole("option", { name: "Ici, le client conclut" }));
+    await user.click(within(await screen.findByTestId("confirmar-papel-e2")).getByText("Annuler"));
 
     expect(screen.queryByTestId("confirmar-papel-e2")).not.toBeInTheDocument();
     expect(apiClient.patch).not.toHaveBeenCalled();
@@ -323,7 +327,7 @@ describe("StagesSection — a marcação de fechamento", () => {
     await screen.findByTestId("nome-e2");
 
     await user.click(screen.getByTestId("papel-e2"));
-    await user.click(await screen.findByRole("option", { name: "Aqui o cliente fecha" }));
+    await user.click(await screen.findByRole("option", { name: "Ici, le client conclut" }));
 
     // Nada a desmarcar: um aviso aqui seria falso ("desmarca «undefined»").
     expect(screen.queryByTestId("confirmar-papel-e2")).not.toBeInTheDocument();
@@ -345,7 +349,7 @@ describe("StagesSection — a marcação de fechamento", () => {
     await screen.findByTestId("nome-e1");
 
     await user.click(screen.getByTestId("papel-e3"));
-    await user.click(await screen.findByRole("option", { name: "Nada especial" }));
+    await user.click(await screen.findByRole("option", { name: "Rien de particulier" }));
 
     expect(await screen.findByTestId("etapa-erro-e3")).toHaveTextContent(
       "a marcação se muda, não se apaga",
@@ -353,7 +357,7 @@ describe("StagesSection — a marcação de fechamento", () => {
     // O seletor volta a dizer o que o BANCO tem — deixá-lo em «nenhuma» faria a
     // tela afirmar um estado que não existe.
     await waitFor(() =>
-      expect(screen.getByTestId("papel-e3")).toHaveTextContent("Aqui o cliente fecha"),
+      expect(screen.getByTestId("papel-e3")).toHaveTextContent("Ici, le client conclut"),
     );
     // E releu o servidor: reenviar sobre um funil que mudou é o que o 409 pede
     // para evitar.
@@ -386,7 +390,7 @@ describe("StagesSection — a marcação de fechamento", () => {
     vi.mocked(apiClient.get).mockResolvedValue({ data: estado({ won: "e3" }) });
     montar();
     const linha = await screen.findByTestId("passo-de-e3");
-    expect(linha).toHaveTextContent("O assistente usa esta etapa para «Ganho».");
+    expect(linha).toHaveTextContent("L’assistant utilise cette étape pour «Ganho ».");
     expect(within(linha).getByRole("link")).toHaveAttribute("href", `#mapeamento-${PIPE}`);
   });
 });
@@ -402,10 +406,10 @@ describe("StagesSection — arquivar", () => {
     // sem tela para desfazer.
     expect(apiClient.delete).not.toHaveBeenCalled();
     const painel = await screen.findByTestId("arquivar-painel-e1");
-    expect(painel).toHaveTextContent("A coluna sai do quadro");
+    expect(painel).toHaveTextContent("La colonne quitte le tableau");
     // Honestidade: não existe tela que desarquive. Dizer isso ANTES é a
     // diferença entre uma escolha e uma armadilha.
-    expect(painel).toHaveTextContent("não dá para trazer a coluna de volta por aqui");
+    expect(painel).toHaveTextContent("la colonne ne peut pas être restaurée ici");
 
     vi.mocked(apiClient.delete).mockResolvedValue({ data: { etapas: [] } });
     await user.click(screen.getByTestId("arquivar-confirmar-e1"));
@@ -433,7 +437,7 @@ describe("StagesSection — arquivar", () => {
     await user.click(screen.getByTestId("arquivar-confirmar-e1"));
 
     expect(await screen.findByTestId("arquivar-pergunta-e1")).toHaveTextContent(
-      "38 negócios estão nesta etapa. Para onde eles vão?",
+      "38 opportunités sont dans cette étape. Où doivent-ils aller ?",
     );
     // ⭐ Sem destino escolhido, arquivar NÃO é oferecido: perder o rastro de 38
     // negócios não pode ser um clique de distância.
@@ -468,7 +472,7 @@ describe("StagesSection — arquivar", () => {
     await user.click(screen.getByTestId("arquivar-confirmar-e1"));
 
     expect(await screen.findByTestId("arquivar-sem-destino-e1")).toHaveTextContent(
-      "Crie uma etapa antes de arquivar «Carrinho abandonado»",
+      "Créez une étape avant d’archiver «Carrinho abandonado»",
     );
     expect(screen.queryByTestId("destino-e1")).not.toBeInTheDocument();
     expect(screen.queryByTestId("arquivar-confirmar-e1")).not.toBeInTheDocument();
@@ -524,8 +528,8 @@ describe("StagesSection — arquivar", () => {
 
     await user.click(screen.getByTestId("arquivar-e2"));
     const aviso = await screen.findByTestId("arquivar-perde-passo-e2");
-    expect(aviso).toHaveTextContent("assistente usa para «Em negociação»");
-    expect(aviso).toHaveTextContent("para de mover o card nesse passo");
+    expect(aviso).toHaveTextContent("assistant utilise pour «Em negociação »");
+    expect(aviso).toHaveTextContent("cesse de déplacer le card à cette étape");
     expect(within(aviso).getByRole("link")).toHaveAttribute("href", `#mapeamento-${PIPE}`);
   });
 
@@ -549,8 +553,8 @@ describe("StagesSection — arquivar", () => {
     await user.click(screen.getByTestId("arquivar-e1"));
     await user.click(screen.getByTestId("arquivar-confirmar-e1"));
     const pergunta = await screen.findByTestId("arquivar-pergunta-e1");
-    expect(pergunta).toHaveTextContent("1 negócio está nesta etapa. Para onde ele vai?");
-    expect(pergunta).not.toHaveTextContent("1 negócios");
+    expect(pergunta).toHaveTextContent("1 opportunité est dans cette étape. Où doit-il aller ?");
+    expect(pergunta).not.toHaveTextContent("1 opportunités");
   });
 
   /**
@@ -599,6 +603,6 @@ describe("StagesSection — arquivar", () => {
     const aviso = await screen.findByTestId("arquivar-erro-e1");
     expect(aviso).not.toHaveTextContent("violates");
     expect(aviso).not.toHaveTextContent("crm_leads");
-    expect(aviso).toHaveTextContent("Não deu para salvar");
+    expect(aviso).toHaveTextContent("Impossible d’enregistrer");
   });
 });

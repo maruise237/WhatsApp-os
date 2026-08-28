@@ -66,10 +66,10 @@ describe("painel do Operador — disciplina de informação", () => {
     // O que CONTINUA acontecendo (decisão da spec 16 §2.1: desligar não desliga
     // o registro básico). Sem esta frase, o usuário conclui que desligar deixa o
     // sistema cego — e liga por medo, não por escolha.
-    expect(aviso.textContent).toMatch(/continua atendendo/i);
-    expect(aviso.textContent).toMatch(/registrado sozinho/i);
+    expect(aviso.textContent).toMatch(/continue de répondre/i);
+    expect(aviso.textContent).toMatch(/enregistrés automatiquement/i);
     // E o que PARA de acontecer.
-    expect(aviso.textContent).toMatch(/decidir sobre a operação/i);
+    expect(aviso.textContent).toMatch(/décider pour l’opération/i);
   });
 
   it("DESLIGADO: não mostra configuração que não vai valer", () => {
@@ -85,14 +85,14 @@ describe("painel do Operador — disciplina de informação", () => {
     expect(screen.getByTestId("operador-capacidades")).toBeTruthy();
     // A frase que impede o modelo mental errado: o usuário precisa saber que
     // isto não é a mesma lista da aba de conversa.
-    expect(screen.getByText(/só deste papel/i)).toBeTruthy();
+    expect(screen.getByText(/uniquement ce rôle/i)).toBeTruthy();
   });
 
   it("LIGADO e sem capacidade: explica que ainda serve para algo", () => {
     renderPainel({ enabled: true, toolIds: [] });
     // Estado legítimo (o papel ainda avisa promessa não cumprida). Sem esta
     // frase o usuário liga, não marca nada, e conclui que quebrou.
-    expect(screen.getByTestId("operador-sem-capacidade").textContent).toMatch(/prometer algo/i);
+    expect(screen.getByTestId("operador-sem-capacidade").textContent).toMatch(/promesse faite à un client/i);
   });
 
   it("o texto NÃO usa o nosso vocabulário interno", () => {
@@ -146,7 +146,7 @@ describe("o papel funcionando aparece na tela", () => {
     metricas = { dias: 30, turnos: 0, agiu: 0, promessas: { declaradas: 0, assumidas: 0, semDono: 0 }, quisAgirENaoPode: 0 };
     renderPainel({ enabled: true });
     const bloco = await screen.findByTestId("operador-como-esta-indo");
-    expect(bloco.textContent).toContain("Nenhuma conversa passou por aqui");
+    expect(bloco.textContent).toContain("Aucune conversation n’est passée ici");
     expect(bloco.textContent).not.toMatch(/\b0 de 0\b/);
   });
 
@@ -163,10 +163,10 @@ describe("o papel funcionando aparece na tela", () => {
     expect((await screen.findByTestId("operador-metrica-acao")).textContent).toContain("31");
     const promessas = screen.getByTestId("operador-metrica-promessas");
     // "assumidas", nunca "cumpridas": o sistema não apura cumprimento.
-    expect(promessas.textContent).toContain("responsável");
+    expect(promessas.textContent).toContain("responsable");
     expect(promessas.textContent?.toLowerCase()).not.toContain("cumprid");
     // O único número que aponta ação de configuração vem com o caminho.
-    expect(screen.getByTestId("operador-metrica-sem-mao").textContent).toContain("marcar abaixo");
+    expect(screen.getByTestId("operador-metrica-sem-mao").textContent).toContain("ci-dessous");
   });
 
   it("sem promessa órfã, não inventa alarme", async () => {

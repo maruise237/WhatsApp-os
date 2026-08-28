@@ -99,7 +99,7 @@ describe("o passo do telefone pergunta como a pessoa já usa o número", () => {
   it("abre com a pergunta e as três formas, não com o código", () => {
     montar();
 
-    expect(screen.getByText(/como você já usa esse número/i)).toBeTruthy();
+    expect(screen.getByText(/comment utilisez-vous déjà ce numéro/i)).toBeTruthy();
     expect(screen.getByTestId("forma-qr")).toBeTruthy();
     expect(screen.getByTestId("forma-oficial")).toBeTruthy();
     expect(screen.getByTestId("forma-parceiro")).toBeTruthy();
@@ -158,7 +158,7 @@ describe("o passo do telefone pergunta como a pessoa já usa o número", () => {
 
     // A pergunta volta inteira. Se a escolha fosse gravada em vez de viver em
     // memória, não haveria como desfazê-la — e o passo já estaria "cumprido".
-    await waitFor(() => expect(screen.getByText(/como você já usa esse número/i)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/comment utilisez-vous déjà ce numéro/i)).toBeTruthy());
     expect(screen.getByTestId("forma-qr")).toBeTruthy();
   });
 
@@ -167,8 +167,8 @@ describe("o passo do telefone pergunta como a pessoa já usa o número", () => {
 
     // c2f88e83: um aviso correto que nasceu sem botão prendeu quem instalava
     // sem chave. A pergunta é um estado novo, e estados novos precisam de saída.
-    expect(screen.getByRole("button", { name: /pular por enquanto/i })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /conectei em outro lugar/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /ignorer pour le moment/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /connecté ailleurs/i })).toBeTruthy();
   });
 
   it("avisa que o servidor ainda não recebe pelo caminho oficial, ANTES do formulário", async () => {
@@ -180,7 +180,7 @@ describe("o passo do telefone pergunta como a pessoa já usa o número", () => {
     // recém-feita este é o estado NORMAL, e a hora de dizer isso é antes de a
     // pessoa ir buscar três credenciais no painel — não depois de conectar.
     await waitFor(() =>
-      expect(screen.getByText(/ainda não está pronto para RECEBER/i)).toBeTruthy(),
+      expect(screen.getByText(/n’est pas encore prêt à RECEVOIR/i)).toBeTruthy(),
     );
   });
 
@@ -190,6 +190,6 @@ describe("o passo do telefone pergunta como a pessoa já usa o número", () => {
     fireEvent.click(screen.getByTestId("forma-oficial").querySelector("input")!);
 
     await waitFor(() => expect(screen.getByTestId("dublê-oficial")).toBeTruthy());
-    expect(screen.queryByText(/ainda não está pronto para RECEBER/i)).toBeNull();
+    expect(screen.queryByText(/n’est pas encore prêt à RECEVOIR/i)).toBeNull();
   });
 });

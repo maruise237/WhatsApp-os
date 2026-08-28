@@ -56,8 +56,8 @@ describe("CaseList", () => {
     render(wrap(<CaseList />));
 
     expect(screen.getByText("Cliente pede desconto acima do permitido")).toBeInTheDocument();
-    expect(screen.getByText("Aguardando você")).toBeInTheDocument();
-    expect(screen.getByText("Aguardando o cliente")).toBeInTheDocument();
+    expect(screen.getByText("En attente de votre intervention")).toBeInTheDocument();
+    expect(screen.getByText("En attente du client")).toBeInTheDocument();
     expect(screen.queryByText("awaiting_human")).not.toBeInTheDocument();
     expect(screen.queryByText("awaiting_lead")).not.toBeInTheDocument();
   });
@@ -70,7 +70,7 @@ describe("CaseList", () => {
 
     render(wrap(<CaseList />));
 
-    expect(screen.getByText("Nenhum caso aberto")).toBeInTheDocument();
-    expect(screen.getByText(/quando a ia precisar de você/i)).toBeInTheDocument();
+    expect(screen.getByText("Aucun cas ouvert")).toBeInTheDocument();
+    expect(screen.getByText(/lorsqu['’]elle aura besoin de vous/i)).toBeInTheDocument();
   });
 });

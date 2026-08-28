@@ -57,17 +57,17 @@ describe("AudioRecorder", () => {
 
   it("mic inicia gravação e mostra timer + cancelar", async () => {
     render(<AudioRecorder conversationId="conv-1" />);
-    fireEvent.click(screen.getByRole("button", { name: /gravar áudio/i }));
-    expect(await screen.findByRole("button", { name: /cancelar gravação/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /enregistrer un audio/i }));
+    expect(await screen.findByRole("button", { name: /annuler l.enregistrement/i })).toBeInTheDocument();
     expect(screen.getByText(/0:0\d/)).toBeInTheDocument();
   });
 
   it("enviar para a gravação, sobe o blob com mime real e envia type audio", async () => {
     render(<AudioRecorder conversationId="conv-1" />);
-    fireEvent.click(screen.getByRole("button", { name: /gravar áudio/i }));
-    await screen.findByRole("button", { name: /enviar áudio/i });
+    fireEvent.click(screen.getByRole("button", { name: /enregistrer un audio/i }));
+    await screen.findByRole("button", { name: /envoyer l.audio/i });
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: /enviar áudio/i }));
+      fireEvent.click(screen.getByRole("button", { name: /envoyer l.audio/i }));
     });
     await waitFor(() => expect(uploadMock).toHaveBeenCalled());
     const arg = uploadMock.mock.calls[0]![0] as { file: Blob };
@@ -82,16 +82,16 @@ describe("AudioRecorder", () => {
 
   it("cancelar descarta sem upload", async () => {
     render(<AudioRecorder conversationId="conv-1" />);
-    fireEvent.click(screen.getByRole("button", { name: /gravar áudio/i }));
-    fireEvent.click(await screen.findByRole("button", { name: /cancelar gravação/i }));
+    fireEvent.click(screen.getByRole("button", { name: /enregistrer un audio/i }));
+    fireEvent.click(await screen.findByRole("button", { name: /annuler l.enregistrement/i }));
     expect(uploadMock).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: /gravar áudio/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /enregistrer un audio/i })).toBeInTheDocument();
   });
 
   it("desmontar durante a gravação libera o microfone", async () => {
     const { unmount } = render(<AudioRecorder conversationId="conv-1" />);
-    fireEvent.click(screen.getByRole("button", { name: /gravar áudio/i }));
-    await screen.findByRole("button", { name: /cancelar gravação/i });
+    fireEvent.click(screen.getByRole("button", { name: /enregistrer un audio/i }));
+    await screen.findByRole("button", { name: /annuler l.enregistrement/i });
     expect(trackStopMock).not.toHaveBeenCalled();
     unmount();
     expect(trackStopMock).toHaveBeenCalled();
@@ -99,8 +99,8 @@ describe("AudioRecorder", () => {
 
   it("clicar em enviar duas vezes rápido não quebra e sobe uma vez só", async () => {
     render(<AudioRecorder conversationId="conv-1" />);
-    fireEvent.click(screen.getByRole("button", { name: /gravar áudio/i }));
-    const sendBtn = await screen.findByRole("button", { name: /enviar áudio/i });
+    fireEvent.click(screen.getByRole("button", { name: /enregistrer un audio/i }));
+    const sendBtn = await screen.findByRole("button", { name: /envoyer l.audio/i });
     await act(async () => {
       expect(() => {
         fireEvent.click(sendBtn);

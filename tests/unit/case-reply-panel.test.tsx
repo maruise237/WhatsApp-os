@@ -34,15 +34,15 @@ describe("CaseReplyPanel", () => {
   it("desabilitado fora de awaiting_human, com explicação visível", () => {
     renderWith("awaiting_lead");
 
-    expect(screen.getByText(/aguardando o cliente responder/i)).toBeInTheDocument();
+    expect(screen.getByText(/en attente de la réponse du client/i)).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: /concluí/i })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Enviar" })).toBeDisabled();
-    expect(screen.getByPlaceholderText(/escreva sua resposta/i)).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Envoyer" })).toBeDisabled();
+    expect(screen.getByPlaceholderText(/écrivez votre réponse/i)).toBeDisabled();
   });
 
   it("botão Enviar desabilitado com texto vazio, mesmo em awaiting_human", () => {
     renderWith("awaiting_human");
-    expect(screen.getByRole("button", { name: "Enviar" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Envoyer" })).toBeDisabled();
   });
 
   it("nenhuma ação vem pré-selecionada e o envio exige escolher uma", () => {
@@ -55,26 +55,26 @@ describe("CaseReplyPanel", () => {
       expect(radio).toHaveAttribute("aria-checked", "false");
     }
 
-    fireEvent.change(screen.getByPlaceholderText(/escreva sua resposta/i), {
+    fireEvent.change(screen.getByPlaceholderText(/écrivez votre réponse/i), {
       target: { value: "Preciso do e-mail do pedido" },
     });
-    expect(screen.getByRole("button", { name: "Enviar" })).toBeDisabled();
-    expect(screen.getByText(/escolha uma das opções acima/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Envoyer" })).toBeDisabled();
+    expect(screen.getByText(/choisissez l['’]une des options ci-dessus/i)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("radio", { name: /preciso de info do cliente/i }));
-    expect(screen.getByRole("button", { name: "Enviar" })).not.toBeDisabled();
+    fireEvent.click(screen.getByRole("radio", { name: /j['’]ai besoin d['’]une information/i }));
+    expect(screen.getByRole("button", { name: "Envoyer" })).not.toBeDisabled();
   });
 
   it("enviar com ação need_lead_info chama o POST com {action, body} e invalida as queries", async () => {
     postMock.mockResolvedValue({ data: { status: "awaiting_lead" } });
     const { invalidateSpy } = renderWith("awaiting_human");
 
-    fireEvent.click(screen.getByRole("radio", { name: /preciso de info do cliente/i }));
-    fireEvent.change(screen.getByPlaceholderText(/escreva sua resposta/i), {
+    fireEvent.click(screen.getByRole("radio", { name: /j['’]ai besoin d['’]une information/i }));
+    fireEvent.change(screen.getByPlaceholderText(/écrivez votre réponse/i), {
       target: { value: "Qual seu CPF?" },
     });
 
-    const sendBtn = screen.getByRole("button", { name: "Enviar" });
+    const sendBtn = screen.getByRole("button", { name: "Envoyer" });
     expect(sendBtn).not.toBeDisabled();
     fireEvent.click(sendBtn);
 
@@ -92,10 +92,10 @@ describe("CaseReplyPanel", () => {
     renderWith("awaiting_human");
 
     fireEvent.click(screen.getByRole("radio", { name: /concluí/i }));
-    fireEvent.change(screen.getByPlaceholderText(/escreva sua resposta/i), {
+    fireEvent.change(screen.getByPlaceholderText(/écrivez votre réponse/i), {
       target: { value: "Concluído, avisei o cliente." },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Enviar" }));
+    fireEvent.click(screen.getByRole("button", { name: "Envoyer" }));
 
     await waitFor(() => expect(showApiErrorMock).toHaveBeenCalled());
   });

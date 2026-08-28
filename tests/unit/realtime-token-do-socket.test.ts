@@ -1,197 +1,84 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 /**
- * QUEM DIZ AO SOCKET DO REALTIME QUAL É O TOKEN — e por que este teste existe.
+ * QUEM AUTENTICA O REALTIME — e por que este teste existe.
  *
  * ─── O defeito, relatado olhando a tela ─────────────────────────────────────
  *
  * "Recebemos mensagem e só reflete no inbox se atualizarmos a página."
  *
- * ─── O mecanismo, medido no socket (não inferido) ───────────────────────────
+ * ─── A era Supabase (o que este arquivo vigiava antes) ───────────────────────
  *
- * O cookie de sessão é httpOnly, então o supabase-js do browser não enxerga a
- * sessão. A callback `accessToken` PADRÃO do SupabaseClient, nesse caso,
- * termina em `?? this.supabaseKey`: o socket assina com a ANON KEY. Canal
- * anônimo responde SUBSCRIBED e a RLS filtra do outro lado — ele nunca entrega
- * nada, em silêncio.
+ * O cookie de sessão era httpOnly, o supabase-js do browser não enxergava a
+ * sessão, e a callback `accessToken` PADRÃO terminava em `?? this.supabaseKey`:
+ * o socket assinava com a ANON KEY. Canal anônimo responde SUBSCRIBED e a RLS
+ * filtra do outro lado — ele nunca entrega nada, em silêncio. O conserto foi
+ * instalar uma callback `accessToken` própria (nunca setAuth, que o
+ * realtime-js 2.112.x passou a vencer com a callback padrão).
  *
- * O repo já corrigia isto com `supabase.realtime.setAuth(token)` antes de
- * assinar. ⚠️ ISSO PAROU DE FUNCIONAR NUM BUMP DE DEPENDÊNCIA, sem uma linha
- * nossa mudar: a partir do realtime-js 2.112.x a callback vence o token
- * manual. A própria biblioteca documenta:
+ * ─── O cutover Neon mudou o mecanismo ────────────────────────────────────────
  *
- *   "the callback is the source of truth: the client remains in callback mode
- *    and continues to refresh from it on heartbeat, even after a
- *    bootstrap/override `setAuth(token)` call"
+ * Hoje o browser NÃO assina socket nenhum: `lib/neon/browser-client.ts` abre um
+ * `EventSource` para a rota do próprio app (`/api/v1/realtime/stream`), e a
+ * autenticação acontece no SERVIDOR — `createClient()` de
+ * `lib/neon/server-client.ts` resolve o JWT RLS a partir do cookie de sessão
+ * (nunca a anon key) e a rota só expõe uma lista fechada de tabelas.
  *
- * Medição do join, com dois canais no mesmo socket (o que o inbox faz — lista
- * e conversa aberta): o primeiro levava o JWT do usuário, o segundo levava
- * `{"iss":"supabase-demo","role":"anon"}`. Zero entregas.
- *
- * ─── Por que os testes anteriores ficaram verdes ────────────────────────────
- *
- * Eles exercitavam `authenticateRealtime` contra um cliente FAKE
- * (`{ realtime: { setAuth: vi.fn() } }`) e afirmavam `setAuth` foi CHAMADO. O
- * que quebrou foi o EFEITO de chamá-lo. Um teste que guarda a chamada em vez
- * do comportamento não vermelhece quando o comportamento morre — foi o que
- * aconteceu, e é a razão de este arquivo cobrar a CALLBACK INSTALADA, que é o
- * que o socket realmente consulta.
+ * A garantia que este arquivo cobra continua a MESMA — o realtime nunca usa a
+ * anon key e nunca autentica no cliente — mas o lugar onde ela mora mudou. Os
+ * testes abaixo medem o contrato novo: token nenhum no cliente, fonte única no
+ * servidor.
  */
 
 /**
  * ⚠️ SEM COMENTÁRIOS, e não é capricho: a primeira versão deste teste procurava
  * `.setAuth(` no arquivo inteiro e casava com a PROSA que explica por que o
- * `setAuth` saiu. Ele reprovava o conserto por causa do texto que documenta o
- * conserto. Um teste que não distingue código de comentário mede a coisa
+ * `setAuth` saiu. Um teste que não distingue código de comentário mede a coisa
  * errada — e aqui mediria ao contrário.
  */
 function soCodigo(fonte: string): string {
   return fonte.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
 }
 
-const FONTE = soCodigo(readFileSync("lib/supabase/browser.ts", "utf8"));
+const BROWSER = soCodigo(readFileSync(join(process.cwd(), "lib/neon/browser-client.ts"), "utf8"));
+const HOOK = soCodigo(readFileSync(join(process.cwd(), "hooks/realtime/useRealtimeChannel.ts"), "utf8"));
+const ROTA = soCodigo(
+  readFileSync(join(process.cwd(), "app/api/v1/realtime/stream/route.ts"), "utf8"),
+);
 
-describe("o token que o socket do Realtime usa", () => {
-  it("a callback é instalada em `realtime`, e não via setAuth", () => {
-    // `realtime: { accessToken }` é o que sobrescreve a callback padrão (o
-    // SupabaseClient faz `{...defaults, ...settings.realtime}`). Passar
-    // `accessToken` no nível do CLIENT seria outra coisa — transformaria
-    // `supabase.auth` num Proxy que lança, quebrando o AuthProvider.
-    expect(FONTE, "a callback `accessToken` do realtime sumiu do client").toMatch(
-      /realtime:\s*\{\s*accessToken:/,
+describe("a autenticação do realtime depois do cutover Neon", () => {
+  it("o canal do browser assina via EventSource na rota do próprio app — sem token no cliente", () => {
+    // O EventSource é same-origin: o cookie de sessão httpOnly viaja sozinho e
+    // a rota resolve o token no servidor. Um token no cliente (URL, header,
+    // callback) seria a anon key de novo — exatamente o defeito histórico.
+    expect(BROWSER, "o EventSource para /api/v1/realtime/stream sumiu do client").toMatch(
+      /EventSource\(\s*`\/api\/v1\/realtime\/stream\?/,
     );
-    expect(
-      FONTE,
-      "voltou a usar setAuth — a callback vence o token manual desde o realtime-js 2.112.x",
-    ).not.toMatch(/realtime\.setAuth\(/);
+    expect(BROWSER, "voltou a instalar callback accessToken no cliente").not.toMatch(/accessToken/);
+    expect(BROWSER, "voltou a chamar setAuth no cliente").not.toMatch(/setAuth\(/);
   });
 
   it("o hook do canal NÃO autentica por conta própria — fonte única", () => {
-    // Duas fontes de token foi exatamente o defeito. Se o hook voltar a chamar
-    // setAuth, a que vence é a callback e a outra vira mentira no código.
-    const hook = soCodigo(readFileSync("hooks/realtime/useRealtimeChannel.ts", "utf8"));
-    expect(hook, "o hook voltou a chamar setAuth").not.toMatch(/\.setAuth\(/);
-    expect(hook, "o hook voltou a buscar token por conta própria").not.toMatch(
-      /realtime-token/,
-    );
-  });
-});
-
-describe("a callback do token", () => {
-  // A callback é módulo-global de propósito (o cache tem de valer para todos os
-  // canais do socket). O reset existe para os casos não vazarem um no outro.
-  let createClient: () => unknown;
-  let __resetTokenDoRealtime: () => void;
-
-  /** Extrai a callback que foi passada ao createBrowserClient. */
-  async function callbackInstalada(): Promise<() => Promise<string | null>> {
-    const mod = await import("@supabase/ssr");
-    const espiao = vi.mocked(mod.createBrowserClient);
-    createClient();
-    const opts = espiao.mock.calls.at(-1)?.[2] as
-      | { realtime?: { accessToken?: () => Promise<string | null> } }
-      | undefined;
-    const cb = opts?.realtime?.accessToken;
-    if (!cb) throw new Error("nenhuma callback `accessToken` foi instalada no realtime");
-    return cb;
-  }
-
-  beforeEach(async () => {
-    vi.resetModules();
-    vi.doMock("@supabase/ssr", () => ({
-      createBrowserClient: vi.fn(() => ({ realtime: {} })),
-    }));
-    vi.stubEnv("NEON_DATA_API_URL", "http://localhost:54321");
-    vi.stubEnv("NEON_TEST_JWT", "anon-key-de-teste");
-    const browser = await import("@/lib/supabase/browser");
-    createClient = browser.createClient;
-    __resetTokenDoRealtime = browser.__resetTokenDoRealtime;
-    __resetTokenDoRealtime();
+    // Duas fontes de token foi exatamente o defeito. O hook só abre o canal; a
+    // autenticação mora na rota do servidor.
+    expect(HOOK, "o hook voltou a chamar setAuth").not.toMatch(/\.setAuth\(/);
+    expect(HOOK, "o hook voltou a buscar token por conta própria").not.toMatch(/realtime-token/);
+    expect(HOOK, "o hook voltou a depender de accessToken").not.toMatch(/accessToken/);
   });
 
-  afterEach(() => {
-    vi.unstubAllEnvs();
-    vi.doUnmock("@supabase/ssr");
-  });
-
-  it("devolve o token da sessão — NUNCA a anon key", async () => {
-    // O coração do defeito: a callback padrão devolvia a anon key em vez de
-    // falhar, e a anon key assina com sucesso e não recebe nada.
-    const cb = await callbackInstalada();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({ data: { access_token: "jwt-do-usuario", expires_at: null } }),
-      }),
-    );
-    await expect(cb()).resolves.toBe("jwt-do-usuario");
-  });
-
-  it("401 devolve null, e a PRÓXIMA tentativa refaz a requisição", async () => {
-    // Falha não se guarda. Um 401 transitório (sessão estabelecendo, cookie em
-    // renovação) condenaria todos os canais criados depois se a promessa
-    // ficasse memoizada — foi um defeito real deste caminho, na versão anterior.
-    const cb = await callbackInstalada();
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 401 }));
-    await expect(cb()).resolves.toBeNull();
-
-    const bom = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: { access_token: "jwt-depois", expires_at: null } }),
-    });
-    vi.stubGlobal("fetch", bom);
-    await expect(cb()).resolves.toBe("jwt-depois");
-    expect(bom).toHaveBeenCalledTimes(1);
-  });
-
-  it("200 sem token também não é sucesso", async () => {
-    // O caminho mais traiçoeiro: `res.ok` é verdadeiro, nada falha, e mesmo
-    // assim não há token. Guardar isto é guardar sucesso parcial.
-    const cb = await callbackInstalada();
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ data: {} }) }));
-    await expect(cb()).resolves.toBeNull();
-  });
-
-  it("N canais assinando juntos fazem UMA requisição", async () => {
-    const cb = await callbackInstalada();
-    const espiao = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: { access_token: "jwt-1", expires_at: null } }),
-    });
-    vi.stubGlobal("fetch", espiao);
-    await Promise.all([cb(), cb(), cb()]);
-    expect(espiao).toHaveBeenCalledTimes(1);
-  });
-
-  it("token com prazo é reusado; token perto de vencer é renovado", async () => {
-    // O socket chama esta callback a CADA HEARTBEAT (~30s). Sem cache seriam
-    // ~2 requisições/min por aba para um token que vale uma hora. Com cache
-    // eterno, o inbox aberto por mais de uma hora perderia o tempo real — que
-    // é a bomba-relógio que a versão com `setAuth` tinha.
-    const cb = await callbackInstalada();
-    const daquiAUmaHora = Math.floor(Date.now() / 1000) + 3600;
-    const primeiro = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: { access_token: "jwt-longo", expires_at: daquiAUmaHora } }),
-    });
-    vi.stubGlobal("fetch", primeiro);
-    await cb();
-    await cb();
-    expect(primeiro, "token válido deveria vir do cache").toHaveBeenCalledTimes(1);
-
-    // Agora um que vence em 10s: dentro da margem de renovação.
-    __resetTokenDoRealtime();
-    const jaVencendo = Math.floor(Date.now() / 1000) + 10;
-    const segundo = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: { access_token: "jwt-curto", expires_at: jaVencendo } }),
-    });
-    vi.stubGlobal("fetch", segundo);
-    await cb();
-    await cb();
-    expect(segundo, "token perto de vencer deveria ser renovado").toHaveBeenCalledTimes(2);
+  it("a rota do stream autentica no SERVIDOR via createClient (cookie → RLS JWT), nunca anon", () => {
+    // O coração do defeito antigo: quem assinava era o browser, com a anon key.
+    // Hoje quem consulta é o servidor, com a sessão; a rota não pode ter
+    // caminho anônimo nem expor tabela fora da allowlist.
+    expect(ROTA, "a rota deixou de usar createClient (fonte única de sessão)").toMatch(/createClient/);
+    expect(
+      ROTA,
+      "a rota deixou de vir de lib/neon/server-client (cookie → JWT RLS)",
+    ).toMatch(/neon\/server-client/);
+    expect(ROTA, "a rota devolve anon para o realtime").not.toMatch(/\banon\b/i);
+    expect(ROTA, "a allowlist de tabelas sumiu da rota").toMatch(/ALLOWED_TABLES/);
   });
 });

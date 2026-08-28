@@ -96,15 +96,15 @@ describe("editor de instruções do agente", () => {
     // ele não cabe, em vez de descobrir no salvamento — ou nunca.
     const prompt = montar();
     fireEvent.change(prompt, { target: { value: "a".repeat(20_500) } });
-    expect(screen.getByTestId("contador-do-prompt")).toHaveTextContent("20.500/20.000");
+    expect(screen.getByTestId("contador-do-prompt")).toHaveTextContent("20 500/20.000");
   });
 
   it("recusa o salvamento dizendo quanto passou", () => {
     const prompt = montar();
     fireEvent.change(prompt, { target: { value: "a".repeat(20_500) } });
-    fireEvent.click(screen.getByRole("button", { name: /salvar|criar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /créer|enregistrer/i }));
     expect(
-      screen.getByText(/corte 500 para conseguir salvar/i),
+      screen.getByText(/supprimez-en 500 pour pouvoir enregistrer/i),
       "o aviso precisa dizer QUANTO cortar — sem isso o autor corta no escuro",
     ).toBeInTheDocument();
   });
@@ -115,8 +115,8 @@ describe("editor de instruções do agente", () => {
     // aceita, e o autor ficaria preso sem entender o motivo.
     const prompt = montar();
     fireEvent.change(prompt, { target: { value: "a".repeat(20_000) + "\n\n   " } });
-    expect(screen.getByTestId("contador-do-prompt")).toHaveTextContent("20.000/20.000");
-    fireEvent.click(screen.getByRole("button", { name: /salvar|criar/i }));
-    expect(screen.queryByText(/conseguir salvar/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId("contador-do-prompt")).toHaveTextContent("20 000/20.000");
+    fireEvent.click(screen.getByRole("button", { name: /créer|enregistrer/i }));
+    expect(screen.queryByText(/pour pouvoir enregistrer/i)).not.toBeInTheDocument();
   });
 });

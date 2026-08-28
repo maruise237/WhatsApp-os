@@ -107,10 +107,10 @@ describe("listagem que falhou não vira 'primeira instalação'", () => {
 
     render(wrap(<ConnectionsClient wahaConfigured />));
 
-    expect(screen.getByText("Não foi possível carregar seus números.")).toBeInTheDocument();
-    expect(screen.getByText(/esta lista não está mostrando o que existe/)).toBeInTheDocument();
-    expect(screen.queryByText(/Conecte seu primeiro número/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Nenhum número conectado ainda/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Impossible de charger vos numéros :/)).toBeInTheDocument();
+    expect(screen.getByText(/cette liste ne reflète/)).toBeInTheDocument();
+    expect(screen.queryByText(/Connectez votre premier numéro/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Aucun numéro n’est encore connecté/)).not.toBeInTheDocument();
   });
 
   it("org realmente sem número continua vendo o convite de primeira conexão", () => {
@@ -118,7 +118,7 @@ describe("listagem que falhou não vira 'primeira instalação'", () => {
 
     render(wrap(<ConnectionsClient wahaConfigured />));
 
-    expect(screen.getByText(/Conecte seu primeiro número/)).toBeInTheDocument();
+    expect(screen.getByText(/Connectez votre premier numéro/)).toBeInTheDocument();
   });
 
   it("banco sem a migration: avisa que canal excluído volta à lista", () => {
@@ -126,7 +126,7 @@ describe("listagem que falhou não vira 'primeira instalação'", () => {
 
     render(wrap(<ConnectionsClient wahaConfigured />));
 
-    expect(screen.getByText(/continua aparecendo nesta lista/)).toBeInTheDocument();
+    expect(screen.getByText(/continuera d’apparaître dans cette liste/)).toBeInTheDocument();
   });
 
   it("bolinha da sidebar não diz 'Nenhuma conexão' quando a lista falhou", () => {
@@ -143,7 +143,7 @@ describe("Excluir sem o serviço de WhatsApp ativo", () => {
   it("fica desabilitado para o número pareado por QR, dizendo por quê", () => {
     render(wrap(<ConnectionsClient wahaConfigured={false} />));
 
-    const botao = screen.getByRole("button", { name: /^Excluir Vendas — indisponível/ });
+    const botao = screen.getByRole("button", { name: /^Supprimer Vendas — indisponible/ });
     expect(botao).toBeDisabled();
   });
 
@@ -152,7 +152,7 @@ describe("Excluir sem o serviço de WhatsApp ativo", () => {
 
     render(wrap(<ConnectionsClient wahaConfigured={false} />));
 
-    expect(screen.getByRole("button", { name: "Excluir Oficial" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Supprimer Oficial" })).toBeEnabled();
   });
 });
 
@@ -168,15 +168,15 @@ describe("Reconectar não é oferecido a quem não vive no transporte", () => {
 
     render(wrap(<ConnectionsClient wahaConfigured />));
 
-    expect(screen.queryByRole("button", { name: /Reconectar/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Reconnecter/ })).not.toBeInTheDocument();
     // Não-vacuidade: o card É o do canal oficial, e as ações dele continuam lá.
-    expect(screen.getByRole("button", { name: "Excluir Oficial" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Supprimer Oficial" })).toBeInTheDocument();
   });
 
   it("número pareado por QR continua recebendo o botão", () => {
     render(wrap(<ConnectionsClient wahaConfigured />));
 
-    expect(screen.getByRole("button", { name: /Reconectar/ })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /Reconnecter/ })).toBeEnabled();
   });
 });
 
@@ -185,16 +185,16 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
     getMock.mockResolvedValue({ data: { deletion_impact: IMPACTO_ARQUIVA } });
 
     render(wrap(<ConnectionsClient wahaConfigured />));
-    fireEvent.click(screen.getByRole("button", { name: "Excluir Vendas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer Vendas" }));
 
     await waitFor(() =>
       expect(getMock).toHaveBeenCalledWith("/api/v1/channel-sessions/canal-1?impact=1"),
     );
     expect(
-      await screen.findByText("Continua no inbox: 12 conversas e 340 mensagens."),
+      await screen.findByText("Reste dans l’Inbox : 12 conversations e 340 messages."),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Fica salvo, mas sem número — para de atender: 1 roteador de IA."),
+      screen.getByText("Reste enregistré, mais sans numéro — il cesse de répondre : 1 routeur IA."),
     ).toBeInTheDocument();
     // A promessa antiga: valia só para o número pareado por QR, e mesmo nele
     // dizia que "só o canal é removido".
@@ -206,23 +206,23 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
     getMock.mockReturnValue(new Promise(() => {}));
 
     render(wrap(<ConnectionsClient wahaConfigured />));
-    fireEvent.click(screen.getByRole("button", { name: "Excluir Vendas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer Vendas" }));
 
-    const confirmar = await screen.findByRole("button", { name: "Excluir" });
+    const confirmar = await screen.findByRole("button", { name: "Supprimer" });
     expect(confirmar).toBeDisabled();
-    expect(screen.getByText(/Verificando o que está ligado/)).toBeInTheDocument();
+    expect(screen.getByText(/Vérification des éléments liés/)).toBeInTheDocument();
   });
 
   it("preflight que falhou não vira promessa: admite que não sabe", async () => {
     getMock.mockRejectedValue(new Error("500"));
 
     render(wrap(<ConnectionsClient wahaConfigured />));
-    fireEvent.click(screen.getByRole("button", { name: "Excluir Vendas" }));
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer Vendas" }));
 
     expect(
-      await screen.findByText(/Não foi possível verificar o que está ligado/),
+      await screen.findByText(/Impossible de vérifier les éléments liés/),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Excluir" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Supprimer" })).toBeEnabled();
   });
 
   it("confirmar usa o impacto que o DELETE devolve para contar a conversa preservada", async () => {
@@ -232,14 +232,16 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
     });
 
     render(wrap(<ConnectionsClient wahaConfigured />));
-    fireEvent.click(screen.getByRole("button", { name: "Excluir Vendas" }));
-    fireEvent.click(await screen.findByRole("button", { name: "Excluir" }));
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer Vendas" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Supprimer" }));
 
     await waitFor(() =>
       expect(deleteMock).toHaveBeenCalledWith("/api/v1/channel-sessions/canal-1"),
     );
     await waitFor(() =>
-      expect(toastSuccess).toHaveBeenCalledWith("Canal removido. 12 conversas continuam no inbox."),
+      expect(toastSuccess).toHaveBeenCalledWith(
+        "Canal retiré. 12 conversations continuent dans l’Inbox.",
+      ),
     );
   });
 });

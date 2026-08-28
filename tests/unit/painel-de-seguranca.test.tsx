@@ -116,11 +116,11 @@ describe("painel de segurança — o que se confere antes de enviar", () => {
     renderPainel();
     await waitFor(() => {
       expect(screen.getByTestId("conferencia-semantic_promise-escolha").textContent).toContain(
-        "configuração do servidor",
+        "configuration du serveur",
       );
     });
     expect(screen.getByTestId("conferencia-jailbreak_detect-escolha").textContent).toContain(
-      "por você",
+      "par vous",
     );
   });
 
@@ -133,7 +133,7 @@ describe("painel de segurança — o que se confere antes de enviar", () => {
     expect(fixas).toHaveLength(9);
     for (const c of fixas) {
       const linha = screen.getByTestId(`conferencia-${c.nome}-fixa`);
-      expect(linha.textContent).toContain("não se desliga");
+      expect(linha.textContent).toContain("ne peut pas être désactivée");
       // Proibição sem razão é o que faz alguém procurar como contornar.
       expect(linha.textContent?.length ?? 0).toBeGreaterThan(50);
     }
@@ -151,13 +151,13 @@ describe("painel de segurança — o que se confere antes de enviar", () => {
     for (const c of [...CONFERENCIAS_DE_SAIDA, CONFERENCIA_DE_ENTRADA]) {
       if (c.escolha === null) continue;
       const linha = screen.getByTestId(`conferencia-${c.nome}-escolha`);
-      expect(linha.textContent).toContain("consulta ao modelo");
+      expect(linha.textContent).toContain("requête au modèle");
     }
   });
 
   it("a conferência de ENTRADA aparece separada da cadeia de saída", () => {
     renderPainel();
-    expect(screen.getByText(/antes de o assistente ler/i)).toBeTruthy();
+    expect(screen.getByText(/avant que l’assistant ne lise/i)).toBeTruthy();
     expect(screen.getByTestId(`item-conferencia-${CONFERENCIA_DE_ENTRADA.nome}`)).toBeTruthy();
   });
 

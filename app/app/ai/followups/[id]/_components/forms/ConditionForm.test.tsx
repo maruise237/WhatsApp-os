@@ -45,7 +45,7 @@ describe("ConditionForm — o modo sobrevive a uma edição qualquer", () => {
     const user = usuario();
     const gravados = renderizar(POR_REGRA);
 
-    await user.type(screen.getAllByLabelText("Valor")[0]!, "x");
+    await user.type(screen.getAllByLabelText("Valeur")[0]!, "x");
 
     expect(gravados.length).toBeGreaterThan(0);
     expect(gravados.at(-1)!.branching).toBe("per_check");
@@ -55,7 +55,7 @@ describe("ConditionForm — o modo sobrevive a uma edição qualquer", () => {
     const user = usuario();
     const gravados = renderizar(POR_REGRA);
 
-    await user.type(screen.getByLabelText("Nome da saída 1"), "!");
+    await user.type(screen.getByLabelText("Nom de la sortie 1"), "!");
 
     expect(gravados.at(-1)!.checks.map((c) => c.id)).toEqual(["regra-1", "regra-2"]);
   });
@@ -64,7 +64,7 @@ describe("ConditionForm — o modo sobrevive a uma edição qualquer", () => {
     const user = usuario();
     const gravados = renderizar(POR_REGRA);
 
-    await user.clear(screen.getByLabelText("Nome da saída 1"));
+    await user.clear(screen.getByLabelText("Nom de la sortie 1"));
 
     expect(gravados.at(-1)!.checks[0]!.label).toBeUndefined();
     expect(gravados.at(-1)!.checks[0]!.id).toBe("regra-1");
@@ -78,7 +78,7 @@ describe("ConditionForm — o modo sobrevive a uma edição qualquer", () => {
     };
     const gravados = renderizar(v1);
 
-    await user.type(screen.getByLabelText("Valor"), "x");
+    await user.type(screen.getByLabelText("Valeur"), "x");
 
     expect(gravados.at(-1)).not.toHaveProperty("branching");
   });
@@ -90,15 +90,15 @@ describe("ConditionForm — trocar de modo avisa antes", () => {
     // As duas regras estão ligadas; no modo combinado esses ramos deixam de existir.
     const gravados = renderizar(POR_REGRA, ["regra-1", "regra-2"]);
 
-    await user.click(screen.getByRole("combobox", { name: "Como as regras decidem o caminho" }));
-    await user.click(await screen.findByRole("option", { name: /Avaliar as regras juntas/ }));
+    await user.click(screen.getByRole("combobox", { name: "Comment les règles déterminent le chemin" }));
+    await user.click(await screen.findByRole("option", { name: /Évaluer les règles ensemble/ }));
 
     const aviso = screen.getByTestId("cond-troca-aviso");
-    expect(aviso).toHaveTextContent("2 ligações sem saída");
+    expect(aviso).toHaveTextContent("2 liaisons sans sortie");
     // E, principalmente: NADA foi gravado ainda.
     expect(gravados).toEqual([]);
 
-    await user.click(screen.getByRole("button", { name: "Trocar mesmo assim" }));
+    await user.click(screen.getByRole("button", { name: "Changer quand même" }));
     expect(gravados.at(-1)).not.toHaveProperty("branching");
   });
 
@@ -106,9 +106,9 @@ describe("ConditionForm — trocar de modo avisa antes", () => {
     const user = usuario();
     const gravados = renderizar(POR_REGRA, ["regra-1"]);
 
-    await user.click(screen.getByRole("combobox", { name: "Como as regras decidem o caminho" }));
-    await user.click(await screen.findByRole("option", { name: /Avaliar as regras juntas/ }));
-    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+    await user.click(screen.getByRole("combobox", { name: "Comment les règles déterminent le chemin" }));
+    await user.click(await screen.findByRole("option", { name: /Évaluer les règles ensemble/ }));
+    await user.click(screen.getByRole("button", { name: "Annuler" }));
 
     expect(screen.queryByTestId("cond-troca-aviso")).toBeNull();
     expect(gravados).toEqual([]);
@@ -125,8 +125,8 @@ describe("ConditionForm — trocar de modo avisa antes", () => {
     };
     const gravados = renderizar(v1, []);
 
-    await user.click(screen.getByRole("combobox", { name: "Como as regras decidem o caminho" }));
-    await user.click(await screen.findByRole("option", { name: "Uma saída por regra" }));
+    await user.click(screen.getByRole("combobox", { name: "Comment les règles déterminent le chemin" }));
+    await user.click(await screen.findByRole("option", { name: "Une sortie par règle" }));
 
     expect(screen.queryByTestId("cond-troca-aviso")).toBeNull();
     const ultimo = gravados.at(-1)!;

@@ -168,16 +168,16 @@ describe("caminhoBateComPrefixo / podeApagar — o prefixo asseverado", () => {
 
 describe("urlPublicaDoLogo / logoDaCamada — o que a camada mostra", () => {
   it("monta a URL pública do bucket, normalizando barra sobrando", () => {
-    const esperada = `https://p.supabase.co/storage/v1/object/public/${BUCKET_DE_LOGOS}/platform/${NOME}`;
+    const esperada = `https://p.supabase.co/api/v1/marca/logo/public?path=${encodeURIComponent(`platform/${NOME}`)}`;
     expect(urlPublicaDoLogo(`platform/${NOME}`, "https://p.supabase.co")).toBe(esperada);
     // Barra no fim é grafia legítima do `.env` do operador, e sem a normalização
-    // produziria `//storage`.
+    // produziria `//api`.
     expect(urlPublicaDoLogo(`platform/${NOME}`, "https://p.supabase.co/")).toBe(esperada);
   });
 
   it("o ARQUIVO subido vence a URL colada, dentro da mesma camada", () => {
     expect(logoDaCamada(`platform/${NOME}`, "https://cdn/antigo.png", "https://p.co")).toBe(
-      `https://p.co/storage/v1/object/public/${BUCKET_DE_LOGOS}/platform/${NOME}`,
+      `https://p.co/api/v1/marca/logo/public?path=${encodeURIComponent(`platform/${NOME}`)}`,
     );
   });
 

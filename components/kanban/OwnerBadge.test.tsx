@@ -13,19 +13,19 @@ describe("OwnerBadge", () => {
     render(<OwnerBadge ownerKind="user" ownerName="Maria Silva" />);
     expect(screen.getByText("Maria Silva")).toBeInTheDocument();
     expect(screen.getByText("MS")).toBeInTheDocument();
-    expect(screen.getByLabelText("Responsável: Maria Silva")).toBeInTheDocument();
+    expect(screen.getByLabelText("Responsable: Maria Silva")).toBeInTheDocument();
   });
 
   it("cai para rótulo genérico quando o nome do owner é desconhecido", () => {
     render(<OwnerBadge ownerKind="user" ownerName={null} />);
-    expect(screen.getByText("Responsável")).toBeInTheDocument();
+    expect(screen.getByText("Responsable")).toBeInTheDocument();
     expect(screen.getByText("?")).toBeInTheDocument();
   });
 
   it("mostra 'Sem responsável' quando não há dono", () => {
     render(<OwnerBadge ownerKind={null} ownerName={null} />);
-    expect(screen.getByLabelText("Sem responsável")).toBeInTheDocument();
-    expect(screen.getByText("Sem responsável")).toBeInTheDocument();
+    expect(screen.getByLabelText("Aucun responsable")).toBeInTheDocument();
+    expect(screen.getByText("Aucun responsable")).toBeInTheDocument();
   });
 
   it("agente: mesmo tamanho do humano, com anel e inicial em mono", () => {
@@ -40,14 +40,14 @@ describe("OwnerBadge", () => {
 
   it("agente: rótulo acessível traz nome · versão publicada", () => {
     render(<OwnerBadge ownerKind="ai" ownerName="Agente Beta" agentVersion={3} />);
-    expect(screen.getByLabelText("Responsável: Agente Beta · v3")).toBeInTheDocument();
+    expect(screen.getByLabelText("Responsable: Agente Beta · v3")).toBeInTheDocument();
     // O nome fica visível no card; a versão vive no tooltip/rótulo.
     expect(screen.getByText("Agente Beta")).toBeInTheDocument();
   });
 
   it("agente sem versão publicada não inventa 'v'", () => {
     render(<OwnerBadge ownerKind="ai" ownerName="Agente Beta" agentVersion={null} />);
-    expect(screen.getByLabelText("Responsável: Agente Beta")).toBeInTheDocument();
+    expect(screen.getByLabelText("Responsable: Agente Beta")).toBeInTheDocument();
   });
 
   it("nada de emoji ou badge 'AI' no dono agente", () => {

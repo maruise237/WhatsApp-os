@@ -103,7 +103,7 @@ describe("TeamMembersClient — seletor de papel (G2-02)", () => {
     const user = userEvent.setup();
     renderClient();
 
-    const trigger = await screen.findByRole("combobox", { name: /Papel de Agente/i });
+    const trigger = await screen.findByRole("combobox", { name: /Rôle de Agente/i });
     expect(trigger).toHaveTextContent("agent");
     await user.click(trigger);
     await user.click(await screen.findByRole("option", { name: "manager" }));
@@ -132,7 +132,7 @@ describe("TeamMembersClient — seletor de papel (G2-02)", () => {
     const user = userEvent.setup();
     renderClient();
 
-    const trigger = await screen.findByRole("combobox", { name: /Papel de Agente/i });
+    const trigger = await screen.findByRole("combobox", { name: /Rôle de Agente/i });
     await user.click(trigger);
     await user.click(await screen.findByRole("option", { name: "viewer" }));
 

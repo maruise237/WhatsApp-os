@@ -56,7 +56,7 @@ function renderComposer(props: Partial<React.ComponentProps<typeof Composer>> = 
   );
 }
 
-const campo = () => screen.getByLabelText("Mensagem");
+const campo = () => screen.getByLabelText("Message");
 
 describe("imagemDoClipboard", () => {
   it("acha a imagem em `files` (Chrome num print de tela)", () => {
@@ -115,8 +115,8 @@ describe("Composer — colar imagem", () => {
     fireEvent.paste(campo(), { clipboardData: clipboard({ files: [png()] }) });
 
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/legenda/i), { target: { value: "mirá esto" } });
-    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
+    fireEvent.change(screen.getByLabelText(/légende/i), { target: { value: "mirá esto" } });
+    fireEvent.click(screen.getByRole("button", { name: /^envoyer$/i }));
 
     await waitFor(() => expect(uploadMock).toHaveBeenCalled());
     await waitFor(() =>
@@ -137,7 +137,7 @@ describe("Composer — colar imagem", () => {
 
   it("em 'Nota interna' colar imagem não vira anexo — nota é só texto", () => {
     renderComposer();
-    fireEvent.click(screen.getByRole("button", { name: /nota interna/i }));
+    fireEvent.click(screen.getByRole("button", { name: /note interne/i }));
     const seguiu = fireEvent.paste(campo(), { clipboardData: clipboard({ files: [png()] }) });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -146,7 +146,7 @@ describe("Composer — colar imagem", () => {
 
   it("com anexo já em preview, colar não substitui em silêncio o que o operador escolheu", async () => {
     renderComposer();
-    fireEvent.click(screen.getByRole("button", { name: /anexar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /joindre/i }));
     const inputDoc = document.querySelector('input[accept^=".pdf"]') as HTMLInputElement;
     const doc = new File([new Uint8Array([1])], "contrato-assinado.pdf", { type: "application/pdf" });
     fireEvent.change(inputDoc, { target: { files: [doc] } });

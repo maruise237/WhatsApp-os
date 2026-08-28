@@ -12,6 +12,8 @@ overrides:
   brace-expansion@1: ^1.1.18
   path-to-regexp@6: ^6.3.0
 
+packageExtensionsChecksum: 56b3099c4f297963fb581ac182237e95
+
 importers:
 
   .:

@@ -204,8 +204,8 @@ describe("mensagemDeErro — nem toda frase do servidor é texto de tela", () =>
 describe("AgentMappingSection — o que a tela oferece e envia", () => {
   it("«não mover» é a escolha inicial e não é apresentado como erro", async () => {
     montar();
-    expect(await screen.findByTestId("etapa-new")).toHaveTextContent("Não mover o card");
-    expect(screen.getByText(/Deixar em «não mover» é uma escolha válida/)).toBeInTheDocument();
+    expect(await screen.findByTestId("etapa-new")).toHaveTextContent("Ne pas déplacer le card");
+    expect(screen.getByText(/Laisser « ne pas déplacer » est un choix valide/)).toBeInTheDocument();
     expect(screen.queryByTestId("mapeamento-erro")).not.toBeInTheDocument();
     // Nada a salvar enquanto o usuário não mexeu.
     expect(screen.getByTestId("salvar-mapeamento")).toBeDisabled();
@@ -217,7 +217,7 @@ describe("AgentMappingSection — o que a tela oferece e envia", () => {
     await screen.findByTestId("etapa-new");
 
     expect(await opcoesNaTela(user, "qualifying")).toEqual([
-      "Não mover o card",
+      "Ne pas déplacer le card",
       "Carrinho abandonado",
       "Aguardando pagamento",
     ]);
@@ -227,16 +227,16 @@ describe("AgentMappingSection — o que a tela oferece e envia", () => {
     await user.click(await screen.findByRole("option", { name: "Carrinho abandonado" }));
 
     expect(await opcoesNaTela(user, "qualifying")).toEqual([
-      "Não mover o card",
+      "Ne pas déplacer le card",
       "Aguardando pagamento",
     ]);
     await user.keyboard("{Escape}");
 
     await user.click(screen.getByTestId("etapa-new"));
-    await user.click(await screen.findByRole("option", { name: "Não mover o card" }));
+    await user.click(await screen.findByRole("option", { name: "Ne pas déplacer le card" }));
 
     expect(await opcoesNaTela(user, "qualifying")).toEqual([
-      "Não mover o card",
+      "Ne pas déplacer le card",
       "Carrinho abandonado",
       "Aguardando pagamento",
     ]);
@@ -246,7 +246,7 @@ describe("AgentMappingSection — o que a tela oferece e envia", () => {
     const user = userEvent.setup();
     montar();
     await screen.findByTestId("etapa-won");
-    expect(await opcoesNaTela(user, "won")).toEqual(["Não mover o card", "Pago"]);
+    expect(await opcoesNaTela(user, "won")).toEqual(["Ne pas déplacer le card", "Pago"]);
   });
 
   it("salva os SETE passos, com null explícito no que ficou sem etapa", async () => {
@@ -291,7 +291,7 @@ describe("AgentMappingSection — o que a tela oferece e envia", () => {
 
     const aviso = await screen.findByTestId("mapeamento-erro");
     expect(aviso).not.toHaveTextContent("violates");
-    expect(aviso).toHaveTextContent("Não deu para salvar");
+    expect(aviso).toHaveTextContent("Impossible d’enregistrer");
     expect(toast.success).not.toHaveBeenCalled();
   });
 

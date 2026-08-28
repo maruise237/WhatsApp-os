@@ -53,16 +53,16 @@ describe("CaseDetail", () => {
   it("estado vazio quando nenhum caso selecionado", () => {
     useCaseMock.mockReturnValue({ isLoading: false, data: undefined });
     render(wrap(<CaseDetail caseId={null} />));
-    expect(screen.getByText("Selecione um caso à esquerda")).toBeInTheDocument();
+    expect(screen.getByText("Sélectionnez un cas à gauche")).toBeInTheDocument();
   });
 
   it("mostra summary/blocker rotulados e traduz pelo menos 2 kinds da timeline pra pt-br", () => {
     useCaseMock.mockReturnValue({ isLoading: false, data: BASE_CASE });
     render(wrap(<CaseDetail caseId="case-1" />));
 
-    expect(screen.getByText("O que o cliente precisa")).toBeInTheDocument();
+    expect(screen.getByText("Ce dont le client a besoin")).toBeInTheDocument();
     expect(screen.getByText(BASE_CASE.summary)).toBeInTheDocument();
-    expect(screen.getByText("Por que a IA travou")).toBeInTheDocument();
+    expect(screen.getByText("Pourquoi l’IA s’est interrompue")).toBeInTheDocument();
     expect(screen.getByText(BASE_CASE.blocker)).toBeInTheDocument();
 
     // 'opened' traduzido — nunca o enum cru.
@@ -79,6 +79,6 @@ describe("CaseDetail", () => {
       data: { ...BASE_CASE, source: "guardrail_autofallback" as const },
     });
     render(wrap(<CaseDetail caseId="case-1" />));
-    expect(screen.getByText("Aberto automaticamente")).toBeInTheDocument();
+    expect(screen.getByText("Ouvert automatiquement")).toBeInTheDocument();
   });
 });

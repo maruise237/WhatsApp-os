@@ -40,8 +40,8 @@ describe("Composer + modo nota interna", () => {
 
   it("modo reply (default): envia normal via useSendMessage", () => {
     renderComposer();
-    fireEvent.change(screen.getByLabelText(/mensagem/i), { target: { value: "oi cliente" } });
-    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
+    fireEvent.change(screen.getByLabelText(/message/i), { target: { value: "oi cliente" } });
+    fireEvent.click(screen.getByRole("button", { name: /^envoyer$/i }));
 
     expect(sendMock).toHaveBeenCalledWith(
       expect.objectContaining({ conversation_id: "conv-1", body: "oi cliente", type: "text" }),
@@ -55,32 +55,32 @@ describe("Composer + modo nota interna", () => {
       /* simula request lento — onSuccess não é chamado */
     });
     renderComposer();
-    const input = screen.getByLabelText(/mensagem/i);
+    const input = screen.getByLabelText(/message/i);
     fireEvent.change(input, { target: { value: "oi cliente" } });
-    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^envoyer$/i }));
 
     expect(input).toHaveValue("");
   });
 
   it("alterna pra modo nota interna: some anexo/rascunho/áudio, muda placeholder", () => {
     renderComposer();
-    expect(screen.getByRole("button", { name: /anexar/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /sugerir resposta/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /joindre/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /suggérer une réponse/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /nota interna/i }));
+    fireEvent.click(screen.getByRole("button", { name: /note interne/i }));
 
-    expect(screen.queryByRole("button", { name: /anexar/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /sugerir resposta/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /gravar áudio/i })).not.toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/nota interna/i)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /joindre/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /suggérer une réponse/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /enregistrer un audio/i })).not.toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/note interne/i)).toBeInTheDocument();
   });
 
   it("modo nota interna: enviar chama useCreateNote e NÃO useSendMessage", () => {
     renderComposer();
-    fireEvent.click(screen.getByRole("button", { name: /nota interna/i }));
+    fireEvent.click(screen.getByRole("button", { name: /note interne/i }));
 
-    fireEvent.change(screen.getByPlaceholderText(/nota interna/i), { target: { value: "cliente ligou reclamando" } });
-    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
+    fireEvent.change(screen.getByPlaceholderText(/note interne/i), { target: { value: "cliente ligou reclamando" } });
+    fireEvent.click(screen.getByRole("button", { name: /^envoyer$/i }));
 
     expect(createNoteMock).toHaveBeenCalledWith(
       expect.objectContaining({ conversation_id: "conv-1", body: "cliente ligou reclamando" }),

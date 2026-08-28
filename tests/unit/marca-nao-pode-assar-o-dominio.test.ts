@@ -74,13 +74,13 @@ describe("a base do Storage vem de runtime, nunca do build", () => {
     // Medido: (a) fonte do PR → passa; (b) com `return ""` no ramo do servidor →
     // `AssertionError: expected '' to be 'https://o-supabase-do-cliente…'`;
     // (c) restaurado → passa.
-    const antes = process.env.NEON_DATA_API_URL;
-    process.env.NEON_DATA_API_URL = "https://o-supabase-do-cliente.supabase.co";
+    const antes = process.env.NEXT_PUBLIC_APP_URL;
+    process.env.NEXT_PUBLIC_APP_URL = "https://o-supabase-do-cliente.supabase.co";
     try {
       expect(baseDoStorage()).toBe("https://o-supabase-do-cliente.supabase.co");
     } finally {
-      if (antes === undefined) delete process.env.NEON_DATA_API_URL;
-      else process.env.NEON_DATA_API_URL = antes;
+      if (antes === undefined) delete process.env.NEXT_PUBLIC_APP_URL;
+      else process.env.NEXT_PUBLIC_APP_URL = antes;
     }
   });
 

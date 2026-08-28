@@ -66,7 +66,7 @@ describe("a citação de uma mensagem APAGADA não devolve o texto", () => {
     );
     expect(screen.queryByText(/segredo que o cliente apagou/)).toBeNull();
     // Duas ocorrências seria a bolha principal também apagada; aqui só a citada.
-    expect(screen.getAllByText("Esta mensagem foi apagada")).toHaveLength(1);
+    expect(screen.getAllByText("Ce message a été supprimé")).toHaveLength(1);
   });
 
   it("CONTROLE: a citada viva continua aparecendo", () => {
@@ -79,7 +79,7 @@ describe("a citação de uma mensagem APAGADA não devolve o texto", () => {
       />,
     );
     expect(screen.getByText("o segredo que o cliente apagou")).toBeInTheDocument();
-    expect(screen.queryByText("Esta mensagem foi apagada")).toBeNull();
+    expect(screen.queryByText("Ce message a été supprimé")).toBeNull();
   });
 
   it("a resposta em si continua legível — o fio some, a resposta não", () => {

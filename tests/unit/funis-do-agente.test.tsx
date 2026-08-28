@@ -64,8 +64,8 @@ describe("o que a tela EXPLICA", () => {
     // o dono concluir que a configuração quebrou.
     render(<FunisDoAgente funis={TODOS} value={[]} onChange={() => {}} />);
     const aviso = screen.getByTestId("agente-sem-funil");
-    expect(aviso.textContent).toMatch(/conversa.*normalmente/i);
-    expect(aviso.textContent).toMatch(/não mexe em negócio/i);
+    expect(aviso.textContent).toMatch(/échange.*normalement/i);
+    expect(aviso.textContent).toMatch(/intervient dans aucune affaire/i);
   });
 
   it("AVISA quando o funil de entrada ficou de fora — o caso silencioso", () => {
@@ -75,7 +75,7 @@ describe("o que a tela EXPLICA", () => {
     render(<FunisDoAgente funis={TODOS} value={[ANDREA.id]} onChange={() => {}} />);
     const aviso = screen.getByTestId("agente-entrada-de-fora");
     expect(aviso.textContent).toContain("Pedidos");
-    expect(aviso.textContent).toMatch(/acumular/i);
+    expect(aviso.textContent).toMatch(/accumuler/i);
   });
 
   it("NÃO avisa quando o funil de entrada está marcado", () => {
@@ -92,12 +92,12 @@ describe("o que a tela EXPLICA", () => {
 
   it("diz QUAL funil recebe as conversas novas", () => {
     render(<FunisDoAgente funis={TODOS} value={[]} onChange={() => {}} />);
-    expect(screen.getByText(/é para cá que vão as conversas novas/i)).toBeInTheDocument();
+    expect(screen.getByText(/c’est ici qu’arrivent les nouvelles conversations/i)).toBeInTheDocument();
   });
 
   it("organização sem nenhum funil recebe instrução, não uma lista vazia", () => {
     render(<FunisDoAgente funis={[]} value={[]} onChange={() => {}} />);
-    expect(screen.getByText(/crie um em funis/i)).toBeInTheDocument();
+    expect(screen.getByText(/créez-en un dans pipelines/i)).toBeInTheDocument();
   });
 });
 
@@ -105,11 +105,13 @@ describe("linguagem", () => {
   it("nenhum jargão técnico aparece na tela", () => {
     // Mesmo gate que o painel do Operador já aplica: o dono de uma clínica lê
     // esta tela, e "escopo"/"pipeline_ids" não significam nada para ele.
+    // "pipeline" ficou de fora porque é o termo de interface escolhido pela
+    // tradução francesa para "funil" (vocabulário de negócio padrão em fr-FR).
     const { container } = render(
       <FunisDoAgente funis={TODOS} value={[ANDREA.id]} onChange={() => {}} />,
     );
     const texto = container.textContent ?? "";
-    for (const proibida of ["escopo", "pipeline_ids", "pipeline", "uuid", "array", "permissão"]) {
+    for (const proibida of ["escopo", "pipeline_ids", "uuid", "array", "permissão"]) {
       expect(texto.toLowerCase(), `a palavra "${proibida}" vazou para a tela`).not.toContain(
         proibida,
       );
@@ -119,7 +121,7 @@ describe("linguagem", () => {
   it("o texto principal diz o que ACONTECE, não o nome do campo", () => {
     const { container } = render(<FunisDoAgente funis={TODOS} value={[]} onChange={() => {}} />);
     const texto = container.textContent ?? "";
-    expect(texto).toMatch(/move, edita ou encerra negócio/i);
+    expect(texto).toMatch(/déplace.*modifie.*clôture/i);
   });
 });
 
@@ -137,7 +139,7 @@ describe("a lacuna de tradução (passo 4)", () => {
     const bloco = screen.getByTestId("agente-funis-mudos");
     expect(bloco.textContent).toContain("Comercial - Andrea");
     // Diz a CONSEQUÊNCIA, não o nome da configuração que falta.
-    expect(bloco.textContent).toMatch(/deixar os negócios parados/i);
+    expect(bloco.textContent).toMatch(/laissera les affaires/i);
   });
 
   it("funil NÃO marcado com a mesma lacuna fica quieto", () => {

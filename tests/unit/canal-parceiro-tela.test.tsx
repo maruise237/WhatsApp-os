@@ -69,27 +69,27 @@ describe("estado inicial", () => {
     // que um segundo parceiro não exija mudar este componente.
     getMock.mockResolvedValue(desconectado);
     render(<CanalParceiroClient />);
-    expect(await screen.findByText(/Conectar por Zernio/)).toBeInTheDocument();
+    expect(await screen.findByText(/Connecter via Zernio/)).toBeInTheDocument();
   });
 
   it("diz que não está conectado quando não está", async () => {
     getMock.mockResolvedValue(desconectado);
     render(<CanalParceiroClient />);
-    expect(await screen.findByText("Não conectado")).toBeInTheDocument();
+    expect(await screen.findByText("Non connecté")).toBeInTheDocument();
   });
 
   it("mostra o número quando já está conectado", async () => {
     getMock.mockResolvedValue(conectado);
     render(<CanalParceiroClient />);
-    expect(await screen.findByText("Conectado")).toBeInTheDocument();
+    expect(await screen.findByText("Connecté")).toBeInTheDocument();
     expect(screen.getByText(/\+19392301037/)).toBeInTheDocument();
   });
 
   it("com chave gravada, o campo diz que existe — nunca mostra qual é", async () => {
     getMock.mockResolvedValue(conectado);
     render(<CanalParceiroClient />);
-    const campo = await screen.findByLabelText(/Chave de API/);
-    expect(campo).toHaveAttribute("placeholder", expect.stringMatching(/gravada/i));
+    const campo = await screen.findByLabelText(/Clé API/);
+    expect(campo).toHaveAttribute("placeholder", expect.stringMatching(/enregistrée/i));
     expect((campo as HTMLInputElement).value).toBe("");
     expect(campo).toHaveAttribute("type", "password");
   });
@@ -97,22 +97,22 @@ describe("estado inicial", () => {
   it("falha ao ler o estado não trava a tela — o formulário continua servindo", async () => {
     getMock.mockRejectedValue(new Error("500"));
     render(<CanalParceiroClient />);
-    expect(await screen.findByLabelText(/Chave de API/)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Clé API/)).toBeInTheDocument();
   });
 });
 
 describe("conectar", () => {
   const preencher = async () => {
-    fireEvent.change(await screen.findByLabelText("Conta"), { target: { value: "acc_1" } });
-    fireEvent.change(screen.getByLabelText(/Chave de API/), { target: { value: "sk_live_x" } });
+    fireEvent.change(await screen.findByLabelText("Compte"), { target: { value: "acc_1" } });
+    fireEvent.change(screen.getByLabelText(/Clé API/), { target: { value: "sk_live_x" } });
   };
 
   it("o botão fica desabilitado sem os dois campos", async () => {
     getMock.mockResolvedValue(desconectado);
     render(<CanalParceiroClient />);
-    const botao = await screen.findByRole("button", { name: /conectar/i });
+    const botao = await screen.findByRole("button", { name: /connecter/i });
     expect(botao).toBeDisabled();
-    fireEvent.change(screen.getByLabelText("Conta"), { target: { value: "acc_1" } });
+    fireEvent.change(screen.getByLabelText("Compte"), { target: { value: "acc_1" } });
     expect(botao).toBeDisabled();
   });
 
@@ -123,7 +123,7 @@ describe("conectar", () => {
     });
     render(<CanalParceiroClient />);
     await preencher();
-    fireEvent.click(screen.getByRole("button", { name: /conectar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /connecter/i }));
 
     await waitFor(() =>
       expect(postMock).toHaveBeenCalledWith("/api/v1/channels/partner", {
@@ -145,13 +145,13 @@ describe("conectar", () => {
     });
     render(<CanalParceiroClient />);
     await preencher();
-    fireEvent.click(screen.getByRole("button", { name: /conectar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /connecter/i }));
 
-    expect(await screen.findByText(/Falta ligar a volta/)).toBeInTheDocument();
+    expect(await screen.findByText(/Il reste à connecter le retour/)).toBeInTheDocument();
     expect(screen.getByText("https://crm.exemplo/api/v1/webhooks/channel/tok123")).toBeInTheDocument();
     expect(screen.getByText("segredo-do-webhook")).toBeInTheDocument();
     // O aviso é o que impede o operador parar no passo 1 e achar que terminou.
-    expect(screen.getByText(/envia mas não recebe/)).toBeInTheDocument();
+    expect(screen.getByText(/envoie mais ne reçoit pas/)).toBeInTheDocument();
   });
 
   it("a chave sai do campo depois de gravada — não deixa uma cópia a mais do segredo", async () => {
@@ -159,11 +159,9 @@ describe("conectar", () => {
     postMock.mockResolvedValue({ data: { webhook_url: "https://x/w/1", webhook_secret: "s" } });
     render(<CanalParceiroClient />);
     await preencher();
-    fireEvent.click(screen.getByRole("button", { name: /conectar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /connecter/i }));
 
-    await waitFor(() =>
-      expect((screen.getByLabelText(/Chave de API/) as HTMLInputElement).value).toBe(""),
-    );
+    await waitFor(() => expect((screen.getByLabelText(/Clé API/) as HTMLInputElement).value).toBe(""));
   });
 
   it("credencial recusada mostra o motivo do provedor, não um erro genérico", async () => {
@@ -171,17 +169,17 @@ describe("conectar", () => {
     postMock.mockRejectedValue(new Error("Chave recusada pelo provedor."));
     render(<CanalParceiroClient />);
     await preencher();
-    fireEvent.click(screen.getByRole("button", { name: /conectar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /connecter/i }));
 
     await waitFor(() => expect(toastErro).toHaveBeenCalledWith("Chave recusada pelo provedor."));
     // E NÃO mostra o passo 2: não há webhook a colar se a conexão falhou.
-    expect(screen.queryByText(/Falta ligar a volta/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Il reste à connecter le retour/)).not.toBeInTheDocument();
   });
 
   it("já conectado mostra a URL do webhook mas NÃO o segredo", async () => {
     getMock.mockResolvedValue(conectado);
     render(<CanalParceiroClient />);
     expect(await screen.findByText("https://crm.exemplo/api/v1/webhooks/channel/tok123")).toBeInTheDocument();
-    expect(screen.queryByText(/Segredo \(assinatura\)/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Secret \(signature\)/)).not.toBeInTheDocument();
   });
 });

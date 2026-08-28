@@ -49,12 +49,12 @@ describe("EndForm — seletor de resultado", () => {
       />,
     );
 
-    await user.click(screen.getByRole("combobox", { name: "Resultado" }));
+    await user.click(screen.getByRole("combobox", { name: "Résultat" }));
 
     const itens = await screen.findAllByRole("option");
-    expect(itens.map((i) => i.textContent)).toEqual(["Convertido", "Esgotado", "Personalizado"]);
+    expect(itens.map((i) => i.textContent)).toEqual(["Converti", "Épuisé", "Personnalisé"]);
 
-    await user.click(screen.getByRole("option", { name: "Convertido" }));
+    await user.click(screen.getByRole("option", { name: "Converti" }));
 
     // O rótulo é português; o que desce para o grafo continua sendo o wire.
     expect(gravados).toEqual([{ outcome: "converted" }]);

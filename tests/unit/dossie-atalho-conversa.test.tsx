@@ -50,7 +50,7 @@ describe("a porta para a conversa", () => {
   it("mostra o NÚMERO de não lidas, não um ponto", () => {
     // "3 sem ler" e "12 sem ler" pedem urgências diferentes.
     render(<ConversaNoDossie conversa={conversa} />);
-    expect(screen.getByLabelText("3 sem ler")).toHaveTextContent("3");
+    expect(screen.getByLabelText("3 non lu(s)")).toHaveTextContent("3");
   });
 
   it("sem não lidas não inventa um zero", () => {

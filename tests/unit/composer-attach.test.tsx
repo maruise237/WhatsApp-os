@@ -37,21 +37,21 @@ describe("Composer + anexos", () => {
 
   it("botão Anexar abre o menu com as duas opções", () => {
     renderComposer();
-    fireEvent.click(screen.getByRole("button", { name: /anexar/i }));
-    expect(screen.getByText("Fotos e vídeos")).toBeInTheDocument();
-    expect(screen.getByText("Documento")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /joindre/i }));
+    expect(screen.getByText("Photos et vidéos")).toBeInTheDocument();
+    expect(screen.getByText("Document")).toBeInTheDocument();
   });
 
   it("selecionar arquivo abre preview e enviar dispara upload + send com caption", async () => {
     renderComposer();
-    fireEvent.click(screen.getByRole("button", { name: /anexar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /joindre/i }));
     const input = document.querySelector('input[accept^="image"]') as HTMLInputElement;
     const file = new File([new Uint8Array([1, 2, 3])], "foto.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/legenda/i), { target: { value: "olha isso" } });
-    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
+    fireEvent.change(screen.getByLabelText(/légende/i), { target: { value: "olha isso" } });
+    fireEvent.click(screen.getByRole("button", { name: /^envoyer$/i }));
 
     await waitFor(() => expect(uploadMock).toHaveBeenCalled());
     await waitFor(() =>
@@ -72,13 +72,13 @@ describe("Composer + anexos", () => {
   it("upload falho mantém o dialog aberto (sem disparar send)", async () => {
     uploadMock.mockRejectedValueOnce(new Error("upload_failed"));
     renderComposer();
-    fireEvent.click(screen.getByRole("button", { name: /anexar/i }));
+    fireEvent.click(screen.getByRole("button", { name: /joindre/i }));
     const input = document.querySelector('input[accept^="image"]') as HTMLInputElement;
     const file = new File([new Uint8Array([1, 2, 3])], "foto.jpg", { type: "image/jpeg" });
     fireEvent.change(input, { target: { files: [file] } });
 
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /^enviar$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^envoyer$/i }));
 
     await waitFor(() => expect(uploadMock).toHaveBeenCalled());
     expect(screen.getByRole("dialog")).toBeInTheDocument();
