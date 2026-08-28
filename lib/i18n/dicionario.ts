@@ -74,6 +74,7 @@ export const DICIONARIO: Traducoes = {
   },
   "Etapas do funil": { "fr-FR": "Étapes de l'entonnoir", es: "Etapas del embudo" },
   "Agents de IA": { "fr-FR": "Agents IA" },
+  default: { "fr-FR": "Par défaut", es: "Predeterminado" },
   "Configure o comportamento dos agents que respondem no WhatsApp.": {
     "fr-FR": "Configurez le comportement des agents qui répondent sur WhatsApp.",
   },

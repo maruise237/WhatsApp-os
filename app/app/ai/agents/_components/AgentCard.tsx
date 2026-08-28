@@ -77,7 +77,7 @@ export function AgentCard({ agent, canWrite }: Props) {
         <div className="flex shrink-0 items-center gap-1">
           {agent.is_default && (
             <Badge variant="secondary" className="text-xs">
-              default
+              {t("default")}
             </Badge>
           )}
           <AgentStatusBadge status={status} />
