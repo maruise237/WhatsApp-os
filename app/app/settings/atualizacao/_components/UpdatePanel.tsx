@@ -67,7 +67,7 @@ export function UpdatePanel() {
       const mensagem =
         err instanceof ApiError && err.status === 409
           ? err.message
-          : "Não consegui iniciar a atualização. Tente de novo em instantes.";
+          : t("Não consegui iniciar a atualização. Tente de novo em instantes.");
       setErro(mensagem);
     },
   });

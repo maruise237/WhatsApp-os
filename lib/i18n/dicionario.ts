@@ -314,6 +314,9 @@ export const DICIONARIO: Traducoes = {
   "Atualizando o banco de dados": { "fr-FR": "Mise à jour de la base de données" },
   "Reiniciando o sistema": { "fr-FR": "Redémarrage du système" },
   "Atualizar agora": { "fr-FR": "Mettre à jour maintenant" },
+  "Não consegui iniciar a atualização. Tente de novo em instantes.": {
+    "fr-FR": "Impossible de démarrer la mise à jour. Réessayez dans quelques instants.",
+  },
   "O sistema sai do ar por cerca de 2 minutos e volta sozinho. Faço uma cópia de segurança dos seus dados antes.":
     {
       "fr-FR":
