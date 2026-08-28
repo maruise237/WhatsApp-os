@@ -290,6 +290,20 @@ export const DICIONARIO: Traducoes = {
   "Apenas atrasados": { "fr-FR": "Uniquement en retard", es: "Solo atrasados" },
   "Sem responsável": { "fr-FR": "Aucun responsable", es: "Sin responsable" },
   "Editar campos": { "fr-FR": "Modifier les champs", es: "Editar campos" },
+  "Selecione um caso à esquerda": { "fr-FR": "Sélectionnez un cas à gauche" },
+  "Os detalhes e a resposta aparecem aqui.": {
+    "fr-FR": "Les détails et la réponse apparaîtront ici.",
+  },
+  "Contato sem nome": { "fr-FR": "Contact sans nom" },
+  "Sem telefone": { "fr-FR": "Aucun téléphone" },
+  "Aberto automaticamente": { "fr-FR": "Ouvert automatiquement" },
+  "Aberto automaticamente pelo sistema — a IA prometeu passar pra humano mas não abriu o caso, então o sistema abriu por ela.":
+    {
+      "fr-FR":
+        "Ouvert automatiquement par le système : l’IA avait promis de passer la main à une personne sans ouvrir le cas, le système l’a donc ouvert à sa place.",
+    },
+  "O que o cliente precisa": { "fr-FR": "Ce dont le client a besoin" },
+  "Por que a IA travou": { "fr-FR": "Pourquoi l’IA s’est interrompue" },
   "Linha do tempo": { "fr-FR": "Chronologie", es: "Línea de tiempo" },
   "DADOS DO NEGÓCIO": { "fr-FR": "DONNÉES DE L'AFFAIRE", es: "DATOS DEL NEGOCIO" },
   Título: { "fr-FR": "Titre", es: "Título" },
