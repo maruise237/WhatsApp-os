@@ -1168,6 +1168,51 @@ export const DICIONARIO: Traducoes = {
   Publicado: { "fr-FR": "Publié" },
   superado: { "fr-FR": "dépassé" },
   "Pausado · editando a v": { "fr-FR": "En pause · modification de la v" },
+  "Dê um nome para este agente.": { "fr-FR": "Donnez un nom à cet agent." },
+  "O nome pode ter até 120 caracteres.": {
+    "fr-FR": "Le nom peut contenir jusqu’à 120 caractères.",
+  },
+  "Escreva as instruções do agente (pelo menos uma frase).": {
+    "fr-FR": "Écrivez les instructions de l’agent (au moins une phrase).",
+  },
+  "As instruções têm {count} caracteres, e o máximo é 20.000. Corte {excesso} para conseguir salvar.":
+    {
+      "fr-FR":
+        "Les instructions contiennent {count} caractères, alors que le maximum est de 20 000. Supprimez-en {excesso} pour pouvoir enregistrer.",
+    },
+  "Escolha o modelo de inteligência artificial.": {
+    "fr-FR": "Choisissez le modèle d’intelligence artificielle.",
+  },
+  "Escolha a chave de acesso da empresa de inteligência artificial.": {
+    "fr-FR": "Choisissez la clé d’accès du fournisseur d’intelligence artificielle.",
+  },
+  "Esta instalação não tem chave de {provider}. Escolha outra empresa de IA ou cadastre uma chave.":
+    {
+      "fr-FR":
+        "Cette installation ne possède pas de clé pour {provider}. Choisissez un autre fournisseur d’IA ou enregistrez une clé.",
+    },
+  "Escolha por qual número de WhatsApp ele atende.": {
+    "fr-FR": "Choisissez le numéro WhatsApp utilisé pour répondre.",
+  },
+  "Máximo de {count} capacidades por agente.": {
+    "fr-FR": "Maximum de {count} capacités par agent.",
+  },
+  "Campo inválido.": { "fr-FR": "Champ invalide." },
+  "Resolva os erros do formulário.": { "fr-FR": "Corrigez les erreurs du formulaire." },
+  "Salve o agent antes de publicar.": { "fr-FR": "Enregistrez l’agent avant de le publier." },
+  "Sem rascunho para publicar.": { "fr-FR": "Aucun brouillon à publier." },
+  "Salve o rascunho antes de publicar.": {
+    "fr-FR": "Enregistrez le brouillon avant de le publier.",
+  },
+  "Credencial {provider} {estado}.": { "fr-FR": "Identifiant {provider} {estado}." },
+  "Número WhatsApp não está conectado (status: {status}).": {
+    "fr-FR": "Le numéro WhatsApp n’est pas connecté (statut : {status}).",
+  },
+  "Formulário inválido.": { "fr-FR": "Formulaire invalide." },
+  "Validação falhou.": { "fr-FR": "La validation a échoué." },
+  "Agent criado.": { "fr-FR": "Agent créé." },
+  invalida: { "fr-FR": "invalide" },
+  "ainda não validada": { "fr-FR": "pas encore validé" },
   "Sem versão": { "fr-FR": "Aucune version" },
   "Quando mais de um agente puder atender a mesma conversa, o de número maior tenta primeiro. Se você só tem um agente, pode deixar como está.":
     {

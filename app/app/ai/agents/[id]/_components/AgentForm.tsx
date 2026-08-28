@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { useT } from "@/hooks/i18n/useT";
+import { useIdioma, useT } from "@/hooks/i18n/useT";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -234,6 +234,7 @@ export function AgentForm(props: Props) {
   const isEdit = props.mode === "edit";
   const readOnly = props.readOnly ?? false;
   const t = useT();
+  const idioma = useIdioma();
 
   const baseline = React.useMemo(() => {
     if (isEdit) {
@@ -282,21 +283,23 @@ export function AgentForm(props: Props) {
     // salvar, então são escritas como INSTRUÇÃO ("dê um nome") e não como
     // acusação ("nome obrigatório") — um formulário recém-aberto acusando o
     // usuário de errar é a primeira coisa que ele vê nesta tela.
-    if (form.name.trim().length === 0) errors.name = "Dê um nome para este agente.";
-    if (form.name.length > 120) errors.name = "O nome pode ter até 120 caracteres.";
+    if (form.name.trim().length === 0) errors.name = t("Dê um nome para este agente.");
+    if (form.name.length > 120) errors.name = t("O nome pode ter até 120 caracteres.");
     if (form.system_prompt.trim().length < 10)
-      errors.system_prompt = "Escreva as instruções do agente (pelo menos uma frase).";
+      errors.system_prompt = t("Escreva as instruções do agente (pelo menos uma frase).");
     // `.trim()` porque é o que o servidor mede: `z.string().trim().max(20000)`
     // em lib/ai/agents/validation.ts — o trim roda ANTES do max. Duas réguas
     // diferentes barrariam aqui um texto que o servidor aceitaria.
     const tamanhoDoPrompt = form.system_prompt.trim().length;
     if (tamanhoDoPrompt > 20000)
-      errors.system_prompt =
-        `As instruções têm ${tamanhoDoPrompt.toLocaleString("pt-BR")} caracteres, e o máximo é 20.000. ` +
-        `Corte ${(tamanhoDoPrompt - 20000).toLocaleString("pt-BR")} para conseguir salvar.`;
-    if (!form.model) errors.model = "Escolha o modelo de inteligência artificial.";
+      errors.system_prompt = t(
+        "As instruções têm {count} caracteres, e o máximo é 20.000. Corte {excesso} para conseguir salvar.",
+      )
+        .replace("{count}", tamanhoDoPrompt.toLocaleString(idioma))
+        .replace("{excesso}", (tamanhoDoPrompt - 20000).toLocaleString(idioma));
+    if (!form.model) errors.model = t("Escolha o modelo de inteligência artificial.");
     if (!form.credential_id)
-      errors.credential_id = "Escolha a chave de acesso da empresa de inteligência artificial.";
+      errors.credential_id = t("Escolha a chave de acesso da empresa de inteligência artificial.");
     // Escolher "a chave desta instalação" para um provedor que a instalação NÃO
     // tem seria publicar um agente que morre em toda mensagem. A mesma recusa
     // existe no servidor (rota de versões); aqui ela chega antes do clique.
@@ -304,11 +307,16 @@ export function AgentForm(props: Props) {
       form.credential_id === CHAVE_DA_INSTALACAO &&
       !(props.provedoresDaInstalacao ?? []).includes(form.provider)
     )
-      errors.credential_id = `Esta instalação não tem chave de ${form.provider}. Escolha outra empresa de IA ou cadastre uma chave.`;
+      errors.credential_id = t(
+        "Esta instalação não tem chave de {provider}. Escolha outra empresa de IA ou cadastre uma chave.",
+      ).replace("{provider}", form.provider);
     if (!form.channel_session_id)
-      errors.channel_session_id = "Escolha por qual número de WhatsApp ele atende.";
+      errors.channel_session_id = t("Escolha por qual número de WhatsApp ele atende.");
     if (form.tool_ids.length > TETO_TOOLS_POR_AGENTE)
-      errors.tool_ids = `Máximo de ${TETO_TOOLS_POR_AGENTE} capacidades por agente.`;
+      errors.tool_ids = t("Máximo de {count} capacidades por agente.").replace(
+        "{count}",
+        String(TETO_TOOLS_POR_AGENTE),
+      );
 
     // Tenta o schema completo:
     if (Object.keys(errors).length === 0) {
@@ -316,27 +324,32 @@ export function AgentForm(props: Props) {
       if (!parsed.success) {
         const flat = parsed.error.flatten();
         const first = Object.entries(flat.fieldErrors)[0];
-        if (first) errors[first[0]] = first[1]?.[0] ?? "Campo inválido.";
+        if (first) errors[first[0]] = first[1]?.[0] ?? t("Campo inválido.");
       }
     }
     return errors;
-  }, [form]);
+  }, [form, idioma, t]);
 
   const isValid = Object.keys(validation).length === 0;
 
   const publishBlockReason = React.useMemo(() => {
-    if (!isEdit) return "Salve o agent antes de publicar.";
-    if (!props.draft) return "Sem rascunho para publicar.";
-    if (!isValid) return "Resolva os erros do formulário.";
-    if (dirty) return "Salve o rascunho antes de publicar.";
-    if (!cred) return "Escolha a chave de acesso da empresa de inteligência artificial.";
+    if (!isEdit) return t("Salve o agent antes de publicar.");
+    if (!props.draft) return t("Sem rascunho para publicar.");
+    if (!isValid) return t("Resolva os erros do formulário.");
+    if (dirty) return t("Salve o rascunho antes de publicar.");
+    if (!cred) return t("Escolha a chave de acesso da empresa de inteligência artificial.");
     if (credSt !== "validated")
-      return `Credencial ${form.provider} ${credSt === "invalid" ? "inválida" : "ainda não validada"}.`;
-    if (!channelSession) return "Escolha por qual número de WhatsApp ele atende.";
+      return t("Credencial {provider} {estado}.")
+        .replace("{provider}", form.provider)
+        .replace("{estado}", credSt === "invalid" ? t("invalida") : t("ainda não validada"));
+    if (!channelSession) return t("Escolha por qual número de WhatsApp ele atende.");
     if (channelSession.status !== "working" && channelSession.status !== "WORKING")
-      return `Número WhatsApp não está conectado (status: ${channelSession.status}).`;
+      return t("Número WhatsApp não está conectado (status: {status}).").replace(
+        "{status}",
+        channelSession.status,
+      );
     return null;
-  }, [isEdit, props, isValid, dirty, cred, credSt, form.provider, channelSession]);
+  }, [isEdit, props, isValid, dirty, cred, credSt, form.provider, channelSession, t]);
 
   // ---------------------------------------------------------------------
   // Handlers
@@ -345,7 +358,7 @@ export function AgentForm(props: Props) {
   async function handleSave() {
     if (!isValid) {
       const first = Object.values(validation)[0];
-      toast.error(first ?? "Formulário inválido.");
+      toast.error(first ?? t("Formulário inválido."));
       return;
     }
     setSaving(true);
@@ -367,7 +380,7 @@ export function AgentForm(props: Props) {
         };
         const validated = agentMcpCreateSchema.safeParse(payload);
         if (!validated.success) {
-          toast.error("Validação falhou.");
+          toast.error(t("Validação falhou."));
           return;
         }
         const res = await createMcpAgentAction(validated.data);
@@ -375,7 +388,7 @@ export function AgentForm(props: Props) {
           toast.error(res.message ?? `Erro: ${res.error}`);
           return;
         }
-        toast.success("Agent criado.");
+        toast.success(t("Agent criado."));
         router.push(`/app/ai/agents/${res.data!.agent_id}`);
       }
     } finally {
