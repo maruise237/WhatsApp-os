@@ -363,6 +363,48 @@ export const DICIONARIO: Traducoes = {
   "É a mais recente. Não há nada a fazer.": {
     "fr-FR": "C’est la version la plus récente. Aucune action n’est nécessaire.",
   },
+  "O servidor não conseguiu comparar a sua versão ({version}) com a última publicada — normalmente é internet instável ou falta de espaço em disco na hora da checagem. Não quer dizer que esteja desatualizado, nem que esteja em dia: quer dizer que eu não sei.":
+    {
+      "fr-FR":
+        "Le serveur n’a pas pu comparer votre version ({version}) avec la dernière version publiée — il s’agit généralement d’une connexion instable ou d’un manque d’espace disque lors de la vérification. Cela ne signifie ni que le système est obsolète ni qu’il est à jour : cela signifie que je ne sais pas.",
+    },
+  "Vou tentar de novo sozinho a cada poucos minutos. Se continuar assim, quem tem acesso ao servidor pode conferir na hora com:":
+    {
+      "fr-FR":
+        "Je réessaierai automatiquement toutes les quelques minutes. Si le problème persiste, une personne ayant accès au serveur peut vérifier immédiatement avec :",
+    },
+  "Ainda não há nenhuma versão publicada": { "fr-FR": "Aucune version n’est encore publiée" },
+  "Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação — normal em um fork novo ou recém-criado a partir do código-fonte. Não há nada a atualizar agora, e isso não é um problema.":
+    {
+      "fr-FR":
+        "Ce projet ne possède encore aucune version publiée à comparer avec votre installation — c’est normal pour un nouveau fork ou un projet récemment créé depuis le code source. Aucune mise à jour n’est nécessaire pour le moment, et ce n’est pas un problème.",
+    },
+  "Quando sair a primeira versão publicada, ela aparece aqui sozinha. Quem tem acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem avisar:":
+    {
+      "fr-FR":
+        "Lorsque la première version publiée sera disponible, elle apparaîtra ici automatiquement. Une personne ayant accès au serveur peut vérifier à tout moment avec la commande ci-dessous — elle ne modifie rien sans avertissement :",
+    },
+  "Você está à frente da versão publicada": {
+    "fr-FR": "Vous utilisez une version plus récente que la version publiée",
+  },
+  "Seu sistema roda uma versão mais nova do que a última publicada, então não há nada a atualizar. É assim mesmo quando a instalação acompanha o desenvolvimento, e nada aqui está errado por causa disso — a marca da sua versão é {version}.":
+    {
+      "fr-FR":
+        "Votre système utilise une version plus récente que la dernière version publiée : aucune mise à jour n’est donc nécessaire. C’est normal lorsque l’installation suit le développement, et cela n’indique aucun problème — l’identifiant de votre version est {version}.",
+    },
+  "Quando sair uma versão publicada mais nova que a sua, ela aparece aqui sozinha. Quem tem acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem avisar:":
+    {
+      "fr-FR":
+        "Lorsqu’une version publiée plus récente que la vôtre sera disponible, elle apparaîtra ici automatiquement. Une personne ayant accès au serveur peut vérifier à tout moment avec la commande ci-dessous — elle ne modifie rien sans avertissement :",
+    },
+  "Versão {version} disponível": { "fr-FR": "Version {version} disponible" },
+  "Sua instalação está numa versão de desenvolvimento. Atualizar vai levá-la para a versão publicada {version}.":
+    {
+      "fr-FR":
+        "Votre installation utilise une version de développement. La mise à jour la fera passer à la version publiée {version}.",
+    },
+  "Requer atenção": { "fr-FR": "Attention requise" },
+  "O que muda": { "fr-FR": "Ce qui change" },
   "A atualização para a versão {version} não deu certo": {
     "fr-FR": "La mise à jour vers la version {version} a échoué",
   },

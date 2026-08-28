@@ -227,16 +227,16 @@ export function UpdatePanel() {
   // conta disso é o cliente nunca receber a próxima correção de segurança.
   if (data.compare_failed) {
     return (
-      <Layout titulo="Não consegui checar se há versão nova">
+      <Layout titulo={t("Não consegui checar se há versão nova")}>
         <p className="text-sm">
-          O servidor não conseguiu comparar a sua versão (<strong>{versao}</strong>) com a última
-          publicada — normalmente é internet instável ou falta de espaço em disco na hora da
-          checagem. <strong>Não quer dizer que esteja desatualizado, nem que esteja em dia</strong>:
-          quer dizer que eu não sei.
+          {t(
+            "O servidor não conseguiu comparar a sua versão ({version}) com a última publicada — normalmente é internet instável ou falta de espaço em disco na hora da checagem. Não quer dizer que esteja desatualizado, nem que esteja em dia: quer dizer que eu não sei.",
+          ).replace("{version}", versao)}
         </p>
         <p className="mt-3 text-sm">
-          Vou tentar de novo sozinho a cada poucos minutos. Se continuar assim, quem tem acesso ao
-          servidor pode conferir na hora com:
+          {t(
+            "Vou tentar de novo sozinho a cada poucos minutos. Se continuar assim, quem tem acesso ao servidor pode conferir na hora com:",
+          )}
         </p>
         <Comando comando={COMANDO_MANUAL} />
       </Layout>
@@ -245,8 +245,10 @@ export function UpdatePanel() {
 
   if (!data.update_available && !data.off_release) {
     return (
-      <Layout titulo={`Você está na versão ${versao}`}>
-        <p className="text-sm text-muted-foreground">É a mais recente. Não há nada a fazer.</p>
+      <Layout titulo={t("Você está na versão {version}").replace("{version}", versao)}>
+        <p className="text-sm text-muted-foreground">
+          {t("É a mais recente. Não há nada a fazer.")}
+        </p>
       </Layout>
     );
   }
@@ -265,33 +267,32 @@ export function UpdatePanel() {
   if (!nova) {
     if (!data.has_known_release) {
       return (
-        <Layout titulo="Ainda não há nenhuma versão publicada">
+        <Layout titulo={t("Ainda não há nenhuma versão publicada")}>
           <p className="text-sm">
-            Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação —
-            normal em um fork novo ou recém-criado a partir do código-fonte.{" "}
-            <strong>Não há nada a atualizar agora</strong>, e isso não é um problema.
+            {t(
+              "Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação — normal em um fork novo ou recém-criado a partir do código-fonte. Não há nada a atualizar agora, e isso não é um problema.",
+            )}
           </p>
           <p className="mt-3 text-sm">
-            Quando sair a primeira versão publicada, ela aparece aqui sozinha. Quem tem acesso ao
-            servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem
-            avisar:
+            {t(
+              "Quando sair a primeira versão publicada, ela aparece aqui sozinha. Quem tem acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem avisar:",
+            )}
           </p>
           <Comando comando={COMANDO_MANUAL} />
         </Layout>
       );
     }
     return (
-      <Layout titulo="Você está à frente da versão publicada">
+      <Layout titulo={t("Você está à frente da versão publicada")}>
         <p className="text-sm">
-          Seu sistema roda uma versão mais nova do que a última publicada, então{" "}
-          <strong>não há nada a atualizar</strong>. É assim mesmo quando a instalação acompanha o
-          desenvolvimento, e nada aqui está errado por causa disso — a marca da sua versão é{" "}
-          <strong>{versao}</strong>.
+          {t(
+            "Seu sistema roda uma versão mais nova do que a última publicada, então não há nada a atualizar. É assim mesmo quando a instalação acompanha o desenvolvimento, e nada aqui está errado por causa disso — a marca da sua versão é {version}.",
+          ).replace("{version}", versao)}
         </p>
         <p className="mt-3 text-sm">
-          Quando sair uma versão publicada mais nova que a sua, ela aparece aqui sozinha. Quem tem
-          acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda
-          nada sem avisar:
+          {t(
+            "Quando sair uma versão publicada mais nova que a sua, ela aparece aqui sozinha. Quem tem acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem avisar:",
+          )}
         </p>
         <Comando comando={COMANDO_MANUAL} />
       </Layout>
@@ -299,17 +300,18 @@ export function UpdatePanel() {
   }
 
   return (
-    <Layout titulo={`Versão ${nova} disponível`}>
+    <Layout titulo={t("Versão {version} disponível").replace("{version}", nova)}>
       {data.off_release && (
         <p className="mb-4 rounded-md border border-warning bg-warning-bg p-3 text-sm text-warning-fg">
-          Sua instalação está numa versão de desenvolvimento. Atualizar vai levá-la para a versão
-          publicada {nova}.
+          {t(
+            "Sua instalação está numa versão de desenvolvimento. Atualizar vai levá-la para a versão publicada {version}.",
+          ).replace("{version}", nova)}
         </p>
       )}
 
       {data.notes?.requires_attention && (
         <div className="mb-4 rounded-md border border-warning bg-warning-bg p-3 text-sm text-warning-fg">
-          <p className="mb-1 font-medium">⚠️ Requer atenção</p>
+          <p className="mb-1 font-medium">{t("Requer atenção")}</p>
           <p className="whitespace-pre-line">
             {markdownParaTextoSimples(data.notes.requires_attention)}
           </p>
@@ -318,7 +320,7 @@ export function UpdatePanel() {
 
       {data.notes?.body && (
         <div className="mb-6">
-          <p className="mb-2 text-sm font-medium">O que muda</p>
+          <p className="mb-2 text-sm font-medium">{t("O que muda")}</p>
           <pre className="whitespace-pre-wrap font-sans text-sm text-muted-foreground">
             {markdownParaTextoSimples(data.notes.body)}
           </pre>
