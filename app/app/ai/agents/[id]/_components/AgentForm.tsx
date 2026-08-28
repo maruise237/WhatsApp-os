@@ -369,7 +369,9 @@ export function AgentForm(props: Props) {
           toast.error(res.message ?? `Erro: ${res.error}`);
           return;
         }
-        toast.success(`Rascunho v${res.data!.version_number} salvo.`);
+        toast.success(
+          t("Rascunho v{version} salvo.").replace("{version}", String(res.data!.version_number)),
+        );
         router.refresh();
       } else {
         const payload = {
@@ -402,10 +404,12 @@ export function AgentForm(props: Props) {
     try {
       const res = await publishAgentAction(props.agent.id, props.draft.id);
       if (!res.ok) {
-        toast.error(`Falha ao publicar: ${res.error}`);
+        toast.error(`${t("Falha ao publicar:")} ${res.error}`);
         return;
       }
-      toast.success(`v${props.draft.version_number} publicada e ativa.`);
+      toast.success(
+        t("v{version} publicada e ativa.").replace("{version}", String(props.draft.version_number)),
+      );
       setConfirmOpen(false);
       router.refresh();
     } finally {
@@ -441,7 +445,9 @@ export function AgentForm(props: Props) {
           variant="default"
           title={
             obsoleta
-              ? `O rascunho v${obsoleta} é anterior a esta versão e foi superado por ela — ele continua no Histórico.`
+              ? t(
+                  "O rascunho v{version} é anterior a esta versão e foi superado por ela — ele continua no Histórico.",
+                ).replace("{version}", String(obsoleta))
               : undefined
           }
         >
@@ -692,7 +698,9 @@ export function AgentForm(props: Props) {
             ) : null}
             {cred && credSt !== "validated" ? (
               <p className="text-xs text-amber-600 dark:text-amber-400">
-                Credencial selecionada está com status {credSt}. Publish bloqueado até validar.
+                {t(
+                  "Credencial selecionada está com status {status}. Publish bloqueado até validar.",
+                ).replace("{status}", credSt ?? "")}
               </p>
             ) : null}
           </Card>

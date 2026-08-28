@@ -1211,6 +1211,18 @@ export const DICIONARIO: Traducoes = {
   "Formulário inválido.": { "fr-FR": "Formulaire invalide." },
   "Validação falhou.": { "fr-FR": "La validation a échoué." },
   "Agent criado.": { "fr-FR": "Agent créé." },
+  "Rascunho v{version} salvo.": { "fr-FR": "Brouillon v{version} enregistré." },
+  "v{version} publicada e ativa.": { "fr-FR": "v{version} publiée et active." },
+  "Falha ao publicar:": { "fr-FR": "Échec de la publication :" },
+  "Credencial selecionada está com status {status}. Publish bloqueado até validar.": {
+    "fr-FR":
+      "L’identifiant sélectionné a le statut {status}. La publication est bloquée jusqu’à sa validation.",
+  },
+  "O rascunho v{version} é anterior a esta versão e foi superado por ela — ele continua no Histórico.":
+    {
+      "fr-FR":
+        "Le brouillon v{version} est antérieur à cette version et a été dépassé — il reste accessible dans l’historique.",
+    },
   invalida: { "fr-FR": "invalide" },
   "ainda não validada": { "fr-FR": "pas encore validé" },
   "Sem versão": { "fr-FR": "Aucune version" },
