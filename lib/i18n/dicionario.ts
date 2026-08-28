@@ -1735,6 +1735,36 @@ export const DICIONARIO: Traducoes = {
         "En mode sombre, le système utilise naturellement un ton plus clair de l’échelle afin que la couleur reste visible sur le fond sombre.",
     },
   "De onde vem cada coisa": { "fr-FR": "Origine de chaque élément" },
+  "O que isto ainda não muda": { "fr-FR": "Ce que cela ne change pas encore" },
+  "O título da aba do navegador continua com o nome do sistema, e não com o da sua empresa.": {
+    "fr-FR":
+      "Le titre de l’onglet du navigateur conserve le nom du système, et non celui de votre entreprise.",
+  },
+  "A tela de entrada é sempre a do sistema: quando alguém digita a senha, ainda não dá para saber de qual empresa ele é.":
+    {
+      "fr-FR":
+        "L’écran de connexion reste toujours celui du système : lorsqu’une personne saisit son mot de passe, il est encore impossible de savoir de quelle entreprise elle dépend.",
+    },
+  "Os e-mails que este sistema envia (convite de time, pedidos de LGPD) já saem com o nome da sua empresa.":
+    {
+      "fr-FR":
+        "Les e-mails envoyés par ce système (invitations d’équipe, demandes LGPD) utilisent déjà le nom de votre entreprise.",
+    },
+  'O relatório de LGPD entregue ao cliente traz a RAZÃO SOCIAL da sua empresa, e não o nome aqui de cima — é ela que responde legalmente pelos dados. Confira o campo "Razão social" em Configurações → Organização.':
+    {
+      "fr-FR":
+        "Le rapport LGPD remis au client contient la RAISON SOCIALE de votre entreprise, et non le nom affiché ci-dessus — c’est elle qui assume la responsabilité légale des données. Vérifiez le champ « Raison sociale » dans Paramètres → Organisation.",
+    },
+  "O aplicativo de verificação em duas etapas continua registrando o nome do sistema: o cadastro acontece antes de saber de qual empresa a pessoa é.":
+    {
+      "fr-FR":
+        "L’application d’authentification à deux facteurs continue d’enregistrer le nom du système : l’inscription intervient avant qu’il soit possible de savoir de quelle entreprise dépend la personne.",
+    },
+  "O logo que você subir aqui aparece no menu lateral, para quem trabalha nesta empresa. A tela de entrada continua com o logo de quem instalou o sistema: ali ainda não dá para saber de qual empresa a pessoa é.":
+    {
+      "fr-FR":
+        "Le logo que vous téléversez ici apparaît dans la barre latérale pour les membres de cette entreprise. L’écran de connexion conserve le logo de l’installation du système : il est encore impossible d’y savoir de quelle entreprise dépend la personne.",
+    },
   "Considerando o que está nos campos acima.": {
     "fr-FR": "D’après les valeurs des champs ci-dessus.",
   },

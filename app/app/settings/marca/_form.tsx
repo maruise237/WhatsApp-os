@@ -416,15 +416,18 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
       */}
       <Card className="space-y-2 p-6">
         <h2 className="text-base font-semibold tracking-tight text-text">
-          O que isto ainda não muda
+          {t("O que isto ainda não muda")}
         </h2>
         <ul className="list-disc space-y-1 pl-5 text-sm text-text-muted">
           <li>
-            O título da aba do navegador continua com o nome do sistema, e não com o da sua empresa.
+            {t(
+              "O título da aba do navegador continua com o nome do sistema, e não com o da sua empresa.",
+            )}
           </li>
           <li>
-            A tela de entrada é sempre a do sistema: quando alguém digita a senha, ainda não dá para
-            saber de qual empresa ele é.
+            {t(
+              "A tela de entrada é sempre a do sistema: quando alguém digita a senha, ainda não dá para saber de qual empresa ele é.",
+            )}
           </li>
           {/*
             Este item dizia "os e-mails, o PDF de LGPD e o autenticador também
@@ -435,17 +438,19 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
             papéis num documento com peso legal.
           */}
           <li>
-            Os e-mails que este sistema envia (convite de time, pedidos de LGPD) já saem com o nome
-            da sua empresa.
+            {t(
+              "Os e-mails que este sistema envia (convite de time, pedidos de LGPD) já saem com o nome da sua empresa.",
+            )}
           </li>
           <li>
-            O relatório de LGPD entregue ao cliente traz a RAZÃO SOCIAL da sua empresa, e não o nome
-            aqui de cima — é ela que responde legalmente pelos dados. Confira o campo &quot;Razão
-            social&quot; em Configurações → Organização.
+            {t(
+              'O relatório de LGPD entregue ao cliente traz a RAZÃO SOCIAL da sua empresa, e não o nome aqui de cima — é ela que responde legalmente pelos dados. Confira o campo "Razão social" em Configurações → Organização.',
+            )}
           </li>
           <li>
-            O aplicativo de verificação em duas etapas continua registrando o nome do sistema: o
-            cadastro acontece antes de saber de qual empresa a pessoa é.
+            {t(
+              "O aplicativo de verificação em duas etapas continua registrando o nome do sistema: o cadastro acontece antes de saber de qual empresa a pessoa é.",
+            )}
           </li>
           {/*
             Esta linha dizia "o logo continua sendo o de quem instalou o
@@ -454,9 +459,9 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
             frase ausente, porque quem a lê para de procurar o campo.
           */}
           <li>
-            O logo que você subir aqui aparece no menu lateral, para quem trabalha nesta empresa. A
-            tela de entrada continua com o logo de quem instalou o sistema: ali ainda não dá para
-            saber de qual empresa a pessoa é.
+            {t(
+              "O logo que você subir aqui aparece no menu lateral, para quem trabalha nesta empresa. A tela de entrada continua com o logo de quem instalou o sistema: ali ainda não dá para saber de qual empresa a pessoa é.",
+            )}
           </li>
         </ul>
       </Card>
