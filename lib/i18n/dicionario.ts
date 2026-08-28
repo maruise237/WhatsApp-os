@@ -1880,6 +1880,19 @@ export const DICIONARIO: Traducoes = {
       "En l’état, cette couleur n’atteindrait pas l’interface : le système conserverait la couleur déjà utilisée.",
   },
   "Nome da sua empresa": { "fr-FR": "Nom de votre entreprise" },
+  "Dados inválidos.": { "fr-FR": "Données invalides." },
+  "Organização atualizada.": { "fr-FR": "Organisation mise à jour." },
+  "Nome de exibição": { "fr-FR": "Nom d’affichage" },
+  "DPO email": { "fr-FR": "E-mail du DPO" },
+  "Retenção de mídia (dias)": { "fr-FR": "Rétention des médias (jours)" },
+  "URL política de privacidade": { "fr-FR": "URL de la politique de confidentialité" },
+  "Motivos de perda extras (separados por vírgula)": {
+    "fr-FR": "Motifs de perte supplémentaires (séparés par des virgules)",
+  },
+  "ex: Sem orçamento, Concorrente": { "fr-FR": "ex. : Budget insuffisant, Concurrent" },
+  "Adicionados ao set padrão. Cada pipeline pode ter seus próprios motivos.": {
+    "fr-FR": "Ajoutés à l’ensemble par défaut. Chaque pipeline peut avoir ses propres motifs.",
+  },
   "Cor da sua marca": { "fr-FR": "Couleur de votre marque" },
   "Estilo de resposta": { "fr-FR": "Style de réponse" },
   "Responder em várias mensagens curtas (como uma pessoa digita)": {
