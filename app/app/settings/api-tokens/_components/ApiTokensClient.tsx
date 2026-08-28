@@ -29,7 +29,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useT } from "@/hooks/i18n/useT";
+import { useIdioma, useT } from "@/hooks/i18n/useT";
 
 /**
  * `mcp:read`/`mcp:write` faltavam nesta lista, e sem eles NENHUMA ferramenta
@@ -58,6 +58,7 @@ const SCOPES: { id: string; label: string }[] = [
 
 export function ApiTokensClient() {
   const t = useT();
+  const idioma = useIdioma();
   const { data, isLoading } = useApiTokens();
   const create = useCreateApiToken();
   const revoke = useRevokeApiToken();
@@ -145,9 +146,7 @@ export function ApiTokensClient() {
                     )}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {token.expires_at
-                      ? new Date(token.expires_at).toLocaleDateString("pt-BR")
-                      : "—"}
+                    {token.expires_at ? new Date(token.expires_at).toLocaleDateString(idioma) : "—"}
                   </TableCell>
                   <TableCell>
                     {!token.revoked_at ? (
@@ -184,7 +183,7 @@ export function ApiTokensClient() {
                 id="t-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Worker de import"
+                placeholder={t("Worker de import")}
                 minLength={2}
                 maxLength={100}
                 required

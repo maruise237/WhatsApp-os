@@ -2780,6 +2780,7 @@ export const DICIONARIO: Traducoes = {
   "O plaintext será mostrado apenas uma vez.": {
     "fr-FR": "Le texte brut ne sera affiché qu’une seule fois.",
   },
+  "Worker de import": { "fr-FR": "Worker d’importation" },
   "Expira em (dias) — opcional": { "fr-FR": "Expire dans (jours) — facultatif" },
   Criar: { "fr-FR": "Créer" },
   "Token criado": { "fr-FR": "Jeton créé" },
