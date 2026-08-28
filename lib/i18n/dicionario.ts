@@ -302,6 +302,35 @@ export const DICIONARIO: Traducoes = {
       "fr-FR":
         "Ouvert automatiquement par le système : l’IA avait promis de passer la main à une personne sans ouvrir le cas, le système l’a donc ouvert à sa place.",
     },
+  "Aguardando você": { "fr-FR": "En attente de votre intervention" },
+  "Virou atendimento humano": { "fr-FR": "Passé en prise en charge humaine" },
+  "Aguardando o cliente responder — a IA avisa você quando tiver a informação.": {
+    "fr-FR":
+      "En attente de la réponse du client — l’IA vous avertira lorsqu’elle aura l’information.",
+  },
+  "Este caso já foi concluído.": { "fr-FR": "Ce cas est déjà terminé." },
+  "Este caso virou atendimento humano — não precisa mais de resposta aqui.": {
+    "fr-FR":
+      "Ce cas est passé en prise en charge humaine : aucune réponse n’est plus nécessaire ici.",
+  },
+  "Este caso foi cancelado.": { "fr-FR": "Ce cas a été annulé." },
+  "A IA avisa o cliente e encerra o assunto.": {
+    "fr-FR": "L’IA informe le client et clôt le sujet.",
+  },
+  "Preciso de info do cliente": { "fr-FR": "J’ai besoin d’une information du client" },
+  "A IA pergunta ao cliente e o caso volta pra você quando ele responder.": {
+    "fr-FR": "L’IA interroge le client et le cas vous revient lorsqu’il répond.",
+  },
+  "Não consigo — passar pra humano": { "fr-FR": "Je n’y arrive pas — passer à un agent humain" },
+  "Sai da IA: a conversa vira um atendimento humano de verdade.": {
+    "fr-FR": "La conversation quitte l’IA et passe à une véritable prise en charge humaine.",
+  },
+  "O que você quer fazer?": { "fr-FR": "Que souhaitez-vous faire ?" },
+  "Resposta enviada.": { "fr-FR": "Réponse envoyée." },
+  "Escreva sua resposta para a IA...": { "fr-FR": "Écrivez votre réponse à l’IA…" },
+  "Escolha uma das opções acima para enviar.": {
+    "fr-FR": "Choisissez l’une des options ci-dessus pour envoyer votre réponse.",
+  },
   "O que o cliente precisa": { "fr-FR": "Ce dont le client a besoin" },
   "Por que a IA travou": { "fr-FR": "Pourquoi l’IA s’est interrompue" },
   "Linha do tempo": { "fr-FR": "Chronologie", es: "Línea de tiempo" },
