@@ -945,6 +945,67 @@ export const DICIONARIO: Traducoes = {
   "Tentando…": { "fr-FR": "Nouvelle tentative…" },
 
   // ─── Configuration de l’agent IA ───
+  "Nenhuma conversa passou por aqui nos últimos {days} dias. Assim que o assistente atender alguém, o que ele organizar aparece nesta área.":
+    {
+      "fr-FR":
+        "Aucune conversation n’est passée ici au cours des {days} derniers jours. Dès que l’assistant répondra à quelqu’un, ce qu’il organisera apparaîtra dans cette zone.",
+    },
+  "Como está indo (últimos {days} dias)": {
+    "fr-FR": "Comment cela se passe (les {days} derniers jours)",
+  },
+  "Organizou o sistema em {agiu} de {turnos} conversas.": {
+    "fr-FR": "Le système a été organisé dans {agiu} conversation(s) sur {turnos}.",
+  },
+  "De {declaradas} promessas feitas ao cliente, {assumidas} ficaram com um responsável — e {semDono} não. Elas aparecem na Central de avisos, uma por conversa.":
+    {
+      "fr-FR":
+        "Sur {declaradas} promesse(s) faite(s) au client, {assumidas} ont reçu un responsable — et {semDono} non. Elles apparaissent dans le Centre des alertes, une par conversation.",
+    },
+  "Em {quisAgirENaoPode} delas o assistente tinha algo a registrar e nenhuma capacidade marcada para isso — o que resolve é marcar abaixo o que ele pode fazer.":
+    {
+      "fr-FR":
+        "Dans {quisAgirENaoPode} cas, l’assistant avait quelque chose à enregistrer mais aucune capacité n’était activée pour cela — activez ci-dessous ce qu’il peut faire.",
+    },
+  "Deixar o agente organizar o sistema depois de cada conversa": {
+    "fr-FR": "Laisser l’agent organiser le système après chaque conversation",
+  },
+  "Quem conversa com o cliente é uma coisa; quem mantém o sistema em dia é outra. Separar os dois evita que o assistente comente com o cliente o que está fazendo por dentro — e é o que faz ele realmente registrar, em vez de só responder bem.":
+    {
+      "fr-FR":
+        "La personne qui échange avec le client et celle qui maintient le système à jour sont deux rôles différents. Les séparer évite que l’assistant commente au client ce qu’il fait en interne et lui permet d’enregistrer réellement les actions, au lieu de seulement bien répondre.",
+    },
+  "Com isto desligado:": { "fr-FR": "Lorsque cette option est désactivée :" },
+  "o assistente continua atendendo e o básico continua sendo registrado sozinho — a etapa do cliente, o retorno que ele prometeu e o histórico da conversa.":
+    {
+      "fr-FR":
+        "l’assistant continue de répondre et les éléments de base restent enregistrés automatiquement — l’étape du client, le suivi qu’il a promis et l’historique de la conversation.",
+    },
+  "O que ele deixa de fazer é decidir sobre a operação: abrir chamados, distribuir para a pessoa certa, organizar marcadores e etapas. Isso passa a ser trabalho de alguém do time.":
+    {
+      "fr-FR":
+        "Il cesse en revanche de décider pour l’opération : ouvrir des tickets, attribuer au bon membre, organiser les étiquettes et les étapes. Cela devient le travail d’un membre de l’équipe.",
+    },
+  "A inteligência que ele usa para organizar": {
+    "fr-FR": "L’intelligence qu’il utilise pour organiser",
+  },
+  "Pode ser diferente da que conversa. Organizar o sistema é uma tarefa mais mecânica que atender uma pessoa — costuma sair bem com um modelo mais barato.":
+    {
+      "fr-FR":
+        "Elle peut être différente de celle qui échange avec les clients. Organiser le système est une tâche plus mécanique que répondre à une personne et fonctionne souvent bien avec un modèle moins coûteux.",
+    },
+  "A mesma que conversa": { "fr-FR": "La même que celle qui échange" },
+  "Usar a mesma que conversa": { "fr-FR": "Utiliser la même que celle qui échange" },
+  "O que ele pode mexer no sistema": { "fr-FR": "Ce qu’il peut modifier dans le système" },
+  "Esta lista é só deste papel — nada aqui é usado enquanto ele conversa com o cliente. Ligue por jornada de trabalho.":
+    {
+      "fr-FR":
+        "Cette liste concerne uniquement ce rôle — rien ici n’est utilisé lorsqu’il échange avec le client. Activez les capacités selon son périmètre de travail.",
+    },
+  "Sem nada marcado, ele ainda avisa você quando o assistente prometer algo a um cliente e ninguém cumprir — mas não consegue resolver sozinho.":
+    {
+      "fr-FR":
+        "Si rien n’est sélectionné, il vous avertit lorsqu’une promesse faite à un client n’est pas tenue — mais il ne peut pas la résoudre seul.",
+    },
   "Atendente IA": { "fr-FR": "Assistant IA" },
   "Como ele vai se chamar": { "fr-FR": "Comment s’appellera-t-il ?" },
   "É o nome que aparece para o seu time. O cliente vê só a conversa.": {
