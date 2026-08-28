@@ -18,6 +18,16 @@ export default defineConfig({
     testTimeout: 15_000,
     setupFiles: ["./tests/setup/vitest.setup.ts"],
     globals: true,
+    // @neondatabase/auth importe `next/headers`/`next/server` sans exports map
+    // dans next (mesuré: package.json de next 16.3.1 n'a pas de champ exports).
+    // Externalisé, c'est le résolveur de Node qui traite l'import et casse
+    // ("Cannot find module .../next/headers"). Inline + alias = l'import passe
+    // par le résolveur de Vite, qui résout l'alias vers le fichier réel.
+    server: {
+      deps: {
+        inline: [/@neondatabase\/auth/],
+      },
+    },
     coverage: { provider: "v8", reporter: ["text", "html"] },
     // tests/journeys/** roda no Playwright (jornada de baseline dos canais), igual
     // a tests/e2e/**: sem excluir, o include default do vitest o pegaria e o
@@ -32,5 +42,16 @@ export default defineConfig({
       "tests/journeys/**",
     ],
   },
-  resolve: { alias: { "@": path.resolve(__dirname, ".") } },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "."),
+      // @neondatabase/auth déclare next comme peer; pnpm ne le lie pas dans le
+      // node_modules du paquet, et le résolveur de vitest casse sur
+      // `next/headers`/`next/server` venant de .pnpm (mesuré: 4 arquivos de
+      // teste falhavam com "Cannot find module .../next/headers"). Alias vers
+      // les modules réels de l'app.
+      "next/headers": path.resolve(__dirname, "node_modules/next/headers.js"),
+      "next/server": path.resolve(__dirname, "node_modules/next/server.js"),
+    },
+  },
 });
