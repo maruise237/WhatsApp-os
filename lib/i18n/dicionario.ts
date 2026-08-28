@@ -1229,6 +1229,37 @@ export const DICIONARIO: Traducoes = {
   ligada: { "fr-FR": "activée" },
   capacidade: { "fr-FR": "capacité" },
   capacidades: { "fr-FR": "capacités" },
+  "Carregando as capacidades…": { "fr-FR": "Chargement des capacités…" },
+  "Não foi possível carregar as capacidades. Recarregue a página.": {
+    "fr-FR": "Impossible de charger les capacités. Rechargez la page.",
+  },
+  "capacidades ligadas": { "fr-FR": "capacités activées" },
+  "Limite atingido. Desligue algo para ligar outra coisa.": {
+    "fr-FR": "Limite atteinte. Désactivez une capacité avant d’en activer une autre.",
+  },
+  "Acima disso o agente erra na hora de escolher o que usar.": {
+    "fr-FR": "Au-delà de cette limite, l’agent risque de se tromper dans son choix.",
+  },
+  parcial: { "fr-FR": "partiel" },
+  "Só ligando uma a uma — o pacote não liga por você:": {
+    "fr-FR": "Activation individuelle uniquement — le package ne l’active pas pour vous :",
+  },
+  "Esconder a lista completa": { "fr-FR": "Masquer la liste complète" },
+  "Escolher uma a uma (modo avançado)": { "fr-FR": "Choisir individuellement (mode avancé)" },
+  "Cada linha é uma capacidade. O nome em cinza é como ela aparece para quem integra o sistema por fora.":
+    {
+      "fr-FR":
+        "Chaque ligne correspond à une capacité. Le nom grisé est celui utilisé par les intégrations externes.",
+    },
+  "Uma capacidade ligada não existe mais": { "fr-FR": "Une capacité activée n’existe plus" },
+  "capacidades ligadas não existem mais": { "fr-FR": "capacités activées n’existent plus" },
+  "nesta versão do sistema": { "fr-FR": "dans cette version du système" },
+  "Elas continuam salvas, mas o agente não consegue usá-las.": {
+    "fr-FR": "Elles restent enregistrées, mais l’agent ne peut pas les utiliser.",
+  },
+  Desligar: { "fr-FR": "Désactiver" },
+  "essa capacidade": { "fr-FR": "cette capacité" },
+  "essas capacidades": { "fr-FR": "ces capacités" },
   "Carregando o uso das capacidades…": { "fr-FR": "Chargement de l’utilisation des capacités…" },
   "Não foi possível carregar o uso das capacidades.": {
     "fr-FR": "Impossible de charger l’utilisation des capacités.",
