@@ -624,6 +624,61 @@ export const DICIONARIO: Traducoes = {
   },
   "O que essas pessoas podem fazer": { "fr-FR": "Ce que ces personnes peuvent faire" },
   "Somente leitura": { "fr-FR": "Lecture seule" },
+  "Cada um pega o que quiser": { "fr-FR": "Chacun prend ce qu’il veut" },
+  "Todo cliente novo cai numa fila aberta e o primeiro atendente que clicar assume. Simples, e é onde nasce a discussão de quem furou a fila.":
+    {
+      "fr-FR":
+        "Chaque nouveau client arrive dans une file ouverte et le premier agent qui clique le prend en charge. C’est simple, mais c’est là que commencent les discussions sur les priorités.",
+    },
+  "Rodízio automático entre os atendentes": { "fr-FR": "Rotation automatique entre les agents" },
+  "Cliente 1 vai para o atendente A, cliente 2 para o B, e ao acabar a lista volta ao primeiro. Quem recebe é sempre quem está há mais tempo sem receber — entre os que estão disponíveis e dentro do horário. Ninguém escolhe, então não há fila furada.":
+    {
+      "fr-FR":
+        "Le client 1 est attribué à l’agent A, le client 2 à l’agent B, puis la liste reprend au début. L’attribution revient toujours à l’agent disponible depuis le plus longtemps, dans ses horaires. Personne ne choisit : les priorités sont ainsi respectées.",
+    },
+  "Todos veem tudo": { "fr-FR": "Tout le monde voit tout" },
+  "Qualquer atendente abre a conversa e o negócio de qualquer colega.": {
+    "fr-FR": "Chaque agent peut ouvrir la conversation et l’affaire de n’importe quel collègue.",
+  },
+  "Os seus, mais os que ainda não têm dono": {
+    "fr-FR": "Les siens et ceux qui n’ont pas encore de responsable",
+  },
+  "O atendente vê a própria carteira e a fila de quem chegou agora. Não vê o que já é de um colega.":
+    {
+      "fr-FR":
+        "L’agent voit son propre portefeuille et la file des nouveaux arrivants. Il ne voit pas les éléments déjà attribués à un collègue.",
+    },
+  "Só os seus": { "fr-FR": "Les siens uniquement" },
+  "O atendente vê apenas o que foi direcionado a ele — nem a fila. Combine com o rodízio: sem alguém distribuindo, ninguém recebe nada e as telas ficam vazias.":
+    {
+      "fr-FR":
+        "L’agent ne voit que ce qui lui a été attribué — pas même la file. À combiner avec la rotation : sans distribution, personne ne reçoit rien et les écrans restent vides.",
+    },
+  "Quem recebe o cliente novo": { "fr-FR": "Qui reçoit le nouveau client" },
+  "Vale para conversa que chega sem dono.": {
+    "fr-FR": "S’applique aux conversations qui arrivent sans responsable.",
+  },
+  "Tentativas antes de desistir": { "fr-FR": "Tentatives avant abandon" },
+  "Quando não há ninguém disponível, o sistema tenta de novo mais tarde. Ao estourar, a conversa fica na fila esperando alguém.":
+    {
+      "fr-FR":
+        "Lorsqu’aucun agent n’est disponible, le système réessaie plus tard. Une fois la limite atteinte, la conversation reste dans la file en attendant quelqu’un.",
+    },
+  "Espera entre tentativas (segundos)": { "fr-FR": "Attente entre les tentatives (secondes)" },
+  "O que cada atendente enxerga": { "fr-FR": "Ce que chaque agent voit" },
+  "Restringe apenas quem tem o papel Atendente. Gerente e administrador continuam vendo a operação inteira.":
+    {
+      "fr-FR":
+        "La restriction ne concerne que les personnes ayant le rôle Agent. Les responsables et administrateurs continuent de voir toute l’activité.",
+    },
+  "Com “só os seus” e distribuição manual, ninguém enxerga a fila para pegar — e nenhum cliente é atendido. Ligue o rodízio para que alguém receba.":
+    {
+      "fr-FR":
+        "Avec « les siens uniquement » et la distribution manuelle, personne ne voit la file pour prendre un client — aucun client n’est donc pris en charge. Activez la rotation pour qu’un agent en reçoive un.",
+    },
+  "Distribuição de atendimento salva.": { "fr-FR": "Distribution des demandes enregistrée." },
+  "Não consegui salvar.": { "fr-FR": "Impossible d’enregistrer." },
+  "Há mudanças não salvas.": { "fr-FR": "Des modifications ne sont pas enregistrées." },
   Atendente: { "fr-FR": "Agent" },
   Gerente: { "fr-FR": "Responsable" },
   Administrador: { "fr-FR": "Administrateur" },
