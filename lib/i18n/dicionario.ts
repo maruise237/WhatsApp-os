@@ -258,6 +258,21 @@ export const DICIONARIO: Traducoes = {
   "Ações do lead": { "fr-FR": "Actions du lead" },
   "Marcar como ganho": { "fr-FR": "Marquer comme gagné" },
   Todos: { "fr-FR": "Tous" },
+  Casos: { "fr-FR": "Cas" },
+  "Quando a IA trava em algo que só um humano resolve, ela abre um caso aqui — e continua conversando com o cliente enquanto espera sua resposta.":
+    {
+      "fr-FR":
+        "Lorsqu’un blocage ne peut être résolu que par une personne, l’IA ouvre un cas ici et continue d’échanger avec le client en attendant votre réponse.",
+    },
+  Concluídos: { "fr-FR": "Terminés" },
+  "Nenhum caso aberto": { "fr-FR": "Aucun cas ouvert" },
+  "Nenhum caso concluído": { "fr-FR": "Aucun cas terminé" },
+  "Quando a IA precisar de você, aparece aqui.": {
+    "fr-FR": "Lorsqu’elle aura besoin de vous, l’IA l’affichera ici.",
+  },
+  "Casos concluídos, cancelados ou repassados ficam aqui.": {
+    "fr-FR": "Les cas terminés, annulés ou transférés apparaissent ici.",
+  },
   Abertos: { "fr-FR": "Ouverts" },
   Ganhos: { "fr-FR": "Gagnés" },
   Perdidos: { "fr-FR": "Perdus" },

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { es, fr, ptBR } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,8 +11,12 @@ import { STATUS_BADGE_VARIANT, STATUS_LABEL } from "@/lib/ai/case-copy";
 import { Robot } from "@/lib/ui/icons";
 import { cn } from "@/lib/utils";
 import { CaseDetail } from "./CaseDetail";
+import { useIdioma, useT } from "@/hooks/i18n/useT";
 
 export function CaseList() {
+  const t = useT();
+  const idioma = useIdioma();
+  const dateLocale = idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
   const [tab, setTab] = useState<"open" | "resolved">("open");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { data, isLoading } = useCases(tab);
@@ -22,8 +26,11 @@ export function CaseList() {
       <div className="flex w-full max-w-xs shrink-0 flex-col gap-4">
         <Tabs value={tab} onValueChange={(v) => setTab(v as "open" | "resolved")}>
           <TabsList>
-            <TabsTrigger value="open">Abertos{data ? ` (${data.open_count})` : ""}</TabsTrigger>
-            <TabsTrigger value="resolved">Concluídos</TabsTrigger>
+            <TabsTrigger value="open">
+              {t("Abertos")}
+              {data ? ` (${data.open_count})` : ""}
+            </TabsTrigger>
+            <TabsTrigger value="resolved">{t("Concluídos")}</TabsTrigger>
           </TabsList>
         </Tabs>
 
@@ -36,12 +43,12 @@ export function CaseList() {
           <div className="flex flex-1 flex-col items-center justify-center gap-2 py-16 text-center">
             <Robot size={28} className="text-muted-foreground/60" aria-hidden />
             <p className="text-sm font-medium">
-              {tab === "open" ? "Nenhum caso aberto" : "Nenhum caso concluído"}
+              {tab === "open" ? t("Nenhum caso aberto") : t("Nenhum caso concluído")}
             </p>
             <p className="text-xs text-muted-foreground">
               {tab === "open"
-                ? "Quando a IA precisar de você, aparece aqui."
-                : "Casos concluídos, cancelados ou repassados ficam aqui."}
+                ? t("Quando a IA precisar de você, aparece aqui.")
+                : t("Casos concluídos, cancelados ou repassados ficam aqui.")}
             </p>
           </div>
         ) : (
@@ -74,7 +81,13 @@ function CaseRow({
   selected: boolean;
   onSelect: () => void;
 }) {
-  const when = formatDistanceToNowStrict(new Date(item.opened_at), { addSuffix: true, locale: ptBR });
+  const t = useT();
+  const idioma = useIdioma();
+  const dateLocale = idioma === "fr-FR" ? fr : idioma === "es" ? es : ptBR;
+  const when = formatDistanceToNowStrict(new Date(item.opened_at), {
+    addSuffix: true,
+    locale: dateLocale,
+  });
   return (
     <li>
       <button
@@ -90,11 +103,11 @@ function CaseRow({
         <div className="flex w-full items-center justify-between gap-2">
           <p className="truncate text-sm font-medium">{item.title}</p>
           <Badge variant={STATUS_BADGE_VARIANT[item.status]} className="shrink-0">
-            {STATUS_LABEL[item.status]}
+            {t(STATUS_LABEL[item.status])}
           </Badge>
         </div>
         <p className="text-xs text-muted-foreground">
-          {item.contact_name ?? "Contato sem nome"} · {when}
+          {item.contact_name ?? t("Contato sem nome")} · {when}
         </p>
       </button>
     </li>
