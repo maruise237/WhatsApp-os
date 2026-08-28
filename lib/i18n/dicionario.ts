@@ -2453,7 +2453,22 @@ export const DICIONARIO: Traducoes = {
   "Carregando agent…": { "fr-FR": "Chargement de l’agent…" },
   "Agent default · ": { "fr-FR": "Agent par défaut · " },
   Geral: { "fr-FR": "Général" },
-  Modelo: { "fr-FR": "Modèle" },
+  Inválida: { "fr-FR": "Invalide" },
+  Inativa: { "fr-FR": "Inactive" },
+  "Revalidando…": { "fr-FR": "Nouvelle validation…" },
+  "Credencial removida.": { "fr-FR": "Credential supprimée." },
+  "Excluir credencial": { "fr-FR": "Supprimer la credential" },
+  "Em uso por": { "fr-FR": "Utilisée par" },
+  "Revalidar credencial": { "fr-FR": "Revalider la credential" },
+  "Em uso por {usageCount} agent{suffix} publicado{suffix}.": {
+    "fr-FR": "Utilisée par {usageCount} agent{suffix} publié{suffix}.",
+  },
+  "Remover credencial “{label}”?": { "fr-FR": "Supprimer la credential « {label} » ?" },
+  "Agents que usam esta credencial vão falhar ao executar. Esta ação não pode ser desfeita.": {
+    "fr-FR":
+      "Les agents qui utilisent cette credential échoueront lors de leur exécution. Cette action est irréversible.",
+  },
+  Modelos: { "fr-FR": "Modèles" },
   RAG: { "fr-FR": "RAG" },
   "Descrição interna do agent": { "fr-FR": "Description interne de l’agent" },
   "Agent ativo": { "fr-FR": "Agent actif" },
