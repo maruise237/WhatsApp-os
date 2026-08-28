@@ -2578,6 +2578,14 @@ export const DICIONARIO: Traducoes = {
   "Papel de «": { "fr-FR": "Rôle de «" },
   "» no funil": { "fr-FR": " » dans le pipeline" },
   "Mudar isso": { "fr-FR": "Modifier cela" },
+  "Só uma etapa pode ser a de fechamento. Marcar esta desmarca «{name}».": {
+    "fr-FR":
+      "Une seule étape peut correspondre à la clôture. Marquer celle-ci retirera ce rôle à « {name} ».",
+  },
+  "Só uma etapa pode ser a de perda. Marcar esta desmarca «{name}».": {
+    "fr-FR":
+      "Une seule étape peut correspondre à une perte. Marquer celle-ci retirera ce rôle à « {name} ».",
+  },
   "Marcar mesmo assim": { "fr-FR": "Marquer quand même" },
   "Acrescentar etapa ao fim": { "fr-FR": "Ajouter une étape à la fin" },
   "Nome da nova coluna": { "fr-FR": "Nom de la nouvelle colonne" },

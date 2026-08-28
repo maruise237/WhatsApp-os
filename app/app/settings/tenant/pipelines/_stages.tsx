@@ -253,7 +253,7 @@ export function StagesSection({
       { stageId: etapaId, patch },
       {
         onSuccess: () => toast.success(t("Etapa atualizada.")),
-        onError: (e) => setErro({ etapaId, texto: mensagemDeErro(e), sobrePapel }),
+        onError: (e) => setErro({ etapaId, texto: t(mensagemDeErro(e)), sobrePapel }),
       },
     );
   }
@@ -273,8 +273,14 @@ export function StagesSection({
         papel,
         texto:
           papel === "won"
-            ? `Só uma etapa pode ser a de fechamento. Marcar esta desmarca «${atual.name}».`
-            : `Só uma etapa pode ser a de perda. Marcar esta desmarca «${atual.name}».`,
+            ? t("Só uma etapa pode ser a de fechamento. Marcar esta desmarca «{name}».").replace(
+                "{name}",
+                atual.name,
+              )
+            : t("Só uma etapa pode ser a de perda. Marcar esta desmarca «{name}».").replace(
+                "{name}",
+                atual.name,
+              ),
       });
       return;
     }
@@ -299,7 +305,7 @@ export function StagesSection({
             etapaId: etapa.id,
             negocios: caso.negocios,
             destino: null,
-            erro: caso.precisaDestino ? null : mensagemDeErro(e),
+            erro: caso.precisaDestino ? null : t(mensagemDeErro(e)),
           });
         },
       },
@@ -315,7 +321,7 @@ export function StagesSection({
         setNova(null);
         toast.success(`«${nome}» ${t("entrou no fim do funil.")}`);
       },
-      onError: (e) => setErro({ etapaId: null, texto: mensagemDeErro(e) }),
+      onError: (e) => setErro({ etapaId: null, texto: t(mensagemDeErro(e)) }),
     });
   }
 
