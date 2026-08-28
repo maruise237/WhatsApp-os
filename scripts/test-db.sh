@@ -94,6 +94,14 @@ begin
 end
 $$;
 
+-- O baseline (cutover Neon) referencia `neon_auth.user` nas FKs — stubs mínimos,
+-- mesmo contrato do bloco de roles acima: o banco efêmero tem de ser o do produto.
+create schema if not exists neon_auth;
+create table if not exists neon_auth."user" (
+  id uuid primary key,
+  email text
+);
+
 -- O DEFAULT ACL QUE TODO PROJETO SUPABASE JÁ TEM ANTES DE QUALQUER SQL NOSSO.
 --
 -- Sem estas 4 linhas o Postgres efêmero NÃO é o banco do produto, e a diferença
@@ -263,6 +271,32 @@ echo "    ✓ install ok"
 echo "==> modo UPDATE: re-aplicando baseline.sql COM ON_ERROR_STOP=1 (idempotência de verdade)"
 psql_install < "$BASELINE"
 echo "    ✓ update ok (zero erro na re-aplicação)"
+
+# O baseline (cutover Neon) deixou FKs MISTAS: parte referencia `auth.users`,
+# parte `neon_auth."user"` (as tabelas novas do Sales OS). Os testes semeiam
+# usuários em `auth.users`; para as FKs novas satisfazerem, espelhamos cada
+# usuário em `neon_auth."user"` — backfill + trigger pós-install (o prelude roda
+# antes do baseline, então o trigger não pode nascer lá).
+echo "==> espelho auth.users → neon_auth.\"user\" (FKs mistas do cutover Neon)"
+psql_install <<'SQL'
+insert into neon_auth."user" (id, email)
+select id, email from auth.users
+on conflict (id) do nothing;
+
+create or replace function neon_auth.espelhar_usuario_do_auth() returns trigger
+language plpgsql as $$
+begin
+  insert into neon_auth."user" (id, email) values (new.id, new.email)
+  on conflict (id) do nothing;
+  return new;
+end $$;
+
+drop trigger if exists trg_espelha_auth_users_no_neon on auth.users;
+create trigger trg_espelha_auth_users_no_neon
+  after insert on auth.users
+  for each row execute function neon_auth.espelhar_usuario_do_auth();
+SQL
+echo "    ✓ espelho ok"
 
 echo "==> banco \`postgres\` a partir do molde (o setupFile o recria a cada arquivo)"
 # Criar aqui, ALÉM do reset por arquivo, tem dois motivos medidos:
