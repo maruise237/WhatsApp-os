@@ -1818,6 +1818,10 @@ export const DICIONARIO: Traducoes = {
   "fora da escala — fica só no logo": { "fr-FR": "hors échelle — utilisée uniquement sur le logo" },
   "Botões no modo claro": { "fr-FR": "Boutons en mode clair" },
   "Botões no modo escuro": { "fr-FR": "Boutons en mode sombre" },
+  Marca: { "fr-FR": "Marque" },
+  "O nome e a cor que a sua empresa mostra para quem trabalha aqui dentro.": {
+    "fr-FR": "Le nom et la couleur que votre entreprise affiche pour les membres de son équipe.",
+  },
   "Marca salva.": { "fr-FR": "Marque enregistrée." },
   "Como sua empresa aparece": { "fr-FR": "Apparence de votre entreprise" },
   "Aparece no menu lateral, para quem trabalha aqui. Deixe em branco para usar {name}.": {
