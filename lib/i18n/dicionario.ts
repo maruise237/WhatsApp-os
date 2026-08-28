@@ -2783,6 +2783,11 @@ export const DICIONARIO: Traducoes = {
   "Worker de import": { "fr-FR": "Worker d’importation" },
   "Expira em (dias) — opcional": { "fr-FR": "Expire dans (jours) — facultatif" },
   Criar: { "fr-FR": "Créer" },
+  "API Tokens": { "fr-FR": "Jetons API" },
+  "Tokens server-to-server. Plaintext exibido uma única vez na criação.": {
+    "fr-FR":
+      "Jetons serveur à serveur. Le texte brut n’est affiché qu’une seule fois lors de la création.",
+  },
   "Token criado": { "fr-FR": "Jeton créé" },
   "Copie e guarde agora — não conseguiremos exibir novamente.": {
     "fr-FR": "Copiez-le et conservez-le maintenant : il ne pourra plus être affiché.",
