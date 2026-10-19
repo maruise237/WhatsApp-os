@@ -36,8 +36,7 @@ export default async function TestarPage() {
       <header>
         <h2 className="text-2xl font-semibold tracking-tight">Veja ele atender</h2>
         <p className="text-sm text-muted-foreground">
-          Escreva como se fosse um cliente. Nada é enviado pelo WhatsApp — é só um
-          ensaio, entre você e ele.
+          Écrivez comme si vous étiez un client. Rien n’est envoyé sur WhatsApp — c’est juste un essai, entre vous et lui.
         </p>
       </header>
       <TestarClient

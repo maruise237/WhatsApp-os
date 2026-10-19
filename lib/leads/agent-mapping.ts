@@ -47,13 +47,13 @@ export type ResultadoValidacao = { ok: true } | { ok: false; erros: string[] };
  * ajuste — a família de defeito que a própria 0084 nasceu para fechar.
  */
 export const ROTULO_DO_PASSO: Readonly<Record<LeadStage, string>> = {
-  new: "Novo lead",
-  contacted: "Primeiro contato",
-  qualifying: "Em qualificação",
-  qualified: "Qualificado",
-  negotiating: "Em negociação",
-  won: "Ganho",
-  lost: "Perdido",
+  new: "Nouveau lead",
+  contacted: "Premier contact",
+  qualifying: "En qualification",
+  qualified: "Qualifié",
+  negotiating: "En négociation",
+  won: "Gagné",
+  lost: "Perdu",
 };
 
 /**
@@ -67,13 +67,13 @@ export const ROTULO_DO_PASSO: Readonly<Record<LeadStage, string>> = {
  * Aqui, quem mudar o vocabulário do funil do agente vê as duas juntas.
  */
 export const EXPLICACAO_DO_PASSO: Readonly<Record<LeadStage, string>> = {
-  new: "acabou de chamar e ninguém respondeu ainda",
-  contacted: "já foi respondido",
-  qualifying: "ele está entendendo o que a pessoa precisa",
-  qualified: "já dá para saber o que oferecer",
-  negotiating: "está fechando preço, horário ou condições",
-  won: "fechou negócio",
-  lost: "não fechou",
+  new: "vient d’écrire et personne n’a encore répondu",
+  contacted: "a déjà reçu une réponse",
+  qualifying: "il cherche à comprendre ce dont la personne a besoin",
+  qualified: "on sait déjà quoi lui proposer",
+  negotiating: "il finalise le prix, l’horaire ou les conditions",
+  won: "l’affaire est conclue",
+  lost: "l’affaire n’a pas abouti",
 };
 
 function ehPasso(valor: string): valor is LeadStage {
@@ -114,7 +114,7 @@ export function validarMapeamento(
     if (stageId === undefined) continue;
 
     if (!ehPasso(passo)) {
-      erros.push(`«${passo}» não é um passo do atendimento do assistente.`);
+      erros.push(`«${passo}» n’est pas une étape du suivi de l’assistant.`);
       continue;
     }
     const rotulo = ROTULO_DO_PASSO[passo];
@@ -125,7 +125,7 @@ export function validarMapeamento(
     const etapa = etapas.find((e) => e.id === stageId);
     if (!etapa) {
       erros.push(
-        `A etapa escolhida para «${rotulo}» não faz parte deste funil. Recarregue a página e escolha de novo.`,
+        `L’étape choisie pour «${rotulo}» ne fait pas partie de cet entonnoir. Rechargez la page et choisissez à nouveau.`,
       );
       continue;
     }
@@ -134,8 +134,8 @@ export function validarMapeamento(
     const donoAnterior = etapaJaUsadaPor.get(etapa.id);
     if (donoAnterior) {
       erros.push(
-        `A etapa «${etapa.name}» já representa «${ROTULO_DO_PASSO[donoAnterior]}» e não pode representar «${rotulo}` +
-          `» também. Cada etapa vale por um passo só.`,
+        `L’étape «${etapa.name}» représente déjà «${ROTULO_DO_PASSO[donoAnterior]}» et ne peut pas représenter «${rotulo}` +
+          `» en plus. Chaque étape ne vaut que pour un seul passage.`,
       );
       continue;
     }
@@ -146,19 +146,19 @@ export function validarMapeamento(
     // mesmo lugar do funil.
     if (passo === "won" && !etapa.is_won) {
       erros.push(
-        `A etapa «${etapa.name}» não é a etapa de fechamento (ganho) deste funil, então não pode representar «${rotulo}».`,
+        `L’étape «${etapa.name}» n’est pas l’étape de conclusion (gagné) de cet entonnoir, elle ne peut donc pas représenter «${rotulo}».`,
       );
     } else if (passo === "lost" && !etapa.is_lost) {
       erros.push(
-        `A etapa «${etapa.name}» não é a etapa de perda deste funil, então não pode representar «${rotulo}».`,
+        `L’étape «${etapa.name}» n’est pas l’étape de perte de cet entonnoir, elle ne peut donc pas représenter «${rotulo}».`,
       );
     } else if (etapa.is_won && passo !== "won") {
       erros.push(
-        `A etapa «${etapa.name}» é a etapa de ganho deste funil, então só pode representar «${ROTULO_DO_PASSO.won}».`,
+        `L’étape «${etapa.name}» est l’étape gagnée de cet entonnoir, elle ne peut donc représenter que «${ROTULO_DO_PASSO.won}».`,
       );
     } else if (etapa.is_lost && passo !== "lost") {
       erros.push(
-        `A etapa «${etapa.name}» é a etapa de perda deste funil, então só pode representar «${ROTULO_DO_PASSO.lost}».`,
+        `L’étape «${etapa.name}» est l’étape de perte de cet entonnoir, elle ne peut donc représenter que «${ROTULO_DO_PASSO.lost}».`,
       );
     }
 
@@ -177,7 +177,7 @@ export function validarMapeamento(
     const hintAtual = etapa.agent_stage_hint;
     if (erros.length === errosAntes && hintAtual && hintAtual !== passo && !mencionados.has(hintAtual)) {
       erros.push(
-        `A etapa «${etapa.name}» já representa «${rotuloDoPasso(hintAtual)}». Libere-a antes de usá-la para «${rotulo}».`,
+        `L’étape «${etapa.name}» représente déjà «${rotuloDoPasso(hintAtual)}». Libérez-la avant de l’utiliser pour «${rotulo}».`,
       );
     }
   }

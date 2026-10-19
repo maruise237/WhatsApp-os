@@ -112,7 +112,7 @@ describe("Sidebar agrupado", () => {
     const config = screen.getByRole("link", { name: /Paramètres/ });
     expect(config).toHaveAttribute("href", "/app/settings");
     // Fora da <nav> que rola.
-    const nav = screen.getByRole("navigation", { name: "Navegação principal" });
+    const nav = screen.getByRole("navigation", { name: "Navigation principale" });
     expect(nav.contains(config)).toBe(false);
   });
 

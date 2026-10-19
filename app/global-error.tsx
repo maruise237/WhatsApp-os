@@ -23,7 +23,7 @@ export default function GlobalError({
   const displayId = eventId ?? error.digest ?? "—";
 
   return (
-    <html lang="pt-BR">
+    <html lang="fr">
       <body
         style={{
           margin: 0,
@@ -53,7 +53,7 @@ export default function GlobalError({
             Algo deu errado
           </h1>
           <p style={{ color: "#57534e", margin: "0 0 1.5rem" }}>
-            Tente novamente em instantes. Se persistir, contate o suporte com o ID abaixo.
+            Réessayez dans quelques instants. Si le problème persiste, contactez le support avec l’identifiant ci-dessous.
           </p>
           <div
             style={{
@@ -101,7 +101,7 @@ export default function GlobalError({
                 cursor: "pointer",
               }}
             >
-              Tentar de novo
+              Réessayer
             </button>
           </div>
         </div>

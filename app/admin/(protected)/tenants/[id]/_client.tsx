@@ -29,7 +29,7 @@ export function TenantOverviewClient({ id }: TenantOverviewClientProps) {
   if (isError || !data?.data) {
     return (
       <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-10 text-center text-sm text-destructive">
-        Não foi possível carregar os dados do tenant. Tente recarregar a página.
+        Impossible de charger les données de l’organisation. Essayez de recharger la page.
       </div>
     );
   }

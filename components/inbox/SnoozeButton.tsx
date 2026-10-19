@@ -16,9 +16,9 @@ interface Props {
 }
 
 const DURATIONS: Array<{ hours: 1 | 3 | 24; label: string }> = [
-  { hours: 1, label: "Em 1 hora" },
-  { hours: 3, label: "Em 3 horas" },
-  { hours: 24, label: "Em 24 horas" },
+  { hours: 1, label: "Dans 1 heure" },
+  { hours: 3, label: "Dans 3 heures" },
+  { hours: 24, label: "Dans 24 heures" },
 ];
 
 function isSnoozeActive(snoozeUntil: string | null): boolean {
@@ -48,7 +48,7 @@ export function SnoozeButton({ conversationId, snoozeUntil, disabled }: Props) {
           <DropdownMenuItem
             onClick={() => cancel.mutate({ conversation_id: conversationId })}
           >
-            Cancelar lembrete
+            Annuler le rappel
           </DropdownMenuItem>
         ) : (
           DURATIONS.map((d) => (

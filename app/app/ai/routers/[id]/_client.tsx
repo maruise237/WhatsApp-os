@@ -145,10 +145,10 @@ export function RouterEditorClient({
     JSON.stringify(currentMembers) !== JSON.stringify(baseline.members);
 
   const memberErrors = draftMembers.map((m) => {
-    if (!m.agent_id) return "Escolha o agente que atende esta intenção.";
-    if (m.intent_name.trim().length === 0) return "Dê um nome curto para a intenção.";
+    if (!m.agent_id) return "Choisissez l’agent qui prend en charge cette intention.";
+    if (m.intent_name.trim().length === 0) return "Donnez un nom court à l’intention.";
     if (m.intent_description.trim().length === 0)
-      return "Descreva quando a IA deve escolher esta intenção.";
+      return "Décrivez quand l’IA doit choisir cette intention.";
     return null;
   });
   const duplicateNames = new Set(
@@ -186,7 +186,7 @@ export function RouterEditorClient({
 
   async function handleSave() {
     if (!isValid) {
-      toast.error("Resolva os campos destacados antes de salvar.");
+      toast.error("Corrigez les champs en surbrillance avant d’enregistrer.");
       return;
     }
     try {
@@ -249,7 +249,7 @@ export function RouterEditorClient({
         </div>
         {canManage && (
           <Button variant="ghost" size="sm" onClick={() => setDeleteOpen(true)} className="text-destructive">
-            <Trash /> Excluir roteador
+            <Trash /> Supprimer le routeur
           </Button>
         )}
       </div>
@@ -257,9 +257,9 @@ export function RouterEditorClient({
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="space-y-4">
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Identificação</h3>
+            <h3 className="text-sm font-medium">Identification</h3>
             <div className="space-y-1">
-              <Label htmlFor="router-name">Nome</Label>
+              <Label htmlFor="router-name">Nom</Label>
               <Input
                 id="router-name"
                 value={name}
@@ -269,15 +269,14 @@ export function RouterEditorClient({
               />
             </div>
             <div className="space-y-1">
-              <Label>Número de WhatsApp</Label>
+              <Label>Numéro WhatsApp</Label>
               <p className="rounded-md border border-border/60 px-3 py-2 text-sm text-muted-foreground">
                 {channel
                   ? `${channel.display_name}${channel.phone_number ? ` · ${channel.phone_number}` : ""}`
-                  : "Número removido"}
+                  : "Numéro supprimé"}
               </p>
               <p className="text-xs text-muted-foreground">
-                O número não pode ser trocado depois de criado — crie outro roteador para um
-                número diferente.
+                Le numéro ne peut pas être changé après la création — créez un autre routeur pour un autre numéro.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -288,15 +287,15 @@ export function RouterEditorClient({
                 disabled={!canManage}
               />
               <Label htmlFor="router-active">
-                {isActive ? "Ativo — está roteando as conversas deste número" : "Inativo — não roteia nada"}
+                {isActive ? "Actif — oriente les conversations de ce numéro" : "Inactif — n’oriente rien"}
               </Label>
             </div>
           </Card>
 
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Modelo que identifica a intenção</h3>
+            <h3 className="text-sm font-medium">Modèle qui identifie l’intention</h3>
             <div className="space-y-1">
-              <Label htmlFor="router-classifier">Modelo do classificador</Label>
+              <Label htmlFor="router-classifier">Modèle du classificateur</Label>
               <Select
                 value={classifier}
                 onValueChange={setClassifier}
@@ -306,27 +305,27 @@ export function RouterEditorClient({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={AUTO}>Automático — usa o provedor da organização</SelectItem>
+                  <SelectItem value={AUTO}>Automatique — utilise le fournisseur de l’organisation</SelectItem>
                   {classifierModels.map((m) => (
                     <SelectItem key={`${m.provider}::${m.model_id}`} value={`${m.provider}::${m.model_id}`}>
                       {m.display_name} · {m.provider}
-                      {m.origem === "plataforma" ? " (chave desta instalação)" : ""}
+                      {m.origem === "plataforma" ? "(clé de cette installation)" : ""}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
                 {classifierModels.length === 0
-                  ? "Nenhuma chave de IA utilizável nesta organização — cadastre uma em Agentes IA › Credenciais para poder escolher o modelo."
-                  : "Só aparecem modelos de provedores com chave cadastrada aqui. Se a conta do provedor estiver sem crédito, a identificação falha e tudo cai no fallback."}
+                  ? "Aucune clé d’IA utilisable dans cette organisation — enregistrez-en une dans Agents IA › Identifiants pour pouvoir choisir le modèle."
+                  : "Seuls les modèles des fournisseurs ayant une clé enregistrée ici apparaissent. Si le compte du fournisseur n’a plus de crédit, l’identification échoue et tout bascule vers l’agent de secours."}
               </p>
             </div>
           </Card>
 
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Se nenhuma intenção casar</h3>
+            <h3 className="text-sm font-medium">Si aucune intention ne correspond</h3>
             <div className="space-y-1">
-              <Label htmlFor="router-fallback">Agente de fallback</Label>
+              <Label htmlFor="router-fallback">Agent de secours</Label>
               <Select
                 value={fallbackAgentId || NONE}
                 onValueChange={(v) => setFallbackAgentId(v === NONE ? "" : v)}
@@ -336,7 +335,7 @@ export function RouterEditorClient({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={NONE}>Nenhum — responde com o atendimento padrão</SelectItem>
+                  <SelectItem value={NONE}>Aucun — répond avec le service par défaut</SelectItem>
                   {agents.map((a) => (
                     <SelectItem key={a.id} value={a.id}>
                       {a.name}
@@ -345,8 +344,7 @@ export function RouterEditorClient({
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Quando a IA não tem certeza do que o cliente quer, ela chama este agente em vez de
-                travar a conversa.
+                Quand l’IA n’est pas sûre de ce que veut le client, elle appelle cet agent au lieu de bloquer la conversation.
               </p>
             </div>
           </Card>
@@ -366,23 +364,21 @@ export function RouterEditorClient({
           <Card className="space-y-3 p-4">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3 className="text-sm font-medium">Intenções</h3>
+                <h3 className="text-sm font-medium">Intentions</h3>
                 <p className="text-xs text-muted-foreground">
-                  Cada intenção descreve uma situação e diz qual agente deve assumir a conversa
-                  quando o cliente quer aquilo.
+                  Chaque intention décrit une situation et indique quel agent doit prendre la conversation quand le client veut cela.
                 </p>
               </div>
               {canManage && (
                 <Button variant="outline" size="sm" onClick={addMember} className="shrink-0">
-                  <Plus /> Intenção
+                  <Plus /> Intention
                 </Button>
               )}
             </div>
 
             {draftMembers.length === 0 ? (
               <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
-                Nenhuma intenção ainda. Sem intenções, toda conversa cai direto no agente de
-                fallback (ou fica sem resposta automática, se você não escolher um).
+                Aucune intention pour le moment. Sans intentions, toute conversation va directement à l’agent de secours (ou reste sans réponse automatique, si vous n’en choisissez pas).
               </p>
             ) : (
               <ul className="flex flex-col gap-3">
@@ -406,7 +402,7 @@ export function RouterEditorClient({
           {canManage && (
             <div className="flex sm:justify-end">
               <Button onClick={handleSave} disabled={!dirty || !isValid || saving} className="w-full sm:w-auto">
-                {saving ? "Salvando…" : "Salvar"}
+                {saving ? "Salvando…" : "Enregistrer"}
               </Button>
             </div>
           )}
@@ -416,16 +412,14 @@ export function RouterEditorClient({
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir &ldquo;{router.name}&rdquo;?</AlertDialogTitle>
+            <AlertDialogTitle>Supprimer &ldquo;{router.name}&rdquo;?</AlertDialogTitle>
             <AlertDialogDescription>
-              O número volta a ser atendido pelos gatilhos normais dos agentes (sem roteamento
-              por intenção). As intenções deste roteador são apagadas junto. Não é possível
-              desfazer.
+              Le numéro est de nouveau pris en charge par les déclencheurs normaux des agents (sans orientation par intention). Les intentions de ce routeur sont supprimées avec lui. Action irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Excluir</AlertDialogAction>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -454,7 +448,7 @@ function IntentRow({
     <div className="space-y-2">
       <div className="flex items-center gap-2">
         <div className="flex-1 space-y-1">
-          <Label>Nome da intenção</Label>
+          <Label>Nom de l’intention</Label>
           <Input
             value={member.intent_name}
             onChange={(e) => onChange({ intent_name: e.target.value })}
@@ -465,10 +459,10 @@ function IntentRow({
           />
         </div>
         <div className="flex-1 space-y-1">
-          <Label>Agente que atende</Label>
+          <Label>Agent qui répond</Label>
           <Select value={member.agent_id || undefined} onValueChange={(v) => onChange({ agent_id: v })} disabled={disabled}>
             <SelectTrigger>
-              <SelectValue placeholder="Selecione o agente" />
+              <SelectValue placeholder="Sélectionnez l’agent" />
             </SelectTrigger>
             <SelectContent>
               {agents.map((a) => (
@@ -485,18 +479,18 @@ function IntentRow({
             size="icon"
             className="mt-5 shrink-0"
             onClick={onRemove}
-            aria-label="Remover intenção"
+            aria-label="Supprimer l’intention"
           >
             <Trash />
           </Button>
         )}
       </div>
       <div className="space-y-1">
-        <Label>Quando escolher esta intenção</Label>
+        <Label>Quand choisir cette intention</Label>
         <Textarea
           value={member.intent_description}
           onChange={(e) => onChange({ intent_description: e.target.value })}
-          placeholder="Escreva como explicaria para um atendente novo: em que situação o cliente cai aqui."
+          placeholder="Écrivez-le comme vous l’expliqueriez à un nouveau conseiller : dans quelle situation le client arrive ici."
           disabled={disabled}
           rows={2}
           maxLength={2000}
@@ -508,7 +502,7 @@ function IntentRow({
         disabled={disabled}
       />
       {duplicate ? (
-        <p className="text-xs text-destructive">Já existe outra intenção com este nome.</p>
+        <p className="text-xs text-destructive">Une autre intention porte déjà ce nom.</p>
       ) : error ? (
         <p className="text-xs text-destructive">{error}</p>
       ) : null}
@@ -540,7 +534,7 @@ function ExamplesInput({
 
   return (
     <div className="space-y-1">
-      <Label>Frases de exemplo (opcional)</Label>
+      <Label>Phrases d’exemple (facultatif)</Label>
       <div className="flex flex-wrap gap-1 rounded border border-border/60 p-2">
         {value.map((ex) => (
           <button
@@ -549,14 +543,14 @@ function ExamplesInput({
             onClick={() => !disabled && remove(ex)}
             className="group flex items-center gap-1 rounded bg-muted px-2 py-0.5 text-xs hover:bg-destructive/15"
             disabled={disabled}
-            aria-label={`Remover exemplo ${ex}`}
+            aria-label={`Supprimer l’exemple ${ex}`}
           >
             {ex}
             <span className="text-muted-foreground group-hover:text-destructive">×</span>
           </button>
         ))}
         {value.length === 0 ? (
-          <span className="text-xs text-muted-foreground">Sem frases de exemplo.</span>
+          <span className="text-xs text-muted-foreground">Aucune phrase d’exemple.</span>
         ) : null}
       </div>
       {!disabled && (
@@ -580,7 +574,7 @@ function ExamplesInput({
             onClick={() => add(draft)}
             disabled={draft.trim() === ""}
           >
-            Adicionar
+            Ajouter
           </button>
         </div>
       )}
@@ -617,23 +611,22 @@ function TestPanel({
   return (
     <Card className="space-y-3 p-4">
       <CardHeader className="p-0">
-        <CardTitle className="text-sm">Testar classificação</CardTitle>
+        <CardTitle className="text-sm">Tester la classification</CardTitle>
         <CardDescription>
-          Escreva uma frase como um cliente escreveria e veja qual intenção e qual agente o
-          roteador escolheria — sem afetar nenhuma conversa real.
+          Écrivez une phrase comme un client l’écrirait et voyez quelle intention et quel agent le routeur choisirait — sans affecter aucune vraie conversation.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 p-0">
         {!isActive && (
           <div className="flex items-start gap-2 rounded-md bg-accent-soft p-3 text-xs text-text-muted">
             <Info className="mt-0.5 shrink-0" aria-hidden />
-            <p>Ative o roteador para poder testar a classificação.</p>
+            <p>Activez le routeur pour pouvoir tester la classification.</p>
           </div>
         )}
         <Textarea
           value={message}
           onChange={(e) => onMessageChange(e.target.value)}
-          placeholder="Ex.: oi, quero saber o preço do plano premium"
+          placeholder="Ex. : bonjour, je voudrais connaître le prix de l’offre premium"
           rows={2}
           maxLength={4000}
           disabled={!canTest || !isActive}
@@ -644,28 +637,28 @@ function TestPanel({
           onClick={onTest}
           disabled={!canTest || !isActive || pending || !message.trim()}
         >
-          {pending ? "Testando…" : "Testar classificação"}
+          {pending ? "Testando…" : "Tester la classification"}
           {!pending && <ArrowRight />}
         </Button>
         {result && (
           <div className="rounded-md border border-border/60 p-3 text-sm">
             <p>
-              Intenção: <span className="font-medium">{result.intent_name ?? "nenhuma casou"}</span>
+              Intention : <span className="font-medium">{result.intent_name ?? "aucune ne correspond"}</span>
               {result.intent_name && (
                 <span className="ml-2 text-xs text-muted-foreground">
-                  confiança {(result.confidence * 100).toFixed(0)}%
+                  confiance {(result.confidence * 100).toFixed(0)}%
                 </span>
               )}
             </p>
             {belowThreshold && (
               <p className="text-xs text-amber-600">
-                Confiança {(result.confidence * 100).toFixed(0)}% — abaixo do mínimo de{" "}
-                {(result.min_confidence * 100).toFixed(0)}%, cairia no atendimento padrão em produção.
+                Confiance {(result.confidence * 100).toFixed(0)}% — sous le minimum de{" "}
+                {(result.min_confidence * 100).toFixed(0)}%, basculerait vers le service par défaut en production.
               </p>
             )}
             <p>
-              Agente que atenderia:{" "}
-              <span className="font-medium">{result.agent_name ?? "nenhum (sem fallback)"}</span>
+              Agent qui répondrait :{" "}
+              <span className="font-medium">{result.agent_name ?? "aucun (sans agent de secours)"}</span>
             </p>
           </div>
         )}

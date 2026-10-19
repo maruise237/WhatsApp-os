@@ -69,7 +69,7 @@ function LinhaDeContraste({ rotulo, tokens }: { rotulo: string; tokens: TokensDo
       <span className="text-text-muted">{rotulo}:</span>
       <span className="font-mono text-text">{par.razao.toFixed(1).replace(".", ",")}:1</span>
       <span className={par.passa ? "text-success-fg" : "text-error-fg"}>
-        {par.passa ? "passa em AA" : "abaixo do mínimo AA"}
+        {par.passa ? "conforme AA" : "sous le minimum AA"}
       </span>
     </li>
   );
@@ -80,10 +80,10 @@ function origemEmPortugues(origem: string, definidoNestaTela: boolean): string {
   // arquivo de instalação copiado para a tabela na primeira leitura. Chamar isso
   // de "definido nesta tela" faria a origem mentir logo na instalação nova.
   if (origem === "banco") {
-    return definidoNestaTela ? "definido nesta tela" : "veio do arquivo de instalação do servidor";
+    return definidoNestaTela ? "definido nesta tela" : "provient du fichier d’installation du serveur";
   }
-  if (origem === "env") return "veio do arquivo de instalação do servidor";
-  return "padrão do sistema";
+  if (origem === "env") return "provient du fichier d’installation du serveur";
+  return "valeur par défaut du système";
 }
 
 function LinhaDeOrigem({ campo, valor }: { campo: string; valor: string }) {
@@ -108,10 +108,10 @@ export function EstadoDaMarca({
     <section className="space-y-4" aria-labelledby="estado-da-marca">
       <div>
         <h2 id="estado-da-marca" className="text-base font-semibold tracking-tight text-text">
-          Como está agora
+          État actuel
         </h2>
         <p className="text-sm text-text-muted">
-          O que o sistema está usando, o que ele mediu e o que ele ajustou sozinho.
+          Ce que le système utilise, ce qu’il a mesuré et ce qu’il a ajusté tout seul.
         </p>
       </div>
 
@@ -123,10 +123,10 @@ export function EstadoDaMarca({
       {fallbackEm ? (
         <Card className="border-error bg-error-bg p-4">
           <p className="text-sm font-semibold text-error-fg">
-            A sua marca não está sendo aplicada.
+            Votre marque n’est pas appliquée.
           </p>
           <p className="mt-1 text-sm text-text">
-            Desde {fallbackEm} o sistema voltou a usar as cores padrão dele.
+            Desde {fallbackEm} le système est revenu à ses couleurs par défaut.
           </p>
           <ul className="mt-2 space-y-1">
             {motivosDoFallback(fallbackMotivo).map((aviso) => (
@@ -136,16 +136,16 @@ export function EstadoDaMarca({
             ))}
           </ul>
           <p className="mt-2 text-sm text-text-muted">
-            Salvar uma cor válida aqui apaga este alerta.
+            Enregistrer une couleur valide ici supprime cette alerte.
           </p>
         </Card>
       ) : null}
 
       <Card className="p-4">
-        <h3 className="text-sm font-medium text-text">De onde vem cada coisa</h3>
+        <h3 className="text-sm font-medium text-text">D’où vient chaque élément</h3>
         <div className="mt-2">
           <LinhaDeOrigem
-            campo="Nome do sistema"
+            campo="Nom du système"
             valor={origemEmPortugues(origens.nome, definidoNestaTela)}
           />
           <LinhaDeOrigem
@@ -158,31 +158,29 @@ export function EstadoDaMarca({
           />
         </div>
         <p className="mt-3 text-xs text-text-muted">
-          O logo ainda é trocado no arquivo de instalação do servidor. Esta tela mostra de onde
-          ele vem para que o valor não pareça ter sumido.
+          Le logo se change encore dans le fichier d’installation du serveur. Cet écran indique d’où il vient pour que la valeur ne semble pas avoir disparu.
         </p>
       </Card>
 
       {derivada ? (
         <Card className="p-4">
-          <h3 className="text-sm font-medium text-text">O texto em cima dos botões</h3>
+          <h3 className="text-sm font-medium text-text">Le texte sur les boutons</h3>
           <p className="mt-1 text-xs text-text-muted">
-            Quanto maior o número, mais fácil de ler. AA é o mínimo recomendado
-            internacionalmente para texto.
+            Plus le nombre est élevé, plus c’est lisible. AA est le minimum recommandé au niveau international pour le texte.
           </p>
           <ul className="mt-2 space-y-1 text-sm">
-            <LinhaDeContraste rotulo="No modo claro" tokens={derivada.claro} />
-            <LinhaDeContraste rotulo="No modo escuro" tokens={derivada.escuro} />
+            <LinhaDeContraste rotulo="En mode clair" tokens={derivada.claro} />
+            <LinhaDeContraste rotulo="En mode sombre" tokens={derivada.escuro} />
           </ul>
 
-          <h3 className="mt-5 text-sm font-medium text-text">O que o sistema ajustou</h3>
+          <h3 className="mt-5 text-sm font-medium text-text">Ce que le système a ajusté</h3>
           {/* O caso "nada mudou" NÃO diz "sua cor é usada exatamente como você
               escolheu": no modo escuro o produto usa um tom mais claro da
               escala por desenho, e a frase absoluta seria desmentida pela
               própria tira logo acima. */}
           {avisos.length === 0 ? (
             <p className="mt-1 text-sm text-text-muted">
-              Nada foi ajustado — a escala acima mostra onde a sua cor entra.
+              Rien n’a été ajusté — l’échelle ci-dessus montre où se situe votre couleur.
             </p>
           ) : (
             <ul className="mt-2 space-y-1.5">
@@ -196,8 +194,7 @@ export function EstadoDaMarca({
 
           {!seriaAplicada ? (
             <p className="mt-3 text-sm text-error-fg">
-              Do jeito que está, esta cor não chegaria à tela: o sistema continuaria com as cores
-              padrão dele.
+              En l’état, cette couleur n’arriverait pas à l’écran : le système garderait ses couleurs par défaut.
             </p>
           ) : null}
         </Card>

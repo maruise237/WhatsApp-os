@@ -261,7 +261,7 @@ export function ContactPickerDialog({
 
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => close(false)} disabled={sending}>
-            Cancelar
+            Annuler
           </Button>
         </DialogFooter>
       </DialogContent>

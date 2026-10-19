@@ -43,7 +43,7 @@ export function DashboardClient() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Visão cross-tenant — atualiza a cada 30 segundos.
+          Vue multi-organisations — actualisée toutes les 30 secondes.
         </p>
       </div>
 

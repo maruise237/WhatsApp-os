@@ -77,7 +77,7 @@ export function InviteTeamForm() {
           value={emailsRaw}
           onChange={(e) => setEmailsRaw(e.target.value)}
           rows={6}
-          placeholder={"alice@empresa.com\nbob@empresa.com"}
+          placeholder={"alice@entreprise.com bob@entreprise.com"}
         />
       </div>
 

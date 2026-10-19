@@ -82,7 +82,7 @@ export function useUpdateBudget() {
     },
     onSuccess: (data) => {
       qc.setQueryData(aiBudgetQueryKey, data);
-      toast.success("Orçamento atualizado");
+      toast.success("Budget mis à jour");
     },
   });
 }

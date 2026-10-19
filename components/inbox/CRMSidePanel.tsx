@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -180,14 +180,14 @@ function formatMoney(cents: number | null, currency: string | null): string {
   if (cents == null) return "—";
   const cur = currency ?? "BRL";
   try {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: cur }).format(cents / 100);
+    return new Intl.NumberFormat("fr-FR", { style: "currency", currency: cur }).format(cents / 100);
   } catch {
     return `${(cents / 100).toFixed(2)} ${cur}`;
   }
 }
 
 function shortDate(iso: string): string {
-  return format(new Date(iso), "dd/MM/yy HH:mm", { locale: ptBR });
+  return format(new Date(iso), "dd/MM/yy HH:mm", { locale: fr });
 }
 
 /**
@@ -470,7 +470,7 @@ export function CRMSidePanel({ conversation }: Props) {
           </ul>
         ) : (
           <SemLista
-            vazio="Nenhuma demanda aberta."
+            vazio="Aucune demande ouverte."
             erro={erro}
             onTentarDeNovo={() => setTentativa((n) => n + 1)}
           />
@@ -503,7 +503,7 @@ export function CRMSidePanel({ conversation }: Props) {
           </ul>
         ) : (
           <SemLista
-            vazio="Sem leads."
+            vazio="Aucun lead."
             erro={erro}
             onTentarDeNovo={() => setTentativa((n) => n + 1)}
           />
@@ -539,7 +539,7 @@ export function CRMSidePanel({ conversation }: Props) {
           </ul>
         ) : (
           <SemLista
-            vazio="Sem pedidos."
+            vazio="Aucune commande."
             erro={erro}
             onTentarDeNovo={() => setTentativa((n) => n + 1)}
           />
@@ -586,7 +586,7 @@ export function CRMSidePanel({ conversation }: Props) {
           </ul>
         ) : (
           <SemLista
-            vazio="Sem atividade."
+            vazio="Aucune activité."
             erro={erro}
             onTentarDeNovo={() => setTentativa((n) => n + 1)}
           />

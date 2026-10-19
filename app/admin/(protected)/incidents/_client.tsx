@@ -26,8 +26,8 @@ const STATUS_OPTIONS: { value: IncidentStatus; label: string }[] = [
 ];
 
 const SEVERITY_OPTIONS: { value: IncidentSeverity; label: string }[] = [
-  { value: "critical", label: "Crítico" },
-  { value: "warning", label: "Atenção" },
+  { value: "critical", label: "Critique" },
+  { value: "warning", label: "Attention" },
   { value: "info", label: "Info" },
 ];
 
@@ -65,7 +65,7 @@ export function IncidentsClient() {
           }
         >
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Status" />
+            <SelectValue placeholder="Statut" />
           </SelectTrigger>
           <SelectContent>
             {STATUS_OPTIONS.map((opt) => (
@@ -89,7 +89,7 @@ export function IncidentsClient() {
             <SelectValue placeholder="Severidade" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todas severidades</SelectItem>
+            <SelectItem value="all">Toutes les gravités</SelectItem>
             {SEVERITY_OPTIONS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
@@ -104,7 +104,7 @@ export function IncidentsClient() {
             size="sm"
             onClick={() => setFilters((f) => ({ status: f.status }))}
           >
-            Limpar filtros
+            Effacer les filtres
           </Button>
         )}
       </div>

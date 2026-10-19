@@ -34,11 +34,11 @@ export function InviteForm() {
       .filter(Boolean);
     const unique = Array.from(new Set(emails));
     if (unique.length === 0) {
-      toast.error("Adicione ao menos um email.");
+      toast.error("Ajoutez au moins un e-mail.");
       return;
     }
     if (unique.length > 20) {
-      toast.error("Máximo 20 emails por convite.");
+      toast.error("20 e-mails maximum par invitation.");
       return;
     }
     try {
@@ -65,7 +65,7 @@ export function InviteForm() {
             value={emailsRaw}
             onChange={(e) => setEmailsRaw(e.target.value)}
             rows={8}
-            placeholder={"alice@empresa.com\nbob@empresa.com"}
+            placeholder={"alice@entreprise.com bob@entreprise.com"}
           />
         </div>
         <div className="space-y-2">
@@ -84,7 +84,7 @@ export function InviteForm() {
           </Select>
         </div>
         <Button type="submit" disabled={invite.isPending}>
-          {invite.isPending ? "Enviando…" : "Enviar convites"}
+          {invite.isPending ? "Enviando…" : "Envoyer les invitations"}
         </Button>
       </form>
 
@@ -101,7 +101,7 @@ export function InviteForm() {
                       <div className="text-xs text-muted-foreground">
                         {s.email_dispatched
                           ? "Email enviado."
-                          : "Resend não configurado — link copiável abaixo (DEV)."}
+                          : "Resend non configuré — lien copiable ci-dessous (DEV)."}
                       </div>
                       {!s.email_dispatched ? (
                         <code className="mt-1 block break-all text-xs">{s.accept_url}</code>
@@ -129,7 +129,7 @@ export function InviteForm() {
           </>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Resultados aparecerão aqui após o envio.
+            Les résultats apparaîtront ici après l’envoi.
           </p>
         )}
       </div>

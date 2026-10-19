@@ -33,7 +33,7 @@ function formatDuration(seconds: number | null): string {
 }
 
 function attendantLabel(a: AttendantMetric): string {
-  return a.name ?? a.email ?? `Atendente ${a.user_id.slice(0, 8)}`;
+  return a.name ?? a.email ?? `Conseiller ${a.user_id.slice(0, 8)}`;
 }
 
 interface Props {
@@ -48,8 +48,8 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
   // Opções do filtro: só manager+ (a rota /team é manager+). Agent nem vê o filtro.
   const team = useTeamMembers({ enabled: canCompare });
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">Carregando…</p>;
-  if (isError || !data) return <p className="text-sm text-destructive">Erro ao carregar métricas.</p>;
+  if (isLoading) return <p className="text-sm text-muted-foreground">Chargement…</p>;
+  if (isError || !data) return <p className="text-sm text-destructive">Erreur lors du chargement des métriques.</p>;
 
   const metrics = data.data;
   const funnelTotal = metrics.funnel.reduce((acc, s) => acc + s.count, 0);
@@ -59,13 +59,13 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
     <div className="flex flex-col gap-6">
       {canCompare ? (
         <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">Atendente</span>
+          <span className="text-sm text-muted-foreground">Conseiller</span>
           <Select value={owner} onValueChange={setOwner}>
             <SelectTrigger className="w-64">
-              <SelectValue placeholder="Todos os atendentes" />
+              <SelectValue placeholder="Tous les conseillers" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL}>Todos os atendentes</SelectItem>
+              <SelectItem value={ALL}>Tous les conseillers</SelectItem>
               {(team.data?.data ?? [])
                 .filter((m) => m.role !== "viewer")
                 .map((m) => (
@@ -88,13 +88,13 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            Funil {selectedOwner ? "do atendente" : ""} · {funnelTotal}{" "}
+            Entonnoir {selectedOwner ? "du conseiller" : ""} · {funnelTotal}{" "}
             {funnelTotal === 1 ? "aberto" : "abertos"}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           {metrics.funnel.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Nenhuma etapa configurada.</p>
+            <p className="text-sm text-muted-foreground">Aucune étape configurée.</p>
           ) : (
             metrics.funnel.map((s) => (
               <div key={s.stage_id} className="flex items-center gap-3">
@@ -115,23 +115,23 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            {canCompare ? "Performance por atendente" : "Sua performance"}
+            {canCompare ? "Performance por atendente" : "Votre performance"}
           </CardTitle>
         </CardHeader>
         <CardContent>
           {metrics.attendants.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              Sem atividade no período (ganhos/perdidos, conversas ou respostas).
+              Aucune activité sur la période (gagnés/perdus, conversations ou réponses).
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Atendente</TableHead>
+                  <TableHead>Conseiller</TableHead>
                   <TableHead className="text-right">Ganhos</TableHead>
                   <TableHead className="text-right">Perdidos</TableHead>
-                  <TableHead className="text-right">Conversas</TableHead>
-                  <TableHead className="text-right">1ª resposta (média)</TableHead>
+                  <TableHead className="text-right">Conversations</TableHead>
+                  <TableHead className="text-right">1re réponse (moyenne)</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

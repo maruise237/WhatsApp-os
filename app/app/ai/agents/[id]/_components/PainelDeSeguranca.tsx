@@ -143,7 +143,7 @@ export function PainelDeSeguranca() {
       <Card className="space-y-2 p-4">
         <h3 className="text-sm font-medium">{t("Antes de cada mensagem sair")}</h3>
         <p className="text-xs text-muted-foreground">
-          O assistente escreve, e o sistema confere. {t("São")} {CONFERENCIAS_DE_SAIDA.length}{" "}
+          L’assistant rédige, et le système vérifie. {t("São")} {CONFERENCIAS_DE_SAIDA.length}{" "}
           {t("verificações")},{" "}
           {t(
             "nesta ordem — a primeira que barra interrompe as seguintes, e o assistente recebe de volta o motivo para reescrever.",

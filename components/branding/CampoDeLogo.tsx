@@ -207,7 +207,7 @@ export function CampoDeLogo({
       | { error?: { code?: string; message?: string } }
       | null;
     const codigo = corpo?.error?.code ?? "";
-    return ERRO_EM_PORTUGUES[codigo] ?? corpo?.error?.message ?? "Não consegui trocar o logo agora.";
+    return ERRO_EM_PORTUGUES[codigo] ?? corpo?.error?.message ?? "Impossible de changer le logo pour le moment.";
   }
 
   async function enviar(arquivo: File) {
@@ -274,14 +274,12 @@ export function CampoDeLogo({
           />
           {logoGravado ? (
             <Button type="button" variant="outline" onClick={() => void remover()} disabled={enviando}>
-              Remover
+              Supprimer
             </Button>
           ) : null}
         </div>
         <p className="text-xs text-text-muted">
-          PNG ou JPG, até {Math.round(TAMANHO_MAXIMO_DO_LOGO / 1024)} KB. Prefira fundo
-          transparente. SVG não é aceito: ele pode executar código quando aberto direto pelo
-          endereço da imagem.
+          PNG ou JPG, jusqu’à {Math.round(TAMANHO_MAXIMO_DO_LOGO / 1024)} Ko. Préférez un fond transparent. Le SVG n’est pas accepté : il peut exécuter du code lorsqu’il est ouvert directement via l’adresse de l’image.
         </p>
       </div>
 
@@ -293,8 +291,8 @@ export function CampoDeLogo({
             subir, até o refresh chegar (ou para sempre, quando ele é abortado).
           */}
           {logoGravado
-            ? "Como o logo aparece nas duas aparências do sistema:"
-            : `Sem logo próprio, o sistema usa o logo ${origemDoHerdado}. Assim ele aparece:`}
+            ? "Comment le logo apparaît dans les deux apparences du système :"
+            : `Sans logo propre, le système utilise le logo ${origemDoHerdado}. Voici comment il apparaît :`}
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           {(

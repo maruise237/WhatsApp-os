@@ -105,7 +105,7 @@ export function AudioPlayer({ messageId, isOutbound }: Props) {
         <input
           type="range"
           aria-label={t("Progresso do áudio")}
-          aria-valuetext={`${fmt(current)} de ${fmt(safeDuration)}`}
+          aria-valuetext={`${fmt(current)} sur ${fmt(safeDuration)}`}
           min="0"
           max={String(safeDuration || 1)}
           step="0.1"

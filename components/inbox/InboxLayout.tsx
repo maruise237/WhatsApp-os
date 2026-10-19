@@ -242,14 +242,14 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
   const motivoDaJanela =
     janela.tipo === "fechada"
       ? janela.fechadaHaMs === null
-        ? "O cliente ainda não escreveu — a janela de 24h nunca abriu. Só um modelo aprovado sai daqui."
-        : `A janela de 24h fechou há ${formatarDecorrido(janela.fechadaHaMs)}. Só um modelo aprovado sai daqui — texto livre é recusado pela plataforma.`
+        ? "Le client n’a pas encore écrit — la fenêtre de 24 h ne s’est jamais ouverte. Seul un modèle approuvé peut partir d’ici."
+        : `La fenêtre de 24 h s’est fermée il y a ${formatarDecorrido(janela.fechadaHaMs)}. Seul un modèle approuvé peut partir d’ici — le texte libre est refusé par la plateforme.`
       : null;
 
   const blockedReason = selectedConversation?.contacts?.is_blocked
-    ? "Contato bloqueado — envio de mensagens desabilitado."
+    ? "Contact bloqué — envoi de messages désactivé."
     : selectedConversation?.contacts?.is_anonymized
-      ? "Contato anonimizado — não é possível enviar mensagens."
+      ? "Contact anonymisé — impossible d’envoyer des messages."
       : null;
 
   // Altura da grade: a conta desconta TUDO que fica acima e abaixo dela.
@@ -380,7 +380,7 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
               onClick={() => handleSelect(null)}
             >
               <CaretLeft size={16} />
-              Conversas
+              Conversations
             </Button>
             <div className="flex-1" />
             {selectedConversation && (
@@ -392,7 +392,7 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[min(22rem,90vw)] overflow-y-auto p-0">
-                  <SheetTitle className="sr-only">Ficha do contato</SheetTitle>
+                  <SheetTitle className="sr-only">Fiche du contact</SheetTitle>
                   <CRMSidePanel conversation={selectedConversation} />
                 </SheetContent>
               </Sheet>
@@ -427,11 +427,11 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
           </>
         ) : selectionNotFound ? (
           <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
-            Conversa não encontrada ou fora do seu acesso.
+            Conversation introuvable ou hors de votre accès.
           </div>
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Selecione uma conversa
+            Sélectionnez une conversation
           </div>
         )}
       </div>

@@ -24,7 +24,7 @@ const TYPO_FONTS: Record<TypoId, { display: string; body: string }> = {
 };
 
 const SAMPLE_PROSE =
-  "Pedido #12.443 enviado às 14h32 — cliente respondeu pelo WhatsApp confirmando o endereço de entrega. A IA já sugeriu a próxima ação: pedir comprovante de pagamento via Pix.";
+  "Commande n° 12 443 expédiée à 14h32 — le client a répondu sur WhatsApp pour confirmer l’adresse de livraison. L’IA a déjà suggéré l’action suivante : demander le reçu de paiement Mobile Money.";
 
 function PairBlock({ id }: { id: TypoId }) {
   const v = useVariant();
@@ -55,13 +55,13 @@ function PairBlock({ id }: { id: TypoId }) {
 
       <div className="ds-pair-preview" style={{ fontFamily: fonts.body }}>
         <div style={{ fontFamily: fonts.display, fontWeight: 700, fontSize: 56, lineHeight: 1.05, letterSpacing: "-0.03em" }}>
-          Atendimento que escala.
+          Un service client qui passe à l’échelle.
         </div>
         <div style={{ fontFamily: fonts.display, fontWeight: 600, fontSize: 36, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-          H2 · Inbox de hoje
+          H2 · Boîte de réception du jour
         </div>
-        <div style={{ fontFamily: fonts.display, fontWeight: 600, fontSize: 24 }}>H3 · Pedido em aberto</div>
-        <div style={{ fontFamily: fonts.display, fontWeight: 500, fontSize: 18 }}>H4 · Conversa #482</div>
+        <div style={{ fontFamily: fonts.display, fontWeight: 600, fontSize: 24 }}>H3 · Commande en cours</div>
+        <div style={{ fontFamily: fonts.display, fontWeight: 500, fontSize: 18 }}>H4 · Conversation n° 482</div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 6 }}>
           <div>
@@ -71,8 +71,7 @@ function PairBlock({ id }: { id: TypoId }) {
           <div>
             <div className="ds-key" style={{ marginBottom: 4 }}>Body · italic + bold</div>
             <p style={{ fontFamily: fonts.body, fontSize: 15, lineHeight: 1.55 }}>
-              <strong>Maria Silva</strong> respondeu <em>&ldquo;já paguei via Pix&rdquo;</em> às 14h32.
-              Aguardando comprovante automático.
+              <strong>Maria Silva</strong> respondeu <em>&ldquo;j’ai déjà payé par Mobile Money&rdquo;</em> à 14h32. En attente du reçu automatique.
             </p>
           </div>
         </div>
@@ -89,7 +88,7 @@ function PairBlock({ id }: { id: TypoId }) {
           <div>
             <div className="ds-key" style={{ marginBottom: 4 }}>Numerais proporcionais (texto)</div>
             <div style={{ fontFamily: fonts.body, fontVariantNumeric: "proportional-nums", fontSize: 15 }}>
-              <div>1.234 conversas hoje</div>
+              <div>1 234 conversations aujourd’hui</div>
               <div>98% SLA cumprido</div>
               <div>14h32 · 16h05 · 18h11</div>
             </div>
@@ -121,9 +120,7 @@ export function SectionTypography() {
     <div className="ds-section">
       <h2 className="ds-display">Tipografia</h2>
       <p className="ds-lede">
-        Quatro pareamentos avaliados. Critério: legibilidade em 8h-shifts, suporte a numerais tabulares,
-        peso extremo disponível, italic real (não slanted). Inter / Geist / Space Grotesk foram banidos
-        por saturação em training data.
+        Quatre associations évaluées. Critères : lisibilité sur des journées de 8 h, chiffres tabulaires, graisses extrêmes disponibles, vraie italique (pas inclinée). Inter / Geist / Space Grotesk ont été écartées car surreprésentées dans les données d’entraînement.
       </p>
 
       <PairBlock id="bricolage-jakarta" />

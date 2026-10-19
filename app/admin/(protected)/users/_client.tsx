@@ -68,22 +68,22 @@ export function UsersClient() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Usuários</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Utilisateurs</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {isLoading
             ? "Carregando..."
-            : `${total} usuário${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
+            : `${total} utilisateur${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
         </p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
         <Input
-          placeholder="Buscar por email ou nome..."
+          placeholder="Rechercher par e-mail ou nom..."
           value={inputValue}
           onChange={(e) => handleSearch(e.target.value)}
           className="sm:w-72"
-          aria-label="Buscar usuários"
+          aria-label="Rechercher des utilisateurs"
         />
 
         <Select
@@ -94,7 +94,7 @@ export function UsersClient() {
             <SelectValue placeholder="Tenant" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos os tenants</SelectItem>
+            <SelectItem value="all">Toutes les organisations</SelectItem>
             {tenants.map((t) => (
               <SelectItem key={t.id} value={t.id}>
                 {t.display_name}
@@ -108,10 +108,10 @@ export function UsersClient() {
             <SelectValue placeholder="Role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos os roles</SelectItem>
+            <SelectItem value="all">Tous les rôles</SelectItem>
             <SelectItem value="admin">Admin</SelectItem>
             <SelectItem value="manager">Manager</SelectItem>
-            <SelectItem value="agent">Agente</SelectItem>
+            <SelectItem value="agent">Agent</SelectItem>
             <SelectItem value="viewer">Viewer</SelectItem>
           </SelectContent>
         </Select>

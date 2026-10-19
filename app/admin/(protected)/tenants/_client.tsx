@@ -32,7 +32,7 @@ export function TenantsClient() {
         <Button asChild size="sm" className="shrink-0">
           <Link href="/admin/tenants/new">
             <Plus size={16} aria-hidden />
-            Novo tenant
+            Nouvelle organisation
           </Link>
         </Button>
       </div>

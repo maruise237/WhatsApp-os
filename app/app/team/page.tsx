@@ -19,9 +19,9 @@ export default async function TeamPage() {
     <div className="flex h-full flex-col gap-6 p-6">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight">Equipe</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Équipe</h1>
           <p className="text-sm text-muted-foreground">
-            Gestão de membros, roles e atendimento do tenant.
+            Gestion des membres, des rôles et de l’assistance de l’organisation.
           </p>
         </div>
         {isAdmin ? (
@@ -34,7 +34,7 @@ export default async function TeamPage() {
       <Tabs defaultValue="members" className="flex flex-1 flex-col">
         <TabsList>
           <TabsTrigger value="members">Membros</TabsTrigger>
-          <TabsTrigger value="attendants">Atendimento</TabsTrigger>
+          <TabsTrigger value="attendants">Assistance</TabsTrigger>
         </TabsList>
         <TabsContent value="members" className="mt-4">
           <TeamMembersClient currentUserId={user.id} canManage={isAdmin} />
@@ -44,7 +44,7 @@ export default async function TeamPage() {
             <AttendantsClient canManage={isManager} />
           ) : (
             <p className="text-sm text-muted-foreground">
-              A gestão de atendimento está disponível para gerentes e administradores.
+              La gestion de l’assistance est disponible pour les managers et les administrateurs.
             </p>
           )}
         </TabsContent>

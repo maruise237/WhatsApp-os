@@ -41,7 +41,7 @@ export function SecurityClient({
         setCodes(r.recovery_codes);
         toast.success(t("Novos códigos gerados."));
       } else {
-        toast.error(`Erro: ${r.error}`);
+        toast.error(`Erreur : ${r.error}`);
       }
     });
   }

@@ -64,7 +64,7 @@ export function useReindexSource(agentId: string) {
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Reindexação enfileirada — atualizando em segundo plano.");
+      toast.success("Réindexation en file — mise à jour en arrière-plan.");
     },
     onError: (err) => {
       showApiError(err);

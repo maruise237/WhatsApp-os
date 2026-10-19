@@ -1,4 +1,5 @@
 import { NavHub } from "@/components/shell/NavHub";
+import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +30,9 @@ export default async function SettingsHubPage() {
       group="organizacao"
       isPlatformAdmin={user.is_platform_admin}
       role={activeOrg?.role ?? null}
-      title="Configurações"
-      subtitle="Sua conta, os dados da empresa e quem tem acesso ao quê."
+      idioma={normalizarIdioma(user.locale)}
+      title="Paramètres"
+      subtitle="Votre compte, les données de l’entreprise et qui a accès à quoi."
     />
   );
 }

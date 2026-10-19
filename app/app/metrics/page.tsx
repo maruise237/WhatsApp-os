@@ -17,8 +17,8 @@ export default async function MetricsPage() {
         <h1 className="text-2xl font-semibold tracking-tight">Desempenho</h1>
         <p className="text-sm text-muted-foreground">
           {canCompare
-            ? "Atrito, funil e performance por atendente nos últimos 30 dias."
-            : "Atrito, seu funil e sua performance nos últimos 30 dias."}
+            ? "Friction, entonnoir et performance par conseiller sur les 30 derniers jours."
+            : "La friction, votre entonnoir et votre performance sur les 30 derniers jours."}
         </p>
       </header>
 

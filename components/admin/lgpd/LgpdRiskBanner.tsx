@@ -33,15 +33,14 @@ export function LgpdRiskBanner({ requests }: LgpdRiskBannerProps) {
         />
         <span>
           <strong>{count}</strong>{" "}
-          {count === 1 ? "solicitação vencendo" : "solicitações vencendo"} em menos de 24h
-          ou já vencida{count !== 1 ? "s" : ""} — ação imediata requerida.
+          {count === 1 ? "demande arrivant à échéance" : "demandes arrivant à échéance"} dans moins de 24 h ou déjà échue{count !== 1 ? "s" : ""} — action immédiate requise.
         </span>
       </div>
       <Link
         href="/admin/lgpd?risk_level=expired"
         className="shrink-0 text-xs font-medium underline underline-offset-2 hover:opacity-80"
       >
-        Ver detalhes
+        Voir les détails
       </Link>
     </div>
   );

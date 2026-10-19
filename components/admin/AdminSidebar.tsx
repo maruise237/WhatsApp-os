@@ -73,7 +73,7 @@ export function AdminSidebar({ userEmail, variant = "desktop" }: AdminSidebarPro
           <span className="text-sm font-semibold tracking-tight">Admin Plataforma</span>
         </div>
       </div>
-      <nav className="flex-1 space-y-1 overflow-y-auto p-2" aria-label="Navegação plataforma">
+      <nav className="flex-1 space-y-1 overflow-y-auto p-2" aria-label="Navigation plateforme">
         {NAV_ITEMS.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
@@ -102,7 +102,7 @@ export function AdminSidebar({ userEmail, variant = "desktop" }: AdminSidebarPro
           className="flex items-center gap-2 rounded-md px-2 py-1.5 text-xs text-muted-foreground hover:bg-accent/50 hover:text-foreground"
         >
           <ArrowRight size={14} aria-hidden />
-          <span>Voltar pra app</span>
+          <span>Retour à l’app</span>
         </Link>
         <p className="truncate px-2 text-xs text-muted-foreground" title={userEmail}>
           {userEmail}

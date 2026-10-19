@@ -191,7 +191,7 @@ describe("diálogo de exclusão diz a verdade antes do clique", () => {
       expect(getMock).toHaveBeenCalledWith("/api/v1/channel-sessions/canal-1?impact=1"),
     );
     expect(
-      await screen.findByText("Reste dans l’Inbox : 12 conversations e 340 messages."),
+      await screen.findByText("Reste dans l’Inbox : 12 conversations et 340 messages."),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Reste enregistré, mais sans numéro — il cesse de répondre : 1 routeur IA."),

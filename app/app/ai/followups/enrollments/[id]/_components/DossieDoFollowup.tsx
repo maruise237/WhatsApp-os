@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { format, formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -53,14 +53,14 @@ const CANCELAVEL = new Set(["active", "waiting_reply", "paused_handoff", "paused
 function absoluta(iso: string | null): string {
   if (!iso) return "—";
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "—" : format(d, "dd/MM/yyyy HH:mm", { locale: ptBR });
+  return Number.isNaN(d.getTime()) ? "—" : format(d, "dd/MM/yyyy HH:mm", { locale: fr });
 }
 
 function relativa(iso: string | null): string | null {
   if (!iso) return null;
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
-  return formatDistanceToNowStrict(d, { addSuffix: true, locale: ptBR });
+  return formatDistanceToNowStrict(d, { addSuffix: true, locale: fr });
 }
 
 /** O valor que o `<input type="datetime-local">` entende, no fuso de quem olha. */
@@ -102,7 +102,7 @@ function LinhaDoTempo({
   if (eventos.length === 0) {
     return (
       <p className="py-4 text-sm text-text-muted" data-testid="dossie-timeline-vazia">
-        Este follow-up ainda não deu nenhum passo.
+        Cette relance n’a encore fait aucune étape.
       </p>
     );
   }
@@ -111,7 +111,7 @@ function LinhaDoTempo({
     <>
       {truncado && (
         <p className="pb-2 text-xs text-warning-fg">
-          Mostrando os primeiros passos — este follow-up tem histórico maior que o desta tela.
+          Affichage des premières étapes — cette relance a un historique plus long que celui de cet écran.
         </p>
       )}
       <ul className="border-l border-border pl-3" data-testid="dossie-timeline">
@@ -157,7 +157,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
 
 
   if (isLoading) {
-    return <p className="p-6 text-sm text-text-muted">Carregando o follow-up…</p>;
+    return <p className="p-6 text-sm text-text-muted">Chargement de la relance…</p>;
   }
   // Erro NÃO vira "não existe": um follow-up que falhou ao carregar e um que
   // sumiu pedem ações opostas de quem está olhando.
@@ -165,10 +165,10 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
     return (
       <div className="p-6">
         <p className="text-sm text-warning-fg">
-          Não consegui carregar este follow-up. Recarregue a página; se persistir, ele pode ter sido removido.
+          Impossible de charger cette relance. Rechargez la page ; si le problème persiste, elle a peut-être été supprimée.
         </p>
         <Link href="/app/ai/followups" className="mt-3 inline-block text-sm underline">
-          Voltar para a fila
+          Retour à la file
         </Link>
       </div>
     );
@@ -194,7 +194,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
           href="/app/ai/followups"
           className="inline-flex w-fit items-center gap-1 text-sm text-text-muted hover:text-text"
         >
-          <CaretLeft size={14} aria-hidden /> Fila de follow-ups
+          <CaretLeft size={14} aria-hidden /> File des relances
         </Link>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-semibold tracking-tight">{data.contact.name}</h1>
@@ -204,14 +204,14 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <Campo rotulo="Fluxo">{data.flow.name ?? "Fluxo removido"}</Campo>
-          <Campo rotulo="Agente">{data.agent_name ?? "Nenhum agente fixado"}</Campo>
-          <Campo rotulo="Começou">{absoluta(data.started_at)}</Campo>
+          <Campo rotulo="Agent">{data.agent_name ?? "Aucun agent assigné"}</Campo>
+          <Campo rotulo="Début">{absoluta(data.started_at)}</Campo>
           <Campo rotulo="Passos dados">{data.steps_taken}</Campo>
         </div>
       </header>
 
       <section className="rounded-md border border-border p-4" data-testid="dossie-onde-esta">
-        <h2 className="mb-2 text-sm font-medium">Onde está agora</h2>
+        <h2 className="mb-2 text-sm font-medium">Où elle en est</h2>
         <div className="flex flex-col gap-1">
           <p className="text-sm text-text">
             {data.no_atual ? (
@@ -225,32 +225,31 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
               // O passo saiu do grafo pinado: dizer o id EXPLICITAMENTE é o que
               // permite alguém investigar; esconder deixaria a tela muda.
               <span className="text-text-muted">
-                passo {data.current_node_id} — não existe mais na versão publicada deste fluxo
+                passo {data.current_node_id} — n’existe plus dans la version publiée de ce flux
               </span>
             )}
           </p>
           <p className="flex items-center gap-1.5 text-sm text-text-muted" data-testid="dossie-proximo-passo">
             <Clock size={14} aria-hidden />
             {data.next_eval_at
-              ? `Volta a andar ${relativa(data.next_eval_at)} (${absoluta(data.next_eval_at)})`
+              ? `Reprend ${relativa(data.next_eval_at)} (${absoluta(data.next_eval_at)})`
               : data.status === "paused_manual"
-                ? "Parado até alguém retomar"
+                ? "En pause jusqu’à ce que quelqu’un la relance"
                 : data.completed_at
-                  ? `Encerrado em ${absoluta(data.completed_at)}`
-                  : "Sem próximo passo agendado"}
+                  ? `Terminée le ${absoluta(data.completed_at)}`
+                  : "Aucune prochaine étape planifiée"}
           </p>
           {data.outcome && <p className="text-sm text-text-muted">Desfecho: {data.outcome}</p>}
           {data.cancel_reason && <p className="text-sm text-text-muted">Motivo: {data.cancel_reason}</p>}
           {data.last_error && (
             <p className="flex items-center gap-1.5 text-sm text-warning-fg">
-              <Warning size={14} aria-hidden /> Última falha: {data.last_error} (tentativa {data.attempts} de{" "}
+              <Warning size={14} aria-hidden /> Dernier échec : {data.last_error} (tentativa {data.attempts} de{" "}
               {data.max_attempts})
             </p>
           )}
           {motorOcupado && (
             <p className="text-xs text-text-muted" data-testid="dossie-motor-ocupado">
-              O automático está executando este follow-up agora — as ações abaixo podem ser recusadas por
-              alguns instantes.
+              L’automatisme exécute cette relance en ce moment — les actions ci-dessous peuvent être refusées pendant quelques instants.
             </p>
           )}
         </div>
@@ -266,7 +265,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
               disabled={intervir.isPending}
               onClick={() => intervir.mutate({ id, acao: "pause" })}
             >
-              <Pause size={14} aria-hidden className="mr-1" /> Pausar
+              <Pause size={14} aria-hidden className="mr-1" /> Mettre en pause
             </Button>
           )}
           {podeRetomar && (
@@ -277,7 +276,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
               disabled={intervir.isPending}
               onClick={() => intervir.mutate({ id, acao: "resume" })}
             >
-              <Play size={14} aria-hidden className="mr-1" /> Retomar
+              <Play size={14} aria-hidden className="mr-1" /> Reprendre
             </Button>
           )}
           {podeMexerNoRelogio && (
@@ -320,7 +319,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
               disabled={intervir.isPending}
               onClick={() => (data.saidas.length === 1 ? pular() : setPulando(true))}
             >
-              <SkipForward size={14} aria-hidden className="mr-1" /> Pular este passo
+              <SkipForward size={14} aria-hidden className="mr-1" /> Passer cette étape
             </Button>
           )}
           {/*
@@ -336,7 +335,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
               disabled={cancelar.isPending}
               onClick={() => setCancelando(true)}
             >
-              <Trash size={14} aria-hidden className="mr-1 text-error" /> Cancelar follow-up
+              <Trash size={14} aria-hidden className="mr-1 text-error" /> Annuler la relance
             </Button>
           )}
         </section>
@@ -349,7 +348,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
       />
 
       <section className="rounded-md border border-border p-4">
-        <h2 className="mb-1 text-sm font-medium">O que já aconteceu</h2>
+        <h2 className="mb-1 text-sm font-medium">Ce qui s’est déjà passé</h2>
         <LinhaDoTempo
           eventos={data.eventos}
           nos={data.nos}
@@ -361,13 +360,13 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
       <Dialog open={adiando} onOpenChange={setAdiando}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Adiar o próximo passo</DialogTitle>
+            <DialogTitle>Reporter la prochaine étape</DialogTitle>
             <DialogDescription>
-              O follow-up continua no mesmo passo e volta a andar no horário que você escolher.
+              La relance reste à la même étape et reprend à l’heure que vous choisissez.
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="adiar-quando">Novo horário</Label>
+            <Label htmlFor="adiar-quando">Nouvel horaire</Label>
             <Input
               id="adiar-quando"
               type="datetime-local"
@@ -378,7 +377,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setAdiando(false)}>
-              Voltar
+              Retour
             </Button>
             <Button
               data-testid="dossie-adiar-confirmar"
@@ -399,13 +398,13 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
       <AlertDialog open={cancelando} onOpenChange={setCancelando}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancelar este follow-up?</AlertDialogTitle>
+            <AlertDialogTitle>Annuler cette relance ?</AlertDialogTitle>
             <AlertDialogDescription>
-              O lead não receberá mais mensagens deste fluxo. Diferente de pausar, isto não pode ser desfeito.
+              Le lead ne recevra plus de messages de ce flux. Contrairement à la pause, cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogCancel>Retour</AlertDialogCancel>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
               data-testid="dossie-cancelar-confirmar"
@@ -414,7 +413,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
                 setCancelando(false);
               }}
             >
-              Cancelar follow-up
+              Annuler la relance
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -423,10 +422,9 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
       <Dialog open={pulando} onOpenChange={setPulando}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Por onde seguir?</DialogTitle>
+            <DialogTitle>Par où continuer ?</DialogTitle>
             <DialogDescription>
-              Este passo tem mais de um caminho no fluxo. Escolher por você seria decidir o rumo do
-              atendimento sem perguntar.
+              Cette étape a plusieurs chemins dans le flux. Choisir à votre place reviendrait à décider de l’orientation du suivi sans vous demander.
             </DialogDescription>
           </DialogHeader>
           <ul className="flex flex-col gap-2">

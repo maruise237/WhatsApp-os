@@ -150,7 +150,7 @@ function summaryLabel(
   if (cfg.kind === "manual" || cfg.kind === undefined) return t("Gatilho: Manual");
   // conversation_end de dados antigos (API crua) — sem UI própria, mas mostrado
   // com transparência em vez de mentir "Manual".
-  return `Gatilho: ${String(cfg.kind)} (${t("indisponível")})`;
+  return `${t("Gatilho:")} ${String(cfg.kind)} (${t("indisponível")})`;
 }
 
 interface Props {

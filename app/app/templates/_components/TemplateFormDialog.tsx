@@ -105,24 +105,24 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
         <DialogHeader>
           <DialogTitle>{isEdit ? "Editar template" : "Novo template"}</DialogTitle>
           <DialogDescription>
-            Scripts salvos para responder mais rápido no atendimento.
+            Scripts enregistrés pour répondre plus vite pendant les échanges.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="tpl-title">Título</Label>
+            <Label htmlFor="tpl-title">Titre</Label>
             <Input
               id="tpl-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Saudação inicial"
+              placeholder="Message d’accueil"
               minLength={1}
               maxLength={80}
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tpl-body">Mensagem</Label>
+            <Label htmlFor="tpl-body">Message</Label>
             <Textarea
               id="tpl-body"
               value={body}
@@ -134,11 +134,11 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
               rows={5}
             />
             <p className="text-xs text-muted-foreground">
-              Use {"{{primeiro_nome}}"} e {"{{nome}}"} para personalizar.
+              Use {"{{primeiro_nome}}"} e {"{{nome}}"} pour personnaliser.
             </p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tpl-shortcut">Atalho (opcional)</Label>
+            <Label htmlFor="tpl-shortcut">Raccourci (facultatif)</Label>
             <Input
               id="tpl-shortcut"
               value={shortcut}
@@ -155,15 +155,15 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
                 onCheckedChange={setShared}
                 disabled={isEdit}
               />
-              <Label htmlFor="tpl-shared">Compartilhar com a equipe</Label>
+              <Label htmlFor="tpl-shared">Partager avec l’équipe</Label>
             </div>
           )}
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Cancelar
+              Annuler
             </Button>
             <Button type="submit" disabled={pending}>
-              {isEdit ? "Salvar" : "Criar template"}
+              {isEdit ? "Enregistrer" : "Créer le modèle"}
             </Button>
           </DialogFooter>
         </form>

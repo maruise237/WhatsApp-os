@@ -110,15 +110,15 @@ export function motivoDaListaVazia(passo: LeadStage, etapas: EtapaDoFunil[]): st
   if (etapas.some((e) => serveParaOPasso(passo, e))) {
     // Sem direção ("acima"): o passo que segura a etapa pode estar em qualquer
     // linha, inclusive abaixo desta.
-    return "As etapas que serviriam para este passo já estão sendo usadas por outros passos. Libere uma delas para poder escolhê-la aqui.";
+    return "Les étapes qui conviendraient à ce passage sont déjà utilisées par d’autres passages. Libérez-en une pour pouvoir la choisir ici.";
   }
   if (passo === "won") {
-    return "Este funil não tem nenhuma etapa marcada como fechamento, então não há para onde levar o card quando a pessoa fecha. Marque uma etapa como «aqui o cliente fecha» em «Etapas deste funil».";
+    return "Cet entonnoir n’a aucune étape marquée comme conclusion, il n’y a donc nulle part où emmener la carte quand la personne conclut. Marquez une étape comme « ici le client conclut » dans « Étapes de cet entonnoir ».";
   }
   if (passo === "lost") {
-    return "Este funil não tem nenhuma etapa marcada como perda, então não há para onde levar o card quando a pessoa desiste. Marque uma etapa como «aqui o cliente desiste» em «Etapas deste funil».";
+    return "Cet entonnoir n’a aucune étape marquée comme perte, il n’y a donc nulle part où emmener la carte quand la personne abandonne. Marquez une étape comme « ici le client abandonne » dans « Étapes de cet entonnoir ».";
   }
-  return "Este funil só tem etapas de fechamento e de perda, então não há etapa comum para receber o card neste passo. Crie as etapas do meio do caminho em «Etapas deste funil».";
+  return "Cet entonnoir n’a que des étapes de conclusion et de perte, il n’y a donc pas d’étape ordinaire pour recevoir la carte à ce passage. Créez les étapes intermédiaires dans « Étapes de cet entonnoir ».";
 }
 
 /**
@@ -148,10 +148,10 @@ export function conserteNasEtapas(passo: LeadStage, etapas: EtapaDoFunil[]): boo
 export function mensagemDeErro(e: unknown): string {
   if (e instanceof ApiError) {
     if (e.status === 409 || e.status === 422) return e.message;
-    if (e.status === 401) return "Sua sessão expirou. Entre de novo para salvar suas escolhas.";
-    if (e.status === 403) return "Você não tem permissão para mudar a configuração deste funil.";
+    if (e.status === 401) return "Votre session a expiré. Reconnectez-vous pour enregistrer vos choix.";
+    if (e.status === 403) return "Vous n’avez pas l’autorisation de modifier la configuration de cet entonnoir.";
   }
-  return "Não deu para salvar agora. Tente de novo em instantes.";
+  return "Impossible d’enregistrer pour le moment. Réessayez dans quelques instants.";
 }
 
 function iguais(a: MapaDoAgente, b: MapaDoAgente): boolean {

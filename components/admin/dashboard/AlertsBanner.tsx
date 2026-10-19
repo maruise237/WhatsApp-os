@@ -15,7 +15,7 @@ export function AlertsBanner({ alerts }: AlertsBannerProps) {
         <CardContent className="flex items-center gap-3 py-5">
           <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0" />
           <p className="text-sm text-muted-foreground">
-            Nenhum alerta crítico no momento. Tudo certo!
+            Aucune alerte critique pour le moment. Tout va bien !
           </p>
         </CardContent>
       </Card>
@@ -32,7 +32,7 @@ export function AlertsBanner({ alerts }: AlertsBannerProps) {
           <Warning
             className={`h-4 w-4 ${hasCritical ? "text-red-500" : "text-amber-500"}`}
           />
-          Alertas ativos
+          Alertes actives
           <span className="ml-auto text-xs font-normal text-muted-foreground">
             {alerts.length} {alerts.length === 1 ? "alerta" : "alertas"}
           </span>
@@ -46,7 +46,7 @@ export function AlertsBanner({ alerts }: AlertsBannerProps) {
         </div>
         {alerts.length > 10 && (
           <p className="px-3 py-2 text-xs text-muted-foreground border-t">
-            +{alerts.length - 10} alertas adicionais
+            +{alerts.length - 10} alertes supplémentaires
           </p>
         )}
       </CardContent>

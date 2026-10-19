@@ -1,6 +1,6 @@
 "use client";
 import { formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { ArrowsClockwise, Scales, ShieldCheck } from "@/lib/ui/icons";
 import { retentionCopy, type RetentionKind } from "@/lib/inbox/retention-copy";
 import { useRetention } from "@/hooks/inbox/useRetention";
@@ -32,7 +32,7 @@ export function RetentionNotice({ conversationId }: { conversationId: string }) 
   const Icon = KIND_ICON[copy.kind];
   const when = formatDistanceToNowStrict(new Date(latest.created_at), {
     addSuffix: true,
-    locale: ptBR,
+    locale: fr,
   });
 
   return (

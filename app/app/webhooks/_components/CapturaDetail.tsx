@@ -22,7 +22,7 @@ interface Props {
 }
 
 function dataHoraCompleta(iso: string): string {
-  return new Date(iso).toLocaleString("pt-BR", {
+  return new Date(iso).toLocaleString("fr-FR", {
     dateStyle: "full",
     timeStyle: "medium",
   });
@@ -64,7 +64,7 @@ export function CapturaDetail({ captura, onOpenChange }: Props) {
         <SheetHeader>
           <div className="flex items-center gap-2">
             <SheetTitle className="truncate">
-              {captura.captured_name ?? captura.captured_phone ?? "Captação"}
+              {captura.captured_name ?? captura.captured_phone ?? "Captation"}
             </SheetTitle>
             <Badge
               variant={
@@ -79,7 +79,7 @@ export function CapturaDetail({ captura, onOpenChange }: Props) {
             </Badge>
           </div>
           <SheetDescription>
-            Chegou pela fonte <strong className="text-text">{captura.source_name}</strong>.
+            Arrivé par la source <strong className="text-text">{captura.source_name}</strong>.
           </SheetDescription>
         </SheetHeader>
 
@@ -95,11 +95,11 @@ export function CapturaDetail({ captura, onOpenChange }: Props) {
 
           <section>
             <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-text">
-              <IdentificationCard className="h-4 w-4 text-accent" /> O que o formulário trouxe
+              <IdentificationCard className="h-4 w-4 text-accent" /> Ce que le formulaire a transmis
             </h3>
             <dl className="divide-y divide-border rounded-sm border border-border px-3 py-1">
-              <Linha rotulo="Nome">{captura.captured_name ?? "—"}</Linha>
-              <Linha rotulo="Telefone">{captura.captured_phone ?? "—"}</Linha>
+              <Linha rotulo="Nom">{captura.captured_name ?? "—"}</Linha>
+              <Linha rotulo="Téléphone">{captura.captured_phone ?? "—"}</Linha>
               <Linha rotulo="E-mail">{captura.captured_email ?? "—"}</Linha>
               {campos.map(([chave, valor]) => (
                 <Linha key={chave} rotulo={chave}>
@@ -109,29 +109,28 @@ export function CapturaDetail({ captura, onOpenChange }: Props) {
             </dl>
             {campos.length === 0 ? (
               <p className="mt-2 text-xs text-muted-foreground">
-                Nenhum campo além dos acima.
+                Aucun champ en dehors de ceux ci-dessus.
               </p>
             ) : null}
           </section>
 
           <section>
             <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-text">
-              <Clock className="h-4 w-4 text-accent" /> Quando
+              <Clock className="h-4 w-4 text-accent" /> Quand
             </h3>
             <p className="text-sm text-text">{dataHoraCompleta(captura.received_at)}</p>
           </section>
 
           <section>
             <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-text">
-              <Globe className="h-4 w-4 text-accent" /> De onde veio
+              <Globe className="h-4 w-4 text-accent" /> D’où il vient
             </h3>
             <dl className="divide-y divide-border rounded-sm border border-border px-3 py-1">
-              <Linha rotulo="Página">{captura.origin ?? "não informada"}</Linha>
-              <Linha rotulo="Endereço IP">
+              <Linha rotulo="Page">{captura.origin ?? "non renseignée"}</Linha>
+              <Linha rotulo="Adresse IP">
                 {captura.remote_ip ?? (
                   <span className="text-muted-foreground">
-                    não identificado — sua instalação não está atrás de um proxy que informe a
-                    origem
+                    non identifiée — votre installation n’est pas derrière un proxy qui indique l’origine
                   </span>
                 )}
               </Linha>
@@ -147,7 +146,7 @@ export function CapturaDetail({ captura, onOpenChange }: Props) {
           {captura.lead_id ? (
             <Button asChild variant="secondary">
               <Link href={`/app/leads/${captura.lead_id}`}>
-                <ArrowSquareOut /> Ver o lead no funil
+                <ArrowSquareOut /> Voir le lead dans l’entonnoir
               </Link>
             </Button>
           ) : null}

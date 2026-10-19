@@ -23,7 +23,7 @@ interface Props {
 function formatBRL(cents: number | null, currency: string | null): string {
   if (cents === null) return "—";
   try {
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("fr-FR", {
       style: "currency",
       currency: currency ?? "BRL",
       maximumFractionDigits: 0,
@@ -107,7 +107,7 @@ export function LeadDossier({
             onClick={() => campos.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
             className="ml-auto text-text-muted underline-offset-2 hover:text-text hover:underline"
           >
-            Editar campos
+            Modifier les champs
           </button>
         </div>
 
@@ -117,7 +117,7 @@ export function LeadDossier({
             timeline concluiria que a timeline está incompleta. */}
         {score?.at && (
           <p className="pt-2 text-[11px] text-text-muted">
-            Probabilidade recalculada automaticamente · {new Date(score.at).toLocaleString("pt-BR")}
+            Probabilidade recalculada automaticamente · {new Date(score.at).toLocaleString("fr-FR")}
           </p>
         )}
 
@@ -126,7 +126,7 @@ export function LeadDossier({
         {/* ② timeline */}
         <section className="flex-1 py-3">
           <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-text-muted">
-            Linha do tempo
+            Chronologie
           </h3>
           <LeadTimeline
             itens={timeline.itens}
@@ -139,7 +139,7 @@ export function LeadDossier({
         {/* ③ campos, por último */}
         <div ref={campos} className="border-t border-border pt-3">
           <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-text-muted">
-            Dados do negócio
+            Données de l’affaire
           </h3>
           <LeadFieldsForm lead={lead} pipelineId={pipelineId} />
         </div>

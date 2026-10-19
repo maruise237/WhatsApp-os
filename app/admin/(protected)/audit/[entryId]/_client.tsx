@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow, format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,7 +23,7 @@ function maskEmail(email: string | null | undefined): string {
 
 function formatDate(iso: string): string {
   try {
-    return format(new Date(iso), "dd/MM/yyyy HH:mm:ss", { locale: ptBR });
+    return format(new Date(iso), "dd/MM/yyyy HH:mm:ss", { locale: fr });
   } catch {
     return iso;
   }
@@ -31,7 +31,7 @@ function formatDate(iso: string): string {
 
 function relativeDate(iso: string): string {
   try {
-    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: ptBR });
+    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: fr });
   } catch {
     return iso;
   }
@@ -84,7 +84,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
   if (isError || !detail) {
     return (
       <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-10 text-center text-sm text-destructive">
-        Entrada de audit não encontrada.
+        Entrée d’audit introuvable.
       </div>
     );
   }
@@ -136,7 +136,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
             <Row label="Request ID" value={entry.request_id ?? "—"} mono />
             <Row label="Resource Type" value={entry.resource_type ?? "—"} />
             <Row label="Resource ID" value={entry.resource_id ?? "—"} mono />
-            <Row label="Bypassed RLS" value={entry.bypassed_rls ? "Sim" : "Não"} />
+            <Row label="Bypassed RLS" value={entry.bypassed_rls ? "Oui" : "Non"} />
             <Row label="Actor IP" value={entry.actor_ip ?? "—"} mono />
             <Row
               label="User Agent"
@@ -160,7 +160,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
               <p className="text-sm text-muted-foreground">
                 {entry.actor_user_id
                   ? `ID: ${entry.actor_user_id}`
-                  : "Sem actor registrado"}
+                  : "Aucun acteur enregistré"}
               </p>
             )}
           </div>
@@ -170,13 +170,13 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
             <div className="rounded-md border p-4 space-y-2">
               <h2 className="text-sm font-medium">Tenant</h2>
               <div className="space-y-1 text-sm">
-                <Row label="Nome" value={tenant.display_name} />
+                <Row label="Nom" value={tenant.display_name} />
                 <Row label="Slug" value={tenant.slug} mono />
-                <Row label="Status" value={tenant.status} />
+                <Row label="Statut" value={tenant.status} />
               </div>
               <Button asChild variant="outline" size="sm" className="mt-2">
                 <Link href={`/admin/tenants/${tenant.id}`}>
-                  Ver tenant
+                  Voir l’organisation
                 </Link>
               </Button>
             </div>
@@ -192,7 +192,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
               </p>
               <Button asChild variant="outline" size="sm">
                 <Link href={deepLink}>
-                  Abrir recurso
+                  Ouvrir la ressource
                 </Link>
               </Button>
             </div>

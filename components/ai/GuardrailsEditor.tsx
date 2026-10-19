@@ -39,16 +39,16 @@ function defaultForKind(kind: GuardrailKind): GuardrailItem {
         kind: "regex_output_block",
         pattern: "",
         flags: "i",
-        reason: "Bloquear conteúdo sensível na resposta",
+        reason: "Bloquer le contenu sensible dans la réponse",
       };
     case "rag_must_hit":
-      return { kind: "rag_must_hit", min_citations: 1, reason: "Exigir citação da base" };
+      return { kind: "rag_must_hit", min_citations: 1, reason: "Exiger une citation de la base" };
     case "regex_input_block":
       return {
         kind: "regex_input_block",
         pattern: "",
         flags: "i",
-        reason: "Bloquear input com termo proibido",
+        reason: "Bloquer une saisie contenant un terme interdit",
       };
     case "window_check":
       return {
@@ -63,7 +63,7 @@ function defaultForKind(kind: GuardrailKind): GuardrailItem {
         kind: "contact_flag",
         field: "force_human",
         expected: false,
-        reason: "Skip se contato pediu humano",
+        reason: "Ignorer si le contact a demandé un humain",
       };
   }
 }

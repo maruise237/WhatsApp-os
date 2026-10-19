@@ -41,14 +41,14 @@ describe("CommandPalette", () => {
     const user = userEvent.setup();
     abrir();
     await user.type(screen.getByRole("combobox"), "conhec");
-    expect(screen.getByRole("option", { name: /Conhecimento/ })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /Connaissances/ })).toBeTruthy();
   });
 
   it("ignora acento, porque ninguém digita acento com pressa", async () => {
     const user = userEvent.setup();
     abrir();
     await user.type(screen.getByRole("combobox"), "orcamento");
-    expect(screen.getByRole("option", { name: /Uso e orçamento/ })).toBeTruthy();
+    expect(screen.getByRole("option", { name: /Utilisation et budget/ })).toBeTruthy();
   });
 
   it("busca também na descrição, não só no rótulo", async () => {
@@ -95,6 +95,6 @@ describe("CommandPalette", () => {
     abrir();
     await user.type(screen.getByRole("combobox"), "zzzzzz");
     expect(screen.queryAllByRole("option")).toHaveLength(0);
-    expect(screen.getByText(/Nada encontrado/i)).toBeTruthy();
+    expect(screen.getByText(/Aucun résultat/i)).toBeTruthy();
   });
 });

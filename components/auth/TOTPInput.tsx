@@ -98,7 +98,7 @@ export function TOTPInput({
     <div
       className={cn("flex items-center justify-center gap-2", className)}
       role="group"
-      aria-label="Código de 6 dígitos"
+      aria-label="Code à 6 chiffres"
     >
       {chars.map((c, i) => (
         <input
@@ -113,7 +113,7 @@ export function TOTPInput({
           value={c}
           disabled={disabled}
           aria-invalid={hasError ? true : undefined}
-          aria-label={`Dígito ${i + 1}`}
+          aria-label={`Chiffre ${i + 1}`}
           onChange={(e) => handleChange(i, e.target.value)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onPaste={handlePaste}

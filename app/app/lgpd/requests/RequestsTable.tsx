@@ -83,11 +83,11 @@ function fmtRelative(iso: string): string {
     const diffMs = now - then;
     const diffMin = Math.floor(diffMs / 60_000);
     if (diffMin < 1) return "agora";
-    if (diffMin < 60) return `${diffMin}min atrás`;
+    if (diffMin < 60) return `il y a ${diffMin} min`;
     const diffH = Math.floor(diffMin / 60);
-    if (diffH < 24) return `${diffH}h atrás`;
+    if (diffH < 24) return `il y a ${diffH} h`;
     const diffD = Math.floor(diffH / 24);
-    return `${diffD}d atrás`;
+    return `il y a ${diffD} j`;
   } catch {
     return iso;
   }
@@ -108,9 +108,9 @@ function fmtDistance(iso: string | null): { label: string; urgent: boolean } {
     const diffD = Math.floor(diffMs / 86_400_000);
     if (diffD < 1) {
       const diffH = Math.floor(diffMs / 3_600_000);
-      return { label: `em ${diffH}h`, urgent };
+      return { label: `dans ${diffH} h`, urgent };
     }
-    return { label: `em ${diffD}d`, urgent };
+    return { label: `dans ${diffD} j`, urgent };
   } catch {
     return { label: iso, urgent: false };
   }
@@ -147,15 +147,15 @@ export function RequestsTable() {
           }}
         >
           <SelectTrigger className="h-9 w-[170px]">
-            <SelectValue placeholder="Status: todos" />
+            <SelectValue placeholder="Statut : tous" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>Status: todos</SelectItem>
-            <SelectItem value="received">Recebido</SelectItem>
+            <SelectItem value={ALL}>Statut : tous</SelectItem>
+            <SelectItem value="received">Reçue</SelectItem>
             <SelectItem value="processing">Processando</SelectItem>
-            <SelectItem value="completed">Concluído</SelectItem>
-            <SelectItem value="failed">Falhou</SelectItem>
-            <SelectItem value="pending_review">Revisão pendente</SelectItem>
+            <SelectItem value="completed">Terminée</SelectItem>
+            <SelectItem value="failed">Échec</SelectItem>
+            <SelectItem value="pending_review">Révision en attente</SelectItem>
           </SelectContent>
         </Select>
 
@@ -167,13 +167,13 @@ export function RequestsTable() {
           }}
         >
           <SelectTrigger className="h-9 w-[200px]">
-            <SelectValue placeholder="Tipo: todos" />
+            <SelectValue placeholder="Type : tous" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>Tipo: todos</SelectItem>
-            <SelectItem value="redact">Anonimização cliente</SelectItem>
-            <SelectItem value="data_request">Solicitação dados</SelectItem>
-            <SelectItem value="store_redact">Anonimização tenant</SelectItem>
+            <SelectItem value={ALL}>Type : tous</SelectItem>
+            <SelectItem value="redact">Anonymisation client</SelectItem>
+            <SelectItem value="data_request">Demande de données</SelectItem>
+            <SelectItem value="store_redact">Anonymisation organisation</SelectItem>
           </SelectContent>
         </Select>
 
@@ -185,12 +185,12 @@ export function RequestsTable() {
           }}
         >
           <SelectTrigger className="h-9 w-[160px]">
-            <SelectValue placeholder="SLA: todos" />
+            <SelectValue placeholder="SLA : tous" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL}>SLA: todos</SelectItem>
+            <SelectItem value={ALL}>SLA : tous</SelectItem>
             <SelectItem value="overdue">Vencido</SelectItem>
-            <SelectItem value="critical">Crítico</SelectItem>
+            <SelectItem value="critical">Critique</SelectItem>
             <SelectItem value="warning">Alerta</SelectItem>
             <SelectItem value="ok">OK</SelectItem>
           </SelectContent>
@@ -207,13 +207,13 @@ export function RequestsTable() {
               setPage(1);
             }}
           >
-            Limpar filtros
+            Effacer les filtres
           </Button>
         )}
 
         {meta && (
           <span className="ml-auto text-xs text-muted-foreground">
-            {meta.total} {meta.total === 1 ? "solicitação" : "solicitações"}
+            {meta.total} {meta.total === 1 ? "demande" : "demandes"}
           </span>
         )}
       </div>
@@ -224,12 +224,12 @@ export function RequestsTable() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[90px]">ID</TableHead>
-              <TableHead>Tipo</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Sujeito</TableHead>
-              <TableHead>Recebido</TableHead>
+              <TableHead>Reçue</TableHead>
               <TableHead>Vence</TableHead>
               <TableHead>SLA</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Statut</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>
@@ -249,9 +249,9 @@ export function RequestsTable() {
                 <TableCell colSpan={8} className="text-center">
                   <div className="flex flex-col items-center gap-2 py-8 text-sm text-muted-foreground">
                     <Warning size={24} weight="fill" className="text-red-500" aria-hidden />
-                    <p>Erro ao carregar solicitações.</p>
+                    <p>Erreur lors du chargement des demandes.</p>
                     <Button size="sm" variant="outline" onClick={() => q.refetch()}>
-                      Tentar novamente
+                      Réessayer
                     </Button>
                   </div>
                 </TableCell>
@@ -261,9 +261,9 @@ export function RequestsTable() {
                 <TableCell colSpan={8} className="text-center">
                   <div className="flex flex-col items-center gap-2 py-12 text-sm text-muted-foreground">
                     <Warning size={32} weight="thin" aria-hidden />
-                    <p className="font-medium">Nenhuma solicitação LGPD</p>
+                    <p className="font-medium">Aucune demande RGPD</p>
                     <p className="text-xs">
-                      Solicitações de dados e anonimizações aparecerão aqui.
+                      Les demandes de données et d’anonymisation apparaîtront ici.
                     </p>
                   </div>
                 </TableCell>
@@ -313,7 +313,7 @@ export function RequestsTable() {
                     </TableCell>
                     <TableCell>
                       <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-xs">
-                        <Link href={`/app/lgpd/requests/${r.id}`}>Ver</Link>
+                        <Link href={`/app/lgpd/requests/${r.id}`}>Voir</Link>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -333,10 +333,10 @@ export function RequestsTable() {
             disabled={page <= 1 || q.isFetching}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
-            Anterior
+            Précédent
           </Button>
           <span className="text-xs text-muted-foreground">
-            Página {meta.page}
+            Page {meta.page}
           </span>
           <Button
             variant="outline"
@@ -344,7 +344,7 @@ export function RequestsTable() {
             disabled={!meta.has_more || q.isFetching}
             onClick={() => setPage((p) => p + 1)}
           >
-            Próxima
+            Suivant
           </Button>
         </div>
       )}

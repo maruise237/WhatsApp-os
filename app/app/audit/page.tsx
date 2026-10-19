@@ -19,7 +19,7 @@ export default async function AuditPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Audit Log</h1>
         <p className="text-sm text-muted-foreground">
-          Histórico append-only de mutações na organização. Manager+.
+          Historique en ajout seul des modifications de l’organisation. Manager et plus.
         </p>
       </header>
       <AuditClient />

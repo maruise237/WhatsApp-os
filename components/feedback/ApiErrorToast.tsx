@@ -77,7 +77,7 @@ export function showApiError(err: unknown): void {
     toast.error(err.message || err.code, { description });
     return;
   }
-  toast.error("Erro inesperado. Tente novamente.");
+  toast.error("Erreur inattendue. Réessayez.");
 }
 
 export function useApiErrorHandler(): (err: unknown) => void {

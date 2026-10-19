@@ -6,13 +6,13 @@ export default function ServiceUnavailablePage() {
   return (
     <main className="flex min-h-screen items-center justify-center p-8">
       <Card className="w-full max-w-md p-8 text-center">
-        <h1 className="text-2xl font-semibold">503 — Em manutenção</h1>
+        <h1 className="text-2xl font-semibold">503 — En maintenance</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Voltamos em alguns minutos.
+          Nous revenons dans quelques minutes.
         </p>
         <div className="mt-6 flex justify-center gap-2">
           <Button asChild>
-            <Link href="/">Voltar</Link>
+            <Link href="/">Retour</Link>
           </Button>
         </div>
       </Card>

@@ -23,15 +23,15 @@ export function AdminSidePanel({ data }: Props) {
       {/* ── Contact info ── */}
       <section>
         <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Contato
+          Contact
         </h3>
         {contact ? (
           <div className="flex flex-col gap-1.5 text-sm">
             <div className="font-medium">
               {contact.is_anonymized ? (
-                <span className="italic text-muted-foreground">Contato anonimizado</span>
+                <span className="italic text-muted-foreground">Contact anonymisé</span>
               ) : (
-                contact.name ?? "Sem nome"
+                contact.name ?? "Sans nom"
               )}
             </div>
             {contact.phone_number && (
@@ -50,7 +50,7 @@ export function AdminSidePanel({ data }: Props) {
             )}
           </div>
         ) : (
-          <p className="text-xs text-muted-foreground">Sem contato vinculado.</p>
+          <p className="text-xs text-muted-foreground">Aucun contact associé.</p>
         )}
       </section>
 
@@ -75,11 +75,11 @@ export function AdminSidePanel({ data }: Props) {
               href={`/admin/tenants/${organization.id}`}
               className="inline-flex items-center gap-1 text-xs font-medium text-primary underline-offset-2 hover:underline"
             >
-              Abrir tenant <ArrowRight size={12} aria-hidden />
+              Ouvrir l’organisation <ArrowRight size={12} aria-hidden />
             </Link>
           </div>
         ) : (
-          <p className="text-xs text-muted-foreground">Sem organização vinculada.</p>
+          <p className="text-xs text-muted-foreground">Aucune organisation associée.</p>
         )}
       </section>
     </aside>

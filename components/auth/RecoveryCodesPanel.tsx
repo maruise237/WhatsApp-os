@@ -54,8 +54,8 @@ export function RecoveryCodesPanel({ codes, onAcknowledge }: RecoveryCodesPanelP
 
   const handleCopy = async () => {
     const ok = await copyToClipboard(codes.join("\n"));
-    if (ok) toast.success("Códigos copiados para a área de transferência.");
-    else toast.error("Não foi possível copiar. Selecione e copie manualmente.");
+    if (ok) toast.success("Codes copiés dans le presse-papiers.");
+    else toast.error("Impossible de copier. Sélectionnez et copiez manuellement.");
   };
 
   const handleDownload = () => {
@@ -75,9 +75,8 @@ export function RecoveryCodesPanel({ codes, onAcknowledge }: RecoveryCodesPanelP
     <div className="space-y-4">
       <div className="rounded-md border border-border bg-muted/40 p-4">
         <p className="mb-3 text-sm text-muted-foreground">
-          Salve esses 10 códigos em um local seguro. Cada um pode ser usado{" "}
-          <strong>uma única vez</strong> para entrar caso você perca acesso ao autenticador.
-          Eles <strong>não serão mostrados novamente</strong>.
+          Conservez ces 10 codes en lieu sûr. Chacun peut être utilisé{" "}
+          <strong>une seule fois</strong> pour vous connecter si vous perdez l’accès à votre application d’authentification. Ils <strong>ne seront plus affichés</strong>.
         </p>
         <div className="grid grid-cols-2 gap-2">
           {codes.map((c, i) => (
@@ -93,10 +92,10 @@ export function RecoveryCodesPanel({ codes, onAcknowledge }: RecoveryCodesPanelP
 
       <div className="flex gap-2">
         <Button type="button" variant="outline" className="flex-1" onClick={handleCopy}>
-          Copiar todos
+          Tout copier
         </Button>
         <Button type="button" variant="outline" className="flex-1" onClick={handleDownload}>
-          Baixar .txt
+          Télécharger le .txt
         </Button>
       </div>
 
@@ -107,7 +106,7 @@ export function RecoveryCodesPanel({ codes, onAcknowledge }: RecoveryCodesPanelP
           onChange={(e) => setAcked(e.target.checked)}
           className="mt-0.5 h-4 w-4 rounded border-border"
         />
-        <span>Salvei meus códigos em local seguro.</span>
+        <span>J’ai conservé mes codes en lieu sûr.</span>
       </label>
 
       <Button
@@ -116,7 +115,7 @@ export function RecoveryCodesPanel({ codes, onAcknowledge }: RecoveryCodesPanelP
         disabled={!acked}
         onClick={onAcknowledge}
       >
-        Concluir
+        Terminer
       </Button>
     </div>
   );

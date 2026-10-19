@@ -33,7 +33,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
       <Shell>
         <h1 className="text-xl font-semibold">Muitas tentativas</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Aguarde alguns minutos e abra o link do convite de novo.
+          Patientez quelques minutes et rouvrez le lien d’invitation.
         </p>
       </Shell>
     );
@@ -44,9 +44,9 @@ export default async function AcceptInvitePage({ params }: PageProps) {
   if (!payload) {
     return (
       <Shell>
-        <h1 className="text-xl font-semibold">Convite inválido ou expirado</h1>
+        <h1 className="text-xl font-semibold">Invitation invalide ou expirée</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Este link não é válido ou já passou da janela de 24h. Peça um novo convite ao admin do tenant.
+          Ce lien n’est pas valide ou a dépassé le délai de 24 h. Demandez une nouvelle invitation à l’administrateur de l’organisation.
         </p>
       </Shell>
     );
@@ -63,7 +63,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
       <Shell>
         <h1 className="text-xl font-semibold">Você foi convidado</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Para aceitar o convite como <strong>{payload.role}</strong>, faça login com o email{" "}
+          Pour accepter l’invitation en tant que <strong>{payload.role}</strong>, connectez-vous avec l’e-mail{" "}
           <strong>{payload.email}</strong>.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -84,7 +84,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
             href={`/signup?invite=${encodeURIComponent(token)}`}
             className="text-sm underline underline-offset-4"
           >
-            Ainda não tenho conta
+            Je n’ai pas encore de compte
           </Link>
         </div>
       </Shell>
@@ -95,17 +95,17 @@ export default async function AcceptInvitePage({ params }: PageProps) {
   if (userEmail !== payload.email.trim().toLowerCase()) {
     return (
       <Shell>
-        <h1 className="text-xl font-semibold">Email não corresponde</h1>
+        <h1 className="text-xl font-semibold">L’e-mail ne correspond pas</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Você está logado como <strong>{user.email}</strong>, mas o convite foi enviado para{" "}
-          <strong>{payload.email}</strong>. Saia e faça login com o email correto.
+          Você está logado como <strong>{user.email}</strong>, mais l’invitation a été envoyée à{" "}
+          <strong>{payload.email}</strong>. Déconnectez-vous et connectez-vous avec le bon e-mail.
         </p>
         <form action="/api/auth/signout" method="post" className="mt-4">
           <button
             type="submit"
             className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-accent"
           >
-            Sair
+            Se déconnecter
           </button>
         </form>
       </Shell>
@@ -121,8 +121,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
     <Shell>
       <h1 className="text-xl font-semibold">Aceitar convite</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Você foi convidado para entrar como <strong>{payload.role}</strong>. Confirme abaixo para
-        ativar seu acesso.
+        Vous avez été invité à rejoindre l’organisation en tant que <strong>{payload.role}</strong>. Confirmez ci-dessous pour activer votre accès.
       </p>
       <form action={accept} className="mt-4">
         <button

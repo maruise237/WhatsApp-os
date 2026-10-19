@@ -1,6 +1,6 @@
 "use client";
 import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -25,7 +25,7 @@ import type { PlatformAdminEntry } from "@/hooks/useAdminPlatformAdmins";
 
 function relativeDate(iso: string): string {
   try {
-    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: ptBR });
+    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: fr });
   } catch {
     return iso;
   }
@@ -80,10 +80,10 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center">
       <p className="text-sm font-medium text-muted-foreground">
-        Nenhum platform admin encontrado
+        Aucun administrateur de la plateforme trouvé
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Platform admins são configurados exclusivamente via DBA.
+        Les administrateurs de la plateforme sont configurés exclusivement par le DBA.
       </p>
     </div>
   );
@@ -129,12 +129,12 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="min-w-[200px]">Usuário</TableHead>
-            <TableHead className="w-[140px]">Concedido em</TableHead>
+            <TableHead className="min-w-[200px]">Utilisateur</TableHead>
+            <TableHead className="w-[140px]">Accordé le</TableHead>
             <TableHead className="w-[160px]">Concedido por</TableHead>
             <TableHead className="w-[120px]">Scope</TableHead>
             <TableHead className="w-[60px]">MFA</TableHead>
-            <TableHead className="w-[90px]">Status</TableHead>
+            <TableHead className="w-[90px]">Statut</TableHead>
             <TableHead>Motivo</TableHead>
           </TableRow>
         </TableHeader>
@@ -180,11 +180,11 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
                 <TableCell>
                   {row.mfa_required ? (
                     <Badge variant="default" className="text-[10px]">
-                      Sim
+                      Oui
                     </Badge>
                   ) : (
                     <Badge variant="secondary" className="text-[10px]">
-                      Não
+                      Non
                     </Badge>
                   )}
                 </TableCell>
@@ -200,7 +200,7 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
                       variant="outline"
                       className="border-green-500 text-[10px] text-green-700"
                     >
-                      Ativo
+                      Actif
                     </Badge>
                   )}
                 </TableCell>

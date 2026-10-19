@@ -45,8 +45,7 @@ export default async function RoutersPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Roteadores</h1>
         <p className="text-sm text-muted-foreground">
-          Um roteador entende o que o cliente quer e entrega a conversa para o agente certo —
-          plugado em um número de WhatsApp.
+          Un routeur comprend ce que veut le client et confie la conversation au bon agent — branché sur un numéro WhatsApp.
         </p>
       </header>
       <RoutersClient initialState={{ routers }} channelSessions={channelSessions} />

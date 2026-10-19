@@ -86,19 +86,19 @@ export function UsageDashboardClient({ agents, initial }: Props) {
         <>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard
-              label="Custo no período"
+              label="Coût sur la période"
               // DÓLAR: esta tela mostrava o MESMO número em duas moedas — o card de
               // orçamento logo acima em US$ e este StatCard em R$, dois centímetros abaixo.
               value={formatCentsUSD(q.data.totals.cost_cents)}
             />
             <StatCard
-              label="Atendimentos com IA"
-              value={q.data.totals.invocations.toLocaleString("pt-BR")}
+              label="Échanges avec l’IA"
+              value={q.data.totals.invocations.toLocaleString("fr-FR")}
             />
             <StatCard
-              label="Passaram para uma pessoa"
+              label="Transférés à une personne"
               value={`${(q.data.totals.handoff_rate * 100).toFixed(2)}%`}
-              hint="quanto mais alto, mais a IA precisou de ajuda"
+              hint="plus c’est élevé, plus l’IA a eu besoin d’aide"
             />
             {/*
               "p95" quer dizer: em 95 das 100 respostas o tempo foi ATÉ isso.
@@ -107,13 +107,13 @@ export function UsageDashboardClient({ agents, initial }: Props) {
               precisa saber o que fazer com o número, não decorar estatística.
             */}
             <StatCard
-              label="Tempo de resposta"
-              value={`${(q.data.totals.p95_latency_ms / 1000).toLocaleString("pt-BR", {
+              label="Temps de réponse"
+              value={`${(q.data.totals.p95_latency_ms / 1000).toLocaleString("fr-FR", {
                 maximumFractionDigits: 1,
               })} s`}
-              hint={`a maioria responde em ${(
+              hint={`la plupart répondent en ${(
                 q.data.totals.p50_latency_ms / 1000
-              ).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} s; este é o pior caso comum`}
+              ).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} s ; voici le pire cas courant`}
             />
           </div>
 

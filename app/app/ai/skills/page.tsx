@@ -55,10 +55,9 @@ export default async function SkillsPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Skills da IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Compétences de l’IA</h1>
         <p className="text-sm text-muted-foreground">
-          Habilidades especializadas que seus agentes carregam só quando a conversa pede —
-          instale prontas do catálogo ou envie a sua.
+          Compétences spécialisées que vos agents chargent uniquement quand la conversation le demande — installez-les depuis le catalogue ou envoyez la vôtre.
         </p>
       </header>
       <SkillsClient initialState={initialState} />

@@ -78,7 +78,7 @@ function MultiSelectPopover({
       <PopoverContent className="w-64 p-2" align="start">
         <div className="space-y-1">
           <Input
-            placeholder="Buscar..."
+            placeholder="Rechercher..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="h-8 text-sm"
@@ -88,13 +88,13 @@ function MultiSelectPopover({
               onClick={() => { onClear(); setSearch(""); }}
               className="w-full rounded px-2 py-1 text-left text-xs text-muted-foreground hover:bg-accent"
             >
-              Limpar seleção ({selected.length})
+              Effacer la sélection ({selected.length})
             </button>
           )}
           <div className="max-h-52 overflow-y-auto space-y-0.5">
             {filtered.length === 0 && (
               <p className="px-2 py-4 text-center text-xs text-muted-foreground">
-                Nenhum resultado
+                Aucun résultat
               </p>
             )}
             {filtered.map((o) => (
@@ -237,19 +237,19 @@ export function AuditFiltersAdmin({
           type="datetime-local"
           className="h-9 w-48 text-sm"
           onChange={(e) => handleFromChange(e.target.value)}
-          aria-label="Data de início"
+          aria-label="Date de début"
         />
       </div>
       <div className="flex items-center gap-1">
         <label className="text-xs text-muted-foreground sr-only" htmlFor="audit-to">
-          Até
+          Jusqu’au
         </label>
         <Input
           id="audit-to"
           type="datetime-local"
           className="h-9 w-48 text-sm"
           onChange={(e) => handleToChange(e.target.value)}
-          aria-label="Data de fim"
+          aria-label="Date de fin"
         />
       </div>
       {hasAnyFilter && (
@@ -260,7 +260,7 @@ export function AuditFiltersAdmin({
           onClick={clearAll}
         >
           <X size={14} aria-hidden />
-          Limpar
+          Effacer
         </Button>
       )}
     </div>

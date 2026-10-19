@@ -120,12 +120,12 @@ describe("o conteúdo da definição, e o campo que causava as recusas", () => {
     const c = lerConteudo([
       { type: "HEADER", format: "TEXT", text: "Olá" },
       { type: "BODY", text: "Seu pedido {{1}} chega dia {{2}}." },
-      { type: "FOOTER", text: "Equipe" },
+      { type: "FOOTER", text: "Équipe" },
       { type: "BUTTONS", buttons: [{ type: "URL", text: "Rastrear" }] },
     ]);
     expect(c.body).toContain("Seu pedido");
     expect(c.header).toMatchObject({ formato: "TEXT", texto: "Olá" });
-    expect(c.footer).toBe("Equipe");
+    expect(c.footer).toBe("Équipe");
     expect(c.botoes).toEqual([{ tipo: "URL", texto: "Rastrear" }]);
   });
 
@@ -248,7 +248,7 @@ describe("o formulário completo — idioma, cabeçalho e botões", () => {
     const c = montarComponents({
       body: "corpo",
       exemplos: [],
-      cabecalho: { texto: "Título" },
+      cabecalho: { texto: "Titre" },
     }) as { type: string }[];
     expect(c.map((x) => x.type)).toEqual(["HEADER", "BODY"]);
   });
@@ -258,8 +258,8 @@ describe("o formulário completo — idioma, cabeçalho e botões", () => {
       body: "corpo",
       exemplos: [],
       botoes: [
-        { tipo: "quick_reply", texto: "Sim" },
-        { tipo: "url", texto: "Ver", url: "https://x.com" },
+        { tipo: "quick_reply", texto: "Oui" },
+        { tipo: "url", texto: "Voir", url: "https://x.com" },
       ],
     }) as { type: string; buttons?: unknown[] }[];
     const bts = c.find((x) => x.type === "BUTTONS");
@@ -273,7 +273,7 @@ describe("o formulário completo — idioma, cabeçalho e botões", () => {
       body: "corpo",
       exemplos: [],
       botoes: [
-        { tipo: "url", texto: "Ver", url: "" },
+        { tipo: "url", texto: "Voir", url: "" },
         { tipo: "phone_number", texto: "Ligar", telefone: "" },
         { tipo: "quick_reply", texto: "Ok" },
       ],
@@ -357,7 +357,7 @@ describe("subir a imagem e ver a prévia", () => {
     // isso antes poupa o ciclo de revisão inteiro.
     const fonte = readFileSync("components/connections/PreviaDaDefinicao.tsx", "utf8");
     expect(fonte).toMatch(/faltando/);
-    expect(fonte).toMatch(/numeração é sequencial/);
+    expect(fonte).toMatch(/numérotation est séquentielle/);
   });
 
   it("as variáveis aparecem COMO variáveis, não substituídas", () => {

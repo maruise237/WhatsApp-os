@@ -138,7 +138,7 @@ function passoPorEtapa(mapa: MapaDoAgente): Map<string, LeadStage> {
 
 /** "1 negócio", "4 negócios" — a tela recompõe a frase, então pluraliza como o servidor. */
 export function contagemDeNegocios(n: number): string {
-  return `${n} ${n === 1 ? "negócio" : "negócios"}`;
+  return `${n} ${n === 1 ? "opportunité" : "opportunités"}`;
 }
 
 /**
@@ -188,7 +188,7 @@ const LARGURA = { ordem: "sm:w-[76px]", papel: "sm:w-56", arquivar: "sm:w-[104px
  * antigo, que é exatamente o defeito que estes rótulos existem para consertar.
  */
 export const ROTULO = {
-  nome: "Nome da coluna (clique para renomear)",
+  nome: "Nom de la colonne (cliquez pour renommer)",
   ordem: "Ordem",
   papel: "O que acontece nesta coluna",
 } as const;

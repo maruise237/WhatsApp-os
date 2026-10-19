@@ -46,7 +46,7 @@ export function SuspendDialog({ open, onClose, organizationId }: SuspendDialogPr
   function handleConfirm() {
     const parsed = reasonSchema.safeParse(reason);
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Razão inválida");
+      setError(parsed.error.issues[0]?.message ?? "Motif invalide");
       return;
     }
     suspend.mutate(
@@ -73,21 +73,20 @@ export function SuspendDialog({ open, onClose, organizationId }: SuspendDialogPr
         <AlertDialogHeader>
           <AlertDialogTitle>Suspender tenant</AlertDialogTitle>
           <AlertDialogDescription>
-            A suspensão bloqueará o acesso dos usuários deste tenant à plataforma.
-            Esta ação pode ser revertida.
+            La suspension bloquera l’accès des utilisateurs de cette organisation à la plateforme. Cette action est réversible.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="space-y-2 py-2">
           <Label htmlFor="suspend-reason">
-            Motivo da suspensão{" "}
+            Motif de la suspension{" "}
             <span className="text-muted-foreground text-xs font-normal">
               ({reason.length}/500)
             </span>
           </Label>
           <Textarea
             id="suspend-reason"
-            placeholder="Descreva o motivo da suspensão (mínimo 10 caracteres)..."
+            placeholder="Décrivez le motif de la suspension (10 caractères minimum)..."
             value={reason}
             onChange={(e) => {
               setReason(e.target.value);
@@ -105,13 +104,13 @@ export function SuspendDialog({ open, onClose, organizationId }: SuspendDialogPr
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleClose}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel onClick={handleClose}>Annuler</AlertDialogCancel>
           <Button
             variant="destructive"
             onClick={handleConfirm}
             disabled={!isValid || suspend.isPending}
           >
-            {suspend.isPending ? "Suspendendo..." : "Confirmar suspensão"}
+            {suspend.isPending ? "Suspendendo..." : "Confirmer la suspension"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

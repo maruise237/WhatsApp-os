@@ -25,8 +25,7 @@ export function SlaBanner({ requests }: SlaBannerProps) {
         <Warning size={18} weight="fill" className="shrink-0 text-red-600 dark:text-red-400" aria-hidden />
         <span>
           <strong>{critical.length}</strong>{" "}
-          {critical.length === 1 ? "solicitação crítica" : "solicitações críticas"} —
-          SLA vencido ou inferior a 2 dias. Ação imediata requerida.
+          {critical.length === 1 ? "demande critique" : "demandes critiques"} — SLA dépassé ou inférieur à 2 jours. Action immédiate requise.
         </span>
       </div>
     );
@@ -41,8 +40,7 @@ export function SlaBanner({ requests }: SlaBannerProps) {
         <Warning size={18} weight="fill" className="shrink-0 text-yellow-600 dark:text-yellow-400" aria-hidden />
         <span>
           <strong>{warning.length}</strong>{" "}
-          {warning.length === 1 ? "solicitação em alerta" : "solicitações em alerta"} —
-          mais de 50% do prazo consumido.
+          {warning.length === 1 ? "demande en alerte" : "demandes en alerte"} — plus de 50 % du délai consommé.
         </span>
       </div>
     );

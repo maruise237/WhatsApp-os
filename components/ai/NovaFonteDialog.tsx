@@ -29,11 +29,7 @@ import { useT } from "@/hooks/i18n/useT";
  * linhas por pergunta é o que alguém consegue colar de um documento que já
  * tem, e é o que a API parseia. Editor item-a-item viria depois, se pedirem.
  */
-const EXEMPLO = `## Pergunta: Qual o prazo de entrega?
-## Resposta: De 2 a 3 dias úteis após a confirmação do pagamento.
-
-## Pergunta: Vocês fazem troca?
-## Resposta: Sim, em até 30 dias, com o produto sem uso.`;
+const EXEMPLO = `## Question : Quel est le délai de livraison ? ## Réponse : De 2 à 3 jours ouvrés après la confirmation du paiement. ## Question : Faites-vous des échanges ? ## Réponse : Oui, sous 30 jours, avec le produit non utilisé.`;
 
 /**
  * Só os dois tipos cujo conteúdo colado a API ingere de fato. `conversations` e
@@ -54,7 +50,7 @@ interface Props {
 
 export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCriada }: Props) {
   const t = useT();
-  const [nome, setNome] = useState(`${rotulo} da loja`);
+  const [nome, setNome] = useState(`${rotulo} de la boutique`);
   const [conteudo, setConteudo] = useState("");
   const [enviando, setEnviando] = useState(false);
 

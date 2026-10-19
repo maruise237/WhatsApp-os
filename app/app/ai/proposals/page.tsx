@@ -29,8 +29,7 @@ export default async function ProposalsPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Propostas</h1>
         <p className="text-sm text-muted-foreground">
-          Próximos passos que o assistente sugeriu e esperam sua decisão. Aprovar e
-          ignorar são registrados — ignorar é uma decisão, não a falta dela.
+          Prochaines étapes suggérées par l’assistant qui attendent votre décision. Approuver et ignorer sont enregistrés — ignorer est une décision, pas une absence de décision.
         </p>
       </header>
       <ProposalsList canDecide={canDecide} />

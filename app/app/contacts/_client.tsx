@@ -22,7 +22,7 @@ import { EmptyContacts } from "@/components/empty";
 import type { ContactOrderBy } from "@/lib/schemas/contacts";
 
 const SOURCE_OPTIONS = [
-  { value: undefined, label: "Todas as origens" },
+  { value: undefined, label: "Toutes les origines" },
   { value: "manual", label: "Manual" },
   { value: "whatsapp", label: "WhatsApp" },
   { value: "nuvemshop", label: "Nuvemshop" },

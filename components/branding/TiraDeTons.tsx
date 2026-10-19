@@ -60,7 +60,7 @@ export function TiraDeTons({ tons, legenda }: Props) {
       <div
         role="img"
         aria-label={
-          `Escala de ${tons.length} tons gerada a partir da sua cor, do mais claro ao mais ` +
+          `Échelle de ${tons.length} teintes générée à partir de votre couleur, de la plus claire à la plus ` +
           `escuro. Os tons em uso estão descritos na lista abaixo.`
         }
         className="flex overflow-hidden rounded-md border border-border"

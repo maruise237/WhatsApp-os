@@ -37,9 +37,9 @@ export function AlertItem({ alert }: AlertItemProps) {
 
   const severityLabel =
     alert.severity === "critical"
-      ? "Crítico"
+      ? "Critique"
       : alert.severity === "warning"
-        ? "Atenção"
+        ? "Attention"
         : "Info";
 
   return (

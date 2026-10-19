@@ -35,7 +35,7 @@ function formatBRL(cents: number | null, currency: string | null): string | null
   if (cents == null) return null;
   const code = currency ?? "BRL";
   try {
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("fr-FR", {
       style: "currency",
       currency: code,
       maximumFractionDigits: 0,
@@ -230,7 +230,7 @@ export function KanbanCard({
               agentVersion={card.owner.agentVersion}
             />
             <span className="shrink-0 whitespace-nowrap text-[11px] tabular-nums text-text-muted">
-              {state.showStageAge && age ? `${age} em ${card.stageName}` : `em ${card.stageName}`}
+              {state.showStageAge && age ? `${age} dans ${card.stageName}` : `dans ${card.stageName}`}
             </span>
           </div>
         </div>

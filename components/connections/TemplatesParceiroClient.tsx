@@ -514,7 +514,7 @@ export function TemplatesParceiroClient() {
                       </div>
                     )}
                     <p className="text-[10px] text-muted-foreground">
-                      {t("Sincronizado em")} {new Date(template.syncedAt).toLocaleString("pt-BR")}
+                      {t("Sincronizado em")} {new Date(template.syncedAt).toLocaleString("fr-FR")}
                     </p>
                   </div>
                 )}

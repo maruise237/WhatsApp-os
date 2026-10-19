@@ -75,7 +75,7 @@ function pintar(props: Partial<Parameters<typeof CampoDeLogo>[0]> = {}) {
       escopo="instalacao"
       logoDaCamada={{ url: null }}
       logoHerdado={null}
-      origemDoHerdado="do arquivo de instalação do servidor"
+      origemDoHerdado="du fichier d’installation du serveur"
       nomeEmVigor="DeskcommCRM"
       {...props}
     />,
@@ -120,7 +120,7 @@ describe("a prévia do logo não espera o router.refresh()", () => {
     await waitFor(() => expect(previaClara()).not.toBeNull());
     expect(previaClara()!.getAttribute("src")).toBe(URL_SUBIDA);
     // O botão só existe quando ESTA camada tem logo próprio — e agora ela tem.
-    expect(screen.getByRole("button", { name: /^remover$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^supprimer$/i })).toBeInTheDocument();
     // E o texto acima da prévia não pode dizer "sem logo próprio" com o logo à vista.
     expect(screen.queryByText(/Sem logo próprio/i)).toBeNull();
   });
@@ -131,13 +131,13 @@ describe("a prévia do logo não espera o router.refresh()", () => {
 
     expect(previaClara()!.getAttribute("src")).toBe(URL_SUBIDA);
 
-    fireEvent.click(screen.getByRole("button", { name: /^remover$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^supprimer$/i }));
 
     // `logo_url: null` é "esta camada ficou sem logo próprio", e não "a resposta
     // não trouxe o campo": a prévia tem de CAIR no herdado, não continuar no que
     // acabou de ser apagado.
     await waitFor(() => expect(previaClara()!.getAttribute("src")).toBe(URL_HERDADA));
-    expect(screen.queryByRole("button", { name: /^remover$/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /^supprimer$/i })).toBeNull();
   });
 
   it("(3) o servidor volta ao comando quando um render novo traz outra coisa", async () => {
@@ -156,13 +156,13 @@ describe("a prévia do logo não espera o router.refresh()", () => {
         escopo="instalacao"
         logoDaCamada={{ url: null }}
         logoHerdado={URL_HERDADA}
-        origemDoHerdado="do arquivo de instalação do servidor"
+        origemDoHerdado="du fichier d’installation du serveur"
         nomeEmVigor="DeskcommCRM"
       />,
     );
 
     expect(previaClara()!.getAttribute("src")).toBe(URL_HERDADA);
-    expect(screen.queryByRole("button", { name: /^remover$/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /^supprimer$/i })).toBeNull();
   });
 
   it("(4) o refresh continua sendo disparado — o resto da página ainda depende dele", async () => {

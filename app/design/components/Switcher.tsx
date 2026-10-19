@@ -25,7 +25,7 @@ export function Switcher() {
         onChange={(e) => v.setTypo(e.target.value as TypoId)}
       >
         {Object.entries(TYPOS).map(([id, t]) => (
-          <option key={id} value={id}>Tipo · {t.name}</option>
+          <option key={id} value={id}>Type · {t.name}</option>
         ))}
       </select>
       <select
@@ -43,7 +43,7 @@ export function Switcher() {
         className="ds-icon-btn"
         aria-label="Alternar tema"
         onClick={() => v.setTheme(v.theme === "light" ? "dark" : "light")}
-        title={v.theme === "light" ? "Trocar para escuro" : "Trocar para claro"}
+        title={v.theme === "light" ? "Passer en mode sombre" : "Passer en mode clair"}
       >
         {v.theme === "light" ? (
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" /></svg>

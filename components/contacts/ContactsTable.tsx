@@ -170,12 +170,12 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
                 <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
                   <Link
                     href={`/app/inbox?id=${c.conversa.id}`}
-                    title="Abrir conversa no Inbox"
-                    aria-label={`Abrir conversa com ${displayName(c)} no Inbox`}
+                    title="Ouvrir la conversation dans la boîte de réception"
+                    aria-label={`Ouvrir la conversation avec ${displayName(c)} dans la boîte de réception`}
                   >
                     <ChatCircle size={16} weight="regular" aria-hidden />
                     {c.conversa.unread > 0 && (
-                      <span className="sr-only">{c.conversa.unread} sem ler</span>
+                      <span className="sr-only">{c.conversa.unread} non lus</span>
                     )}
                   </Link>
                 </Button>

@@ -15,7 +15,7 @@ import type { TenantHealthResponse } from "@/app/api/v1/admin/tenants/[id]/healt
 
 function formatDate(iso: string | null): string {
   if (!iso) return "—";
-  return new Intl.DateTimeFormat("pt-BR", {
+  return new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -37,7 +37,7 @@ function formatLag(seconds: number | null): string {
  * ~5x menor do que o que a fatura do provedor vai cobrar.
  */
 function formatCents(cents: number): string {
-  return new Intl.NumberFormat("pt-BR", {
+  return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: "USD",
   }).format(cents / 100);
@@ -45,7 +45,7 @@ function formatCents(cents: number): string {
 
 /** O teto vincula esta organização? É o que separa "100%" de "100% e parou". */
 const MODO_LABEL: Record<TenantHealthResponse["ai"]["enforcement_mode"], string> = {
-  off: "Não aplicado",
+  off: "Non appliqué",
   avisar: "Só avisa",
   bloquear: "Para a IA no limite",
 };
@@ -71,7 +71,7 @@ export function HealthGrid({ health }: HealthGridProps) {
   const wahaConnected = waha.sessions.filter((s) => s.status === "WORKING").length;
   const wahaPrimary =
     waha.sessions.length === 0
-      ? "Sem sessões"
+      ? "Aucune session"
       : `${wahaConnected}/${waha.sessions.length} conectada${waha.sessions.length !== 1 ? "s" : ""}`;
 
   const wahaDetails = waha.sessions.slice(0, 4).map((s) => ({
@@ -80,11 +80,11 @@ export function HealthGrid({ health }: HealthGridProps) {
   }));
 
   // Nuvemshop card
-  const nuPrimary = nuvemshop.connected ? "Conectado" : "Não conectado";
+  const nuPrimary = nuvemshop.connected ? "Conectado" : "Non connecté";
   const nuDetails = [
-    { label: "Última sync", value: formatDate(nuvemshop.last_synced_at) },
+    { label: "Dernière synchro", value: formatDate(nuvemshop.last_synced_at) },
     ...(nuvemshop.days_until_expiry !== null
-      ? [{ label: "Expira em", value: `${nuvemshop.days_until_expiry}d` }]
+      ? [{ label: "Expire le", value: `${nuvemshop.days_until_expiry}d` }]
       : []),
     ...(nuvemshop.expires_at
       ? [{ label: "Token expira", value: formatDate(nuvemshop.expires_at) }]
@@ -93,11 +93,11 @@ export function HealthGrid({ health }: HealthGridProps) {
 
   // AI budget card
   const aiPrimary =
-    ai.percent_used !== null ? `${ai.percent_used}% usado` : "Sem orçamento";
+    ai.percent_used !== null ? `${ai.percent_used}% usado` : "Sans budget";
   const aiDetails = [
     { label: "Consumido", value: formatCents(ai.consumed_cents) },
     {
-      label: "Orçamento",
+      label: "Budget",
       value: ai.budget_cents ? formatCents(ai.budget_cents) : "Ilimitado",
     },
     { label: "Limite", value: MODO_LABEL[ai.enforcement_mode] },
@@ -106,7 +106,7 @@ export function HealthGrid({ health }: HealthGridProps) {
   // Audit lag card
   const auditPrimary = formatLag(audit.lag_seconds);
   const auditDetails = [
-    { label: "Último evento", value: formatDate(audit.last_at) },
+    { label: "Dernier événement", value: formatDate(audit.last_at) },
     {
       label: "Lag",
       value: audit.lag_seconds !== null ? formatLag(audit.lag_seconds) : "—",
@@ -132,7 +132,7 @@ export function HealthGrid({ health }: HealthGridProps) {
       />
 
       <HealthCard
-        title="Orçamento IA"
+        title="Budget IA"
         status={ai.status}
         icon={<Brain size={18} aria-hidden />}
         primaryValue={aiPrimary}

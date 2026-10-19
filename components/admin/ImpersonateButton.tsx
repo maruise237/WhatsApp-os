@@ -53,7 +53,7 @@ export function ImpersonateButton({
       if (!res.ok) {
         const errorMsg =
           (json as { error?: { message?: string } })?.error?.message ??
-          "Não foi possível iniciar impersonate";
+          "Impossible de démarrer l’impersonation";
         toast.error(errorMsg);
         return;
       }
@@ -67,7 +67,7 @@ export function ImpersonateButton({
       // Fallback (in case assign is intercepted in tests).
       router.push(redirectUrl);
     } catch (err) {
-      toast.error("Erro de rede ao iniciar impersonate");
+      toast.error("Erreur réseau au démarrage de l’impersonation");
       console.error("[impersonate] start error", err);
     } finally {
       setBusy(false);
@@ -83,7 +83,7 @@ export function ImpersonateButton({
           disabled={disabled}
           aria-label={
             disabled
-              ? (disabledReason ?? "Impersonate indisponível")
+              ? (disabledReason ?? "Impersonation indisponible")
               : `Impersonar ${displayName}`
           }
           title={disabled ? disabledReason : undefined}
@@ -95,19 +95,18 @@ export function ImpersonateButton({
         <AlertDialogHeader>
           <AlertDialogTitle>Iniciar impersonate?</AlertDialogTitle>
           <AlertDialogDescription>
-            Você está prestes a entrar como o tenant{" "}
-            <span className="font-semibold text-foreground">{displayName}</span>.
-            Toda ação será registrada com a flag{" "}
+            Vous êtes sur le point d’entrer en tant que l’organisation{" "}
+            <span className="font-semibold text-foreground">{displayName}</span>. Chaque action sera enregistrée avec le marqueur{" "}
             <code className="rounded bg-muted px-1 py-0.5 text-xs">
               acting_as_platform_admin
             </code>
-            . A sessão expira em 1 hora. Confirma?
+            . La session expire dans 1 heure. Confirmer ?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={busy}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={busy}>Annuler</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm} disabled={busy}>
-            {busy ? "Entrando…" : "Confirmar e entrar"}
+            {busy ? "Entrando…" : "Confirmer et entrer"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

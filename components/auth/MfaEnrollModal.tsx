@@ -39,7 +39,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
     startTransition(async () => {
       const res = await enrollMfa();
       if (!res.ok) {
-        setError(res.message ?? "Não foi possível iniciar a configuração.");
+        setError(res.message ?? "Impossible de démarrer la configuration.");
         setStep("intro");
         return;
       }
@@ -61,9 +61,9 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
       const res = await confirmMfaEnroll(finalCode, enrollState.factor_id);
       if (!res.ok) {
         if (res.error === "verify_failed" || res.error === "invalid_code") {
-          setError("Código inválido. Tente novamente.");
+          setError("Code invalide. Réessayez.");
         } else {
-          setError(res.message ?? "Falha ao confirmar. Tente novamente.");
+          setError(res.message ?? "Échec de la confirmation. Réessayez.");
         }
         setCode("");
         return;
@@ -85,7 +85,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
           <div className="space-y-4">
             <div>
               <h2 id="mfa-title" className="text-xl font-semibold">
-                Configure a verificação em duas etapas
+                Configurez la validation en deux étapes
               </h2>
               {/*
                 ⚠️ O MESMO MODAL ATENDE DOIS MOMENTOS OPOSTOS. Ele nasceu dentro
@@ -97,10 +97,9 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
               */}
               <p className="mt-1 text-sm text-muted-foreground">
                 {motivo === "obrigatorio"
-                  ? "Esta empresa exige a verificação em duas etapas de quem administra. "
-                  : "A cada login, além da senha, o sistema vai pedir um código de 6 dígitos. "}
-                Use um aplicativo autenticador (Google Authenticator, 1Password, Authy,
-                Bitwarden) para gerar os códigos.
+                  ? "Cette entreprise exige la validation en deux étapes pour les personnes qui l’administrent."
+                  : "À chaque connexion, en plus du mot de passe, le système demandera un code à 6 chiffres."}
+                Utilisez une application d’authentification (Google Authenticator, 1Password, Authy, Bitwarden) pour générer les codes.
               </p>
             </div>
             {error && (
@@ -117,7 +116,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
               }}
               disabled={isPending}
             >
-              Iniciar configuração
+              Démarrer la configuration
             </Button>
           </div>
         )}
@@ -126,11 +125,10 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
           <div className="space-y-5">
             <div>
               <h2 id="mfa-title" className="text-xl font-semibold">
-                Escaneie o QR code
+                Scannez le QR code
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Abra seu app autenticador, adicione uma nova conta e digite o
-                código de 6 dígitos abaixo.
+                Ouvrez votre application d’authentification, ajoutez un nouveau compte et saisissez le code à 6 chiffres ci-dessous.
               </p>
             </div>
 
@@ -144,7 +142,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
                   {/* eslint-disable-next-line @next/next/no-img-element -- inline data URL, no benefit from next/image optimization */}
                   <img
                     src={enrollState.qr_data_url}
-                    alt="QR code para configurar autenticador"
+                    alt="QR code pour configurer l’application d’authentification"
                     width={240}
                     height={240}
                     className="rounded border border-border bg-white p-2"
@@ -152,7 +150,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
                 </div>
                 <details className="text-xs text-muted-foreground">
                   <summary className="cursor-pointer">
-                    Não consegue escanear? Digite o código manual
+                    Impossible de scanner ? Saisissez le code manuellement
                   </summary>
                   <code className="mt-2 block break-all rounded bg-muted p-2 font-mono">
                     {enrollState.secret}
@@ -161,7 +159,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
 
                 <div className="space-y-3">
                   <p className="text-center text-sm font-medium">
-                    Digite o código de 6 dígitos
+                    Saisissez le code à 6 chiffres
                   </p>
                   <TOTPInput
                     value={code}
@@ -182,7 +180,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
                     disabled={isPending || code.length !== 6}
                     onClick={() => submitCode()}
                   >
-                    {isPending ? "Verificando..." : "Confirmar"}
+                    {isPending ? "Verificando..." : "Confirmer"}
                   </Button>
                 </div>
               </>
@@ -194,7 +192,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
           <div className="space-y-4">
             <div>
               <h2 id="mfa-title" className="text-xl font-semibold">
-                Códigos de recuperação
+                Codes de récupération
               </h2>
             </div>
             <RecoveryCodesPanel

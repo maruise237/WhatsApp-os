@@ -29,7 +29,7 @@ export function MobileSidebar() {
           variant="ghost"
           size="icon"
           className="h-11 w-11 md:hidden"
-          aria-label="Abrir navegação"
+          aria-label="Ouvrir la navigation"
         >
           <List size={22} aria-hidden />
         </Button>
@@ -38,7 +38,7 @@ export function MobileSidebar() {
         side="left"
         className="flex w-72 max-w-[calc(100vw-2rem)] flex-col gap-0 p-0 sm:max-w-xs"
       >
-        <SheetTitle className="sr-only">Navegação principal</SheetTitle>
+        <SheetTitle className="sr-only">Navigation principale</SheetTitle>
         <SidebarContent
           collapsed={false}
           showCollapseControl={false}

@@ -1,7 +1,7 @@
 "use client";
 
 import { differenceInDays, format, isBefore } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 interface SlaTimelineProps {
   received_at: string;
@@ -21,16 +21,16 @@ function getMilestones(
 ): { label: string; day: number }[] {
   if (requestType === "data_request") {
     return [
-      { label: "Recebido", day: 0 },
-      { label: "Revisão intermediária", day: 5 },
-      { label: "Entrega ao titular", day: 7 },
+      { label: "Reçue", day: 0 },
+      { label: "Révision intermédiaire", day: 5 },
+      { label: "Remise à la personne concernée", day: 7 },
     ];
   }
   // redact / store_redact
   return [
-    { label: "Recebido", day: 0 },
+    { label: "Reçue", day: 0 },
     { label: "Processamento", day: 10 },
-    { label: "Anonimização concluída", day: 15 },
+    { label: "Anonymisation terminée", day: 15 },
   ];
 }
 
@@ -87,7 +87,7 @@ export function SlaTimeline({ received_at, due_at, request_type }: SlaTimelinePr
       {/* Progress bar */}
       <div className="space-y-1">
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>D+{daysElapsed} (hoje)</span>
+          <span>D+{daysElapsed} (aujourd’hui)</span>
           <span>
             {daysRemaining > 0
               ? `${daysRemaining}d restantes`
@@ -143,7 +143,7 @@ export function SlaTimeline({ received_at, due_at, request_type }: SlaTimelinePr
                   D+{m.targetDay} — {m.label}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {format(m.date, "dd 'de' MMM yyyy", { locale: ptBR })}
+                  {format(m.date, "dd 'de' MMM yyyy", { locale: fr })}
                 </p>
               </div>
             </li>

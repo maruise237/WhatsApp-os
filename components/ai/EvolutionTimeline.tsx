@@ -10,8 +10,8 @@ import type { TimelineItem } from "@/lib/ai/evolution/aggregate";
  * três coisas diferentes a fazer se ele quiser mais.
  */
 const TIPOS: Record<TimelineItem["kind"], { rotulo: string; Icone: typeof Brain; cor: string }> = {
-  memory: { rotulo: "Regra que você ensinou", Icone: Brain, cor: "text-accent" },
-  proposal: { rotulo: "Melhoria que você aprovou", Icone: Lightbulb, cor: "text-warning-fg" },
+  memory: { rotulo: "Règle que vous avez enseignée", Icone: Brain, cor: "text-accent" },
+  proposal: { rotulo: "Amélioration que vous avez approuvée", Icone: Lightbulb, cor: "text-warning-fg" },
   skill: { rotulo: "Habilidade instalada", Icone: PuzzlePiece, cor: "text-info-fg" },
 };
 
@@ -31,7 +31,7 @@ function titulo(t: string): string {
 function dia(s: string): string {
   // `s` já vem truncado em YYYY-MM-DD pelo agregador; o `T00:00:00Z` evita que o
   // browser leia a data como local e mostre o dia anterior a oeste de Greenwich.
-  return new Date(`${s}T00:00:00Z`).toLocaleDateString("pt-BR", {
+  return new Date(`${s}T00:00:00Z`).toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     timeZone: "UTC",

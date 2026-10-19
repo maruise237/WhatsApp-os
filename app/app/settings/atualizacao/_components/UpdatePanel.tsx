@@ -42,10 +42,10 @@ function comandoDeVolta(fromVersion: string | undefined): string {
 }
 
 const PASSOS = [
-  { chave: "backup", texto: "Guardando uma cópia de segurança dos seus dados" },
-  { chave: "codigo", texto: "Baixando a versão nova" },
-  { chave: "banco", texto: "Atualizando o banco de dados" },
-  { chave: "app", texto: "Reiniciando o sistema" },
+  { chave: "backup", texto: "Sauvegarde de vos données en cours" },
+  { chave: "codigo", texto: "Téléchargement de la nouvelle version" },
+  { chave: "banco", texto: "Mise à jour de la base de données" },
+  { chave: "app", texto: "Redémarrage du système" },
 ] as const;
 
 export function UpdatePanel() {

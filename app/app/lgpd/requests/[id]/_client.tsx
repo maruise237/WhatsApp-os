@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { CaretLeft } from "@/lib/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -62,7 +62,7 @@ export function LgpdRequestDetail({ id }: Props) {
   if (error || !data) {
     return (
       <div className="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-        Falha ao carregar solicitação.
+        Échec du chargement de la demande.
       </div>
     );
   }
@@ -81,7 +81,7 @@ export function LgpdRequestDetail({ id }: Props) {
           <Button variant="ghost" size="sm" asChild className="-ml-2 gap-1 text-muted-foreground">
             <Link href="/app/lgpd/requests">
               <CaretLeft size={14} aria-hidden />
-              Solicitações
+              Demandes
             </Link>
           </Button>
         </div>
@@ -100,13 +100,13 @@ export function LgpdRequestDetail({ id }: Props) {
         </div>
 
         <p className="text-sm text-muted-foreground">
-          Recebido em{" "}
-          {format(new Date(request.received_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+          Reçue le{" "}
+          {format(new Date(request.received_at), "dd/MM/yyyy 'às' HH:mm", { locale: fr })}
           {request.due_at && (
             <>
               {" · "}
-              Vence em{" "}
-              {format(new Date(request.due_at), "dd/MM/yyyy", { locale: ptBR })}
+              Échéance le{" "}
+              {format(new Date(request.due_at), "dd/MM/yyyy", { locale: fr })}
             </>
           )}
         </p>
@@ -115,10 +115,10 @@ export function LgpdRequestDetail({ id }: Props) {
       {/* PDF download if completed */}
       {signed_pdf_url && (
         <div className="rounded-md border bg-muted/30 px-4 py-3 text-sm flex flex-wrap items-center justify-between gap-4">
-          <span>Relatório de exportação disponível (expira em 72h).</span>
+          <span>Rapport d’export disponible (expire dans 72 h).</span>
           <Button size="sm" variant="outline" asChild className="shrink-0">
             <a href={signed_pdf_url} download>
-              Baixar PDF
+              Télécharger le PDF
             </a>
           </Button>
         </div>
@@ -139,7 +139,7 @@ export function LgpdRequestDetail({ id }: Props) {
         {/* SLA Timeline */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Linha do tempo SLA</CardTitle>
+            <CardTitle className="text-sm font-medium">Chronologie du SLA</CardTitle>
           </CardHeader>
           <CardContent>
             {request.due_at ? (
@@ -149,7 +149,7 @@ export function LgpdRequestDetail({ id }: Props) {
                 request_type={request.request_type}
               />
             ) : (
-              <p className="text-sm text-muted-foreground">SLA não definido.</p>
+              <p className="text-sm text-muted-foreground">SLA non défini.</p>
             )}
           </CardContent>
         </Card>
@@ -157,13 +157,13 @@ export function LgpdRequestDetail({ id }: Props) {
         {/* Request info */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Detalhes</CardTitle>
+            <CardTitle className="text-sm font-medium">Détails</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <Row label="ID completo" value={request.id} mono />
-            <Row label="Tipo" value={typeLabel} />
-            <Row label="Status" value={statusLabel} />
-            <Row label="Origem" value={request.source ?? "—"} />
+            <Row label="Type" value={typeLabel} />
+            <Row label="Statut" value={statusLabel} />
+            <Row label="Origine" value={request.source ?? "—"} />
             <Row label="Escopo" value={request.scope} />
             <Row label="Tentativas" value={String(request.attempts)} />
             {request.contact_id && (
@@ -174,13 +174,13 @@ export function LgpdRequestDetail({ id }: Props) {
             )}
             {request.completed_at && (
               <Row
-                label="Concluído em"
-                value={format(new Date(request.completed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                label="Terminée le"
+                value={format(new Date(request.completed_at), "dd/MM/yyyy HH:mm", { locale: fr })}
               />
             )}
             {request.error_message && (
               <div className="rounded-md border border-destructive/30 bg-destructive/5 px-2 py-1">
-                <p className="text-xs text-muted-foreground">Erro</p>
+                <p className="text-xs text-muted-foreground">Erreur</p>
                 <p className="text-destructive text-xs">{request.error_message}</p>
               </div>
             )}
@@ -191,7 +191,7 @@ export function LgpdRequestDetail({ id }: Props) {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-sm font-medium">
-              Trilha de auditoria ({audit_trail.length})
+              Piste d’audit ({audit_trail.length})
             </CardTitle>
           </CardHeader>
           <CardContent>

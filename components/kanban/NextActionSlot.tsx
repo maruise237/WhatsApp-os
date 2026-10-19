@@ -39,7 +39,7 @@ export function NextActionSlot({
   return (
     <>
       <span className="min-w-0 flex-1 truncate text-accent" title={label}>
-        Propõe: {label}
+        Propose : {label}
       </span>
       <span className="flex shrink-0 items-center gap-1">
         <button

@@ -59,7 +59,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
         // "não foi possível testar" não diz se falta chave, saldo ou modelo.
         setDesfecho({
           tipo: "erro",
-          mensagem: json.error?.message ?? `O ensaio falhou (HTTP ${res.status}).`,
+          mensagem: json.error?.message ?? `L’essai a échoué (HTTP ${res.status}).`,
         });
         return;
       }
@@ -72,7 +72,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
       if (d?.status && d.status !== "completed") {
         setDesfecho({
           tipo: "erro",
-          mensagem: d.error_message ?? d.error_code ?? `o ensaio terminou como "${d.status}"`,
+          mensagem: d.error_message ?? d.error_code ?? `l’essai s’est terminé avec le statut "${d.status}"`,
         });
         return;
       }
@@ -80,7 +80,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
       setDesfecho(
         texto
           ? { tipo: "resposta", texto }
-          : { tipo: "erro", mensagem: "Ele executou, mas não devolveu texto nenhum." },
+          : { tipo: "erro", mensagem: "Il s’est exécuté, mais n’a renvoyé aucun texte." },
       );
     } catch (err) {
       setDesfecho({ tipo: "erro", mensagem: err instanceof Error ? err.message : String(err) });

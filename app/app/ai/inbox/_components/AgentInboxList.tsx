@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,12 +42,12 @@ export function AgentInboxList({ canResolve }: { canResolve: boolean }) {
         <div className="flex flex-1 flex-col items-center justify-center gap-2 py-16 text-center">
           <Bell size={28} className="text-muted-foreground/60" aria-hidden />
           <p className="text-sm font-medium">
-            {tab === "open" ? "Nenhum aviso em aberto" : "Nenhum aviso resolvido"}
+            {tab === "open" ? "Aucune alerte en cours" : "Aucune alerte résolue"}
           </p>
           <p className="text-xs text-muted-foreground">
             {tab === "open"
-              ? "Quando o assistente precisar de você, o aviso aparece aqui."
-              : "Avisos que você marcar como resolvidos ficam aqui."}
+              ? "Quand l’assistant aura besoin de vous, l’alerte apparaîtra ici."
+              : "Les alertes que vous marquez comme résolues restent ici."}
           </p>
         </div>
       ) : (
@@ -80,7 +80,7 @@ function InboxRow({
 }) {
   const when = formatDistanceToNowStrict(new Date(item.created_at), {
     addSuffix: true,
-    locale: ptBR,
+    locale: fr,
   });
   return (
     <li className="flex items-start gap-3 px-4 py-3" data-testid="inbox-item">

@@ -7,8 +7,7 @@ export function SectionTokens() {
     <div className="ds-section">
       <h2 className="ds-display">Tokens</h2>
       <p className="ds-lede">
-        Foundation do sistema. Escala 4-base (4/8/12/16…) — granular o suficiente para densidade
-        compacta sem fragmentação. Nada decorativo: cada token resolve um problema operacional.
+        Fondation du système. Échelle base 4 (4/8/12/16…) — assez fine pour la densité compacte sans fragmentation. Rien de décoratif : chaque jeton résout un problème opérationnel.
       </p>
 
       <h3>Spacing scale (4-base)</h3>
@@ -87,8 +86,8 @@ export function SectionTokens() {
           <thead>
             <tr style={{ textAlign: "left", color: "var(--ds-text-muted)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em" }}>
               <th style={{ padding: "8px 0" }}>Token</th>
-              <th>Valor</th>
-              <th>Uso</th>
+              <th>Valeur</th>
+              <th>Utilisation</th>
             </tr>
           </thead>
           <tbody>

@@ -57,7 +57,7 @@ function StatusBadge({
 
 function formatDate(iso: string | null): string {
   if (!iso) return "—";
-  return new Intl.DateTimeFormat("pt-BR", {
+  return new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     year: "2-digit",
@@ -133,9 +133,9 @@ export function TenantsTable({
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-md border py-16 text-center text-muted-foreground">
         <Buildings size={36} weight="duotone" className="opacity-40" aria-hidden />
-        <p className="text-sm font-medium">Nenhum tenant encontrado</p>
+        <p className="text-sm font-medium">Aucune organisation trouvée</p>
         <p className="max-w-xs text-xs opacity-70">
-          Ajuste os filtros ou crie um novo tenant.
+          Ajustez les filtres ou créez une nouvelle organisation.
         </p>
       </div>
     );
@@ -148,12 +148,12 @@ export function TenantsTable({
           <TableHeader>
             <TableRow>
               <TableHead className="w-[140px]">Slug</TableHead>
-              <TableHead>Nome</TableHead>
+              <TableHead>Nom</TableHead>
               <TableHead className="w-[130px]">CNPJ</TableHead>
-              <TableHead className="w-[110px]">Status</TableHead>
+              <TableHead className="w-[110px]">Statut</TableHead>
               <TableHead className="w-[70px] text-right">Users</TableHead>
-              <TableHead className="w-[90px] text-right">Conversas</TableHead>
-              <TableHead className="w-[90px]">Criado em</TableHead>
+              <TableHead className="w-[90px] text-right">Conversations</TableHead>
+              <TableHead className="w-[90px]">Créé le</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>
@@ -182,7 +182,7 @@ export function TenantsTable({
                     href={`/admin/tenants/${row.id}`}
                     className="text-xs font-medium text-accent hover:underline"
                   >
-                    Ver
+                    Voir
                   </Link>
                 </TableCell>
               </TableRow>

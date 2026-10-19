@@ -247,7 +247,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
         setInfo({
           status: "ERROR",
           session: sessionName,
-          error: json.error?.message ?? `o servidor respondeu ${res.status}`,
+          error: json.error?.message ?? `le serveur a répondu ${res.status}`,
         });
       } catch (err) {
         if (!cancelled) setInfo({ status: "ERROR", session: sessionName, error: String(err) });
@@ -286,7 +286,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
               ? {
                   status: "ERROR",
                   session: sessionName,
-                  error: `o servidor respondeu ${res.status}`,
+                  error: `le serveur a répondu ${res.status}`,
                 }
               : antes,
           );
@@ -294,7 +294,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
       } catch {
         setInfo((antes) =>
           antes.status === "INIT" || antes.status === "STARTING"
-            ? { status: "ERROR", session: sessionName, error: "não consegui falar com o servidor" }
+            ? { status: "ERROR", session: sessionName, error: "impossible de joindre le serveur" }
             : antes,
         );
       }
@@ -323,9 +323,9 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
       const res = await fetch("/api/v1/onboarding/whatsapp/session?restart=1", { method: "POST" });
       const json = (await res.json()) as { data?: SessionInfo };
       if (json.data) setInfo(json.data);
-      else toast.error("Não consegui gerar outro código. Tente de novo em alguns segundos.");
+      else toast.error("Impossible de générer un autre code. Réessayez dans quelques secondes.");
     } catch {
-      toast.error("Não consegui falar com o servidor. Confira sua conexão e tente de novo.");
+      toast.error("Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.");
     } finally {
       setBusy(false);
     }

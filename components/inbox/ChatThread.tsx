@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef } from "react";
 import { format, isToday, isYesterday } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MessageBubble } from "./MessageBubble";
@@ -40,7 +40,7 @@ export function mergeThreadItems(messages: Message[], notes: Note[]): ThreadItem
 function dayLabel(d: Date, t: (texto: string) => string): string {
   if (isToday(d)) return t("Hoje");
   if (isYesterday(d)) return t("Ontem");
-  return format(d, "dd/MM/yyyy", { locale: ptBR });
+  return format(d, "dd/MM/yyyy", { locale: fr });
 }
 
 export function ChatThread({ conversationId, onResponder }: Props) {

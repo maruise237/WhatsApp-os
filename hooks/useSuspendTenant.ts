@@ -17,10 +17,10 @@ export function useSuspendTenant() {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ["admin", "tenant", variables.id] });
       void queryClient.invalidateQueries({ queryKey: ["admin", "tenants"] });
-      toast.success("Tenant suspenso com sucesso");
+      toast.success("Organisation suspendue avec succès");
     },
     onError: (err: Error) => {
-      toast.error("Erro ao suspender tenant", { description: err.message });
+      toast.error("Erreur lors de la suspension de l’organisation", { description: err.message });
     },
   });
 }

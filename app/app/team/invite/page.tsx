@@ -18,7 +18,7 @@ export default async function TeamInvitePage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Convidar membros</h1>
         <p className="text-sm text-muted-foreground">
-          Cole até 20 emails (um por linha) e escolha a role compartilhada.
+          Collez jusqu’à 20 e-mails (un par ligne) et choisissez le rôle commun.
         </p>
       </header>
       <InviteForm />

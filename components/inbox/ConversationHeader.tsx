@@ -168,7 +168,7 @@ export function ConversationHeader({ conversation }: Props) {
           {comando.quem === "humano" ? (
             <OwnerBadge ownerKind="user" ownerName={comando.nome ?? "Atendente"} />
           ) : comando.quem === "automatico" ? (
-            <OwnerBadge ownerKind="ai" ownerName="Automático" />
+            <OwnerBadge ownerKind="ai" ownerName="Automatique" />
           ) : (
             // `ninguem`, `aguardando` e `encerrada` sem dono caem aqui: o disco
             // TRACEJADO do OwnerBadge, que é como o funil já desenha "ninguém".
@@ -195,7 +195,7 @@ export function ConversationHeader({ conversation }: Props) {
             // dicionário de espanhol o citam). O que faltava era a consequência
             // dita: desde a 0173 assumir também para o atendimento automático, e
             // um botão que muda duas coisas precisa anunciar as duas.
-            title="Você passa a responder esta conversa e o atendimento automático para aqui."
+            title="Vous prenez la main sur cette conversation et la réponse automatique s’arrête."
             onClick={() =>
               claim.mutate({
                 conversation_id: conversation.id,
@@ -242,8 +242,8 @@ export function ConversationHeader({ conversation }: Props) {
             // que às vezes faz mais do que o nome promete precisa dizer quando.
             title={
               motivo === "contato_travado"
-                ? "Religa o atendimento automático para este cliente — vale para todas as conversas dele."
-                : "Devolve esta conversa ao atendimento automático."
+                ? "Réactive la réponse automatique pour ce client — valable pour toutes ses conversations."
+                : "Rend cette conversation à la réponse automatique."
             }
             onClick={() => retomar.mutate({ conversation_id: conversation.id })}
           >
@@ -259,7 +259,7 @@ export function ConversationHeader({ conversation }: Props) {
             // `podePausar` já exige dono != null, então este botão NUNCA aparece
             // sem dono — prometer "você assume" aqui seria prometer o que a rota
             // não faz: com dono, ela só cala, nunca rouba a conversa de quem a tem.
-            title="O atendimento automático para nesta conversa. O dono não muda."
+            title="La réponse automatique s’arrête dans cette conversation. Le responsable ne change pas."
             onClick={() => pausar.mutate({ conversation_id: conversation.id })}
           >
             {pausar.isPending ? "Pausando..." : t("Pausar o automático")}
@@ -282,7 +282,7 @@ export function ConversationHeader({ conversation }: Props) {
             variant="outline"
             disabled={close.isPending}
             onClick={() => {
-              if (confirm("Fechar esta conversa?")) {
+              if (confirm("Clôturer cette conversation ?")) {
                 close.mutate({ conversation_id: conversation.id });
               }
             }}
@@ -304,7 +304,7 @@ export function ConversationHeader({ conversation }: Props) {
         {c?.id && (
           <Button asChild size="sm" variant="ghost" className="xl:hidden">
             <Link href={`/app/contacts/${c.id}`} className="flex items-center gap-1">
-              Ver contato
+              Voir le contact
               <ArrowRight size={12} weight="regular" aria-hidden />
             </Link>
           </Button>

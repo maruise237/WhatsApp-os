@@ -128,23 +128,23 @@ describe("opcoesDoPasso — a recusa do banco vira ausência de opção", () => 
 describe("motivoDaListaVazia — lista vazia sempre explica por quê", () => {
   it("funil sem etapa de fechamento explica o fato, sem prometer tela que não existe", () => {
     const t = motivoDaListaVazia("won", [ETAPAS[0]!, ETAPAS[3]!]);
-    expect(t).toContain("nenhuma etapa marcada como fechamento");
-    expect(t).not.toContain("já estão sendo usadas");
+    expect(t).toContain("aucune étape marquée comme conclusion");
+    expect(t).not.toContain("sont déjà utilisées");
   });
 
   it("etapas todas em uso diz que dá para liberar uma — sem apontar direção", () => {
     const t = motivoDaListaVazia("qualifying", ETAPAS);
-    expect(t).toContain("já estão sendo usadas");
+    expect(t).toContain("sont déjà utilisées");
     // O passo que segura a etapa pode estar em qualquer linha, inclusive abaixo.
-    expect(t).not.toContain("acima");
+    expect(t).not.toContain("ci-dessus");
   });
 
   it("funil só com ganho e perda NÃO manda liberar uma etapa que não existe", () => {
     // A assimetria que já estava resolvida para won/lost: "já estão em uso" é
     // afirmação, e aqui não há nenhuma etapa comum para estar em uso.
     const t = motivoDaListaVazia("qualifying", [ETAPAS[2]!, ETAPAS[3]!]);
-    expect(t).not.toContain("já estão sendo usadas");
-    expect(t).toContain("só tem etapas de fechamento e de perda");
+    expect(t).not.toContain("sont déjà utilisées");
+    expect(t).toContain("n’a que des étapes de conclusion et de perte");
   });
 
   /**
@@ -164,7 +164,7 @@ describe("motivoDaListaVazia — lista vazia sempre explica por quê", () => {
       ["won", ETAPAS],
     ];
     for (const [passo, etapas] of casos) {
-      const ehOcupacao = motivoDaListaVazia(passo, etapas).includes("já estão sendo usadas");
+      const ehOcupacao = motivoDaListaVazia(passo, etapas).includes("sont déjà utilisées");
       expect(conserteNasEtapas(passo, etapas)).toBe(!ehOcupacao);
     }
   });
@@ -183,7 +183,7 @@ describe("mensagemDeErro — nem toda frase do servidor é texto de tela", () =>
     const m = mensagemDeErro(new ApiError(500, "internal_error", undefined, "r", cru));
     expect(m).not.toContain("violates");
     expect(m).not.toContain("crm_stages");
-    expect(m).toContain("Não deu para salvar");
+    expect(m).toContain("Impossible d’enregistrer");
   });
 
   it("403 NÃO mostra a palavra «role» ao dono da clínica", () => {
@@ -191,13 +191,13 @@ describe("mensagemDeErro — nem toda frase do servidor é texto de tela", () =>
       new ApiError(403, "forbidden_role", undefined, "r", "Permissão insuficiente. Requer role >= manager."),
     );
     expect(m).not.toContain("role");
-    expect(m).toContain("permissão");
+    expect(m).toContain("autorisation");
   });
 
   it("401 explica a sessão em vez de repetir «Auth required.»", () => {
     const m = mensagemDeErro(new ApiError(401, "auth_required", undefined, "r", "Auth required."));
     expect(m).not.toContain("Auth required");
-    expect(m).toContain("sessão");
+    expect(m).toContain("session");
   });
 });
 
@@ -275,7 +275,7 @@ describe("AgentMappingSection — o que a tela oferece e envia", () => {
     });
     // Confirmação no mesmo canal do resto da tela (o editor de vocabulário, a
     // 200px daqui, também usa toast) — não em texto cinza só desta seção.
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Escolhas salvas."));
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Choix enregistrés."));
   });
 
   it("erro 500 não vira toast de sucesso nem texto cru do Postgres na tela", async () => {

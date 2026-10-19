@@ -125,17 +125,17 @@ export function NewTenantForm() {
         owner_email: values.owner_email,
       });
 
-      toast.success("Tenant criado com sucesso!");
+      toast.success("Organisation créée avec succès !");
       router.push(`/admin/tenants/${result.data.id}`);
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === "conflict") {
-          form.setError("slug", { message: "Este slug já está em uso" });
+          form.setError("slug", { message: "Ce slug est déjà utilisé" });
           return;
         }
-        toast.error(`Erro ao criar tenant: ${err.message}`);
+        toast.error(`Erreur lors de la création de l’organisation : ${err.message}`);
       } else {
-        toast.error("Erro inesperado ao criar tenant");
+        toast.error("Erreur inattendue lors de la création de l’organisation");
       }
     }
   });
@@ -145,26 +145,26 @@ export function NewTenantForm() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Novo Tenant</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Nouvelle organisation</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Cria um novo tenant com status <em>onboarding</em>.
+          Crée une nouvelle organisation avec le statut <em>onboarding</em>.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Dados do tenant</CardTitle>
+          <CardTitle className="text-base">Données de l’organisation</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-5" noValidate>
             {/* display_name */}
             <div className="space-y-1.5">
               <Label htmlFor="display_name">
-                Nome de exibição <span className="text-error-fg">*</span>
+                Nom d’affichage <span className="text-error-fg">*</span>
               </Label>
               <Input
                 id="display_name"
-                placeholder="Loja da Maria"
+                placeholder="Boutique de Marie"
                 {...register("display_name")}
                 onChange={(e) => handleDisplayNameChange(e.target.value)}
                 aria-invalid={!!errors.display_name}
@@ -181,14 +181,14 @@ export function NewTenantForm() {
               </Label>
               <Input
                 id="slug"
-                placeholder="loja-da-maria"
+                placeholder="boutique-de-marie"
                 {...register("slug")}
                 onChange={(e) => handleSlugChange(e.target.value)}
                 aria-invalid={!!errors.slug}
                 className="font-mono"
               />
               <p className="text-xs text-muted-foreground">
-                Apenas letras minúsculas, números e hífens. Gerado automaticamente.
+                Uniquement des lettres minuscules, des chiffres et des tirets. Généré automatiquement.
               </p>
               {errors.slug && (
                 <p className="text-xs text-error-fg">{errors.slug.message}</p>
@@ -197,10 +197,10 @@ export function NewTenantForm() {
 
             {/* legal_name */}
             <div className="space-y-1.5">
-              <Label htmlFor="legal_name">Razão social</Label>
+              <Label htmlFor="legal_name">Raison sociale</Label>
               <Input
                 id="legal_name"
-                placeholder="Maria da Silva LTDA"
+                placeholder="Marie Dupont SARL"
                 {...register("legal_name")}
                 aria-invalid={!!errors.legal_name}
               />
@@ -229,14 +229,14 @@ export function NewTenantForm() {
 
             {/* plan */}
             <div className="space-y-1.5">
-              <Label htmlFor="plan">Plano</Label>
+              <Label htmlFor="plan">Offre</Label>
               <Select
                 value={planValue}
                 onValueChange={(v) =>
                   setValue("plan", v as "standard" | "pro" | "enterprise")
                 }
               >
-                <SelectTrigger id="plan" aria-label="Plano">
+                <SelectTrigger id="plan" aria-label="Offre">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -253,12 +253,12 @@ export function NewTenantForm() {
             {/* owner_email */}
             <div className="space-y-1.5">
               <Label htmlFor="owner_email">
-                E-mail do responsável <span className="text-error-fg">*</span>
+                E-mail du responsable <span className="text-error-fg">*</span>
               </Label>
               <Input
                 id="owner_email"
                 type="email"
-                placeholder="responsavel@empresa.com"
+                placeholder="responsable@entreprise.com"
                 {...register("owner_email")}
                 aria-invalid={!!errors.owner_email}
               />
@@ -270,7 +270,7 @@ export function NewTenantForm() {
             {/* Actions */}
             <div className="flex items-center gap-3 pt-2">
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Criando..." : "Criar tenant"}
+                {isSubmitting ? "Criando..." : "Créer l’organisation"}
               </Button>
               <Button
                 type="button"
@@ -278,7 +278,7 @@ export function NewTenantForm() {
                 onClick={() => router.back()}
                 disabled={isSubmitting}
               >
-                Cancelar
+                Annuler
               </Button>
             </div>
           </form>

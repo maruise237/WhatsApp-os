@@ -1,6 +1,6 @@
 "use client";
 import { format, formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Phone, Robot } from "@/lib/ui/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -69,15 +69,15 @@ function relativeTime(iso: string | null): string {
   const sameDay = d.toDateString() === now.toDateString();
   if (sameDay) return format(d, "HH:mm");
   const diff = (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
-  if (diff < 7) return formatDistanceToNowStrict(d, { addSuffix: false, locale: ptBR });
+  if (diff < 7) return formatDistanceToNowStrict(d, { addSuffix: false, locale: fr });
   return format(d, "dd/MM");
 }
 
 /** "Aguardando há 5 min" — desde a última mensagem do cliente (fallback: criação). */
 function waitingLabel(conversation: ConversationWithContact): string {
   const since = conversation.last_inbound_at ?? conversation.created_at;
-  if (!since) return "Aguardando";
-  return `Aguardando ${formatDistanceToNowStrict(new Date(since), { addSuffix: true, locale: ptBR })}`;
+  if (!since) return "En attente";
+  return `Aguardando ${formatDistanceToNowStrict(new Date(since), { addSuffix: true, locale: fr })}`;
 }
 
 export function ConversationListItem({
@@ -95,7 +95,7 @@ export function ConversationListItem({
   const tags = c?.tags ?? [];
   const visibleTags = tags.slice(0, 2);
   const overflow = tags.length - visibleTags.length;
-  const preview = conversation.last_message_preview?.trim() || "Sem mensagens";
+  const preview = conversation.last_message_preview?.trim() || "Aucun message";
   const truncated = preview.length > 60 ? `${preview.slice(0, 60)}…` : preview;
   const time = relativeTime(conversation.last_message_at);
   const unread = conversation.unread_count_for_assignee ?? 0;
@@ -168,7 +168,7 @@ export function ConversationListItem({
           <div className="mb-1 flex items-center gap-1.5">
             <span
               className="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-primary/10 px-1 text-[10px] font-medium tabular-nums text-primary"
-              aria-label={`Posição ${queuePosition} na fila`}
+              aria-label={`Position ${queuePosition} dans la file`}
             >
               {queuePosition}º
             </span>

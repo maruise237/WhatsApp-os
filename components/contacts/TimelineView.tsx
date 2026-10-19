@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import { format, isToday, isYesterday } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { ChatCircle, Users, Storefront, Robot, Gear } from "@/lib/ui/icons";
 import type { Icon as PhosphorIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ const ICON_MAP: Record<string, PhosphorIcon> = {
 function dayHeader(d: Date, t: (texto: string) => string): string {
   if (isToday(d)) return t("Hoje");
   if (isYesterday(d)) return t("Ontem");
-  return format(d, "dd/MM/yyyy", { locale: ptBR });
+  return format(d, "dd/MM/yyyy", { locale: fr });
 }
 
 /**
@@ -113,7 +113,7 @@ export function TimelineView({ contactId, types }: Props) {
                   agente: it.actor_agent_name,
                   usuario: it.actor_user_name,
                 });
-                const time = format(new Date(it.performed_at), "HH:mm", { locale: ptBR });
+                const time = format(new Date(it.performed_at), "HH:mm", { locale: fr });
                 return (
                   <li
                     key={it.id}

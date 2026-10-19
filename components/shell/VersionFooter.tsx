@@ -32,9 +32,9 @@ export function VersionFooter({
     return (
       <p
         className={cn("px-3 py-1 text-[11px] text-muted-foreground/70", collapsed && "px-0 text-center")}
-        title={`Versão ${label}`}
+        title={`Version ${label}`}
       >
-        {collapsed ? label.split(".").slice(0, 2).join(".") : `versão ${label}`}
+        {collapsed ? label.split(".").slice(0, 2).join(".") : `version ${label}`}
       </p>
     );
   }
@@ -44,7 +44,7 @@ export function VersionFooter({
     <Link
       href="/app/settings/atualizacao"
       onClick={onNavigate}
-      title={`Nova versão ${novo} disponível`}
+      title={`Nouvelle version ${novo} disponible`}
       className={cn(
         "flex items-center gap-2 rounded-md px-3 py-2 text-xs text-foreground hover:bg-accent/50",
         collapsed && "justify-center px-2",
@@ -56,7 +56,7 @@ export function VersionFooter({
       </span>
       {!collapsed && (
         <span className="truncate">
-          Nova versão{novo ? ` · ${novo}` : ""}
+          Nouvelle version{novo ? ` · ${novo}` : ""}
         </span>
       )}
       {collapsed && <ArrowCircleUp size={16} aria-hidden />}

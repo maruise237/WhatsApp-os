@@ -88,7 +88,7 @@ describe('validarMapeamento', () => {
   it('recusa etapa de perda recebendo passo que não é "perdido"', () => {
     const r = validarMapeamento({ qualifying: 'e4' }, etapas);
     expect(r.ok).toBe(false);
-    expect(r.ok === false && r.erros[0]).toMatch(/Perdido/);
+    expect(r.ok === false && r.erros[0]).toMatch(/Perdu/);
   });
 
   it('recusa ocupar etapa que já representa um passo que a entrada nem menciona', () => {
@@ -97,7 +97,7 @@ describe('validarMapeamento', () => {
     const r = validarMapeamento({ negotiating: 'p1' }, permutaveis);
     expect(r.ok).toBe(false);
     expect(r.ok === false && r.erros[0]).toMatch(/Avaliação/);
-    expect(r.ok === false && r.erros[0]).toMatch(/Qualificado/);
+    expect(r.ok === false && r.erros[0]).toMatch(/Qualifié/);
   });
 
   it('aceita permuta — o passo largado está na entrada, ninguém perde configuração', () => {

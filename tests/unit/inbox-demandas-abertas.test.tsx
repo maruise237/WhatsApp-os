@@ -160,7 +160,7 @@ describe("painel do inbox — demandas abertas", () => {
     await waitFor(() => expect(secao.textContent).toMatch(/impossible de lire ces données/i));
     // A afirmação sobre o negócio não pode ser feita em cima de um erro de
     // leitura — é o defeito que a rota `crm-summary` inteira veio curar.
-    expect(secao.textContent).not.toMatch(/nenhuma demanda aberta/i);
+    expect(secao.textContent).not.toMatch(/aucune demande ouverte/i);
   });
 
   it("contato SEM demanda aberta diz isso — e não some da tela", async () => {
@@ -168,7 +168,7 @@ describe("painel do inbox — demandas abertas", () => {
     renderPainel();
 
     const secao = await screen.findByTestId("inbox-demandas");
-    await waitFor(() => expect(secao.textContent).toMatch(/nenhuma demanda aberta/i));
+    await waitFor(() => expect(secao.textContent).toMatch(/aucune demande ouverte/i));
     // Some da tela seria pior que dizer: o atendente não distinguiria "não tem"
     // de "esta versão não mostra".
     expect(screen.queryByTestId("demanda-sem-proximo-passo")).toBeNull();

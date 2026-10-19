@@ -82,13 +82,13 @@ describe("como o tempo é escrito", () => {
 
 describe("quanto tempo passou", () => {
   it("uma unidade só — já fechou, e o minuto não muda a saída", () => {
-    expect(formatarDecorrido(3 * 86_400_000)).toBe("3d");
+    expect(formatarDecorrido(3 * 86_400_000)).toBe("3 j");
     expect(formatarDecorrido(5 * 3_600_000)).toBe("5h");
     expect(formatarDecorrido(20 * 60_000)).toBe("20m");
   });
 
   it("recém-fechada não vira \"0m\"", () => {
-    expect(formatarDecorrido(30_000)).toBe("agora mesmo");
+    expect(formatarDecorrido(30_000)).toBe("à l’instant");
   });
 });
 
@@ -107,17 +107,17 @@ describe("o selo na tela", () => {
     // "Janela fechada" sozinho deixa o operador sem saída. O texto nomeia a
     // saída que existe: modelo aprovado.
     render(<JanelaSelo provider="zernio" lastInboundAt={new Date(Date.now() - 30 * 3_600_000).toISOString()} />);
-    expect(screen.getByText(/só modelo/i)).toBeInTheDocument();
+    expect(screen.getByText(/modèle uniquement/i)).toBeInTheDocument();
   });
 
   it("e diz HÁ QUANTO fechou — 20 minutos e um mês pedem decisões diferentes", () => {
     render(<JanelaSelo provider="zernio" lastInboundAt={new Date(Date.now() - 30 * 3_600_000).toISOString()} />);
-    expect(screen.getByText(/fechada há 6h/i)).toBeInTheDocument();
+    expect(screen.getByText(/fermée il y a 6h/i)).toBeInTheDocument();
   });
 
   it("cliente que nunca escreveu não ganha um prazo inventado", () => {
     render(<JanelaSelo provider="zernio" lastInboundAt={null} />);
-    expect(screen.getByText(/nunca escreveu/i)).toBeInTheDocument();
+    expect(screen.getByText(/jamais écrit/i)).toBeInTheDocument();
   });
 });
 

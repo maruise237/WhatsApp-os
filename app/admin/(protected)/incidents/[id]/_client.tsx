@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow, format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +24,7 @@ const SEVERITY_VARIANTS: Record<IncidentSeverity, "error" | "warning" | "info"> 
 
 const SEVERITY_LABELS: Record<IncidentSeverity, string> = {
   critical: "Crítico",
-  warning: "Atenção",
+  warning: "Attention",
   info: "Info",
 };
 
@@ -64,11 +64,11 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
   if (error || !data?.data) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-16 text-center text-muted-foreground">
-        <p className="text-sm font-medium">Incidente não encontrado</p>
+        <p className="text-sm font-medium">Incident introuvable</p>
         <Button asChild variant="outline" size="sm">
           <Link href="/admin/incidents">
             <CaretLeft size={14} aria-hidden />
-            Voltar
+            Retour
           </Link>
         </Button>
       </div>
@@ -115,11 +115,11 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
             Criado{" "}
             {formatDistanceToNow(new Date(incident.created_at), {
               addSuffix: true,
-              locale: ptBR,
+              locale: fr,
             })}
             {" · "}
             {format(new Date(incident.created_at), "dd/MM/yyyy HH:mm", {
-              locale: ptBR,
+              locale: fr,
             })}
           </p>
         </div>
@@ -155,7 +155,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
           <CardContent>
             {incident.audit_trail.length === 0 ? (
               <p className="text-xs text-muted-foreground">
-                Nenhuma entrada de auditoria encontrada.
+                Aucune entrée d’audit trouvée.
               </p>
             ) : (
               <div className="space-y-3 max-h-80 overflow-auto pr-1">
@@ -171,7 +171,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
                       </span>
                       <span className="ml-2 text-muted-foreground/70">
                         {format(new Date(entry.created_at), "dd/MM HH:mm:ss", {
-                          locale: ptBR,
+                          locale: fr,
                         })}
                       </span>
                     </div>
@@ -187,7 +187,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
       {status === "resolved" && incident.resolution_note && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Resolução</CardTitle>
+            <CardTitle className="text-sm font-medium">Résolution</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <p className="text-sm text-foreground whitespace-pre-wrap">
@@ -195,9 +195,9 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
             </p>
             {incident.resolved_at && (
               <p className="text-xs text-muted-foreground">
-                Resolvido em{" "}
+                Résolu le{" "}
                 {format(new Date(incident.resolved_at), "dd/MM/yyyy HH:mm", {
-                  locale: ptBR,
+                  locale: fr,
                 })}
               </p>
             )}

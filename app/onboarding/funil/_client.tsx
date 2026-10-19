@@ -85,19 +85,16 @@ export function QuadroClient({
       */}
       {sugestao.origem === "ia" ? (
         <p className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3 text-sm">
-          Seu funcionário montou este quadro olhando o que você me contou sobre o
-          negócio. Ajuste o que quiser.
+          Votre assistant a construit ce tableau d’après ce que vous m’avez dit de votre activité. Ajustez ce que vous voulez.
         </p>
       ) : (
         <div className="space-y-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-sm">
           <p>
-            Não consegui pedir uma sugestão para o seu funcionário agora
-            {sugestao.porque ? <> — {sugestao.porque}</> : null}. Comecei por um
-            quadro pronto de <strong>{sugestao.pacote.comoSeApresenta}</strong>.
+            Impossible de demander une suggestion à votre assistant pour le moment
+            {sugestao.porque ? <> — {sugestao.porque}</> : null}. J’ai commencé avec un tableau prêt à l’emploi de <strong>{sugestao.pacote.comoSeApresenta}</strong>.
           </p>
           <p className="text-xs text-muted-foreground">
-            Isso não trava nada: escolha outro modelo abaixo ou ajuste as colunas
-            na mão. Dá para mudar tudo depois, quando quiser.
+            Cela ne bloque rien : choisissez un autre modèle ci-dessous ou ajustez les colonnes à la main. Vous pourrez tout modifier plus tard, quand vous voudrez.
           </p>
         </div>
       )}
@@ -105,7 +102,7 @@ export function QuadroClient({
       <div className="space-y-3 rounded-lg border bg-background p-6">
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="nome_do_quadro">
-            Nome do quadro
+            Nom du tableau
           </label>
           <Input
             id="nome_do_quadro"
@@ -128,15 +125,15 @@ export function QuadroClient({
                 </span>
                 <div className="min-w-0 flex-1 space-y-1">
                   <Input
-                    aria-label={`Nome da coluna ${i + 1}`}
+                    aria-label={`Nom de la colonne ${i + 1}`}
                     value={etapa.nome}
                     onChange={(e) => renomear(i, e.target.value)}
                     maxLength={60}
                   />
                   <p className="text-xs text-muted-foreground">
                     {explicacao
-                      ? `Ele move o cliente para cá quando ${explicacao}.`
-                      : "Coluna que só vocês movem — ele não mexe nesta."}
+                      ? `Il déplace le client ici quand ${explicacao}.`
+                      : "Colonne que vous seuls déplacez — il n’y touche pas."}
                   </p>
                 </div>
                 {/*
@@ -145,7 +142,7 @@ export function QuadroClient({
                   salvar seria pior do que não oferecer o botão.
                 */}
                 {etapa.passo === "won" || etapa.passo === "lost" ? (
-                  <span className="mt-2 shrink-0 text-xs text-muted-foreground">obrigatória</span>
+                  <span className="mt-2 shrink-0 text-xs text-muted-foreground">obligatoire</span>
                 ) : (
                   <Button
                     type="button"
@@ -155,7 +152,7 @@ export function QuadroClient({
                     onClick={() => remover(i)}
                     disabled={quadro.etapas.length <= MIN_ETAPAS}
                   >
-                    Remover
+                    Supprimer
                   </Button>
                 )}
               </li>
@@ -171,11 +168,11 @@ export function QuadroClient({
             onClick={adicionar}
             disabled={quadro.etapas.length >= MAX_ETAPAS}
           >
-            Adicionar coluna
+            Ajouter une colonne
           </Button>
           {quadro.etapas.length >= MAX_ETAPAS ? (
             <span className="text-xs text-muted-foreground">
-              {MAX_ETAPAS} colunas é o máximo — mais que isso não cabe na tela do celular.
+              {MAX_ETAPAS} colonnes au maximum — au-delà, cela ne tient pas sur l’écran du téléphone.
             </span>
           ) : null}
         </div>
@@ -185,14 +182,13 @@ export function QuadroClient({
       {atual && atual.colunas.length > 0 ? (
         <details className="rounded-md border p-3 text-sm">
           <summary className="cursor-pointer text-muted-foreground">
-            O que veio na instalação ({atual.nome})
+            Ce qui est venu avec l’installation ({atual.nome})
           </summary>
           <p className="mt-2 text-xs text-muted-foreground">
             {atual.colunas.join(" → ")}
           </p>
           <p className="mt-2 text-xs text-muted-foreground">
-            Este é o quadro padrão, feito para loja online. Ao continuar, ele é
-            substituído pelo de cima.
+            C’est le tableau par défaut, conçu pour une boutique en ligne. Si vous continuez, il sera remplacé par celui du dessus.
           </p>
         </details>
       ) : null}
@@ -220,7 +216,7 @@ export function QuadroClient({
             onClick={() => setTrocando(true)}
             className="text-sm text-muted-foreground underline underline-offset-2"
           >
-            Prefiro começar de um modelo pronto
+            Je préfère partir d’un modèle prêt à l’emploi
           </button>
         )}
       </div>
@@ -241,7 +237,7 @@ export function QuadroClient({
         <div className="flex flex-wrap items-center gap-3">
           {semNome ? (
             <span className="text-xs text-amber-700 dark:text-amber-500">
-              Dê um nome à coluna em branco.
+              Donnez un nom à la colonne vide.
             </span>
           ) : null}
         <Button

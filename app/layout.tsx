@@ -82,11 +82,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const { name } = marca;
   return {
     title: {
-      default: `${name} — atendimento e vendas por WhatsApp com agentes de IA`,
+      default: `${name} — service client et ventes sur WhatsApp avec des agents IA`,
       template: `%s · ${name}`,
     },
     description:
-      "Centralize o atendimento por WhatsApp num funil só. Agentes de IA resolvem o que dá pra resolver e passam para o time humano o que importa — com tudo registrado. Multi-tenant, LGPD-nativo, feito para operações brasileiras.",
+      "Centralisez vos échanges WhatsApp dans un seul entonnoir. Les agents IA règlent ce qui peut l’être et transmettent à l’équipe humaine ce qui compte — avec tout l’historique. Multi-organisation, respect des données personnelles intégré, pensé pour les entreprises qui vendent sur WhatsApp.",
     applicationName: name,
     authors: [{ name }],
     keywords: [
@@ -275,7 +275,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="pt-BR"
+      lang="fr"
       data-theme="light"
       suppressHydrationWarning
       className={`${atkinson.variable} ${plexMono.variable}`}

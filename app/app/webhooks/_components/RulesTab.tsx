@@ -110,7 +110,7 @@ export function RulesTab() {
     <div className="space-y-4 pt-4">
       <div className="flex sm:justify-end">
         <Button onClick={openCreate} className="w-full sm:w-auto">
-          <Plus /> Nova automação
+          <Plus /> Nouvelle automatisation
         </Button>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

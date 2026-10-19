@@ -18,7 +18,7 @@ import { useT } from "@/hooks/i18n/useT";
 
 function fmtDate(iso: string): string {
   try {
-    return new Date(iso).toLocaleString("pt-BR", { hour12: false });
+    return new Date(iso).toLocaleString("fr-FR", { hour12: false });
   } catch {
     return iso;
   }

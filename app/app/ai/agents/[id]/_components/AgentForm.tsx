@@ -174,7 +174,7 @@ function buildState(args: { agent?: AgentRow; version: AgentVersionRow | null })
     credential_id: version ? (version.credential_id ?? CHAVE_DA_INSTALACAO) : "",
     channel_session_id: version?.channel_session_id ?? "",
     system_prompt:
-      version?.system_prompt ?? "Você é um atendente. Responda de forma educada e clara, em pt-BR.",
+      version?.system_prompt ?? "Vous êtes un conseiller. Répondez de manière polie et claire, en français.",
     tool_ids: version?.tool_ids ?? [],
     trigger_config: (version?.trigger_config as unknown as TriggerValue) ?? DEFAULT_TRIGGER,
     max_steps: version?.max_steps ?? 10,
@@ -366,7 +366,7 @@ export function AgentForm(props: Props) {
       if (isEdit) {
         const res = await saveAgentDraftAction(props.agent.id, toVersionPayload(form));
         if (!res.ok) {
-          toast.error(res.message ?? `Erro: ${res.error}`);
+          toast.error(res.message ?? `Erreur : ${res.error}`);
           return;
         }
         toast.success(
@@ -387,7 +387,7 @@ export function AgentForm(props: Props) {
         }
         const res = await createMcpAgentAction(validated.data);
         if (!res.ok) {
-          toast.error(res.message ?? `Erro: ${res.error}`);
+          toast.error(res.message ?? `Erreur : ${res.error}`);
           return;
         }
         toast.success(t("Agent criado."));

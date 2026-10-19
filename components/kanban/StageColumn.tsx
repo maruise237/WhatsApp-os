@@ -29,7 +29,7 @@ interface StageColumnProps {
 
 function formatBRL(cents: number): string {
   try {
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("fr-FR", {
       style: "currency",
       currency: "BRL",
       maximumFractionDigits: 0,

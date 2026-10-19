@@ -153,12 +153,12 @@ describe("destinosPossiveis — para onde os negócios podem ir", () => {
 
 describe("contagemDeNegocios — a tela recompõe a frase, então pluraliza", () => {
   it("um negócio não vira «1 negócios»", () => {
-    expect(contagemDeNegocios(1)).toBe("1 negócio");
+    expect(contagemDeNegocios(1)).toBe("1 opportunité");
   });
 
   it("zero e muitos ficam no plural", () => {
-    expect(contagemDeNegocios(0)).toBe("0 negócios");
-    expect(contagemDeNegocios(38)).toBe("38 negócios");
+    expect(contagemDeNegocios(0)).toBe("0 opportunités");
+    expect(contagemDeNegocios(38)).toBe("38 opportunités");
   });
 });
 
@@ -390,7 +390,7 @@ describe("StagesSection — a marcação de fechamento", () => {
     vi.mocked(apiClient.get).mockResolvedValue({ data: estado({ won: "e3" }) });
     montar();
     const linha = await screen.findByTestId("passo-de-e3");
-    expect(linha).toHaveTextContent("L’assistant utilise cette étape pour «Ganho ».");
+    expect(linha).toHaveTextContent("L’assistant utilise cette étape pour «Gagné ».");
     expect(within(linha).getByRole("link")).toHaveAttribute("href", `#mapeamento-${PIPE}`);
   });
 });
@@ -528,7 +528,7 @@ describe("StagesSection — arquivar", () => {
 
     await user.click(screen.getByTestId("arquivar-e2"));
     const aviso = await screen.findByTestId("arquivar-perde-passo-e2");
-    expect(aviso).toHaveTextContent("assistant utilise pour «Em negociação »");
+    expect(aviso).toHaveTextContent("assistant utilise pour «En négociation »");
     expect(aviso).toHaveTextContent("cesse de déplacer le card à cette étape");
     expect(within(aviso).getByRole("link")).toHaveAttribute("href", `#mapeamento-${PIPE}`);
   });

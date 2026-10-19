@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { CaretLeft } from "@/lib/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,27 +41,27 @@ function SlaTimelineInline({ received_at, due_at, request_type }: SlaTimelinePro
   const milestones =
     request_type === "data_request"
       ? [
-          { label: "Recebido", day: 0 },
-          { label: "Revisão intermediária", day: 5 },
-          { label: "Entrega ao titular", day: 7 },
+          { label: "Reçue", day: 0 },
+          { label: "Révision intermédiaire", day: 5 },
+          { label: "Remise à la personne concernée", day: 7 },
         ]
       : [
-          { label: "Recebido", day: 0 },
+          { label: "Reçue", day: 0 },
           { label: "Processamento", day: 10 },
-          { label: "Anonimização concluída", day: 15 },
+          { label: "Anonymisation terminée", day: 15 },
         ];
 
   return (
     <div className="space-y-4">
       <div className="space-y-1">
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>D+{daysElapsed} (hoje)</span>
+          <span>D+{daysElapsed} (aujourd’hui)</span>
           <span>
             {daysRemaining > 0
               ? `${daysRemaining}d restantes`
               : daysRemaining === 0
                 ? "vence hoje"
-                : `${Math.abs(daysRemaining)}d em atraso`}
+                : `${Math.abs(daysRemaining)} j de retard`}
           </span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -101,7 +101,7 @@ function SlaTimelineInline({ received_at, due_at, request_type }: SlaTimelinePro
                   D+{m.day} — {m.label}
                 </p>
                 <p className="text-xs text-muted-foreground opacity-70">
-                  {format(milestoneDate, "dd 'de' MMM yyyy", { locale: ptBR })}
+                  {format(milestoneDate, "dd 'de' MMM yyyy", { locale: fr })}
                 </p>
               </div>
             </li>
@@ -127,7 +127,7 @@ function AuditTrailInline({ entries }: { entries: AuditEntry[] }) {
   if (entries.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        Nenhuma entrada de auditoria registrada para esta solicitação.
+        Aucune entrée d’audit enregistrée pour cette demande.
       </p>
     );
   }
@@ -150,7 +150,7 @@ function AuditTrailInline({ entries }: { entries: AuditEntry[] }) {
             <div className={`pb-3 min-w-0 flex-1 ${isLast ? "pb-0" : ""}`}>
               <p className="text-sm font-mono font-medium truncate">{entry.action}</p>
               <p className="text-xs text-muted-foreground">
-                {format(new Date(entry.created_at), "dd/MM/yyyy HH:mm:ss", { locale: ptBR })}
+                {format(new Date(entry.created_at), "dd/MM/yyyy HH:mm:ss", { locale: fr })}
                 {entry.actor_user_id && (
                   <span className="ml-2 opacity-60">
                     por {entry.actor_user_id.slice(0, 8)}…
@@ -233,7 +233,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
   if (error || !data) {
     return (
       <div className="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-        Falha ao carregar solicitação.
+        Échec du chargement de la demande.
       </div>
     );
   }
@@ -272,18 +272,18 @@ export function LgpdRequestAdminDetail({ id }: Props) {
         </div>
 
         <p className="text-sm text-muted-foreground">
-          Recebido em{" "}
-          {format(new Date(request.received_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+          Reçue le{" "}
+          {format(new Date(request.received_at), "dd/MM/yyyy 'às' HH:mm", { locale: fr })}
           {request.due_at && (
             <>
               {" · "}
-              Vence em {format(new Date(request.due_at), "dd/MM/yyyy", { locale: ptBR })}
+              Échéance le {format(new Date(request.due_at), "dd/MM/yyyy", { locale: fr })}
             </>
           )}
         </p>
 
         <p className="text-xs text-muted-foreground italic">
-          Somente leitura — aprovação é feita pelo operador no contexto do tenant.
+          Lecture seule — l’approbation se fait par l’opérateur dans le contexte de l’organisation.
         </p>
       </div>
 
@@ -292,7 +292,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
         {/* SLA Timeline */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Linha do tempo SLA</CardTitle>
+            <CardTitle className="text-sm font-medium">Chronologie du SLA</CardTitle>
           </CardHeader>
           <CardContent>
             {request.due_at ? (
@@ -302,7 +302,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
                 request_type={request.request_type}
               />
             ) : (
-              <p className="text-sm text-muted-foreground">SLA não definido.</p>
+              <p className="text-sm text-muted-foreground">SLA non défini.</p>
             )}
           </CardContent>
         </Card>
@@ -310,13 +310,13 @@ export function LgpdRequestAdminDetail({ id }: Props) {
         {/* Details */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Detalhes</CardTitle>
+            <CardTitle className="text-sm font-medium">Détails</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <Row label="ID completo" value={request.id} mono />
-            <Row label="Tipo" value={typeLabel} />
-            <Row label="Status" value={statusLabel} />
-            <Row label="Origem" value={(request as { source?: string | null }).source ?? "—"} />
+            <Row label="Type" value={typeLabel} />
+            <Row label="Statut" value={statusLabel} />
+            <Row label="Origine" value={(request as { source?: string | null }).source ?? "—"} />
             <Row label="Escopo" value={request.scope} />
             <Row label="Tentativas" value={String(request.attempts)} />
             {tenant && (
@@ -333,15 +333,15 @@ export function LgpdRequestAdminDetail({ id }: Props) {
             )}
             {request.completed_at && (
               <Row
-                label="Concluído em"
+                label="Terminée le"
                 value={format(new Date(request.completed_at), "dd/MM/yyyy HH:mm", {
-                  locale: ptBR,
+                  locale: fr,
                 })}
               />
             )}
             {request.error_message && (
               <div className="rounded-md border border-destructive/30 bg-destructive/5 px-2 py-1">
-                <p className="text-xs text-muted-foreground">Erro</p>
+                <p className="text-xs text-muted-foreground">Erreur</p>
                 <p className="text-destructive text-xs">{request.error_message}</p>
               </div>
             )}
@@ -352,7 +352,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-sm font-medium">
-              Trilha de auditoria ({audit_trail.length})
+              Piste d’audit ({audit_trail.length})
             </CardTitle>
           </CardHeader>
           <CardContent>

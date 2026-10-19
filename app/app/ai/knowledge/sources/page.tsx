@@ -31,18 +31,18 @@ export default async function KnowledgeSourcesPage() {
     return (
       <div className="flex h-full flex-col gap-6 p-6">
         <header>
-          <h1 className="text-2xl font-semibold tracking-tight">Fontes de Conhecimento</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Sources de connaissances</h1>
           <p className="text-sm text-muted-foreground">
-            Configure as fontes de RAG do agent default da organização.
+            Configurez les sources RAG de l’agent par défaut de l’organisation.
           </p>
         </header>
         <div className="rounded-lg border border-border bg-surface p-6 text-sm">
           <p className="mb-4">
-            Nenhum agent default encontrado. Crie um agent default em{" "}
-            <span className="font-mono">/app/ai/agents</span> primeiro.
+            Aucun agent par défaut trouvé. Créez un agent par défaut dans{" "}
+            <span className="font-mono">/app/ai/agents</span> d’abord.
           </p>
           <Button asChild variant="primary" size="sm">
-            <Link href="/app/ai/agents">Ir para Agents</Link>
+            <Link href="/app/ai/agents">Aller aux agents</Link>
           </Button>
         </div>
       </div>
@@ -61,9 +61,9 @@ export default async function KnowledgeSourcesPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Fontes de Conhecimento</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Sources de connaissances</h1>
         <p className="text-sm text-muted-foreground">
-          Status e ações sobre as fontes RAG do agent <span className="font-medium">{agent.name}</span>.
+          Statut et actions sur les sources RAG de l’agent <span className="font-medium">{agent.name}</span>.
         </p>
       </header>
       <KnowledgeSourcesClient agentId={agent.id} initialSources={initialSources} />

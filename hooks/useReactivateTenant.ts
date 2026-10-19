@@ -17,10 +17,10 @@ export function useReactivateTenant() {
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ["admin", "tenant", variables.id] });
       void queryClient.invalidateQueries({ queryKey: ["admin", "tenants"] });
-      toast.success("Tenant reativado com sucesso");
+      toast.success("Organisation réactivée avec succès");
     },
     onError: (err: Error) => {
-      toast.error("Erro ao reativar tenant", { description: err.message });
+      toast.error("Erreur lors de la réactivation de l’organisation", { description: err.message });
     },
   });
 }

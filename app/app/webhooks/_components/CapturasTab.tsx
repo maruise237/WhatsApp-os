@@ -56,13 +56,13 @@ const DESFECHO_VARIANTE: Record<DesfechoDaCaptacao, "success" | "neutral" | "err
 function quando(iso: string): { data: string; hora: string } {
   const d = new Date(iso);
   return {
-    data: d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" }),
-    hora: d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+    data: d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "2-digit" }),
+    hora: d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
   };
 }
 
 function identidade(row: LeadCaptureRow): string {
-  return row.captured_name ?? row.captured_phone ?? row.captured_email ?? "(sem identificação)";
+  return row.captured_name ?? row.captured_phone ?? row.captured_email ?? "(sans identification)";
 }
 
 /** `datetime-local` devolve hora local sem fuso; o filtro é ISO. */
@@ -106,7 +106,7 @@ export function CapturasTab() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
           <div className="space-y-1">
             <label className="text-xs text-muted-foreground" htmlFor="captura-busca">
-              Nome, telefone ou e-mail
+              Nom, téléphone ou e-mail
             </label>
             <div className="flex gap-2">
               <Input
@@ -122,7 +122,7 @@ export function CapturasTab() {
                 type="button"
                 variant="secondary"
                 size="icon"
-                aria-label="Buscar"
+                aria-label="Rechercher"
                 onClick={() => setBuscaAplicada(busca.trim())}
               >
                 <MagnifyingGlass />
@@ -136,7 +136,7 @@ export function CapturasTab() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={TODAS}>Todas as fontes</SelectItem>
+                <SelectItem value={TODAS}>Toutes les sources</SelectItem>
                 {fontes.map((f) => (
                   <SelectItem key={f.id} value={f.id}>
                     {f.name}
@@ -152,10 +152,10 @@ export function CapturasTab() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={TODAS}>Todos</SelectItem>
+                <SelectItem value={TODAS}>Tous</SelectItem>
                 <SelectItem value="criado">Virou lead</SelectItem>
                 <SelectItem value="duplicado">Reenvio</SelectItem>
-                <SelectItem value="recusado">Não entrou</SelectItem>
+                <SelectItem value="recusado">Non entré</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -172,7 +172,7 @@ export function CapturasTab() {
           </div>
           <div className="space-y-1">
             <label className="text-xs text-muted-foreground" htmlFor="captura-ate">
-              Até
+              Jusqu’au
             </label>
             <Input
               id="captura-ate"
@@ -199,12 +199,12 @@ export function CapturasTab() {
         <div className="flex justify-center pt-10">
           <Card className="max-w-md">
             <CardContent className="space-y-3 pt-6 text-center">
-              <p className="text-sm text-text">Não foi possível carregar o histórico.</p>
+              <p className="text-sm text-text">Impossible de charger l’historique.</p>
               <p className="text-xs text-muted-foreground">
-                Isto é uma falha ao consultar — não quer dizer que ninguém preencheu.
+                Il s’agit d’un échec de consultation — cela ne veut pas dire que personne n’a rempli le formulaire.
               </p>
               <Button type="button" variant="secondary" onClick={() => refetch()}>
-                Tentar de novo
+                Réessayer
               </Button>
             </CardContent>
           </Card>
@@ -216,8 +216,8 @@ export function CapturasTab() {
               <Tray className="mx-auto h-10 w-10 text-accent" />
               <p className="text-sm text-muted-foreground">
                 {temFiltro
-                  ? "Nenhuma captação com esses filtros. Tente ampliar o período."
-                  : "Ninguém preencheu seus formulários ainda. Assim que o primeiro envio chegar, ele aparece aqui — com os dados, o horário e a origem."}
+                  ? "Aucune captation avec ces filtres. Essayez d’élargir la période."
+                  : "Personne n’a encore rempli vos formulaires. Dès que le premier envoi arrivera, il apparaîtra ici — avec les données, l’heure et l’origine."}
               </p>
             </CardContent>
           </Card>
@@ -231,10 +231,10 @@ export function CapturasTab() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Quem</TableHead>
-                  <TableHead>Contato</TableHead>
+                  <TableHead>Contact</TableHead>
                   <TableHead>Fonte</TableHead>
-                  <TableHead>Quando</TableHead>
-                  <TableHead>Origem</TableHead>
+                  <TableHead>Quand</TableHead>
+                  <TableHead>Origine</TableHead>
                   <TableHead>Resultado</TableHead>
                 </TableRow>
               </TableHeader>
@@ -293,7 +293,7 @@ export function CapturasTab() {
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
               >
-                {isFetchingNextPage ? "Carregando…" : "Carregar mais"}
+                {isFetchingNextPage ? "Chargement…" : "Carregar mais"}
               </Button>
             </div>
           ) : null}

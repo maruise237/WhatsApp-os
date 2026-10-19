@@ -120,7 +120,7 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
                   )}
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  {m.last_sign_in_at ? new Date(m.last_sign_in_at).toLocaleString("pt-BR") : "—"}
+                  {m.last_sign_in_at ? new Date(m.last_sign_in_at).toLocaleString("fr-FR") : "—"}
                 </TableCell>
                 {canManage ? (
                   <TableCell>

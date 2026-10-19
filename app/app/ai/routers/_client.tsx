@@ -38,7 +38,7 @@ interface Props {
 
 function channelLabel(sessions: ChannelSessionLite[], id: string): string {
   const s = sessions.find((c) => c.id === id);
-  if (!s) return "Número removido";
+  if (!s) return "Numéro supprimé";
   return s.phone_number ? `${s.display_name} · ${s.phone_number}` : s.display_name;
 }
 
@@ -53,7 +53,7 @@ export function RoutersClient({ initialState, channelSessions }: Props) {
       <div className="flex sm:justify-end">
         {canManagePerm && (
           <Button onClick={() => setCreateOpen(true)} className="w-full sm:w-auto">
-            <Plus /> Novo roteador
+            <Plus /> Nouveau routeur
           </Button>
         )}
       </div>
@@ -62,13 +62,11 @@ export function RoutersClient({ initialState, channelSessions }: Props) {
         <Card className="flex flex-col items-center gap-3 p-10 text-center">
           <Signpost size={32} className="text-muted-foreground" aria-hidden />
           <p className="max-w-md text-sm text-muted-foreground">
-            Um roteador entende o que o cliente quer e entrega a conversa para o agente certo —
-            um número de vendas fala com quem quer comprar, um de suporte com quem já é cliente,
-            tudo no mesmo WhatsApp. Crie um para o seu número e escolha quais agentes ele aciona.
+            Un routeur comprend ce que veut le client et confie la conversation au bon agent — l’agent commercial parle à ceux qui veulent acheter, le support à ceux qui sont déjà clients, le tout sur le même WhatsApp. Créez-en un pour votre numéro et choisissez quels agents il sollicite.
           </p>
           {canManagePerm && (
             <Button onClick={() => setCreateOpen(true)}>
-              <Plus /> Criar meu primeiro roteador
+              <Plus /> Créer mon premier routeur
             </Button>
           )}
         </Card>
@@ -91,8 +89,8 @@ export function RoutersClient({ initialState, channelSessions }: Props) {
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {r.member_count === 0
-                      ? "Sem intenções configuradas"
-                      : `${r.member_count} ${r.member_count === 1 ? "intenção" : "intenções"}`}
+                      ? "Aucune intention configurée"
+                      : `${r.member_count} ${r.member_count === 1 ? "intention" : "intentions"}`}
                   </p>
                 </Card>
               </Link>
@@ -131,7 +129,7 @@ function CreateRouterDialog({
       { name, channel_session_id: channelSessionId },
       {
         onSuccess: (res) => {
-          toast.success("Roteador criado — agora escolha as intenções.");
+          toast.success("Routeur créé — choisissez maintenant les intentions.");
           onOpenChange(false);
           nextRouter.push(`/app/ai/routers/${res.id}`);
         },
@@ -146,30 +144,29 @@ function CreateRouterDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo roteador</DialogTitle>
+          <DialogTitle>Nouveau routeur</DialogTitle>
           <DialogDescription>
-            Escolha o número de WhatsApp que ele vai atender. Depois de criado, você define as
-            intenções e para qual agente cada uma vai.
+            Choisissez le numéro WhatsApp qu’il va servir. Une fois créé, vous définissez les intentions et l’agent vers lequel chacune est dirigée.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <Label htmlFor="router-name">Nome</Label>
+            <Label htmlFor="router-name">Nom</Label>
             <Input
               id="router-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex.: Roteador de vendas"
+              placeholder="Ex. : Routeur commercial"
               maxLength={120}
               autoFocus
               required
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="router-channel">Número de WhatsApp</Label>
+            <Label htmlFor="router-channel">Numéro WhatsApp</Label>
             <Select value={channelSessionId || undefined} onValueChange={setChannelSessionId}>
               <SelectTrigger id="router-channel">
-                <SelectValue placeholder="Selecione um número" />
+                <SelectValue placeholder="Sélectionnez un numéro" />
               </SelectTrigger>
               <SelectContent>
                 {channelSessions.map((s) => (
@@ -183,21 +180,21 @@ function CreateRouterDialog({
                 ))}
                 {channelSessions.length === 0 ? (
                   <SelectItem value="__none__" disabled>
-                    Nenhum número conectado
+                    Aucun numéro connecté
                   </SelectItem>
                 ) : null}
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              Só é possível ter um roteador ativo por número.
+              Un seul routeur actif par numéro est possible.
             </p>
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancelar
+              Annuler
             </Button>
             <Button type="submit" disabled={!valid || create.isPending}>
-              {create.isPending ? "Criando…" : "Criar roteador"}
+              {create.isPending ? "Criando…" : "Créer le routeur"}
             </Button>
           </DialogFooter>
         </form>

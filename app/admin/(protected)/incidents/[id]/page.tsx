@@ -1,6 +1,6 @@
 import { IncidentDetailClient } from "./_client";
 
-export const metadata = { title: "Detalhe do Incidente — Admin Plataforma" };
+export const metadata = { title: "Détail de l’incident — Admin plateforme" };
 
 export default async function AdminIncidentDetailPage({
   params,

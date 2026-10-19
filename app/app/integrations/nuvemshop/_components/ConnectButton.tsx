@@ -36,7 +36,7 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
       }
       disabled={disabled || pending}
     >
-      {pending ? "Redirecionando…" : "Conectar com Nuvemshop"}
+      {pending ? "Redirecionando…" : "Se connecter à Nuvemshop"}
     </Button>
   );
 }
@@ -58,7 +58,7 @@ export function DisconnectButton() {
       }
       disabled={pending}
     >
-      {pending ? "Desconectando…" : "Desconectar"}
+      {pending ? "Desconectando…" : "Déconnecter"}
     </Button>
   );
 }

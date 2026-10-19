@@ -149,7 +149,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
               type="url"
               value={redirectTo}
               onChange={(e) => setRedirectTo(e.target.value)}
-              placeholder="https://seusite.com/obrigado"
+              placeholder="https://votresite.com/merci"
             />
             <p className="text-xs text-muted-foreground">
               {t("Para onde enviar a pessoa depois que ela preencher seu formulário.")}

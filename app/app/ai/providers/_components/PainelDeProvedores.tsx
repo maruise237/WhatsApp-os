@@ -117,17 +117,17 @@ export function PainelDeProvedores() {
         // Corpo não-JSON quer dizer que a resposta nem chegou ao handler
         // (proxy, erro de runtime). O começo do corpo é o que há de mais
         // informativo, então ele vai para a tela em vez de sumir no console.
-        setErro(`resposta inesperada do servidor (${res.status}): ${texto.slice(0, 200)}`);
+        setErro(`réponse inattendue du serveur (${res.status}) : ${texto.slice(0, 200)}`);
         return;
       }
       if (!res.ok) {
-        setErro(json?.error?.message ?? `não consegui carregar a configuração (${res.status})`);
+        setErro(json?.error?.message ?? `impossible de charger la configuration (${res.status})`);
         return;
       }
       setErro(null);
       setDados(json?.data as Dados);
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "não consegui falar com o servidor");
+      setErro(e instanceof Error ? e.message : "impossible de joindre le serveur");
     }
   }, []);
 
@@ -152,10 +152,10 @@ export function PainelDeProvedores() {
     return (
       <div className="p-6">
         <Card className="border-destructive/40 p-6">
-          <h2 className="font-medium">Não consegui carregar a configuração de IA</h2>
+          <h2 className="font-medium">Impossible de charger la configuration de l’IA</h2>
           <p className="mt-2 text-sm text-muted-foreground">{erro}</p>
           <Button className="mt-4" variant="outline" onClick={() => void carregar()}>
-            Tentar de novo
+            Réessayer
           </Button>
         </Card>
       </div>
@@ -163,7 +163,7 @@ export function PainelDeProvedores() {
   }
 
   if (!dados) {
-    return <div className="p-6 text-sm text-muted-foreground">Carregando…</div>;
+    return <div className="p-6 text-sm text-muted-foreground">Chargement…</div>;
   }
 
   const semChave = dados.credenciais.length === 0;
@@ -171,20 +171,18 @@ export function PainelDeProvedores() {
   return (
     <div className="mx-auto w-full max-w-5xl p-6" data-testid="painel-de-provedores">
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Provedores de IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Fournisseurs d’IA</h1>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Seu sistema usa inteligência artificial em {dados.pontos.length} lugares diferentes.
-          Aqui você vê qual está atendendo cada um — e troca, se quiser.
+          Votre système utilise l’intelligence artificielle à {dados.pontos.length} endroits différents. Ici, vous voyez lequel est utilisé pour chacun — et vous pouvez le changer.
         </p>
       </header>
 
       {semChave && (
         <Card className="mb-6 border-amber-500/40 bg-amber-500/5 p-4" data-testid="aviso-sem-chave">
           <p className="text-sm">
-            Você ainda não cadastrou nenhuma chave de provedor. Enquanto isso, tudo usa a chave
-            que veio na instalação.{" "}
+            Vous n’avez encore enregistré aucune clé de fournisseur. En attendant, tout utilise la clé fournie à l’installation.{" "}
             <Link className="underline underline-offset-4" href="/app/ai/credentials">
-              Cadastrar uma chave
+              Enregistrer une clé
             </Link>
           </p>
         </Card>
@@ -207,7 +205,7 @@ export function PainelDeProvedores() {
                 data-testid={`avancado-${papel}`}
                 onClick={() => setAvancado((a) => ({ ...a, [papel]: !a[papel] }))}
               >
-                {avancado[papel] ? "Ocultar" : "Configuração avançada"} ({pontos.length}{" "}
+                {avancado[papel] ? "Ocultar" : "Configuration avancée"} ({pontos.length}{" "}
                 {pontos.length === 1 ? "ponto" : "pontos"})
               </Button>
             </div>
@@ -233,7 +231,7 @@ export function PainelDeProvedores() {
 
 /** O que o grupo usa hoje, sem obrigar a abrir ponto a ponto. */
 function ResumoDoGrupo({ pontos }: { pontos: Ponto[] }) {
-  const modelos = [...new Set(pontos.map((p) => p.efetivo.modelId ?? "não definido"))];
+  const modelos = [...new Set(pontos.map((p) => p.efetivo.modelId ?? "non défini"))];
   const comAviso = pontos.filter((p) => p.avisos.length > 0).length;
 
   return (
@@ -249,8 +247,8 @@ function ResumoDoGrupo({ pontos }: { pontos: Ponto[] }) {
       {comAviso > 0 && (
         <p className="mt-2 text-sm text-amber-600 dark:text-amber-500" data-testid="grupo-com-aviso">
           {comAviso === 1
-            ? "1 ponto deste grupo precisa da sua atenção."
-            : `${comAviso} pontos deste grupo precisam da sua atenção.`}
+            ? "1 point de ce groupe demande votre attention."
+            : `${comAviso} points de ce groupe demandent votre attention.`}
         </p>
       )}
     </Card>
@@ -305,12 +303,12 @@ function CartaoDoPonto({
       if (!res.ok) {
         // A mensagem do servidor é escrita para leigo (ver validar-binding.ts):
         // repassar direto é melhor que traduzir de novo aqui e divergir.
-        toast.error(json?.error?.message ?? "não consegui salvar");
+        toast.error(json?.error?.message ?? "impossible d’enregistrer");
         return;
       }
       const avisos: string[] = json?.data?.avisos ?? [];
       if (avisos.length > 0) avisos.forEach((a) => toast.warning(a));
-      else toast.success(`"${ponto.rotulo}" agora usa ${modelId}`);
+      else toast.success(`"${ponto.rotulo}" utilise maintenant ${modelId}`);
       await aoSalvar();
     } finally {
       setSalvando(false);
@@ -325,7 +323,7 @@ function CartaoDoPonto({
             <h3 className="font-medium">{ponto.rotulo}</h3>
             {ponto.exige.tools && (
               <Badge variant="outline" className="text-xs">
-                precisa de ferramentas
+                nécessite des outils
               </Badge>
             )}
             {ponto.fixo && (
@@ -365,9 +363,9 @@ function CartaoDoPonto({
 
       {ponto.mandadoPeloAgente && (
         <p className="mt-2 text-xs text-muted-foreground">
-          Este ponto usa o modelo definido na versão publicada do agente.{" "}
+          Ce point utilise le modèle défini dans la version publiée de l’agent.{" "}
           <Link className="underline underline-offset-4" href="/app/ai/agents">
-            Configurar no agente
+            Configurer dans l’agent
           </Link>
         </p>
       )}
@@ -398,7 +396,7 @@ function CartaoDoPonto({
           </div>
 
           <div>
-            <Label className="text-xs">Modelo</Label>
+            <Label className="text-xs">Modèle</Label>
             {/*
               Catálogo vazio não pode ser beco sem saída. O `baseline.sql` semeia
               `ai_models` só para anthropic/openai/google; os da OpenRouter só
@@ -418,21 +416,19 @@ function CartaoDoPonto({
                   data-testid={`modelo-${ponto.id}`}
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  O catálogo deste provedor ainda não foi baixado. Digite o
-                  identificador do modelo como o provedor o nomeia — a lista
-                  completa aparece sozinha depois da primeira sincronização.
+                  Le catalogue de ce fournisseur n’a pas encore été téléchargé. Saisissez l’identifiant du modèle tel que le fournisseur le nomme — la liste complète apparaît d’elle-même après la première synchronisation.
                 </p>
               </>
             ) : (
               <Select value={modelId} onValueChange={setModelId}>
                 <SelectTrigger data-testid={`modelo-${ponto.id}`}>
-                  <SelectValue placeholder="escolha" />
+                  <SelectValue placeholder="choisir" />
                 </SelectTrigger>
                 <SelectContent>
                   {modelosDoProvider.map((m) => (
                     <SelectItem key={m.model_id} value={m.model_id}>
                       {m.display_name}
-                      {ponto.exige.tools && !m.supports_tools ? " — sem ferramentas" : ""}
+                      {ponto.exige.tools && !m.supports_tools ? "— sans outils" : ""}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -444,7 +440,7 @@ function CartaoDoPonto({
             <Label className="text-xs">Chave</Label>
             <Select value={credentialId} onValueChange={setCredentialId}>
               <SelectTrigger data-testid={`chave-${ponto.id}`}>
-                <SelectValue placeholder="da instalação" />
+                <SelectValue placeholder="de l’installation" />
               </SelectTrigger>
               <SelectContent>
                 {credsDoProvider.map((c) => (
@@ -458,17 +454,15 @@ function CartaoDoPonto({
 
           {aceitaEndpointProprio && (
             <div className="sm:col-span-3">
-              <Label className="text-xs">Endereço próprio (opcional)</Label>
+              <Label className="text-xs">Adresse personnalisée (facultatif)</Label>
               <Input
                 value={baseUrl}
                 onChange={(e) => setBaseUrl(e.target.value)}
-                placeholder="https://meu-gateway.exemplo.com/v1"
+                placeholder="https://ma-passerelle.exemple.com/v1"
                 data-testid={`base-url-${ponto.id}`}
               />
               <p className="mt-1 text-xs text-muted-foreground">
-                Deixe em branco para usar o endereço oficial do provedor. Use
-                isto para apontar para um gateway compatível com a API da OpenAI
-                — inclusive um modelo rodando na sua própria máquina.
+                Laissez vide pour utiliser l’adresse officielle du fournisseur. Utilisez ceci pour pointer vers une passerelle compatible avec l’API d’OpenAI — y compris un modèle qui tourne sur votre propre machine.
               </p>
             </div>
           )}
@@ -480,7 +474,7 @@ function CartaoDoPonto({
               onClick={() => void salvar()}
               data-testid={`salvar-${ponto.id}`}
             >
-              {salvando ? "Salvando…" : "Salvar"}
+              {salvando ? "Salvando…" : "Enregistrer"}
             </Button>
           </div>
         </div>

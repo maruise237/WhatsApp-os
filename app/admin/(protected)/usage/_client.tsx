@@ -13,9 +13,9 @@ import { UsageCharts } from "@/components/admin/usage/UsageCharts";
 import { UsageTable } from "@/components/admin/usage/UsageTable";
 
 const RANGE_OPTIONS: { value: UsageRange; label: string }[] = [
-  { value: "7d", label: "Últimos 7 dias" },
-  { value: "30d", label: "Últimos 30 dias" },
-  { value: "90d", label: "Últimos 90 dias" },
+  { value: "7d", label: "7 derniers jours" },
+  { value: "30d", label: "30 derniers jours" },
+  { value: "90d", label: "90 derniers jours" },
 ];
 
 export function UsageClient() {
@@ -32,14 +32,14 @@ export function UsageClient() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Uso & Custo</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Consumo de mensagens, conversas e AI por tenant
+            Consommation de messages, de conversations et d’IA par organisation
           </p>
         </div>
 
         {/* Range selector */}
         <Select value={range} onValueChange={(v) => setRange(v as UsageRange)}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Período" />
+            <SelectValue placeholder="Période" />
           </SelectTrigger>
           <SelectContent>
             {RANGE_OPTIONS.map((opt) => (
@@ -60,7 +60,7 @@ export function UsageClient() {
         </div>
       ) : isError || !usageData ? (
         <div className="flex items-center justify-center rounded-lg border py-12 text-sm text-muted-foreground">
-          Erro ao carregar dados de uso. Tente recarregar.
+          Erreur lors du chargement des données d’utilisation. Essayez de recharger.
         </div>
       ) : (
         <>

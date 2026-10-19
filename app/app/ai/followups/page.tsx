@@ -35,8 +35,7 @@ export default async function FollowupFlowsPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Follow-ups</h1>
           <p className="text-sm text-text-muted">
-            Fluxos automáticos de reengajamento — silêncio, mudança de etapa ou fim
-            de conversa disparam mensagens sem intervenção manual.
+            Flux automatiques de réengagement — un silence, un changement d’étape ou une fin de conversation déclenchent des messages sans intervention manuelle.
           </p>
         </div>
       </header>

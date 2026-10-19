@@ -30,18 +30,18 @@ function provedorLegivel(id: string | null, t: (texto: string) => string): strin
 const JEITOS: { id: PromptTemplate; titulo: string; desc: string }[] = [
   {
     id: "ecommerce_friendly",
-    titulo: "Próximo e caloroso",
-    desc: "Conversa como gente, puxa assunto, tranquiliza. Bom para quem vende no dia a dia.",
+    titulo: "Proche et chaleureux",
+    desc: "Parle comme une vraie personne, engage la conversation, rassure. Idéal pour la vente au quotidien.",
   },
   {
     id: "ecommerce_professional",
-    titulo: "Objetivo e cordial",
-    desc: "Vai direto ao ponto sem ser seco, e sempre indica o próximo passo.",
+    titulo: "Direct et cordial",
+    desc: "Va droit au but sans être sec, et indique toujours la prochaine étape.",
   },
   {
     id: "support_minimal",
-    titulo: "Curto e prático",
-    desc: "Frases curtas, pergunta só o essencial e chama uma pessoa cedo.",
+    titulo: "Court et pratique",
+    desc: "Phrases courtes, ne demande que l’essentiel et appelle une personne tôt.",
   },
 ];
 

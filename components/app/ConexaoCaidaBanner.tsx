@@ -53,18 +53,17 @@ export function ConexaoCaidaBanner({ caidas }: { caidas: ConexaoCaida[] }) {
             </>
           ) : (
             <>
-              <strong className="font-semibold">{caidas.length} conexões</strong> de WhatsApp
-              estão desconectadas
+              <strong className="font-semibold">{caidas.length} connexions</strong> WhatsApp sont déconnectées
             </>
           )}
-          {" — nenhuma mensagem entra nem sai."}
+          {"— aucun message n’entre ni ne sort."}
         </span>
       </div>
       <Link
         href="/app/connections"
         className="rounded-md border border-red-400 bg-white/70 px-3 py-1 font-medium text-red-950 hover:bg-white dark:border-red-700 dark:bg-red-900/40 dark:text-red-50 dark:hover:bg-red-900/70"
       >
-        {precisaEscanear ? "Escanear o QR" : "Ver conexões"}
+        {precisaEscanear ? "Scanner le QR" : "Voir les connexions"}
       </Link>
     </div>
   );
