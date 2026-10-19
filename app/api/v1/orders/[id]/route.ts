@@ -22,7 +22,7 @@ export async function GET(_request: NextRequest, { params }: Context): Promise<R
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("sales_orders")
-    .select("*, sales_order_items(*), payment_proofs(*)")
+    .select("*, sales_order_items(*), payment_proofs(*), contacts(id, name, display_name, phone_number)")
     .eq("id", id)
     .eq("organization_id", authz.org.orgId)
     .maybeSingle();

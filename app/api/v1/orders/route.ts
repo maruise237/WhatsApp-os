@@ -19,7 +19,7 @@ export async function GET(): Promise<Response> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("sales_orders")
-    .select("*, sales_order_items(*), payment_proofs(*)")
+    .select("*, sales_order_items(*), payment_proofs(*), contacts(id, name, display_name, phone_number)")
     .eq("organization_id", authz.org.orgId)
     .order("updated_at", { ascending: false });
 

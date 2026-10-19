@@ -10,18 +10,18 @@ import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(): Promise<Response> {
+export async function GET(request: NextRequest): Promise<Response> {
   const requestId = randomUUID();
   const authz = await requireRole("agent", { requestId, resource: "products" });
   if (!authz.ok) return authz.response;
 
+  // `?include_archived=1` : le catalogue montre aussi les produits archivés,
+  // pour qu'un vendeur puisse les réactiver au lieu de les recréer.
+  const includeArchived = request.nextUrl.searchParams.get("include_archived") === "1";
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("organization_id", authz.org.orgId)
-    .eq("is_active", true)
-    .order("created_at", { ascending: false });
+  let query = supabase.from("products").select("*").eq("organization_id", authz.org.orgId);
+  if (!includeArchived) query = query.eq("is_active", true);
+  const { data, error } = await query.order("created_at", { ascending: false });
 
   if (error) return fail("internal_error", error.message, 500, { requestId });
   return ok(data ?? [], { requestId });
