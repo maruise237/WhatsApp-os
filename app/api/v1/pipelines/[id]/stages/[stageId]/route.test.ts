@@ -140,7 +140,7 @@ describe("PATCH /api/v1/pipelines/[id]/stages/[stageId]", () => {
     const res = await PATCH(reqPatch({ is_won: true }), ctx("e9"));
 
     expect(res.status).toBe(409);
-    expect((await res.json() as { error: { message: string } }).error.message).toContain("arquivada");
+    expect((await res.json() as { error: { message: string } }).error.message).toContain("archivée");
     // O veredito não é o status: é que a etapa de ganho de verdade continua sendo «Pago».
     expect(db.escritas).toEqual([]);
     expect(db.tabelas.crm_stages.find((e) => e.id === "e3")?.is_won).toBe(true);
@@ -500,7 +500,7 @@ describe("DELETE /api/v1/pipelines/[id]/stages/[stageId]", () => {
       payload: { from_stage_id: "e2", to_stage_id: "e1", stage_archived: true },
     });
     // A razão é lida por gente: cita as duas colunas e o motivo.
-    expect(linhas[0]!.reason).toBe("Movido de Proposta para Novo (a etapa «Proposta» foi arquivada)");
+    expect(linhas[0]!.reason).toBe("Déplacé de Proposta vers Novo (la colonne «Proposta» a été archivée)");
   });
 
   /**

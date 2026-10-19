@@ -135,13 +135,13 @@ describe("regra 3.3 — nenhuma eficiência é publicada sozinha", () => {
     const p90 = iguais
       .find((p) => p.chave === "custo_humano")
       ?.danos.find((d) => d.chave === "espera_humana_p90_s");
-    expect(p90?.nota).toMatch(/poucas esperas/i);
+    expect(p90?.nota).toMatch(/peu d’attentes/i);
 
     // E quando diferem, a nota volta a ser a que explica o próprio p90.
     const p90Diferente = pares
       .find((p) => p.chave === "custo_humano")
       ?.danos.find((d) => d.chave === "espera_humana_p90_s");
-    expect(p90Diferente?.nota).toMatch(/quem espera mais/i);
+    expect(p90Diferente?.nota).toMatch(/attendent le plus/i);
   });
 
   it("a taxa de contorno é publicada — mede a ferramenta sendo evitada", () => {
@@ -173,14 +173,14 @@ describe("abandono e a régua (Fase 2)", () => {
     // Doutrina §3.4 regra 4. Se o rótulo não trouxer as horas, ninguém sabe se
     // o 15% de hoje e o de mês passado foram medidos com a mesma régua.
     const dano = conversao.danos.find((d) => d.chave === "taxa_de_abandono")!;
-    expect(dano.rotulo).toContain("72h");
+    expect(dano.rotulo).toContain("72 h");
 
     const outraRegua = montarPares({ ...RAW, escopo: { ...RAW.escopo, abandono_horas: 24 } });
     const dano24 = outraRegua
       .find((p) => p.chave === "conversao")!
       .danos.find((d) => d.chave === "taxa_de_abandono")!;
-    expect(dano24.rotulo).toContain("24h");
-    expect(dano24.rotulo).not.toContain("72h");
+    expect(dano24.rotulo).toContain("24 h");
+    expect(dano24.rotulo).not.toContain("72 h");
   });
 
   it("a nota mostra os componentes crus, não só a razão", () => {
@@ -266,15 +266,15 @@ describe("repetição e espera (Fase 3)", () => {
     const dano = pares
       .find((p) => p.chave === "automacao")!
       .danos.find((d) => d.chave === "taxa_de_repergunta")!;
-    expect(dano.nota).toMatch(/piso/i);
-    expect(dano.nota).toMatch(/escapa/i);
+    expect(dano.nota).toMatch(/minimum/i);
+    expect(dano.nota).toMatch(/échappent/i);
   });
 
   it("a espera calada é dano do CUSTO HUMANO e traz a régua no rótulo", () => {
     const dano = pares
       .find((p) => p.chave === "custo_humano")!
       .danos.find((d) => d.chave === "taxa_de_espera_calada")!;
-    expect(dano.rotulo).toContain("4h");
+    expect(dano.rotulo).toContain("4 h");
     expect(taxaDeEsperaCalada(RAW.cliente)).toBeCloseTo(0.05, 6);
   });
 

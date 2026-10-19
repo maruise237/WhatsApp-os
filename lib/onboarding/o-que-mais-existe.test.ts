@@ -76,8 +76,8 @@ describe("o tutorial de cada peça", () => {
     const followup = PECAS.find((p) => p.href === "/app/ai/followups");
     expect(followup, "o tour precisa apresentar o follow-up").toBeTruthy();
     const texto = followup!.comoFunciona.join(" ").toLowerCase();
-    expect(texto).toMatch(/responder?, o retorno para|para na hora/);
-    expect(texto).toMatch(/pedir para parar|parar/);
+    expect(texto).toMatch(/répond, la relance s’arrête|s’arrête aussitôt/);
+    expect(texto).toMatch(/demande d’arrêter|arrête/);
   });
 
   it("nenhum passo usa nome técnico", () => {

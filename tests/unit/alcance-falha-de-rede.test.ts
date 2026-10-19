@@ -94,13 +94,13 @@ describe("explicarFalhaDeAlcance", () => {
         "tls_recusado",
         "indeterminada",
       ] as const
-    ).map((f) => explicarFalhaDeAlcance(f, "o WhatsApp (WAHA)"));
+    ).map((f) => explicarFalhaDeAlcance(f, "WhatsApp (WAHA)"));
     expect(new Set(frases).size).toBe(frases.length);
   });
 
   it("endereço inexistente NÃO manda conferir o serviço — era esse o defeito", () => {
-    const frase = explicarFalhaDeAlcance("endereco_nao_resolve", "o WhatsApp (WAHA)");
-    expect(frase).toMatch(/configuração/i);
+    const frase = explicarFalhaDeAlcance("endereco_nao_resolve", "WhatsApp (WAHA)");
+    expect(frase).toMatch(/configuration/i);
     expect(frase).not.toMatch(/container/i);
     expect(frase).not.toMatch(/no ar/i);
   });
@@ -113,7 +113,7 @@ describe("wahaFriendlyError", () => {
     expect(dns).not.toBe(porta);
     // A regressão que importa: DNS morto mandava reiniciar o container.
     expect(dns).not.toMatch(/container/i);
-    expect(porta).toMatch(/porta|no ar/i);
+    expect(porta).toMatch(/port|en ligne/i);
   });
 
   it("erro que não é de rede continua chegando ao operador com o texto original", () => {
@@ -133,6 +133,6 @@ describe("alvoDe", () => {
   });
 
   it("endereço inválido não explode o health check", () => {
-    expect(alvoDe("nao-e-uma-url")).toBe("(endereço inválido)");
+    expect(alvoDe("nao-e-uma-url")).toBe("(adresse invalide)");
   });
 });

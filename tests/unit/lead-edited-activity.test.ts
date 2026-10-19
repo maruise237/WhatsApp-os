@@ -12,17 +12,17 @@ import { listaLegivel, ACTIVITY_LABELS, activityLabel } from "@/lib/leads/activi
  */
 describe("a edição humana na timeline", () => {
   it("o tipo tem rótulo em português, e não o nome de máquina", () => {
-    expect(ACTIVITY_LABELS.lead_edited).toBe("Dados do negócio alterados");
+    expect(ACTIVITY_LABELS.lead_edited).toBe("Infos de l’affaire modifiées");
     expect(activityLabel("lead_edited")).not.toBe("lead_edited");
   });
 
   it("a razão diz QUAIS campos mudaram", () => {
     // "dados alterados" sozinho não muda o que ninguém faz a seguir: saber que
     // mudou o VALOR é diferente de saber que mudou a descrição.
-    expect(listaLegivel(["value_cents"])).toBe("o valor");
-    expect(listaLegivel(["title", "value_cents"])).toBe("o título e o valor");
+    expect(listaLegivel(["value_cents"])).toBe("le montant");
+    expect(listaLegivel(["title", "value_cents"])).toBe("le titre et le montant");
     expect(listaLegivel(["title", "tags", "owner_user_id"])).toBe(
-      "o título, as tags e o responsável",
+      "le titre, les étiquettes et le responsable",
     );
   });
 
@@ -31,7 +31,7 @@ describe("a edição humana na timeline", () => {
     // Sumir seria pior: a frase diria menos do que de fato aconteceu, e quem
     // lesse concluiria que aquele campo não foi tocado.
     expect(listaLegivel(["campo_novo"])).toBe("campo_novo");
-    expect(listaLegivel(["title", "campo_novo"])).toBe("o título e campo_novo");
+    expect(listaLegivel(["title", "campo_novo"])).toBe("le titre et campo_novo");
   });
 
   it("lista vazia não vira frase quebrada", () => {

@@ -66,9 +66,9 @@ describe("CaseDetail", () => {
     expect(screen.getByText(BASE_CASE.blocker)).toBeInTheDocument();
 
     // 'opened' traduzido — nunca o enum cru.
-    expect(screen.getByText("A IA abriu o caso")).toBeInTheDocument();
+    expect(screen.getByText("L’IA a ouvert le dossier")).toBeInTheDocument();
     // 'lead_asked' traduzido.
-    expect(screen.getByText("A IA perguntou ao cliente")).toBeInTheDocument();
+    expect(screen.getByText("L’IA a posé la question au client")).toBeInTheDocument();
     expect(screen.queryByText("opened")).not.toBeInTheDocument();
     expect(screen.queryByText("lead_asked")).not.toBeInTheDocument();
   });

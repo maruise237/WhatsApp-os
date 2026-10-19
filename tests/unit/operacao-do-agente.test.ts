@@ -101,7 +101,7 @@ describe("criar entrada automática de contatos — tenancy sob service-role", (
     const erro = await recusa(() => criarEntradaAutomatica(deps(db), ENTRADA));
 
     expect(erro.status).toBe(422);
-    expect(erro.message).toContain("Esse funil não existe aqui");
+    expect(erro.message).toContain("Ce tableau n’existe pas ici");
     expect(db.escritas).toEqual([]);
   });
 
@@ -114,7 +114,7 @@ describe("criar entrada automática de contatos — tenancy sob service-role", (
     const erro = await recusa(() => criarEntradaAutomatica(deps(db), ENTRADA));
 
     expect(erro.status).toBe(422);
-    expect(erro.message).toContain("não pertence ao funil escolhido");
+    expect(erro.message).toContain("n’appartient pas au tableau choisi");
     expect(db.escritas).toEqual([]);
   });
 
@@ -123,7 +123,7 @@ describe("criar entrada automática de contatos — tenancy sob service-role", (
     const erro = await recusa(() => criarEntradaAutomatica(deps(db), ENTRADA));
 
     expect(erro.status).toBe(422);
-    expect(erro.message).toContain("arquivada");
+    expect(erro.message).toContain("archivée");
     expect(db.escritas).toEqual([]);
   });
 

@@ -260,5 +260,5 @@ export function listaLegivel(campos: string[]): string {
   const nomes = campos.map((c) => NOME_DO_CAMPO[c] ?? c);
   if (nomes.length === 0) return "nada";
   if (nomes.length === 1) return nomes[0]!;
-  return `${nomes.slice(0, -1).join(", ")} e ${nomes[nomes.length - 1]!}`;
+  return `${nomes.slice(0, -1).join(", ")} et ${nomes[nomes.length - 1]!}`;
 }

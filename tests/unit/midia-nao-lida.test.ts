@@ -58,7 +58,7 @@ describe("o aviso que o operador recebe", () => {
 
   it("o texto descreve o que o CLIENTE viveu, não a causa técnica", () => {
     const copy = (KIND_LABEL as Record<string, string>)["midia_nao_lida"]!;
-    expect(copy.toLowerCase()).toMatch(/foto|áudio|imagem|mídia/);
+    expect(copy.toLowerCase()).toMatch(/photo|audio|image|média/);
     expect(copy.toLowerCase()).not.toMatch(/null|undefined|api|token|whisper/);
   });
 });

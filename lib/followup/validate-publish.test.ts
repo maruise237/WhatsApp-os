@@ -436,7 +436,7 @@ describe('validateFlowForPublish — cobertura por ramo (per_check)', () => {
     const msg = result.errors.find((e) => e.branch_id === 'chk_frio')!.message;
     expect(msg).not.toContain('chk_frio');
     expect(msg).not.toContain('steps_taken');
-    expect(msg).toMatch(/passos/i);
+    expect(msg).toMatch(/étapes/i);
   });
 
   it('reprova quando falta a saída "nenhuma delas" — é ela que impede lead parado', () => {

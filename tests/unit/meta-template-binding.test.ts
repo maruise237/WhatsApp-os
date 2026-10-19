@@ -83,7 +83,7 @@ describe("explainBindingState", () => {
       expect(f).toContain("pedido_confirmado");
       expect(f).toContain("pt_BR");
     }
-    expect(explainBindingState("stale", SALVO)).toMatch(/mudou na Meta/);
-    expect(explainBindingState("missing", SALVO)).toMatch(/não existe mais/);
+    expect(explainBindingState("stale", SALVO)).toMatch(/a changé chez Meta/);
+    expect(explainBindingState("missing", SALVO)).toMatch(/n’existe plus/);
   });
 });

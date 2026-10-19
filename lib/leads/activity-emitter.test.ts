@@ -194,13 +194,13 @@ describe("emitLeadActivity", () => {
 describe("stageChangeReason", () => {
   it("com os dois nomes, diz de onde para onde", () => {
     expect(stageChangeReason("Avaliação", "Proposta enviada")).toBe(
-      "Movido de Avaliação para Proposta enviada",
+      "Déplacé de Avaliação vers Proposta enviada",
     );
   });
 
   it("sem o nome de origem, ainda diz para onde (nunca mostra UUID)", () => {
-    expect(stageChangeReason(null, "Negociação")).toBe("Movido para Negociação");
-    expect(stageChangeReason(null, null)).toBe("Mudou de estágio");
+    expect(stageChangeReason(null, "Negociação")).toBe("Déplacé vers Negociação");
+    expect(stageChangeReason(null, null)).toBe("A changé de colonne");
   });
 });
 

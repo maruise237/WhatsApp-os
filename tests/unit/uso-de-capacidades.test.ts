@@ -18,10 +18,10 @@ import {
 } from "@/lib/ai/agents/uso-de-capacidades";
 
 const CATALOGO: ReadonlyArray<CapacidadeConhecida> = [
-  { name: "crm_ler", rotulo: "Ler a conversa", o_que_toca: "Atendimento", risco: "seguro" },
+  { name: "crm_ler", rotulo: "Ler a conversa", o_que_toca: "Service client", risco: "seguro" },
   { name: "crm_mover", rotulo: "Mover de etapa", o_que_toca: "Funil", risco: "atencao" },
-  { name: "crm_enviar", rotulo: "Enviar mensagem", o_que_toca: "Atendimento", risco: "critico" },
-  { name: "crm_pedir_ajuda", rotulo: "Pedir ajuda humana", o_que_toca: "Atendimento", risco: "atencao" },
+  { name: "crm_enviar", rotulo: "Enviar mensagem", o_que_toca: "Service client", risco: "critico" },
+  { name: "crm_pedir_ajuda", rotulo: "Pedir ajuda humana", o_que_toca: "Service client", risco: "atencao" },
 ];
 
 function uso(p: Partial<LinhaDeUso> & { tool_name: string }): LinhaDeUso {
@@ -53,7 +53,7 @@ describe("o sinal de cada capacidade", () => {
   it("ligada e sem nenhum uso é 'nunca usada', e a recomendação diz a janela", () => {
     const [linha] = montar(["crm_ler"], [], 45);
     expect(linha!.sinal).toBe("nunca_usada");
-    expect(linha!.recomendacao).toContain("45 dias");
+    expect(linha!.recomendacao).toContain("45 derniers jours");
     expect(linha!.ligada).toBe(true);
   });
 
@@ -73,7 +73,7 @@ describe("o sinal de cada capacidade", () => {
   it("parte falhando é 'falhando', com o número das duas pontas", () => {
     const [linha] = montar(["crm_mover"], [uso({ tool_name: "crm_mover", total: 10, falhas: 3 })]);
     expect(linha!.sinal).toBe("falhando");
-    expect(linha!.recomendacao).toContain("3 de 10");
+    expect(linha!.recomendacao).toContain("3 tentatives sur 10");
   });
 
   it("usada só nas execuções de teste não conta como funcionando em produção", () => {
@@ -90,7 +90,7 @@ describe("o sinal de cada capacidade", () => {
       [uso({ tool_name: "crm_ler", total: 9, em_teste: 2 })],
     );
     expect(linha!.sinal).toBe("saudavel");
-    expect(linha!.recomendacao).toContain("2 em teste");
+    expect(linha!.recomendacao).toContain("2 en test");
   });
 });
 
@@ -150,7 +150,7 @@ describe("o que entra na lista e em que ordem", () => {
   it("capacidade que saiu do catálogo mantém a linha, com o id no lugar do rótulo", () => {
     const [linha] = montar(["crm_capacidade_extinta"], []);
     expect(linha!.rotulo).toBe("crm_capacidade_extinta");
-    expect(linha!.o_que_toca).toContain("removida");
+    expect(linha!.o_que_toca).toContain("retirée");
   });
 });
 
@@ -191,7 +191,7 @@ describe("configuração recém-feita não pede decisão nenhuma", () => {
       agora: AGORA,
     });
     expect(linha!.sinal).toBe("recem_ligada");
-    expect(linha!.recomendacao).not.toMatch(/considere desligar/);
+    expect(linha!.recomendacao).not.toMatch(/pensez à la désactiver/);
     expect(resumirUso([linha!]).precisam_de_atencao).toBe(0);
   });
 
@@ -205,7 +205,7 @@ describe("configuração recém-feita não pede decisão nenhuma", () => {
       agora: AGORA,
     });
     expect(linha!.sinal).toBe("nunca_usada");
-    expect(linha!.recomendacao).toMatch(/considere desligar/);
+    expect(linha!.recomendacao).toMatch(/pensez à la désactiver/);
     expect(resumirUso([linha!]).precisam_de_atencao).toBe(1);
   });
 

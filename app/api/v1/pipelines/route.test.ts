@@ -55,7 +55,7 @@ describe("POST /api/v1/pipelines", () => {
 
     expect(res.status).toBe(422);
     const body = (await res.json()) as { error: { message: string } };
-    expect(body.error.message).toBe("Já existe um funil chamado «Pedidos». Escolha outro nome.");
+    expect(body.error.message).toBe("Un tableau nommé «Pedidos» existe déjà. Choisissez un autre nom.");
     expect(db.escritas).toEqual([]);
   });
 

@@ -52,7 +52,7 @@ describe("resolveCardState — precedência estrita", () => {
   });
 
   it("esfriando E aguardando: quem manda é o slot de cima, e o relógio volta", () => {
-    // "Aguardando você" não conta tempo, então o rodapé volta a mostrá-lo —
+    // "En attente de vous" não conta tempo, então o rodapé volta a mostrá-lo —
     // continua havendo exatamente UM relógio no card.
     const r = resolveCardState({ ...base, isCooling: true, nextAction: { label: "Ligar" } });
     expect(r.kind).toBe("awaiting");
@@ -63,7 +63,7 @@ describe("resolveCardState — precedência estrita", () => {
     const r = resolveCardState({ ...base, probability: 72, band: "quente" as const, isCooling: true, hoursInStage: 144 });
     expect(r.kind).toBe("cooling");
     expect(r.border).toBe("warning");
-    expect(r.slot).toEqual({ type: "cooling", label: "Sem resposta há 6 dias" });
+    expect(r.slot).toEqual({ type: "cooling", label: "Sans réponse depuis 6 jours" });
   });
 
   it("aguardando decisão vence esfriando E score (cenário 24 do briefing)", () => {
@@ -117,16 +117,16 @@ describe("resolveCardState — precedência estrita", () => {
 
 describe("rótulos de tempo", () => {
   it("coolingLabel: horas viram dias depois de 48h", () => {
-    expect(coolingLabel(6)).toBe("Sem resposta há 6h");
-    expect(coolingLabel(144)).toBe("Sem resposta há 6 dias");
-    expect(coolingLabel(0.5)).toBe("Sem resposta");
-    expect(coolingLabel(null)).toBe("Sem resposta");
+    expect(coolingLabel(6)).toBe("Sans réponse depuis 6 h");
+    expect(coolingLabel(144)).toBe("Sans réponse depuis 6 jours");
+    expect(coolingLabel(0.5)).toBe("Sans réponse");
+    expect(coolingLabel(null)).toBe("Sans réponse");
   });
 
   it("stageAgeLabel: compacto, cabe no rodapé", () => {
-    expect(stageAgeLabel(72)).toBe("3d");
+    expect(stageAgeLabel(72)).toBe("3j");
     expect(stageAgeLabel(5)).toBe("5h");
-    expect(stageAgeLabel(0.2)).toBe("agora");
+    expect(stageAgeLabel(0.2)).toBe("maintenant");
     expect(stageAgeLabel(null)).toBe("");
   });
 });

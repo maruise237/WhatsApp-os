@@ -57,7 +57,7 @@ describe("o pedido", () => {
   it("leva o exemplo do ramo, não uma descrição do formato em prosa", () => {
     // Descrever o formato produz JSON válido com conteúdo de manual de vendas.
     const { prompt } = pedidoDeSugestao(CTX, escolherPacotePorTexto("clínica"));
-    expect(prompt).toContain("Consulta marcada");
+    expect(prompt).toContain("Rendez-vous pris");
     expect(prompt).toContain("Clínica Bem Viver");
     expect(prompt).toContain("Atendimento odontológico");
   });
@@ -66,7 +66,7 @@ describe("o pedido", () => {
     // Sem isto o modelo devolve o exemplo de volta, e toda clínica do mundo
     // termina com o mesmo quadro.
     const { prompt } = pedidoDeSugestao(CTX, escolherPacotePorTexto("clínica"));
-    expect(prompt).toMatch(/não copie/i);
+    expect(prompt).toMatch(/ne copie pas/i);
   });
 
   it("proíbe explicitamente a língua de manual de vendas", () => {
@@ -122,7 +122,7 @@ describe("sugerir", () => {
     });
     const s = await sugerirFunil(CTX, responde(semGanho));
     expect(s.origem).toBe("pacote");
-    expect(s.origem === "pacote" && s.porque).toMatch(/fechado/i);
+    expect(s.origem === "pacote" && s.porque).toMatch(/conclue/i);
   });
 
   it("a chave sem saldo vira pacote + motivo, nunca uma tela quebrada", async () => {

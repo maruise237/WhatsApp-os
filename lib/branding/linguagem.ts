@@ -151,7 +151,7 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
 const NOME_DA_COR_DE_ALERTA: Record<string, string> = {
   success: "succès",
   warning: "attention",
-  error: "erro",
+  error: "erreur",
   info: "informação",
 };
 

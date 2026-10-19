@@ -22,13 +22,13 @@ describe("o que ENTRA na timeline", () => {
     const r = diffCheckpoint(vazio(), vazio({ objections: ["preço acima do orçamento"] }));
     expect(r.emit).toBe(true);
     expect(r.addedObjections).toEqual(["preço acima do orçamento"]);
-    expect(r.reason).toBe("Nova objeção: preço acima do orçamento");
+    expect(r.reason).toBe("Nouvelle objection : preço acima do orçamento");
   });
 
   it("compromisso novo", () => {
     const r = diffCheckpoint(vazio(), vazio({ commitments: ["retorna terça"] }));
     expect(r.emit).toBe(true);
-    expect(r.reason).toBe("Novo compromisso: retorna terça");
+    expect(r.reason).toBe("Nouvel engagement : retorna terça");
   });
 
   it("próxima ação mudou", () => {
@@ -38,7 +38,7 @@ describe("o que ENTRA na timeline", () => {
     );
     expect(r.emit).toBe(true);
     expect(r.nextActionChanged).toBe(true);
-    expect(r.reason).toBe("Próxima ação: enviar proposta");
+    expect(r.reason).toBe("Prochaine action : enviar proposta");
   });
 
   it("vários fatos novos entram numa linha só, não em três", () => {
@@ -51,7 +51,7 @@ describe("o que ENTRA na timeline", () => {
       }),
     );
     expect(r.reason).toBe(
-      "Nova objeção: prazo longo · Novo compromisso: envia documento · Próxima ação: ligar amanhã",
+      "Nouvelle objection : prazo longo · Nouvel engagement : envia documento · Prochaine action : ligar amanhã",
     );
   });
 });
@@ -63,7 +63,7 @@ describe("o que FICA DE FORA (o ponto do 2.4)", () => {
       vazio({ objections: ["preço"], rolling_summary: "cliente segue avaliando, citou concorrente" }),
     );
     expect(r.emit).toBe(false);
-    expect(r.reason).toContain("só reescreveu o resumo");
+    expect(r.reason).toContain("a seulement réécrit le résumé");
   });
 
   it("repetir a MESMA objeção do turno anterior não entra", () => {
@@ -111,7 +111,7 @@ describe("o que FICA DE FORA (o ponto do 2.4)", () => {
   });
 });
 
-describe("primeiro checkpoint", () => {
+describe("premier point d’étape", () => {
   it("com fato novo, entra", () => {
     expect(diffCheckpoint(null, vazio({ objections: ["quer desconto"] })).emit).toBe(true);
   });
@@ -119,7 +119,7 @@ describe("primeiro checkpoint", () => {
   it("sem fato novo, não entra — 'a IA começou a pensar' não é evento", () => {
     const r = diffCheckpoint(null, vazio({ rolling_summary: "primeira conversa" }));
     expect(r.emit).toBe(false);
-    expect(r.reason).toContain("primeiro checkpoint");
+    expect(r.reason).toContain("premier point d’étape");
   });
 });
 

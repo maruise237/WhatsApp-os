@@ -124,7 +124,7 @@ describe("buildComponents", () => {
     // É o 132000 acontecendo do lado de cá, onde o operador ainda pode corrigir.
     // Montar sem o parâmetro e deixar a Meta reprovar é o comportamento de hoje.
     const c = tpl("jaspers_market_order_confirmation_v1");
-    expect(() => buildComponents(c, { "1": "Rafael" })).toThrow(/corpo/);
+    expect(() => buildComponents(c, { "1": "Rafael" })).toThrow(/corps/);
   });
 
   it("slot de tipo que a derivação ainda não produz FALHA fechado", () => {

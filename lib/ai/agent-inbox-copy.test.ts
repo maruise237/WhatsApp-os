@@ -10,12 +10,12 @@ import {
 describe("agent-inbox-copy — rótulos leigos dos avisos do runtime", () => {
   it("traduz kinds conhecidos do schema (agent_inbox_items.kind)", () => {
     expect(kindLabel("qr_rescan")).toContain("QR");
-    expect(kindLabel("budget_exceeded")).toContain("orçamento");
-    expect(kindLabel("handoff")).toContain("humano");
+    expect(kindLabel("budget_exceeded")).toContain("budget");
+    expect(kindLabel("handoff")).toContain("personne");
   });
 
   it("kind desconhecido cai no rótulo genérico sem quebrar", () => {
-    expect(kindLabel("kind_novo_do_engine")).toBe("Aviso do assistente");
+    expect(kindLabel("kind_novo_do_engine")).toBe("Alerte de l’assistant");
   });
 
   /**
@@ -46,16 +46,16 @@ describe("agent-inbox-copy — rótulos leigos dos avisos do runtime", () => {
 
   it("o item ambíguo se anuncia pelo que pede, não pelo genérico", () => {
     // Regressão direta: este kind nasceu na 0073 e chegou à tela caindo no
-    // "Aviso do assistente" — genérico num item cuja razão de existir é pedir
+    // "Alerte de l’assistant" — genérico num item cuja razão de existir é pedir
     // uma escolha. O teste falha se alguém remover o rótulo.
-    expect(kindLabel("next_action_ambiguous")).not.toBe("Aviso do assistente");
-    expect(kindLabel("next_action_ambiguous")).toContain("escolha");
+    expect(kindLabel("next_action_ambiguous")).not.toBe("Alerte de l’assistant");
+    expect(kindLabel("next_action_ambiguous")).toContain("choisir");
   });
 
   it("severidades têm rótulo leigo", () => {
-    expect(SEVERITY_LABEL.info).toBe("informativo");
-    expect(SEVERITY_LABEL.warn).toBe("atenção");
-    expect(SEVERITY_LABEL.critical).toBe("crítico");
+    expect(SEVERITY_LABEL.info).toBe("information");
+    expect(SEVERITY_LABEL.warn).toBe("attention");
+    expect(SEVERITY_LABEL.critical).toBe("critique");
   });
 });
 
@@ -90,13 +90,13 @@ describe("copyDaPromessaSemDono — o aviso só afirma o que foi apurado", () =>
     // O rótulo é o que aparece na lista da Central, antes de alguém abrir o item
     // — se ele afirma e o corpo não, a tela se contradiz.
     expect(kindLabel("promise_unfulfilled").toLowerCase()).not.toContain("cumpri");
-    expect(kindLabel("promise_unfulfilled")).toContain("responsável");
+    expect(kindLabel("promise_unfulfilled")).toContain("responsable");
   });
 
   it("sem capacidade marcada, manda para a tela do assistente", () => {
     const { body } = copyDaPromessaSemDono(1, "operador_sem_ferramentas");
-    expect(body).toContain("capacidade");
-    expect(body).toContain("tela do assistente");
+    expect(body).toContain("capacité");
+    expect(body).toContain("écran de l’assistant");
   });
 
   it("com capacidade e sem ação, NÃO manda configurar nada — manda decidir", () => {
@@ -104,12 +104,12 @@ describe("copyDaPromessaSemDono — o aviso só afirma o que foi apurado", () =>
     // "não agiu" mandasse marcar capacidades, metade das pessoas iria mexer na
     // configuração por um problema que não é de configuração.
     const { body } = copyDaPromessaSemDono(1, "operador_nao_agiu");
-    expect(body).not.toContain("capacidade");
-    expect(body).toContain("decida quem faz");
+    expect(body).not.toContain("capacité");
+    expect(body).toContain("décidez qui s’en charge");
   });
 
   it("plural: o título conta as promessas", () => {
-    expect(copyDaPromessaSemDono(3, "operador_nao_agiu").title).toContain("3 promessas");
+    expect(copyDaPromessaSemDono(3, "operador_nao_agiu").title).toContain("3 promesses");
     expect(copyDaPromessaSemDono(1, "operador_nao_agiu").title).not.toContain("1 promessas");
   });
 

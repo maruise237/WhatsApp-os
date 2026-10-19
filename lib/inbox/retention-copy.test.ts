@@ -13,7 +13,7 @@ describe("retentionCopy — tradução leiga dos vetos before_send", () => {
     const r = retentionCopy("outside_window", ctx);
     expect(r.kind).toBe("protection");
     expect(r.description).toContain("8h–21h");
-    expect(r.description).toContain("sem domingo");
+    expect(r.description).toContain("sans le dimanche");
     expect(retentionCopy("mass_identical", ctx).kind).toBe("protection");
   });
 
@@ -38,6 +38,6 @@ describe("retentionCopy — tradução leiga dos vetos before_send", () => {
 
   it("respeita allow_sunday=true na copy da janela", () => {
     const r = retentionCopy("outside_window", { ...ctx, allow_sunday: true });
-    expect(r.description).not.toContain("sem domingo");
+    expect(r.description).not.toContain("sans le dimanche");
   });
 });

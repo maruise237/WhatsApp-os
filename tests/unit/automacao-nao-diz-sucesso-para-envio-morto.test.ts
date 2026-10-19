@@ -59,7 +59,7 @@ describe("desfechoDoEnvio — o run conta o que aconteceu com a mensagem", () =>
       error_message: "fetch failed",
     });
     // Quem lê a aba Atividade é quem montou a automação, não quem escreveu o adapter.
-    expect(d.error).toContain("serviço de WhatsApp");
+    expect(d.error).toContain("service WhatsApp");
     expect(d.error).not.toBe("fetch failed");
   });
 
@@ -83,7 +83,7 @@ describe("desfechoDoEnvio — o run conta o que aconteceu com a mensagem", () =>
     // `failed` faria quem lê desistir de uma mensagem que o watchdog resgata
     // quando o número reconectar.
     expect(d.status).toBe("postponed");
-    expect(String(d.detail?.explicacao)).toContain("não está conectado");
+    expect(String(d.detail?.explicacao)).toContain("n’est pas connecté");
   });
 
   it("fila SEM motivo declarado ainda explica a espera", () => {
@@ -118,7 +118,7 @@ describe("desfechoDoEnvio — o run conta o que aconteceu com a mensagem", () =>
     // original do provedor, que às vezes é a única pista real.
     expect(fraseDaFalhaDeCanal("nao_existe")).toBeNull();
     expect(fraseDaFalhaDeCanal(null)).toBeNull();
-    expect(fraseDaFalhaDeCanal("channel_archived")).toContain("excluído");
+    expect(fraseDaFalhaDeCanal("channel_archived")).toContain("supprimé");
   });
 });
 

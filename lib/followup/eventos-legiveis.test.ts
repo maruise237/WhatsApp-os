@@ -43,15 +43,15 @@ function evento(over: Partial<Parameters<typeof descreveEvento>[0]> = {}) {
 
 describe("duracaoLegivel", () => {
   it("fala em minutos, horas e dias — a unidade que a pessoa usaria", () => {
-    expect(duracaoLegivel(1_800_000)).toBe("30 minutos");
-    expect(duracaoLegivel(3_600_000)).toBe("1 hora");
-    expect(duracaoLegivel(14_400_000)).toBe("4 horas");
-    expect(duracaoLegivel(172_800_000)).toBe("2 dias");
+    expect(duracaoLegivel(1_800_000)).toBe("30 minutes");
+    expect(duracaoLegivel(3_600_000)).toBe("1 heure");
+    expect(duracaoLegivel(14_400_000)).toBe("4 heures");
+    expect(duracaoLegivel(172_800_000)).toBe("2 jours");
   });
 
   it("valor impossível não vira número esquisito na tela", () => {
-    expect(duracaoLegivel(Number.NaN)).toBe("tempo indefinido");
-    expect(duracaoLegivel(-1)).toBe("tempo indefinido");
+    expect(duracaoLegivel(Number.NaN)).toBe("durée indéfinie");
+    expect(duracaoLegivel(-1)).toBe("durée indéfinie");
   });
 });
 
@@ -65,18 +65,18 @@ describe("resumoDoNo", () => {
       config: { mode: "ai_message", prompt_hint: "SEGREDO DO PROMPT" },
     });
     expect(r.resumo).not.toContain("SEGREDO DO PROMPT");
-    expect(r.resumo).toContain("agente escreve");
+    expect(r.resumo).toContain("assistant écrit");
   });
 
   it("a espera adaptativa mostra a faixa que o dono do fluxo configurou", () => {
     const r = resumoDoNo({
       id: "w",
       type: "wait",
-      label: "Espera",
+      label: "Attente",
       position: { x: 0, y: 0 },
       config: { mode: "smart", min_ms: 3_600_000, max_ms: 86_400_000 },
     });
-    expect(r.resumo).toBe("espera adaptativa, entre 1 hora e 1 dia");
+    expect(r.resumo).toBe("attente adaptée, entre 1 heure et 1 jour");
   });
 });
 
@@ -89,11 +89,11 @@ describe("refDoNo — o alvo nunca some", () => {
     // Registro sem o dono é indiagnosticável: "falhou" sem onde não serve para
     // nada. Feio e verdadeiro ganha de bonito e mudo.
     expect(refDoNo("wait-99", nos)).toContain("wait-99");
-    expect(refDoNo("wait-99", nos)).toContain("não existe mais");
+    expect(refDoNo("wait-99", nos)).toContain("n’existe plus");
   });
 
   it("evento sem nó não inventa um", () => {
-    expect(refDoNo(null, nos)).toBe("sem passo associado");
+    expect(refDoNo(null, nos)).toBe("aucune étape associée");
   });
 });
 
@@ -103,8 +103,8 @@ describe("descreveEvento", () => {
       evento({ event_type: "node_advanced", payload: { next_node_id: "action-1" } }),
       nos,
     );
-    expect(r.titulo).toBe("Seguiu em frente");
-    expect(r.detalhe).toBe("foi para Primeira cutucada");
+    expect(r.titulo).toBe("A avancé");
+    expect(r.detalhe).toBe("est passée à Primeira cutucada");
     expect(r.onde).toBe("Deixa esfriar");
     expect(r.autor).toBe("motor");
   });
@@ -125,7 +125,7 @@ describe("descreveEvento", () => {
 
   it("tipo desconhecido não vira jargão disfarçado de frase, mas também não some", () => {
     const r = descreveEvento(evento({ event_type: "passo_que_ainda_nao_existe" }), nos);
-    expect(r.titulo).toBe("Passo registrado pelo motor");
+    expect(r.titulo).toBe("Étape enregistrée par le moteur");
     // O código aparece porque é EXATAMENTE aqui que quem diagnostica precisa dele.
     expect(r.detalhe).toContain("passo_que_ainda_nao_existe");
   });
@@ -134,7 +134,7 @@ describe("descreveEvento", () => {
 describe("rotuloDaAresta", () => {
   it("diz QUANDO o caminho é seguido, em português", () => {
     expect(rotuloDaAresta({ id: "e", source: "a", target: "b", priority: 0, condition: { type: "always" } })).toBe(
-      "caminho normal",
+      "chemin normal",
     );
     expect(
       rotuloDaAresta({
@@ -144,7 +144,7 @@ describe("rotuloDaAresta", () => {
         priority: 0,
         condition: { type: "class_match", value: "no_reply" },
       }),
-    ).toBe("quando ninguém responde");
+    ).toBe("quand personne ne répond");
     expect(
       rotuloDaAresta({
         id: "e",
@@ -153,7 +153,7 @@ describe("rotuloDaAresta", () => {
         priority: 0,
         condition: { type: "cond_result", value: false },
       }),
-    ).toBe("quando a condição é falsa");
+    ).toBe("quand la condition est fausse");
     // v1 e v2 leem a MESMA classe com a MESMA frase — é o risco que centralizar
     // o dicionário mata: o mesmo fluxo lido de dois jeitos conforme a versão.
     expect(
@@ -164,14 +164,14 @@ describe("rotuloDaAresta", () => {
         priority: 0,
         condition: { type: "class_match", value: "quente" },
       }),
-    ).toBe("quando a IA classifica a resposta como “quente”");
+    ).toBe("quand l’IA classe la réponse comme « quente »");
   });
 });
 
 describe("rotuloDoStatus", () => {
   it("as duas pausas NÃO se chamam igual — decisões diferentes dependem disso", () => {
-    expect(rotuloDoStatus("paused_manual")).toBe("Pausado por uma pessoa");
-    expect(rotuloDoStatus("paused_handoff")).toBe("Pausado (atendimento humano)");
+    expect(rotuloDoStatus("paused_manual")).toBe("Mis en pause par une personne");
+    expect(rotuloDoStatus("paused_handoff")).toBe("En pause (reprise par une personne)");
   });
 });
 
@@ -201,18 +201,18 @@ describe("rotuloDaAresta — o ramo nomeado do grafo v2", () => {
 
   it("usa o NOME que a pessoa deu ao ramo, que só existe no nó — e diz que quem julgou foi a IA", () => {
     expect(rotuloDaAresta(aresta("b-quente"), classify)).toBe(
-      "quando a IA classifica a resposta como “quente”",
+      "quand l’IA classe la réponse comme « quente »",
     );
   });
 
   it("sem o nó de origem, NÃO ecoa o branch_id — ele é identificador interno", () => {
     // A distinguibilidade entre duas opções vem do rótulo do DESTINO, que a
     // lista de saídas do dossiê mostra ao lado da frase.
-    expect(rotuloDaAresta(aresta("b-quente"))).toBe("por um caminho sem nome");
+    expect(rotuloDaAresta(aresta("b-quente"))).toBe("par un chemin sans nom");
   });
 
   it("ramo que o nó não declara mais também não vira id na tela", () => {
-    expect(rotuloDaAresta(aresta("b-sumiu"), classify)).toBe("por um caminho sem nome");
+    expect(rotuloDaAresta(aresta("b-sumiu"), classify)).toBe("par un chemin sans nom");
   });
 
   it("regra do negócio não se lê como resposta de ninguém", () => {
@@ -238,17 +238,17 @@ describe("rotuloDaAresta — o ramo nomeado do grafo v2", () => {
       condition: { type: "branch" as const, branch_id: id },
     });
 
-    expect(rotuloDaAresta(paraRamo("r-quente"), condicao)).toBe("quando vale a regra “Lead quente”");
+    expect(rotuloDaAresta(paraRamo("r-quente"), condicao)).toBe("quand la règle « Lead quente » s’applique");
     // Regra sem nome vira a condição POR EXTENSO — `regra-2` na tela é o que o
     // vocabulário existe para impedir.
     expect(rotuloDaAresta(paraRamo("r-passos"), condicao)).not.toContain("r-passos");
-    expect(rotuloDaAresta(paraRamo("r-passos"), condicao)).toMatch(/^quando /);
+    expect(rotuloDaAresta(paraRamo("r-passos"), condicao)).toMatch(/^quand /);
   });
 
   it("os ramos reservados do contrato viram frase sem depender do nó", () => {
-    expect(rotuloDaAresta(aresta("no_reply"))).toBe("quando ninguém responde");
-    expect(rotuloDaAresta(aresta("true"))).toBe("quando a condição é verdadeira");
-    expect(rotuloDaAresta(aresta("false"))).toBe("quando a condição é falsa");
+    expect(rotuloDaAresta(aresta("no_reply"))).toBe("quand personne ne répond");
+    expect(rotuloDaAresta(aresta("true"))).toBe("quand la condition est vraie");
+    expect(rotuloDaAresta(aresta("false"))).toBe("quand la condition est fausse");
   });
 });
 
@@ -260,13 +260,13 @@ describe("os eventos que o plano de tempo trouxe", () => {
       evento({ node_id: null, event_type: "turn_enqueued", payload: { purpose: "plan_timing" } }),
       nos,
     );
-    expect(planejar.titulo).toBe("Pediu ao agente para planejar os tempos de espera");
+    expect(planejar.titulo).toBe("A demandé à l’assistant de planifier les délais d’attente");
 
     const mensagem = descreveEvento(
       evento({ event_type: "turn_enqueued", payload: { purpose: "send_message" } }),
       nos,
     );
-    expect(mensagem.titulo).toBe("Pediu ao agente para escrever a mensagem");
+    expect(mensagem.titulo).toBe("A demandé à l’assistant d’écrire le message");
   });
 
   it("o plano decidido vira frase, não `código: timing_plan_decidido`", () => {
@@ -274,13 +274,13 @@ describe("os eventos que o plano de tempo trouxe", () => {
       evento({ event_type: "timing_plan_decidido", payload: { esperas: { "wait-1": {}, "wait-2": {} } } }),
       nos,
     );
-    expect(r.titulo).toBe("O agente decidiu quanto esperar em cada passo");
-    expect(r.detalhe).toBe("2 esperas planejadas");
+    expect(r.titulo).toBe("L’assistant a décidé du délai d’attente de chaque étape");
+    expect(r.detalhe).toBe("2 attentes planifiées");
   });
 
   it("desistir do plano é um FATO na timeline, não silêncio", () => {
     const r = descreveEvento(evento({ event_type: "timing_plan_desistido" }), nos);
-    expect(r.titulo).toBe("Seguiu sem o plano de tempo");
-    expect(r.detalhe).toContain("máximo configurado");
+    expect(r.titulo).toBe("A continué sans planning de délais");
+    expect(r.detalhe).toContain("maximum configuré");
   });
 });

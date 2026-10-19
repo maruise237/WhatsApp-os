@@ -173,7 +173,7 @@ describe('validarArquivamento', () => {
     // texto ("recarregue a página") que manda o usuário fazer a coisa errada.
     const r = validarArquivamento(etapas, 'e2', { negocios: 3, destinoId: 'e2' });
     expect(r.ok).toBe(false);
-    expect(r.ok === false && r.erro).toMatch(/ela mesma/);
+    expect(r.ok === false && r.erro).toMatch(/pas dans la même/);
   });
 
   it('recusa destino que não está no funil', () => {
@@ -186,7 +186,7 @@ describe('validarArquivamento', () => {
     // por estágio: N negócios virariam receita porque alguém arrumou o quadro.
     const r = validarArquivamento(etapas, 'e2', { negocios: 3, destinoId: 'e3' });
     expect(r.ok).toBe(false);
-    expect(r.ok === false && r.erro).toMatch(/encerrados/);
+    expect(r.ok === false && r.erro).toMatch(/clôturerait/);
   });
 
   it('recusa mandar os negócios para a etapa de PERDA — o banco levantaria 22023', () => {
@@ -198,7 +198,7 @@ describe('validarArquivamento', () => {
     expect(r.ok).toBe(false);
     // Mede o MOTIVO, não só o `ok:false`: sem isso, a regra de "destino fora do
     // funil" recusaria igual e o teste passaria com esta regra removida.
-    expect(r.ok === false && r.erro).toMatch(/de perda/);
+    expect(r.ok === false && r.erro).toMatch(/« perdu »/);
   });
 
   it('aceita destino em aberto no mesmo funil', () => {
@@ -210,7 +210,7 @@ describe('validarArquivamento', () => {
     // fechado SERIA MOVIDO para uma coluna fora do quadro, em silêncio.
     const r = validarArquivamento(etapas, 'e3', { negocios: 0, destinoId: null });
     expect(r.ok).toBe(false);
-    expect(r.ok === false && r.erro).toMatch(/ganho/);
+    expect(r.ok === false && r.erro).toMatch(/gagné/);
   });
 
   it('recusa arquivar a ÚLTIMA etapa do funil', () => {

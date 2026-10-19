@@ -111,8 +111,8 @@ describe("resumo final", () => {
     // A moldura do redesenho. Um passo chamado "IA" não diz o que vai
     // acontecer ali; "Treinar" diz.
     const rotulos = resumoDoOnboarding(VAZIO, SEM_LOJA).map((i) => i.rotulo);
-    expect(rotulos).toContain("O telefone dele");
-    expect(rotulos).toContain("Treinar");
+    expect(rotulos).toContain("Son numéro");
+    expect(rotulos).toContain("Le former");
     expect(rotulos).not.toContain("IA");
   });
 });

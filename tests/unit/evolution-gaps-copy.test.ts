@@ -20,7 +20,7 @@ describe("boaNoticia — cada afirmação precisa da sua própria evidência", (
     const t = boaNoticia(0, 12, 3);
     expect(t).not.toContain("chaque question a trouvé une réponse");
     expect(t).toContain("chaque conversation a trouvé où aller");
-    expect(t).toContain("chaque étape du suivi a une colonne de l’entonnoir");
+    expect(t).toContain("chaque étape du suivi a une colonne du tableau");
     expect(t).toContain("personne n’a consulté votre base de connaissances");
   });
 
@@ -35,8 +35,8 @@ describe("boaNoticia — cada afirmação precisa da sua própria evidência", (
     // Instalação fresca: o instalador não provisiona pipeline nenhum, então zero
     // funis ⇒ zero lacunas ⇒ a lista fica vazia sem que nada esteja certo.
     const t = boaNoticia(30, 12, 0);
-    expect(t).not.toContain("chaque étape du suivi a une colonne de l’entonnoir");
-    expect(t).toContain("vous n’avez encore aucun entonnoir configuré");
+    expect(t).not.toContain("chaque étape du suivi a une colonne du tableau");
+    expect(t).toContain("vous n’avez encore aucun tableau configuré");
   });
 
   it("sem evidência nenhuma, abre pelo motivo e não pela boa notícia", () => {
@@ -45,7 +45,7 @@ describe("boaNoticia — cada afirmação precisa da sua própria evidência", (
     expect(t).not.toContain("Rien ne bloque");
     expect(t).not.toContain("chaque question a trouvé une réponse");
     expect(t).not.toContain("chaque conversation a trouvé où aller");
-    expect(t).not.toContain("chaque étape du suivi a une colonne de l’entonnoir");
+    expect(t).not.toContain("chaque étape du suivi a une colonne du tableau");
   });
 
   it("com as três evidências, afirma tudo e sem ressalva", () => {
@@ -53,7 +53,7 @@ describe("boaNoticia — cada afirmação precisa da sua própria evidência", (
     expect(t).toContain("Rien ne bloque sur cette période");
     expect(t).toContain("chaque question a trouvé une réponse");
     expect(t).toContain("chaque conversation a trouvé où aller");
-    expect(t).toContain("chaque étape du suivi a une colonne de l’entonnoir");
+    expect(t).toContain("chaque étape du suivi a une colonne du tableau");
     expect(t).not.toContain("réserve");
   });
 });
