@@ -28,6 +28,7 @@
     "test:invariants": "bash scripts/test-db.sh",
     "lint:channels": "tsx scripts/lint-channels.ts",
     "gov:verify": "pnpm typecheck && pnpm lint && pnpm lint:channels && pnpm test:unit",
+    "build:worker": "node scripts/build-worker.mjs",
     "worker": "tsx --env-file=.env --env-file=.env.local workers/agent-worker/main.ts",
     "flywheel:judge": "tsx --env-file=.env --env-file=.env.local scripts/flywheel-judge-live.ts"
   },
@@ -106,6 +107,7 @@
     "@vercel/config": "^0.6.1",
     "@vitest/coverage-v8": "^4.1.11",
     "autoprefixer": "^10.5.4",
+    "esbuild": "0.28.2",
     "eslint": "^9.12.0",
     "eslint-config-next": "^16.2.10",
     "jsdom": "^30.0.1",

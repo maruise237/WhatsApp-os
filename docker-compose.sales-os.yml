@@ -18,6 +18,7 @@ services:
   evolution-go:
     image: ${EVOLUTION_GO_IMAGE:-evoapicloud/evolution-go:latest}
     restart: unless-stopped
+    mem_limit: 256m
     environment:
       SERVER_PORT: 8080
       CLIENT_NAME: evolution
@@ -48,35 +49,22 @@ services:
       retries: 5
       start_period: 30s
 
-  seaweedfs-master:
-    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
-    command: ["master", "-ip=seaweedfs-master", "-ip.bind=0.0.0.0"]
-    expose: ["9333"]
-    networks: [internal]
-
-  seaweedfs-volume:
-    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
-    command: ["volume", "-mserver=seaweedfs-master:9333", "-ip=seaweedfs-volume", "-ip.bind=0.0.0.0", "-dir=/data"]
-    depends_on: [seaweedfs-master]
-    volumes: ["seaweedfs-volume-data:/data"]
-    expose: ["8080"]
-    networks: [internal]
-
-  seaweedfs-filer:
-    image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
-    command: ["filer", "-master=seaweedfs-master:9333", "-ip.bind=0.0.0.0"]
-    depends_on: [seaweedfs-master, seaweedfs-volume]
-    expose: ["8888"]
-    networks: [internal]
-
+  # SeaweedFS en UN conteneur (master + volume + filer + S3) — voir
+  # docker-compose.dokploy.yml pour le pourquoi.
   seaweedfs-s3:
     image: ${SEAWEEDFS_IMAGE:-chrislusf/seaweedfs:3.80}
-    command: ["s3", "-filer=seaweedfs-filer:8888", "-ip.bind=0.0.0.0", "-port=8333"]
-    depends_on: [seaweedfs-filer]
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      GOMEMLIMIT: 200MiB
+    command: ["server", "-dir=/data", "-ip=seaweedfs-s3", "-ip.bind=0.0.0.0", "-master.volumeSizeLimitMB=1024", "-volume.max=0", "-filer", "-s3", "-s3.port=8333"]
+    volumes: ["seaweedfs-data:/data"]
     expose: ["8333"]
     networks: [internal]
 
   whatsapp-gateway:
+    image: ${GATEWAY_IMAGE:-ghcr.io/maruise237/whatsapp-gateway:main}
+    mem_limit: 96m
     build:
       context: ./services/whatsapp-gateway
       dockerfile: Dockerfile
@@ -109,4 +97,4 @@ services:
 
 volumes:
   evolution-go-data:
-  seaweedfs-volume-data:
+  seaweedfs-data:

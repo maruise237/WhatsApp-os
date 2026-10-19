@@ -168,7 +168,9 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
-    command: ["redis-server", "--save", "", "--appendonly", "no"]  # efêmero (rate-limit/debounce)
+    mem_limit: 64m
+    # Efêmero (rate-limit/debounce) e limitado a 32 MB : nada aqui precisa durar.
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "32mb", "--maxmemory-policy", "allkeys-lru"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -190,6 +192,7 @@ services:
     # Quando a T6 for validada, isto vira `:0.0.10` e o comentário sai.
     image: hiett/serverless-redis-http@sha256:5b0bb9239fce53abf87b2018a7a0deb9ec7bd900c5360738fe5fbeeb426f9150
     restart: unless-stopped
+    mem_limit: 160m
     environment:
       SRH_MODE: env
       SRH_TOKEN: ${SRH_TOKEN}
@@ -211,6 +214,7 @@ services:
     # justamente no momento em que a máquina está se recuperando de algo.
     image: ${SCHEDULER_IMAGE:-ghcr.io/melgarafael/deskcomm-scheduler:stable}
     pull_policy: ${SCHEDULER_PULL_POLICY:-always}
+    mem_limit: 32m
     build:
       context: .
       dockerfile: Dockerfile.scheduler
@@ -227,6 +231,7 @@ services:
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
+    mem_limit: 128m
     ports:
       - "80:80"
       - "443:443"

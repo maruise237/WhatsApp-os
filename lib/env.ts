@@ -138,9 +138,12 @@ const schema = z.object({
   SEAWEEDFS_MEDIA_BUCKET: z.string().default("media-bucket"),
 
   // WAHA historique, conservé pendant la migration progressive vers Evolution Go.
-  WAHA_API_BASE_URL: required("WAHA_API_BASE_URL"),
-  WAHA_API_KEY: required("WAHA_API_KEY"),
-  WAHA_WEBHOOK_BASE_URL: required("WAHA_WEBHOOK_BASE_URL"),
+  // Optionnel : la stack allégée (docker-compose.dokploy.yml) ne lance WAHA que
+  // sous le profil `waha`. Sans ces variables, l'adaptateur WAHA répond « non
+  // configuré » et /api/v1/health le marque `degraded`, sans bloquer le boot.
+  WAHA_API_BASE_URL: z.string().optional().default(""),
+  WAHA_API_KEY: z.string().optional().default(""),
+  WAHA_WEBHOOK_BASE_URL: z.string().optional().default(""),
   // Segredo com que o WAHA assina os webhooks. O compose já o entrega ao
   // contêiner do WAHA; o app precisa dele para CONFERIR a assinatura — e não o
   // declarava aqui, então nunca teve como verificar nada.
@@ -152,9 +155,12 @@ const schema = z.object({
   // assine — aí a verificação passa a ser obrigatória.
   WAHA_WEBHOOK_REQUIRE_SIGNATURE: z.string().optional().default("false"),
 
-  // Upstash Redis
-  UPSTASH_REDIS_REST_URL: required("UPSTASH_REDIS_REST_URL"),
-  UPSTASH_REDIS_REST_TOKEN: required("UPSTASH_REDIS_REST_TOKEN"),
+  // Upstash Redis (ou Redis local via srh). Optionnel : sur une seule VPS, le
+  // rate-limit et le debounce du RAG retombent sur un compteur en mémoire
+  // (lib/ai/dispatcher/rate-limit.ts, lib/ai/rag/debounce.ts). Redis ne sert
+  // qu'avec plusieurs instances de l'app — profil `redis` du compose Dokploy.
+  UPSTASH_REDIS_REST_URL: z.string().optional().default(""),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional().default(""),
 
   // AI providers — env-gated. Worker no-ops with skip="ai_gateway_key_missing"
   // when AI_GATEWAY_API_KEY is absent, so production boot must not be fatal.

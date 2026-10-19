@@ -1,5 +1,14 @@
 FROM node:22-alpine
 
+# Procédence (doctrine de packaging, invariant 2) : image publiée par le CI
+# (.github/workflows/publish-image.yml), jamais construite sur la VPS.
+LABEL org.opencontainers.image.source="https://github.com/maruise237/WhatsApp-os" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.title="WhatsApp OS gateway"
+
+ARG APP_VERSION=dev
+ENV APP_VERSION=$APP_VERSION
+
 ENV NODE_ENV=production
 WORKDIR /app
 

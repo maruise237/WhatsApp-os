@@ -32,8 +32,19 @@ function getRedis(): Redis | null {
     return null;
   }
 
-  _redis = new Redis({ url, token });
+  // `retry: false` : Redis injoignable (URL vers un service absent, réseau
+  // coupé) doit retomber sur le repli en mémoire tout de suite, pas après la
+  // série de tentatives par défaut du SDK.
+  _redis = new Redis({ url, token, retry: false });
   return _redis;
+}
+
+let _unreachableWarned = false;
+
+function warnUnreachable(): void {
+  if (_unreachableWarned) return;
+  console.warn("[rag-debounce] Redis unreachable — using in-memory fallback");
+  _unreachableWarned = true;
 }
 
 // ---------------------------------------------------------------------------
@@ -77,8 +88,15 @@ export async function acquireDebounce(key: string, ttlSec: number): Promise<bool
   }
 
   // SET NX EX — returns "OK" if set, null if key already exists
-  const result = await redis.set(key, "1", { nx: true, ex: ttlSec });
-  return result === "OK";
+  try {
+    const result = await redis.set(key, "1", { nx: true, ex: ttlSec });
+    return result === "OK";
+  } catch {
+    // Redis configuré mais injoignable : on garde le debounce (en mémoire)
+    // plutôt que de faire échouer l'indexation entière.
+    warnUnreachable();
+    return memAcquire(key, ttlSec);
+  }
 }
 
 /**
@@ -92,5 +110,10 @@ export async function releaseDebounce(key: string): Promise<void> {
     return;
   }
 
-  await redis.del(key);
+  try {
+    await redis.del(key);
+  } catch {
+    warnUnreachable();
+    memRelease(key);
+  }
 }
