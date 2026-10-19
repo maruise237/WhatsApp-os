@@ -110,7 +110,9 @@ export function ConversationList({
   if (items.length === 0) {
     return (
       <div className="flex h-full items-center justify-center p-6">
-        <EmptyInbox />
+        {/* Sans issue, l'inbox vide est le cul-de-sac de la première visite :
+            rien n'arrive tant que le numéro n'est pas branché. */}
+        <EmptyInbox secondary={{ label: "Vérifier la connexion WhatsApp", href: "/app/connections" }} />
       </div>
     );
   }
