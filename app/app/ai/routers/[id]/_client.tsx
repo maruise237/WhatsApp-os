@@ -241,7 +241,7 @@ export function RouterEditorClient({
             href="/app/ai/routers"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
           >
-            <CaretLeft size={14} aria-hidden /> Roteadores
+            <CaretLeft size={14} aria-hidden /> Routeurs
           </Link>
           <Badge variant={router.is_active ? "success" : "neutral"} className="text-xs">
             {router.is_active ? "ativo" : "inativo"}

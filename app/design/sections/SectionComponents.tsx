@@ -30,7 +30,7 @@ export function SectionComponents() {
         <Stack label="Variants">
           <button className="ds-btn ds-btn--primary">Confirmar envio</button>
           <button className="ds-btn ds-btn--secondary">Annuler</button>
-          <button className="ds-btn ds-btn--ghost">Adiar</button>
+          <button className="ds-btn ds-btn--ghost">Reporter</button>
           <button className="ds-btn ds-btn--destructive">Supprimer la conversation</button>
           <button className="ds-btn ds-btn--link">voir les détails</button>
         </Stack>

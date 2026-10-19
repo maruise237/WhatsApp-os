@@ -166,10 +166,10 @@ export function LgpdRequestsTable({
             <TableRow>
               <TableHead className="w-[90px]">ID</TableHead>
               <TableHead>Type</TableHead>
-              <TableHead className="w-[160px]">Tenant</TableHead>
+              <TableHead className="w-[160px]">Organisation</TableHead>
               <TableHead className="w-[130px]">Reçue le</TableHead>
               <TableHead className="w-[130px]">Échéance le</TableHead>
-              <TableHead className="w-[80px]">Risco</TableHead>
+              <TableHead className="w-[80px]">Risque</TableHead>
               <TableHead className="w-[100px]">Statut</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>

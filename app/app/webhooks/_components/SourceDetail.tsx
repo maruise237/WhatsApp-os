@@ -235,7 +235,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
 
           <section className="flex items-center justify-between rounded-sm border border-border p-3">
             <div>
-              <p className="text-sm font-medium text-text">Fonte ativa</p>
+              <p className="text-sm font-medium text-text">Source active</p>
               <p className="text-xs text-muted-foreground">En pause, elle n’accepte plus de nouveaux envois.</p>
             </div>
             <Switch

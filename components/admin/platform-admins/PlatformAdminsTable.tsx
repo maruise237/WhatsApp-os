@@ -131,11 +131,11 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
           <TableRow>
             <TableHead className="min-w-[200px]">Utilisateur</TableHead>
             <TableHead className="w-[140px]">Accordé le</TableHead>
-            <TableHead className="w-[160px]">Concedido por</TableHead>
-            <TableHead className="w-[120px]">Scope</TableHead>
+            <TableHead className="w-[160px]">Accordé par</TableHead>
+            <TableHead className="w-[120px]">Portée</TableHead>
             <TableHead className="w-[60px]">MFA</TableHead>
             <TableHead className="w-[90px]">Statut</TableHead>
-            <TableHead>Motivo</TableHead>
+            <TableHead>Motif</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -193,7 +193,7 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
                 <TableCell>
                   {isRevoked ? (
                     <Badge variant="destructive" className="text-[10px]">
-                      Revogado
+                      Révoqué
                     </Badge>
                   ) : (
                     <Badge

@@ -24,7 +24,7 @@ export function TenantsClient() {
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight">Tenants</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Organisations</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {isLoading ? "Carregando..." : `${total} tenant${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
           </p>

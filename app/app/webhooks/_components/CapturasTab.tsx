@@ -130,7 +130,7 @@ export function CapturasTab() {
             </div>
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">Fonte</label>
+            <label className="text-xs text-muted-foreground">Source</label>
             <Select value={fonte} onValueChange={setFonte}>
               <SelectTrigger aria-label="Filtrar por fonte">
                 <SelectValue />
@@ -146,15 +146,15 @@ export function CapturasTab() {
             </Select>
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">Resultado</label>
+            <label className="text-xs text-muted-foreground">Résultat</label>
             <Select value={desfecho} onValueChange={setDesfecho}>
               <SelectTrigger aria-label="Filtrar por resultado">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={TODAS}>Tous</SelectItem>
-                <SelectItem value="criado">Virou lead</SelectItem>
-                <SelectItem value="duplicado">Reenvio</SelectItem>
+                <SelectItem value="criado">Devenu lead</SelectItem>
+                <SelectItem value="duplicado">Renvoi</SelectItem>
                 <SelectItem value="recusado">Non entré</SelectItem>
               </SelectContent>
             </Select>
@@ -230,12 +230,12 @@ export function CapturasTab() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Quem</TableHead>
+                  <TableHead>Qui</TableHead>
                   <TableHead>Contact</TableHead>
-                  <TableHead>Fonte</TableHead>
+                  <TableHead>Source</TableHead>
                   <TableHead>Quand</TableHead>
                   <TableHead>Origine</TableHead>
-                  <TableHead>Resultado</TableHead>
+                  <TableHead>Résultat</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

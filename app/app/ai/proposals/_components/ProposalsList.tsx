@@ -93,7 +93,7 @@ function Pendentes({
             {/* Há quanto tempo espera é a informação que decide a ORDEM de quem
                 olha — por isso fica na linha do título, não escondida embaixo. */}
             <span className="text-xs text-muted-foreground">
-              proposta {quando(p.proposed_at)}
+              proposition {quando(p.proposed_at)}
             </span>
           </div>
 
@@ -107,7 +107,7 @@ function Pendentes({
               aria-label={`Aprovar: ${p.next_action}`}
             >
               <Check size={14} aria-hidden />
-              Aprovar
+              Approuver
             </Button>
             <Button
               size="sm"
@@ -117,7 +117,7 @@ function Pendentes({
               aria-label={`Ignorar: ${p.next_action}`}
             >
               <X size={14} aria-hidden />
-              Ignorar
+              Ignorer
             </Button>
           </div>
         </li>
@@ -149,7 +149,7 @@ function Historico({ itens }: { itens: DecisaoPassada[] }) {
             </Badge>
             <span className="text-sm font-medium">{d.lead_title}</span>
             <span className="text-xs text-muted-foreground">
-              por {d.decided_by ?? "—"} · {quando(d.decided_at)}
+              par {d.decided_by ?? "—"} · {quando(d.decided_at)}
             </span>
           </div>
           <p className="text-sm text-muted-foreground">{d.next_action}</p>

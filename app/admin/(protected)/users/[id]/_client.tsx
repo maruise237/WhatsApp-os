@@ -138,7 +138,7 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
         <CardContent>
           <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm sm:grid-cols-3">
             <div>
-              <dt className="text-xs text-muted-foreground mb-0.5">Email confirmado</dt>
+              <dt className="text-xs text-muted-foreground mb-0.5">E-mail confirmé</dt>
               <dd>{user.email_confirmed_at ? absoluteDate(user.email_confirmed_at) : <Badge variant="warning">En attente</Badge>}</dd>
             </div>
             <div>
@@ -173,7 +173,7 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">
-            Memberships ({memberships.length})
+            Adhésions ({memberships.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -185,8 +185,8 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Tenant</TableHead>
-                  <TableHead className="w-[100px]">Role</TableHead>
+                  <TableHead>Organisation</TableHead>
+                  <TableHead className="w-[100px]">Rôle</TableHead>
                   <TableHead className="w-[140px]">Accepté le</TableHead>
                   <TableHead className="w-[100px]">Statut</TableHead>
                 </TableRow>
@@ -217,7 +217,7 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
                     </TableCell>
                     <TableCell>
                       {m.revoked_at ? (
-                        <Badge variant="error">Revogado</Badge>
+                        <Badge variant="error">Révoqué</Badge>
                       ) : (
                         <Badge variant="success">Actif</Badge>
                       )}
@@ -234,7 +234,7 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">
-            Audit recente ({recent_audit.length}{recent_audit.length === 50 ? "+" : ""})
+            Audit récent ({recent_audit.length}{recent_audit.length === 50 ? "+" : ""})
           </CardTitle>
         </CardHeader>
         <CardContent>

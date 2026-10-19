@@ -29,7 +29,7 @@ export function SuspendedBanner({ suspendedAt, reason }: SuspendedBannerProps) {
     >
       <Warning size={18} weight="fill" className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
       <p className="text-sm">
-        <span className="font-semibold">Tenant suspenso</span>{" "}
+        <span className="font-semibold">Organisation suspendue</span>{" "}
         {formatRelativePtBr(suspendedAt)}.{" "}
         <span className="text-amber-800 dark:text-amber-300">
           {reason ?? "Aucun motif enregistré."}

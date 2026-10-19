@@ -82,7 +82,7 @@ export default async function TenantDetailLayout({
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <CaretLeft size={14} aria-hidden />
-        Tenants
+        Organisations
       </Link>
 
       {/* Header */}

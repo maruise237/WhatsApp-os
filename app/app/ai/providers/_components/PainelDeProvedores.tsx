@@ -237,7 +237,7 @@ function ResumoDoGrupo({ pontos }: { pontos: Ponto[] }) {
   return (
     <Card className="p-4">
       <div className="flex flex-wrap items-center gap-2 text-sm">
-        <span className="text-muted-foreground">Usando:</span>
+        <span className="text-muted-foreground">Utilise :</span>
         {modelos.map((m) => (
           <Badge key={m} variant="secondary" className="font-mono text-xs">
             {m}
@@ -328,7 +328,7 @@ function CartaoDoPonto({
             )}
             {ponto.fixo && (
               <Badge variant="secondary" className="text-xs">
-                fixo
+                fixe
               </Badge>
             )}
           </div>
@@ -373,7 +373,7 @@ function CartaoDoPonto({
       {editavel && (
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div>
-            <Label className="text-xs">Provedor</Label>
+            <Label className="text-xs">Fournisseur</Label>
             <Select
               value={provider}
               onValueChange={(v) => {
@@ -437,7 +437,7 @@ function CartaoDoPonto({
           </div>
 
           <div>
-            <Label className="text-xs">Chave</Label>
+            <Label className="text-xs">Clé</Label>
             <Select value={credentialId} onValueChange={setCredentialId}>
               <SelectTrigger data-testid={`chave-${ponto.id}`}>
                 <SelectValue placeholder="de l’installation" />

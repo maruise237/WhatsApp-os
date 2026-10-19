@@ -45,7 +45,7 @@ export function AdminSidePanel({ data }: Props) {
             )}
             {contact.is_blocked && (
               <span className="inline-block rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-medium text-destructive">
-                Bloqueado
+                Bloqué
               </span>
             )}
           </div>
@@ -57,7 +57,7 @@ export function AdminSidePanel({ data }: Props) {
       {/* ── Tenant info ── */}
       <section>
         <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Tenant
+          Organisation
         </h3>
         {organization ? (
           <div className="flex flex-col gap-2">
@@ -69,7 +69,7 @@ export function AdminSidePanel({ data }: Props) {
               Slug: <span className="font-mono">{organization.slug}</span>
             </div>
             <div className="text-xs capitalize text-muted-foreground">
-              Status: {organization.status}
+              Statut : {organization.status}
             </div>
             <Link
               href={`/admin/tenants/${organization.id}`}

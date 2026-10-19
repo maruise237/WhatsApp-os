@@ -96,7 +96,7 @@ export function AdminThreadClient({ conversationId }: Props) {
         <div className="flex items-center gap-2 border-t border-border bg-muted/40 px-4 py-3">
           <Lock size={14} className="shrink-0 text-muted-foreground" aria-hidden />
           <span className="text-xs text-muted-foreground">
-            Modo somente-leitura.{" "}
+            Mode lecture seule.{" "}
             <span className="font-medium">
               Utilisez &ldquo;Impersonate&rdquo; (bientôt, S-11.07) pour répondre.
             </span>

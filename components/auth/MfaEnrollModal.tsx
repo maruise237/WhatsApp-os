@@ -134,7 +134,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
 
             {!enrollState ? (
               <div className="flex h-60 items-center justify-center text-sm text-muted-foreground">
-                Gerando QR code...
+                Génération du QR code...
               </div>
             ) : (
               <>

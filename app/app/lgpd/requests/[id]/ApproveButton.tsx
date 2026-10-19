@@ -92,7 +92,7 @@ export function ApproveButton({ requestId, requestType, status }: ApproveButtonP
 
         <div className="space-y-2 py-2">
           <Label htmlFor="approved_reason">
-            Justificativa{" "}
+            Justification{" "}
             <span className="text-muted-foreground text-xs">(10 caractères minimum)</span>
           </Label>
           <Textarea
@@ -106,7 +106,7 @@ export function ApproveButton({ requestId, requestType, status }: ApproveButtonP
             aria-describedby="approved_reason_hint"
           />
           <p id="approved_reason_hint" className="text-xs text-muted-foreground">
-            {reason.trim().length}/500 caracteres
+            {reason.trim().length}/500 caractères
           </p>
         </div>
 

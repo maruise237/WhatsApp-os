@@ -88,12 +88,12 @@ export function ImpersonateButton({
           }
           title={disabled ? disabledReason : undefined}
         >
-          Impersonar tenant
+          Se connecter en tant qu’organisation
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Iniciar impersonate?</AlertDialogTitle>
+          <AlertDialogTitle>Démarrer l’impersonation ?</AlertDialogTitle>
           <AlertDialogDescription>
             Vous êtes sur le point d’entrer en tant que l’organisation{" "}
             <span className="font-semibold text-foreground">{displayName}</span>. Chaque action sera enregistrée avec le marqueur{" "}

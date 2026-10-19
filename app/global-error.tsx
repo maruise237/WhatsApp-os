@@ -50,7 +50,7 @@ export default function GlobalError({
           }}
         >
           <h1 style={{ fontSize: "1.5rem", margin: "0 0 0.5rem", fontWeight: 600 }}>
-            Algo deu errado
+            Une erreur est survenue
           </h1>
           <p style={{ color: "#57534e", margin: "0 0 1.5rem" }}>
             Réessayez dans quelques instants. Si le problème persiste, contactez le support avec l’identifiant ci-dessous.

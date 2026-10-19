@@ -33,7 +33,7 @@ export function AuditTrail({ entries }: AuditTrailProps) {
               <p className="text-xs text-muted-foreground">
                 {format(new Date(entry.created_at), "dd/MM/yyyy HH:mm:ss", { locale: fr })}
                 {entry.actor_user_id && (
-                  <span className="ml-2 opacity-60">por {entry.actor_user_id.slice(0, 8)}…</span>
+                  <span className="ml-2 opacity-60">par {entry.actor_user_id.slice(0, 8)}…</span>
                 )}
               </p>
             </div>

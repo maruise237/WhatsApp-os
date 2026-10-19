@@ -26,14 +26,14 @@ export default async function TeamPage() {
         </div>
         {isAdmin ? (
           <Button asChild className="shrink-0">
-            <Link href="/app/team/invite">Convidar membros</Link>
+            <Link href="/app/team/invite">Inviter des membres</Link>
           </Button>
         ) : null}
       </header>
 
       <Tabs defaultValue="members" className="flex flex-1 flex-col">
         <TabsList>
-          <TabsTrigger value="members">Membros</TabsTrigger>
+          <TabsTrigger value="members">Membres</TabsTrigger>
           <TabsTrigger value="attendants">Assistance</TabsTrigger>
         </TabsList>
         <TabsContent value="members" className="mt-4">

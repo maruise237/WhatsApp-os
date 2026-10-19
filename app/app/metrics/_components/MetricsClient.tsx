@@ -128,8 +128,8 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Conseiller</TableHead>
-                  <TableHead className="text-right">Ganhos</TableHead>
-                  <TableHead className="text-right">Perdidos</TableHead>
+                  <TableHead className="text-right">Gagnés</TableHead>
+                  <TableHead className="text-right">Perdus</TableHead>
                   <TableHead className="text-right">Conversations</TableHead>
                   <TableHead className="text-right">1re réponse (moyenne)</TableHead>
                 </TableRow>

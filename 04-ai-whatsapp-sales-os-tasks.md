@@ -54,7 +54,7 @@
 | D-002 | [x] | P2, F-003 | Implémenter création, statut, QR, déconnexion et suppression d’une instance par vendeur via le gateway. | Provisioning, statut, QR, reconnexion et suppression passent par l’adaptateur/gateway ; tests transport réel encore dépendants de Docker. |
 | D-003 | [x] | F-012 | Adapter les payloads Evolution Go vers le modèle canonique de message Deskcomm. | `lib/channels/evolution/inbound.ts` normalise messages/statuts/médias et réutilise l’ingest CRM ; tests de fixtures restent un durcissement recommandé. |
 | D-004 | [~] | F-032, F-042 | Ajouter SeaweedFS au compose et implémenter upload, lecture signée, expiration et suppression des médias. | Services Compose et abstraction S3 privée avec URL signée, expiration et suppression livrés ; branchement des routes de preuves et tests S3 réels restent à faire. |
-| D-005 | [ ] | P7 | Mettre à jour les images et scripts de packaging sans service de production build-only. | `pnpm test:shell`, build CI et test de compose fresh. |
+| D-005 | [~] | P7 | Mettre à jour les images et scripts de packaging sans service de production build-only. | Stack Dokploy allégée (7 conteneurs par défaut, ~312 Mo au repos contre ~807 Mo, mesuré) ; gateway publié par le CI ; worker compilé (89 Mo contre 197 Mo) ; garde-fou `tests/unit/stack-legere-dokploy.test.ts` ; guide `docs/runbooks/stack-legere.md`. Reste : premier déploiement réel sur la VPS après publication des images. |
 
 ## Lot E — Catalogue, agent et commandes
 

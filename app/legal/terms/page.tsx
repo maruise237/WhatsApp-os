@@ -22,7 +22,7 @@ export default async function TermsPage() {
       <section className="space-y-2">
         <h2 className="text-base font-semibold">1. Qui est qui</h2>
         <p>
-          O {op.sistema} est un logiciel open source installé et exploité par{" "}
+          {op.sistema} est un logiciel open source installé et exploité par{" "}
           <strong>{operador}</strong>
           {op.cnpj ? ` (CNPJ ${op.cnpj})` : ""}, ci-après <strong>l’exploitant</strong>. C’est l’exploitant qui maintient ce serveur, décide de l’usage du système et répond des données traitées ici.
         </p>
@@ -34,7 +34,7 @@ export default async function TermsPage() {
       <section className="space-y-2">
         <h2 className="text-base font-semibold">2. Ce que fait le système</h2>
         <p>
-          O {op.sistema} organise le service client et les ventes : il reçoit et envoie des messages via les canaux connectés par l’exploitant, enregistre les contacts et les affaires, et permet à des agents d’intelligence artificielle de servir aux côtés de personnes, selon les règles configurées par l’exploitant.
+          {op.sistema} organise le service client et les ventes : il reçoit et envoie des messages via les canaux connectés par l’exploitant, enregistre les contacts et les affaires, et permet à des agents d’intelligence artificielle de servir aux côtés de personnes, selon les règles configurées par l’exploitant.
         </p>
       </section>
 
@@ -81,7 +81,7 @@ export default async function TermsPage() {
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold">7. Encerramento</h2>
+        <h2 className="text-base font-semibold">7. Résiliation</h2>
         <p>
           L’exploitant peut suspendre ou clôturer votre accès en cas de non-respect des présentes conditions. Vous pouvez demander la clôture de votre compte à tout moment. La clôture de l’accès n’efface pas automatiquement les historiques d’échanges, qui suivent les règles de conservation décrites dans la Politique de confidentialité.
         </p>

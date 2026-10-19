@@ -225,7 +225,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
               // O passo saiu do grafo pinado: dizer o id EXPLICITAMENTE é o que
               // permite alguém investigar; esconder deixaria a tela muda.
               <span className="text-text-muted">
-                passo {data.current_node_id} — n’existe plus dans la version publiée de ce flux
+                étape {data.current_node_id} — n’existe plus dans la version publiée de ce flux
               </span>
             )}
           </p>
@@ -239,11 +239,11 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
                   ? `Terminée le ${absoluta(data.completed_at)}`
                   : "Aucune prochaine étape planifiée"}
           </p>
-          {data.outcome && <p className="text-sm text-text-muted">Desfecho: {data.outcome}</p>}
-          {data.cancel_reason && <p className="text-sm text-text-muted">Motivo: {data.cancel_reason}</p>}
+          {data.outcome && <p className="text-sm text-text-muted">Issue : {data.outcome}</p>}
+          {data.cancel_reason && <p className="text-sm text-text-muted">Motif : {data.cancel_reason}</p>}
           {data.last_error && (
             <p className="flex items-center gap-1.5 text-sm text-warning-fg">
-              <Warning size={14} aria-hidden /> Dernier échec : {data.last_error} (tentativa {data.attempts} de{" "}
+              <Warning size={14} aria-hidden /> Dernier échec : {data.last_error} (tentative {data.attempts} de{" "}
               {data.max_attempts})
             </p>
           )}
@@ -293,7 +293,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
                 setAdiando(true);
               }}
             >
-              <Clock size={14} aria-hidden className="mr-1" /> Adiar
+              <Clock size={14} aria-hidden className="mr-1" /> Reporter
             </Button>
           )}
           {/*
@@ -389,7 +389,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
                 setAdiando(false);
               }}
             >
-              Adiar
+              Reporter
             </Button>
           </DialogFooter>
         </DialogContent>

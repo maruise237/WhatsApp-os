@@ -152,7 +152,7 @@ export function RequestsTable() {
           <SelectContent>
             <SelectItem value={ALL}>Statut : tous</SelectItem>
             <SelectItem value="received">Reçue</SelectItem>
-            <SelectItem value="processing">Processando</SelectItem>
+            <SelectItem value="processing">En traitement</SelectItem>
             <SelectItem value="completed">Terminée</SelectItem>
             <SelectItem value="failed">Échec</SelectItem>
             <SelectItem value="pending_review">Révision en attente</SelectItem>
@@ -189,9 +189,9 @@ export function RequestsTable() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={ALL}>SLA : tous</SelectItem>
-            <SelectItem value="overdue">Vencido</SelectItem>
+            <SelectItem value="overdue">Échue</SelectItem>
             <SelectItem value="critical">Critique</SelectItem>
-            <SelectItem value="warning">Alerta</SelectItem>
+            <SelectItem value="warning">Alerte</SelectItem>
             <SelectItem value="ok">OK</SelectItem>
           </SelectContent>
         </Select>
@@ -225,9 +225,9 @@ export function RequestsTable() {
             <TableRow>
               <TableHead className="w-[90px]">ID</TableHead>
               <TableHead>Type</TableHead>
-              <TableHead>Sujeito</TableHead>
+              <TableHead>Personne concernée</TableHead>
               <TableHead>Reçue</TableHead>
-              <TableHead>Vence</TableHead>
+              <TableHead>Échéance</TableHead>
               <TableHead>SLA</TableHead>
               <TableHead>Statut</TableHead>
               <TableHead className="w-[60px]" />

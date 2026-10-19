@@ -61,7 +61,7 @@ export function ConnectNuvemshopClient() {
           disabled={pending}
           onClick={() => startTransition(() => void skipNuvemshop())}
         >
-          Pular por enquanto
+          Passer pour l’instant
         </Button>
       </div>
     </div>

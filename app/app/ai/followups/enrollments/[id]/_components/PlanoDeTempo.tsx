@@ -32,7 +32,7 @@ export function PlanoDeTempoBloco({ plano, nos, decididoRelativo }: Props) {
       <header className="mb-3">
         <h2 className="text-sm font-medium">Le délai choisi par l’agent</h2>
         <p className="text-xs text-text-muted">
-          Decidido {decididoRelativo ?? "au début de la relance"}
+          Décidé {decididoRelativo ?? "au début de la relance"}
           {plano.modelo ? ` · ${plano.modelo}` : ""}
         </p>
       </header>
@@ -43,7 +43,7 @@ export function PlanoDeTempoBloco({ plano, nos, decididoRelativo }: Props) {
             <li key={nodeId} className="flex flex-col gap-0.5" data-testid="dossie-espera">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm text-text">{porId[nodeId]?.rotulo ?? nodeId}</span>
-                <span className="text-sm font-medium text-text">esperar {d.escolhido}</span>
+                <span className="text-sm font-medium text-text">attendre {d.escolhido}</span>
                 {espera.clampado && (
                   <Badge variant="warning" data-testid="dossie-espera-clampada">
                     a atteint votre limite

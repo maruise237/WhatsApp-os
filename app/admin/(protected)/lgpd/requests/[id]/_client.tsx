@@ -153,7 +153,7 @@ function AuditTrailInline({ entries }: { entries: AuditEntry[] }) {
                 {format(new Date(entry.created_at), "dd/MM/yyyy HH:mm:ss", { locale: fr })}
                 {entry.actor_user_id && (
                   <span className="ml-2 opacity-60">
-                    por {entry.actor_user_id.slice(0, 8)}…
+                    par {entry.actor_user_id.slice(0, 8)}…
                   </span>
                 )}
               </p>
@@ -256,7 +256,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
         >
           <Link href="/admin/lgpd">
             <CaretLeft size={14} aria-hidden />
-            LGPD Cross-tenant
+            RGPD multi-organisations
           </Link>
         </Button>
       </div>
@@ -267,7 +267,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
           <h1 className="text-xl font-semibold tracking-tight font-mono">#{shortId}</h1>
           <Badge variant={STATUS_VARIANT[request.status] ?? "secondary"}>{statusLabel}</Badge>
           <Badge variant="outline">{typeLabel}</Badge>
-          {request.emergency && <Badge variant="destructive">Urgente</Badge>}
+          {request.emergency && <Badge variant="destructive">Urgent</Badge>}
           {tenant && <TenantBadge name={tenant.display_name} slug={tenant.slug} />}
         </div>
 
@@ -321,7 +321,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
             <Row label="Tentativas" value={String(request.attempts)} />
             {tenant && (
               <>
-                <Row label="Tenant" value={tenant.display_name} />
+                <Row label="Organisation" value={tenant.display_name} />
                 <Row label="Slug" value={tenant.slug} />
               </>
             )}

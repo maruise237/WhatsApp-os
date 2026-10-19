@@ -220,12 +220,12 @@ export function ConversationListItem({
           )}
           {c?.is_blocked && (
             <Badge variant="destructive" className="h-4 px-1.5 text-[10px]">
-              Bloqueado
+              Bloqué
             </Badge>
           )}
           {c?.is_anonymized && (
             <Badge variant="outline" className="h-4 px-1.5 text-[10px]">
-              Anonimizado
+              Anonymisé
             </Badge>
           )}
           {unread > 0 && (

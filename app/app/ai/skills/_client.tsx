@@ -88,7 +88,7 @@ export function SkillsClient({ initialState }: Props) {
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <CardTitle>Skills instaladas</CardTitle>
+              <CardTitle>Compétences installées</CardTitle>
               <CardDescription>
                 Ce que vos agents savent déjà faire au-delà de la conversation courante — chaque compétence n’entre en action que lorsque le sujet le demande.
               </CardDescription>
@@ -146,7 +146,7 @@ export function SkillsClient({ initialState }: Props) {
                         onClick={() => handleUninstall(skill.name)}
                         className="w-full sm:w-auto"
                       >
-                        <Trash /> Desinstalar
+                        <Trash /> Désinstaller
                       </Button>
                     </div>
                   )}

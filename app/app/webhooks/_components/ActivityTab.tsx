@@ -149,7 +149,7 @@ function ActionLine({ action, run }: { action: AutomationRuleRunActionResult; ru
                 })
               }
             >
-              <PaperPlaneTilt /> Reenviar
+              <PaperPlaneTilt /> Renvoyer
             </Button>
           ) : null}
         </div>

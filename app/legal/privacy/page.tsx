@@ -23,7 +23,7 @@ export default async function PrivacyPage() {
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">Politique de confidentialité</h1>
         <p className="text-muted-foreground">
-          Comment cette installation de {op.sistema} trata dados pessoais.
+          Comment cette installation de {op.sistema} traite les données personnelles.
         </p>
       </header>
 
@@ -70,14 +70,14 @@ export default async function PrivacyPage() {
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold">5. Por quanto tempo</h2>
+        <h2 className="text-base font-semibold">5. Durée de conservation</h2>
         <p>
           Les conversations et les données commerciales sont conservées tant qu’il existe une relation avec le client ou une obligation légale de conservation. Les fichiers médias ont leur propre durée, configurée par l’exploitant. Les journaux d’audit sont conservés plus longtemps, car ils prouvent qui a fait quoi.
         </p>
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-base font-semibold">6. Seus direitos</h2>
+        <h2 className="text-base font-semibold">6. Vos droits</h2>
         <p>
           La réglementation sur la protection des données vous garantit le droit de savoir si vos données sont traitées, d’y accéder, de corriger des données incomplètes ou obsolètes, de demander leur anonymisation ou leur suppression, de savoir avec qui elles ont été partagées et de retirer votre consentement.
         </p>

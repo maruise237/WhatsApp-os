@@ -95,7 +95,7 @@ export function LgpdRequestDetail({ id }: Props) {
           </Badge>
           <Badge variant="outline">{typeLabel}</Badge>
           {request.emergency && (
-            <Badge variant="destructive">Urgente</Badge>
+            <Badge variant="destructive">Urgent</Badge>
           )}
         </div>
 

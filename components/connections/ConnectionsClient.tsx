@@ -641,7 +641,7 @@ function QrDialog({
           ) : status === "WORKING" ? (
             <div className="flex flex-col items-center gap-2 text-sm font-medium text-success-fg">
               <CheckCircle size={28} weight="fill" aria-hidden />
-              Conectado!
+              Connecté !
             </div>
           ) : status === "FAILED" || status === "STOPPED" ? (
             // Chegar aqui quase sempre significa credencial revogada: o número

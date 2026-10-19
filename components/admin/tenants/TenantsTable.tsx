@@ -151,7 +151,7 @@ export function TenantsTable({
               <TableHead>Nom</TableHead>
               <TableHead className="w-[130px]">CNPJ</TableHead>
               <TableHead className="w-[110px]">Statut</TableHead>
-              <TableHead className="w-[70px] text-right">Users</TableHead>
+              <TableHead className="w-[70px] text-right">Utilisateurs</TableHead>
               <TableHead className="w-[90px] text-right">Conversations</TableHead>
               <TableHead className="w-[90px]">Créé le</TableHead>
               <TableHead className="w-[60px]" />

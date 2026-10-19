@@ -73,10 +73,10 @@ export default async function NuvemshopIntegrationPage() {
           <CardHeader>
             <CardTitle>Intégration non configurée</CardTitle>
             <CardDescription>
-              Configure <code className="rounded bg-muted px-1 py-0.5 text-xs">NUVEMSHOP_APP_ID</code>,{" "}
+              Configurez <code className="rounded bg-muted px-1 py-0.5 text-xs">NUVEMSHOP_APP_ID</code>,{" "}
               <code className="rounded bg-muted px-1 py-0.5 text-xs">NUVEMSHOP_CLIENT_ID</code> e{" "}
               <code className="rounded bg-muted px-1 py-0.5 text-xs">NUVEMSHOP_CLIENT_SECRET</code>{" "}
-              em <code className="rounded bg-muted px-1 py-0.5 text-xs">.env.local</code> pour activer l’intégration.
+              dans <code className="rounded bg-muted px-1 py-0.5 text-xs">.env.local</code> pour activer l’intégration.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
@@ -114,7 +114,7 @@ export default async function NuvemshopIntegrationPage() {
           <CardHeader className="flex flex-row items-start justify-between gap-3">
             <div>
               <CardTitle className="flex items-center gap-2">
-                Conectado
+                Connecté
                 <Badge variant="secondary">{integration.status}</Badge>
               </CardTitle>
               <CardDescription>
@@ -128,7 +128,7 @@ export default async function NuvemshopIntegrationPage() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div>
-              <span className="font-medium">Escopos:</span>{" "}
+              <span className="font-medium">Portées :</span>{" "}
               {integration.scopes.length > 0 ? (
                 <span className="text-muted-foreground">{integration.scopes.join(", ")}</span>
               ) : (
@@ -136,7 +136,7 @@ export default async function NuvemshopIntegrationPage() {
               )}
             </div>
             <div>
-              <span className="font-medium">Webhooks registrados:</span>{" "}
+              <span className="font-medium">Webhooks enregistrés :</span>{" "}
               <span className="text-muted-foreground">
                 {integration.webhook_subscriptions
                   ? Object.entries(integration.webhook_subscriptions).filter(

@@ -38,7 +38,7 @@ function PairBlock({ id }: { id: TypoId }) {
         <div>
           <h3 style={{ margin: 0 }}>
             {meta.name}
-            {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>ativa</span>}
+            {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>active</span>}
           </h3>
           <p style={{ fontSize: 13, color: "var(--ds-text-muted)", marginTop: 4 }}>
             {meta.description} · escala {meta.scale}

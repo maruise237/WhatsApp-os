@@ -27,9 +27,9 @@ export function AgentInboxList({ canResolve }: { canResolve: boolean }) {
       <Tabs value={tab} onValueChange={(v) => setTab(v as "open" | "resolved")}>
         <TabsList>
           <TabsTrigger value="open">
-            Abertos{data ? ` (${data.open_count})` : ""}
+            Ouverts{data ? ` (${data.open_count})` : ""}
           </TabsTrigger>
-          <TabsTrigger value="resolved">Resolvidos</TabsTrigger>
+          <TabsTrigger value="resolved">Résolus</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -97,12 +97,12 @@ function InboxRow({
       {canResolve ? (
         item.status === "resolved" ? (
           <Button size="sm" variant="ghost" disabled={pending} onClick={() => onToggle("open")}>
-            Reabrir
+            Rouvrir
           </Button>
         ) : (
           <Button size="sm" variant="outline" disabled={pending} onClick={() => onToggle("resolved")}>
             <Check size={14} aria-hidden />
-            Marcar resolvido
+            Marquer comme résolu
           </Button>
         )
       ) : null}

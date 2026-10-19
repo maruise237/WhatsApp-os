@@ -87,7 +87,7 @@ export function PreviaDaDefinicao({
 
       {faltando.length > 0 && (
         <p className="text-[11px] text-destructive">
-          Falta {faltando.map((n) => `{{${n}}}`).join(", ")} dans le texte. La numérotation est séquentielle et la plateforme refuse s’il y a un trou.
+          Manque {faltando.map((n) => `{{${n}}}`).join(", ")} dans le texte. La numérotation est séquentielle et la plateforme refuse s’il y a un trou.
         </p>
       )}
     </div>

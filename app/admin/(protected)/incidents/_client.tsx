@@ -20,9 +20,9 @@ import {
 } from "@/hooks/useAdminIncidents";
 
 const STATUS_OPTIONS: { value: IncidentStatus; label: string }[] = [
-  { value: "open", label: "Abertos" },
+  { value: "open", label: "Ouverts" },
   { value: "acknowledged", label: "Reconhecidos" },
-  { value: "resolved", label: "Resolvidos" },
+  { value: "resolved", label: "Résolus" },
 ];
 
 const SEVERITY_OPTIONS: { value: IncidentSeverity; label: string }[] = [
@@ -47,7 +47,7 @@ export function IncidentsClient() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Incidentes</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Incidents</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {isLoading
               ? "Carregando..."
@@ -86,7 +86,7 @@ export function IncidentsClient() {
           }
         >
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Severidade" />
+            <SelectValue placeholder="Gravité" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Toutes les gravités</SelectItem>

@@ -34,7 +34,7 @@ export default async function TestarPage() {
   return (
     <div className="space-y-6">
       <header>
-        <h2 className="text-2xl font-semibold tracking-tight">Veja ele atender</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Regardez-le répondre</h2>
         <p className="text-sm text-muted-foreground">
           Écrivez comme si vous étiez un client. Rien n’est envoyé sur WhatsApp — c’est juste un essai, entre vous et lui.
         </p>

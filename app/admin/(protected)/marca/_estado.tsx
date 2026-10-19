@@ -126,7 +126,7 @@ export function EstadoDaMarca({
             Votre marque n’est pas appliquée.
           </p>
           <p className="mt-1 text-sm text-text">
-            Desde {fallbackEm} le système est revenu à ses couleurs par défaut.
+            Depuis {fallbackEm} le système est revenu à ses couleurs par défaut.
           </p>
           <ul className="mt-2 space-y-1">
             {motivosDoFallback(fallbackMotivo).map((aviso) => (

@@ -55,7 +55,7 @@ export function NextActionSlot({
             "disabled:opacity-50",
           )}
         >
-          Aprovar
+          Approuver
         </button>
         <button
           type="button"
@@ -68,7 +68,7 @@ export function NextActionSlot({
             "disabled:opacity-50",
           )}
         >
-          Ignorar
+          Ignorer
         </button>
       </span>
     </>

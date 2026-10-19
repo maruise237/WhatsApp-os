@@ -71,7 +71,7 @@ export function LgpdAdminClient() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">LGPD — Cross-tenant</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">RGPD — Multi-organisations</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {isLoading
             ? "Carregando..."
@@ -88,7 +88,7 @@ export function LgpdAdminClient() {
           <SelectContent>
             <SelectItem value={NONE}>Tous les statuts</SelectItem>
             <SelectItem value="received">Reçue</SelectItem>
-            <SelectItem value="processing">Processando</SelectItem>
+            <SelectItem value="processing">En traitement</SelectItem>
             <SelectItem value="pending_review">Révision</SelectItem>
             <SelectItem value="completed">Terminée</SelectItem>
             <SelectItem value="failed">Échec</SelectItem>
@@ -109,13 +109,13 @@ export function LgpdAdminClient() {
 
         <Select onValueChange={setRisk} value={filters.risk_level ?? NONE}>
           <SelectTrigger className="h-8 w-[160px] text-xs">
-            <SelectValue placeholder="Risco" />
+            <SelectValue placeholder="Risque" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={NONE}>Tous les risques</SelectItem>
-            <SelectItem value="expired">Vencido</SelectItem>
+            <SelectItem value="expired">Échue</SelectItem>
             <SelectItem value="at_risk">Critique (&lt;24h)</SelectItem>
-            <SelectItem value="warning">Alerta (&gt;50%)</SelectItem>
+            <SelectItem value="warning">Alerte (&gt;50%)</SelectItem>
             <SelectItem value="ok">OK</SelectItem>
           </SelectContent>
         </Select>

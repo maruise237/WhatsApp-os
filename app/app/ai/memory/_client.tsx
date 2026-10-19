@@ -132,7 +132,7 @@ export function OrgMemoryClient({ initialState }: Props) {
               </CardDescription>
             </div>
             {document ? (
-              <Badge variant="success">v{document.version_number} ativa</Badge>
+              <Badge variant="success">v{document.version_number} active</Badge>
             ) : (
               <Badge variant="neutral">Aucune version publiée pour le moment</Badge>
             )}
@@ -146,7 +146,7 @@ export function OrgMemoryClient({ initialState }: Props) {
             className="min-h-[220px] font-mono text-[13px]"
           />
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs text-muted-foreground">{content.length} caracteres</span>
+            <span className="text-xs text-muted-foreground">{content.length} caractères</span>
             <div className="flex items-center gap-2">
               {!canPublish && (
                 <span className="text-xs text-muted-foreground">
@@ -176,7 +176,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                       <span className="font-mono text-xs">v{v.version_number}</span>
                       <span className="text-xs text-muted-foreground">{formatDate(v.created_at)}</span>
                       {document?.version_id === v.id && (
-                        <Badge variant="success" className="text-[10px]">ativa</Badge>
+                        <Badge variant="success" className="text-[10px]">active</Badge>
                       )}
                     </button>
                   </li>
@@ -191,7 +191,7 @@ export function OrgMemoryClient({ initialState }: Props) {
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <CardTitle>Aprendizados</CardTitle>
+              <CardTitle>Apprentissages</CardTitle>
               <CardDescription>
                 Faits et corrections ponctuels que les agents prennent aussi en compte — ajoutés à la main ou appris automatiquement par le système à partir de vraies conversations.
               </CardDescription>
@@ -287,7 +287,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                         </>
                       ) : (
                         <>
-                          <ArrowsClockwise /> Reativar
+                          <ArrowsClockwise /> Réactiver
                         </>
                       )}
                     </Button>

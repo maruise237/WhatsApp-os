@@ -100,7 +100,7 @@ describe("o selo na tela", () => {
 
   it("mostra o tempo restante quando aberta", () => {
     render(<JanelaSelo provider="zernio" lastInboundAt={new Date(Date.now() - 3_600_000).toISOString()} />);
-    expect(screen.getByText(/Janela \d+h/)).toBeInTheDocument();
+    expect(screen.getByText(/Fenêtre \d+h/)).toBeInTheDocument();
   });
 
   it("diz o que fazer quando fechada, não só que fechou", () => {

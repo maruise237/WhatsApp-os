@@ -44,12 +44,12 @@ export function ResolveIncidentDialog({ incidentId }: ResolveIncidentDialogProps
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="default" size="sm">
-          Resolver incidente
+          Résoudre l’incident
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Resolver incidente</AlertDialogTitle>
+          <AlertDialogTitle>Résoudre l’incident</AlertDialogTitle>
           <AlertDialogDescription>
             Décrivez comment l’incident a été résolu. Cette action est enregistrée dans le journal d’audit et est irréversible.
           </AlertDialogDescription>

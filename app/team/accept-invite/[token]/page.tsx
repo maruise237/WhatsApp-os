@@ -31,7 +31,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
   if (await authRateLimited("invite_accept", null, AUTH_LIMITS.invite_accept)) {
     return (
       <Shell>
-        <h1 className="text-xl font-semibold">Muitas tentativas</h1>
+        <h1 className="text-xl font-semibold">Trop de tentatives</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Patientez quelques minutes et rouvrez le lien d’invitation.
         </p>
@@ -71,7 +71,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
             href={`/login?next=${next}`}
             className="inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
           >
-            Fazer login
+            Se connecter
           </Link>
           {/*
             O caminho que faltava. Quem é convidado e ainda NÃO tem conta só
@@ -119,7 +119,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
 
   return (
     <Shell>
-      <h1 className="text-xl font-semibold">Aceitar convite</h1>
+      <h1 className="text-xl font-semibold">Accepter l’invitation</h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Vous avez été invité à rejoindre l’organisation en tant que <strong>{payload.role}</strong>. Confirmez ci-dessous pour activer votre accès.
       </p>
@@ -128,7 +128,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
           type="submit"
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
         >
-          Aceitar convite
+          Accepter l’invitation
         </button>
       </form>
     </Shell>

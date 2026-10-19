@@ -117,7 +117,7 @@ export function LeadDossier({
             timeline concluiria que a timeline está incompleta. */}
         {score?.at && (
           <p className="pt-2 text-[11px] text-text-muted">
-            Probabilidade recalculada automaticamente · {new Date(score.at).toLocaleString("fr-FR")}
+            Probabilité recalculée automatiquement · {new Date(score.at).toLocaleString("fr-FR")}
           </p>
         )}
 

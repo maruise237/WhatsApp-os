@@ -67,7 +67,7 @@ export function SectionDensity() {
               <div>
                 <h3 style={{ margin: 0 }}>
                   {d.label}
-                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>ativa</span>}
+                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>active</span>}
                 </h3>
                 <p style={{ fontSize: 12.5, color: "var(--ds-text-muted)", marginTop: 4 }}>
                   row-height <span className="ds-mono">{d.rowH}</span> · gap <span className="ds-mono">{d.gap}</span>

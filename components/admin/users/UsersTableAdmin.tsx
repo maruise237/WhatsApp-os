@@ -129,10 +129,10 @@ export function UsersTableAdmin({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Email</TableHead>
+              <TableHead>E-mail</TableHead>
               <TableHead className="w-[160px]">Nom</TableHead>
-              <TableHead className="w-[160px]">Tenant</TableHead>
-              <TableHead className="w-[100px]">Role</TableHead>
+              <TableHead className="w-[160px]">Organisation</TableHead>
+              <TableHead className="w-[100px]">Rôle</TableHead>
               <TableHead className="w-[160px]">Dernier accès</TableHead>
               <TableHead className="w-[100px]">Statut</TableHead>
               <TableHead className="w-[60px]" />
@@ -163,7 +163,7 @@ export function UsersTableAdmin({
                 </TableCell>
                 <TableCell>
                   {row.revoked_at ? (
-                    <Badge variant="error">Revogado</Badge>
+                    <Badge variant="error">Révoqué</Badge>
                   ) : (
                     <Badge variant="success">Actif</Badge>
                   )}

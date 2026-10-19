@@ -140,7 +140,7 @@ export function AtritoPanel({ podeEditarRegua }: { podeEditarRegua: boolean }) {
   return (
     <section className="flex flex-col gap-3">
       <div>
-        <h2 className="text-base font-medium">Atrito</h2>
+        <h2 className="text-base font-medium">Friction</h2>
         <p className="text-sm text-muted-foreground">
           Ce que le résultat a coûté aux deux parties.{" "}
           {escopo.demandas === 0 ? (

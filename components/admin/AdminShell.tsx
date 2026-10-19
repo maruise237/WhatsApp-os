@@ -92,7 +92,7 @@ export function AdminShell({ userEmail, children }: AdminShellProps) {
               >
                 <List size={20} aria-hidden />
               </Button>
-              <span className="text-sm font-semibold tracking-tight">Admin Plataforma</span>
+              <span className="text-sm font-semibold tracking-tight">Admin plateforme</span>
             </header>
             {/* `overflow-x-hidden` como rede de segurança — mesmo motivo do
                 `AppShell` (ver comentário lá): se algo estourar a largura, a

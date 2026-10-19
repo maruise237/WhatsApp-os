@@ -118,7 +118,7 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
               onChange={(e) => setConteudo(e.target.value)}
             />
             <p className="text-xs text-text-muted">
-              {t("Uma linha")} <code>## Pergunta:</code> {t("e uma")} <code>## Resposta:</code>{" "}
+              {t("Uma linha")} <code>## Question :</code> {t("e uma")} <code>## Réponse :</code>{" "}
               {t("por item, separados")} {t("por uma linha em branco.")}
             </p>
           </div>

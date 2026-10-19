@@ -50,7 +50,7 @@ export function SectionPalettes() {
               <div>
                 <h3 style={{ margin: 0 }}>
                   {p.name}
-                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>ativa</span>}
+                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>active</span>}
                 </h3>
                 <p style={{ fontSize: 13, color: "var(--ds-text-muted)", marginTop: 4 }}>{p.description}</p>
               </div>

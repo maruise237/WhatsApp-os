@@ -161,7 +161,7 @@ export function TenantOverview({ organization, counts, integrations }: TenantOve
         {/* LGPD + AI */}
         <div className="rounded-lg border bg-card p-5">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-            Compliance & IA
+            Conformité et IA
           </h2>
           <div>
             <InfoRow

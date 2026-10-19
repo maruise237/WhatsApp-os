@@ -119,9 +119,9 @@ export function AuditTable({
             <TableRow>
               <TableHead className="w-[130px]">Quand</TableHead>
               <TableHead>Action</TableHead>
-              <TableHead className="w-[130px]">Tenant</TableHead>
-              <TableHead className="w-[160px]">Actor</TableHead>
-              <TableHead className="w-[180px]">Recurso</TableHead>
+              <TableHead className="w-[130px]">Organisation</TableHead>
+              <TableHead className="w-[160px]">Acteur</TableHead>
+              <TableHead className="w-[180px]">Ressource</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>

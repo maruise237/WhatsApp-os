@@ -59,7 +59,7 @@ export function InviteForm() {
     <div className="grid gap-6 md:grid-cols-[1fr,2fr]">
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="emails">Emails</Label>
+          <Label htmlFor="emails">E-mails</Label>
           <Textarea
             id="emails"
             value={emailsRaw}
@@ -69,7 +69,7 @@ export function InviteForm() {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="role">Role</Label>
+          <Label htmlFor="role">Rôle</Label>
           <Select value={role} onValueChange={(v) => setRole(v as Role)}>
             <SelectTrigger id="role">
               <SelectValue />
@@ -93,7 +93,7 @@ export function InviteForm() {
           <>
             {result.sent.length > 0 ? (
               <section>
-                <h2 className="text-sm font-semibold">Enviados ({result.sent.length})</h2>
+                <h2 className="text-sm font-semibold">Envoyés ({result.sent.length})</h2>
                 <ul className="mt-2 space-y-2 text-sm">
                   {result.sent.map((s) => (
                     <li key={s.email} className="rounded-md border p-2">
@@ -114,7 +114,7 @@ export function InviteForm() {
             {result.failed.length > 0 ? (
               <section>
                 <h2 className="text-sm font-semibold text-destructive">
-                  Falhas ({result.failed.length})
+                  Échecs ({result.failed.length})
                 </h2>
                 <ul className="mt-2 space-y-1 text-sm">
                   {result.failed.map((f) => (

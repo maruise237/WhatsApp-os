@@ -388,7 +388,7 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-9 gap-1 px-2 xl:hidden">
                     <IdentificationCard size={16} />
-                    Ficha
+                    Fiche
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[min(22rem,90vw)] overflow-y-auto p-0">

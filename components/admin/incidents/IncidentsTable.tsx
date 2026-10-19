@@ -81,8 +81,8 @@ export function IncidentsTableSkeleton() {
           <TableRow>
             <TableHead className="w-[140px]">Quand</TableHead>
             <TableHead>Type</TableHead>
-            <TableHead className="w-[160px]">Tenant</TableHead>
-            <TableHead className="w-[110px]">Severidade</TableHead>
+            <TableHead className="w-[160px]">Organisation</TableHead>
+            <TableHead className="w-[110px]">Gravité</TableHead>
             <TableHead className="w-[120px]">Statut</TableHead>
             <TableHead className="w-[60px]" />
           </TableRow>
@@ -140,8 +140,8 @@ export function IncidentsTable({
             <TableRow>
               <TableHead className="w-[140px]">Quand</TableHead>
               <TableHead>Type</TableHead>
-              <TableHead className="w-[160px]">Tenant</TableHead>
-              <TableHead className="w-[110px]">Severidade</TableHead>
+              <TableHead className="w-[160px]">Organisation</TableHead>
+              <TableHead className="w-[110px]">Gravité</TableHead>
               <TableHead className="w-[120px]">Statut</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>

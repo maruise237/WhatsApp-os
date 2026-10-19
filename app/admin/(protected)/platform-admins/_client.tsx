@@ -13,7 +13,7 @@ export function PlatformAdminsClient() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Platform Admins</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Administrateurs de la plateforme</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Administrateurs disposant d’un accès privilégié à la plateforme
         </p>

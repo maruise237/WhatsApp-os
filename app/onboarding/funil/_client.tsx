@@ -231,7 +231,7 @@ export function QuadroClient({
           disabled={pending}
           onClick={() => startTransition(async () => void (await pularQuadro()))}
         >
-          Pular por enquanto
+          Passer pour l’instant
         </Button>
 
         <div className="flex flex-wrap items-center gap-3">

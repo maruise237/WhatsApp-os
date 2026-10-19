@@ -88,7 +88,7 @@ export function UsageTable({ tenants, range }: UsageTableProps) {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-muted-foreground">
-          Uso por tenant
+          Utilisation par organisation
         </h2>
         <Button
           variant="outline"
@@ -104,12 +104,12 @@ export function UsageTable({ tenants, range }: UsageTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tenant</TableHead>
+              <TableHead>Organisation</TableHead>
               <TableHead className="text-right">Messages</TableHead>
               <TableHead className="text-right">Conversations</TableHead>
-              <TableHead className="text-right">Invoc. AI</TableHead>
+              <TableHead className="text-right">Appels IA</TableHead>
               <TableHead className="text-right">Tokens</TableHead>
-              <TableHead className="text-right">Custo AI</TableHead>
+              <TableHead className="text-right">Coût IA</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

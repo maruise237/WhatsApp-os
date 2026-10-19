@@ -81,7 +81,7 @@ export function JanelaSelo({
       )}
       title="Temps restant pour écrire du texte libre. Ensuite, uniquement un modèle approuvé."
     >
-      Janela {formatarRestante(estado.restanteMs)}
+      Fenêtre {formatarRestante(estado.restanteMs)}
     </Badge>
   );
 }

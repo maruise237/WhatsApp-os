@@ -98,7 +98,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
       <Button asChild variant="ghost" size="sm" className="gap-1.5 -ml-2">
         <Link href="/admin/audit">
           <CaretLeft size={14} aria-hidden />
-          Audit Log
+          Journal d’audit
         </Link>
       </Button>
 
@@ -126,7 +126,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Metadata JSON viewer */}
         <div className="space-y-3">
-          <h2 className="text-sm font-medium">Metadata</h2>
+          <h2 className="text-sm font-medium">Métadonnées</h2>
           <pre className="overflow-auto rounded-md border bg-muted/40 p-4 text-xs leading-relaxed">
             {JSON.stringify(entry.metadata, null, 2)}
           </pre>
@@ -150,11 +150,11 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
         <div className="space-y-4">
           {/* Actor card */}
           <div className="rounded-md border p-4 space-y-2">
-            <h2 className="text-sm font-medium">Actor</h2>
+            <h2 className="text-sm font-medium">Acteur</h2>
             {actor ? (
               <div className="space-y-1 text-sm">
                 <Row label="User ID" value={actor.id} mono />
-                <Row label="Email" value={maskEmail(actor.email)} />
+                <Row label="E-mail" value={maskEmail(actor.email)} />
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
@@ -168,7 +168,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
           {/* Tenant card */}
           {tenant && (
             <div className="rounded-md border p-4 space-y-2">
-              <h2 className="text-sm font-medium">Tenant</h2>
+              <h2 className="text-sm font-medium">Organisation</h2>
               <div className="space-y-1 text-sm">
                 <Row label="Nom" value={tenant.display_name} />
                 <Row label="Slug" value={tenant.slug} mono />
@@ -185,7 +185,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
           {/* Resource deep link */}
           {deepLink && (
             <div className="rounded-md border p-4">
-              <h2 className="text-sm font-medium mb-2">Recurso</h2>
+              <h2 className="text-sm font-medium mb-2">Ressource</h2>
               <p className="text-sm text-muted-foreground mb-3">
                 {entry.resource_type}&nbsp;·&nbsp;
                 <span className="font-mono">{entry.resource_id}</span>

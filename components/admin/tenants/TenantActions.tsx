@@ -54,9 +54,9 @@ export function TenantActions({
             className="w-full"
             variant="destructive"
             onClick={() => setSuspendOpen(true)}
-            aria-label="Suspender tenant"
+            aria-label="Suspendre l’organisation"
           >
-            Suspender tenant
+            Suspendre l’organisation
           </Button>
         )}
 
@@ -66,9 +66,9 @@ export function TenantActions({
             className="w-full"
             variant="outline"
             onClick={() => setReactivateOpen(true)}
-            aria-label="Reativar tenant"
+            aria-label="Réactiver l’organisation"
           >
-            Reativar tenant
+            Réactiver l’organisation
           </Button>
         )}
 

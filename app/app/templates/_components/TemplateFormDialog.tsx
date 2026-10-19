@@ -134,7 +134,7 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
               rows={5}
             />
             <p className="text-xs text-muted-foreground">
-              Use {"{{primeiro_nome}}"} e {"{{nome}}"} pour personnaliser.
+              Utilisez {"{{primeiro_nome}}"} e {"{{nome}}"} pour personnaliser.
             </p>
           </div>
           <div className="space-y-2">

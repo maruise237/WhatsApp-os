@@ -179,7 +179,7 @@ export function ExecucoesDeIa() {
                   <span className="font-medium">{e.pontoRotulo}</span>
                   {e.status === "erro" && (
                     <Badge variant="destructive" className="text-xs">
-                      falhou
+                      a échoué
                     </Badge>
                   )}
                 </div>

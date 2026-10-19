@@ -88,7 +88,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <CaretLeft size={14} aria-hidden />
-          Incidentes
+          Incidents
         </Link>
       </div>
 
@@ -112,7 +112,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
             )}
           </div>
           <p className="text-xs text-muted-foreground">
-            Criado{" "}
+            Créé{" "}
             {formatDistanceToNow(new Date(incident.created_at), {
               addSuffix: true,
               locale: fr,
@@ -150,7 +150,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
         {/* Audit timeline */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Audit Trail</CardTitle>
+            <CardTitle className="text-sm font-medium">Piste d’audit</CardTitle>
           </CardHeader>
           <CardContent>
             {incident.audit_trail.length === 0 ? (

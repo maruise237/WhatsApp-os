@@ -77,7 +77,7 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Marca</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Marque</h1>
         <p className="mt-1 text-sm text-text-muted">
           Le nom et la couleur que ce système affiche à toutes les personnes qui utilisent cette installation.
         </p>

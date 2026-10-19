@@ -71,7 +71,7 @@ export function SuspendDialog({ open, onClose, organizationId }: SuspendDialogPr
     <AlertDialog open={open} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Suspender tenant</AlertDialogTitle>
+          <AlertDialogTitle>Suspendre l’organisation</AlertDialogTitle>
           <AlertDialogDescription>
             La suspension bloquera l’accès des utilisateurs de cette organisation à la plateforme. Cette action est réversible.
           </AlertDialogDescription>

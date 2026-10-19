@@ -37,7 +37,7 @@ export function SegmentError({ error, reset, segment }: SegmentErrorProps) {
   return (
     <main className="flex min-h-[60vh] items-center justify-center p-8">
       <Card className="w-full max-w-md p-8 text-center">
-        <h1 className="text-xl font-semibold">Algo deu errado</h1>
+        <h1 className="text-xl font-semibold">Une erreur est survenue</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Réessayez dans quelques instants. Si le problème persiste, contactez le support avec l’identifiant ci-dessous.
         </p>

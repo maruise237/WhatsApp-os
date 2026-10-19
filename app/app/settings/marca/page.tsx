@@ -40,7 +40,7 @@ import { createClient } from "@/lib/supabase/server";
 
 import { FormularioDaMarcaDaOrganizacao } from "./_form";
 
-export const metadata = { title: "Marca" };
+export const metadata = { title: "Marque" };
 export const dynamic = "force-dynamic";
 
 export default async function MarcaDaOrganizacaoPage() {

@@ -33,7 +33,7 @@ export default async function FollowupFlowsPage() {
     <div className="flex h-full flex-col gap-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Follow-ups</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Relances</h1>
           <p className="text-sm text-text-muted">
             Flux automatiques de réengagement — un silence, un changement d’étape ou une fin de conversation déclenchent des messages sans intervention manuelle.
           </p>
@@ -41,8 +41,8 @@ export default async function FollowupFlowsPage() {
       </header>
       <Tabs defaultValue="fluxos" className="flex flex-1 flex-col">
         <TabsList>
-          <TabsTrigger value="fluxos">Fluxos</TabsTrigger>
-          <TabsTrigger value="fila">Fila</TabsTrigger>
+          <TabsTrigger value="fluxos">Flux</TabsTrigger>
+          <TabsTrigger value="fila">File</TabsTrigger>
         </TabsList>
         <TabsContent value="fluxos">
           <FlowsList initialData={flows} canWrite={canWrite} />
