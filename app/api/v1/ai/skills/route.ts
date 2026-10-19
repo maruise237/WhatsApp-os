@@ -48,7 +48,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     .select("name, version_id, updated_at")
     .eq("organization_id", org.orgId);
   if (orgErr) {
-    return fail("internal_error", "Erro ao carregar skills instaladas.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des compétences installées.", 500, { requestId });
   }
 
   const { data: platformPointers, error: platErr } = await admin
@@ -56,7 +56,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     .select("name, version_id")
     .is("organization_id", null);
   if (platErr) {
-    return fail("internal_error", "Erro ao carregar catálogo de skills.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement du catalogue de compétences.", 500, { requestId });
   }
 
   const orgRows = (orgPointers ?? []) as OrgPointerRow[];
@@ -70,7 +70,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
       .select("id, description, forked_from_version_id")
       .in("id", versionIds);
     if (verErr) {
-      return fail("internal_error", "Erro ao carregar descrição das skills.", 500, { requestId });
+      return fail("internal_error", "Erreur lors du chargement de la description des compétences.", 500, { requestId });
     }
     versions = (versionRows ?? []) as VersionRow[];
   }

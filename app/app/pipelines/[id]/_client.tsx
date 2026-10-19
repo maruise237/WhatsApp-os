@@ -97,7 +97,7 @@ export function PipelinePageClient({
       <FilterBar filters={filters} onChange={setFilters} leads={data?.leads ?? []} />
       {error ? (
         <div className="rounded-md border border-destructive/30 bg-destructive/10 p-4 text-sm">
-          Impossible de charger cet entonnoir :{" "}
+          Impossible de charger ce tableau :{" "}
           {formatError(error)}
         </div>
       ) : isLoading || !data ? (

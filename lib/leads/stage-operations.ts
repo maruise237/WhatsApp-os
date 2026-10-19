@@ -146,8 +146,8 @@ export function conflitoDoBanco(
   requestId: string,
 ): ApiError | null {
   const motivo: Record<string, string> = {
-    "23505": `Outra etapa deste funil já ocupa esse lugar — «${nomeDaEtapa}» não pôde ser gravada.`,
-    "23514": `«${nomeDaEtapa}» mudou de papel neste funil (ganho ou perda) enquanto você editava.`,
+    "23505": `Une autre colonne de ce tableau occupe déjà cette place — «${nomeDaEtapa}» n’a pas pu être enregistrée.`,
+    "23514": `«${nomeDaEtapa}» a changé de rôle dans ce tableau (gagné ou perdu) pendant votre modification.`,
   };
   const texto = motivo[erro?.code ?? ""];
   if (!texto) return null;
@@ -156,7 +156,7 @@ export function conflitoDoBanco(
     "state_conflict",
     undefined,
     requestId,
-    `${texto} Recarregue a página e tente de novo.`,
+    `${texto} Rechargez la page et réessayez.`,
   );
 }
 
@@ -183,7 +183,7 @@ async function funilOuNadaFeito(deps: DepsDeEtapa, pipelineId: string): Promise<
   // Funil de outra org morre AQUI, antes de qualquer escrita: responder 404
   // depois de gravar seria pior do que responder 200.
   if (!etapas) {
-    throw new ApiError(404, "not_found", undefined, deps.requestId, "Funil não encontrado.");
+    throw new ApiError(404, "not_found", undefined, deps.requestId, "Tableau introuvable.");
   }
   return etapas;
 }
@@ -296,7 +296,7 @@ export async function atualizarEtapa(
   // organização), e a resposta é a mesma de uma etapa inexistente.
   const alvo = etapas.find((e) => e.id === stageId);
   if (!alvo) {
-    throw new ApiError(404, "not_found", undefined, deps.requestId, "Etapa não encontrada.");
+    throw new ApiError(404, "not_found", undefined, deps.requestId, "Colonne introuvable.");
   }
 
   // ⚠️ ARQUIVADA NÃO SE EDITA — e este é o caso perigoso, não um detalhe de
@@ -313,7 +313,7 @@ export async function atualizarEtapa(
       "state_conflict",
       undefined,
       deps.requestId,
-      `A etapa «${alvo.name}» foi arquivada e não está mais no quadro. Recarregue a página.`,
+      `La colonne «${alvo.name}» a été archivée et n’est plus dans le tableau. Rechargez la page.`,
     );
   }
 
@@ -346,7 +346,7 @@ export async function atualizarEtapa(
         "unprocessable_entity",
         undefined,
         deps.requestId,
-        "A etapa que você escolheu como vizinha não está mais no funil. Recarregue a página.",
+        "La colonne choisie comme voisine n’est plus dans le tableau. Rechargez la page.",
       );
     }
     const posicao = posicaoEntre(ativas[i]?.position ?? null, ativas[i + 1]?.position ?? null);
@@ -360,7 +360,7 @@ export async function atualizarEtapa(
         "state_conflict",
         undefined,
         deps.requestId,
-        "As colunas deste funil estão empatadas na ordenação. Recarregue a página e mova a etapa para outro lugar.",
+        "Les colonnes de ce tableau sont à égalité dans l’ordre. Rechargez la page et déplacez la colonne ailleurs.",
       );
     }
     patchDoAlvo.position = posicao;
@@ -440,7 +440,7 @@ export async function arquivarEtapa(
   const etapas = await funilOuNadaFeito(deps, pipelineId);
   const alvo = etapas.find((e) => e.id === stageId);
   if (!alvo) {
-    throw new ApiError(404, "not_found", undefined, deps.requestId, "Etapa não encontrada.");
+    throw new ApiError(404, "not_found", undefined, deps.requestId, "Colonne introuvable.");
   }
 
   // Os negócios da etapa, com a contagem EXATA do banco no mesmo round-trip: a
@@ -496,7 +496,7 @@ export async function arquivarEtapa(
         "internal_error",
         { erro: error.message },
         deps.requestId,
-        `Não consegui mover os negócios de «${alvo.name}». A etapa continua no quadro — tente de novo.`,
+        `Impossible de déplacer les affaires de «${alvo.name}». La colonne reste dans le tableau — réessayez.`,
       );
     }
   }
@@ -530,7 +530,7 @@ export async function arquivarEtapa(
           sourceModule: "crm",
           sourceId: stageId,
           actor: deps.actor,
-          reason: `${stageChangeReason(alvo.name, destinoNome)} (a etapa «${alvo.name}» foi arquivada)`,
+          reason: `${stageChangeReason(alvo.name, destinoNome)} (la colonne «${alvo.name}» a été archivée)`,
           payload: {
             from_stage_id: stageId,
             to_stage_id: destinoId,

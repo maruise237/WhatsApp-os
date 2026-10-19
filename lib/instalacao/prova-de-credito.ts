@@ -130,7 +130,7 @@ export async function provarSaldo(
     return {
       ok: false,
       codigo: "provedor_desconhecido",
-      mensagem: `Não sei como testar o provedor "${provider}".`,
+      mensagem: `Je ne sais pas tester le fournisseur "${provider}".`,
       httpStatus: null,
     };
   }

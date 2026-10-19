@@ -40,7 +40,7 @@ export async function POST(request: NextRequest, { params }: Context): Promise<R
   try {
     body = await request.json();
   } catch {
-    return fail("invalid_request", "Corpo JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = createPaymentProofSchema.safeParse(body);
   if (!parsed.success || parsed.data.order_id !== id) {

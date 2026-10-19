@@ -113,7 +113,7 @@ export async function recoverStuckMessages(
       .update({
         status: "failed",
         error_code: "send_timeout",
-        error_message: `Envio não confirmado em ${STUCK_AFTER_MS / 60000} min — marcada como falha por recover-stuck-messages.`,
+        error_message: `Envoi non confirmé après ${STUCK_AFTER_MS / 60000} min — marqué en échec par recover-stuck-messages.`,
         updated_at: now.toISOString(),
       })
       .in(
@@ -182,12 +182,12 @@ export async function recoverStuckMessages(
       severity: "critical",
       title:
         n === 1
-          ? "Uma resposta não chegou ao cliente"
-          : `${n} respostas não chegaram ao cliente`,
+          ? "Une réponse n’est pas parvenue au client"
+          : `${n} réponses ne sont pas parvenues au client`,
       body:
-        `Ficaram mais de ${STUCK_AFTER_MS / 60000} minutos aguardando envio e foram marcadas como falha. ` +
-        `Verifique se a conexão do WhatsApp está ativa e se o worker de envio está rodando. ` +
-        `Nada foi reenviado automaticamente — reenviar sem saber a causa arrisca mandar a mesma mensagem duas vezes.`,
+        `Elles sont restées plus de ${STUCK_AFTER_MS / 60000} minutes en attente d’envoi et ont été marquées en échec. ` +
+        `Vérifiez que la connexion WhatsApp est active et que le service d’envoi fonctionne. ` +
+        `Rien n’a été renvoyé automatiquement — renvoyer sans connaître la cause risque d’envoyer deux fois le même message.`,
       ref_kind: "conversation",
       ref_id: mensagens[0]?.conversation_id ?? null,
     });

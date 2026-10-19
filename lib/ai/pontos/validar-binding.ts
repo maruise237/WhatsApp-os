@@ -56,7 +56,7 @@ export function validarBinding(entrada: {
     return {
       ok: false,
       codigo: "ponto_desconhecido",
-      mensagem: `"${entrada.pontoId}" não é um ponto configurável do sistema.`,
+      mensagem: `"${entrada.pontoId}" n’est pas un usage réglable de l’application.`,
     };
   }
 
@@ -64,7 +64,7 @@ export function validarBinding(entrada: {
     return {
       ok: false,
       codigo: "ponto_fixo",
-      mensagem: `${ponto.rotulo} não aceita troca de modelo. ${ponto.fixo.razao}`,
+      mensagem: `${ponto.rotulo} : le modèle ne peut pas être changé. ${ponto.fixo.razao}`,
     };
   }
 
@@ -72,8 +72,8 @@ export function validarBinding(entrada: {
     return {
       ok: true,
       avisos: [
-        `Não conseguimos verificar o que "${entrada.modelo.model_id}" sabe fazer — ele não está no catálogo. ` +
-          `Se for um modelo seu ou de um endpoint próprio, isso é esperado. Vale testar a conexão antes de confiar nele.`,
+        `Impossible de vérifier ce que sait faire "${entrada.modelo.model_id}" — il n’est pas dans le catalogue. ` +
+          `Si c’est votre propre modèle ou serveur, c’est normal. Testez la connexion avant de vous y fier.`,
       ],
     };
   }
@@ -86,9 +86,9 @@ export function validarBinding(entrada: {
       // suporta function calling" não diz nada a quem não é engenheiro — e é
       // exatamente essa pessoa que está na tela escolhendo.
       mensagem:
-        `"${entrada.modelo.model_id}" não sabe usar as ferramentas do CRM. Em "${ponto.rotulo}" isso significa que ` +
-        `o agente conversaria normalmente com o cliente, mas não criaria o lead nem moveria o funil — e sem nenhum ` +
-        `erro aparecer na tela. Escolha um modelo com suporte a ferramentas.`,
+        `"${entrada.modelo.model_id}" ne sait pas utiliser les outils du CRM. Pour "${ponto.rotulo}", cela veut dire que ` +
+        `l’assistant discuterait normalement avec le client, mais ne créerait pas la fiche ni ne ferait avancer le tableau — sans aucune ` +
+        `erreur à l’écran. Choisissez un modèle qui sait utiliser des outils.`,
     };
   }
 
@@ -98,8 +98,8 @@ export function validarBinding(entrada: {
     // cliente manda, mas um agente que só lê texto ainda atende — mal, e o
     // operador precisa saber disso, não ser impedido.
     avisos.push(
-      `"${entrada.modelo.model_id}" não enxerga imagens. Em "${ponto.rotulo}", fotos e comprovantes que o cliente ` +
-        `enviar vão ser ignorados pelo agente.`,
+      `"${entrada.modelo.model_id}" ne voit pas les images. Pour "${ponto.rotulo}", les photos et justificatifs envoyés par le client ` +
+        `seront ignorés par l’assistant.`,
     );
   }
 

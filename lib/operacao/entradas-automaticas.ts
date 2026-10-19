@@ -106,7 +106,7 @@ async function fonteDaOrg(
       "not_found",
       undefined,
       deps.requestId,
-      "Essa entrada automática de contatos não existe aqui.",
+      "Cette arrivée automatique de contacts n’existe pas ici.",
     );
   }
   return data as unknown as { id: string; name: string; path_token: string; is_active: boolean };
@@ -138,7 +138,7 @@ async function destinoValido(
       "unprocessable_entity",
       undefined,
       deps.requestId,
-      "Esse funil não existe aqui. Escolha um funil da sua empresa para receber os contatos.",
+      "Ce tableau n’existe pas ici. Choisissez un tableau de votre entreprise pour recevoir les contacts.",
     );
   }
 
@@ -158,7 +158,7 @@ async function destinoValido(
       "unprocessable_entity",
       undefined,
       deps.requestId,
-      "Essa etapa não pertence ao funil escolhido. Escolha uma etapa do mesmo funil.",
+      "Cette colonne n’appartient pas au tableau choisi. Choisissez une colonne du même tableau.",
     );
   }
   // Etapa arquivada sumiu do quadro: os contatos entrariam onde ninguém olha.
@@ -168,7 +168,7 @@ async function destinoValido(
       "unprocessable_entity",
       undefined,
       deps.requestId,
-      "Essa etapa foi arquivada e não aparece mais no quadro. Escolha uma etapa em uso.",
+      "Cette colonne a été archivée et n’apparaît plus dans le tableau. Choisissez une colonne utilisée.",
     );
   }
 }

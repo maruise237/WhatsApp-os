@@ -356,7 +356,7 @@ export type FalhaDeAlvo = Extract<ResolucaoDoAlvo, { ok: false }>;
  */
 function motivoLegivel(texto: string): string {
   const limpo = texto.trim();
-  if (limpo === "") return "Sem motivo informado";
+  if (limpo === "") return "Aucune raison indiquée";
   return limpo.charAt(0).toUpperCase() + limpo.slice(1);
 }
 

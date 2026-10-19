@@ -114,9 +114,9 @@ async function ensureChannelSession(
 
 export async function GET() {
   const user = await loadAuthUser();
-  if (!user) return fail("unauthenticated", "Sessão expirada", 401);
+  if (!user) return fail("unauthenticated", "Session expirée", 401);
   const activeOrg = await resolveActiveOrg(user);
-  if (!activeOrg) return fail("tenant_not_found", "Sem organização ativa", 404);
+  if (!activeOrg) return fail("tenant_not_found", "Aucune organisation active", 404);
   const waha = getWahaClient();
   if (!waha) return ok({ status: "WAHA_NOT_CONFIGURED", session: null });
   const sessionName = defaultSessionName(activeOrg.orgId);
@@ -133,11 +133,11 @@ export async function GET() {
 export async function POST(req: Request) {
   const requestId = randomUUID();
   const user = await loadAuthUser();
-  if (!user) return fail("unauthenticated", "Sessão expirada", 401);
+  if (!user) return fail("unauthenticated", "Session expirée", 401);
   const activeOrg = await resolveActiveOrg(user);
-  if (!activeOrg) return fail("tenant_not_found", "Sem organização ativa", 404);
+  if (!activeOrg) return fail("tenant_not_found", "Aucune organisation active", 404);
   const waha = getWahaClient();
-  if (!waha) return fail("waha_not_configured", "Suba o Docker (docker compose up -d waha) e tente novamente.", 503);
+  if (!waha) return fail("waha_not_configured", "Démarrez Docker (docker compose up -d waha) et réessayez.", 503);
   const sessionName = defaultSessionName(activeOrg.orgId);
 
   // 1) Make sure we have a row in channel_sessions.

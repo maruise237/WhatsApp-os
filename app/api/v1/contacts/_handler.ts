@@ -138,7 +138,7 @@ export async function listContactsHandler(
   if (q.cursor) {
     const c = decodeCursor(q.cursor);
     if (!c) {
-      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Cursor inválido.");
+      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Curseur invalide.");
     }
     const op = asc ? "gt" : "lt";
     if (c.sort) {
@@ -254,7 +254,7 @@ export async function getContactHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, error.message);
   }
   if (!data) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Contato não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Contact introuvable.");
   }
   const contact = data as Contact;
 
@@ -421,7 +421,7 @@ export async function patchContactHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, selErr.message);
   }
   if (!existing) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Contato não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Contact introuvable.");
   }
   if (existing.is_anonymized) {
     throw new ApiError(
@@ -429,7 +429,7 @@ export async function patchContactHandler(
       "lgpd_anonymization_irreversible",
       undefined,
       ctx.requestId,
-      "Contato anonimizado — edição bloqueada (LGPD).",
+      "Contact anonymisé — modification impossible (protection des données).",
     );
   }
 
@@ -478,7 +478,7 @@ export async function patchContactHandler(
       "invalid_request",
       undefined,
       ctx.requestId,
-      "Nenhum campo para atualizar.",
+      "Aucun champ à mettre à jour.",
     );
   }
 
@@ -500,7 +500,7 @@ export async function patchContactHandler(
       "not_found",
       undefined,
       ctx.requestId,
-      "Contato não encontrado após update.",
+      "Contact introuvable après la mise à jour.",
     );
   }
 

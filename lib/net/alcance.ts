@@ -124,17 +124,17 @@ export function classificarFalhaDeAlcance(erro: unknown): FalhaDeAlcance {
 export function explicarFalhaDeAlcance(falha: FalhaDeAlcance, servico: string): string {
   switch (falha) {
     case "endereco_nao_resolve":
-      return `O endereço configurado para ${servico} não existe — nem chegamos a tentar conectar. Isso é configuração, não o serviço: reveja o endereço nas variáveis de ambiente.`;
+      return `L’adresse configurée pour ${servico} n’existe pas — la connexion n’a même pas été tentée. C’est un problème de configuration, pas du service : vérifiez l’adresse dans les variables d’environnement.`;
     case "conexao_recusada":
-      return `O servidor de ${servico} foi encontrado, mas recusou a conexão: nada está atendendo naquela porta. Confirme que o serviço está no ar e que a porta configurada é a dele.`;
+      return `Le serveur ${servico} a été trouvé, mais il a refusé la connexion : rien n’écoute sur ce port. Vérifiez que le service est en ligne et que le port configuré est le bon.`;
     case "host_inalcancavel":
-      return `Não há caminho de rede até o servidor de ${servico}. Ele pode estar desligado ou bloqueado por firewall.`;
+      return `Aucun chemin réseau vers le serveur ${servico}. Il est peut-être éteint ou bloqué par un pare-feu.`;
     case "tempo_esgotado":
-      return `O servidor de ${servico} não respondeu a tempo. Pode estar sobrecarregado, ou o tráfego está sendo bloqueado no meio do caminho.`;
+      return `Le serveur ${servico} n’a pas répondu à temps. Il est peut-être surchargé, ou le trafic est bloqué en chemin.`;
     case "tls_recusado":
-      return `O certificado de segurança do endereço de ${servico} foi recusado. Confirme o certificado do domínio configurado.`;
+      return `Le certificat de sécurité de l’adresse de ${servico} a été refusé. Vérifiez le certificat du domaine configuré.`;
     case "indeterminada":
-      return `Não foi possível falar com ${servico}, e a causa não foi identificada.`;
+      return `Impossible de joindre ${servico}, et la cause n’a pas été identifiée.`;
   }
 }
 
@@ -151,6 +151,6 @@ export function alvoDe(url: string): string {
     const u = new URL(url);
     return u.port ? `${u.protocol}//${u.hostname}:${u.port}` : `${u.protocol}//${u.hostname}`;
   } catch {
-    return "(endereço inválido)";
+    return "(adresse invalide)";
   }
 }

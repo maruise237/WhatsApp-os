@@ -54,15 +54,15 @@ function narra(
 ): { tipo: ActivityType; reason: string } | null {
   if (de === para) return null;
   if (para === "em_risco" && (de === "em_dia" || de === null)) {
-    return { tipo: "lead_cooled", reason: "Sem resposta além do prazo deste estágio" };
+    return { tipo: "lead_cooled", reason: "Sans réponse au-delà du délai de cette colonne" };
   }
   if (para === "critico") {
     // Vale linha mesmo vindo de `em_risco`: passar de "esfriando" a "parado há
     // muito tempo" é a mudança que decide se alguém liga hoje ou semana que vem.
-    return { tipo: "lead_cooled", reason: "Parado há muito tempo — sem resposta" };
+    return { tipo: "lead_cooled", reason: "À l’arrêt depuis longtemps — sans réponse" };
   }
   if (para === "em_dia" && de !== null && de !== "em_dia") {
-    return { tipo: "lead_reactivated", reason: "Voltou a ter movimento" };
+    return { tipo: "lead_reactivated", reason: "Bouge à nouveau" };
   }
   return null;
 }

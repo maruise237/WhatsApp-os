@@ -88,7 +88,7 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            Entonnoir {selectedOwner ? "du conseiller" : ""} · {funnelTotal}{" "}
+            Tableau {selectedOwner ? "du conseiller" : ""} · {funnelTotal}{" "}
             {funnelTotal === 1 ? "aberto" : "abertos"}
           </CardTitle>
         </CardHeader>

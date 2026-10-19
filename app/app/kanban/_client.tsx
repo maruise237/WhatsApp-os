@@ -143,14 +143,14 @@ export function FunisClient({
           if (e.key === "Enter") criarFunil();
           if (e.key === "Escape") setNovo(null);
         }}
-        placeholder="Nom de l’entonnoir — ex. : Consultations, Chantiers, Inscriptions"
-        aria-label="Nom du nouvel entonnoir"
+        placeholder="Nom du tableau — ex. : Consultations, Chantiers, Inscriptions"
+        aria-label="Nom du nouveau tableau"
         data-testid="nome-do-novo-funil"
         disabled={ocupado}
       />
       <div className="flex gap-2">
         <Button onClick={criarFunil} disabled={ocupado || !novo.trim()} data-testid="confirmar-novo-funil">
-          Créer l’entonnoir
+          Créer le tableau
         </Button>
         <Button variant="ghost" onClick={() => setNovo(null)} disabled={ocupado}>
           Annuler
@@ -172,7 +172,7 @@ export function FunisClient({
           <EmptyPipeline
             primary={
               podeGerenciar
-                ? { label: "Créer mon premier entonnoir", onClick: () => setNovo("") }
+                ? { label: "Créer mon premier tableau", onClick: () => setNovo("") }
                 : undefined
             }
           />
@@ -192,7 +192,7 @@ export function FunisClient({
         <div className="flex sm:justify-end">
           {novo === null ? (
             <Button onClick={() => setNovo("")} disabled={ocupado} data-testid="novo-funil" className="w-full sm:w-auto">
-              <Plus size={16} className="mr-2" aria-hidden /> Nouvel entonnoir
+              <Plus size={16} className="mr-2" aria-hidden /> Nouveau tableau
             </Button>
           ) : null}
         </div>

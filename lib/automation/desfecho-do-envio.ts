@@ -75,7 +75,7 @@ export function desfechoDoEnvio(
         reason: motivo,
         explicacao:
           fraseDaFalhaDeCanal(motivo) ??
-          "A mensagem está na fila e sai assim que o canal aceitar.",
+          "Le message est en file d’attente et partira dès que le canal l’acceptera.",
       },
     };
   }
@@ -89,7 +89,7 @@ export function desfechoDoEnvio(
     error:
       fraseDaFalhaDeCanal(mensagem.error_code) ??
       mensagem.error_message ??
-      `A mensagem não saiu (${codigo}).`,
+      `Le message n’est pas parti (${codigo}).`,
     detail: { ...base, error_code: mensagem.error_code ?? null, status: mensagem.status },
   };
 }
@@ -117,7 +117,7 @@ export async function reportarEnvio(
       organizationId: ctx.organizationId,
       ruleName: ctx.ruleName,
       conversationId,
-      motivo: desfecho.error ?? "A mensagem não saiu.",
+      motivo: desfecho.error ?? "Le message n’est pas parti.",
     });
   }
   return desfecho;
@@ -202,10 +202,10 @@ export async function avisarEnvioQueFalhou(
     organization_id: entrada.organizationId,
     kind: "message_send_stuck",
     severity: "critical",
-    title: "Uma automação não conseguiu falar com o cliente",
+    title: "Une automatisation n’a pas pu joindre le client",
     body:
-      `A automação "${entrada.ruleName}" disparou e a mensagem não chegou. ${entrada.motivo} ` +
-      `Nada foi reenviado automaticamente — reenviar sem saber a causa arrisca mandar a mesma mensagem duas vezes.`,
+      `L’automatisation "${entrada.ruleName}" s’est déclenchée mais le message n’est pas arrivé. ${entrada.motivo} ` +
+      `Rien n’a été renvoyé automatiquement — renvoyer sans connaître la cause risque d’envoyer le même message deux fois.`,
     ref_kind: entrada.conversationId ? "conversation" : null,
     ref_id: entrada.conversationId ?? null,
   });

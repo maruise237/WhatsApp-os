@@ -42,8 +42,8 @@ export function JaEstaPronto({ retrato }: { retrato: RetratoDaInstalacao }) {
     {
       pronto: Boolean(retrato.funil),
       texto: retrato.funil
-        ? `Entonnoir de vente créé : ${retrato.funil.nome}`
-        : "Aucun entonnoir de vente pour le moment",
+        ? `Tableau de vente créé : ${retrato.funil.nome}`
+        : "Aucun tableau de vente pour le moment",
     },
   ];
 

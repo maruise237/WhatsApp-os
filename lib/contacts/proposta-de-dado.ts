@@ -229,16 +229,16 @@ export async function vencePropostasDeDado(
           severity: "info",
           title:
             n === 1
-              ? "Uma informação de cliente venceu sem alguém conferir"
-              : `${n} informações de clientes venceram sem alguém conferir`,
+              ? "Une info client a expiré sans que personne ne la vérifie"
+              : `${n} infos clients ont expiré sans que personne ne les vérifie`,
           // Diz o que ACONTECEU e o que fazer. Não repete o valor: o aviso é
           // lido por quem talvez não devesse ver o dado, e o dado continua na
           // ficha de quem tem acesso a ela.
           body:
-            `O assistente ouviu ${n === 1 ? "um dado" : "alguns dados"} na conversa com ` +
-            `${n === 1 ? "um cliente" : "clientes"} e ninguém confirmou a tempo. ` +
-            `${n === 1 ? "Ele saiu" : "Eles saíram"} da ficha para não parecer que já estava salvo. ` +
-            `Se a informação ainda importa, peça de novo ou preencha à mão.`,
+            `L’assistant a relevé ${n === 1 ? "une info" : "plusieurs infos"} dans la conversation avec ` +
+            `${n === 1 ? "un client" : "des clients"} et personne ne l’a confirmé à temps. ` +
+            `${n === 1 ? "Elle a été retirée" : "Elles ont été retirées"} de la fiche pour ne pas laisser croire qu’elles étaient enregistrées. ` +
+            `Si l’info compte encore, redemandez-la ou remplissez-la à la main.`,
           ref_kind: "organization",
           ref_id: organizationId,
         })

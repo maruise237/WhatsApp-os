@@ -12,7 +12,7 @@ export function TopBar() {
         <MobileSidebar />
         <TenantSwitcher />
       </div>
-      <div className="flex min-w-0 flex-1 justify-center md:max-w-md">
+      <div className="flex min-w-0 flex-1 justify-end md:max-w-md md:justify-center">
         <SearchTrigger />
       </div>
       <div className="flex shrink-0 items-center gap-2">

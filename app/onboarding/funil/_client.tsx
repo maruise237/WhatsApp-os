@@ -254,7 +254,7 @@ export function QuadroClient({
             })
           }
         >
-          {pending ? "Salvando..." : "Usar este quadro"}
+          {pending ? "Enregistrement…" : "Utiliser ce tableau"}
         </Button>
         </div>
       </div>

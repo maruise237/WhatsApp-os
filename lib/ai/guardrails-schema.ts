@@ -127,7 +127,7 @@ export const agentCreateSchema = z
       .min(20)
       .max(10000)
       .default(
-        "Você é um assistente da loja. Responda com clareza e cordialidade, em português do Brasil. Use a base de conhecimento abaixo quando relevante.",
+        "Tu es l’assistant de la boutique. Réponds avec clarté et courtoisie, en français. Utilise la base de connaissances ci-dessous quand c’est utile.",
       ),
   })
   .strict();
@@ -138,12 +138,12 @@ export type AgentCreate = z.infer<typeof agentCreateSchema>;
 // ---------------------------------------------------------------------------
 
 export const SYSTEM_PROMPT_PLACEHOLDERS: Array<{ token: string; description: string }> = [
-  { token: "{{vocabulary.lead}}", description: "Vocabulário do tenant para 'lead' (ex: cliente)" },
-  { token: "{{vocabulary.deal}}", description: "Vocabulário do tenant para 'deal' (ex: pedido)" },
-  { token: "{{vocabulary.won}}", description: "Vocabulário do tenant para 'won' (ex: pago)" },
-  { token: "{{vocabulary.lost}}", description: "Vocabulário do tenant para 'lost' (ex: cancelado)" },
-  { token: "{{contact_name}}", description: "Nome do contato em atendimento" },
-  { token: "{{contact_locale}}", description: "Locale do contato (ex: pt-BR)" },
-  { token: "{{recent_messages}}", description: "Últimas N mensagens da conversa" },
-  { token: "{{retrieved_chunks}}", description: "Trechos da base de conhecimento (RAG)" },
+  { token: "{{vocabulary.lead}}", description: "Mot utilisé par l’entreprise pour « client » (ex. : client)" },
+  { token: "{{vocabulary.deal}}", description: "Mot utilisé par l’entreprise pour « affaire » (ex. : commande)" },
+  { token: "{{vocabulary.won}}", description: "Mot utilisé par l’entreprise pour « gagné » (ex. : payé)" },
+  { token: "{{vocabulary.lost}}", description: "Mot utilisé par l’entreprise pour « perdu » (ex. : annulé)" },
+  { token: "{{contact_name}}", description: "Nom du contact en conversation" },
+  { token: "{{contact_locale}}", description: "Langue du contact (ex. : fr-FR)" },
+  { token: "{{recent_messages}}", description: "Les N derniers messages de la conversation" },
+  { token: "{{retrieved_chunks}}", description: "Extraits de la base de connaissances" },
 ];

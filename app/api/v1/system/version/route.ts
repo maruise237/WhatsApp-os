@@ -23,7 +23,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
   const user = await loadAuthUser();
   // `unauthenticated` (não `unauthorized`): esse último é reservado ao segredo
   // interno das rotas host↔app (lib/api/errors.ts) — aqui falta é sessão.
-  if (!user) return fail("unauthenticated", "Faça login para continuar.", 401);
+  if (!user) return fail("unauthenticated", "Connectez-vous pour continuer.", 401);
 
   const db = createAdminClient();
   const { data: version, error: versionError } = await db
@@ -38,7 +38,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
   // e mais abaixo isso poderia se disfarçar de "sem atualização disponível".
   if (versionError) {
     logger.error("[system/version] leitura de system_version falhou", { error: versionError.message });
-    return fail("internal_error", "Não consegui ler o estado da atualização.", 500);
+    return fail("internal_error", "Impossible de lire l’état de la mise à jour.", 500);
   }
 
   const current = version?.current_version ?? "";
@@ -62,7 +62,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
 
   if (runError) {
     logger.error("[system/version] leitura do run mais recente falhou", { error: runError.message });
-    return fail("internal_error", "Não consegui ler o estado da atualização.", 500);
+    return fail("internal_error", "Impossible de lire l’état de la mise à jour.", 500);
   }
 
   const now = new Date();

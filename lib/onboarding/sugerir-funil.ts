@@ -79,32 +79,32 @@ export function pedidoDeSugestao(
   exemplo: PacoteDeFunil,
 ): { system: string; prompt: string } {
   const passos = [
-    '"new" — acabou de chamar, ninguém respondeu ainda',
-    '"contacted" — já foi respondido',
-    '"qualifying" — está entendendo o que a pessoa precisa',
-    '"qualified" — já sabe o que oferecer',
-    '"negotiating" — está fechando preço, horário ou condições',
-    '"won" — fechou (exatamente UMA coluna)',
-    '"lost" — não fechou (exatamente UMA coluna)',
-    "null — coluna que só uma pessoa move, sem equivalente no atendimento",
+    '"new" — vient d’écrire, personne n’a encore répondu',
+    '"contacted" — a déjà reçu une réponse',
+    '"qualifying" — on comprend ce dont la personne a besoin',
+    '"qualified" — on sait déjà quoi proposer',
+    '"negotiating" — on fixe le prix, l’horaire ou les conditions',
+    '"won" — vente conclue (exactement UNE colonne)',
+    '"lost" — vente perdue (exactement UNE colonne)',
+    "null — colonne que seule une personne déplace, sans équivalent dans la conversation",
   ].join("\n- ");
 
   return {
     system:
-      "Você monta o quadro de clientes de um negócio brasileiro que atende por WhatsApp. " +
-      "Escreva do jeito que o DONO fala, não como um manual de vendas: nada de " +
-      '"prospecção", "MQL", "nutrição" ou "fundo de funil". ' +
-      "Cada coluna é um momento concreto do atendimento dele. " +
-      "Responda APENAS com o JSON, sem comentário e sem crases.",
+      "Tu construis le tableau des clients d’une petite entreprise d’Afrique francophone qui vend par WhatsApp. " +
+      "Écris comme parle le PATRON, pas comme un manuel de vente : pas de " +
+      '"prospection", "MQL", "nurturing" ni "fond de tunnel". Écris en français. ' +
+      "Chaque colonne est un moment concret de sa relation avec le client. " +
+      "Réponds UNIQUEMENT avec le JSON, sans commentaire et sans backticks.",
     prompt: [
-      `Negócio: ${ctx.nome}`,
-      `O que faz: ${ctx.oQueFaz}`,
+      `Entreprise : ${ctx.nome}`,
+      `Activité : ${ctx.oQueFaz}`,
       "",
-      "Monte de 5 a 7 colunas, na ordem em que o cliente passa por elas.",
-      'Cada coluna tem "nome" (o que aparece no topo) e "passo", que diz quando o atendente move o cliente para lá:',
+      "Crée de 5 à 7 colonnes, dans l’ordre où le client les traverse.",
+      'Chaque colonne a un "nome" (ce qui s’affiche en haut) et un "passo", qui indique quand l’assistant y déplace le client :',
       `- ${passos}`,
       "",
-      `Exemplo do formato (é de outro negócio — não copie os nomes, adapte ao "${ctx.nome}"):`,
+      `Exemple de format (d’une autre entreprise — ne copie pas les noms, adapte-les à "${ctx.nome}") :`,
       JSON.stringify({ nome: exemplo.proposta.nome, etapas: exemplo.proposta.etapas }, null, 2),
     ].join("\n"),
   };
@@ -171,7 +171,7 @@ export async function sugerirFunil(ctx: ContextoDoNegocio, gerar: Gerar): Promis
 
   const bruta = extrairJson(texto);
   if (!bruta || typeof bruta !== "object") {
-    return { origem: "pacote", pacote: exemplo, porque: "a resposta não veio no formato esperado" };
+    return { origem: "pacote", pacote: exemplo, porque: "la réponse n’était pas au format attendu" };
   }
 
   const proposta = normalizarProposta(bruta as { nome?: unknown; etapas?: unknown });

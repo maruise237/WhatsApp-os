@@ -10,5 +10,5 @@ const UUID_RX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 
 /** Devolve a resposta de erro quando o id não é um uuid; `null` quando está ok. */
 export function validaIdDaRota(id: string, requestId: string): Response | null {
-  return UUID_RX.test(id) ? null : fail("invalid_request", "id inválido.", 400, { requestId });
+  return UUID_RX.test(id) ? null : fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 }

@@ -11,7 +11,7 @@ import { randomUUID } from "node:crypto";
 // ---------------------------------------------------------------------------
 
 const T04_MESSAGE =
-  "platform_admins é gerenciado exclusivamente via DBA (Spec 01 §3.4 T-04)";
+  "platform_admins est géré exclusivement par l’administrateur de la base (Spec 01 §3.4 T-04)";
 
 // ---------------------------------------------------------------------------
 // GET /api/v1/admin/platform-admins
@@ -118,7 +118,7 @@ export async function GET(_req: NextRequest) {
       r !== null && "unavailable" in r,
   );
   if (indisponivel) {
-    return fail("upstream_unavailable", "Auth indisponível", 503, {
+    return fail("upstream_unavailable", "Authentification indisponible", 503, {
       requestId,
       details: indisponivel.unavailable,
     });

@@ -31,10 +31,10 @@ const REASON_TO_RESPONSE: Record<
   Exclude<DraftReplyResult, { ok: true }>["reason"],
   [code: string, message: string, status: number]
 > = {
-  no_agent: ["no_agent", "Nenhum agente publicado para sugerir resposta.", 422],
-  blocked: ["blocked", "Contato bloqueado/anonimizado.", 422],
-  empty: ["empty", "A IA não gerou um rascunho.", 422],
-  error: ["internal_error", "Erro ao gerar rascunho.", 500],
+  no_agent: ["no_agent", "Aucun assistant publié pour suggérer une réponse.", 422],
+  blocked: ["blocked", "Contact bloqué ou anonymisé.", 422],
+  empty: ["empty", "L’IA n’a pas généré de brouillon.", 422],
+  error: ["internal_error", "Erreur lors de la génération du brouillon.", 500],
 };
 
 export async function POST(_req: NextRequest, { params }: RouteParams): Promise<Response> {
@@ -51,16 +51,16 @@ export async function POST(_req: NextRequest, { params }: RouteParams): Promise<
     .eq("id", id)
     .eq("organization_id", org.orgId)
     .maybeSingle();
-  if (!conv) return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+  if (!conv) return fail("not_found", "Conversation introuvable.", 404, { requestId });
   if (!conv.contact_id || !conv.channel_session_id) {
-    return fail("unprocessable", "Conversa sem contato/canal.", 422, { requestId });
+    return fail("unprocessable", "Conversation sans contact ni canal.", 422, { requestId });
   }
 
   let pool;
   try {
     pool = getRequestPool();
   } catch {
-    return fail("unavailable", "Rascunho da IA indisponível (config).", 503, { requestId });
+    return fail("unavailable", "Brouillon de l’IA indisponible (configuration).", 503, { requestId });
   }
 
   // Falha controlada (getLeadContext ok:false) volta como reason:'error' e vira

@@ -269,7 +269,7 @@ export function SalesCentral({ canManageCatalog }: SalesCentralProps) {
   }
 
   const tabs: Array<[View, string, number | null]> = [
-    ["proofs", "À vérifier", pendingProofs.length],
+    ["proofs", "Preuves", pendingProofs.length],
     ["orders", "Commandes", orders.filter((o) => !CLOSED.includes(o.status)).length],
     ["catalog", "Catalogue", products.filter((p) => p.is_active).length],
   ];
@@ -318,11 +318,11 @@ export function SalesCentral({ canManageCatalog }: SalesCentralProps) {
             role="tab"
             aria-selected={activeView === key}
             onClick={() => setView(key)}
-            className={`flex items-center justify-center gap-1.5 rounded-md px-2 py-2 transition ${
+            className={`flex min-w-0 items-center justify-center gap-1 rounded-md px-1 py-2 transition sm:gap-1.5 sm:px-2 ${
               activeView === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"
             }`}
           >
-            <span className="truncate">{label}</span>
+            <span className="truncate text-[13px] sm:text-sm">{label}</span>
             {count !== null && count > 0 && (
               <span className={`rounded-full px-1.5 text-xs ${activeView === key ? "bg-primary-foreground/20" : "bg-muted"}`}>{count}</span>
             )}

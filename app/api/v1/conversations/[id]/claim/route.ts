@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
   const row = data?.[0];
   if (!row) {
-    return fail("state_conflict", "Outro atendente já assumiu.", 409, { requestId });
+    return fail("state_conflict", "Un autre agent a déjà pris en charge.", 409, { requestId });
   }
 
   const conv = row as unknown as Conversation;
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     contactId: conv.contact_id,
     tipo: "conversation_claimed",
     actor: { type: "user", id: user.id, role: authz.org.role },
-    motivo: "Assumiu o atendimento desta conversa",
+    motivo: "A pris en charge cette conversation",
   });
 
   return ok(conv, { requestId });

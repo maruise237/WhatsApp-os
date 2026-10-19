@@ -81,7 +81,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
   }
   const activeOrg = await resolveActiveOrg(authUser);
   if (!activeOrg) {
-    return fail("forbidden", "Nenhuma organização ativa.", 403, { requestId });
+    return fail("forbidden", "Aucune organisation active.", 403, { requestId });
   }
 
   const supabase = await createClient();
@@ -95,7 +95,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
 
   if (error) {
     console.error("[ai-knowledge-sources] GET list failed:", error.message);
-    return fail("internal_error", "Erro ao listar fontes de conhecimento.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des sources de connaissances.", 500, { requestId });
   }
 
   // `ok()` já embrulha em `{ data }`. Com `{ data: data ?? [] }` o corpo saía
@@ -120,12 +120,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createSourceSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (temConteudo && !TIPOS_QUE_INGEREM_TEXTO.has(input.source_type)) {
     return fail(
       "unprocessable_entity",
-      `Fonte de ${ROTULO_DO_TIPO[input.source_type]} não recebe conteúdo colado — ela é preenchida automaticamente.`,
+      `Une source de type ${ROTULO_DO_TIPO[input.source_type]} n’accepte pas de contenu collé — elle est remplie automatiquement.`,
       422,
       { requestId },
     );
@@ -159,10 +159,10 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (agentErr) {
     console.error("[ai-knowledge-sources] agent lookup failed:", agentErr.message);
-    return fail("internal_error", "Erro ao validar agent_id.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la validation de agent_id.", 500, { requestId });
   }
   if (!agent) {
-    return fail("not_found", "Agent não encontrado nesta organização.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable dans cette organisation.", 404, { requestId });
   }
 
   // Itens de conteúdo: valem para 'faq' E 'policy'. Antes só 'faq' era tratado,
@@ -185,7 +185,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       if (faqItems.length === 0) {
         return fail(
           "invalid_request",
-          "markdown_blob não contém itens FAQ válidos. Use seções ## Pergunta: / ## Resposta:.",
+          "markdown_blob ne contient aucune question de FAQ valide. Utilisez des sections ## Question : / ## Réponse :.",
           400,
           { requestId },
         );
@@ -219,14 +219,14 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (ksErr?.code === "23505") {
       return fail(
         "knowledge_source_type_in_use",
-        `Já existe uma fonte de ${ROTULO_DO_TIPO[input.source_type]} ativa para este agente. ` +
-          `Edite ou arquive a existente em vez de criar outra.`,
+        `Une source de type ${ROTULO_DO_TIPO[input.source_type]} est déjà active pour cet assistant. ` +
+          `Modifiez ou archivez celle qui existe au lieu d’en créer une autre.`,
         409,
         { requestId },
       );
     }
     console.error("[ai-knowledge-sources] insert knowledge source failed:", ksErr?.message);
-    return fail("internal_error", "Erro ao criar fonte de conhecimento.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la création de la source de connaissances.", 500, { requestId });
   }
 
   const ksId: string = (ks as { id: string }).id;

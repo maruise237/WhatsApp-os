@@ -64,7 +64,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const parsed = querySchema.safeParse(Object.fromEntries(req.nextUrl.searchParams.entries()));
   if (!parsed.success) {
-    return fail("validation_failed", "Filtros inválidos.", 422, {
+    return fail("validation_failed", "Filtres invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

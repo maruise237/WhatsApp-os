@@ -72,7 +72,7 @@ export async function sendOnboardingInvites(payload: InvitePayload): Promise<Sen
 
   // env.* é runtime → correto na imagem genérica self-host (ver browser.ts).
   const baseUrl = env.NEXT_PUBLIC_APP_URL;
-  const inviterName = ctx.fullName ?? ctx.email ?? "Um colega";
+  const inviterName = ctx.fullName ?? ctx.email ?? "Un collègue";
   // Fora do laço: a marca é a mesma para o lote inteiro (mesma organização).
   const marca = await marcaDaSaida(ctx.orgId);
 

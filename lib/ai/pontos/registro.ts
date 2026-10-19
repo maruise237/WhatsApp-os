@@ -67,28 +67,28 @@ export type PapelDeIa =
 
 export const PAPEIS: Record<PapelDeIa, { rotulo: string; explicacao: string }> = {
   atender: {
-    rotulo: "Atender o cliente",
-    explicacao: "Escrever o que o cliente lê e agir no funil durante a conversa.",
+    rotulo: "Répondre au client",
+    explicacao: "Écrire ce que lit le client et faire avancer le tableau pendant la conversation.",
   },
   entender: {
-    rotulo: "Entender a conversa",
-    explicacao: "Ler o que chegou e decidir o que aquilo significa para o negócio.",
+    rotulo: "Comprendre la conversation",
+    explicacao: "Lire ce qui arrive et décider ce que cela signifie pour l’activité.",
   },
   proteger: {
-    rotulo: "Proteger a operação",
-    explicacao: "Barrar manipulação e promessa que a empresa não pode cumprir.",
+    rotulo: "Protéger l’activité",
+    explicacao: "Bloquer les manipulations et les promesses que l’entreprise ne peut pas tenir.",
   },
   lembrar: {
-    rotulo: "Lembrar e buscar",
-    explicacao: "Guardar o essencial da conversa e achar o material certo do seu negócio.",
+    rotulo: "Se souvenir et chercher",
+    explicacao: "Garder l’essentiel de la conversation et trouver le bon document de votre activité.",
   },
   perceber: {
-    rotulo: "Ver e ouvir",
-    explicacao: "Transformar áudio, imagem e vídeo do cliente em texto que o agente entende.",
+    rotulo: "Voir et écouter",
+    explicacao: "Transformer l’audio, les images et les vidéos du client en texte que l’assistant comprend.",
   },
   melhorar: {
-    rotulo: "Melhorar e testar",
-    explicacao: "Avaliar o próprio desempenho e conferir se a configuração está de pé.",
+    rotulo: "Améliorer et tester",
+    explicacao: "Évaluer ses propres résultats et vérifier que les réglages fonctionnent.",
   },
 };
 
@@ -157,205 +157,205 @@ export const PONTOS_DE_IA: readonly PontoDeIa[] = [
   // ─────────────────────────── Atender o cliente ───────────────────────────
   {
     id: "agent_turn",
-    rotulo: "Responder o cliente",
+    rotulo: "Répondre au client",
     oQueFaz:
-      "Escreve a resposta que o cliente lê no WhatsApp, consultando o material do seu negócio e usando as ferramentas do CRM.",
+      "Écrit la réponse que le client lit sur WhatsApp, en consultant vos documents et en utilisant les outils du CRM.",
     papel: "atender",
     exige: { tools: true, imagem: true },
     emissor: "lib/agent-engine/agent/inbound-turn.ts",
     sintomaDeFalha:
-      "O cliente manda mensagem e ninguém responde. A conversa fica parada na Caixa de entrada sem aviso.",
+      "Le client écrit et personne ne répond. La conversation reste bloquée dans la boîte de réception sans alerte.",
     registraEm: "llm_calls",
   },
   {
     id: "operator_turn",
-    rotulo: "Trabalhar o funil",
+    rotulo: "Faire avancer le tableau",
     oQueFaz:
-      "Cria o lead, move de etapa e registra o que ficou combinado, enquanto a conversa acontece.",
+      "Crée la fiche client, la change de colonne et note ce qui a été convenu, pendant la conversation.",
     papel: "atender",
     exige: { tools: true },
     emissor: "lib/agent-engine/agent/operator-turn.ts",
     sintomaDeFalha:
-      "O cliente é atendido normalmente, mas nada aparece no funil — nenhum lead criado, nenhuma etapa movida.",
+      "Le client est servi normalement, mais rien n’apparaît dans le tableau — aucune fiche créée, aucune colonne changée.",
     registraEm: "llm_calls",
   },
   {
     id: "automation_ai_message",
-    rotulo: "Abordar quem preencheu o formulário",
+    rotulo: "Contacter ceux qui ont rempli le formulaire",
     oQueFaz:
-      "Escreve a primeira mensagem para quem acabou de preencher um formulário, usando os campos que a pessoa respondeu e a orientação que você deu na automação.",
+      "Écrit le premier message à la personne qui vient de remplir un formulaire, à partir de ses réponses et des consignes que vous avez données dans l’automatisation.",
     papel: "atender",
     // Sem tools: o texto vem e quem envia é a automação, com janela de horário
     // e opt-out. Dar `send_message` ao modelo faria dele o remetente.
     exige: {},
     emissor: "lib/agent-engine/agent/abordagem-de-formulario.ts",
     sintomaDeFalha:
-      "O lead entra pelo formulário, a automação roda, e a mensagem de abordagem nunca é escrita — o contato fica no funil sem ninguém falar com ele.",
+      "Le client arrive par le formulaire, l’automatisation se lance, mais le premier message n’est jamais écrit — le contact reste dans le tableau sans que personne ne lui parle.",
     registraEm: "llm_calls",
   },
   {
     id: "draft_suggestion",
-    rotulo: "Sugerir resposta ao atendente",
+    rotulo: "Suggérer une réponse à l’équipe",
     oQueFaz:
-      "Escreve um rascunho de resposta para o atendente humano revisar antes de enviar.",
+      "Écrit un brouillon de réponse que la personne de l’équipe relit avant de l’envoyer.",
     papel: "atender",
     exige: {},
     emissor: "lib/agent-engine/agent/draft-reply.ts",
     sintomaDeFalha:
-      "O botão de sugerir resposta não traz nada, e o atendente escreve do zero sem saber por quê.",
+      "Le bouton de suggestion ne propose rien, et la personne écrit tout elle-même sans savoir pourquoi.",
     registraEm: "llm_calls",
   },
   {
     id: "bot_respond",
-    rotulo: "Responder (motor antigo)",
+    rotulo: "Répondre (ancien moteur)",
     oQueFaz:
-      "Caminho de resposta anterior ao motor de agentes atual, mantido para instalações que ainda o usam.",
+      "Ancienne façon de répondre, avant le moteur d’assistants actuel, gardée pour les installations qui l’utilisent encore.",
     papel: "atender",
     exige: {},
     emissor: "workers/ai-response-worker.ts",
     sintomaDeFalha:
-      "Nas instalações que ainda dependem dele, o cliente fica sem resposta e a conversa não avança.",
+      "Dans les installations qui en dépendent encore, le client reste sans réponse et la conversation n’avance pas.",
     registraEm: "llm_calls",
   },
 
   // ────────────────────────── Entender a conversa ──────────────────────────
   {
     id: "intent_router",
-    rotulo: "Escolher qual agente atende",
+    rotulo: "Choisir quel assistant répond",
     oQueFaz:
-      "Lê a mensagem que chegou e decide qual dos seus agentes deve pegar aquela conversa.",
+      "Lit le message reçu et décide lequel de vos assistants doit prendre cette conversation.",
     papel: "entender",
     exige: {},
     emissor: "lib/agent-engine/agent/intent-classifier.ts",
     sintomaDeFalha:
-      "A conversa cai sempre no mesmo agente, ou em nenhum — como se os roteadores que você configurou não existissem.",
+      "La conversation arrive toujours au même assistant, ou à aucun — comme si vos règles d’aiguillage n’existaient pas.",
     registraEm: "llm_calls",
   },
   {
     id: "stage_classifier",
-    rotulo: "Identificar a etapa do lead",
+    rotulo: "Trouver la colonne du client",
     oQueFaz:
-      "Lê a conversa e sugere em que etapa do funil aquele cliente está de verdade.",
+      "Lit la conversation et propose la colonne du tableau où se trouve vraiment ce client.",
     papel: "entender",
     exige: {},
     emissor: "lib/agent-engine/agent/stage-classifier.ts",
     sintomaDeFalha:
-      "Os leads param de andar sozinhos pelo funil e ficam todos na etapa em que entraram.",
+      "Les clients n’avancent plus tout seuls dans le tableau et restent tous dans leur colonne d’arrivée.",
     registraEm: "llm_calls",
   },
   {
     id: "sentiment_classify",
-    rotulo: "Medir o clima da conversa",
+    rotulo: "Mesurer l’humeur de la conversation",
     oQueFaz:
-      "Avalia se o cliente está satisfeito ou irritado, para escalar ao humano antes de perder a venda.",
+      "Évalue si le client est satisfait ou agacé, pour passer la main à une personne avant de perdre la vente.",
     papel: "entender",
     exige: {},
     emissor: "workers/ai-sentiment-worker.ts",
     sintomaDeFalha:
-      "Cliente irritado não é mais escalado para um humano, e a insatisfação só aparece quando ele já sumiu.",
+      "Un client agacé n’est plus passé à une personne, et le mécontentement n’apparaît que quand il est déjà parti.",
     registraEm: "llm_calls",
   },
   {
     id: "followup_classify",
-    rotulo: "Ler a resposta ao follow-up",
+    rotulo: "Lire la réponse à la relance",
     oQueFaz:
-      "Entende se o cliente aceitou, recusou ou pediu para falar depois, e encaminha o fluxo conforme isso.",
+      "Comprend si le client a accepté, refusé ou demandé à reparler plus tard, et oriente la séquence en conséquence.",
     papel: "entender",
     exige: {},
     emissor: "lib/agent-engine/agent/followup-flow-classify.ts",
     sintomaDeFalha:
-      "O follow-up trava no mesmo passo: o cliente respondeu, mas o fluxo não segue para lugar nenhum.",
+      "La relance bloque à la même étape : le client a répondu, mais la séquence ne va nulle part.",
     registraEm: "llm_calls",
   },
   {
     id: "followup_decide_timing",
-    rotulo: "Escolher a hora do follow-up",
-    oQueFaz: "Decide o melhor momento para retomar uma conversa que esfriou.",
+    rotulo: "Choisir l’heure de la relance",
+    oQueFaz: "Choisit le meilleur moment pour relancer une conversation refroidie.",
     papel: "entender",
     exige: {},
     emissor: "lib/agent-engine/agent/followup-flow-classify.ts",
     sintomaDeFalha:
-      "As retomadas saem todas no mesmo horário fixo, sem respeitar o ritmo de cada cliente.",
+      "Les relances partent toutes à la même heure fixe, sans respecter le rythme de chaque client.",
     registraEm: "llm_calls",
   },
 
   // ────────────────────────── Proteger a operação ──────────────────────────
   {
     id: "jailbreak_detect",
-    rotulo: "Barrar tentativa de manipulação",
+    rotulo: "Bloquer les tentatives de manipulation",
     oQueFaz:
-      "Percebe quando alguém tenta enganar o agente para ele fugir das suas regras.",
+      "Repère quand quelqu’un essaie de tromper l’assistant pour lui faire contourner vos règles.",
     papel: "proteger",
     exige: {},
     emissor: "lib/agent-engine/guardrails/jailbreak/classifier.ts",
     sintomaDeFalha:
-      "O agente passa a aceitar instruções de estranhos e pode falar em nome da empresa coisas que você nunca autorizou.",
+      "L’assistant accepte les consignes d’inconnus et peut dire au nom de l’entreprise des choses que vous n’avez jamais autorisées.",
     registraEm: "llm_calls",
   },
   {
     id: "promise_semantic",
-    rotulo: "Impedir promessa que não se cumpre",
+    rotulo: "Empêcher les promesses intenables",
     oQueFaz:
-      "Confere se a resposta promete prazo, desconto ou condição que a empresa não pode honrar.",
+      "Vérifie si la réponse promet un délai, une remise ou une condition que l’entreprise ne peut pas tenir.",
     papel: "proteger",
     exige: {},
     emissor: "lib/agent-engine/guardrails/promise/semantic.ts",
     sintomaDeFalha:
-      "O agente promete ao cliente coisas que a operação não entrega, e a cobrança chega depois.",
+      "L’assistant promet au client des choses que l’entreprise ne livre pas, et les réclamations arrivent ensuite.",
     registraEm: "llm_calls",
   },
 
   // ─────────────────────────── Lembrar e buscar ────────────────────────────
   {
     id: "compaction",
-    rotulo: "Resumir a conversa longa",
+    rotulo: "Résumer une longue conversation",
     oQueFaz:
-      "Condensa uma conversa comprida no essencial, para o agente não perder o fio nem encarecer cada resposta.",
+      "Réduit une longue conversation à l’essentiel, pour que l’assistant ne perde pas le fil et que chaque réponse ne coûte pas plus cher.",
     papel: "lembrar",
     exige: {},
     emissor: "lib/agent-engine/agent/compaction.ts",
     sintomaDeFalha:
-      "Em conversas longas o agente esquece o que já foi combinado e começa a repetir perguntas.",
+      "Dans les longues conversations, l’assistant oublie ce qui a été convenu et repose les mêmes questions.",
     registraEm: "llm_calls",
   },
   {
     id: "flush",
-    rotulo: "Guardar o combinado",
+    rotulo: "Garder ce qui a été convenu",
     oQueFaz:
-      "Extrai da conversa os compromissos, objeções e dados do cliente antes de fechar o atendimento.",
+      "Relève dans la conversation les engagements, objections et infos du client avant de la clôturer.",
     papel: "lembrar",
     exige: {},
     emissor: "lib/agent-engine/agent/compaction.ts",
     sintomaDeFalha:
-      "O que foi combinado com o cliente não fica registrado, e o próximo atendimento começa do zero.",
+      "Ce qui a été convenu avec le client n’est pas noté, et la conversation suivante repart de zéro.",
     registraEm: "llm_calls",
   },
   {
     id: "checkpoint",
-    rotulo: "Fechar o atendimento",
+    rotulo: "Clôturer la conversation",
     oQueFaz:
-      "Escreve o resumo de encerramento do turno, que o próximo atendimento lê ao abrir.",
+      "Écrit le résumé de fin d’échange, que la conversation suivante lit en démarrant.",
     papel: "lembrar",
     exige: {},
     emissor: "lib/agent-engine/agent/inbound-turn.ts",
     sintomaDeFalha:
-      "Cada retomada de conversa parece a primeira: o agente não sabe o que aconteceu antes.",
+      "Chaque reprise de conversation semble être la première : l’assistant ne sait pas ce qui s’est passé avant.",
     registraEm: "llm_calls",
   },
   {
     id: "embedding_indexar",
-    rotulo: "Indexar o seu material",
+    rotulo: "Indexer vos documents",
     oQueFaz:
-      "Prepara os documentos do seu negócio para que o agente consiga encontrá-los na hora de responder.",
+      "Prépare les documents de votre activité pour que l’assistant puisse les retrouver au moment de répondre.",
     papel: "lembrar",
     exige: { embeddingDims: 1536 },
     emissor: "lib/ai/embed.ts",
     fixo: {
       razao:
-        "O material indexado e a busca precisam usar exatamente o mesmo modelo — são coordenadas de um mesmo mapa. Trocar só um dos lados não dá erro: o agente simplesmente para de achar o seu conteúdo, sem avisar. Para mudar de modelo aqui é preciso reindexar tudo de uma vez.",
+        "L’indexation et la recherche doivent utiliser exactement le même modèle — ce sont les coordonnées d’une même carte. En changer un seul ne provoque pas d’erreur : l’assistant ne trouve simplement plus votre contenu, sans prévenir. Pour changer de modèle ici, il faut tout réindexer d’un coup.",
     },
     sintomaDeFalha:
-      "Você sobe um documento e ele nunca fica pronto para uso; o agente responde sem conhecer o seu material.",
+      "Vous ajoutez un document et il n’est jamais prêt ; l’assistant répond sans connaître vos documents.",
     // `nenhum`, e não `llm_calls`: `lib/ai/embed.ts` não chama `logInvocation`
     // nem passa pelo seam — não há uma linha de telemetria para este ponto em
     // lugar nenhum. Declarar a tabela certa seria mentir sobre uma cobertura
@@ -364,119 +364,119 @@ export const PONTOS_DE_IA: readonly PontoDeIa[] = [
   },
   {
     id: "embedding_consultar",
-    rotulo: "Buscar no seu material",
+    rotulo: "Chercher dans vos documents",
     oQueFaz:
-      "Encontra, entre os seus documentos, os trechos que respondem à pergunta do cliente.",
+      "Trouve, dans vos documents, les passages qui répondent à la question du client.",
     papel: "lembrar",
     exige: { embeddingDims: 1536 },
     emissor: "lib/agent-engine/edge/llm/embed.ts",
     fixo: {
       razao:
-        "Precisa usar o mesmo modelo com que o material foi indexado. Se divergir, a busca continua funcionando e devolve resultados errados — falha silenciosa, e por isso a troca é feita junto com a reindexação, não aqui.",
+        "Doit utiliser le même modèle que celui de l’indexation. S’ils diffèrent, la recherche marche toujours mais renvoie de mauvais résultats — une panne silencieuse, c’est pourquoi le changement se fait avec la réindexation, pas ici.",
     },
     sintomaDeFalha:
-      "O agente responde de forma genérica, ignorando o que está escrito nos seus documentos.",
+      "L’assistant répond de façon générale, sans tenir compte de ce qui est écrit dans vos documents.",
     registraEm: "nenhum",
   },
 
   // ───────────────────────────── Ver e ouvir ───────────────────────────────
   {
     id: "transcricao_de_audio",
-    rotulo: "Ouvir o áudio do cliente",
-    oQueFaz: "Transforma o áudio que o cliente mandou em texto que o agente lê.",
+    rotulo: "Écouter l’audio du client",
+    oQueFaz: "Transforme l’audio envoyé par le client en texte que l’assistant lit.",
     papel: "perceber",
     exige: { audio: true },
     emissor: "lib/messaging/media/transcription.ts",
     fixo: {
       razao:
-        "Usa o padrão de transcrição da OpenAI, que é o formato que os serviços do mercado implementam. Aceita apontar para outro serviço compatível — inclusive um rodando na sua própria máquina — mas exige uma chave desse serviço, separada da chave do modelo de conversa.",
+        "Utilise le format de transcription d’OpenAI, repris par les services du marché. Peut pointer vers un autre service compatible — même installé sur votre propre machine — mais demande une clé de ce service, distincte de la clé du modèle de conversation.",
     },
     sintomaDeFalha:
-      "O cliente manda áudio e o agente responde como se não tivesse recebido nada.",
+      "Le client envoie un audio et l’assistant répond comme s’il n’avait rien reçu.",
     registraEm: "nenhum",
   },
   {
     id: "visao_de_imagem",
-    rotulo: "Ver a imagem do cliente",
+    rotulo: "Voir l’image du client",
     oQueFaz:
-      "Descreve a foto, o print ou o comprovante que o cliente enviou, para o agente saber do que se trata.",
+      "Décrit la photo, la capture d’écran ou le justificatif envoyé par le client, pour que l’assistant sache de quoi il s’agit.",
     papel: "perceber",
     exige: { imagem: true },
     emissor: "workers/media-derive-worker.ts",
     sintomaDeFalha:
-      "O cliente manda uma foto do produto ou um comprovante e o agente age como se a imagem não existisse.",
+      "Le client envoie une photo du produit ou un justificatif et l’assistant fait comme si l’image n’existait pas.",
     registraEm: "nenhum",
   },
 
   // ────────────────────────── Melhorar e testar ────────────────────────────
   {
     id: "flywheel_judge",
-    rotulo: "Avaliar o próprio atendimento",
+    rotulo: "Évaluer ses propres conversations",
     oQueFaz:
-      "Revisa atendimentos já concluídos e julga quais foram bons, para o agente aprender com eles.",
+      "Relit les conversations terminées et juge lesquelles étaient bonnes, pour que l’assistant en tire des leçons.",
     papel: "melhorar",
     exige: {},
     emissor: "lib/agent-engine/flywheel/live.ts",
     sintomaDeFalha:
-      "A tela de Propostas para de sugerir melhorias, e o agente estaciona no desempenho atual.",
+      "L’écran Propositions ne suggère plus d’améliorations, et l’assistant stagne à son niveau actuel.",
     registraEm: "llm_calls",
   },
   {
     id: "flywheel_distiller",
-    rotulo: "Extrair a lição",
+    rotulo: "Tirer la leçon",
     oQueFaz:
-      "Transforma os bons atendimentos em orientação prática para o agente aplicar nos próximos.",
+      "Transforme les bonnes conversations en consignes pratiques que l’assistant applique ensuite.",
     papel: "melhorar",
     exige: {},
     emissor: "lib/agent-engine/flywheel/live.ts",
     sintomaDeFalha:
-      "As melhorias identificadas não viram instrução, e o mesmo acerto precisa ser redescoberto toda vez.",
+      "Les améliorations repérées ne deviennent pas des consignes, et la même bonne pratique doit être redécouverte à chaque fois.",
     registraEm: "llm_calls",
   },
   {
     id: "connection_test",
-    rotulo: "Testar a conexão com o provedor",
+    rotulo: "Tester la connexion au fournisseur",
     oQueFaz:
-      "Faz uma chamada de verdade ao provedor para confirmar que a chave e o modelo escolhidos funcionam.",
+      "Fait un vrai appel au fournisseur pour confirmer que la clé et le modèle choisis fonctionnent.",
     papel: "melhorar",
     exige: {},
     emissor: "lib/agent-engine/edge/llm/test-model.ts",
     sintomaDeFalha:
-      "O botão de testar não conclui, e você fica sem saber se a configuração está de pé antes de colocar no ar.",
+      "Le bouton de test n’aboutit pas, et vous ne savez pas si les réglages fonctionnent avant la mise en ligne.",
     registraEm: "llm_calls",
   },
   {
     id: "teste_de_agente",
-    rotulo: "Ensaiar o agente antes de publicar",
+    rotulo: "Essayer l’assistant avant de publier",
     oQueFaz:
-      "Roda o agente contra uma conversa de mentira, para você ver como ele responderia sem falar com cliente de verdade.",
+      "Fait tourner l’assistant sur une conversation fictive, pour voir comment il répondrait sans parler à un vrai client.",
     papel: "melhorar",
     exige: { tools: true },
     emissor: "lib/ai/runtime/agent.ts",
     fixo: {
       razao:
-        "Usa o modelo da versão do agente que você está ensaiando — e é exatamente isso que faz o ensaio valer. " +
-        "Se este ponto tivesse modelo próprio, você testaria uma configuração diferente da que vai publicar, e o " +
-        "ensaio deixaria de prever o comportamento real. Para trocar o modelo, troque na versão do agente.",
+        "Utilise le modèle de la version de l’assistant que vous essayez — c’est justement ce qui rend l’essai utile. " +
+        "Si cet usage avait son propre modèle, vous testeriez un réglage différent de celui que vous allez publier, et l’" +
+        "essai ne prédirait plus le vrai comportement. Pour changer de modèle, changez-le dans la version de l’assistant.",
     },
     sintomaDeFalha:
-      "O ensaio do agente não devolve resposta, e você precisa publicar às cegas para descobrir se ficou bom.",
+      "L’essai de l’assistant ne renvoie pas de réponse, et vous devez publier à l’aveugle pour savoir si c’est bien.",
     registraEm: "ai_agent_runs",
   },
   {
     id: "contagem_de_tokens",
-    rotulo: "Medir o tamanho do contexto",
+    rotulo: "Mesurer la taille du contexte",
     oQueFaz:
-      "Calcula quanto do limite do modelo a conversa já ocupa, para decidir a hora de resumir.",
+      "Calcule quelle part de la limite du modèle la conversation occupe déjà, pour savoir quand résumer.",
     papel: "melhorar",
     exige: {},
     emissor: "lib/agent-engine/edge/llm/count-tokens.ts",
     fixo: {
       razao:
-        "Cada família de modelo conta o tamanho do texto de um jeito próprio, então a medida precisa vir do mesmo provedor do modelo em uso — não é uma escolha à parte.",
+        "Chaque famille de modèles mesure la longueur du texte à sa façon, donc la mesure doit venir du même fournisseur que le modèle utilisé — ce n’est pas un choix séparé.",
     },
     sintomaDeFalha:
-      "O sistema erra a hora de resumir a conversa: resume cedo demais e perde contexto, ou tarde demais e a resposta é recusada.",
+      "L’application se trompe de moment pour résumer : trop tôt et elle perd le contexte, trop tard et la réponse est refusée.",
     registraEm: "nenhum",
   },
 ] as const;

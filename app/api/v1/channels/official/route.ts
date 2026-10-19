@@ -124,7 +124,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const parsed = conectarSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("invalid_request", "phone_number_id, waba_id e token são obrigatórios", 422, {
+    return fail("invalid_request", "phone_number_id, waba_id et token sont obligatoires", 422, {
       requestId,
     });
   }
@@ -144,7 +144,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // recusar. O operador precisa saber que falta uma configuração de servidor.
     return fail(
       "invalid_request",
-      "cifra indisponível nesta instalação (GUC app.nuvemshop_oauth_key ausente) — o token não foi gravado",
+      "chiffrement indisponible sur cette installation (GUC app.nuvemshop_oauth_key absent) — le jeton n’a pas été enregistré",
       422,
       { requestId },
     );

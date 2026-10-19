@@ -87,7 +87,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       request_id: requestId,
       campos: leitura.campos,
     });
-    return fail("validation_failed", "payload fora do contrato do canal", 400, {
+    return fail("validation_failed", "données hors du format attendu par le canal", 400, {
       requestId,
       details: { campos: leitura.campos },
     });

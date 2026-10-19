@@ -51,7 +51,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     data: { session },
   } = await supabase.auth.getSession();
   if (!session?.access_token) {
-    return fail("unauthenticated", "Sessão sem token.", 401, { requestId, headers: NO_STORE });
+    return fail("unauthenticated", "Session sans jeton.", 401, { requestId, headers: NO_STORE });
   }
 
   return ok(

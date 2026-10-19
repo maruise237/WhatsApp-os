@@ -146,7 +146,7 @@ export function CapturaDetail({ captura, onOpenChange }: Props) {
           {captura.lead_id ? (
             <Button asChild variant="secondary">
               <Link href={`/app/leads/${captura.lead_id}`}>
-                <ArrowSquareOut /> Voir le lead dans l’entonnoir
+                <ArrowSquareOut /> Voir le lead dans le tableau
               </Link>
             </Button>
           ) : null}

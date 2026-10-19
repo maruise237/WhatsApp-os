@@ -67,7 +67,7 @@ export function resolveDestinoDoAgente(
  * qualifying" é vocabulário que o usuário nunca viu.
  */
 export function razaoDaMudancaPeloAgente(stageName: string, passo: string): string {
-  return `Movido para ${stageName} pelo assistente (passo "${passo}" do atendimento)`;
+  return `Déplacé vers ${stageName} par l’assistant (étape "${passo}" de la conversation)`;
 }
 
 export type { RiskBucket };

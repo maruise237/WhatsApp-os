@@ -113,7 +113,7 @@ const customFieldSchema = z.object({
     .string()
     .min(1)
     .max(40)
-    .regex(/^[a-z][a-z0-9_]*$/i, "Use letras, números e underscore"),
+    .regex(/^[a-z][a-z0-9_]*$/i, "Utilisez des lettres, des chiffres et le tiret bas"),
   label: z.string().min(1).max(80),
   type: z.enum([
     "text",
@@ -164,7 +164,7 @@ export const platformBrandingSchema = z.object({
   accent_hex: z
     .string()
     .trim()
-    .refine(ehHexValido, { message: "Use uma cor no formato #rrggbb" })
+    .refine(ehHexValido, { message: "Utilisez une couleur au format #rrggbb" })
     .nullable(),
   show_powered_by: z.boolean(),
 });
@@ -194,7 +194,7 @@ export const marcaDaOrganizacaoSchema = z.object({
   accent_hex: z
     .string()
     .trim()
-    .refine(ehHexValido, { message: "Use uma cor no formato #rrggbb" })
+    .refine(ehHexValido, { message: "Utilisez une couleur au format #rrggbb" })
     .nullable(),
 });
 export type MarcaDaOrganizacaoInput = z.infer<typeof marcaDaOrganizacaoSchema>;

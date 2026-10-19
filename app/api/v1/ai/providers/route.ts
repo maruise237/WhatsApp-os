@@ -46,9 +46,9 @@ interface ModeloDoCatalogo {
 export async function GET(): Promise<Response> {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.manager) {
-    return fail("forbidden", "requer papel de gerente ou superior", 403);
+    return fail("forbidden", "nécessite le rôle de manager ou supérieur", 403);
   }
 
   const db = await createClient();
@@ -165,7 +165,7 @@ export async function GET(): Promise<Response> {
         // catálogo; o resolvedor puro não consulta banco.
         ...(capacidade && ponto.exige.tools === true && !capacidade.supports_tools
           ? [
-              `O modelo em uso não sabe usar as ferramentas do CRM — o agente conversa, mas não registra nada no funil.`,
+              `Le modèle utilisé ne sait pas se servir des outils du CRM — l’assistant discute, mais n’enregistre rien dans le tableau.`,
             ]
           : []),
       ],
@@ -195,7 +195,7 @@ const corpoDoPut = z.object({
     .min(1)
     .refine(ehProvedorSuportado, {
       message:
-        "provedor não suportado por esta instalação — escolha um da lista em Agente de IA → Provedores",
+        "fournisseur non pris en charge par cette installation — choisissez-en un dans la liste Assistant IA → Fournisseurs",
     }),
   model_id: z.string().min(1),
   credential_id: z.string().uuid().nullable().optional(),
@@ -206,19 +206,19 @@ const corpoDoPut = z.object({
 export async function PUT(req: NextRequest): Promise<Response> {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.admin) {
-    return fail("forbidden", "requer papel de administrador", 403);
+    return fail("forbidden", "nécessite le rôle d’administrateur", 403);
   }
 
   const parsed = corpoDoPut.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("invalid_body", "corpo inválido", 422, { details: parsed.error.issues });
+    return fail("invalid_body", "corps de requête invalide", 422, { details: parsed.error.issues });
   }
   const corpo = parsed.data;
 
   const ponto = PONTO_POR_ID.get(corpo.purpose);
-  if (!ponto) return fail("ponto_desconhecido", `"${corpo.purpose}" não é um ponto do sistema`, 404);
+  if (!ponto) return fail("ponto_desconhecido", `« ${corpo.purpose} » n’est pas un point du système`, 404);
 
   const db = await createClient();
 
@@ -255,12 +255,12 @@ export async function PUT(req: NextRequest): Promise<Response> {
       .eq("id", corpo.credential_id)
       .eq("organization_id", org.orgId)
       .maybeSingle();
-    if (!cred) return fail("credencial_invalida", "chave não encontrada nesta organização", 422);
+    if (!cred) return fail("credencial_invalida", "clé introuvable dans cette organisation", 422);
     if (cred.provider !== corpo.provider) {
       return fail(
         "credencial_de_outro_provedor",
-        `a chave escolhida é de ${cred.provider}, mas o ponto foi configurado para ${corpo.provider}. ` +
-          `Modelo e chave precisam ser do mesmo provedor, senão a chamada é recusada pelo endpoint.`,
+        `la clé choisie est de ${cred.provider}, mais ce point est configuré pour ${corpo.provider}. ` +
+          `Le modèle et la clé doivent venir du même fournisseur, sinon l’appel est refusé.`,
         422,
       );
     }
@@ -287,7 +287,7 @@ export async function PUT(req: NextRequest): Promise<Response> {
   if (!gravado) {
     // Upsert que casa zero linhas devolve sucesso no PostgREST — a tela diria
     // "salvo" sem nada ter sido gravado.
-    return fail("save_failed", "nada foi gravado — verifique as permissões da organização", 500);
+    return fail("save_failed", "rien n’a été enregistré — vérifiez les permissions de l’organisation", 500);
   }
 
   void audit({

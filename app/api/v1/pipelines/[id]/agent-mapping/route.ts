@@ -160,7 +160,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   try {
     const funil = await lerFunil(supabase, authz.org.orgId, pipelineId);
-    if (!funil) return fail("not_found", "Funil não encontrado.", 404, { requestId });
+    if (!funil) return fail("not_found", "Tableau introuvable.", 404, { requestId });
     return ok(corpo(funil.etapas), { requestId });
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
@@ -179,14 +179,14 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   try {
     json = await req.json();
   } catch {
-    return fail("invalid_request", "Corpo não é JSON válido.", 400, { requestId });
+    return fail("invalid_request", "Le corps de la requête n’est pas un JSON valide.", 400, { requestId });
   }
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return fail(
       "validation_failed",
-      "Envie o mapeamento completo dos sete passos do atendimento.",
+      "Envoyez la correspondance complète des sept étapes de la conversation.",
       422,
       { requestId, details: parsed.error.flatten() },
     );
@@ -202,7 +202,7 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
   // Pipeline de outra org morre AQUI, antes de qualquer escrita: responder 404
   // depois de gravar seria pior que responder 200.
-  if (!funil) return fail("not_found", "Funil não encontrado.", 404, { requestId });
+  if (!funil) return fail("not_found", "Tableau introuvable.", 404, { requestId });
 
   const { mapeamento } = parsed.data;
 
@@ -245,12 +245,12 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     // camada pura existe para evitar, e devolvê-la no 500 a traria de volta.
     const nome = funil.etapas.find((e) => e.id === u.stageId)?.name ?? "escolhida";
     const conflito: Record<string, string> = {
-      "23505": `A etapa «${nome}» já está representando esse passo do atendimento.`,
-      "23514": `A etapa «${nome}» mudou de papel neste funil (ganho ou perda) enquanto você editava.`,
+      "23505": `L’étape « ${nome} » représente déjà ce moment de la conversation.`,
+      "23514": `L’étape « ${nome} » a changé de rôle dans ce tableau (gagné ou perdu) pendant votre modification.`,
     };
     const motivo = conflito[(error as { code?: string }).code ?? ""];
     if (motivo) {
-      return fail("state_conflict", `${motivo} Recarregue a página e tente de novo.`, 409, {
+      return fail("state_conflict", `${motivo} Rechargez la page et réessayez.`, 409, {
         requestId,
       });
     }
@@ -273,7 +273,7 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // inclusive se um update parcial deixou o funil diferente do mapa enviado.
   try {
     const depois = await lerFunil(supabase, orgId, pipelineId);
-    if (!depois) return fail("not_found", "Funil não encontrado.", 404, { requestId });
+    if (!depois) return fail("not_found", "Tableau introuvable.", 404, { requestId });
     return ok(corpo(depois.etapas), { requestId });
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });

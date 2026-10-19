@@ -85,7 +85,7 @@ export function validarNomeDeEtapa(
   etapaId: string | null,
 ): Resultado {
   if (!nome.trim()) {
-    return { ok: false, erro: "Dê um nome à etapa — é o que aparece no topo da coluna." };
+    return { ok: false, erro: "Donnez un nom à la colonne — c’est ce qui s’affiche en haut." };
   }
 
   const chave = chaveDeNome(nome);
@@ -95,7 +95,7 @@ export function validarNomeDeEtapa(
   if (colisao) {
     return {
       ok: false,
-      erro: `Já existe uma etapa chamada «${colisao.name}» neste funil. Escolha outro nome.`,
+      erro: `Une colonne nommée «${colisao.name}» existe déjà dans ce tableau. Choisissez un autre nom.`,
     };
   }
 
@@ -180,7 +180,7 @@ export function validarMarcacao(
 ): Resultado {
   const etapa = etapas.find((e) => e.id === etapaId);
   if (!etapa) {
-    return { ok: false, erro: "Essa etapa não faz parte deste funil. Recarregue a página e tente de novo." };
+    return { ok: false, erro: "Cette colonne ne fait pas partie de ce tableau. Rechargez la page et réessayez." };
   }
 
   const desejado: Record<PassoDeDesfecho, boolean> = {
@@ -191,20 +191,20 @@ export function validarMarcacao(
   if (desejado.won && desejado.lost) {
     return {
       ok: false,
-      erro: `A etapa «${etapa.name}» não pode ser de ganho e de perda ao mesmo tempo — escolha uma.`,
+      erro: `La colonne «${etapa.name}» ne peut pas être à la fois « gagné » et « perdu » — choisissez l’un des deux.`,
     };
   }
 
   for (const passo of ["won", "lost"] as const) {
     const campo = CAMPO_DO_PASSO[passo];
-    const desfecho = passo === "won" ? "de ganho" : "de perda";
+    const desfecho = passo === "won" ? "« gagné »" : "« perdu »";
 
     if (!desejado[passo] && etapa[campo]) {
       return {
         ok: false,
         erro:
-          `A etapa «${etapa.name}» é a etapa ${desfecho} deste funil e o funil precisa de uma. ` +
-          `Marque OUTRA etapa como ${desfecho} — a marcação se muda, não se apaga.`,
+          `La colonne «${etapa.name}» est la colonne ${desfecho} de ce tableau, et le tableau en a besoin d’une. ` +
+          `Marquez une AUTRE colonne comme ${desfecho} — le marquage se déplace, il ne se supprime pas.`,
       };
     }
 
@@ -212,8 +212,8 @@ export function validarMarcacao(
       return {
         ok: false,
         erro:
-          `A etapa «${etapa.name}» representa «${rotuloDoPasso(etapa.agent_stage_hint)}» no atendimento ` +
-          `do assistente, então não pode ser a etapa ${desfecho}. Mude o mapeamento do assistente antes.`,
+          `La colonne «${etapa.name}» correspond à «${rotuloDoPasso(etapa.agent_stage_hint)}» pour ` +
+          `l’assistant, elle ne peut donc pas être la colonne ${desfecho}. Modifiez d’abord la correspondance de l’assistant.`,
       };
     }
   }
@@ -319,7 +319,7 @@ export function validarArquivamento(
 ): ResultadoDeArquivamento {
   const etapa = etapas.find((e) => e.id === etapaId);
   if (!etapa) {
-    return { ok: false, erro: "Essa etapa não faz parte deste funil. Recarregue a página e tente de novo." };
+    return { ok: false, erro: "Cette colonne ne fait pas partie de ce tableau. Rechargez la page et réessayez." };
   }
 
   const restantes = ativas(etapas).filter((e) => e.id !== etapaId);
@@ -327,19 +327,19 @@ export function validarArquivamento(
     return {
       ok: false,
       erro:
-        `«${etapa.name}» é a única etapa deste funil. Um funil sem etapa nenhuma some do quadro e não ` +
-        `recebe negócio novo — crie outra etapa antes de arquivar esta.`,
+        `«${etapa.name}» est la seule colonne de ce tableau. Un tableau sans colonne disparaît et ne ` +
+        `reçoit plus de nouvelles affaires — créez une autre colonne avant d’archiver celle-ci.`,
     };
   }
 
   for (const passo of ["won", "lost"] as const) {
     if (etapa[CAMPO_DO_PASSO[passo]]) {
-      const desfecho = passo === "won" ? "de ganho" : "de perda";
+      const desfecho = passo === "won" ? "« gagné »" : "« perdu »";
       return {
         ok: false,
         erro:
-          `«${etapa.name}» é a etapa ${desfecho} deste funil. Marque OUTRA etapa como ${desfecho} antes ` +
-          `de arquivar esta — senão os negócios continuariam indo parar numa coluna fora do quadro.`,
+          `«${etapa.name}» est la colonne ${desfecho} de ce tableau. Marquez une AUTRE colonne comme ${desfecho} avant ` +
+          `d’archiver celle-ci — sinon les affaires continueraient d’atterrir dans une colonne hors du tableau.`,
       };
     }
   }
@@ -347,7 +347,7 @@ export function validarArquivamento(
   if (destinoId === etapaId) {
     return {
       ok: false,
-      erro: `Os negócios de «${etapa.name}» precisam ir para outra etapa, não para ela mesma.`,
+      erro: `Les affaires de «${etapa.name}» doivent aller dans une autre colonne, pas dans la même.`,
     };
   }
 
@@ -356,8 +356,8 @@ export function validarArquivamento(
       return {
         ok: false,
         erro:
-          `A etapa «${etapa.name}» tem ${negocios} ${negocios === 1 ? "negócio" : "negócios"}. ` +
-          `Escolha para qual etapa eles vão antes de arquivá-la.`,
+          `La colonne «${etapa.name}» contient ${negocios} ${negocios === 1 ? "affaire" : "affaires"}. ` +
+          `Choisissez vers quelle colonne les déplacer avant de l’archiver.`,
         // A ÚNICA recusa que a tela troca por uma pergunta em vez de mostrar.
         precisaDestino: true,
       };
@@ -366,7 +366,7 @@ export function validarArquivamento(
     if (!destino) {
       return {
         ok: false,
-        erro: `A etapa escolhida para receber os negócios de «${etapa.name}» não está mais no funil. Recarregue a página.`,
+        erro: `La colonne choisie pour recevoir les affaires de «${etapa.name}» n’est plus dans le tableau. Rechargez la page.`,
       };
     }
 
@@ -379,12 +379,12 @@ export function validarArquivamento(
     // português. Arquivar uma etapa é organizar o quadro, não fechar negócio.
     for (const passo of ["won", "lost"] as const) {
       if (destino[CAMPO_DO_PASSO[passo]]) {
-        const desfecho = passo === "won" ? "de ganho" : "de perda";
+        const desfecho = passo === "won" ? "« gagné »" : "« perdu »";
         return {
           ok: false,
           erro:
-            `«${destino.name}» é a etapa ${desfecho} deste funil: mandar os negócios de «${etapa.name}» ` +
-            `para lá os daria por encerrados. Escolha uma etapa em aberto.`,
+            `«${destino.name}» est la colonne ${desfecho} de ce tableau : y envoyer les affaires de «${etapa.name}» ` +
+            `les clôturerait. Choisissez une colonne encore ouverte.`,
         };
       }
     }

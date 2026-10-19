@@ -124,7 +124,7 @@ type Recusa = { readonly codigo: string; readonly mensagem: string; readonly sta
 async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recusa: Recusa }> {
   const user = await loadAuthUser();
   if (!user) {
-    return { recusa: { codigo: "unauthenticated", mensagem: "Faça login.", status: 401 } };
+    return { recusa: { codigo: "unauthenticated", mensagem: "Connectez-vous.", status: 401 } };
   }
 
   if (escopo === "instalacao") {
@@ -132,7 +132,7 @@ async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recu
       return {
         recusa: {
           codigo: "forbidden_role",
-          mensagem: "Só quem administra a instalação pode trocar o logo do sistema.",
+          mensagem: "Seul l’administrateur de l’installation peut changer le logo du système.",
           status: 403,
         },
       };
@@ -146,7 +146,7 @@ async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recu
       return {
         recusa: {
           codigo: "mfa_required",
-          mensagem: "Confirme o segundo fator nesta sessão para trocar o logo.",
+          mensagem: "Confirmez la double authentification dans cette session pour changer le logo.",
           status: 403,
         },
       };
@@ -157,14 +157,14 @@ async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recu
   const org = await resolveActiveOrg(user);
   if (!org) {
     return {
-      recusa: { codigo: "forbidden_tenant", mensagem: "Sem organização ativa.", status: 403 },
+      recusa: { codigo: "forbidden_tenant", mensagem: "Aucune organisation active.", status: 403 },
     };
   }
   if (!user.is_platform_admin && ROLE_RANK[org.role] < ROLE_RANK.admin) {
     return {
       recusa: {
         codigo: "forbidden_role",
-        mensagem: "Só quem administra a empresa pode trocar o logo dela.",
+        mensagem: "Seul l’administrateur de l’entreprise peut changer son logo.",
         status: 403,
       },
     };
@@ -175,7 +175,7 @@ async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recu
     return {
       recusa: {
         codigo: "mfa_required",
-        mensagem: "Confirme o segundo fator nesta sessão para trocar o logo.",
+        mensagem: "Confirmez la double authentification dans cette session pour changer le logo.",
         status: 403,
       },
     };
@@ -228,7 +228,7 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
         codigo: error.code,
         detalhe: error.message,
       });
-      return { codigo: "internal_error", mensagem: "Erro ao gravar o logo.", status: 500 };
+      return { codigo: "internal_error", mensagem: "Erreur lors de l’enregistrement du logo.", status: 500 };
     }
     // A troca aparece no próximo render sem esperar o TTL de 30s do memo.
     //
@@ -254,7 +254,7 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
     if (error.code === "42501") {
       return {
         codigo: "forbidden_role",
-        mensagem: "Só quem administra a empresa pode trocar o logo dela.",
+        mensagem: "Seul l’administrateur de l’entreprise peut changer son logo.",
         status: 403,
       };
     }
@@ -262,7 +262,7 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
       logger.error("[marca/logo] caminho recusado pelo banco", { detalhe: error.message });
       return {
         codigo: "validation_failed",
-        mensagem: "O caminho do logo não pertence a esta empresa.",
+        mensagem: "Le chemin du logo n’appartient pas à cette entreprise.",
         status: 422,
       };
     }
@@ -270,12 +270,12 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
       codigo: error.code,
       detalhe: error.message,
     });
-    return { codigo: "internal_error", mensagem: "Erro ao gravar o logo.", status: 500 };
+    return { codigo: "internal_error", mensagem: "Erreur lors de l’enregistrement du logo.", status: 500 };
   }
   // A CATRACA DA ISSUE #144: `data` é o `row_count`. 0 significa que a
   // organização não casou o filtro, e sem esta linha a tela diria "salvo".
   if (data !== 1) {
-    return { codigo: "internal_error", mensagem: "O logo não foi gravado.", status: 500 };
+    return { codigo: "internal_error", mensagem: "Le logo n’a pas été enregistré.", status: 500 };
   }
   return null;
 }
@@ -360,7 +360,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const form = await req.formData().catch(() => null);
   const escopoLido = escopoSchema.safeParse(form?.get("escopo"));
   if (!escopoLido.success) {
-    return fail("validation_failed", "Campo 'escopo' inválido.", 422, { requestId });
+    return fail("validation_failed", "Champ « escopo » invalide.", 422, { requestId });
   }
 
   const aberto = await abrirContexto(escopoLido.data);
@@ -375,7 +375,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     JANELA_SEGUNDOS,
   );
   if (!limite.allowed) {
-    return fail("rate_limited", "Muitas trocas de logo seguidas. Tente em alguns minutos.", 429, {
+    return fail("rate_limited", "Trop de changements de logo d’affilée. Réessayez dans quelques minutes.", 429, {
       requestId,
       headers: { "Retry-After": String(JANELA_SEGUNDOS) },
     });
@@ -383,12 +383,12 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const file = form?.get("file");
   if (!(file instanceof File)) {
-    return fail("validation_failed", "Campo 'file' (multipart) obrigatório.", 422, { requestId });
+    return fail("validation_failed", "Le champ « file » (multipart) est obligatoire.", 422, { requestId });
   }
   if (file.size > TAMANHO_MAXIMO_DO_LOGO) {
     return fail(
       "payload_too_large",
-      "O logo precisa ter até 512 KB. Arquivo maior vai inteiro para o navegador em toda página.",
+      "Le logo doit faire 512 Ko maximum. Un fichier plus lourd est chargé en entier par le navigateur sur chaque page.",
       413,
       { requestId },
     );
@@ -399,7 +399,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (pareceSvg(bytes)) {
     return fail(
       "logo_svg_recusado",
-      "SVG não é aceito como logo: ele pode executar código quando aberto direto do endereço da imagem. Exporte o mesmo arquivo em PNG (fundo transparente) ou JPG.",
+      "Le SVG n’est pas accepté comme logo : il peut exécuter du code quand on l’ouvre directement depuis l’adresse de l’image. Exportez le même fichier en PNG (fond transparent) ou en JPG.",
       415,
       { requestId },
     );
@@ -407,7 +407,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const tipo = farejarTipo(bytes);
   if (!tipo) {
-    return fail("unsupported_media_type", "O logo precisa ser PNG ou JPG.", 415, {
+    return fail("unsupported_media_type", "Le logo doit être au format PNG ou JPG.", 415, {
       requestId,
       // O que o cliente DISSE que mandou entra aqui e em lugar nenhum da decisão:
       // é o campo que o atacante escolhe, e guardá-lo é o que permite ver a
@@ -424,7 +424,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .upload(caminho, bytes, { contentType: tipo, upsert: false });
   if (erroUp) {
     logger.error("[marca/logo] upload falhou", { detalhe: erroUp.message, requestId });
-    return fail("internal_error", "Erro ao subir o logo.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’envoi du logo.", 500, { requestId });
   }
 
   const recusa = await gravarCaminho(ctx, caminho);
@@ -457,7 +457,7 @@ export async function DELETE(req: NextRequest): Promise<Response> {
 
   const escopoLido = escopoSchema.safeParse(new URL(req.url).searchParams.get("escopo"));
   if (!escopoLido.success) {
-    return fail("validation_failed", "Parâmetro 'escopo' inválido.", 422, { requestId });
+    return fail("validation_failed", "Paramètre « escopo » invalide.", 422, { requestId });
   }
 
   const aberto = await abrirContexto(escopoLido.data);
@@ -472,7 +472,7 @@ export async function DELETE(req: NextRequest): Promise<Response> {
     JANELA_SEGUNDOS,
   );
   if (!limite.allowed) {
-    return fail("rate_limited", "Muitas trocas de logo seguidas. Tente em alguns minutos.", 429, {
+    return fail("rate_limited", "Trop de changements de logo d’affilée. Réessayez dans quelques minutes.", 429, {
       requestId,
       headers: { "Retry-After": String(JANELA_SEGUNDOS) },
     });

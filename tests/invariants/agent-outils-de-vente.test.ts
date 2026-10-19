@@ -140,14 +140,23 @@ describe("vente conduite par l'agent, sur le schéma réel", () => {
     expect(orders).toEqual([{ status: "en_attente_paiement", paid_at: null }]);
   });
 
-  it("une autre organisation ne touche pas cette conversation", async () => {
-    const intrus = { tenantId: OTHER_ORG, conversationId: CONV, jobId: "job-intrus" };
-    expect(await applyCreateOrderDraft(pool, intrus, { items: [{ product_id: OTHER_PRODUCT, quantity: 1 }] })).toMatchObject({
-      ok: false,
-    });
-    expect(await applyRequestPaymentProof(pool, intrus, {})).toMatchObject({ ok: false, error: { code: "order_not_found" } });
-    expect(await applyRegisterPaymentProof(pool, intrus, {})).toMatchObject({ ok: false, error: { code: "order_not_found" } });
-    const { rows } = await pool.query("select count(*)::int as n from sales_orders where organization_id = $1", [OTHER_ORG]);
-    expect(rows[0].n).toBe(0);
-  });
-});
+  it("après validation humaine, la commande va jusqu'à « livrée » sans perdre la trace du paiement (0182)", async () => {
+    const { rows: u } = await pool.query(
+      `insert into auth.users (email) values ('vendeuse-0182@test.local') returning id`,
+    );
+    const userId = u[0].id as string;
+    await pool.query(`insert into neon_auth."user" (id, email) values ($1, 'vendeuse-0182@test.local') on conflict do nothing`, [userId]);
+    const { rows: o } = await pool.query("select id from sales_orders where conversation_id = $1", [CONV]);
+    const id = o[0].id as string;
+    await pool.query(`update sales_orders set status = 'payée', paid_at = now(), paid_by_user_id = $2 where id = $1`, [id, userId]);
+    await pool.query(`update sales_orders set status = 'a_livrer' where id = $1`, [id]);
+    await pool.query(`update sales_orders set status = 'livree' where id = $1`, [id]);
+    const { rows } = await pool.query("select status, paid_at is not null as trace from sales_orders where id = $1", [id]);
+    expect(rows[0]).toEqual({ status: "livree", trace: true });
+
+    // Ce qui reste interdit : payée sans auteur, et une date de paiement sur une commande non payée.
+    await expect(
+      pool.query(`update sales_orders set status = 'payée', paid_by_user_id = null where id = $1`, [id]),
+    ).rejects.toThrow(/sales_orders_payee_a_un_auteur/);
+    await expect(
+      pool.query(`update sales_orders set status = '

@@ -32,7 +32,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     Object.fromEntries(new URL(req.url).searchParams.entries()),
   );
   if (!parsed.success) {
-    return fail("validation_failed", "Query inválida.", 422, {
+    return fail("validation_failed", "Requête invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -44,6 +44,6 @@ export async function GET(req: NextRequest): Promise<Response> {
     });
     return ok({ cases: chamados, open_count: abertos }, { requestId });
   } catch {
-    return fail("internal_error", "Falha ao carregar os casos.", 500, { requestId });
+    return fail("internal_error", "Impossible de charger les dossiers.", 500, { requestId });
   }
 }

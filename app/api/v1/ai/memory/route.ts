@@ -65,7 +65,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     .eq("organization_id", org.orgId)
     .order("version_number", { ascending: false });
   if (versionsErr) {
-    return fail("internal_error", "Erro ao carregar versões da memória.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des versions de la mémoire.", 500, { requestId });
   }
 
   const { data: entries, error: entriesErr } = await admin
@@ -75,7 +75,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     .neq("status", "proposed")
     .order("created_at", { ascending: false });
   if (entriesErr) {
-    return fail("internal_error", "Erro ao carregar entradas da memória.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des entrées de la mémoire.", 500, { requestId });
   }
 
   return ok({ document, versions: versions ?? [], entries: entries ?? [] }, { requestId });
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json().catch(() => null);
   const parsed = postSchema.safeParse(body);
   if (!parsed.success) {
-    return fail("validation_failed", "content é obrigatório.", 422, {
+    return fail("validation_failed", "content est obligatoire.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -103,8 +103,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     return fail(
       "internal_error",
       pub.erro === "versao"
-        ? "Erro ao publicar versão da memória."
-        : "Erro ao ativar a versão da memória.",
+        ? "Erreur lors de la publication de la version de la mémoire."
+        : "Erreur lors de l’activation de la version de la mémoire.",
       500,
       { requestId },
     );

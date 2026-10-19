@@ -70,7 +70,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   const { data, error } = await query.order("created_at", { ascending: false });
-  if (error) return fail("internal_error", "Erro ao listar agents.", 500, { requestId });
+  if (error) return fail("internal_error", "Erreur lors du chargement des assistants.", 500, { requestId });
 
   return ok(data ?? [], { requestId });
 }
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const wantsMcp =
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (wantsMcp) {
     const parsed = agentMcpCreateSchema.safeParse(rawBody);
     if (!parsed.success) {
-      return fail("validation_failed", "Campos inválidos.", 422, {
+      return fail("validation_failed", "Champs invalides.", 422, {
         requestId,
         details: parsed.error.flatten(),
       });
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       .single();
 
     if (agentErr || !agentRow) {
-      return fail("internal_error", "Erro ao criar agent.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de la création de l’assistant.", 500, { requestId });
     }
 
     const { data: versionRow, error: versionErr } = await admin
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         .from("ai_agents")
         .update({ archived_at: new Date().toISOString() })
         .eq("id", agentRow.id);
-      return fail("internal_error", "Erro ao criar versão inicial.", 500, {
+      return fail("internal_error", "Erreur lors de la création de la version initiale.", 500, {
         requestId,
         details: { agent_rolled_back: true, db_error: versionErr?.message },
       });
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   // Legacy path — kind='rag_bot' (default DB constraint).
   const parsed = agentCreateSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -214,7 +214,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .single();
 
   if (error || !data) {
-    return fail("internal_error", "Erro ao criar agent.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la création de l’assistant.", 500, { requestId });
   }
   return ok(data, { status: 201, requestId });
 }

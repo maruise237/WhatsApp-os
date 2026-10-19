@@ -49,9 +49,9 @@ export async function contarCanaisDaOrg(orgId: string) {
 export async function GET(req: NextRequest) {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.manager) {
-    return fail("forbidden", "requer papel de gerente ou superior", 403);
+    return fail("forbidden", "nécessite le rôle de manager ou supérieur", 403);
   }
 
   const supabase = await createClient();
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
   // A partir daqui custa dinheiro: uma geração real de um token. Nunca sai de
   // graça num GET que a tela chama sozinha.
   if (ROLE_RANK[org.role] < ROLE_RANK.admin) {
-    return fail("forbidden", "provar a chave requer papel de administrador", 403);
+    return fail("forbidden", "tester la clé nécessite le rôle d’administrateur", 403);
   }
 
   const { origemDaChave, modeloCurado, provedor, chaveEmVerificacao } = retrato.inteligencia;
@@ -82,10 +82,10 @@ export async function GET(req: NextRequest) {
         feita: false,
         ...(aindaVerificando ? { aindaVerificando: true } : {}),
         motivo: aindaVerificando
-          ? "A chave acabou de ser cadastrada e ainda está sendo conferida."
+          ? "La clé vient d’être ajoutée et est encore en cours de vérification."
           : origemDaChave === "nenhuma"
-            ? "Não há chave para testar."
-            : "Não há modelo desta empresa de IA nesta instalação ainda.",
+            ? "Aucune clé à tester."
+            : "Aucun modèle de ce fournisseur d’IA n’est encore disponible sur cette installation.",
       },
     });
   }
@@ -115,8 +115,8 @@ export async function GET(req: NextRequest) {
         ...retrato,
         prova:
           reason === "not_validated"
-            ? { feita: false, aindaVerificando: true, motivo: "A chave acabou de ser cadastrada e ainda está sendo conferida." }
-            : { feita: false, motivo: "Não consegui abrir a chave cadastrada para testá-la." },
+            ? { feita: false, aindaVerificando: true, motivo: "La clé vient d’être ajoutée et est encore en cours de vérification." }
+            : { feita: false, motivo: "Impossible d’ouvrir la clé enregistrée pour la tester." },
       });
     }
   } else {
@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
   if (!apiKey) {
     return ok({
       ...retrato,
-      prova: { feita: false, motivo: "Não há chave para testar." },
+      prova: { feita: false, motivo: "Aucune clé à tester." },
     });
   }
 

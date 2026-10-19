@@ -94,9 +94,14 @@ export async function applySearchCatalog(db: pg.Pool, scope: SalesToolScope, raw
   const query = parsed.data.query?.trim() ?? '';
   const params: unknown[] = [scope.tenantId];
   let filter = '';
+  // Le titre d'abord : « robe » doit sortir la robe avant le foulard « assorti
+  // aux robes » — sinon le modèle, qui prend volontiers le premier résultat,
+  // commande le mauvais produit (mesuré sur la pile locale).
+  let rank = '';
   if (query !== '') {
     params.push(likePattern(query));
     filter = 'and (title ilike $2 or coalesce(description, \'\') ilike $2)';
+    rank = '(title ilike $2) desc,';
   }
   const { rows } = await db.query<{
     id: string;
@@ -109,7 +114,7 @@ export async function applySearchCatalog(db: pg.Pool, scope: SalesToolScope, raw
     `select id, title, description, price_cents, currency, stock
        from products
       where organization_id = $1 and is_active = true ${filter}
-      order by (stock > 0) desc, updated_at desc
+      order by ${rank} (stock > 0) desc, updated_at desc
       limit 10`,
     params,
   );

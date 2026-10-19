@@ -33,9 +33,12 @@ export function Stepper({ passos }: { passos: PassoVisivel[] }) {
   const pathname = usePathname() ?? "";
   const idx = passos.findIndex((p) => pathname.includes(`/${p.segmento}`));
 
+  const atual = idx >= 0 ? passos[idx] : undefined;
+
   return (
+    <div className="w-full">
     <ol
-      aria-label="onboarding steps"
+      aria-label="Étapes de configuration"
       className="flex w-full items-center justify-between gap-2 px-2 py-3"
     >
       {passos.map((p, i) => {
@@ -75,5 +78,14 @@ export function Stepper({ passos }: { passos: PassoVisivel[] }) {
         );
       })}
     </ol>
+    {/* En dessous de `sm` les libellés sont masqués (voir plus haut) : sans
+        cette ligne, le mobile ne voyait que des numéros et ne savait ni où il
+        en était, ni combien il en restait. */}
+    {atual ? (
+      <p aria-hidden className="px-2 pb-2 text-center text-xs text-muted-foreground sm:hidden">
+        Étape {idx + 1} sur {passos.length} · <span className="font-medium text-foreground">{atual.rotulo}</span>
+      </p>
+    ) : null}
+    </div>
   );
 }

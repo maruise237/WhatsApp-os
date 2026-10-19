@@ -17,20 +17,20 @@ export const TOOLS_ATENDIMENTO = declararTools([
   {
     name: "crm_search_contacts",
     category: "read",
-    rotulo: "Procurar cliente",
+    rotulo: "Rechercher un client",
     explicacao:
-      "Encontra um cliente pelo nome, telefone ou e-mail, para o agente saber com quem está falando antes de responder.",
-    oQueToca: "Cadastro de clientes",
+      "Retrouve un client par son nom, son téléphone ou son e-mail, pour que l’assistant sache à qui il parle avant de répondre.",
+    oQueToca: "Fichier clients",
     risco: "seguro",
     pacotes: ["atender", "vender"],
   },
   {
     name: "crm_get_contact",
     category: "read",
-    rotulo: "Ver ficha do cliente",
+    rotulo: "Voir la fiche du client",
     explicacao:
-      "Abre a ficha completa de um cliente: dados de contato, histórico e por onde ele chegou até a empresa.",
-    oQueToca: "Cadastro de clientes",
+      "Ouvre la fiche complète d’un client : coordonnées, historique et la façon dont il a connu l’entreprise.",
+    oQueToca: "Fichier clients",
     risco: "seguro",
     pacotes: ["atender", "vender"],
   },
@@ -47,10 +47,10 @@ export const TOOLS_ATENDIMENTO = declararTools([
     // Esta linha é o encontro de dois trabalhos que não se viram: a remoção do
     // campo veio pela branch do Índice de Atrito e a ferramenta veio pelo #194.
     // Nenhum dos dois gerou conflito de texto — o `tsc` é que reprovou no merge.
-    rotulo: "Anotar dado que o cliente informou",
+    rotulo: "Noter une info donnée par le client",
     explicacao:
-      "Quando o cliente diz o e-mail, o nome ou o telefone dele na conversa, guarda essa informação para uma pessoa conferir antes de entrar na ficha.",
-    oQueToca: "Cadastro de clientes",
+      "Quand le client donne son e-mail, son nom ou son téléphone dans la conversation, garde cette info pour qu’une personne la vérifie avant de l’ajouter à la fiche.",
+    oQueToca: "Fichier clients",
     // `atencao`, não `critico`: nada sai para o cliente e nada entra na ficha
     // por conta dela — o peso mora na confirmação, que é humana. Marcar
     // `critico` aqui faria a tela pedir cerimônia para uma anotação.
@@ -71,40 +71,40 @@ export const TOOLS_ATENDIMENTO = declararTools([
   {
     name: "crm_list_conversations",
     category: "read",
-    rotulo: "Listar conversas",
+    rotulo: "Lister les conversations",
     explicacao:
-      "Mostra as conversas em andamento, quem está cuidando de cada uma e a posição de cada cliente na fila de espera.",
-    oQueToca: "Atendimento",
+      "Affiche les conversations en cours, qui s’occupe de chacune et la place de chaque client dans la file d’attente.",
+    oQueToca: "Service client",
     risco: "seguro",
     pacotes: ["atender", "escalar"],
   },
   {
     name: "crm_get_conversation",
     category: "read",
-    rotulo: "Ver uma conversa",
+    rotulo: "Voir une conversation",
     explicacao:
-      "Abre os detalhes de uma conversa: quem está atendendo, marcadores aplicados e há quanto tempo o cliente espera.",
-    oQueToca: "Atendimento",
+      "Ouvre le détail d’une conversation : qui s’en occupe, les étiquettes posées et depuis combien de temps le client attend.",
+    oQueToca: "Service client",
     risco: "seguro",
     pacotes: ["atender", "escalar"],
   },
   {
     name: "crm_get_conversation_history",
     category: "read",
-    rotulo: "Ler o histórico da conversa",
+    rotulo: "Lire l’historique de la conversation",
     explicacao:
-      "Lê as mensagens já trocadas com o cliente, para o agente responder sem pedir que ele repita o que já contou.",
-    oQueToca: "Atendimento",
+      "Lit les messages déjà échangés avec le client, pour que l’assistant réponde sans lui faire répéter ce qu’il a déjà dit.",
+    oQueToca: "Service client",
     risco: "seguro",
     pacotes: ["atender"],
   },
   {
     name: "crm_send_whatsapp_message",
     category: "write",
-    rotulo: "Enviar mensagem no WhatsApp",
+    rotulo: "Envoyer un message WhatsApp",
     explicacao:
-      "Envia uma mensagem de WhatsApp para o cliente. Ele recebe de verdade, no celular dele, e não dá para desfazer.",
-    oQueToca: "Atendimento",
+      "Envoie un message WhatsApp au client. Il le reçoit vraiment sur son téléphone, et on ne peut pas l’annuler.",
+    oQueToca: "Service client",
     risco: "critico",
     pacotes: ["atender"],
   },

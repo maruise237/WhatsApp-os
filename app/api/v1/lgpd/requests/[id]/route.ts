@@ -48,7 +48,7 @@ export async function GET(
     return fail("internal_error", reqErr.message, 500, { requestId });
   }
   if (!request) {
-    return fail("not_found", "Solicitação não encontrada.", 404, { requestId });
+    return fail("not_found", "Demande introuvable.", 404, { requestId });
   }
 
   // Fetch audit trail entries for this request

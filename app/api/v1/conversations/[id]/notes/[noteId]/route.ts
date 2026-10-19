@@ -35,10 +35,10 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
     .eq("conversation_id", id)
     .eq("organization_id", org.orgId)
     .maybeSingle();
-  if (!note) return fail("not_found", "Nota não encontrada.", 404, { requestId });
+  if (!note) return fail("not_found", "Note introuvable.", 404, { requestId });
 
   if (note.created_by_user_id !== user.id && ROLE_RANK[org.role] < ROLE_RANK.manager) {
-    return fail("forbidden", "Só o autor ou manager+ pode apagar esta nota.", 403, { requestId });
+    return fail("forbidden", "Seul l’auteur ou un manager (ou plus) peut supprimer cette note.", 403, { requestId });
   }
 
   const { data: deleted, error } = await supabase
@@ -49,8 +49,8 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
     .eq("organization_id", org.orgId)
     .select("id")
     .maybeSingle();
-  if (error) return fail("internal_error", "Erro ao excluir nota.", 500, { requestId });
-  if (!deleted) return fail("not_found", "Nota não encontrada.", 404, { requestId });
+  if (error) return fail("internal_error", "Erreur lors de la suppression de la note.", 500, { requestId });
+  if (!deleted) return fail("not_found", "Note introuvable.", 404, { requestId });
 
   void audit({
     action: "conversation.note_deleted",

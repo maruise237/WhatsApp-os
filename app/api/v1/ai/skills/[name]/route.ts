@@ -34,7 +34,7 @@ export async function DELETE(
   const { name: rawName } = await ctx.params;
   const nameParsed = nameSchema.safeParse(decodeURIComponent(rawName));
   if (!nameParsed.success) {
-    return fail("validation_failed", "Nome de skill inválido.", 422, { requestId });
+    return fail("validation_failed", "Nom de compétence invalide.", 422, { requestId });
   }
   const name = nameParsed.data;
 
@@ -47,10 +47,10 @@ export async function DELETE(
     .select("name");
 
   if (error) {
-    return fail("internal_error", "Erro ao desinstalar a skill.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la désinstallation de la compétence.", 500, { requestId });
   }
   if (!deleted || deleted.length === 0) {
-    return fail("not_found", "Skill não está instalada nesta organização.", 404, { requestId });
+    return fail("not_found", "Cette compétence n’est pas installée dans cette organisation.", 404, { requestId });
   }
 
   await audit({

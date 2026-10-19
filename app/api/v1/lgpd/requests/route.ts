@@ -63,7 +63,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   });
   const parsed = querySchema.safeParse(rawParams);
   if (!parsed.success) {
-    return fail("validation_failed", "Parâmetros inválidos.", 422, {
+    return fail("validation_failed", "Paramètres invalides.", 422, {
       details: parsed.error.flatten(),
       requestId,
     });

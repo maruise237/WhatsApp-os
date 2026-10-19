@@ -39,7 +39,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     Object.fromEntries(new URL(req.url).searchParams.entries()),
   );
   if (!parsed.success) {
-    return fail("validation_failed", "Query inválida.", 422, {
+    return fail("validation_failed", "Requête invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -54,6 +54,6 @@ export async function GET(req: NextRequest): Promise<Response> {
     });
     return ok(radar, { requestId });
   } catch {
-    return fail("internal_error", "Falha ao carregar o radar.", 500, { requestId });
+    return fail("internal_error", "Impossible de charger le radar.", 500, { requestId });
   }
 }

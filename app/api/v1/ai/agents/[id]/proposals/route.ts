@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("agent", { requestId, resource: "flywheel_proposals" });
@@ -35,7 +35,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
     Object.fromEntries(new URL(req.url).searchParams.entries()),
   );
   if (!parsed.success) {
-    return fail("validation_failed", "Query inválida.", 422, {
+    return fail("validation_failed", "Requête invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("organization_id", org.orgId)
     .maybeSingle();
   if (!agent) {
-    return fail("not_found", "Agente não encontrado nesta organização.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable dans cette organisation.", 404, { requestId });
   }
 
   let query = admin
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
 
   const { data, error } = await query;
   if (error) {
-    return fail("internal_error", "Falha ao carregar as propostas.", 500, { requestId });
+    return fail("internal_error", "Impossible de charger les propositions.", 500, { requestId });
   }
   return ok({ items: data ?? [] }, { requestId });
 }

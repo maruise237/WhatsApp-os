@@ -78,7 +78,7 @@ export async function preencherModeloDeMensagem(
       "not_found",
       undefined,
       deps.requestId,
-      "Essa resposta pronta não existe aqui.",
+      "Cette réponse toute prête n’existe pas ici.",
     );
   }
 

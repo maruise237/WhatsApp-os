@@ -22,25 +22,24 @@ import { useT } from "@/hooks/i18n/useT";
  * identificador é do sistema, o que ela reconhece é a cidade.
  */
 const FUSOS: { id: string; cidade: string }[] = [
-  { id: "America/Sao_Paulo", cidade: "São Paulo, Rio, Brasília, Sul e Sudeste" },
-  { id: "America/Recife", cidade: "Recife, Salvador, Fortaleza e Nordeste" },
-  { id: "America/Belem", cidade: "Belém e Pará" },
-  { id: "America/Manaus", cidade: "Manaus e Amazonas" },
-  { id: "America/Cuiaba", cidade: "Cuiabá e Mato Grosso" },
-  { id: "America/Rio_Branco", cidade: "Rio Branco e Acre" },
-  { id: "America/Argentina/Buenos_Aires", cidade: "Buenos Aires" },
-  { id: "Europe/Lisbon", cidade: "Lisboa" },
-  { id: "Europe/Madrid", cidade: "Madri" },
-  { id: "America/New_York", cidade: "Nova York" },
-  { id: "America/Los_Angeles", cidade: "Los Angeles" },
-  { id: "UTC", cidade: "Outro (horário universal)" },
+  { id: "Africa/Douala", cidade: "Douala, Yaoundé, Libreville, Kinshasa (heure d’Afrique centrale)" },
+  { id: "Africa/Abidjan", cidade: "Abidjan, Dakar, Bamako, Lomé, Ouagadougou" },
+  { id: "Africa/Lagos", cidade: "Lagos, Cotonou, Niamey, N’Djamena" },
+  { id: "Africa/Casablanca", cidade: "Casablanca, Rabat" },
+  { id: "Africa/Tunis", cidade: "Tunis, Alger" },
+  { id: "Africa/Johannesburg", cidade: "Lubumbashi, Kigali, Bujumbura, Johannesburg" },
+  { id: "Indian/Antananarivo", cidade: "Antananarivo, Nairobi, Djibouti" },
+  { id: "Europe/Paris", cidade: "Paris, Bruxelles, Genève" },
+  { id: "America/Montreal", cidade: "Montréal, Québec" },
+  { id: "America/Sao_Paulo", cidade: "São Paulo, Rio, Brasília" },
+  { id: "UTC", cidade: "Autre (temps universel)" },
 ];
 
 export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
   const t = useT();
   const [displayName, setDisplayName] = useState(defaultOrgName);
   const [oQueFaz, setOQueFaz] = useState("");
-  const [timezone, setTimezone] = useState("America/Sao_Paulo");
+  const [timezone, setTimezone] = useState("Africa/Douala");
   const [accepted, setAccepted] = useState(false);
   const [pending, startTransition] = useTransition();
 

@@ -125,7 +125,7 @@ export function validarMapeamento(
     const etapa = etapas.find((e) => e.id === stageId);
     if (!etapa) {
       erros.push(
-        `L’étape choisie pour «${rotulo}» ne fait pas partie de cet entonnoir. Rechargez la page et choisissez à nouveau.`,
+        `L’étape choisie pour «${rotulo}» ne fait pas partie de ce tableau. Rechargez la page et choisissez à nouveau.`,
       );
       continue;
     }
@@ -146,19 +146,19 @@ export function validarMapeamento(
     // mesmo lugar do funil.
     if (passo === "won" && !etapa.is_won) {
       erros.push(
-        `L’étape «${etapa.name}» n’est pas l’étape de conclusion (gagné) de cet entonnoir, elle ne peut donc pas représenter «${rotulo}».`,
+        `L’étape «${etapa.name}» n’est pas l’étape de conclusion (gagné) de ce tableau, elle ne peut donc pas représenter «${rotulo}».`,
       );
     } else if (passo === "lost" && !etapa.is_lost) {
       erros.push(
-        `L’étape «${etapa.name}» n’est pas l’étape de perte de cet entonnoir, elle ne peut donc pas représenter «${rotulo}».`,
+        `L’étape «${etapa.name}» n’est pas l’étape de perte de ce tableau, elle ne peut donc pas représenter «${rotulo}».`,
       );
     } else if (etapa.is_won && passo !== "won") {
       erros.push(
-        `L’étape «${etapa.name}» est l’étape gagnée de cet entonnoir, elle ne peut donc représenter que «${ROTULO_DO_PASSO.won}».`,
+        `L’étape «${etapa.name}» est l’étape gagnée de ce tableau, elle ne peut donc représenter que «${ROTULO_DO_PASSO.won}».`,
       );
     } else if (etapa.is_lost && passo !== "lost") {
       erros.push(
-        `L’étape «${etapa.name}» est l’étape de perte de cet entonnoir, elle ne peut donc représenter que «${ROTULO_DO_PASSO.lost}».`,
+        `L’étape «${etapa.name}» est l’étape de perte de ce tableau, elle ne peut donc représenter que «${ROTULO_DO_PASSO.lost}».`,
       );
     }
 

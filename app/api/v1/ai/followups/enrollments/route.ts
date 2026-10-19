@@ -43,7 +43,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const status = req.nextUrl.searchParams.get("status");
   if (status !== null && !ENROLLMENT_STATUSES.includes(status)) {
-    return fail("invalid_request", "status inválido.", 400, { requestId });
+    return fail("invalid_request", "Statut invalide.", 400, { requestId });
   }
 
   const supabase = await createClient();
@@ -69,12 +69,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createFollowupEnrollmentSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -90,9 +90,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     .eq("id", pointer_id)
     .maybeSingle();
   if (pointerErr) return fail("internal_error", pointerErr.message, 500, { requestId });
-  if (!pointer) return fail("not_found", "Fluxo não encontrado.", 404, { requestId });
+  if (!pointer) return fail("not_found", "Scénario introuvable.", 404, { requestId });
   if (pointer.status !== "active" || !pointer.active_version_id) {
-    return fail("flow_not_active", "Fluxo não está ativo (precisa estar publicado).", 422, { requestId });
+    return fail("flow_not_active", "Ce scénario n’est pas actif (il doit être publié).", 422, { requestId });
   }
 
   const { data: contact, error: contactErr } = await supabase
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .eq("id", contact_id)
     .maybeSingle();
   if (contactErr) return fail("internal_error", contactErr.message, 500, { requestId });
-  if (!contact) return fail("not_found", "Contato não encontrado.", 404, { requestId });
+  if (!contact) return fail("not_found", "Contact introuvable.", 404, { requestId });
 
   const { data: version, error: versionErr } = await supabase
     .from("followup_flow_versions")
@@ -111,12 +111,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     .eq("id", pointer.active_version_id)
     .maybeSingle();
   if (versionErr) return fail("internal_error", versionErr.message, 500, { requestId });
-  if (!version) return fail("internal_error", "Version ativa do fluxo não encontrada.", 500, { requestId });
+  if (!version) return fail("internal_error", "Version active du scénario introuvable.", 500, { requestId });
 
   const graph = flowGraphSchema.parse(version.graph);
   const triggerNode = graph.nodes.find((n) => n.type === "trigger");
   if (!triggerNode) {
-    return fail("internal_error", "Grafo publicado sem nó trigger.", 500, { requestId });
+    return fail("internal_error", "Le scénario publié n’a pas de déclencheur.", 500, { requestId });
   }
 
   // Task 8.6: fixa qual agente arma este enrollment. Se o body passou agent_id,
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       .eq("id", agentIdInput)
       .maybeSingle();
     if (agentErr) return fail("internal_error", agentErr.message, 500, { requestId });
-    if (!agent) return fail("not_found", "Agente não encontrado.", 404, { requestId });
+    if (!agent) return fail("not_found", "Assistant introuvable.", 404, { requestId });
     agentId = agentIdInput;
   } else {
     agentId = await resolveAgentForAutomaticTrigger(
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (insErr || !created) {
     if (insErr?.code === "23505") {
-      return fail("conflict", "Este contato já está em um follow-up ativo (1 por lead na organização).", 409, { requestId });
+      return fail("conflict", "Ce contact est déjà dans une relance active (1 par client dans l’organisation).", 409, { requestId });
     }
     return fail("internal_error", insErr?.message ?? "followup_enrollment_insert_failed", 500, { requestId });
   }

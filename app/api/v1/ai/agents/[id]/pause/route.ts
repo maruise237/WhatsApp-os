@@ -22,7 +22,7 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function POST(_req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  if (!UUID_RX.test(id)) return fail("invalid_request", "id inválido.", 400, { requestId });
+  if (!UUID_RX.test(id)) return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
   if (!authz.ok) return authz.response;
@@ -36,9 +36,9 @@ export async function POST(_req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
 
-  if (!existing) return fail("not_found", "Agent não encontrado.", 404, { requestId });
+  if (!existing) return fail("not_found", "Assistant introuvable.", 404, { requestId });
   if (existing.archived_at) {
-    return fail("state_conflict", "Agent arquivado.", 409, { requestId });
+    return fail("state_conflict", "Assistant archivé.", 409, { requestId });
   }
 
   const previousVersionId = existing.published_version_id as string | null;
@@ -58,7 +58,7 @@ export async function POST(_req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("id", id)
     .eq("organization_id", activeOrg.orgId);
 
-  if (error) return fail("internal_error", "Erro ao pausar agent.", 500, { requestId });
+  if (error) return fail("internal_error", "Erreur lors de la mise en pause de l’assistant.", 500, { requestId });
 
   void audit({
     action: "ai_agent.paused",

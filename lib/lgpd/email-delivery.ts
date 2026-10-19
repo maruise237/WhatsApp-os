@@ -59,38 +59,38 @@ interface SendArgs {
 export async function sendExportEmail(args: SendArgs): Promise<{ messageId: string }> {
   const shortId = args.requestId.slice(0, 8);
   const orgName = escapeHtml(args.marca.nome);
-  const expiresFmt = args.expiresAt.toLocaleString("pt-BR", {
+  const expiresFmt = args.expiresAt.toLocaleString("fr-FR", {
     timeZone: "America/Sao_Paulo",
   });
 
-  const subject = `Sua solicitação LGPD #${shortId}`;
+  const subject = `Votre demande de données personnelles #${shortId}`;
 
   const html = `<!doctype html>
-<html lang="pt-BR">
+<html lang="fr">
 <body style="font-family:-apple-system,Helvetica,Arial,sans-serif;color:${NEUTROS_DE_SAIDA.texto};line-height:1.5;max-width:560px;margin:0 auto;padding:24px;">
-  <h2 style="margin:0 0 12px;font-size:18px;">Solicitação LGPD #${shortId} processada</h2>
-  <p>Olá,</p>
-  <p>Sua solicitação de acesso aos dados pessoais (LGPD Art. 18, II) foi processada por <strong>${orgName}</strong>.</p>
-  <p>O relatório completo está disponível para download no link abaixo. Por motivos de segurança, o link expira em <strong>${expiresFmt}</strong>.</p>
+  <h2 style="margin:0 0 12px;font-size:18px;">Demande de données personnelles #${shortId} traitée</h2>
+  <p>Bonjour,</p>
+  <p>Votre demande d’accès à vos données personnelles (LGPD art. 18, II) a été traitée par <strong>${orgName}</strong>.</p>
+  <p>Le rapport complet peut être téléchargé via le lien ci-dessous. Pour des raisons de sécurité, le lien expire le <strong>${expiresFmt}</strong>.</p>
   <p style="margin:24px 0;">
-    <a href="${args.signedUrl}" style="background:${args.marca.accent};color:${args.marca.accentFg};padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Baixar relatório LGPD</a>
+    <a href="${args.signedUrl}" style="background:${args.marca.accent};color:${args.marca.accentFg};padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Télécharger le rapport</a>
   </p>
-  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Se você não solicitou este relatório, ignore este email — nenhum dado adicional é compartilhado.</p>
-  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base legal: LGPD Lei nº 13.709/2018, Art. 18, II.</p>
+  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Si vous n’avez pas demandé ce rapport, ignorez cet e-mail — aucune autre donnée n’est partagée.</p>
+  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base légale : LGPD, loi nº 13.709/2018, art. 18, II.</p>
 </body>
 </html>`;
 
   // O corpo em texto puro NÃO passa por `escapeHtml` — escapar aqui mostraria
   // `&amp;` ao titular numa marca como "Silva &amp; Filhos".
-  const text = `Solicitação LGPD #${shortId} processada por ${args.marca.nome}.
+  const text = `Demande de données personnelles #${shortId} traitée par ${args.marca.nome}.
 
-O relatório completo está disponível em:
+Le rapport complet est disponible ici :
 ${args.signedUrl}
 
-O link expira em ${expiresFmt}.
+Le lien expire le ${expiresFmt}.
 
-Se você não solicitou este relatório, ignore este email.
-Base legal: LGPD Lei nº 13.709/2018, Art. 18, II.`;
+Si vous n’avez pas demandé ce rapport, ignorez cet e-mail.
+Base légale : LGPD, loi nº 13.709/2018, art. 18, II.`;
 
   const result = await sendEmail({
     to: args.to,

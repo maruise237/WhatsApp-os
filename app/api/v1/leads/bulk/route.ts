@@ -48,7 +48,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   if (input.lead_ids.length > MAX_BULK) {
-    return fail("bulk_too_large", `Máximo ${MAX_BULK} leads por bulk.`, 422, { requestId });
+    return fail("bulk_too_large", `${MAX_BULK} clients maximum par action groupée.`, 422, { requestId });
   }
 
   // G3-04: assign é reatribuição de dono em lote → piso ≥manager (spec 04 §6.5,
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       if (!isServiceRoleConfigured()) {
         return fail(
           "owner_validation_unavailable",
-          "Não foi possível validar o responsável agora. Tente novamente em instantes.",
+          "Impossible de vérifier le responsable pour le moment. Réessayez dans quelques instants.",
           422,
           { requestId },
         );
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       if (!member || member.role === "viewer") {
         return fail(
           "invalid_owner",
-          "Responsável não é um atendente ativo desta organização.",
+          "Le responsable n’est pas un agent actif de cette organisation.",
           422,
           { requestId },
         );
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (!first) {
     return fail(
       "not_found",
-      "Nenhum lead acessível na operação.",
+      "Aucun client accessible pour cette opération.",
       404,
       { requestId },
     );
@@ -224,7 +224,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       if (!owner.ok || !owner.patch) {
         return fail(
           "validation_failed",
-          "Um lead tem um dono: informe owner_user_id OU owner_agent_id.",
+          "Un client n’a qu’un seul responsable : indiquez owner_user_id OU owner_agent_id.",
           422,
           { requestId },
         );

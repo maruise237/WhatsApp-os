@@ -87,7 +87,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     return fail("internal_error", error.message, 500, { requestId });
   }
   if (!data) {
-    return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+    return fail("not_found", "Conversation introuvable.", 404, { requestId });
   }
 
   await audit({

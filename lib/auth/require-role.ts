@@ -74,7 +74,7 @@ export async function requireRole(min: Role, opts: RequireRoleOpts = {}): Promis
   if (!org) {
     return {
       ok: false,
-      response: fail("forbidden_tenant", "Sem organização ativa.", 403, { requestId }),
+      response: fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId }),
     };
   }
 
@@ -118,7 +118,7 @@ export async function requireRole(min: Role, opts: RequireRoleOpts = {}): Promis
       ok: false,
       response: fail(
         "mfa_required",
-        "Esta sessão precisa da verificação em duas etapas. Entre novamente com o código do aplicativo.",
+        "Cette session nécessite la vérification en deux étapes. Reconnectez-vous avec le code de l’application.",
         403,
         { requestId },
       ),
@@ -137,7 +137,7 @@ export async function requireRole(min: Role, opts: RequireRoleOpts = {}): Promis
     });
     return {
       ok: false,
-      response: fail("forbidden_role", `Permissão insuficiente. Requer role >= ${min}.`, 403, {
+      response: fail("forbidden_role", `Autorisation insuffisante. Rôle requis : ${min} ou supérieur.`, 403, {
         requestId,
       }),
     };

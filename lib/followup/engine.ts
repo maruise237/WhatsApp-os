@@ -200,8 +200,8 @@ async function markDead(
   const flowName = (await db.loadFlowPointerName(enrollment.organization_id, enrollment.pointer_id)) ?? enrollment.pointer_id;
   await db.insertDeadInboxItem({
     organization_id: enrollment.organization_id,
-    title: "Um fluxo de follow-up parou de tentar",
-    body: `O fluxo "${flowName}" (enrollment ${enrollment.id}) foi marcado como "dead": ${sanitized}`,
+    title: "Une séquence de relance ne réessaie plus",
+    body: `La séquence "${flowName}" (inscription ${enrollment.id}) a été arrêtée : ${sanitized}`,
     ref_id: enrollment.id,
   });
 

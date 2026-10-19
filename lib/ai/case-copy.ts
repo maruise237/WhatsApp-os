@@ -44,7 +44,7 @@ export interface CaseActionOption {
 export const CASE_ACTIONS: CaseActionOption[] = [
   {
     action: "resolved",
-    label: "Concluí",
+    label: "C’est réglé",
     help: "A IA avisa o cliente e encerra o assunto.",
   },
   {
@@ -60,29 +60,29 @@ export const CASE_ACTIONS: CaseActionOption[] = [
 ];
 
 const EVENT_LABEL: Record<CaseEvent["kind"], string> = {
-  opened: "A IA abriu o caso",
-  human_replied: "Você respondeu",
-  lead_asked: "A IA perguntou ao cliente",
-  lead_provided: "O cliente respondeu",
-  lead_unresponsive: "O cliente não respondeu a tempo",
+  opened: "L’IA a ouvert le dossier",
+  human_replied: "Vous avez répondu",
+  lead_asked: "L’IA a posé la question au client",
+  lead_provided: "Le client a répondu",
+  lead_unresponsive: "Le client n’a pas répondu à temps",
   resolved: "Concluído",
   escalated: "Virou atendimento humano",
   cancelled: "Cancelado",
 };
 
 const HUMAN_ACTION_LABEL: Record<CaseHumanAction, string> = {
-  resolved: "Você concluiu o caso",
-  need_lead_info: "Você pediu uma informação ao cliente",
-  escalate: "Você decidiu passar para atendimento humano",
+  resolved: "Vous avez terminé le dossier",
+  need_lead_info: "Vous avez demandé une info au client",
+  escalate: "Vous avez décidé de confier à une personne",
 };
 
 /** Traduz um evento da timeline pra uma frase pt-br — nunca o enum cru. */
 export function caseEventLabel(event: Pick<CaseEvent, "kind" | "actor_kind" | "human_action">): string {
   if (event.kind === "opened" && event.actor_kind === "system") {
-    return "O sistema abriu o caso automaticamente";
+    return "Le dossier a été ouvert automatiquement";
   }
   if (event.kind === "human_replied" && event.human_action) {
     return HUMAN_ACTION_LABEL[event.human_action];
   }
-  return EVENT_LABEL[event.kind] ?? "Atualização do caso";
+  return EVENT_LABEL[event.kind] ?? "Mise à jour du dossier";
 }

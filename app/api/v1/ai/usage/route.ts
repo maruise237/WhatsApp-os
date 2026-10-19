@@ -70,7 +70,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     Object.fromEntries(req.nextUrl.searchParams.entries()),
   );
   if (!parsed.success) {
-    return fail("validation_failed", "Filtros inválidos.", 422, {
+    return fail("validation_failed", "Filtres invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -108,7 +108,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const { data: invRowsRaw, error: invErr } = await invQ;
   if (invErr) {
     console.warn("[ai-usage] llm_calls query failed", { error: invErr.message });
-    return fail("internal_error", "Erro ao agregar o uso de IA.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du calcul de l’utilisation de l’IA.", 500, { requestId });
   }
   const invRows = ((invRowsRaw ?? []) as unknown as Array<{
     created_at: string; purpose: string | null; cost_cents: number | null;

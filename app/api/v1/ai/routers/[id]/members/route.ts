@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("admin", { requestId, resource: "ai_routers" });
@@ -44,12 +44,12 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = membersPutSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -65,10 +65,10 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("organization_id", org.orgId)
     .maybeSingle();
   if (routerErr) {
-    return fail("internal_error", "Erro ao carregar router.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement du routeur.", 500, { requestId });
   }
   if (!router) {
-    return fail("not_found", "Router não encontrado.", 404, { requestId });
+    return fail("not_found", "Routeur introuvable.", 404, { requestId });
   }
 
   // Substitui a lista inteira: apaga os membros atuais (filtrando org) e
@@ -79,7 +79,7 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("router_id", id)
     .eq("organization_id", org.orgId);
   if (delErr) {
-    return fail("internal_error", "Erro ao limpar membros do router.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du nettoyage des membres du routeur.", 500, { requestId });
   }
 
   if (members.length > 0) {
@@ -96,11 +96,11 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     const { error: insErr } = await admin.from("ai_router_members").insert(rows);
     if (insErr) {
       if (insErr.code === "23505") {
-        return fail("duplicate_intent_name", "Duas intenções não podem ter o mesmo nome no router.", 409, {
+        return fail("duplicate_intent_name", "Deux intentions ne peuvent pas porter le même nom dans le routeur.", 409, {
           requestId,
         });
       }
-      return fail("internal_error", "Erro ao gravar membros do router.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de l’enregistrement des membres du routeur.", 500, { requestId });
     }
   }
 

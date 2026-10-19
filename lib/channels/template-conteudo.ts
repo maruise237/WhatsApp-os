@@ -32,15 +32,16 @@
  * lista que não termina.
  */
 export const IDIOMAS_DA_DEFINICAO: { codigo: string; rotulo: string }[] = [
-  { codigo: "es", rotulo: "Espanhol" },
-  { codigo: "es_AR", rotulo: "Espanhol (Argentina)" },
-  { codigo: "es_MX", rotulo: "Espanhol (México)" },
-  { codigo: "es_ES", rotulo: "Espanhol (Espanha)" },
-  { codigo: "pt_BR", rotulo: "Português (Brasil)" },
-  { codigo: "pt_PT", rotulo: "Português (Portugal)" },
-  { codigo: "en", rotulo: "Inglês" },
-  { codigo: "en_US", rotulo: "Inglês (EUA)" },
-  { codigo: "en_GB", rotulo: "Inglês (Reino Unido)" },
+  { codigo: "fr", rotulo: "Français" },
+  { codigo: "es", rotulo: "Espagnol" },
+  { codigo: "es_AR", rotulo: "Espagnol (Argentine)" },
+  { codigo: "es_MX", rotulo: "Espagnol (Mexique)" },
+  { codigo: "es_ES", rotulo: "Espagnol (Espagne)" },
+  { codigo: "pt_BR", rotulo: "Portugais (Brésil)" },
+  { codigo: "pt_PT", rotulo: "Portugais (Portugal)" },
+  { codigo: "en", rotulo: "Anglais" },
+  { codigo: "en_US", rotulo: "Anglais (États-Unis)" },
+  { codigo: "en_GB", rotulo: "Anglais (Royaume-Uni)" },
 ];
 
 /** Limites da plataforma. Passar deles é recusa, e o contador evita descobrir tarde. */

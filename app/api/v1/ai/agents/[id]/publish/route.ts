@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
@@ -44,12 +44,12 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = publishSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -67,13 +67,13 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
     .maybeSingle();
 
   if (!targetV || targetV.agent_id !== id) {
-    return fail("version_not_found", "Version não encontrada.", 404, { requestId });
+    return fail("version_not_found", "Version introuvable.", 404, { requestId });
   }
 
   const tools = (targetV.tool_ids ?? []) as string[];
   const invalid = tools.filter((t) => !VALID_TOOL_IDS_RUNTIME.has(t));
   if (invalid.length > 0) {
-    return fail("tool_id_invalid", "tool_ids contém ids inexistentes no catálogo MCP.", 422, {
+    return fail("tool_id_invalid", "tool_ids contient des identifiants absents du catalogue MCP.", 422, {
       requestId,
       details: { invalid },
     });
@@ -90,9 +90,9 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
       const status = result.code === "agent_not_found" || result.code === "version_not_found"
         ? 404
         : 422;
-      return fail(result.code, "Validação de publish falhou.", status, { requestId });
+      return fail(result.code, "La validation avant publication a échoué.", status, { requestId });
     }
-    return fail("internal_error", "Erro ao publicar.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la publication.", 500, { requestId });
   }
 
   // event_log + audit fire-and-forget.

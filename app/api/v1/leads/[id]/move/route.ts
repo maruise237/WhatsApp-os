@@ -58,7 +58,7 @@ export async function POST(
     return fail("internal_error", selErr.message, 500, { requestId });
   }
   if (!lead) {
-    return fail("not_found", "Lead não encontrado.", 404, { requestId });
+    return fail("not_found", "Client introuvable.", 404, { requestId });
   }
 
   // Fetch target stage to validate same pipeline (P-01).
@@ -72,12 +72,12 @@ export async function POST(
     return fail("internal_error", stageErr.message, 500, { requestId });
   }
   if (!stage) {
-    return fail("not_found", "Stage não encontrado.", 404, { requestId });
+    return fail("not_found", "Étape introuvable.", 404, { requestId });
   }
   if (stage.pipeline_id !== lead.pipeline_id) {
     return fail(
       "pipeline_immutable_use_clone",
-      "Move cross-pipeline não é permitido. Clone o lead para o pipeline alvo.",
+      "Impossible de déplacer vers un autre tableau. Dupliquez le client dans le tableau cible.",
       422,
       { requestId },
     );
@@ -109,7 +109,7 @@ export async function POST(
       .maybeSingle();
     return fail(
       "lead_stage_changed_concurrent",
-      "Lead foi modificado por outro usuário. Recarregue e tente novamente.",
+      "Ce client a été modifié par un autre utilisateur. Rechargez et réessayez.",
       409,
       {
         details: { current_updated_at: current?.updated_at ?? null },

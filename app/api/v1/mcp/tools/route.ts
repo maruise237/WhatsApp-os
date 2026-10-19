@@ -30,7 +30,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
   const authUser = await loadAuthUser();
   if (!authUser) return fail("unauthenticated", "Auth required.", 401, { requestId });
   const activeOrg = await resolveActiveOrg(authUser);
-  if (!activeOrg) return fail("forbidden_tenant", "Sem organização ativa.", 403, { requestId });
+  if (!activeOrg) return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
 
   let servidas;
   try {
@@ -40,7 +40,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     // rótulo empurraria o defeito para a tela do dono da clínica.
     return fail(
       "internal_error",
-      err instanceof Error ? err.message : "Catálogo de capacidades inconsistente.",
+      err instanceof Error ? err.message : "Catalogue de capacités incohérent.",
       500,
       { requestId },
     );

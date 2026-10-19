@@ -80,7 +80,7 @@ export async function encerraDemanda(
       "validation_failed",
       undefined,
       ctx.requestId,
-      "Informe o motivo da perda.",
+      "Indiquez la raison de la perte.",
     );
   }
 
@@ -95,7 +95,7 @@ export async function encerraDemanda(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, selErr.message);
   }
   if (!lead) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Lead não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Client introuvable.");
   }
 
   if ((lead as { status: string }).status === input.desfecho) {
@@ -122,8 +122,8 @@ export async function encerraDemanda(
       undefined,
       ctx.requestId,
       input.desfecho === "won"
-        ? "Pipeline não tem stage de fechamento como ganho."
-        : "Pipeline não tem stage de fechamento como perda.",
+        ? "Ce tableau n’a pas de colonne « gagné »."
+        : "Ce tableau n’a pas de colonne « perdu ».",
     );
   }
 
@@ -187,7 +187,7 @@ export async function encerraDemanda(
     // O rótulo do tipo já diz "Demanda encerrada" na tela; o reason acrescenta o
     // DESFECHO e, na perda, o motivo — repetir o rótulo aqui deixaria a linha
     // com a mesma frase duas vezes (ver `motivoLegivel` em retorno-crm.ts).
-    reason: input.desfecho === "won" ? "Ganho" : `Perdido — ${input.motivo}`,
+    reason: input.desfecho === "won" ? "Ganho" : `Perdu — ${input.motivo}`,
     payload: {
       desfecho: input.desfecho,
       from_stage_id: (lead as { stage_id: string }).stage_id,

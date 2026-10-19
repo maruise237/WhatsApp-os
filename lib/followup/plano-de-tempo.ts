@@ -71,7 +71,7 @@ export interface EsperaLegivel {
 export function descreveEspera(espera: EsperaPlanejada): EsperaLegivel {
   return {
     escolhido: duracaoLegivel(espera.escolhido_ms),
-    faixa: `seu limite: de ${duracaoLegivel(espera.min_ms)} a ${duracaoLegivel(espera.max_ms)}`,
+    faixa: `votre limite : de ${duracaoLegivel(espera.min_ms)} à ${duracaoLegivel(espera.max_ms)}`,
     motivo: espera.motivo,
     pedido: espera.clampado ? duracaoLegivel(espera.proposto_ms) : null,
   };

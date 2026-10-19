@@ -27,7 +27,7 @@ export async function POST(
   if (!authz.ok) return authz.response;
   const { user: authUser, org: activeOrg } = authz;
   if (targetUserId === authUser.id) {
-    return fail("state_conflict", "Não é possível revogar o próprio acesso.", 409, { requestId });
+    return fail("state_conflict", "Impossible de révoquer votre propre accès.", 409, { requestId });
   }
 
   const supabase = await createClient();
@@ -39,7 +39,7 @@ export async function POST(
     .eq("user_id", targetUserId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!target) return fail("not_found", "Membro não encontrado.", 404, { requestId });
+  if (!target) return fail("not_found", "Membre introuvable.", 404, { requestId });
   if (target.revoked_at) {
     return ok({ user_id: targetUserId, already_revoked: true }, { requestId });
   }
@@ -55,7 +55,7 @@ export async function POST(
     if ((count ?? 0) <= 1) {
       return fail(
         "state_conflict",
-        "Não é possível revogar o último admin do tenant.",
+        "Impossible de révoquer le dernier administrateur de l’organisation.",
         409,
         { requestId },
       );

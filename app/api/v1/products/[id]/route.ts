@@ -27,7 +27,7 @@ export async function GET(_request: NextRequest, { params }: Context): Promise<R
     .maybeSingle();
 
   if (error) return fail("internal_error", error.message, 500, { requestId });
-  if (!data) return fail("not_found", "Produto não encontrado.", 404, { requestId });
+  if (!data) return fail("not_found", "Produit introuvable.", 404, { requestId });
   return ok(data, { requestId });
 }
 
@@ -41,11 +41,11 @@ export async function PATCH(request: NextRequest, { params }: Context): Promise<
   try {
     body = await request.json();
   } catch {
-    return fail("invalid_request", "Corpo JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = updateProductSchema.safeParse(body);
   if (!parsed.success || Object.keys(parsed.data).length === 0) {
-    return fail("invalid_request", "Nenhuma alteração válida foi enviada.", 400, {
+    return fail("invalid_request", "Aucune modification valide n’a été envoyée.", 400, {
       requestId,
       details: parsed.success ? undefined : parsed.error.flatten(),
     });
@@ -61,7 +61,7 @@ export async function PATCH(request: NextRequest, { params }: Context): Promise<
     .maybeSingle();
 
   if (error) return fail("internal_error", error.message, 500, { requestId });
-  if (!data) return fail("not_found", "Produto não encontrado.", 404, { requestId });
+  if (!data) return fail("not_found", "Produit introuvable.", 404, { requestId });
 
   void audit({
     action: "sales.product_updated",
@@ -92,7 +92,7 @@ export async function DELETE(_request: NextRequest, { params }: Context): Promis
     .maybeSingle();
 
   if (error) return fail("internal_error", error.message, 500, { requestId });
-  if (!data) return fail("not_found", "Produto não encontrado.", 404, { requestId });
+  if (!data) return fail("not_found", "Produit introuvable.", 404, { requestId });
 
   void audit({
     action: "sales.product_archived",

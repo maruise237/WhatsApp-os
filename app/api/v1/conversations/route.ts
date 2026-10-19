@@ -50,7 +50,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     limit: url.searchParams.get("limit") ?? undefined,
   });
   if (!qsParsed.success) {
-    return fail("validation_failed", "Query inválida.", 422, {
+    return fail("validation_failed", "Requête invalide.", 422, {
       details: qsParsed.error.flatten().fieldErrors as Record<string, unknown>,
       requestId,
     });

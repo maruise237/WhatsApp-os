@@ -151,7 +151,7 @@ export function mapHeader(header: string[]): { indices: Record<string, number>; 
   const temIdentificador = indices.phone_number !== undefined || indices.email !== undefined;
   return {
     indices,
-    motivo: temIdentificador ? null : "cabeçalho sem coluna de telefone nem e-mail",
+    motivo: temIdentificador ? null : "en-tête sans colonne téléphone ni e-mail",
   };
 }
 
@@ -259,7 +259,7 @@ export function mapLinha(
   }
 
   if (contato.phone_number === undefined && contato.email === undefined) {
-    return { contato: {}, motivo: "linha sem telefone nem e-mail" };
+    return { contato: {}, motivo: "ligne sans téléphone ni e-mail" };
   }
 
   const cpf = get("cpf").replace(/\D/g, "");

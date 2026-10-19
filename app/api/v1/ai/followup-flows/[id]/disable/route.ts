@@ -20,7 +20,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "followup_flows" });
@@ -35,7 +35,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!existing) return fail("not_found", "Fluxo não encontrado.", 404, { requestId });
+  if (!existing) return fail("not_found", "Scénario introuvable.", 404, { requestId });
 
   if (existing.status === "disabled") {
     return ok({ id, status: "disabled" }, { requestId });

@@ -100,7 +100,7 @@ describe("POST .../versions/:vid/test — runtime real", () => {
     const body = (await res.json()) as { error?: { message?: string } };
 
     expect(res.status).toBe(500);
-    expect(body.error?.message).toContain("Não consegui executar o agente");
+    expect(body.error?.message).toContain("Impossible d’exécuter l’assistant");
     expect(body.error?.message).toContain("AI_GATEWAY_API_KEY ausente");
   });
 });

@@ -121,7 +121,7 @@ export async function listConversationsHandler(
         "invalid_request",
         undefined,
         ctx.requestId,
-        '"assigned_to=me" requer ator humano.',
+        '« assigned_to=me » nécessite un utilisateur humain.',
       );
     }
     query = query.eq("assigned_to_user_id", ctx.actor.id);
@@ -139,7 +139,7 @@ export async function listConversationsHandler(
   if (q.cursor) {
     const c = decodeCursor(q.cursor);
     if (!c) {
-      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Cursor inválido.");
+      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Curseur invalide.");
     }
     const op = asc ? "gt" : "lt";
     if (c.sort) {
@@ -190,7 +190,7 @@ export async function getConversationHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, error.message);
   }
   if (!data) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversa não encontrada.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversation introuvable.");
   }
   return data as unknown as Conversation;
 }
@@ -261,7 +261,7 @@ export async function patchConversationHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, error.message);
   }
   if (!data) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversa não encontrada.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversation introuvable.");
   }
 
   const conv = data as unknown as Conversation;
@@ -335,7 +335,7 @@ export async function markConversationReadHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, error.message);
   }
   if (!data) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversa não encontrada.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversation introuvable.");
   }
   return data as unknown as Conversation;
 }

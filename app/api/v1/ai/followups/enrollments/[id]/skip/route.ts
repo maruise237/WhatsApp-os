@@ -48,7 +48,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
   const parsed = bodySchema.safeParse(raw ?? {});
   if (!parsed.success) {
-    return fail("validation_failed", "Caminho inválido.", 422, {
+    return fail("validation_failed", "Chemin invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

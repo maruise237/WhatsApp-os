@@ -44,7 +44,7 @@ export const dynamic = "force-dynamic";
 
 /** O mesmo literal do handoff: `bot_silenced_until > now()` é sempre verdadeiro. */
 const SILENCIO_DURAVEL = "infinity";
-const MOTIVO = "Automático pausado pelo atendente";
+const MOTIVO = "Réponse automatique mise en pause par l’agent";
 
 interface RouteCtx {
   params: Promise<{ id: string }>;
@@ -70,7 +70,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", org.orgId)
     .maybeSingle();
   if (convErr) return fail("internal_error", convErr.message, 500, { requestId });
-  if (!convData) return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+  if (!convData) return fail("not_found", "Conversation introuvable.", 404, { requestId });
 
   const conv = convData as unknown as {
     id: string;
@@ -83,7 +83,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (conv.status === "closed" || conv.status === "archived") {
     return fail(
       "state_conflict",
-      "Esta conversa está encerrada — não há atendimento automático a pausar.",
+      "Cette conversation est clôturée — il n’y a pas de réponse automatique à mettre en pause.",
       409,
       { requestId },
     );
@@ -104,7 +104,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     });
     if (rpcErr) return fail("internal_error", rpcErr.message, 500, { requestId });
     if (!atribuida || (atribuida as unknown[]).length === 0) {
-      return fail("state_conflict", "Outro atendente assumiu esta conversa agora.", 409, {
+      return fail("state_conflict", "Un autre agent vient de prendre en charge cette conversation.", 409, {
         requestId,
       });
     }
@@ -127,7 +127,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .select("id, contact_id, organization_id, status, assigned_to_user_id, bot_silenced_until")
     .maybeSingle();
   if (updErr) return fail("internal_error", updErr.message, 500, { requestId });
-  if (!atualizada) return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+  if (!atualizada) return fail("not_found", "Conversation introuvable.", 404, { requestId });
 
   const final = atualizada as unknown as Conversation;
 
@@ -151,7 +151,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     tipo: "conversation_ai_paused",
     actor: { type: "user", id: user.id, role: org.role },
     motivo: assumiu
-      ? "Assumiu a conversa e pausou o atendimento automático"
+      ? "A pris en charge la conversation et mis en pause la réponse automatique"
       : MOTIVO,
     payload: { assumiu_ao_pausar: assumiu },
   });

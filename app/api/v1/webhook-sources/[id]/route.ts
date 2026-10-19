@@ -35,7 +35,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   }
   const parsed = updateWebhookSourceSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("invalid_request", "Dados inválidos.", 400, {
+    return fail("invalid_request", "Données invalides.", 400, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -49,7 +49,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!existing) return fail("not_found", "Fonte não encontrada.", 404, { requestId });
+  if (!existing) return fail("not_found", "Source introuvable.", 404, { requestId });
 
   // secret plaintext do input vira secret_encrypted (migration 0041); a coluna
   // em claro não existe mais. `secret: null` remove o segredo da fonte.
@@ -70,7 +70,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
       if (enc === null) {
         return fail(
           "encryption_unavailable",
-          "Não foi possível guardar o segredo com segurança. Configure NUVEMSHOP_OAUTH_ENCRYPTION_KEY (chave de cifra do banco) e tente de novo.",
+          "Impossible de conserver le secret en toute sécurité. Configurez NUVEMSHOP_OAUTH_ENCRYPTION_KEY (clé de chiffrement de la base) et réessayez.",
           422,
           { requestId },
         );
@@ -117,7 +117,7 @@ export async function DELETE(_req: NextRequest, ctx: RouteCtx): Promise<Response
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!existing) return fail("not_found", "Fonte não encontrada.", 404, { requestId });
+  if (!existing) return fail("not_found", "Source introuvable.", 404, { requestId });
 
   const { error: delErr } = await supabase.from("webhook_sources").delete().eq("id", id);
   if (delErr) return fail("internal_error", delErr.message, 500, { requestId });

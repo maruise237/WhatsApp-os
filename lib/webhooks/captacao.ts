@@ -32,11 +32,11 @@ export type MotivoDaRecusa =
 /** O que a tela mostra para cada motivo, em português de gente. */
 export const MOTIVO_DA_RECUSA_LABEL: Record<MotivoDaRecusa, string> = {
   sem_campo_mapeavel:
-    "O envio não trazia nome, telefone nem e-mail reconhecíveis — confira os nomes dos campos do formulário.",
+    "L’envoi ne contenait ni nom, ni téléphone, ni e-mail reconnaissables — vérifiez les noms des champs du formulaire.",
   assinatura_invalida:
-    "A assinatura não conferiu. Quem enviou não usou o segredo configurado nesta fonte.",
+    "La signature ne correspond pas. L’expéditeur n’a pas utilisé le secret configuré pour cette source.",
   erro_ao_criar_lead:
-    "Os dados chegaram, mas o lead não pôde ser criado — confira se o funil e a etapa da fonte ainda existem.",
+    "Les données sont arrivées, mais la fiche client n’a pas pu être créée — vérifiez que le tableau et la colonne de la source existent encore.",
 };
 
 export interface CaptacaoParaRegistrar {
@@ -115,9 +115,9 @@ function limitarValor(valor: unknown): unknown {
   try {
     serializado = JSON.stringify(valor);
   } catch {
-    return "[valor não serializável]";
+    return "[valeur non lisible]";
   }
-  if (serializado === undefined) return "[valor não serializável]";
+  if (serializado === undefined) return "[valeur non lisible]";
   return serializado.length > MAX_TAMANHO_DE_VALOR
     ? `${serializado.slice(0, MAX_TAMANHO_DE_VALOR)}…`
     : valor;

@@ -46,7 +46,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   // Force a high limit for export, ignore caller's `limit`.
   const parsed = auditQuerySchema.safeParse({ ...params, limit: undefined });
   if (!parsed.success) {
-    return fail("validation_failed", "Query inválida.", 422, {
+    return fail("validation_failed", "Requête invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

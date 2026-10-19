@@ -10,6 +10,11 @@ function getClient(): S3Client {
     throw new Error("seaweedfs_not_configured");
   }
   client ??= new S3Client({
+    // Le SDK v3 ajoute sinon `x-amz-checksum-mode=ENABLED` aux URL signées, que
+    // SeaweedFS ne sait pas vérifier : chaque image (preuve de paiement, média
+    // WhatsApp) répondait 403 SignatureDoesNotMatch dans le navigateur.
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    responseChecksumValidation: "WHEN_REQUIRED",
     endpoint: env.SEAWEEDFS_S3_ENDPOINT,
     region: env.SEAWEEDFS_S3_REGION,
     forcePathStyle: true,

@@ -40,11 +40,11 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = bodySchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Informe o novo horário.", 422, {
+    return fail("validation_failed", "Indiquez le nouvel horaire.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

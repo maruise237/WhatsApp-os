@@ -105,11 +105,11 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
         const body = await res.json().catch(() => null);
         toast.error(
           body?.error?.message ??
-            "Cela n’a pas fonctionné. Vérifiez que la source est active et que l’entonnoir/l’étape existent toujours.",
+            "Cela n’a pas fonctionné. Vérifiez que la source est active et que le tableau/l’étape existent toujours.",
         );
         return;
       }
-      toast.success("Ça fonctionne ! Un lead de test est entré dans votre entonnoir.");
+      toast.success("Ça fonctionne ! Un lead de test est entré dans votre tableau.");
       setTestOk(true);
       void refetchEvents();
     } catch {
@@ -130,7 +130,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
             </Badge>
           </div>
           <SheetDescription>
-            Chaque envoi vers l’adresse ci-dessous devient automatiquement un lead dans votre entonnoir.
+            Chaque envoi vers l’adresse ci-dessous devient automatiquement un lead dans votre tableau.
           </SheetDescription>
         </SheetHeader>
 
@@ -263,7 +263,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
               <AlertDialogHeader>
                 <AlertDialogTitle>Supprimer cette source ?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  L’adresse cesse de fonctionner immédiatement. Les leads déjà reçus restent dans votre entonnoir — seule la captation future est interrompue. Cette action est irréversible.
+                  L’adresse cesse de fonctionner immédiatement. Les leads déjà reçus restent dans votre tableau — seule la captation future est interrompue. Cette action est irréversible.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

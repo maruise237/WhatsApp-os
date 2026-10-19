@@ -52,9 +52,9 @@ export async function changeMemberRole(
     .eq("user_id", targetUserId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!target) return fail("not_found", "Membro não encontrado.", 404, { requestId });
+  if (!target) return fail("not_found", "Membre introuvable.", 404, { requestId });
   if (target.revoked_at) {
-    return fail("state_conflict", "Membro está revogado.", 409, { requestId });
+    return fail("state_conflict", "Ce membre a été révoqué.", 409, { requestId });
   }
 
   if (target.role === "admin" && input.role !== "admin") {
@@ -68,7 +68,7 @@ export async function changeMemberRole(
     if ((count ?? 0) <= 1) {
       return fail(
         "state_conflict",
-        "Não é possível rebaixar o último admin do tenant.",
+        "Impossible de rétrograder le dernier administrateur de l’organisation.",
         409,
         { requestId },
       );

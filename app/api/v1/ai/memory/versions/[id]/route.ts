@@ -19,7 +19,7 @@ export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("agent", { requestId, resource: "org_memory" });
@@ -34,10 +34,10 @@ export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("organization_id", org.orgId)
     .maybeSingle();
   if (error) {
-    return fail("internal_error", "Erro ao carregar a versão da memória.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement de la version de la mémoire.", 500, { requestId });
   }
   if (!data) {
-    return fail("not_found", "Versão não encontrada nesta organização.", 404, { requestId });
+    return fail("not_found", "Version introuvable dans cette organisation.", 404, { requestId });
   }
 
   return ok(data, { requestId });

@@ -42,13 +42,13 @@ export async function POST(req: NextRequest): Promise<Response> {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "open_failed";
     if (msg === "contact_not_found") {
-      return fail("not_found", "Contato não encontrado.", 404, { requestId });
+      return fail("not_found", "Contact introuvable.", 404, { requestId });
     }
     if (msg === "session_not_found") {
-      return fail("not_found", "Sessão de canal não encontrada.", 404, { requestId });
+      return fail("not_found", "Session de canal introuvable.", 404, { requestId });
     }
     if (msg === "invalid_phone") {
-      return fail("validation_error", "Telefone inválido.", 422, { requestId });
+      return fail("validation_error", "Numéro de téléphone invalide.", 422, { requestId });
     }
     return fail("internal_error", msg, 500, { requestId });
   }

@@ -132,7 +132,7 @@ async function resolveAutores(eventos: Array<{ payload: unknown }>): Promise<Rec
 export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  if (!UUID_RX.test(id)) return fail("invalid_request", "id inválido.", 400, { requestId });
+  if (!UUID_RX.test(id)) return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 
   const authz = await requireRole("viewer", { requestId, resource: "followup_enrollments" });
   if (!authz.ok) return authz.response;
@@ -155,7 +155,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .maybeSingle();
 
   if (error) return fail("internal_error", error.message, 500, { requestId });
-  if (!row) return fail("not_found", "Follow-up não encontrado.", 404, { requestId });
+  if (!row) return fail("not_found", "Relance introuvable.", 404, { requestId });
 
   const { data: eventos, error: evErr } = await supabase
     .from("followup_enrollment_events")

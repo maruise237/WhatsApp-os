@@ -54,7 +54,7 @@ async function cerebroDoFuncionario(
   if (!versionId) {
     // Quem pulou o passo de treinar, ou ficou com o agente em rascunho por não
     // ter número, chega aqui sem cérebro. Não é erro: é o quadro pronto.
-    return { erro: "seu funcionário ainda não está no ar" };
+    return { erro: "votre assistant n’est pas encore en ligne" };
   }
 
   const { data: versao } = await admin
@@ -63,11 +63,11 @@ async function cerebroDoFuncionario(
     .eq("id", versionId)
     .eq("organization_id", orgId)
     .maybeSingle();
-  if (!versao) return { erro: "não achei a configuração do seu funcionário" };
+  if (!versao) return { erro: "je n’ai pas trouvé la configuration de votre assistant" };
 
   const provider = String(versao.provider ?? "");
   const model = String(versao.model ?? "");
-  if (!provider || !model) return { erro: "seu funcionário está sem modelo definido" };
+  if (!provider || !model) return { erro: "aucun modèle n’est défini pour votre assistant" };
 
   // Mesma ordem do turno de produção e do ensaio: a credencial cadastrada vence,
   // e na falta dela vale a chave que veio na instalação.
@@ -77,12 +77,12 @@ async function cerebroDoFuncionario(
       const cred = await loadCredential(credentialId, orgId);
       return { provider, model, apiKey: cred.apiKey };
     } catch {
-      return { erro: "não consegui usar a chave cadastrada" };
+      return { erro: "impossible d’utiliser la clé enregistrée" };
     }
   }
 
   const daInstalacao = chaveDePlataforma(provider);
-  if (!daInstalacao) return { erro: `esta instalação não tem chave de ${provider}` };
+  if (!daInstalacao) return { erro: `cette installation n’a pas de clé ${provider}` };
   return { provider, model, apiKey: daInstalacao };
 }
 
@@ -192,7 +192,7 @@ export async function aplicarQuadro(formData: FormData): Promise<ResultadoDoQuad
   try {
     ctx = await requireOnboardingCtx();
   } catch (err) {
-    if (err instanceof OnboardingError) return { ok: false, erro: "Sua sessão expirou. Entre de novo." };
+    if (err instanceof OnboardingError) return { ok: false, erro: "Votre session a expiré. Reconnectez-vous." };
     throw err;
   }
 
@@ -200,7 +200,7 @@ export async function aplicarQuadro(formData: FormData): Promise<ResultadoDoQuad
   try {
     bruta = JSON.parse(String(formData.get("quadro") ?? "null"));
   } catch {
-    return { ok: false, erro: "Não consegui ler o quadro. Recarregue a página e tente de novo." };
+    return { ok: false, erro: "Impossible de lire le tableau. Rechargez la page et réessayez." };
   }
 
   // Revalida do lado de cá: o que chega de um formulário é entrada externa,
@@ -213,7 +213,7 @@ export async function aplicarQuadro(formData: FormData): Promise<ResultadoDoQuad
 
   const admin = createAdminClient();
   const atual = await carregarQuadroAtual(admin, ctx.orgId);
-  if (!atual) return { ok: false, erro: "Não encontrei o quadro desta empresa." };
+  if (!atual) return { ok: false, erro: "Je n’ai pas trouvé le tableau de cette entreprise." };
 
   // O slug do funil não pode colidir com o de outro funil da organização
   // (`uniq_crm_pipelines_org_slug`). O do próprio funil sai da lista: renomear
@@ -244,7 +244,7 @@ export async function aplicarQuadro(formData: FormData): Promise<ResultadoDoQuad
     })),
   });
 
-  if (error) return { ok: false, erro: `Não consegui salvar o quadro: ${error.message}` };
+  if (error) return { ok: false, erro: `Impossible d’enregistrer le tableau : ${error.message}` };
 
   const r = (resposta ?? {}) as { ok?: boolean; motivo?: string; quantos?: number };
   if (!r.ok) {
@@ -257,7 +257,7 @@ export async function aplicarQuadro(formData: FormData): Promise<ResultadoDoQuad
       funil: { pipeline_id: atual.pipelineId, origem, etapas: proposta.etapas.length },
     });
   } catch (err) {
-    if (err instanceof OnboardingError) return { ok: false, erro: "Salvei o quadro, mas não consegui registrar o passo. Tente continuar de novo." };
+    if (err instanceof OnboardingError) return { ok: false, erro: "Le tableau est enregistré, mais l’étape n’a pas pu être validée. Essayez de continuer à nouveau." };
     throw err;
   }
 
@@ -278,18 +278,18 @@ function explicarRecusa(motivo: string | undefined, quantos: number | undefined)
   switch (motivo) {
     case "funil_com_negocios":
       return (
-        `Este quadro já tem ${quantos ?? "alguns"} cliente(s) dentro, então trocar as colunas agora ` +
-        `deixaria eles sem lugar. Você pode ajustar as colunas depois, em Configurações › Funis.`
+        `Ce tableau contient déjà ${quantos ?? "quelques"} client(s) : changer les colonnes maintenant ` +
+        `les laisserait sans place. Vous pourrez ajuster les colonnes plus tard, dans Paramètres › Tableaux.`
       );
     case "etapa_em_uso_por_webhook":
       return (
-        "Uma das colunas atuais está sendo usada por uma integração que traz clientes de fora. " +
-        "Trocar o quadro desligaria essa integração, então preferi não mexer — ajuste em Configurações › Funis."
+        "Une des colonnes actuelles est utilisée par une intégration qui fait entrer des clients de l’extérieur. " +
+        "Changer le tableau couperait cette intégration, je préfère donc ne rien toucher : ajustez-le dans Paramètres › Tableaux."
       );
     case "funil_nao_encontrado":
-      return "Não encontrei o quadro desta empresa. Recarregue a página.";
+      return "Je n’ai pas trouvé le tableau de cette entreprise. Rechargez la page.";
     default:
-      return "Não consegui montar o quadro agora. Você pode fazer isso depois em Configurações › Funis.";
+      return "Impossible de créer le tableau pour le moment. Vous pourrez le faire plus tard dans Paramètres › Tableaux.";
   }
 }
 

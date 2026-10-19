@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id, vid } = await ctx.params;
   if (!UUID_RX.test(id) || !UUID_RX.test(vid)) {
-    return fail("invalid_request", "ids inválidos.", 400, { requestId });
+    return fail("invalid_request", "Identifiants invalides.", 400, { requestId });
   }
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
@@ -47,11 +47,11 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = testRunSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("agent_id", id)
     .maybeSingle();
 
-  if (!version) return fail("not_found", "Version não encontrada.", 404, { requestId });
+  if (!version) return fail("not_found", "Version introuvable.", 404, { requestId });
 
   const startedAt = new Date();
 
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
     .single();
 
   if (runErr || !runRow) {
-    return fail("internal_error", "Erro ao iniciar test run.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du lancement du test.", 500, { requestId });
   }
 
   let resultPayload: Record<string, unknown>;
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
       const detalhe = err instanceof Error ? err.message : String(err);
       return fail(
         "internal_error",
-        `Não consegui executar o agente: ${detalhe}. Confira as credenciais de IA da organização.`,
+        `Impossible d’exécuter l’assistant : ${detalhe}. Vérifiez les identifiants d’IA de l’organisation.`,
         500,
         { requestId },
       );
@@ -169,13 +169,13 @@ async function runStubbedTest(args: StubArgs): Promise<Record<string, unknown>> 
       step: 1,
       tool_name: "(stub)",
       args: { sample_message: args.sampleMessage },
-      result: { ok: true, note: "INTERNAL_AGENT_RUN_STUB=true — runtime real chega na S-13.08." },
+      result: { ok: true, note: "INTERNAL_AGENT_RUN_STUB=true — l’exécution réelle arrive avec S-13.08." },
       started_at: args.startedAt.toISOString(),
       ended_at: finishedAt.toISOString(),
     },
   ];
 
-  const finalText = `[STUB] Resposta simulada para "${args.sampleMessage.slice(0, 80)}".`;
+  const finalText = `[STUB] Réponse simulée pour « ${args.sampleMessage.slice(0, 80)} ».`;
 
   const admin = createAdminClient();
   await admin

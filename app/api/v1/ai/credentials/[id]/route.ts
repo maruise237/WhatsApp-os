@@ -36,10 +36,10 @@ export async function DELETE(
     .maybeSingle();
 
   if (fetchErr) {
-    return fail("internal_error", "Erro ao consultar credential.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la lecture de l’identifiant.", 500, { requestId });
   }
   if (!cred || cred.organization_id !== activeOrg.orgId) {
-    return fail("not_found", "Credential não encontrada.", 404, { requestId });
+    return fail("not_found", "Identifiant introuvable.", 404, { requestId });
   }
 
   // Está referenciada por alguma versão que é published_version_id de agent ativo?
@@ -52,7 +52,7 @@ export async function DELETE(
     .eq("organization_id", activeOrg.orgId);
 
   if (linkErr) {
-    return fail("internal_error", "Erro ao verificar uso da credential.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la vérification de l’utilisation de l’identifiant.", 500, { requestId });
   }
 
   type LinkedVersion = {
@@ -73,7 +73,7 @@ export async function DELETE(
   if (inUse) {
     return fail(
       "credential_in_use",
-      "Credential é usada por uma versão publicada de agent. Despublique antes de deletar.",
+      "Cet identifiant est utilisé par une version publiée d’un assistant. Dépubliez-la avant de le supprimer.",
       409,
       { requestId },
     );
@@ -89,12 +89,12 @@ export async function DELETE(
     if (delErr.code === "23503") {
       return fail(
         "credential_in_use",
-        "Credential referenciada (FK ON DELETE RESTRICT). Remova as versões antes.",
+        "Identifiant encore référencé (FK ON DELETE RESTRICT). Supprimez d’abord les versions qui l’utilisent.",
         409,
         { requestId },
       );
     }
-    return fail("internal_error", "Erro ao deletar credential.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la suppression de l’identifiant.", 500, { requestId });
   }
 
   await audit({

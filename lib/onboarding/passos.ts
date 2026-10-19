@@ -51,7 +51,7 @@ function foiPulado(valor: { skipped?: boolean } | undefined): boolean {
 export const PASSOS: readonly PassoDoOnboarding[] = [
   {
     segmento: "welcome",
-    rotulo: "Seu negócio",
+    rotulo: "Votre activité",
     existe: () => true,
     cumprido: (s) => marcado(s.welcome),
     pulado: () => false,
@@ -60,21 +60,21 @@ export const PASSOS: readonly PassoDoOnboarding[] = [
     segmento: "connect-whatsapp",
     // O telefone é a primeira peça concreta do funcionário, e é o passo que
     // pede o celular na mão — o instalador já avisa para deixá-lo aberto.
-    rotulo: "O telefone dele",
+    rotulo: "Son numéro",
     existe: () => true,
     cumprido: (s) => marcado(s.whatsapp),
     pulado: (s) => foiPulado(s.whatsapp),
   },
   {
     segmento: "connect-nuvemshop",
-    rotulo: "Sua loja",
+    rotulo: "Votre boutique",
     existe: (ctx) => ctx.lojaLigada,
     cumprido: (s) => marcado(s.nuvemshop),
     pulado: (s) => foiPulado(s.nuvemshop),
   },
   {
     segmento: "setup-ai",
-    rotulo: "Treinar",
+    rotulo: "Le former",
     existe: () => true,
     cumprido: (s) => marcado(s.ai),
     pulado: (s) => foiPulado(s.ai),
@@ -84,7 +84,7 @@ export const PASSOS: readonly PassoDoOnboarding[] = [
     // O quadro vem DEPOIS de treinar de propósito: a sugestão sai da chave que a
     // pessoa acabou de confirmar funcionando, e é o mesmo cérebro que vai
     // atender. Pedir o quadro antes obrigaria a montá-lo no escuro.
-    rotulo: "Onde ele organiza",
+    rotulo: "Son tableau",
     existe: () => true,
     cumprido: (s) => marcado(s.funil),
     pulado: (s) => foiPulado(s.funil),
@@ -95,14 +95,14 @@ export const PASSOS: readonly PassoDoOnboarding[] = [
     // funcionário responder ANTES de acabar é o que transforma "configurei um
     // sistema" em "contratei alguém" — e é onde o erro aparece antes do
     // primeiro cliente real, não depois.
-    rotulo: "Ver ele atender",
+    rotulo: "Le voir répondre",
     existe: () => true,
     cumprido: (s) => marcado(s.teste),
     pulado: (s) => foiPulado(s.teste),
   },
   {
     segmento: "invite-team",
-    rotulo: "Quem trabalha com ele",
+    rotulo: "Votre équipe",
     existe: () => true,
     cumprido: (s) => marcado(s.team),
     pulado: (s) => foiPulado(s.team),

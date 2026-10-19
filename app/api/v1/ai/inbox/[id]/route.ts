@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("agent", { requestId, resource: "agent_inbox_items" });
@@ -34,11 +34,11 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = bodySchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -53,10 +53,10 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
     .select("id, kind, severity, title, body, ref_kind, ref_id, status, created_at")
     .maybeSingle();
   if (error) {
-    return fail("internal_error", "Falha ao atualizar o aviso.", 500, { requestId });
+    return fail("internal_error", "Impossible de mettre à jour l’alerte.", 500, { requestId });
   }
   if (!data) {
-    return fail("not_found", "Aviso não encontrado nesta organização.", 404, { requestId });
+    return fail("not_found", "Alerte introuvable dans cette organisation.", 404, { requestId });
   }
 
   await audit({

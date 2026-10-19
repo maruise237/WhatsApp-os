@@ -31,7 +31,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "followup_enrollments" });
@@ -46,10 +46,10 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!existing) return fail("not_found", "Enrollment não encontrado.", 404, { requestId });
+  if (!existing) return fail("not_found", "Inscription introuvable.", 404, { requestId });
 
   if (!LIVE_STATUSES.includes(existing.status)) {
-    return fail("already_terminal", "Enrollment já está encerrado.", 409, { requestId });
+    return fail("already_terminal", "Cette inscription est déjà terminée.", 409, { requestId });
   }
 
   const { data: updated, error: updErr } = await supabase

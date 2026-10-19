@@ -22,9 +22,9 @@ export interface RetentionCopy {
 }
 
 const TITLES: Record<RetentionKind, string> = {
-  protection: "Resposta segurada pela proteção do número",
-  compliance: "Resposta bloqueada por conformidade",
-  quality: "Resposta retida para correção",
+  protection: "Réponse retenue pour protéger le numéro",
+  compliance: "Réponse bloquée pour conformité",
+  quality: "Réponse retenue pour correction",
 };
 
 /**
@@ -33,7 +33,7 @@ const TITLES: Record<RetentionKind, string> = {
  * Qualidade (promise/disclosure) explica que o assistente corrige sozinho.
  */
 export function retentionCopy(code: string | null, ctx: RetentionContext): RetentionCopy {
-  const janela = `${ctx.window_start_hour}h–${ctx.window_end_hour}h${ctx.allow_sunday ? "" : ", sem domingo"}`;
+  const janela = `${ctx.window_start_hour}h–${ctx.window_end_hour}h${ctx.allow_sunday ? "" : ", sans le dimanche"}`;
   const make = (kind: RetentionKind, description: string): RetentionCopy => ({
     kind,
     title: TITLES[kind],
@@ -44,57 +44,57 @@ export function retentionCopy(code: string | null, ctx: RetentionContext): Reten
     case "outside_window":
       return make(
         "protection",
-        `Fora da janela de envio (${janela}). A resposta fica agendada para a próxima abertura da janela, às ${ctx.window_start_hour}h — isso protege o número contra bloqueio do WhatsApp.`,
+        `En dehors des heures d’envoi (${janela}). La réponse est programmée pour la prochaine ouverture, à ${ctx.window_start_hour}h — cela protège le numéro contre un blocage WhatsApp.`,
       );
     case "warmup_cap":
       return make(
         "protection",
-        `Este número ainda está em aquecimento e o limite diário de envios dele foi atingido. Enviar além disso arriscaria bloqueio pelo WhatsApp — libera de novo amanhã, a partir das ${ctx.window_start_hour}h.`,
+        `Ce numéro est encore en période de rodage et sa limite d’envois du jour est atteinte. Envoyer davantage risquerait un blocage WhatsApp — c’est de nouveau possible demain, à partir de ${ctx.window_start_hour}h.`,
       );
     case "daily_cap":
       return make(
         "protection",
-        `O limite diário de envios do número foi atingido — proteção contra bloqueio do WhatsApp. Libera de novo amanhã, a partir das ${ctx.window_start_hour}h.`,
+        `La limite d’envois du jour pour ce numéro est atteinte — protection contre un blocage WhatsApp. C’est de nouveau possible demain, à partir de ${ctx.window_start_hour}h.`,
       );
     case "mass_identical":
       return make(
         "protection",
-        "A mesma mensagem estava se repetindo em massa por este número. O envio foi segurado para variar o texto e não parecer robô para o WhatsApp.",
+        "Le même message était envoyé en masse depuis ce numéro. L’envoi a été retenu pour varier le texte et ne pas passer pour un robot auprès de WhatsApp.",
       );
     case "contato_bloqueado":
       return make(
         "compliance",
-        "O contato pediu para não receber mensagens (opt-out). Nada será enviado a ele.",
+        "Le contact a demandé à ne plus recevoir de messages (désinscription). Rien ne lui sera envoyé.",
       );
     case "lgpd_anonymized":
       return make(
         "compliance",
-        "Este contato foi anonimizado (LGPD) — é proibido enviar qualquer mensagem a ele.",
+        "Ce contact a été anonymisé (protection des données) — il est interdit de lui envoyer le moindre message.",
       );
     case "lgpd_missing_legal_basis":
       return make(
         "compliance",
-        "Não há base legal (LGPD) para o primeiro contato de prospecção com este lead. O time precisa regularizar o cadastro antes de abordar.",
+        "Aucune base légale (protection des données) pour un premier contact de prospection avec ce client. L’équipe doit régulariser sa fiche avant de le contacter.",
       );
     case "promise_out_of_table":
       return make(
         "quality",
-        "A resposta prometia um preço ou condição fora da tabela aprovada. O assistente foi orientado a corrigir antes de enviar.",
+        "La réponse promettait un prix ou une condition hors du tarif approuvé. L’assistant doit la corriger avant l’envoi.",
       );
     case "promise_semantic":
       return make(
         "quality",
-        "A resposta continha uma promessa não autorizada. O assistente foi orientado a reescrever antes de enviar.",
+        "La réponse contenait une promesse non autorisée. L’assistant doit la réécrire avant l’envoi.",
       );
     case "disclosure_required":
       return make(
         "quality",
-        "A primeira mensagem a um contato novo precisa se apresentar como assistente virtual. O assistente foi orientado a corrigir antes de enviar.",
+        "Le premier message à un nouveau contact doit se présenter comme un assistant virtuel. L’assistant doit le corriger avant l’envoi.",
       );
     default:
       return make(
         "protection",
-        `Uma trava de segurança segurou esta resposta${code ? ` (código ${code})` : ""}. Ela não foi enviada ao contato.`,
+        `Une sécurité a retenu cette réponse${code ? ` (code ${code})` : ""}. Elle n’a pas été envoyée au contact.`,
       );
   }
 }

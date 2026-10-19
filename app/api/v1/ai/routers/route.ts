@@ -46,7 +46,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     .eq("organization_id", org.orgId)
     .order("created_at", { ascending: false });
   if (routersErr) {
-    return fail("internal_error", "Erro ao listar routers.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des routeurs.", 500, { requestId });
   }
 
   const { data: memberRows, error: membersErr } = await admin
@@ -54,7 +54,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
     .select("router_id")
     .eq("organization_id", org.orgId);
   if (membersErr) {
-    return fail("internal_error", "Erro ao contar membros dos routers.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du comptage des membres des routeurs.", 500, { requestId });
   }
 
   const counts = new Map<string, number>();
@@ -81,12 +81,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createRouterSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -115,10 +115,10 @@ export async function POST(req: NextRequest): Promise<Response> {
     () => base().maybeSingle(),
   );
   if (sessionErr) {
-    return fail("internal_error", "Erro ao verificar o número de WhatsApp.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la vérification du numéro WhatsApp.", 500, { requestId });
   }
   if (!session) {
-    return fail("channel_session_not_found", "Número de WhatsApp não encontrado nesta organização.", 404, {
+    return fail("channel_session_not_found", "Numéro WhatsApp introuvable dans cette organisation.", 404, {
       requestId,
     });
   }
@@ -138,9 +138,9 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (insErr || !created) {
     if (insErr?.code === "23505") {
-      return fail("router_already_exists", "Este número já tem um roteador ativo.", 409, { requestId });
+      return fail("router_already_exists", "Ce numéro a déjà un routeur actif.", 409, { requestId });
     }
-    return fail("internal_error", "Erro ao criar router.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la création du routeur.", 500, { requestId });
   }
 
   void audit({

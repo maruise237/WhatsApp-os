@@ -27,7 +27,7 @@ export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id, vid } = await ctx.params;
   if (!UUID_RX.test(id) || !UUID_RX.test(vid)) {
-    return fail("invalid_request", "ids inválidos.", 400, { requestId });
+    return fail("invalid_request", "Identifiants invalides.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "ai_agents" });
@@ -43,8 +43,8 @@ export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("id", vid)
     .maybeSingle();
 
-  if (error) return fail("internal_error", "Erro ao buscar version.", 500, { requestId });
-  if (!data) return fail("not_found", "Version não encontrada.", 404, { requestId });
+  if (error) return fail("internal_error", "Erreur lors de la recherche de la version.", 500, { requestId });
+  if (!data) return fail("not_found", "Version introuvable.", 404, { requestId });
   return ok(data, { requestId });
 }
 
@@ -52,7 +52,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id, vid } = await ctx.params;
   if (!UUID_RX.test(id) || !UUID_RX.test(vid)) {
-    return fail("invalid_request", "ids inválidos.", 400, { requestId });
+    return fail("invalid_request", "Identifiants invalides.", 400, { requestId });
   }
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
@@ -63,18 +63,18 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = versionPatchSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
   }
   const patch = parsed.data;
   if (Object.keys(patch).length === 0) {
-    return fail("invalid_request", "Body vazio.", 400, { requestId });
+    return fail("invalid_request", "Corps de requête vide.", 400, { requestId });
   }
 
   const admin = createAdminClient();
@@ -86,9 +86,9 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("agent_id", id)
     .maybeSingle();
 
-  if (!existing) return fail("not_found", "Version não encontrada.", 404, { requestId });
+  if (!existing) return fail("not_found", "Version introuvable.", 404, { requestId });
   if (existing.status !== "draft") {
-    return fail("version_immutable", "Apenas versões 'draft' podem ser editadas.", 409, {
+    return fail("version_immutable", "Seules les versions « brouillon » (draft) peuvent être modifiées.", 409, {
       requestId,
       details: { current_status: existing.status },
     });
@@ -126,7 +126,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
     .single();
 
   if (error || !data) {
-    return fail("internal_error", "Erro ao atualizar version.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la mise à jour de la version.", 500, { requestId });
   }
 
   void audit({

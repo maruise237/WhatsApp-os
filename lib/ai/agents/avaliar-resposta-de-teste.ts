@@ -60,15 +60,15 @@ export interface AvaliacaoDaRespostaDeTeste {
  * cadeia force alguém a decidir de que lado ele cai.
  */
 const NAO_AVALIAVEIS_SEM_TURNO: ReadonlyArray<{ gate: string; porque: string }> = [
-  { gate: "stop", porque: "depende de o contato ter pedido para sair — não há contato real no teste" },
-  { gate: "lgpd", porque: "depende da base legal registrada para o contato" },
-  { gate: "pacing", porque: "depende de quantas mensagens o número já enviou hoje e do horário do envio" },
-  { gate: "messaging_window", porque: "depende de quando o contato falou com você pela última vez" },
-  { gate: "spinning", porque: "depende das últimas mensagens enviadas por este número" },
-  { gate: "promise", porque: "depende da tabela de preços e condições da organização" },
-  { gate: "semantic_promise", porque: "usa uma chamada de modelo extra, que o teste não gasta" },
-  { gate: "case_promise", porque: "depende de haver um chamado aberto para este contato" },
-  { gate: "disclosure", porque: "depende de esta ser a primeira mensagem ao contato" },
+  { gate: "stop", porque: "dépend du fait que le contact a demandé à ne plus être contacté — il n’y a pas de vrai contact dans le test" },
+  { gate: "lgpd", porque: "dépend de la base légale enregistrée pour le contact" },
+  { gate: "pacing", porque: "dépend du nombre de messages déjà envoyés aujourd’hui par le numéro et de l’heure d’envoi" },
+  { gate: "messaging_window", porque: "dépend de la dernière fois où le contact vous a écrit" },
+  { gate: "spinning", porque: "dépend des derniers messages envoyés par ce numéro" },
+  { gate: "promise", porque: "dépend de la grille de prix et des conditions de l’entreprise" },
+  { gate: "semantic_promise", porque: "utilise un appel IA supplémentaire, que le test ne consomme pas" },
+  { gate: "case_promise", porque: "dépend de l’existence d’une demande ouverte pour ce contact" },
+  { gate: "disclosure", porque: "dépend du fait que ce soit le premier message au contact" },
 ];
 
 /**

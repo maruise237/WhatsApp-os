@@ -498,3 +498,19 @@
     border-color: var(--color-accent);
   }
 }
+
+/*
+ * Mobile : une seule marge latérale, celle du conteneur (16 px).
+ * `AppShell` met `p-6` sur <main> et une cinquantaine de pages remettent `p-6`
+ * sur leur racine : 48 px de chaque côté, il ne restait que 294 px utiles sur
+ * un écran de 390 px (colonnes coupées, noms sur trois lignes). Neutraliser la
+ * marge de la racine ICI, plutôt que dans chaque page, couvre aussi les pages
+ * de demain. Le bureau garde sa mise en page.
+ */
+@media (max-width: 767px) {
+  [data-app-main] > .p-6 {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+  }
+}

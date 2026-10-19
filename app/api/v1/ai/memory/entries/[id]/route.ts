@@ -23,7 +23,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "org_memory" });
@@ -33,7 +33,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
   const body = await req.json().catch(() => null);
   const parsed = patchSchema.safeParse(body);
   if (!parsed.success) {
-    return fail("validation_failed", "status inválido.", 422, {
+    return fail("validation_failed", "Statut invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -48,7 +48,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx): Promise<Response> {
     .select("id, status")
     .single();
   if (error || !data) {
-    return fail("not_found", "Entrada de memória não encontrada nesta organização.", 404, {
+    return fail("not_found", "Entrée de mémoire introuvable dans cette organisation.", 404, {
       requestId,
     });
   }

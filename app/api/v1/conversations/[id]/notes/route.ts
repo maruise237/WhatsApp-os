@@ -35,7 +35,7 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
     .eq("id", id)
     .eq("organization_id", org.orgId)
     .maybeSingle();
-  if (!conversation) return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+  if (!conversation) return fail("not_found", "Conversation introuvable.", 404, { requestId });
 
   const { data, error } = await supabase
     .from("conversation_notes")
@@ -43,7 +43,7 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
     .eq("conversation_id", id)
     .eq("organization_id", org.orgId)
     .order("created_at", { ascending: true });
-  if (error) return fail("internal_error", "Erro ao listar notas.", 500, { requestId });
+  if (error) return fail("internal_error", "Erreur lors du chargement des notes.", 500, { requestId });
   return ok(data ?? [], { requestId });
 }
 
@@ -61,12 +61,12 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
     .eq("id", id)
     .eq("organization_id", org.orgId)
     .maybeSingle();
-  if (!conversation) return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+  if (!conversation) return fail("not_found", "Conversation introuvable.", 404, { requestId });
 
   const raw = await req.json().catch(() => null);
   const parsed = createNoteSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Dados inválidos.", 422, {
+    return fail("validation_failed", "Données invalides.", 422, {
       requestId,
       details: parsed.error.flatten().fieldErrors as Record<string, unknown>,
     });
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
     })
     .select(COLS)
     .single();
-  if (error || !data) return fail("internal_error", "Erro ao criar nota.", 500, { requestId });
+  if (error || !data) return fail("internal_error", "Erreur lors de la création de la note.", 500, { requestId });
 
   void audit({
     action: "conversation.note_added",

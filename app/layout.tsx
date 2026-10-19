@@ -86,7 +86,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s · ${name}`,
     },
     description:
-      "Centralisez vos échanges WhatsApp dans un seul entonnoir. Les agents IA règlent ce qui peut l’être et transmettent à l’équipe humaine ce qui compte — avec tout l’historique. Multi-organisation, respect des données personnelles intégré, pensé pour les entreprises qui vendent sur WhatsApp.",
+      "Centralisez vos échanges WhatsApp dans un seul tableau. Les agents IA règlent ce qui peut l’être et transmettent à l’équipe humaine ce qui compte — avec tout l’historique. Multi-organisation, respect des données personnelles intégré, pensé pour les entreprises qui vendent sur WhatsApp.",
     applicationName: name,
     authors: [{ name }],
     keywords: [

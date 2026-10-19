@@ -68,3 +68,30 @@ describe("createAdminClient — Neon PostgreSQL direct", () => {
     );
   });
 });
+
+describe("contrat PostgREST du client admin direct", () => {
+  it("une liste d'objets destinée à un jsonb part en JSON, pas en tableau Postgres", async () => {
+    const { valeurPourJson } = await import("./admin-client");
+    expect(valeurPourJson([{ nome: "Ventes" }])).toBe('[{"nome":"Ventes"}]');
+    expect(valeurPourJson({ a: [1, 2] })).toBe('{"a":[1,2]}');
+    expect(valeurPourJson("déjà texte")).toBe("déjà texte");
+    expect(valeurPourJson(null)).toBeNull();
+    const date = new Date(0);
+    expect(valeurPourJson(date)).toBe(date);
+  });
+
+  it("rpc rend la valeur d'un scalaire, l'objet d'une ligne, le tableau d'un ensemble", async () => {
+    const { formerRetourRpc } = await import("./admin-client");
+    const scalaire = { ensemble: false, scalaire: true, vide: false };
+    expect(formerRetourRpc([{ fn_x: { ok: true } }], scalaire)).toEqual({ ok: true });
+    expect(formerRetourRpc([{ fn_decrypt_oauth: "secret" }], scalaire)).toBe("secret");
+    expect(formerRetourRpc([], scalaire)).toBeNull();
+    expect(formerRetourRpc([{ id: "o1", status: "en_cours" }], { ensemble: false, scalaire: false, vide: false })).toEqual({
+      id: "o1",
+      status: "en_cours",
+    });
+    expect(formerRetourRpc([{ a: 1 }, { a: 2 }], { ensemble: true, scalaire: false, vide: false })).toEqual([{ a: 1 }, { a: 2 }]);
+    expect(formerRetourRpc([{ f: 1 }, { f: 2 }], { ensemble: true, scalaire: true, vide: false })).toEqual([1, 2]);
+    expect(formerRetourRpc([{ f: "" }], { ensemble: false, scalaire: true, vide: true })).toBeNull();
+  });
+});

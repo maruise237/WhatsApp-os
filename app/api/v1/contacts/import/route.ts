@@ -66,7 +66,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!(f instanceof File)) throw new Error("sem arquivo");
     file = f;
   } catch {
-    return fail("validation_failed", "Envie o arquivo como multipart/form-data no campo 'file'.", 422, {
+    return fail("validation_failed", "Envoyez le fichier en multipart/form-data dans le champ « file ».", 422, {
       requestId,
     });
   }
@@ -79,13 +79,13 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (!tipoOk) {
     return fail(
       "validation_failed",
-      "Formato não suportado — envie um arquivo .csv. No Excel use 'Salvar como' → 'CSV UTF-8'.",
+      "Format non pris en charge — envoyez un fichier .csv. Dans Excel, utilisez « Enregistrer sous » → « CSV UTF-8 ».",
       422,
       { requestId },
     );
   }
   if (file.size > CSV_MAX_BYTES) {
-    return fail("validation_failed", `Arquivo maior que ${Math.floor(CSV_MAX_BYTES / 1024 / 1024)}MB.`, 413, {
+    return fail("validation_failed", `Fichier de plus de ${Math.floor(CSV_MAX_BYTES / 1024 / 1024)} Mo.`, 413, {
       requestId,
     });
   }
@@ -94,12 +94,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   const text = await file.text();
   const rows = parseCsv(text);
   if (rows.length < 2) {
-    return fail("validation_failed", "CSV vazio ou sem linhas de dados.", 422, { requestId });
+    return fail("validation_failed", "CSV vide ou sans lignes de données.", 422, { requestId });
   }
   const header = rows[0]!;
   const mapeado = mapHeader(header);
   if (mapeado.motivo !== null) {
-    return fail("validation_failed", `Cabeçalho inválido: ${mapeado.motivo}.`, 422, {
+    return fail("validation_failed", `En-tête invalide : ${mapeado.motivo}.`, 422, {
       details: { header: header.join(", ") },
       requestId,
     });
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (dataRows.length > CSV_MAX_DATA_ROWS) {
     return fail(
       "validation_failed",
-      `Máximo de ${CSV_MAX_DATA_ROWS} linhas por importação — divida a planilha.`,
+      `${CSV_MAX_DATA_ROWS} lignes maximum par import — divisez le fichier.`,
       422,
       { requestId },
     );
@@ -128,7 +128,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       continue;
     }
     if (contato.cpf && !isValidCpf(contato.cpf)) {
-      errors.push({ linha, motivo: `CPF inválido: "${contato.cpf}"` });
+      errors.push({ linha, motivo: `Numéro d’identification invalide : « ${contato.cpf} »` });
       continue;
     }
     const chave = contato.phone_number ?? `email:${(contato.email as string).toLowerCase()}`;
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     const parsed = contactCreateSchema.safeParse({ ...contato, source: SOURCE_IMPORT_CSV });
     if (!parsed.success) {
       const primeiro = parsed.error.issues[0];
-      errors.push({ linha, motivo: primeiro?.message ?? "dados inválidos" });
+      errors.push({ linha, motivo: primeiro?.message ?? "données invalides" });
       continue;
     }
     candidatos.push({ linha, contato: parsed.data as Record<string, unknown> });

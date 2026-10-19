@@ -44,10 +44,10 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (runErr) return fail("internal_error", runErr.message, 500, { requestId });
-  if (!run) return fail("not_found", "Run não encontrado.", 404, { requestId });
+  if (!run) return fail("not_found", "Exécution introuvable.", 404, { requestId });
 
   if (!run.event_id) {
-    return fail("event_gone", "O evento original deste run foi removido.", 409, { requestId });
+    return fail("event_gone", "L’événement d’origine de cette exécution a été supprimé.", 409, { requestId });
   }
 
   const { data: rule, error: ruleErr } = await supabase
@@ -57,7 +57,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (ruleErr) return fail("internal_error", ruleErr.message, 500, { requestId });
-  if (!rule) return fail("not_found", "Regra do run não encontrada.", 404, { requestId });
+  if (!rule) return fail("not_found", "Règle de cette exécution introuvable.", 404, { requestId });
 
   const { data: eventRow, error: eventErr } = await supabase
     .from("event_log")
@@ -67,7 +67,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .maybeSingle();
   if (eventErr) return fail("internal_error", eventErr.message, 500, { requestId });
   if (!eventRow) {
-    return fail("event_gone", "O evento original deste run foi removido.", 409, { requestId });
+    return fail("event_gone", "L’événement d’origine de cette exécution a été supprimé.", 409, { requestId });
   }
 
   const typedEvent = eventRow as unknown as EventRow;
@@ -94,7 +94,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (callWebhookActions.length === 0) {
     return fail(
       "no_actions_to_resend",
-      "Esta automação não tem mais nenhuma ação de webhook — não há o que reenviar.",
+      "Cette automatisation n’a plus aucune action webhook — il n’y a rien à renvoyer.",
       409,
       { requestId },
     );

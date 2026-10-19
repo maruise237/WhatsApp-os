@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     () => buscar(`id, ${CHANNEL_SESSION_REF_COLUMNS}`),
   );
   const session = sessionRaw as (ChannelSessionRef & { id: string; archived_at?: string | null }) | null;
-  if (!session) return fail("not_found", "Canal não encontrado.", 404, { requestId });
+  if (!session) return fail("not_found", "Canal introuvable.", 404, { requestId });
   if (session.archived_at) {
     return fail(
       "channel_archived",

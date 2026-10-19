@@ -36,12 +36,12 @@ export async function POST(request: NextRequest): Promise<Response> {
   try {
     body = await request.json();
   } catch {
-    return fail("invalid_request", "Corpo JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createProductSchema.safeParse(body);
   if (!parsed.success) {
-    return fail("invalid_request", "Dados do produto inválidos.", 400, {
+    return fail("invalid_request", "Données du produit invalides.", 400, {
       requestId,
       details: parsed.error.flatten(),
     });

@@ -34,12 +34,12 @@ export type ResultadoDaPolitica = { ok: true } | { ok: false; erro: string };
  */
 export async function definirExigenciaDeMfa(exigir: boolean): Promise<ResultadoDaPolitica> {
   const user = await loadAuthUser();
-  if (!user) return { ok: false, erro: "Sua sessão expirou. Entre de novo." };
+  if (!user) return { ok: false, erro: "Votre session a expiré. Reconnectez-vous." };
   const org = await resolveActiveOrg(user);
-  if (!org) return { ok: false, erro: "Nenhuma empresa ativa." };
+  if (!org) return { ok: false, erro: "Aucune entreprise active." };
 
   if (org.role !== "admin") {
-    return { ok: false, erro: "Só um administrador pode mudar essa regra." };
+    return { ok: false, erro: "Seul un administrateur peut modifier cette règle." };
   }
 
   const admin = createAdminClient();
@@ -48,7 +48,7 @@ export async function definirExigenciaDeMfa(exigir: boolean): Promise<ResultadoD
     .select("settings")
     .eq("id", org.orgId)
     .maybeSingle();
-  if (erroLeitura) return { ok: false, erro: "Não consegui ler a configuração agora." };
+  if (erroLeitura) return { ok: false, erro: "Impossible de lire la configuration pour le moment." };
 
   // `settings` é jsonb livre e compartilhado (o provedor de IA mora nele): ler,
   // mesclar e gravar preserva o que não é nosso. Um UPDATE com o objeto montado
@@ -58,7 +58,7 @@ export async function definirExigenciaDeMfa(exigir: boolean): Promise<ResultadoD
   const novo = { ...settings, security: { ...security, mfa_required: exigir } };
 
   const { error } = await admin.from("organizations").update({ settings: novo }).eq("id", org.orgId);
-  if (error) return { ok: false, erro: "Não consegui salvar essa mudança agora." };
+  if (error) return { ok: false, erro: "Impossible d’enregistrer ce changement pour le moment." };
 
   await audit({
     action: exigir ? "security.mfa_exigida" : "security.mfa_dispensada",
@@ -88,7 +88,7 @@ export async function definirExigenciaDeMfa(exigir: boolean): Promise<ResultadoD
  */
 export async function desativarMfaDaConta(): Promise<ResultadoDaPolitica> {
   const user = await loadAuthUser();
-  if (!user) return { ok: false, erro: "Sua sessão expirou. Entre de novo." };
+  if (!user) return { ok: false, erro: "Votre session a expiré. Reconnectez-vous." };
   const org = await resolveActiveOrg(user);
 
   if (!(await isMfaEnrolled())) return { ok: true };
@@ -126,14 +126,14 @@ export async function desativarMfaDaConta(): Promise<ResultadoDaPolitica> {
   ) {
     return {
       ok: false,
-      erro: "A verificação em duas etapas é obrigatória para administradores desta empresa. Desligue a regra antes.",
+      erro: "La vérification en deux étapes est obligatoire pour les administrateurs de cette entreprise. Désactivez d’abord cette règle.",
     };
   }
 
   if ((await sessionAal()) !== "aal2") {
     return {
       ok: false,
-      erro: "Entre de novo e informe o código de 6 dígitos antes de desligar a verificação.",
+      erro: "Reconnectez-vous et saisissez le code à 6 chiffres avant de désactiver la vérification.",
     };
   }
 
@@ -142,7 +142,7 @@ export async function desativarMfaDaConta(): Promise<ResultadoDaPolitica> {
   for (const f of fatores?.all ?? []) {
     if (f.factor_type !== "totp") continue;
     const { error } = await supabase.auth.mfa.unenroll({ factorId: f.id });
-    if (error) return { ok: false, erro: "Não consegui remover a verificação agora." };
+    if (error) return { ok: false, erro: "Impossible de supprimer la vérification pour le moment." };
   }
 
   await audit({

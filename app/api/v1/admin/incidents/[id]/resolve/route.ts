@@ -18,8 +18,8 @@ import { audit } from "@/lib/audit";
 const bodySchema = z.object({
   resolution_note: z
     .string()
-    .min(10, "Nota de resolução deve ter ao menos 10 caracteres")
-    .max(1000, "Nota de resolução deve ter no máximo 1000 caracteres"),
+    .min(10, "La note de résolution doit contenir au moins 10 caractères")
+    .max(1000, "La note de résolution doit contenir au maximum 1000 caractères"),
 });
 
 export async function POST(

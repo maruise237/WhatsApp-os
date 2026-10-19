@@ -31,7 +31,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "followup_flows" });
@@ -46,7 +46,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!pointer) return fail("not_found", "Fluxo não encontrado.", 404, { requestId });
+  if (!pointer) return fail("not_found", "Scénario introuvable.", 404, { requestId });
 
   // ⚠️ ALLOWLIST, NÃO DENYLIST — e a diferença não é estilo.
   //
@@ -70,7 +70,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (!KINDS_COM_MOTOR.has(triggerKind)) {
     return fail(
       "trigger_kind_not_implemented",
-      `O gatilho «${triggerKind}» não está disponível — use Etapa do funil, Silêncio ou Manual.`,
+      `Le déclencheur « ${triggerKind} » n’est pas disponible — utilisez Étape du tableau, Silence ou Manuel.`,
       422,
       { requestId },
     );
@@ -86,7 +86,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     if (!stageId || !UUID_RX.test(stageId)) {
       return fail(
         "trigger_stage_missing",
-        "Escolha a etapa do funil que dispara este fluxo antes de publicar.",
+        "Choisissez l’étape du tableau qui déclenche ce scénario avant de le publier.",
         422,
         { requestId },
       );
@@ -101,7 +101,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     if (!stage) {
       return fail(
         "trigger_stage_not_found",
-        "A etapa escolhida para o gatilho não existe mais neste funil — escolha outra.",
+        "L’étape choisie pour le déclencheur n’existe plus dans ce tableau — choisissez-en une autre.",
         422,
         { requestId },
       );
@@ -109,7 +109,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     if (stage.is_archived) {
       return fail(
         "trigger_stage_archived",
-        `A etapa «${stage.name}» está arquivada e nunca receberia um negócio — escolha uma etapa ativa.`,
+        `L’étape « ${stage.name} » est archivée et ne recevrait jamais d’affaire — choisissez une étape active.`,
         422,
         { requestId },
       );
@@ -117,14 +117,14 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   }
 
   if (!pointer.draft_graph) {
-    return fail("validation_failed", "Fluxo não tem rascunho pronto para publicar.", 422, {
+    return fail("validation_failed", "Ce scénario n’a pas de brouillon prêt à être publié.", 422, {
       requestId,
       details: {
         errors: [
           {
             node_id: null,
             code: "no_trigger",
-            message: "draft_graph ausente — monte o fluxo antes de publicar.",
+            message: "draft_graph absent — construisez le scénario avant de le publier.",
           },
         ],
       },
@@ -134,7 +134,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const graph = pointer.draft_graph as unknown as FlowGraph;
   const validation = validateFlowForPublish(graph);
   if (!validation.ok) {
-    return fail("validation_failed", "Fluxo reprovado na validação de publish.", 422, {
+    return fail("validation_failed", "Le scénario n’a pas passé la validation avant publication.", 422, {
       requestId,
       details: { errors: validation.errors },
     });
@@ -148,7 +148,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   });
   if (!result.ok) {
     if (result.code === "pointer_not_found") {
-      return fail("not_found", "Fluxo não encontrado.", 404, { requestId });
+      return fail("not_found", "Scénario introuvable.", 404, { requestId });
     }
     return fail("internal_error", result.message, 500, { requestId });
   }

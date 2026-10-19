@@ -50,7 +50,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   }
   const row = data?.[0];
   if (!row) {
-    return fail("state_conflict", "Você não está atribuído a essa conversa.", 409, { requestId });
+    return fail("state_conflict", "Cette conversation ne vous est pas attribuée.", 409, { requestId });
   }
 
   const conv = row as unknown as Conversation;
@@ -74,7 +74,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     contactId: conv.contact_id,
     tipo: "conversation_released",
     actor: { type: "user", id: user.id, role: authz.org.role },
-    motivo: "Liberou a conversa de volta para a fila",
+    motivo: "A remis la conversation dans la file d’attente",
   });
 
   return ok(conv, { requestId });

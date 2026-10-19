@@ -40,44 +40,44 @@ export interface PacoteMeta {
 export const PACOTES: ReadonlyArray<PacoteMeta> = [
   {
     id: "atender",
-    rotulo: "Atender e responder",
+    rotulo: "Accueillir et répondre",
     explicacao:
-      "O agente lê a conversa, entende o histórico e responde ao cliente sem pedir que ele repita o que já disse.",
+      "L’assistant lit la conversation, comprend l’historique et répond au client sans lui faire répéter ce qu’il a déjà dit.",
     ordem: 1,
   },
   {
     id: "vender",
-    rotulo: "Vender e mover o funil",
+    rotulo: "Vendre et faire avancer le tableau",
     explicacao:
-      "O agente registra a oportunidade, atualiza o negócio e move o cliente de etapa conforme a conversa avança.",
+      "L’assistant enregistre l’affaire, la met à jour et déplace le client de colonne au fil de la conversation.",
     ordem: 2,
   },
   {
     id: "reter",
-    rotulo: "Não perder o cliente",
+    rotulo: "Ne pas perdre le client",
     explicacao:
-      "O agente agenda retornos e acompanha quem esfriou, para que nenhum interessado morra por falta de resposta.",
+      "L’assistant programme des relances et suit ceux qui se refroidissent, pour qu’aucun client intéressé ne soit perdu faute de réponse.",
     ordem: 3,
   },
   {
     id: "escalar",
-    rotulo: "Passar para um humano",
+    rotulo: "Passer la main à une personne",
     explicacao:
-      "O agente reconhece quando não é o caso dele resolver, chama uma pessoa e entrega o resumo do que já aconteceu.",
+      "L’assistant sait reconnaître quand ce n’est pas à lui de régler un cas, appelle une personne et lui donne un résumé de la conversation.",
     ordem: 4,
   },
   {
     id: "organizar",
-    rotulo: "Organizar a operação",
+    rotulo: "Organiser le travail",
     explicacao:
-      "O agente mantém a casa em ordem: marcadores, etapas do funil, avisos automáticos e distribuição de trabalho.",
+      "L’assistant garde tout en ordre : étiquettes, colonnes du tableau, alertes automatiques et répartition du travail.",
     ordem: 5,
   },
   {
     id: "evoluir",
-    rotulo: "Aprender e evoluir",
+    rotulo: "Apprendre et progresser",
     explicacao:
-      "O agente consulta o que a empresa já sabe, aprende com os atendimentos e sugere melhorias para você aprovar.",
+      "L’assistant consulte ce que l’entreprise sait déjà, apprend des conversations et propose des améliorations à approuver.",
     ordem: 6,
   },
 ] as const;
@@ -91,26 +91,26 @@ export interface RiscoMeta {
 export const RISCOS: ReadonlyArray<RiscoMeta> = [
   {
     id: "seguro",
-    rotulo: "Só consulta",
-    explicacao: "O agente apenas lê a informação. Nada muda no sistema.",
+    rotulo: "Lecture seule",
+    explicacao: "L’assistant lit seulement l’information. Rien ne change.",
   },
   {
     id: "atencao",
-    rotulo: "Altera dados",
+    rotulo: "Modifie des données",
     explicacao:
-      "O agente muda alguma coisa no sistema. Você consegue ver o que mudou e desfazer pela tela.",
+      "L’assistant modifie quelque chose. Vous pouvez voir ce qui a changé et l’annuler depuis l’écran.",
   },
   {
     id: "critico",
-    rotulo: "Efeito que não dá para desfazer",
+    rotulo: "Action irréversible",
     explicacao:
-      "O agente faz algo que sai do sistema ou não volta atrás — como falar com o cliente de verdade. Precisa ser ligado por você, uma a uma.",
+      "L’assistant fait quelque chose qui sort de l’application ou ne peut pas être annulé — comme écrire vraiment au client. À activer par vous, une par une.",
   },
 ] as const;
 
 /**
  * Capacidade `critico` nunca entra ligada por pacote: exige marcacao explicita
- * do humano. Ligar "Atender e responder" nao pode, sozinho, dar ao agente o
+ * do humano. Ligar "Accueillir et répondre" nao pode, sozinho, dar ao agente o
  * direito de mandar mensagem para o cliente.
  */
 export function entraPorPacote(risco: ToolRisk): boolean {

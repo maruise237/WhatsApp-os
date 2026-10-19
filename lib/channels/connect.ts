@@ -66,7 +66,7 @@ export async function validatePartnerCredentials(
 ): Promise<PartnerValidation> {
   const accountId = input.accountId.trim();
   const apiKey = input.apiKey.trim();
-  if (!accountId || !apiKey) return { ok: false, reason: "Informe a conta e a chave." };
+  if (!accountId || !apiKey) return { ok: false, reason: "Indiquez le compte et la clé." };
 
   let res: Response;
   try {
@@ -81,14 +81,14 @@ export async function validatePartnerCredentials(
   } catch {
     // Rede caída não é credencial errada, e dizer "chave inválida" mandaria o
     // operador trocar uma chave que estava certa.
-    return { ok: false, reason: "Não foi possível falar com o provedor. Tente de novo." };
+    return { ok: false, reason: "Impossible de joindre le fournisseur. Réessayez." };
   }
 
   if (res.status === 401 || res.status === 403) {
-    return { ok: false, reason: "Chave recusada pelo provedor." };
+    return { ok: false, reason: "Clé refusée par le fournisseur." };
   }
   if (!res.ok) {
-    return { ok: false, reason: `Provedor respondeu ${res.status}.` };
+    return { ok: false, reason: `Le fournisseur a répondu ${res.status}.` };
   }
 
   const json = (await res.json().catch(() => null)) as {
@@ -101,13 +101,13 @@ export async function validatePartnerCredentials(
     // A chave presta, mas não alcança esta conta. É diferente de chave inválida,
     // e a mensagem precisa dizer QUAL das duas para o operador saber o que
     // corrigir.
-    return { ok: false, reason: "Conta não encontrada para esta chave." };
+    return { ok: false, reason: "Aucun compte trouvé pour cette clé." };
   }
 
   if (conta.platform !== "whatsapp") {
     return {
       ok: false,
-      reason: `Esta conta é de ${String(conta.platform ?? "outra rede")}, não de WhatsApp.`,
+      reason: `Ce compte est un compte ${String(conta.platform ?? "d’un autre réseau")}, pas WhatsApp.`,
     };
   }
 

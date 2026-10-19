@@ -46,12 +46,12 @@ export type OrigemDaEscolha =
   | "padrao_da_organizacao";
 
 export const EXPLICACAO_DA_ORIGEM: Record<OrigemDaEscolha, string> = {
-  agente_publicado: "Definido na versão publicada do agente.",
-  binding: "Escolhido por você no painel de provedores.",
-  variavel_de_ambiente: "Definido em variável de ambiente na instalação.",
+  agente_publicado: "Défini dans la version publiée de l’assistant.",
+  binding: "Choisi par vous dans le panneau des fournisseurs.",
+  variavel_de_ambiente: "Défini par une variable d’environnement de l’installation.",
   herdado_de_quem_chamou:
-    "Herdado de quem disparou a chamada — o agente publicado, ou o roteador de intenção.",
-  padrao_da_organizacao: "Usando o padrão da organização.",
+    "Hérité de ce qui a lancé l’appel — l’assistant publié ou le routeur d’intention.",
+  padrao_da_organizacao: "Réglage par défaut de l’entreprise.",
 };
 
 /** Uma linha de `ai_purpose_bindings`, já filtrada por organização. */
@@ -155,7 +155,7 @@ export function decidirBinding(entrada: EntradaDaDecisao): DecisaoDeBinding {
   if (PONTOS_DO_AGENTE_PUBLICADO.has(entrada.pontoId) && entrada.agentePublicado !== null) {
     if (entrada.binding !== null && entrada.binding.is_enabled) {
       avisos.push(
-        "Este ponto usa o modelo definido na versão publicada do agente; a escolha do painel não se aplica.",
+        "Cet usage prend le modèle défini dans la version publiée de l’assistant ; le choix du panneau ne s’applique pas.",
       );
     }
     const agente = entrada.agentePublicado;
@@ -187,7 +187,7 @@ export function decidirBinding(entrada: EntradaDaDecisao): DecisaoDeBinding {
   if (entrada.binding !== null && entrada.binding.is_enabled) {
     if (entrada.modeloDeAmbiente !== undefined) {
       avisos.push(
-        `A variável de ambiente deste ponto está definida como "${entrada.modeloDeAmbiente}", mas a escolha do painel tem prioridade.`,
+        `La variable d’environnement de cet usage vaut "${entrada.modeloDeAmbiente}", mais le choix du panneau est prioritaire.`,
       );
     }
     avisos.push(...avisosDeCapacidade(ponto, entrada.binding.model_id));
@@ -266,6 +266,6 @@ function avisosDeCapacidade(ponto: PontoDeIa | undefined, modelId: string): stri
   if (ponto.exige.embeddingDims === undefined) return [];
   if (/embed/i.test(modelId)) return [];
   return [
-    `Este ponto precisa de um modelo de embedding, e "${modelId}" não parece ser um. A busca no seu material pode parar de encontrar o conteúdo certo.`,
+    `Cet usage a besoin d’un modèle d’embedding, et "${modelId}" ne semble pas en être un. La recherche dans vos documents risque de ne plus trouver le bon contenu.`,
   ];
 }

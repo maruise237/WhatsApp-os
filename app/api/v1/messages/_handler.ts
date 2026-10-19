@@ -195,7 +195,7 @@ export async function listMessagesHandler(
   if (q.cursor) {
     const c = decodeMsgCursor(q.cursor);
     if (!c) {
-      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Cursor inválido.");
+      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Curseur invalide.");
     }
     query = query.or(`sent_at.lt.${c.sent_at},and(sent_at.eq.${c.sent_at},id.lt.${c.id})`);
   }
@@ -279,7 +279,7 @@ export async function sendMessageHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, convErr.message);
   }
   if (!conv) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversa não encontrada.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Conversation introuvable.");
   }
 
   type Joined = {
@@ -308,7 +308,7 @@ export async function sendMessageHandler(
       "forbidden",
       undefined,
       ctx.requestId,
-      "Contato bloqueou o atendimento.",
+      "Le contact a bloqué les échanges.",
     );
   }
 
@@ -318,7 +318,7 @@ export async function sendMessageHandler(
       "invalid_media_path",
       undefined,
       ctx.requestId,
-      "media_storage_path fora da conversa.",
+      "media_storage_path ne correspond pas à cette conversation.",
     );
   }
 
@@ -340,7 +340,7 @@ export async function sendMessageHandler(
         throw new ApiError(500, "internal_error", undefined, ctx.requestId, sharedErr.message);
       }
       if (!shared) {
-        throw new ApiError(404, "not_found", undefined, ctx.requestId, "Contato não encontrado.");
+        throw new ApiError(404, "not_found", undefined, ctx.requestId, "Contact introuvable.");
       }
       const row = shared as {
         id: string;
@@ -356,7 +356,7 @@ export async function sendMessageHandler(
           "contact_anonymized",
           undefined,
           ctx.requestId,
-          "Contato anonimizado não pode ser compartilhado.",
+          "Un contact anonymisé ne peut pas être partagé.",
         );
       }
       if (!row.phone_number) {
@@ -365,7 +365,7 @@ export async function sendMessageHandler(
           "missing_phone_number",
           undefined,
           ctx.requestId,
-          "Contato sem telefone para envio como cartão.",
+          "Ce contact n’a pas de téléphone pour être envoyé comme fiche.",
         );
       }
       const displayName = row.display_name ?? row.name ?? row.phone_number;
@@ -388,7 +388,7 @@ export async function sendMessageHandler(
           "invalid_payload",
           undefined,
           ctx.requestId,
-          "Telefone inválido para envio como cartão.",
+          "Numéro de téléphone invalide pour un envoi comme fiche.",
         );
       }
       const nameRaw = typeof o.name === "string" ? o.name.trim() : "";
@@ -404,7 +404,7 @@ export async function sendMessageHandler(
         "invalid_payload",
         undefined,
         ctx.requestId,
-        "Informe metadata.shared_contact_id ou metadata.shared_contact com telefone.",
+        "Indiquez metadata.shared_contact_id ou metadata.shared_contact avec un téléphone.",
       );
     }
   }
@@ -436,7 +436,7 @@ export async function sendMessageHandler(
         "validation_error",
         undefined,
         ctx.requestId,
-        "A mensagem citada não é desta conversa.",
+        "Le message cité n’appartient pas à cette conversation.",
       );
     }
     citada = alvo as { id: string; external_id: string | null };
@@ -513,7 +513,7 @@ export async function sendMessageHandler(
       .update({
         status: "failed",
         error_code: "channel_archived",
-        error_message: "Este número foi excluído da Central de Conexões.",
+        error_message: "Ce numéro a été supprimé du Centre de connexions.",
       })
       .eq("id", message.id)
       .select(MSG_COLS)
@@ -535,7 +535,7 @@ export async function sendMessageHandler(
       .update({
         status: "failed",
         error_code: "missing_phone_number",
-        error_message: "Contato sem telefone para envio WhatsApp.",
+        error_message: "Ce contact n’a pas de téléphone pour un envoi WhatsApp.",
       })
       .eq("id", message.id)
       .select(MSG_COLS)

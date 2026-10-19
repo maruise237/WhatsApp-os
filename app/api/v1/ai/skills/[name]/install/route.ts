@@ -35,7 +35,7 @@ export async function POST(
   const { name: rawName } = await ctx.params;
   const nameParsed = nameSchema.safeParse(decodeURIComponent(rawName));
   if (!nameParsed.success) {
-    return fail("validation_failed", "Nome de skill inválido.", 422, { requestId });
+    return fail("validation_failed", "Nom de compétence invalide.", 422, { requestId });
   }
   const name = nameParsed.data;
 
@@ -51,7 +51,7 @@ export async function POST(
     .eq("name", name)
     .maybeSingle();
   if (!platformSkill) {
-    return fail("not_found", "Skill não encontrada no catálogo de plataforma.", 404, { requestId });
+    return fail("not_found", "Compétence introuvable dans le catalogue de la plateforme.", 404, { requestId });
   }
 
   const db = getSkillsPool();
@@ -61,7 +61,7 @@ export async function POST(
     result = await installPlatformSkill({ db }, { organizationId: org.orgId, name, createdBy: authUser.id });
   } catch (err) {
     console.error("[skills-install] installPlatformSkill falhou:", err);
-    return fail("internal_error", "Erro ao instalar a skill.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’installation de la compétence.", 500, { requestId });
   }
 
   await audit({

@@ -330,7 +330,7 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
       */}
       <div
         className={cn(
-          "h-full min-h-0 flex-col border-r border-border md:flex",
+          "h-full min-h-0 flex-col border-border md:flex md:border-r",
           colunas.lista,
         )}
       >

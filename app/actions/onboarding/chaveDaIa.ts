@@ -30,24 +30,24 @@ export async function salvarChaveDaIa(formData: FormData): Promise<ResultadoDaCh
   try {
     ctx = await requireOnboardingCtx();
   } catch (err) {
-    if (err instanceof OnboardingError) return { ok: false, erro: "Sua sessão expirou. Entre de novo." };
+    if (err instanceof OnboardingError) return { ok: false, erro: "Votre session a expiré. Reconnectez-vous." };
     throw err;
   }
 
   // Guardar chave de provedor é ação de administrador, igual à rota REST. Quem
   // faz o onboarding é o dono, mas o papel é verificado e não presumido.
   if (ctx.role !== "admin") {
-    return { ok: false, erro: "Só um administrador pode cadastrar a chave da inteligência artificial." };
+    return { ok: false, erro: "Seul un administrateur peut ajouter la clé de l’intelligence artificielle." };
   }
 
   const provider = String(formData.get("provider") ?? "");
   if (!(IDS_DE_PROVEDOR as readonly string[]).includes(provider)) {
-    return { ok: false, erro: "Escolha qual inteligência artificial você contratou." };
+    return { ok: false, erro: "Choisissez l’intelligence artificielle à laquelle vous êtes abonné." };
   }
 
   const apiKey = String(formData.get("api_key") ?? "").trim();
   if (apiKey.length < 8) {
-    return { ok: false, erro: "Essa chave parece incompleta. Cole a chave inteira, do começo ao fim." };
+    return { ok: false, erro: "Cette clé semble incomplète. Collez la clé en entier, du début à la fin." };
   }
 
   const r = await guardarCredencial({
@@ -57,7 +57,7 @@ export async function salvarChaveDaIa(formData: FormData): Promise<ResultadoDaCh
     provider: provider as Provider,
     // O nome existe para a pessoa reconhecer a chave depois, na tela de
     // credenciais — não é identificador.
-    label: "Chave do onboarding",
+    label: "Clé de démarrage",
     apiKey,
   });
 
@@ -65,10 +65,10 @@ export async function salvarChaveDaIa(formData: FormData): Promise<ResultadoDaCh
     if (r.motivo === "label_em_uso") {
       return {
         ok: false,
-        erro: "Já existe uma chave cadastrada com esse nome. Veja em IA › Credenciais.",
+        erro: "Une clé portant ce nom existe déjà. Consultez IA › Identifiants.",
       };
     }
-    return { ok: false, erro: "Não consegui guardar a chave agora. Tente de novo." };
+    return { ok: false, erro: "Impossible d’enregistrer la clé pour le moment. Réessayez." };
   }
 
   // O passo lê o retrato da instalação no servidor; sem invalidar, ele seguiria

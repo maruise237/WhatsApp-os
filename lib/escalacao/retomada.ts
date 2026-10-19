@@ -308,8 +308,8 @@ async function emitirAtividadeDeRetomada(
     sourceId: conversationId,
     actor: deps.actor,
     reason: continuidade.houveAtendimentoHumano
-      ? "Atendimento devolvido ao agente com o registro do que a equipe decidiu"
-      : "Atendimento devolvido ao agente",
+      ? "Conversation rendue à l’assistant avec la décision de l’équipe"
+      : "Conversation rendue à l’assistant",
     payload: {
       conversation_id: conversationId,
       decisoes: continuidade.decisoes.length,

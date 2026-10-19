@@ -62,7 +62,7 @@ function ressalvaDeFechamento(steps: string[]): string {
   const nomes = fechamento.map((s) => `«${ROTULO_DO_PASSO[s as LeadStage]}»`).join(" et ");
   return (
     ` ${nomes} ${plural(fechamento.length, "fait exception", "font exception")} : ${plural(fechamento.length, "il ne peut pointer", "ils ne peuvent pointer")} ` +
-    `que vers l’étape de conclusion ou de perte de l’entonnoir. Si votre entonnoir n’a pas ces étapes, voyez avec la personne qui a installé le système.`
+    `que vers l’étape de conclusion ou de perte du tableau. Si votre tableau n’a pas ces étapes, voyez avec la personne qui a installé le système.`
   );
 }
 
@@ -79,12 +79,12 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
       // mandaria o dono da clínica arrumar um funil que já está certo. O texto conta
       // a CONSEQUÊNCIA e devolve a decisão para quem conhece o próprio negócio.
       texto:
-        `Dans l’entonnoir "${p.pipeline_name}", ${p.steps.length} ${plural(p.steps.length, "étape du suivi n’a pas", "étapes du suivi n’ont pas")} ` +
+        `Dans le tableau "${p.pipeline_name}", ${p.steps.length} ${plural(p.steps.length, "étape du suivi n’a pas", "étapes du suivi n’ont pas")} ` +
         // "card" e não "cartão": é o nome que a tela do conserto usa na opção
         // «Não mover o card». Um objeto, um nome — senão o usuário lê sobre
         // "cartão" aqui e procura essa palavra lá.
         `de colonne correspondante : ${nomeiaPassos(p.steps)}. Quand l’agent atteint l’une de ces étapes, la carte du client ` +
-        `ne bouge pas — elle reste où elle est. C’est parfois voulu : tous les entonnoirs n’ont pas besoin d’une colonne pour chaque étape. ` +
+        `ne bouge pas — elle reste où elle est. C’est parfois voulu : tous les tableaux n’ont pas besoin d’une colonne pour chaque étape. ` +
         `Mais si vous vous attendiez à voir ces clients avancer seuls dans le tableau, c’est ici que manque le lien — et c’est vous qui ` +
         `choisissez, étape par étape, vers quelle colonne va la carte.` +
         ressalvaDeFechamento(p.steps),
@@ -168,12 +168,12 @@ export function boaNoticia(buscas: number, decisoes: number, funis: number): str
   const partes: string[] = [];
   if (buscas > 0) partes.push("chaque question a trouvé une réponse dans vos documents");
   if (decisoes > 0) partes.push("chaque conversation a trouvé où aller");
-  if (funis > 0) partes.push("chaque étape du suivi a une colonne de l’entonnoir pour la recevoir");
+  if (funis > 0) partes.push("chaque étape du suivi a une colonne du tableau pour la recevoir");
 
   const faltando: string[] = [];
   if (buscas === 0) faltando.push("personne n’a consulté votre base de connaissances");
   if (decisoes === 0) faltando.push("aucune conversation n’a été orientée");
-  if (funis === 0) faltando.push("vous n’avez encore aucun entonnoir configuré");
+  if (funis === 0) faltando.push("vous n’avez encore aucun tableau configuré");
 
   // Nenhuma evidência: a tela não tem o que elogiar, e dizer "nada travando"
   // seco seria elogio. Abre pelo motivo, não pela boa notícia.
