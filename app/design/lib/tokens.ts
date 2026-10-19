@@ -272,5 +272,5 @@ export const MOTION = {
   fast:    { duration: "120ms", easing: "cubic-bezier(0.2, 0, 0, 1)",     use: "Hover, press, micro-feedback." },
   base:    { duration: "200ms", easing: "cubic-bezier(0.25, 0.1, 0.25, 1)", use: "Default UI transitions." },
   slow:    { duration: "320ms", easing: "cubic-bezier(0.16, 1, 0.3, 1)",  use: "Modal enter, sheet, page-level." },
-  spring:  { duration: "420ms", easing: "cubic-bezier(0.34, 1.56, 0.64, 1)", use: "Playful (badge pop, drag confirm)." },
+  settle:  { duration: "420ms", easing: "cubic-bezier(0.25, 1, 0.5, 1)",  use: "Drag confirm, badge appear — decelerates, never overshoots." },
 };

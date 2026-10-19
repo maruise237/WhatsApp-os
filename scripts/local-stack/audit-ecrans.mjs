@@ -3,7 +3,8 @@
  *
  * Pour chaque route : capture pleine page, débordement horizontal (la page est
  * plus large que l'écran → on peut la faire glisser de côté, défaut n° 1 du
- * responsive), texte portugais encore visible, erreurs JavaScript et statut HTTP.
+ * responsive), cibles tactiles trop petites, texte portugais encore visible,
+ * erreurs JavaScript et statut HTTP.
  *
  *   node scripts/local-stack/audit-ecrans.mjs <dossier-captures> <routes...>
  *   (session lue dans .superpowers/local-stack/state.json, écrite par step.mjs)
@@ -83,6 +84,18 @@ for (const route of routes) {
         }
       }
     }
+    // Cibles tactiles : < 24 px échoue WCAG 2.5.8 (AA) ; < 44 px est sous le confort d'un doigt.
+    const cibles = { sous24: [], sous44: 0 };
+    for (const el of document.querySelectorAll("a[href], button, input:not([type=hidden]), select, textarea, [role=tab], [role=button], [role=switch]")) {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0 || getComputedStyle(el).visibility === "hidden") continue;
+      const petit = Math.min(r.width, r.height);
+      if (petit < 44) cibles.sous44 += 1;
+      if (petit < 24) {
+        const nom = (el.getAttribute("aria-label") || el.textContent || el.getAttribute("name") || el.tagName).trim().slice(0, 40);
+        cibles.sous24.push(`${el.tagName.toLowerCase()} ${Math.round(r.width)}×${Math.round(r.height)} « ${nom} »`);
+      }
+    }
     const lignes = (document.body.innerText ?? "")
       .split("\n")
       .map((l) => l.trim())
@@ -94,6 +107,8 @@ for (const route of routes) {
       largeur,
       debordants: [...new Set(debordants)].slice(0, 8),
       portugais: [...new Set(lignes)].slice(0, 40),
+      ciblesSous24: [...new Set(cibles.sous24)].slice(0, 12),
+      ciblesSous44: cibles.sous44,
     };
   }, { source: PORTUGAIS.source, flags: PORTUGAIS.flags });
   const fichier = `${route.replace(/^\//, "").replace(/[/?=&]/g, "_") || "racine"}.png`;
@@ -103,6 +118,7 @@ for (const route of routes) {
     mesures.scrollWidth > mesures.largeur + 2 ? `DÉBORDE(${mesures.scrollWidth}px)` : "",
     mesures.portugais.length ? `PT×${mesures.portugais.length}` : "",
     erreurs.length ? `ERR×${erreurs.length}` : "",
+    mesures.ciblesSous24.length ? `CIBLES<24×${mesures.ciblesSous24.length}` : "",
   ].filter(Boolean);
   process.stdout.write(`${route} → ${mesures.urlFinale} [${status}] ${flags.join(" ") || "ok"}\n`);
   await page.close();

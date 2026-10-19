@@ -108,7 +108,6 @@
   /* Motion */
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
   --ease-in-out: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
@@ -512,5 +511,25 @@
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
+  }
+}
+
+/*
+ * Barre d'onglets du téléphone (`BottomNav`) : la page réserve sa hauteur pour
+ * que rien ne passe dessous. Dans une conversation ouverte (`data-conversa-aberta`,
+ * posé par l'inbox) la barre et sa réserve tombent ensemble.
+ */
+:root {
+  --bottom-nav-h: 0px;
+}
+@media (max-width: 767px) {
+  html:has([data-bottom-nav]):not(:has([data-conversa-aberta])) {
+    --bottom-nav-h: calc(4rem + env(safe-area-inset-bottom));
+  }
+  html:has([data-conversa-aberta]) [data-bottom-nav] {
+    display: none;
+  }
+  [data-app-main] {
+    padding-bottom: calc(1rem + var(--bottom-nav-h));
   }
 }

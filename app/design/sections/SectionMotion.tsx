@@ -124,7 +124,7 @@ export function SectionMotion() {
             marginTop: 12,
             transform: drag ? "rotate(-1.5deg) translateY(-3px) scale(1.02)" : "rotate(0) translateY(0) scale(1)",
             boxShadow: drag ? "0 12px 32px -6px rgba(20,18,14,0.18)" : "none",
-            transition: "transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms",
+            transition: "transform 200ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 200ms",
             cursor: drag ? "grabbing" : "grab",
             maxWidth: 280,
           }}

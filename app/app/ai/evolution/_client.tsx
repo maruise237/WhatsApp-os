@@ -192,7 +192,7 @@ function Vazio({
             <Link
               key={a.href}
               href={a.href}
-              className="text-sm font-medium text-accent underline underline-offset-4"
+              className="inline-block py-2 text-sm font-medium text-accent underline underline-offset-4"
             >
               {a.label}
             </Link>
@@ -486,7 +486,7 @@ function Conteudo({ payload }: { payload: NonNullable<ReturnType<typeof useEvolu
             vazio={
               <Vazio
                 texto="L’agent n’a pas consulté vos documents. Soit rien n’est publié dans la base de connaissances, soit les conversations n’en ont pas eu besoin."
-                acoes={[{ href: "/app/ai/knowledge/sources", label: "Publicar material" }]}
+                acoes={[{ href: "/app/ai/knowledge/sources", label: "Publier un document" }]}
               />
             }
           />
@@ -510,7 +510,7 @@ function Conteudo({ payload }: { payload: NonNullable<ReturnType<typeof useEvolu
             vazio={
               <Vazio
                 texto="Aucune conversation n’a été classée par sujet. Les sujets sont ceux que vous enregistrez dans le routeur de votre numéro."
-                acoes={[{ href: "/app/ai/routers", label: "Cadastrar assuntos" }]}
+                acoes={[{ href: "/app/ai/routers", label: "Ajouter des sujets" }]}
               />
             }
           />

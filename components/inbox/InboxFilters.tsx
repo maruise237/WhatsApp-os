@@ -152,15 +152,20 @@ export function InboxFilters({ value, onChange }: Props) {
       )}
 
       <Tabs value={value.tab} onValueChange={(v) => onChange({ ...value, tab: v as InboxTab })}>
+        {/*
+          Téléphone : 5 onglets dans 340 px laissaient 68 px chacun, et « File
+          d'attente 4 » débordait sur la cellule voisine. Ici ils gardent leur
+          largeur et la rangée défile ; le bureau garde la grille.
+        */}
         <TabsList
-          className="grid h-8 w-full"
+          className="flex h-10 w-full justify-start overflow-x-auto md:grid md:h-8"
           style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
         >
           {tabs.map((tab) => {
             const meta = INBOX_TABS.find((t) => t.value === tab)!;
             const count = countFor[tab];
             return (
-              <TabsTrigger key={tab} value={tab} className="gap-1 text-[11px]">
+              <TabsTrigger key={tab} value={tab} className="shrink-0 gap-1 px-3 text-xs md:px-2 md:text-[11px]">
                 {t(meta.label)}
                 {typeof count === "number" && count > 0 && (
                   <span className="text-[10px] tabular-nums text-muted-foreground">{count}</span>

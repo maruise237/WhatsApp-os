@@ -70,12 +70,27 @@ await etape("Connexion de la vendeuse", async () => {
 });
 
 await etape("Menu de navigation mobile", async () => {
-  await page.getByRole("button", { name: /menu|navigation/i }).first().click();
+  await page.getByRole("navigation", { name: "Navigation rapide" }).getByRole("button", { name: "Ouvrir le menu" }).click();
   await expect(page.getByRole("link", { name: /ventes|central vendeur/i }).first()).toBeVisible();
 });
 
+await etape("Barre d'onglets du bas", async () => {
+  await page.keyboard.press("Escape");
+  const barre = page.getByRole("navigation", { name: "Navigation rapide" });
+  await expect(barre).toBeVisible();
+  // À portée de pouce : chaque onglet fait au moins 44 px de haut.
+  for (const nom of ["Inbox", "Ventes", "Contacts", "Menu"]) {
+    const cible = nom === "Menu" ? barre.getByRole("button", { name: /menu/i }) : barre.getByRole("link", { name: nom });
+    const h = await cible.evaluate((el) => el.getBoundingClientRect().height);
+    if (h < 44) throw new Error(`onglet « ${nom} » : ${h}px de haut`);
+  }
+});
+
 await etape("Central vendeur — preuve à vérifier", async () => {
-  await page.goto(`${BASE}/app/sales`, { waitUntil: "networkidle" });
+  await page.getByRole("navigation", { name: "Navigation rapide" }).getByRole("link", { name: "Ventes" }).click();
+  await page.waitForURL(/\/app\/sales/);
+  await page.waitForLoadState("networkidle");
+  await expect(page.getByRole("navigation", { name: "Navigation rapide" }).getByRole("link", { name: "Ventes" })).toHaveAttribute("aria-current", "page");
   await expect(onglet("Preuves")).toHaveAttribute("aria-selected", "true");
   await expect(page.getByText("Mireille Ngo")).toBeVisible();
   // La capture du client doit vraiment s'afficher (image décodée, pas l'icône cassée).
@@ -174,10 +189,21 @@ await etape("Conversation WhatsApp de la cliente", async () => {
   await page.waitForURL(/\/app\/inbox/);
   await page.waitForLoadState("networkidle");
   await expect(page.getByText(/robe wax/i).first()).toBeVisible();
+  // Dans une conversation, le champ de saisie prend le bas : la barre s'efface.
+  await expect(page.getByRole("navigation", { name: "Navigation rapide" })).toBeHidden();
 });
 
 await etape("Contacts", async () => {
-  await page.goto(`${BASE}/app/contacts`, { waitUntil: "networkidle" });
+  const barre = page.getByRole("navigation", { name: "Navigation rapide" });
+  await page.getByText("Conversations", { exact: true }).first().click();
+  await expect(barre).toBeVisible();
+  // Ouverte depuis la LISTE (l'URL ne change pas) : la barre doit s'effacer aussi.
+  await page.getByText("Fatou Diallo").first().click();
+  await expect(barre).toBeHidden();
+  await page.getByText("Conversations", { exact: true }).first().click();
+  await barre.getByRole("link", { name: "Contacts" }).click();
+  await page.waitForURL(/\/app\/contacts/);
+  await page.waitForLoadState("networkidle");
   await expect(page.getByText("Fatou Diallo")).toBeVisible();
 });
 

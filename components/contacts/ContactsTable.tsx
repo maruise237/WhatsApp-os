@@ -59,12 +59,14 @@ function SortableHead({
   const emphasis = "text-foreground";
 
   return (
-    <TableHead className={className}>
+    <TableHead
+      className={className}
+      aria-sort={active ? (orderDir === "asc" ? "ascending" : "descending") : "none"}
+    >
       <button
         type="button"
         onClick={() => onSort(column)}
-        className="inline-flex items-center gap-1 font-medium hover:text-foreground"
-        aria-sort={active ? (orderDir === "asc" ? "ascending" : "descending") : "none"}
+        className="-my-3 inline-flex items-center gap-1 py-3 font-medium hover:text-foreground"
       >
         {label}
         <span className="inline-flex flex-col -space-y-1" aria-hidden>
@@ -134,7 +136,7 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
         {contacts.map((c) => (
           <TableRow key={c.id} className="cursor-pointer">
             <TableCell className="font-medium">
-              <Link href={`/app/contacts/${c.id}`} className="hover:underline">
+              <Link href={`/app/contacts/${c.id}`} className="-my-3 block py-3 hover:underline">
                 {displayName(c)}
               </Link>
             </TableCell>

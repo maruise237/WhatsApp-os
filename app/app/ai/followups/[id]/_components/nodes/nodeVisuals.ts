@@ -18,8 +18,6 @@ export interface NodeVisual {
   icon: ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }>;
   /** Icon chip background + text. */
   chipClassName: string;
-  /** Left accent border on the node card. */
-  borderClassName: string;
   defaultLabel: string;
   defaultConfig: () => FlowNode["config"];
 }
@@ -30,7 +28,6 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Gatilho",
     icon: Play,
     chipClassName: "bg-accent-soft text-accent",
-    borderClassName: "border-l-accent-500",
     defaultLabel: "Início do fluxo",
     defaultConfig: () => ({}),
   },
@@ -39,7 +36,6 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Aguardar",
     icon: Clock,
     chipClassName: "bg-info-bg text-info-fg",
-    borderClassName: "border-l-info",
     defaultLabel: "Aguardar",
     defaultConfig: () => ({ mode: "fixed", duration_ms: 300_000 }),
   },
@@ -48,7 +44,6 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Condição",
     icon: GitBranch,
     chipClassName: "bg-warning-bg text-warning-fg",
-    borderClassName: "border-l-warning",
     defaultLabel: "Verificar condição",
     defaultConfig: () => ({
       combinator: "and",
@@ -60,7 +55,6 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Classificar (IA)",
     icon: Brain,
     chipClassName: "bg-accent text-accent-foreground",
-    borderClassName: "border-l-accent-700",
     defaultLabel: "Classificar resposta",
     defaultConfig: () => ({
       classes: ["hot", "cold"],
@@ -73,7 +67,6 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Ação",
     icon: PaperPlaneTilt,
     chipClassName: "bg-success-bg text-success-fg",
-    borderClassName: "border-l-success",
     defaultLabel: "Enviar mensagem",
     defaultConfig: () => ({ mode: "ai_message", prompt_hint: "Configure esta etapa." }),
   },
@@ -82,7 +75,6 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Fim",
     icon: Flag,
     chipClassName: "bg-error-bg text-error-fg",
-    borderClassName: "border-l-error",
     defaultLabel: "Fim do fluxo",
     defaultConfig: () => ({ outcome: "exhausted" }),
   },

@@ -214,9 +214,10 @@ export function FunisClient({
 
           return (
             <li key={funil.id} className="flex flex-col gap-3 p-4" data-testid={`funil-${funil.id}`}>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                {podeGerenciar && (
-                  <div className="flex shrink-0 flex-wrap gap-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                {/* Monter/descendre n'a de sens qu'à partir de deux tableaux. */}
+                {podeGerenciar && funis.length > 1 && (
+                  <div className="flex shrink-0 gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -240,7 +241,7 @@ export function FunisClient({
                   </div>
                 )}
 
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 basis-48">
                   {renomeandoAqui ? (
                     <div className="flex gap-2">
                       <Input
@@ -270,7 +271,7 @@ export function FunisClient({
                   ) : (
                     <Link
                       href={`/app/pipelines/${funil.id}`}
-                      className="group flex flex-col"
+                      className="group -my-2 flex flex-col py-2"
                       data-testid={`abrir-${funil.id}`}
                     >
                       <span className="flex items-center gap-2">
@@ -288,10 +289,10 @@ export function FunisClient({
                   )}
                 </div>
 
-                <span className="shrink-0 text-xs text-muted-foreground">/{funil.slug}</span>
+                <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline">/{funil.slug}</span>
 
                 {podeGerenciar && !renomeandoAqui && (
-                  <div className="flex shrink-0 flex-wrap gap-1">
+                  <div className="-ml-3 flex w-full shrink-0 flex-wrap gap-1 sm:ml-0 sm:w-auto">
                     <Button
                       variant="ghost"
                       size="sm"

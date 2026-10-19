@@ -1,5 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
+import { BottomNav } from "@/components/shell/BottomNav";
 import { Sidebar } from "@/components/shell/Sidebar";
 import { TopBar } from "@/components/shell/TopBar";
 
@@ -37,6 +38,7 @@ export function AppShell({ sidebarCollapsed, children }: AppShellProps) {
         <TopBar />
         <main data-app-main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
+      <BottomNav />
     </div>
   );
 }

@@ -1073,3 +1073,27 @@ commit, com o motivo) e o gate lê a declaração. Três ganhos: não há falso 
 vira imposto, porque uma linha de declaração custa menos que uma linha vazia de changelog —
 que é o risco real, já que ela polui a tela de produto do operador. Não é convenção nova: o
 `tests/unit/navegacao-completude.test.ts` já aceita exceção **com justificativa escrita**.
+
+## J11 — Parcours de vente sur téléphone (Central vendeur) `[P0]` (2026-10-19)
+
+Rejoué par l'écran en 390×844 sur la pile locale (`scripts/local-stack/`, voir son
+README) : `node scripts/local-stack/parcours-ventes.mjs <dossier>` — 17 étapes,
+une capture par étape. Audit des 45 routes : `audit-ecrans.mjs` (débordement,
+portugais, erreurs JS, cibles tactiles < 24 px).
+
+| Cas | État |
+|---|---|
+| Preuve reçue → aperçu décodé → « Paiement reçu » → payée | ✅ |
+| Préparer la livraison (note) → livrée | ✅ (cassé avant la 0182) |
+| Preuve déposée à la main → refusée avec motif → motif visible sur la commande | ✅ |
+| Produit : ajout, modification du stock | ✅ (champs sans étiquette visible avant) |
+| « Ouvrir la conversation » depuis une commande | ✅ (ouvrait la liste : `?conversation=` au lieu de `?id=`) |
+| Barre d'onglets du bas (Inbox · Ventes · Contacts · Menu), masquée dans une conversation | ✅ |
+
+Achados corrigés dans la même passe : page Cas en 500 (relations imbriquées dans
+l'adaptateur Neon), mots-clés de relais humain en portugais (migration 0183),
+`Switch` à 20 px de haut (zone tactile portée à 44 px), onglets de l'inbox qui se
+chevauchaient en 340 px.
+
+Ouvert : descriptions des compétences IA du seed (0069) encore en portugais — contenu
+en base, demande une migration de données.

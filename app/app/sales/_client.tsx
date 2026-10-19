@@ -276,9 +276,8 @@ export function SalesCentral({ canManageCatalog }: SalesCentralProps) {
 
   return (
     <section className="mx-auto flex w-full max-w-6xl flex-col gap-5">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex items-start justify-between gap-3 sm:items-end">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Ventes</p>
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Central vendeur</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
             L’assistant conduit la vente jusqu’à la preuve de paiement. Vous seul confirmez le paiement et organisez la livraison.
@@ -290,7 +289,7 @@ export function SalesCentral({ canManageCatalog }: SalesCentralProps) {
             setLoading(true);
             void reload();
           }}
-          className="self-start rounded-md border px-3 py-2 text-sm hover:bg-accent sm:self-auto"
+          className="shrink-0 rounded-md border px-3 py-2 text-sm hover:bg-accent"
         >
           Actualiser
         </button>
@@ -303,9 +302,9 @@ export function SalesCentral({ canManageCatalog }: SalesCentralProps) {
           ["À livrer", String(kpis.toDeliver), kpis.toDeliver > 0],
           ["Encaissé ce mois", kpis.revenue, false],
         ].map(([label, value, hot]) => (
-          <div key={label as string} className={`rounded-xl border bg-card p-3 ${hot ? "border-primary/40" : ""}`}>
+          <div key={label as string} className={`rounded-xl border bg-card px-3 py-2 sm:p-3 ${hot ? "border-primary/40" : ""}`}>
             <dt className="text-xs text-muted-foreground">{label}</dt>
-            <dd className="mt-1 truncate text-lg font-semibold tabular-nums">{value}</dd>
+            <dd className="truncate text-base font-semibold tabular-nums sm:mt-1 sm:text-lg">{value}</dd>
           </div>
         ))}
       </dl>
