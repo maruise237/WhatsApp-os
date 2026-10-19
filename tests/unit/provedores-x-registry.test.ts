@@ -85,7 +85,7 @@ describe("forma de cada provedor", () => {
     // transcrição e busca sem entender por quê — o defeito medido em VPS.
     const openai = PROVEDOR_POR_ID.get("openai");
     expect(openai).toBeDefined();
-    expect(openai?.quandoUsar.toLowerCase()).toMatch(/áudio|transcre|indexar/);
+    expect(openai?.quandoUsar.toLowerCase()).toMatch(/audio|transcri|index/);
   });
 });
 

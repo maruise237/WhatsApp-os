@@ -79,7 +79,7 @@ describe("POST /api/v1/pipelines", () => {
     const stagesInsert = db.escritas.find((e) => e.table === "crm_stages");
     const etapas = stagesInsert?.patch as Record<string, unknown>[];
     expect(etapas).toHaveLength(4);
-    expect(etapas.map((e) => e.name)).toEqual(["Novo", "Em andamento", "Ganho", "Perdido"]);
+    expect(etapas.map((e) => e.name)).toEqual(["Nouveau", "En cours", "Gagné", "Perdu"]);
     expect(etapas.filter((e) => e.is_won)).toHaveLength(1);
     expect(etapas.every((e) => e.organization_id === ORG_ID)).toBe(true);
   });

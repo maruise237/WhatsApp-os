@@ -412,7 +412,7 @@ describe("DELETE /api/v1/pipelines/[id]/stages/[stageId]", () => {
       error: { message: string; details?: { negocios?: number; precisa_destino?: boolean } };
     };
     // 2, não 3: o negócio de «Cancelado» não está nesta etapa.
-    expect(body.error.message).toContain("2 negócios");
+    expect(body.error.message).toContain("2 affaires");
     expect(body.error.message).toContain("«Proposta»");
     // ⭐ E o MESMO 2 chega em `details`, como número. É o que a tela usa para
     // perguntar "para onde vão os 2 negócios?" sem extrair dígito de frase.

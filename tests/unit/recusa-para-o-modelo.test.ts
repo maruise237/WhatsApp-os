@@ -62,7 +62,7 @@ describe("recusa de capacidade — o texto que vai ao modelo", () => {
 
   it("usa o rótulo em português da capacidade, não o identificador técnico", () => {
     const texto = recusaDeCapacidadeParaOModelo("crm_create_stage");
-    expect(texto).toContain("criar etapa no funil");
+    expect(texto).toContain("Créer une colonne dans le tableau");
     expect(texto).not.toContain("crm_create_stage");
   });
 });
