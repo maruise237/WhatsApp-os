@@ -14658,6 +14658,12 @@ alter table public.sales_orders add constraint sales_orders_paiement_seulement_s
   check (paid_at is null or status in ('payée', 'a_livrer', 'livree'));
 
 
+-- ---- Mots-clés de passage à un humain en français (migration 0183) ----
+-- Seul le défaut change ; les versions existantes gardent leurs mots-clés.
+alter table public.ai_agent_versions
+  alter column handoff_keywords
+  set default array['parler à un humain', 'conseiller', 'vraie personne']::text[];
+
 -- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 --
 -- ⚠️ ESTE BLOCO É, DE PROPÓSITO, O ÚLTIMO DO ARQUIVO. Apêndice novo entra ANTES

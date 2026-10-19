@@ -206,7 +206,7 @@ export function PainelDeProvedores() {
                 onClick={() => setAvancado((a) => ({ ...a, [papel]: !a[papel] }))}
               >
                 {avancado[papel] ? "Ocultar" : "Configuration avancée"} ({pontos.length}{" "}
-                {pontos.length === 1 ? "ponto" : "pontos"})
+                {pontos.length === 1 ? "réglage" : "réglages"})
               </Button>
             </div>
 

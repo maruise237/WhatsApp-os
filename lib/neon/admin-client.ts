@@ -265,34 +265,37 @@ function relationForeignKey(
   throw new Error(`neon_admin_relation_key_unknown:${sourceTable}:${targetTable}`);
 }
 
+/**
+ * `colonnes, table:fk(colonnes, autre:fk(…))` — une relation peut en contenir
+ * une autre, comme dans PostgREST. L'ancienne expression régulière n'acceptait
+ * qu'un niveau : `agent_cases → conversations → contacts` levait
+ * `neon_admin_invalid_identifier` et la page des dossiers répondait 500.
+ */
 function parseSelection(columns: string): { base: string; relations: RelationSelection[] } {
   const relations: RelationSelection[] = [];
-  const relationPattern =
-    /([A-Za-z_][A-Za-z0-9_]*)(!inner)?(?::([A-Za-z_][A-Za-z0-9_]*))?\(([^()]*)\)/g;
   const baseParts: string[] = [];
-  let cursor = 0;
-  let match: RegExpExecArray | null;
-  while ((match = relationPattern.exec(columns)) !== null) {
-    baseParts.push(columns.slice(cursor, match.index));
+  for (const part of splitTopLevel(columns)) {
+    const match = /^([A-Za-z_][A-Za-z0-9_]*)(!inner)?(?::([A-Za-z_][A-Za-z0-9_]*))?\(([\s\S]*)\)$/.exec(part);
+    if (!match) {
+      baseParts.push(part);
+      continue;
+    }
     const table = match[1] ?? "";
-    const explicitKey = match[3];
     relations.push({
       output: table,
       table,
-      foreignKey: relationForeignKey("", table, explicitKey),
+      foreignKey: relationForeignKey("", table, match[3]),
       columns: match[4] ?? "*",
       required: Boolean(match[2]),
     });
-    cursor = match.index + match[0].length;
   }
-  baseParts.push(columns.slice(cursor));
-  const base = baseParts
-    .join(",")
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .join(", ");
-  return { base: base || "*", relations };
+  // Une liste explicite doit porter les clés des relations, sinon rien à hydrater.
+  if (baseParts.length > 0 && !baseParts.includes("*")) {
+    for (const relation of relations) {
+      if (!baseParts.includes(relation.foreignKey)) baseParts.push(relation.foreignKey);
+    }
+  }
+  return { base: baseParts.join(", ") || "*", relations };
 }
 
 async function hydrateRelations(rows: PgRow[], relations: RelationSelection[]): Promise<PgRow[]> {
@@ -307,11 +310,13 @@ async function hydrateRelations(rows: PgRow[], relations: RelationSelection[]): 
         row[relation.output] = null;
         continue;
       }
+      const nested = parseSelection(relation.columns);
       const result = await getPool().query<PgRow>(
-        `SELECT ${columnList(relation.columns)} FROM ${identifier(`public.${relation.table}`)} WHERE "id" = $1 LIMIT 1`,
+        `SELECT ${columnList(nested.base)} FROM ${identifier(`public.${relation.table}`)} WHERE "id" = $1 LIMIT 1`,
         [value],
       );
-      const related = result.rows[0] ?? null;
+      const found = result.rows[0] ?? null;
+      const related = found ? ((await hydrateRelations([found], nested.relations))[0] ?? null) : null;
       if (relation.required && related === null) keep = false;
       row[relation.output] = related;
     }

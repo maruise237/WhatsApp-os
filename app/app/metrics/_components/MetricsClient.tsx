@@ -115,7 +115,7 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            {canCompare ? "Performance por atendente" : "Votre performance"}
+            {canCompare ? "Performance par agent" : "Votre performance"}
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -93,6 +93,10 @@ async function main() {
         direction === "inbound" ? "external_device" : "ai", minute, media?.path ?? null, media?.mime ?? null,
       ],
     );
+    // Comme l'ingestion réelle : l'aperçu et l'heure du dernier message dans la liste.
+    await q(`select fn_mark_conversation_message($1, $2, $3, now() - make_interval(mins => 120 - $4))`, [
+      conversation, direction, body ?? "📷 Photo", minute,
+    ]);
   }
 
   // Mireille : vente complète conduite par l'agent, preuve envoyée → à vérifier.

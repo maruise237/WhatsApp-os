@@ -182,7 +182,7 @@ function buildState(args: { agent?: AgentRow; version: AgentVersionRow | null })
     cost_budget_cents: version?.cost_budget_cents ?? 50,
     history_message_window: version?.history_message_window ?? 20,
     history_token_window: version?.history_token_window ?? 8_000,
-    handoff_keywords: version?.handoff_keywords ?? ["falar com humano", "atendente", "pessoa real"],
+    handoff_keywords: version?.handoff_keywords ?? ["parler à un humain", "conseiller", "vraie personne"],
     handoff_tool_enabled: version?.handoff_tool_enabled ?? true,
     cases_enabled: version?.cases_enabled ?? false,
     split_messages: version?.split_messages ?? false,

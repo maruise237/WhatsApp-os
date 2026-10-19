@@ -93,7 +93,7 @@ const ACTION_LABEL: Partial<Record<SalesOrderStatus, string>> = {
   en_attente_paiement: "Attendre le paiement",
   a_livrer: "Préparer la livraison",
   livree: "Marquer livrée",
-  refusee: "Refuser",
+  refusee: "Refuser la commande",
   annulee: "Annuler",
 };
 
@@ -529,7 +529,7 @@ function OrderCard({
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <Link
-          href={`/app/inbox?conversation=${order.conversation_id}`}
+          href={`/app/inbox?id=${order.conversation_id}`}
           className="rounded-md border px-3 py-1.5 text-xs hover:bg-accent"
         >
           Ouvrir la conversation
@@ -634,51 +634,61 @@ function CatalogView({
 
   const form = (id: string | null) => (
     <form onSubmit={(event) => void submit(event, id)} className="space-y-3">
-      <input
-        required
-        value={draft.title}
-        onChange={(event) => setDraft({ ...draft, title: event.target.value })}
-        placeholder="Nom du produit"
-        aria-label="Nom du produit"
-        className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-      />
-      <textarea
-        value={draft.description}
-        onChange={(event) => setDraft({ ...draft, description: event.target.value })}
-        placeholder="Description (taille, couleur, détails que l’assistant peut citer)"
-        aria-label="Description"
-        rows={3}
-        className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-      />
+      <label className="block space-y-1">
+        <span className="text-xs font-medium text-muted-foreground">Nom du produit</span>
+        <input
+          required
+          value={draft.title}
+          onChange={(event) => setDraft({ ...draft, title: event.target.value })}
+          placeholder="ex. Robe wax « Douala »"
+          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+        />
+      </label>
+      <label className="block space-y-1">
+        <span className="text-xs font-medium text-muted-foreground">Description</span>
+        <textarea
+          value={draft.description}
+          onChange={(event) => setDraft({ ...draft, description: event.target.value })}
+          placeholder="Description (taille, couleur, détails que l’assistant peut citer)"
+          rows={3}
+          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+        />
+      </label>
       <div className="grid grid-cols-[1fr_1fr_5.5rem] gap-2">
-        <input
-          required
-          inputMode="decimal"
-          value={draft.price}
-          onChange={(event) => setDraft({ ...draft, price: event.target.value })}
-          placeholder="Prix"
-          aria-label="Prix"
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-        />
-        <input
-          required
-          inputMode="numeric"
-          value={draft.stock}
-          onChange={(event) => setDraft({ ...draft, stock: event.target.value })}
-          placeholder="Stock"
-          aria-label="Stock"
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-        />
-        <select
-          value={draft.currency}
-          onChange={(event) => setDraft({ ...draft, currency: event.target.value })}
-          aria-label="Devise"
-          className="w-full rounded-md border bg-background px-2 py-2 text-sm"
-        >
-          {[...new Set([draft.currency, ...CURRENCIES])].map((c) => (
-            <option key={c}>{c}</option>
-          ))}
-        </select>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Prix</span>
+          <input
+            required
+            inputMode="decimal"
+            value={draft.price}
+            onChange={(event) => setDraft({ ...draft, price: event.target.value })}
+            placeholder="ex. 15000"
+            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+          />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Stock</span>
+          <input
+            required
+            inputMode="numeric"
+            value={draft.stock}
+            onChange={(event) => setDraft({ ...draft, stock: event.target.value })}
+            placeholder="ex. 10"
+            className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+          />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Devise</span>
+          <select
+            value={draft.currency}
+            onChange={(event) => setDraft({ ...draft, currency: event.target.value })}
+            className="w-full rounded-md border bg-background px-2 py-2 text-sm"
+          >
+            {[...new Set([draft.currency, ...CURRENCIES])].map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
       </div>
       {formError && <p className="text-xs text-destructive">{formError}</p>}
       <div className="flex gap-2">

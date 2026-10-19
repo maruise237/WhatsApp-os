@@ -208,7 +208,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {groups.map((g) => (
           <div key={g.key} className="space-y-1">
             <div className="sticky top-0 z-10 flex justify-center py-1">
-              <span className="bg-background/80 rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground backdrop-blur">
+              <span className="rounded-full border bg-card px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground shadow-sm">
                 {dayLabel(g.date, t)}
               </span>
             </div>

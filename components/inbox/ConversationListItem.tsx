@@ -73,11 +73,11 @@ function relativeTime(iso: string | null): string {
   return format(d, "dd/MM");
 }
 
-/** "Aguardando há 5 min" — desde a última mensagem do cliente (fallback: criação). */
+/** "En attente depuis 5 min" — desde a última mensagem do cliente (fallback: criação). */
 function waitingLabel(conversation: ConversationWithContact): string {
   const since = conversation.last_inbound_at ?? conversation.created_at;
   if (!since) return "En attente";
-  return `Aguardando ${formatDistanceToNowStrict(new Date(since), { addSuffix: true, locale: fr })}`;
+  return `En attente depuis ${formatDistanceToNowStrict(new Date(since), { locale: fr })}`;
 }
 
 export function ConversationListItem({

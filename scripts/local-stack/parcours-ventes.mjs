@@ -96,11 +96,12 @@ await etape("Capture du reçu en grand", async () => {
 
 await etape("Paiement confirmé par la vendeuse", async () => {
   await page.getByRole("button", { name: "Paiement reçu" }).click();
-  await expect(page.getByText(/aucune preuve à vérifier/i)).toBeVisible();
+  // Plus aucune preuve en attente : l'écran bascule seul sur les commandes.
+  await expect(onglet("Commandes")).toHaveAttribute("aria-selected", "true");
+  await expect(onglet("Preuves")).not.toContainText(/\d/);
 });
 
 await etape("Commande payée dans la liste", async () => {
-  await onglet("Commandes").click();
   const carte = page.locator("article", { hasText: "Mireille Ngo" });
   await expect(carte.getByText("Payée")).toBeVisible();
 });
@@ -130,7 +131,8 @@ await etape("Dépôt manuel d'une preuve pour Jean-Paul", async () => {
 await etape("Preuve refusée avec un motif", async () => {
   await onglet("Preuves").click();
   reponsesInvites.push("Le montant ne correspond pas : 30 000 au lieu de 22 000 FCFA");
-  await page.getByRole("button", { name: "Refuser" }).click();
+  await page.getByRole("button", { name: "Refuser", exact: true }).click();
+  // L'onglet a été choisi à la main : il reste ouvert, vide.
   await expect(page.getByText(/aucune preuve à vérifier/i)).toBeVisible();
   await onglet("Commandes").click();
   await page.getByRole("button", { name: "Paiement attendu" }).click();
@@ -154,8 +156,14 @@ await etape("Ajout d'un produit", async () => {
 await etape("Modification du stock", async () => {
   const carte = page.locator("article", { hasText: "Boucles d’oreilles perles" });
   await carte.getByRole("button", { name: "Modifier" }).click();
-  await carte.getByLabel("Stock").fill("8");
-  await carte.getByRole("button", { name: "Enregistrer" }).click();
+  // En édition, le nom devient un champ : on cible le formulaire ouvert.
+  const edition = page.locator("form", { has: page.getByRole("button", { name: "Enregistrer" }) });
+  await expect(edition.getByLabel("Nom du produit")).toHaveValue("Boucles d’oreilles perles");
+  await expect(edition.getByLabel("Prix")).toHaveValue("2500");
+  await edition.getByLabel("Stock").fill("8");
+  await edition.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(out, `${String(n).padStart(2, "0")}-formulaire-edition.png`) });
+  await edition.getByRole("button", { name: "Enregistrer" }).click();
   await expect(page.locator("article", { hasText: "Boucles d’oreilles perles" }).getByText("Stock 8")).toBeVisible();
 });
 

@@ -40,7 +40,7 @@ export function SnoozeButton({ conversationId, snoozeUntil, disabled }: Props) {
           className="flex items-center gap-1"
         >
           <Clock size={12} weight="regular" aria-hidden />
-          {isActive ? "Lembrete ativo" : "Lembrar"}
+          {isActive ? "Rappel actif" : "Rappeler"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

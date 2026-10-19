@@ -103,7 +103,7 @@ export const DICIONARIO: Traducoes = {
   "Todas as tags": { "fr-FR": "Toutes les étiquettes" },
   "Apenas não lidos": { "fr-FR": "Uniquement non lus" },
   Fila: { "fr-FR": "File d'attente" },
-  Minhas: { "fr-FR": "Mes" },
+  Minhas: { "fr-FR": "Les miennes" },
   Todas: { "fr-FR": "Toutes" },
   Fechadas: { "fr-FR": "Fermées" },
   IA: { "fr-FR": "IA" },
