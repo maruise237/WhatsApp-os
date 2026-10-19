@@ -44,6 +44,17 @@ const CURADORIA: {
     ],
   },
   {
+    // Le cœur du produit pour une vendeuse, et il manquait à cette visite.
+    href: "/app/sales",
+    comoChamar: "Vos ventes",
+    porQue: "Les preuves de paiement à vérifier, les commandes à livrer et votre catalogue — au même endroit.",
+    comoFunciona: [
+      "Il conduit la vente dans WhatsApp et demande la capture du paiement",
+      "Vous vérifiez la preuve et confirmez le paiement — lui ne le fait jamais",
+      "Vous préparez puis marquez la livraison ; le client est tenu au courant",
+    ],
+  },
+  {
     href: "/app/kanban",
     comoChamar: "Le tableau des clients",
     porQue: "Chaque client devient une fiche, et il la déplace lui-même au fil de la conversation.",

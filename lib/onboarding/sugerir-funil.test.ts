@@ -41,6 +41,17 @@ describe("escolher o pacote pelo que o dono escreveu", () => {
     expect(escolherPacotePorTexto("Loja de roupas").id).toBe("loja");
   });
 
+  it("reconhece o ramo em francês — o mercado do produto", () => {
+    expect(escolherPacotePorTexto("Vente de pagnes et tissus wax via WhatsApp").id).toBe("loja");
+    expect(escolherPacotePorTexto("Ex. : vente de vêtements de sport via WhatsApp").id).toBe("loja");
+    expect(escolherPacotePorTexto("Cabinet dentaire à Douala").id).toBe("clinica");
+    expect(escolherPacotePorTexto("Salon de coiffure").id).toBe("clinica");
+    expect(escolherPacotePorTexto("Agence immobilière, location d'appartements").id).toBe("imobiliaria");
+    expect(escolherPacotePorTexto("Cabinet d'avocats").id).toBe("servicos");
+    expect(escolherPacotePorTexto("Formation en ligne en marketing digital").id).toBe("curso");
+    expect(escolherPacotePorTexto("ecole de langues").id).toBe("curso");
+  });
+
   it("cai no genérico quando não reconhece — nunca em nada", () => {
     expect(escolherPacotePorTexto("xyzzy").id).toBe(PACOTE_PADRAO.id);
     expect(escolherPacotePorTexto("").id).toBe(PACOTE_PADRAO.id);

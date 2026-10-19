@@ -673,7 +673,7 @@ export const DICIONARIO: Traducoes = {
     },
   "O que vocês fazem?": { "fr-FR": "Que fait votre entreprise ?" },
   "Ex.: clínica odontológica, ou venda de roupa fitness pelo WhatsApp": {
-    "fr-FR": "Ex. : cabinet dentaire ou vente de vêtements de sport via WhatsApp",
+    "fr-FR": "Ex. : vente de pagnes, salon de coiffure",
   },
   "Uma linha basta. É com isso que seu funcionário aprende com quem ele está falando — e que a gente monta o quadro de clientes do seu jeito.":
     {

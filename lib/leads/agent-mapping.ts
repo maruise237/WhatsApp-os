@@ -67,11 +67,12 @@ export const ROTULO_DO_PASSO: Readonly<Record<LeadStage, string>> = {
  * Aqui, quem mudar o vocabulário do funil do agente vê as duas juntas.
  */
 export const EXPLICACAO_DO_PASSO: Readonly<Record<LeadStage, string>> = {
-  new: "vient d’écrire et personne n’a encore répondu",
-  contacted: "a déjà reçu une réponse",
-  qualifying: "il cherche à comprendre ce dont la personne a besoin",
-  qualified: "on sait déjà quoi lui proposer",
-  negotiating: "il finalise le prix, l’horaire ou les conditions",
+  // Lus après « Le client arrive ici quand… » : chaque fin de phrase a son sujet.
+  new: "il vient d’écrire et que personne n’a encore répondu",
+  contacted: "il a déjà reçu une réponse",
+  qualifying: "l’assistant cherche à comprendre son besoin",
+  qualified: "l’assistant sait déjà quoi lui proposer",
+  negotiating: "on finalise le prix, l’horaire ou les conditions",
   won: "l’affaire est conclue",
   lost: "l’affaire n’a pas abouti",
 };

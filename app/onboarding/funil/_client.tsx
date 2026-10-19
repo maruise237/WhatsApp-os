@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Trash } from "@/lib/ui/icons";
 import { aplicarQuadro, pularQuadro, type QuadroAtual } from "@/app/actions/onboarding/montarQuadro";
 import { explicacaoDoPasso } from "@/lib/leads/agent-mapping";
 import { MAX_ETAPAS, MIN_ETAPAS, type PropostaDeFunil } from "@/lib/onboarding/proposta-de-funil";
@@ -132,7 +133,7 @@ export function QuadroClient({
                   />
                   <p className="text-xs text-muted-foreground">
                     {explicacao
-                      ? `Il déplace le client ici quand ${explicacao}.`
+                      ? `Le client arrive ici quand ${explicacao}.`
                       : "Colonne que vous seuls déplacez — il n’y touche pas."}
                   </p>
                 </div>
@@ -142,17 +143,19 @@ export function QuadroClient({
                   salvar seria pior do que não oferecer o botão.
                 */}
                 {etapa.passo === "won" || etapa.passo === "lost" ? (
-                  <span className="mt-2 shrink-0 text-xs text-muted-foreground">obligatoire</span>
+                  <span className="mt-2.5 shrink-0 text-[11px] text-muted-foreground">obligatoire</span>
                 ) : (
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
-                    className="mt-1 shrink-0"
+                    size="icon"
+                    className="h-10 w-10 shrink-0 text-muted-foreground"
                     onClick={() => remover(i)}
                     disabled={quadro.etapas.length <= MIN_ETAPAS}
+                    aria-label={`Supprimer la colonne « ${etapa.nome || i + 1} »`}
+                    title="Supprimer la colonne"
                   >
-                    Supprimer
+                    <Trash size={18} aria-hidden />
                   </Button>
                 )}
               </li>
@@ -224,7 +227,7 @@ export function QuadroClient({
       {/* `flex-wrap`: com o aviso "Dê um nome..." mais os dois botões, a linha
           passava de 320-375px sem margem nenhuma — este é o rodapé de
           navegação do wizard, o botão que a pessoa mais precisa achar. */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="onb-acoes flex flex-wrap items-center justify-between gap-2">
         <Button
           type="button"
           variant="ghost"

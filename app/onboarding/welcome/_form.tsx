@@ -142,7 +142,7 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
         </span>
       </label>
 
-      <div className="flex sm:justify-end">
+      <div className="onb-acoes flex sm:justify-end">
         <Button type="submit" disabled={pending || !accepted} className="w-full sm:w-auto">
           {pending ? t("Salvando...") : t("Continuar")}
         </Button>

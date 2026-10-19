@@ -45,6 +45,8 @@ async function etape(titre, fn) {
     await fn();
     await page.waitForTimeout(700);
     await page.screenshot({ path: path.join(out, `${nom}.png`), fullPage: true });
+    // Ce que le téléphone montre vraiment (barre d'onglets collée comprise).
+    await page.screenshot({ path: path.join(out, `${nom}-ecran.png`) });
     process.stdout.write(`✓ ${n}. ${titre}\n`);
   } catch (e) {
     await page.screenshot({ path: path.join(out, `${nom}-ECHEC.png`), fullPage: true });

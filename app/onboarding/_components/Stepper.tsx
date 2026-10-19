@@ -37,9 +37,31 @@ export function Stepper({ passos }: { passos: PassoVisivel[] }) {
 
   return (
     <div className="w-full">
+    {/*
+      Téléphone : une ligne « Étape 2 sur 6 · Son numéro » et une barre en six
+      segments, au lieu de six ronds de 28 px qui ne disaient rien sans libellé.
+    */}
+    {atual ? (
+      <div className="sm:hidden">
+        <p className="mb-2 text-xs text-muted-foreground">
+          Étape {idx + 1} sur {passos.length} · <span className="font-medium text-foreground">{atual.rotulo}</span>
+        </p>
+        <div className="flex gap-1" aria-hidden>
+          {passos.map((p, i) => (
+            <span
+              key={p.segmento}
+              className={cn(
+                "h-1.5 flex-1 rounded-full",
+                i === idx ? "bg-primary" : p.cumprido || i < idx ? "bg-primary/40" : "bg-muted-foreground/20",
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    ) : null}
     <ol
       aria-label="Étapes de configuration"
-      className="flex w-full items-center justify-between gap-2 px-2 py-3"
+      className="hidden w-full items-center justify-between gap-2 px-2 py-3 sm:flex"
     >
       {passos.map((p, i) => {
         const isActive = i === idx;
@@ -78,14 +100,6 @@ export function Stepper({ passos }: { passos: PassoVisivel[] }) {
         );
       })}
     </ol>
-    {/* En dessous de `sm` les libellés sont masqués (voir plus haut) : sans
-        cette ligne, le mobile ne voyait que des numéros et ne savait ni où il
-        en était, ni combien il en restait. */}
-    {atual ? (
-      <p aria-hidden className="px-2 pb-2 text-center text-xs text-muted-foreground sm:hidden">
-        Étape {idx + 1} sur {passos.length} · <span className="font-medium text-foreground">{atual.rotulo}</span>
-      </p>
-    ) : null}
     </div>
   );
 }

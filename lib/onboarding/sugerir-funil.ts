@@ -41,14 +41,20 @@ export interface ContextoDoNegocio {
  * "Prospecção", "Nutrição" e "Fundo de funil" — nomes de manual, não os que
  * estão na cabeça de quem atende no WhatsApp.
  */
+// Vocabulaire portugais d'origine + français (le marché du produit). Sans le
+// français, « Vente de pagnes et tissus wax via WhatsApp » tombait dans le
+// tableau générique : constaté par l'écran à l'onboarding (pile locale, 2026-10-19).
 const PISTAS: Record<string, RegExp> = {
   clinica:
-    /\b(cl[ií]nic|consult[óo]ri|dentist|odonto|m[ée]dic|terapeut|psic[óo]log|fisioterap|est[ée]tic|sal[ãa]o|barbear|petshop|veterin[áa]ri|nutricion)/i,
-  imobiliaria: /\b(imobili[áa]ri|corret|im[óo]ve|apartament|alugu[ée]|loteament|terren)/i,
+    /\b(cl[ií]nic|consult[óo]ri|dentist|dentair|odonto|m[ée]dic|terapeut|th[ée]rapeut|psic[óo]log|psycholog|fisioterap|kin[ée]|est[ée]tic|esth[ée]ti|sal[ãa]o|salon|coiff|barbear|barbier|onglerie|petshop|veterin[áa]ri|v[ée]t[ée]rinai|nutricion|nutritionn|pharmac)/i,
+  imobiliaria:
+    /\b(imobili[áa]ri|immobili|corret|im[óo]ve|apartament|appartement|alugu[ée]|logement|loteament|terren|terrain)/i,
   servicos:
-    /\b(ag[êe]nci|consultori|advocac|advogad|contabil|arquitet|engenhar|reform|obra|marcenar|servi[çc]o|manuten[çc]|instala[çc])/i,
-  curso: /\b(curso|mentori|infoprodut|aula|treinament|workshop|escola|ensino|coach)/i,
-  loja: /\b(loja|e-?commerce|revend|distribuidor|atacad|varej|vend[oa] produt|boutique|moda)/i,
+    /\b(ag[êe]nci|agence|consultori|conseil|advocac|advogad|avocat|contabil|comptab|arquitet|architect|engenhar|ing[ée]nier|reform|r[ée]novation|obra|chantier|marcenar|menuis|servi[çc]o|service|manuten[çc]|maintenance|instala[çc]|installation|plomb|[ée]lectricit|nettoyage)/i,
+  curso:
+    /\b(curso|cours|formation|mentori|mentorat|infoprodut|aula|treinament|workshop|atelier|escola|[ée]cole|ensino|enseignement|coach|soutien scolaire)/i,
+  loja:
+    /\b(loja|magasin|e-?commerce|commerce|revend|distribuidor|distribut|atacad|grossiste|varej|d[ée]tail|vend[oa] produt|vente|vend|boutique|moda|mode|pagne|wax|tissu|v[êe]tement|habit|chaussure|sac|bijou|cosm[ée]ti|perruque|m[èe]che|[ée]picerie|alimentation)/i,
 };
 
 /**

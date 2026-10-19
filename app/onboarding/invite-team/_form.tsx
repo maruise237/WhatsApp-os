@@ -76,7 +76,7 @@ export function InviteTeamForm() {
           id="emails"
           value={emailsRaw}
           onChange={(e) => setEmailsRaw(e.target.value)}
-          rows={6}
+          rows={3}
           placeholder={"alice@entreprise.com bob@entreprise.com"}
         />
       </div>
@@ -147,7 +147,7 @@ export function InviteTeamForm() {
         </div>
       )}
 
-      <div className="flex flex-wrap justify-between gap-2 pt-2">
+      <div className="onb-acoes flex flex-wrap justify-between gap-2 pt-2">
         <Button type="button" variant="ghost" disabled={pending} onClick={() => submit(true)}>
           {t("Pular por enquanto")}
         </Button>

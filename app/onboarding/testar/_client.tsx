@@ -171,7 +171,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
         </div>
       )}
 
-      <div className="flex flex-wrap justify-between gap-2">
+      <div className="onb-acoes flex flex-wrap justify-between gap-2">
         <Button
           type="button"
           variant="ghost"

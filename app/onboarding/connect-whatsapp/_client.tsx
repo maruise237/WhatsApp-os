@@ -166,7 +166,7 @@ function Saidas({ status, sessionName }: { status: Status; sessionName: string }
   const t = useT();
   const [pending, startTransition] = useTransition();
   return (
-    <div className="flex flex-wrap gap-2 pt-2">
+    <div className="onb-acoes flex flex-wrap gap-2 pt-2">
       <Button
         type="button"
         variant="outline"

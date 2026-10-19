@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
+import { CaretDown } from "@/lib/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -178,25 +179,36 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         exatamente essa.
       */}
       <div className="grid gap-3 sm:grid-cols-2">
-        <section className="rounded-lg border bg-background p-4">
-          <h3 className="text-sm font-medium">{t("Ele já vem sabendo")}</h3>
-          <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+        {/* Repliées : 24 lignes dépliées doublaient la page sur téléphone (4 300 px). */}
+        <details className="group rounded-lg border bg-background">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-2 text-sm font-medium">
+            <span>
+              {t("Ele já vem sabendo")} <span className="font-normal text-muted-foreground">({capacidades.length})</span>
+            </span>
+            <CaretDown size={16} aria-hidden className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+          </summary>
+          <ul className="space-y-1 px-4 pb-4 text-xs text-muted-foreground">
             {capacidades.map((c) => (
               <li key={c}>· {t(c)}</li>
             ))}
           </ul>
-        </section>
-        <section className="rounded-lg border bg-background p-4">
-          <h3 className="text-sm font-medium">{t("E nunca vai fazer")}</h3>
-          <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+        </details>
+        <details className="group rounded-lg border bg-background">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-2 text-sm font-medium">
+            <span>
+              {t("E nunca vai fazer")} <span className="font-normal text-muted-foreground">({conferencias.length})</span>
+            </span>
+            <CaretDown size={16} aria-hidden className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+          </summary>
+          <ul className="space-y-1 px-4 text-xs text-muted-foreground">
             {conferencias.map((c) => (
               <li key={c}>· {t(c)}</li>
             ))}
           </ul>
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="px-4 pb-4 pt-2 text-xs text-muted-foreground">
             {t("Essas conferências acontecem antes de cada mensagem sair, e não têm interruptor.")}
           </p>
-        </section>
+        </details>
       </div>
 
       {regrasNaoSalvas && (
@@ -328,7 +340,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         </div>
       )}
 
-      <div className="flex flex-wrap justify-between gap-2">
+      <div className="onb-acoes flex flex-wrap justify-between gap-2">
         <Button
           type="button"
           variant="ghost"
