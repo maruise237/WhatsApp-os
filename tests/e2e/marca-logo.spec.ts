@@ -148,7 +148,7 @@ const SVG_DISFARCADO = Buffer.from(
  * dormia até a janela do TOTP virar e clicava em `Dígito 1` de novo. Mas 8s é um
  * palpite sobre a MÁQUINA, não sobre o produto: numa máquina carregada o
  * `verifyMfa` demora mais que isso e o código entra DEPOIS do estouro — aí a
- * página já é `/app/inbox`, `input[aria-label="Dígito 1"]` não existe mais, e
+ * página já é `/app/inbox`, `input[aria-label="Chiffre 1"]` não existe mais, e
  * como `playwright.config.ts` não define `actionTimeout` (o default do
  * Playwright é 0, ou seja SEM teto) esse clique espera até o timeout do CASO.
  *
@@ -157,7 +157,7 @@ const SVG_DISFARCADO = Buffer.from(
  * (rate 8 e rate 4), as duas idênticas:
  *
  *   Error: locator.click: Test timeout of 180000ms exceeded.
- *     - waiting for locator('input[aria-label="Dígito 1"]')
+ *     - waiting for locator('input[aria-label="Chiffre 1"]')
  *   NAV http://localhost:3001/app/inbox   (+30862ms)
  *   FIM url=http://localhost:3001/app/inbox
  *
@@ -184,10 +184,10 @@ async function loginComTotp(page: Page, email: string, secret: string): Promise<
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click({ timeout: 15_000 });
+  await page.getByRole("button", { name: /se connecter/i }).click({ timeout: 15_000 });
   await page.waitForURL(/\/login\/mfa/);
 
-  const digito1 = page.locator('input[aria-label="Dígito 1"]');
+  const digito1 = page.locator('input[aria-label="Chiffre 1"]');
   // Escopado no `<form>` de propósito: o `<Toaster/>` do layout raiz também
   // emite elementos com papel de aviso, e um toast de outra tela seria lido
   // aqui como recusa do desafio.

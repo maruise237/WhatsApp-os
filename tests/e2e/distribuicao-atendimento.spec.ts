@@ -44,7 +44,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -55,7 +55,7 @@ async function marcada(page: Page, nome: string, valor: string): Promise<boolean
   );
 }
 
-test.describe("distribuição de atendimento — a tela que liga o rodízio e a visibilidade", () => {
+test.describe("répartition des échanges — l’écran qui active la rotation et la visibilité", () => {
   test.describe.configure({ timeout: 120_000 });
 
   test.afterAll(async ({ browser }) => {
@@ -70,7 +70,7 @@ test.describe("distribuição de atendimento — a tela que liga o rodízio e a 
     await page.close();
   });
 
-  test("manager liga o rodízio e a restrição pela tela, e o estado sobrevive ao reload", async ({
+  test("le manager active la rotation et la restriction depuis l’écran, et l’état survit au rechargement", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
@@ -78,13 +78,13 @@ test.describe("distribuição de atendimento — a tela que liga o rodízio e a 
     // 1. A tela é ALCANÇÁVEL pela navegação — não só pela URL digitada. É o
     //    defeito da issue: a feature existia e não tinha porta.
     await page.goto("/app/settings");
-    const porta = page.getByRole("link", { name: /Distribuição de atendimento/i });
+    const porta = page.getByRole("link", { name: /Répartition des échanges/i });
     await expect(porta).toBeVisible();
     await porta.click();
     await page.waitForURL(/\/app\/settings\/atendimento/);
 
     await expect(
-      page.getByRole("heading", { name: "Distribuição de atendimento" }),
+      page.getByRole("heading", { name: "Répartition des échanges" }),
     ).toBeVisible();
 
     // 2. O default do produto aparece: manual + "os seus e os sem dono".
@@ -102,8 +102,8 @@ test.describe("distribuição de atendimento — a tela que liga o rodízio e a 
 
     // 5. Salva e recarrega: o estado tem de vir do BANCO. Sem o reload isto
     //    provaria só que o React guardou o clique.
-    await page.getByRole("button", { name: /^Salvar$/ }).click();
-    await expect(page.getByText(/Distribuição de atendimento salva/i)).toBeVisible();
+    await page.getByRole("button", { name: /^Enregistrer$/ }).click();
+    await expect(page.getByText(/Distribution des demandes enregistrée/i)).toBeVisible();
 
     await page.reload();
     expect(await marcada(page, "modo", "round_robin")).toBe(true);
@@ -121,7 +121,7 @@ test.describe("distribuição de atendimento — a tela que liga o rodízio e a 
     expect(data.visibility_mode).toBe("own");
   });
 
-  test("a combinação que mata a operação é avisada antes de salvar", async ({ page }) => {
+  test("la combinaison qui bloque l’opération est signalée avant l’enregistrement", async ({ page }) => {
     // "só os seus" + distribuição manual = ninguém enxerga a fila para pegar,
     // e nenhum cliente é atendido. É a configuração que o operador escolheria
     // achando que está sendo restritivo.
@@ -136,7 +136,7 @@ test.describe("distribuição de atendimento — a tela que liga o rodízio e a 
     await expect(page.getByTestId("aviso-combinacao-morta")).toHaveCount(0);
   });
 
-  test("atendente não abre a tela nem consegue gravar pela API", async ({ page }) => {
+  test("l’agent n’ouvre pas l’écran et ne peut pas enregistrer via l’API", async ({ page }) => {
     await login(page, creds.users.agent!.email);
 
     await page.goto("/app/settings/atendimento");

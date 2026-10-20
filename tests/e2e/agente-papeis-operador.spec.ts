@@ -97,21 +97,21 @@ async function abrirAbaDoOperador(): Promise<void> {
   await pagina.getByTestId("papel-operacao").click();
 }
 
-test.describe("A aba do papel que organiza o sistema", () => {
-  test("os TRÊS papéis aparecem, e os nomes dizem o que cada um faz", async () => {
+test.describe("L’onglet du rôle qui organise le système", () => {
+  test("les TROIS rôles apparaissent, et leurs noms disent ce que chacun fait", async () => {
     await pagina.goto(`/app/ai/agents/${agenteDeTeste()}`);
 
     // Os rótulos são o contrato com quem configura. "Conversador"/"Operador" é
     // vocabulário nosso; quem tem uma clínica pensa em quem fala com o cliente
     // e em quem mantém a casa em ordem.
-    await expect(pagina.getByTestId("papel-conversa")).toHaveText(/conversa com o cliente/i);
-    await expect(pagina.getByTestId("papel-operacao")).toHaveText(/organiza o sistema/i);
+    await expect(pagina.getByTestId("papel-conversa")).toHaveText(/échange avec le client/i);
+    await expect(pagina.getByTestId("papel-operacao")).toHaveText(/organisation du système/i);
     // O TERCEIRO. O épico se chama "os três papéis" e foi entregue com dois na
     // tela — a cadeia de conferências rodava e ninguém que configura sabia.
-    await expect(pagina.getByTestId("papel-seguranca")).toHaveText(/confere antes de enviar/i);
+    await expect(pagina.getByTestId("papel-seguranca")).toHaveText(/vérifications avant envoi/i);
   });
 
-  test("o papel que confere mostra a lista inteira, aberta, e sem interruptor decorativo", async () => {
+  test("le rôle de vérification montre la liste entière, ouverte, sans interrupteur décoratif", async () => {
     await pagina.goto(`/app/ai/agents/${agenteDeTeste()}`);
     await pagina.getByTestId("papel-seguranca").click();
 
@@ -140,7 +140,7 @@ test.describe("A aba do papel que organiza o sistema", () => {
     await expect(painel.locator('[role="switch"]')).toHaveCount(2);
   });
 
-  test("desligado, a tela diz o que CONTINUA acontecendo — não só o que para", async () => {
+  test("désactivé, l’écran dit ce qui CONTINUE de se passer — pas seulement ce qui s’arrête", async () => {
     await abrirAbaDoOperador();
 
     const aviso = pagina.getByTestId("operador-consequencia");
@@ -148,32 +148,32 @@ test.describe("A aba do papel que organiza o sistema", () => {
     // Sem a primeira metade, o usuário conclui que desligar deixa o sistema
     // cego, e liga por medo em vez de escolha. A decisão da spec 16 §2.1 é que
     // o registro básico continua por código determinístico.
-    await expect(aviso).toContainText(/continua atendendo/i);
-    await expect(aviso).toContainText(/registrado sozinho/i);
-    await expect(aviso).toContainText(/decidir sobre a operação/i);
+    await expect(aviso).toContainText(/continue de répondre/i);
+    await expect(aviso).toContainText(/enregistrés automatiquement/i);
+    await expect(aviso).toContainText(/décider pour l’opération/i);
   });
 
-  test("desligado, não oferece configuração que não vai valer", async () => {
+  test("désactivé, il ne propose pas de réglage qui ne servira pas", async () => {
     await abrirAbaDoOperador();
     // Convidar alguém a escolher capacidades de um papel desligado produz a
     // conclusão de que o produto quebrou quando nada acontece.
     await expect(pagina.getByTestId("operador-capacidades")).toBeHidden();
   });
 
-  test("ligar revela as escolhas do papel, e elas são SÓ dele", async () => {
+  test("activer révèle les choix du rôle, et ils ne concernent QUE lui", async () => {
     await abrirAbaDoOperador();
     await pagina.getByTestId("operador-liga").click();
 
     await expect(pagina.getByTestId("operador-capacidades")).toBeVisible();
     // A frase que impede o modelo mental errado: esta lista não é a mesma da
     // aba de conversa.
-    await expect(pagina.getByText(/só deste papel/i)).toBeVisible();
+    await expect(pagina.getByText(/concerne uniquement ce rôle/i)).toBeVisible();
     // Sem nada marcado, o papel ainda tem função — e a tela diz qual, senão o
     // usuário liga, não marca nada e conclui que quebrou.
-    await expect(pagina.getByTestId("operador-sem-capacidade")).toContainText(/prometer algo/i);
+    await expect(pagina.getByTestId("operador-sem-capacidade")).toContainText(/promesse faite à un client/i);
   });
 
-  test("a escolha SOBREVIVE ao recarregar — o caso que pega o campo perdido no meio do caminho", async () => {
+  test("le choix SURVIT au rechargement — le cas qui attrape le champ perdu en route", async () => {
     await abrirAbaDoOperador();
 
     // Estado inicial: desligado (default do banco — migration não liga sozinha
@@ -183,8 +183,8 @@ test.describe("A aba do papel que organiza o sistema", () => {
     await pagina.getByTestId("operador-liga").click();
     await expect(pagina.getByTestId("operador-capacidades")).toBeVisible();
 
-    await pagina.getByRole("button", { name: /salvar rascunho/i }).click();
-    await expect(pagina.getByText(/rascunho v\d+ salvo/i)).toBeVisible({ timeout: 20_000 });
+    await pagina.getByRole("button", { name: /enregistrer le brouillon/i }).click();
+    await expect(pagina.getByText(/brouillon v\d+ enregistré/i)).toBeVisible({ timeout: 20_000 });
 
     // O RECARREGAMENTO é o teste. Tudo até aqui vive em estado de React; só
     // depois desta linha a resposta vem do banco, atravessando a server action,
@@ -201,7 +201,7 @@ test.describe("A aba do papel que organiza o sistema", () => {
     await expect(pagina.getByTestId("operador-consequencia")).toBeHidden();
   });
 
-  test("o modelo do papel volta a herdar, e isso também sobrevive ao refresh", async () => {
+  test("le modèle du rôle hérite de nouveau, et cela survit aussi au rechargement", async () => {
     await abrirAbaDoOperador();
     await pagina.getByTestId("operador-liga").click();
 
@@ -209,8 +209,8 @@ test.describe("A aba do papel que organiza o sistema", () => {
     // faz sentido — não há para onde voltar.
     await expect(pagina.getByTestId("operador-modelo-herdar")).toBeHidden();
 
-    await pagina.getByRole("button", { name: /salvar rascunho/i }).click();
-    await expect(pagina.getByText(/rascunho v\d+ salvo/i)).toBeVisible({ timeout: 20_000 });
+    await pagina.getByRole("button", { name: /enregistrer le brouillon/i }).click();
+    await expect(pagina.getByText(/brouillon v\d+ enregistré/i)).toBeVisible({ timeout: 20_000 });
 
     await pagina.reload();
     await pagina.getByTestId("papel-operacao").click();
@@ -220,7 +220,7 @@ test.describe("A aba do papel que organiza o sistema", () => {
     await expect(pagina.getByTestId("operador-modelo-herdar")).toBeHidden();
   });
 
-  test("a tela do papel não fala a NOSSA língua", async () => {
+  test("l’écran du rôle ne parle pas NOTRE jargon", async () => {
     await abrirAbaDoOperador();
     await pagina.getByTestId("operador-liga").click();
 

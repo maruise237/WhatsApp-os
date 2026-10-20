@@ -82,7 +82,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -90,7 +90,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
 
   // Até 2 tentativas: um código pode expirar na borda da janela de 30s.
@@ -99,7 +99,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
       await page.waitForTimeout(msUntilNextTotpWindow() + 200);
     }
     const code = generateTotp(secret);
-    const firstDigit = page.locator('input[aria-label="Dígito 1"]');
+    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
     await firstDigit.click();
     await page.keyboard.type(code, { delay: 40 });
     try {

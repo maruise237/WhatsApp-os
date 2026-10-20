@@ -72,7 +72,7 @@ test("recuperar senha: forgot → e-mail → nova senha → login com a nova", a
   await page.goto("/login");
   await page.getByRole("link", { name: "Esqueci minha senha" }).click();
   await expect(page).toHaveURL(/\/login\/forgot$/);
-  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("E-mail").fill(email);
   await page.getByRole("button", { name: "Enviar link de redefinição" }).click();
   await expect(page.getByText("Verifique seu e-mail")).toBeVisible();
 
@@ -90,13 +90,13 @@ test("recuperar senha: forgot → e-mail → nova senha → login com a nova", a
   await expect(page.getByText("Senha redefinida com sucesso")).toBeVisible();
 
   // 5a. Senha ANTIGA tem que falhar
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Senha").fill(oldPassword);
+  await page.getByLabel("E-mail").fill(email);
+  await page.getByLabel("Mot de passe").fill(oldPassword);
   await page.getByRole("button", { name: "Entrar" }).click();
   await expect(page.getByText("Email ou senha incorretos.")).toBeVisible();
 
   // 5b. Senha NOVA entra
-  await page.getByLabel("Senha").fill(newPassword);
+  await page.getByLabel("Mot de passe").fill(newPassword);
   await page.getByRole("button", { name: "Entrar" }).click();
   await page.waitForURL(/\/(app|onboarding)\//, { timeout: 30_000 });
   await expect(page).not.toHaveURL(/\/login/);

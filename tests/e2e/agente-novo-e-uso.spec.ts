@@ -40,13 +40,13 @@ test.beforeEach(async ({ page }) => {
   creds = await loginComoAdmin(page, creds);
 });
 
-test.describe("Criar um agente pela tela", () => {
-  test("o formulário abre e diz o que falta antes de deixar criar", async ({ page }) => {
+test.describe("Créer un agent depuis l’écran", () => {
+  test("le formulaire s’ouvre et dit ce qui manque avant de permettre la création", async ({ page }) => {
     await page.goto("/app/ai/agents/new");
-    await expect(page.getByRole("heading", { name: /novo agent/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /nouvel agent/i })).toBeVisible();
 
     // O botão nasce bloqueado: a tela não deixa criar um agente pela metade.
-    const criar = page.getByRole("button", { name: /criar agent/i });
+    const criar = page.getByRole("button", { name: /créer l’agent/i });
     await expect(criar).toBeDisabled();
 
     // E ela diz o que falta — as três exigências que o servidor também impõe.
@@ -55,7 +55,7 @@ test.describe("Criar um agente pela tela", () => {
     for (const exigencia of [
       /escolha o modelo/i,
       /escolha a chave de acesso/i,
-      /escolha por qual número de whatsapp/i,
+      /choisissez le numéro whatsapp utilisé pour répondre/i,
     ]) {
       await expect(page.getByText(exigencia).first()).toBeVisible();
     }
@@ -66,7 +66,7 @@ test.describe("Criar um agente pela tela", () => {
     });
   });
 
-  test("preencho como uma pessoa faria e o agente nasce, com as capacidades que liguei", async ({
+  test("je remplis comme une personne le ferait et l’agent naît, avec les capacités activées", async ({
     page,
   }) => {
     await page.goto("/app/ai/agents/new");
@@ -92,7 +92,7 @@ test.describe("Criar um agente pela tela", () => {
       const quantas = await opcoes.count();
       expect(quantas, `o campo "${id}" abriu sem nenhuma opção para escolher`).toBeGreaterThan(0);
       await opcoes.first().click();
-      await expect(gatilho).not.toContainText(/^Selecione/);
+      await expect(gatilho).not.toContainText(/^Sélectionnez/);
     }
 
     // Liga uma jornada de trabalho — o caminho que a W1 entregou.
@@ -105,7 +105,7 @@ test.describe("Criar um agente pela tela", () => {
       fullPage: true,
     });
 
-    const criar = page.getByRole("button", { name: /criar agent/i });
+    const criar = page.getByRole("button", { name: /créer l’agent/i });
     await expect(criar).toBeEnabled();
     await criar.click();
 
@@ -129,11 +129,11 @@ test.describe("Criar um agente pela tela", () => {
     await expect(page.getByText(nome).first()).toBeVisible({ timeout: 30_000 });
   });
 
-  test("a tela oferece caminho para o que ela exige, sem exigir que o usuário adivinhe", async ({
+  test("l’écran propose un chemin vers ce qu’il exige, sans obliger l’utilisateur à deviner", async ({
     page,
   }) => {
     await page.goto("/app/ai/agents/new");
-    await expect(page.getByRole("heading", { name: /novo agent/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /nouvel agent/i })).toBeVisible();
 
     // ⚠️ O QUE ESTE CASO NÃO CONSEGUE MEDIR, declarado em vez de fingido: o
     // estado "instalei agora e não tenho credencial nem número". A primeira
@@ -150,7 +150,7 @@ test.describe("Criar um agente pela tela", () => {
     const caminhos = await page.evaluate(() =>
       [...document.querySelectorAll("a[href]")]
         .map((a) => `${(a.textContent ?? "").trim()} -> ${a.getAttribute("href")}`)
-        .filter((t) => /credencial|conex|whatsapp|numero|número|canal/i.test(t)),
+        .filter((t) => /identifiant|clé|connex|whatsapp|numero|numéro|canal/i.test(t)),
     );
 
     expect(
@@ -160,13 +160,13 @@ test.describe("Criar um agente pela tela", () => {
   });
 });
 
-test.describe("Olhar o consumo de IA", () => {
-  test("a tela mostra os números do período e nomeia o que eles são", async ({ page }) => {
+test.describe("Consulter la consommation d’IA", () => {
+  test("l’écran montre les chiffres de la période et nomme ce qu’ils sont", async ({ page }) => {
     await page.goto("/app/ai/usage");
-    await expect(page.getByRole("heading", { name: /uso de ia/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /utilisation de l’ia/i })).toBeVisible();
 
     // Os quatro cartões do topo existem e trazem número, não traço.
-    for (const rotulo of [/custo no período/i, /atendimentos com ia/i]) {
+    for (const rotulo of [/coût sur la période/i, /échanges avec l’ia/i]) {
       await expect(page.getByText(rotulo).first()).toBeVisible();
     }
 
@@ -186,9 +186,9 @@ test.describe("Olhar o consumo de IA", () => {
     });
   });
 
-  test("um período sem nenhum dado é explicado, não fica em branco", async ({ page }) => {
+  test("une période sans aucune donnée est expliquée, elle ne reste pas vide", async ({ page }) => {
     await page.goto("/app/ai/usage");
-    await expect(page.getByRole("heading", { name: /uso de ia/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /utilisation de l’ia/i })).toBeVisible();
 
     // Uma janela no passado onde não houve uso nenhum.
     const de = page.locator('input[type="date"]').first();
@@ -199,7 +199,7 @@ test.describe("Olhar o consumo de IA", () => {
 
     const corpo = await page.locator("main").innerText();
     expect(
-      /sem dados|nenhum|0/i.test(corpo),
+      /aucune donnée|aucun|0/i.test(corpo),
       "período vazio não disse nada ao usuário",
     ).toBe(true);
 

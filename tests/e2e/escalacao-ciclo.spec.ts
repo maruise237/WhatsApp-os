@@ -40,8 +40,8 @@ const EVIDENCIA = path.join(process.cwd(), ".superpowers/evidence/ia-360-w3");
 
 /** O texto que a pessoa escreve ao decidir — é ele que precisa atravessar. */
 const DECISAO_DA_PESSOA =
-  "Aprovei 15% de desconto para as 200 unidades, com entrega em 5 dias uteis.";
-const NOTA_DO_ATENDENTE = "Cliente confirmou o CNPJ por telefone.";
+  "J’ai approuvé 15 % de remise pour les 200 unités, avec livraison sous 5 jours ouvrés.";
+const NOTA_DO_ATENDENTE = "Le client a confirmé son numéro fiscal par téléphone.";
 
 interface Creds {
   password: string;
@@ -75,7 +75,7 @@ async function login(page: Page, email: string, senha: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(senha);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app/, { timeout: 60_000 });
 }
 
@@ -133,7 +133,7 @@ function blocoDeAberturaDoTurno(orgId: string, contactId: string): string {
   }
 }
 
-test.describe("IA 360 W3 — o agente para, a pessoa continua, o agente retoma sabendo", () => {
+test.describe("IA 360 W3 — l’agent s’arrête, la personne continue, l’agent reprend en connaissance de cause", () => {
   test.describe.configure({ timeout: 180_000 });
 
   test.beforeAll(() => {
@@ -167,7 +167,7 @@ test.describe("IA 360 W3 — o agente para, a pessoa continua, o agente retoma s
     }
   });
 
-  test("ciclo completo: chamado → decisão da pessoa → devolução → o agente volta citando", async ({
+  test("cycle complet : dossier → décision de la personne → restitution → l’agent revient en citant", async ({
     page,
   }) => {
     const e = creds.escalacao;
@@ -190,11 +190,11 @@ test.describe("IA 360 W3 — o agente para, a pessoa continua, o agente retoma s
     // "Concluí" = a ação `resolved` (lib/ai/case-copy.ts). O rótulo é lido da
     // tela, não inventado aqui: se ele mudar, o teste reprova, que é o certo —
     // é a palavra que o atendente vê.
-    await page.getByRole("radio", { name: /Concluí/ }).click();
+    await page.getByRole("radio", { name: /C’est réglé/ }).click();
     const campo = page.locator("textarea").first();
     await expect(campo).toBeVisible({ timeout: 15_000 });
     await campo.fill(DECISAO_DA_PESSOA);
-    await page.getByRole("button", { name: /^Enviar$/ }).click();
+    await page.getByRole("button", { name: /^Envoyer$/ }).click();
 
     await expect
       .poll(

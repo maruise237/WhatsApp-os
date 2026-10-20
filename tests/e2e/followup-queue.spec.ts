@@ -61,7 +61,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -107,7 +107,7 @@ async function createLiveEnrollment(page: Page, tag: string): Promise<LiveEnroll
 
   const graph = {
     nodes: [
-      { id: "trigger-1", type: "trigger", label: "Início", position: { x: 0, y: 0 }, config: {} },
+      { id: "trigger-1", type: "trigger", label: "Début", position: { x: 0, y: 0 }, config: {} },
       { id: "end-1", type: "end", label: "Fim", position: { x: 0, y: 200 }, config: { outcome: "exhausted" } },
     ],
     edges: [{ id: "edge-1", source: "trigger-1", target: "end-1", priority: 0, condition: { type: "always" } }],
@@ -139,7 +139,7 @@ async function cleanupLiveEnrollment(page: Page, live: LiveEnrollment): Promise<
   await page.request.post(`/api/v1/ai/followup-flows/${live.flowId}/disable`, { data: {} });
 }
 
-test.describe("followup queue — fila unificada (Task 7.1)", () => {
+test.describe("file des relances — file unifiée (Task 7.1)", () => {
   test.beforeAll(() => {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-followup-promise.ts"], { stdio: "inherit" });
   // O seed ESCREVE em .e2e-creds.json, e `creds` foi lido no carregamento do
@@ -150,7 +150,7 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
     creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
   });
 
-  test("manager vê enrollment na fila, filtra por status/fluxo, cancela, e a promessa seedada aparece", async ({
+  test("le manager voit l’inscription dans la file, filtre par statut/flow, annule, et la relance semée apparaît", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
@@ -158,33 +158,33 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
 
     // --- 1. a aba Fila lista o enrollment real ---
     await page.goto("/app/ai/followups");
-    await expect(page.getByRole("heading", { name: "Follow-ups" })).toBeVisible();
-    await page.getByRole("tab", { name: "Fila" }).click();
+    await expect(page.getByRole("heading", { name: "Relances" })).toBeVisible();
+    await page.getByRole("tab", { name: "File" }).click();
 
     const row = page.locator('[data-testid="queue-row"]', { hasText: live.contactName });
     await expect(row).toBeVisible();
     await expect(row).toContainText(live.flowName);
     await expect(row).toContainText("trigger-1");
-    await expect(row.getByText("Ativo", { exact: true })).toBeVisible();
+    await expect(row.getByText("Actif", { exact: true })).toBeVisible();
     // next-fire: relativo visível + absoluto (dd/mm/yyyy) como texto secundário.
     await expect(row.locator("td").nth(3)).toContainText(/\d{2}\/\d{2}\/\d{4}/);
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "followup-7.1-01-queue-populated.png"), fullPage: true });
 
     // --- 2. filtro por status e por fluxo estreitam a lista ---
-    await selectFilterOption(page, "Filtrar por status", "Ativo");
+    await selectFilterOption(page, "Filtrer par statut", "Actif");
     await expect(row).toBeVisible();
 
-    await selectFilterOption(page, "Filtrar por status", "Concluído");
+    await selectFilterOption(page, "Filtrer par statut", "Terminé");
     await expect(row).toHaveCount(0);
     await page.screenshot({
       path: path.join(ARTIFACTS_DIR, "followup-7.1-02-filtered-status-empty.png"),
       fullPage: true,
     });
 
-    await selectFilterOption(page, "Filtrar por status", "Todos os status");
+    await selectFilterOption(page, "Filtrer par statut", "Tous les statuts");
     await expect(row).toBeVisible();
 
-    await selectFilterOption(page, "Filtrar por fluxo", live.flowName);
+    await selectFilterOption(page, "Filtrer par flow", live.flowName);
     await expect(row).toBeVisible();
     // filtro por ESTE fluxo recém-criado — só esta 1 linha pode bater (nenhum
     // outro teste usou este nome com timestamp único).
@@ -196,19 +196,19 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
     // garante que a linha está fora de qualquer overlay antes de clicar —
     // mitigação do timeout de 30s reproduzido pelo controller.
     await row.scrollIntoViewIfNeeded();
-    const cancelTrigger = row.getByRole("button", { name: "Cancelar follow-up" });
+    const cancelTrigger = row.getByRole("button", { name: "Annuler le follow-up" });
     await expect(cancelTrigger).toBeVisible();
     await cancelTrigger.click();
     const dialog = page.getByRole("alertdialog");
     await expect(dialog).toBeVisible();
-    await expect(dialog).toContainText("O lead não receberá mais mensagens deste fluxo");
+    await expect(dialog).toContainText("Le lead ne recevra plus de messages de ce flow");
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "followup-7.1-04-cancel-dialog.png"), fullPage: true });
 
-    await dialog.getByRole("button", { name: "Cancelar follow-up" }).click();
-    await expect(page.getByText("Follow-up cancelado.")).toBeVisible();
+    await dialog.getByRole("button", { name: "Annuler le follow-up" }).click();
+    await expect(page.getByText("Relance annulée.")).toBeVisible();
 
     // sai do filtro "ativos" (aqui, o fluxo específico + status Ativo).
-    await selectFilterOption(page, "Filtrar por status", "Ativo");
+    await selectFilterOption(page, "Filtrer par statut", "Actif");
     await expect(row).toHaveCount(0);
     await page.screenshot({
       path: path.join(ARTIFACTS_DIR, "followup-7.1-05-cancelled-left-active.png"),
@@ -230,9 +230,9 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
     const promiseInfo = creds.followup_promise;
     if (!promiseInfo) throw new Error("followup_promise ausente em .e2e-creds.json — seed falhou");
 
-    await selectFilterOption(page, "Filtrar por status", "Todos os status");
-    await selectFilterOption(page, "Filtrar por fluxo", "Todos os fluxos");
-    await page.getByLabel("Buscar contato").fill(promiseInfo.contact_name);
+    await selectFilterOption(page, "Filtrer par statut", "Tous les statuts");
+    await selectFilterOption(page, "Filtrer par flow", "Tous les flows");
+    await page.getByLabel("Rechercher un contact").fill(promiseInfo.contact_name);
 
     // `q` de fato ESTREITA a busca no servidor (não é coincidência a linha
     // aparecer): o seed é upsert-like (1 contato, 1 cron_job por run), então
@@ -241,12 +241,12 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
 
     const promiseRow = page.locator('[data-testid="queue-row"]', { hasText: promiseInfo.contact_name });
     await expect(promiseRow).toBeVisible();
-    await expect(promiseRow).toContainText("Promessa");
+    await expect(promiseRow).toContainText("Relance");
     await expect(promiseRow).toContainText(promiseInfo.reason);
-    await expect(promiseRow.getByText("Agendada", { exact: true })).toBeVisible();
+    await expect(promiseRow.getByText("Programmée", { exact: true })).toBeVisible();
     await expect(promiseRow.locator("td").nth(3)).toContainText(/\d{2}\/\d{2}\/\d{4}/);
     // Promessa não tem botão Cancelar (fora de escopo desta task).
-    await expect(promiseRow.getByRole("button", { name: "Cancelar follow-up" })).toHaveCount(0);
+    await expect(promiseRow.getByRole("button", { name: "Annuler le follow-up" })).toHaveCount(0);
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "followup-7.1-06-promise-row.png"), fullPage: true });
 
     // Cleanup: cancela + desativa o que este teste criou (a promessa já é
@@ -254,7 +254,7 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
     await cleanupLiveEnrollment(page, live);
   });
 
-  test("viewer vê a fila (leitura) mas não consegue cancelar — 403 client E server-side", async ({ page }) => {
+  test("le viewer voit la file (lecture) mais ne peut pas annuler — 403 côté client ET serveur", async ({ page }) => {
     // Setup como manager: precisa de 1 enrollment VIVO real pra tentar cancelar como viewer.
     await login(page, creds.users.manager!.email);
     const live = await createLiveEnrollment(page, "viewer-rbac");
@@ -273,10 +273,10 @@ test.describe("followup queue — fila unificada (Task 7.1)", () => {
     expect(cancelBody.error?.code).toBe("forbidden_role");
 
     await page.goto("/app/ai/followups");
-    await expect(page.getByRole("heading", { name: "Follow-ups" })).toBeVisible();
-    await page.getByRole("tab", { name: "Fila" }).click();
+    await expect(page.getByRole("heading", { name: "Relances" })).toBeVisible();
+    await page.getByRole("tab", { name: "File" }).click();
     // any member consegue ver a fila (GET queue é viewer+) — só não há coluna de ação.
-    await expect(page.getByRole("button", { name: "Cancelar follow-up" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Annuler le follow-up" })).toHaveCount(0);
 
     // Cleanup como manager (viewer não pode, confirmado acima) — fecha o que este teste criou.
     await switchUser(page, creds.users.manager!.email);

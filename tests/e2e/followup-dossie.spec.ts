@@ -82,7 +82,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -119,15 +119,15 @@ async function montaCenario(page: Page, tag: string): Promise<Cenario> {
 
   const graph = {
     nodes: [
-      { id: "trigger-1", type: "trigger", label: "Início", position: { x: 0, y: 0 }, config: {} },
+      { id: "trigger-1", type: "trigger", label: "Début", position: { x: 0, y: 0 }, config: {} },
       {
         id: "wait-1",
         type: "wait",
-        label: "Deixa esfriar",
+        label: "Laisser refroidir",
         position: { x: 0, y: 120 },
         config: { mode: "fixed", duration_ms: 14_400_000 },
       },
-      { id: "end-1", type: "end", label: "Fim", position: { x: 0, y: 240 }, config: { outcome: "exhausted" } },
+      { id: "end-1", type: "end", label: "Fin", position: { x: 0, y: 240 }, config: { outcome: "exhausted" } },
     ],
     edges: [
       { id: "edge-1", source: "trigger-1", target: "wait-1", priority: 0, condition: { type: "always" } },
@@ -184,10 +184,10 @@ async function limpa(page: Page, c: Cenario): Promise<void> {
   await page.request.post(`/api/v1/ai/followup-flows/${c.flowId}/disable`, { data: {} });
 }
 
-test.describe("dossiê do follow-up — ler a história e intervir", () => {
+test.describe("dossier de la relance — lire l’historique et intervenir", () => {
   test.skip(INTERNAL_SECRET === "", "INTERNAL_SECRET ausente no .env.local — o tick do motor não roda");
 
-  test("manager abre o dossiê pela fila, lê a história traduzida e intervém", async ({ page }) => {
+  test("le manager ouvre le dossier depuis la file, lit l’historique traduit et intervient", async ({ page }) => {
     test.setTimeout(180_000);
     await login(page, creds.users.manager!.email);
     const cenario = await montaCenario(page, "mgr");
@@ -199,8 +199,8 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
 
     // --- 1. da fila para o dossiê, pelo clique ---
     await page.goto("/app/ai/followups");
-    await page.getByRole("tab", { name: "Fila" }).click();
-    await page.getByLabel("Buscar contato").fill(cenario.contactName);
+    await page.getByRole("tab", { name: "File" }).click();
+    await page.getByLabel("Rechercher un contact").fill(cenario.contactName);
     // Espera a RESPOSTA da fila, não um relógio: o debounce é de 250ms e o
     // servidor sob carga leva mais que o timeout padrão de 5s do expect —
     // asserção que expira antes da resposta chegar mede a máquina, não a tela.
@@ -214,13 +214,13 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
     await page.waitForURL(new RegExp(`/app/ai/followups/enrollments/${cenario.enrollmentId}`));
 
     await expect(page.getByRole("heading", { name: cenario.contactName })).toBeVisible({ timeout: 30_000 });
-    await expect(page.getByTestId("dossie-status")).toHaveText("Ativo", { timeout: 30_000 });
-    await expect(page.getByTestId("dossie-onde-esta")).toContainText("Deixa esfriar");
+    await expect(page.getByTestId("dossie-status")).toHaveText("Actif", { timeout: 30_000 });
+    await expect(page.getByTestId("dossie-onde-esta")).toContainText("Laisser refroidir");
 
     // --- 2. a história do motor, em português ---
     const timeline = page.getByTestId("dossie-timeline");
-    await expect(timeline).toContainText("Seguiu em frente");
-    await expect(timeline).toContainText("Começou a esperar");
+    await expect(timeline).toContainText("A avancé");
+    await expect(timeline).toContainText("A commencé à attendre");
     // O que a tradução existe para impedir: identificador de máquina na tela.
     await expect(timeline).not.toContainText("node_advanced");
     await expect(timeline).not.toContainText("wait_started");
@@ -228,10 +228,10 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
 
     // --- 3. pausar ---
     await page.getByTestId("dossie-pausar").click();
-    await expect(page.getByText("Follow-up pausado.")).toBeVisible({ timeout: 30_000 });
-    await expect(page.getByTestId("dossie-status")).toHaveText("Pausado por uma pessoa");
-    await expect(page.getByTestId("dossie-proximo-passo")).toContainText("Parado até alguém retomar");
-    await expect(timeline).toContainText("Pausado por uma pessoa da equipe");
+    await expect(page.getByText("Relance mise en pause.")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("dossie-status")).toHaveText("Mis en pause par une personne");
+    await expect(page.getByTestId("dossie-proximo-passo")).toContainText("En pause jusqu’à ce que quelqu’un la relance");
+    await expect(timeline).toContainText("Mise en pause par une personne de l’équipe");
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "02-pausado.png"), fullPage: true });
 
     // Pausado NÃO oferece adiar nem pular: mexer no relógio de quem está fora
@@ -241,9 +241,9 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
 
     // --- 4. retomar ---
     await page.getByTestId("dossie-retomar").click();
-    await expect(page.getByText("Follow-up retomado.")).toBeVisible({ timeout: 30_000 });
-    await expect(page.getByTestId("dossie-status")).toHaveText("Ativo", { timeout: 30_000 });
-    await expect(timeline).toContainText("Retomado por uma pessoa da equipe");
+    await expect(page.getByText("Relance reprise.")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("dossie-status")).toHaveText("Actif", { timeout: 30_000 });
+    await expect(timeline).toContainText("Relancée par une personne de l’équipe");
 
     // --- 5. adiar para uma data escolhida ---
     await page.getByTestId("dossie-adiar").click();
@@ -255,18 +255,18 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
         `${daquiUmMes.getFullYear()}-${p(daquiUmMes.getMonth() + 1)}-${p(daquiUmMes.getDate())}T${p(daquiUmMes.getHours())}:${p(daquiUmMes.getMinutes())}`,
       );
     await page.getByTestId("dossie-adiar-confirmar").click();
-    await expect(page.getByText("Follow-up adiado.")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByText("Relance reportée.")).toBeVisible({ timeout: 30_000 });
     await expect(page.getByTestId("dossie-proximo-passo")).toContainText(
       `${p(daquiUmMes.getDate())}/${p(daquiUmMes.getMonth() + 1)}/${daquiUmMes.getFullYear()}`,
     );
-    await expect(timeline).toContainText("Adiado por uma pessoa da equipe");
+    await expect(timeline).toContainText("Reportée par une personne de l’équipe");
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "03-adiado.png"), fullPage: true });
 
     // --- 6. pular o passo (a espera tem saída única: segue sem perguntar) ---
     await page.getByTestId("dossie-pular").click();
-    await expect(page.getByText("Passo pulado.")).toBeVisible({ timeout: 30_000 });
-    await expect(page.getByTestId("dossie-onde-esta")).toContainText("Fim");
-    await expect(timeline).toContainText("Passo pulado por uma pessoa da equipe");
+    await expect(page.getByText("Étape ignorée.")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("dossie-onde-esta")).toContainText("Fin");
+    await expect(timeline).toContainText("Étape sautée par une personne de l’équipe");
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "04-pulado.png"), fullPage: true });
 
     // --- 7. a intervenção existe FORA do follow-up: no negócio ---
@@ -278,14 +278,14 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
     await card.getByRole("button", { name: cenario.contactName }).click();
     // O dossiê do negócio é um Sheet — `role=dialog` no Radix.
     const dossieDoNegocio = page.getByRole("dialog");
-    await expect(dossieDoNegocio).toContainText("Follow-up pausado");
-    await expect(dossieDoNegocio).toContainText("Follow-up retomado");
+    await expect(dossieDoNegocio).toContainText("Relance en pause");
+    await expect(dossieDoNegocio).toContainText("Relance reprise");
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "05-timeline-do-negocio.png"), fullPage: true });
 
     await limpa(page, cenario);
   });
 
-  test("viewer lê o dossiê inteiro e não tem botão de intervir — nem no servidor", async ({ page }) => {
+  test("le viewer lit tout le dossier et n’a aucun bouton pour intervenir — pas même côté serveur", async ({ page }) => {
     test.setTimeout(120_000);
     await login(page, creds.users.manager!.email);
     const cenario = await montaCenario(page, "viewer");
@@ -315,7 +315,7 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
     await limpa(page, cenario);
   });
 
-  test("o dossiê mostra o tempo que a IA escolheu — e quanto ela pediu antes do corte", async ({ page }) => {
+  test("le dossier montre le délai choisi par l’IA — et ce qu’elle demandait avant la coupe", async ({ page }) => {
     test.setTimeout(180_000);
     await login(page, creds.users.manager!.email);
 
@@ -329,16 +329,16 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
 
     const graph = {
       nodes: [
-        { id: "trigger-1", type: "trigger", label: "Início", position: { x: 0, y: 0 }, config: {} },
+        { id: "trigger-1", type: "trigger", label: "Début", position: { x: 0, y: 0 }, config: {} },
         {
           id: "wait-1",
           type: "wait",
-          label: "Deixa esfriar",
+          label: "Laisser refroidir",
           position: { x: 0, y: 120 },
           // 10 min a 12h: o teto que a IA vai estourar de propósito.
-          config: { mode: "smart", min_ms: 600_000, max_ms: 43_200_000, guidance: "o cliente pediu calma" },
+          config: { mode: "smart", min_ms: 600_000, max_ms: 43_200_000, guidance: "le client a demandé du calme" },
         },
-        { id: "end-1", type: "end", label: "Fim", position: { x: 0, y: 240 }, config: { outcome: "exhausted" } },
+        { id: "end-1", type: "end", label: "Fin", position: { x: 0, y: 240 }, config: { outcome: "exhausted" } },
       ],
       edges: [
         { id: "edge-1", source: "trigger-1", target: "wait-1", priority: 0, condition: { type: "always" } },
@@ -364,7 +364,7 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
       kind: "planned",
       modelo: "anthropic/claude-sonnet-4-6",
       propostas: [
-        { node_id: "wait-1", aguardar_ms: 259_200_000, motivo: "o cliente pediu para retomar semana que vem" },
+        { node_id: "wait-1", aguardar_ms: 259_200_000, motivo: "le client a demandé de reprendre la semaine prochaine" },
       ],
     });
 
@@ -372,22 +372,22 @@ test.describe("dossiê do follow-up — ler a história e intervir", () => {
     const bloco = page.getByTestId("dossie-plano-de-tempo");
     await expect(bloco).toBeVisible({ timeout: 30_000 });
     // O que o nó permitiu, não o que a IA pediu.
-    await expect(bloco).toContainText("esperar 12 horas");
+    await expect(bloco).toContainText("attendre 12 heures");
     await expect(bloco.getByTestId("dossie-espera-clampada")).toBeVisible();
     // E o TAMANHO do corte, que é o que decide se o operador mexe no nó.
-    await expect(bloco.getByTestId("dossie-espera-pedido")).toContainText("a IA pediu 3 dias");
-    await expect(bloco).toContainText("o cliente pediu para retomar semana que vem");
-    await expect(bloco).toContainText("seu limite: de 10 minutos a 12 horas");
+    await expect(bloco.getByTestId("dossie-espera-pedido")).toContainText("l’IA l’a demandé 3 jours");
+    await expect(bloco).toContainText("le client a demandé de reprendre la semaine prochaine");
+    await expect(bloco).toContainText("votre limite : de 10 minutes à 12 heures");
 
     // A tela pegou dois defeitos de tradução que nenhum unitário pegaria: o
     // evento do plano caía no fallback ("código: timing_plan_decidido") e o
     // turno de PLANEJAMENTO se anunciava como "escrever a mensagem". Os dois
     // ficam vigiados aqui, onde apareceram.
     const historia = page.getByTestId("dossie-timeline");
-    await expect(historia).toContainText("O agente decidiu quanto esperar em cada passo");
-    await expect(historia).toContainText("Pediu ao agente para planejar os tempos de espera");
+    await expect(historia).toContainText("L’assistant a décidé du délai d’attente de chaque étape");
+    await expect(historia).toContainText("A demandé à l’assistant de planifier les délais d’attente");
     await expect(historia).not.toContainText("timing_plan_decidido");
-    await expect(historia).not.toContainText("escrever a mensagem");
+    await expect(historia).not.toContainText("écrire le message");
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "07-plano-de-tempo.png"), fullPage: true });
 
     await page.request.post(`/api/v1/ai/followups/enrollments/${enrollment.id}/cancel`, { data: {} });

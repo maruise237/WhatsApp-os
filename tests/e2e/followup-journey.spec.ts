@@ -107,7 +107,7 @@ async function loginWithTotp(page: Page, email: string, secretTotp: string): Pro
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
 
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -115,7 +115,7 @@ async function loginWithTotp(page: Page, email: string, secretTotp: string): Pro
       await page.waitForTimeout(msUntilNextTotpWindow() + 200);
     }
     const code = generateTotp(secretTotp);
-    const firstDigit = page.locator('input[aria-label="Dígito 1"]');
+    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
     await firstDigit.click();
     await page.keyboard.type(code, { delay: 40 });
     try {
@@ -210,7 +210,7 @@ interface EnrollmentRow {
   completed_at: string | null;
 }
 
-test.describe("followup — jornada completa (Task 8.3)", () => {
+test.describe("relance — parcours complet (Task 8.3)", () => {
   test.use({ viewport: { width: 1600, height: 1000 } });
 
   test.beforeAll(() => {
@@ -221,7 +221,7 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
     creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
   });
 
-  test("silêncio → enroll → trigger→wait→action→classify → resposta → outcome → fila", async ({ page }) => {
+  test("silence → enroll → trigger→wait→action→classify → réponse → résultat → file", async ({ page }) => {
     // Jornada ponta a ponta com múltiplos round-trips reais de cron (tick +
     // sweep + drain) — o timeout default de 30s do playwright.config.ts é
     // curto demais (mesmo padrão de tests/e2e/webhooks.spec.ts, que também
@@ -242,10 +242,10 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
     // =========================================================================
     const flowName = `E2E Jornada ${stamp}`;
     await page.goto("/app/ai/followups");
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Nome").fill(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByLabel("Nom").fill(flowName);
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
     await page.locator("li", { hasText: flowName }).getByRole("link").click();
     await page.waitForURL(/\/app\/ai\/followups\/([0-9a-f-]+)$/);
@@ -289,20 +289,20 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
     // outros 2 fins ficam no default "Esgotado", coerente com no_reply/fallback).
     await page.locator(`[data-testid="node-card-${classifyId}"]`).click();
     const panel = page.getByTestId("node-config-panel");
-    await panel.getByLabel("Classes (separadas por vírgula)").fill("positivo");
-    await panel.getByLabel("Classes (separadas por vírgula)").blur();
+    await panel.getByLabel("Classes (séparées par des virgules)").fill("positivo");
+    await panel.getByLabel("Classes (séparées par des virgules)").blur();
     await expect(page.locator(`[data-testid="node-card-${classifyId}"]`)).toContainText("1 classes");
 
     await page.locator(`[data-testid="node-card-${actionId}"]`).click();
-    const promptHint = "Pergunte com simpatia se ainda há interesse e ofereça ajuda para fechar.";
-    await panel.getByLabel("Instrução para a IA").fill(promptHint);
-    await panel.getByLabel("Instrução para a IA").blur();
-    await expect(page.locator(`[data-testid="node-card-${actionId}"]`)).toContainText("Pergunte com simpatia");
+    const promptHint = "Demandez avec bienveillance s’il est toujours intéressé et proposez de l’aide pour conclure.";
+    await panel.getByLabel("Instruction pour l’IA").fill(promptHint);
+    await panel.getByLabel("Instruction pour l’IA").blur();
+    await expect(page.locator(`[data-testid="node-card-${actionId}"]`)).toContainText("Demandez avec bienveillance");
 
     await page.locator(`[data-testid="node-card-${endPositivoId}"]`).click();
     await panel.locator("#end-outcome").click();
-    await page.getByRole("option", { name: "Convertido", exact: true }).click();
-    await expect(page.locator(`[data-testid="node-card-${endPositivoId}"]`)).toContainText("Convertido");
+    await page.getByRole("option", { name: "Converti", exact: true }).click();
+    await expect(page.locator(`[data-testid="node-card-${endPositivoId}"]`)).toContainText("Converti");
 
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
     await expect(page.getByTestId("node-config-sheet")).toHaveCount(0);
@@ -320,7 +320,7 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
     await expect(page.locator(".react-flow__edge")).toHaveCount(6);
 
     await setEdgeCondition(page, "edge-4", "positivo");
-    await setEdgeCondition(page, "edge-5", "Sem resposta");
+    await setEdgeCondition(page, "edge-5", "Sans réponse");
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
     await expect(page.getByTestId("edge-config-sheet")).toHaveCount(0);
 
@@ -335,8 +335,8 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
     expect(trigCfgRes.status()).toBe(200);
 
     await page.getByTestId("publish-button").click();
-    await expect(page.getByText("Fluxo publicado.")).toBeVisible();
-    await expect(page.locator('[aria-label="status: Ativo"]')).toBeVisible();
+    await expect(page.getByText("Flux publié.")).toBeVisible();
+    await expect(page.locator('[aria-label="statut : Actif"]')).toBeVisible();
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "followup-8.3-01-flow-published.png"), fullPage: true });
 
     // A partir daqui o pointer é `status='active'` com `trigger_config.kind=
@@ -382,7 +382,7 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
       await expect(page.getByRole("heading", { name: agentName })).toBeVisible();
       const followupHeading = page.getByRole("heading", { name: "Follow-up", exact: true });
       await followupHeading.scrollIntoViewIfNeeded();
-      const followupToggle = page.getByLabel("Habilitar gatilhos automáticos de follow-up");
+      const followupToggle = page.getByLabel("Activer les déclencheurs automatiques de suivi");
       await followupToggle.click();
       await expect(followupToggle).toBeChecked();
       const flowCheckbox = page.getByLabel(flowName, { exact: true });
@@ -392,8 +392,8 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
         path: path.join(ARTIFACTS_DIR, "followup-8.3-02-agent-followup-section.png"),
         fullPage: true,
       });
-      await page.getByRole("button", { name: "Salvar rascunho" }).click();
-      await expect(page.getByText(/Rascunho v\d+ salvo\./)).toBeVisible();
+      await page.getByRole("button", { name: "Enregistrer le brouillon" }).click();
+      await expect(page.getByText(/Brouillon v\d+ enregistré\./)).toBeVisible();
 
       // Publica a version — sem isso o gate (Task 7.2) nunca libera o gatilho
       // automático (só conta agente com version status='published'). É AQUI
@@ -486,14 +486,14 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
       // cross-contato, então mais de um pointer de teste pode ter enrollado
       // o mesmo contato em runs anteriores (ver nota de cleanup abaixo).
       await page.goto("/app/ai/followups");
-      await page.getByRole("tab", { name: "Fila" }).click();
-      await page.getByLabel("Buscar contato").fill(seed.contactName);
+      await page.getByRole("tab", { name: "File" }).click();
+      await page.getByLabel("Rechercher un contact").fill(seed.contactName);
       const queueRow = page
         .locator('[data-testid="queue-row"]', { hasText: seed.contactName })
         .filter({ hasText: flowName });
       await expect(queueRow).toBeVisible();
       await expect(queueRow).toContainText(flowName);
-      await expect(queueRow.getByText("Ativo", { exact: true })).toBeVisible();
+      await expect(queueRow.getByText("Actif", { exact: true })).toBeVisible();
       await page.screenshot({
         path: path.join(ARTIFACTS_DIR, "followup-8.3-03-queue-active.png"),
         fullPage: true,
@@ -568,7 +568,7 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
       seed.conversationId,
       seed.contactId,
       seed.channelSessionId,
-      "Sim, ainda tenho interesse! Pode me mandar mais detalhes?",
+      "Oui, je suis toujours intéressé ! Vous pouvez m’envoyer plus de détails ?",
     ]);
 
     // Drena o event_log real (mesmo cron que produção usa) até a reatividade
@@ -613,13 +613,13 @@ test.describe("followup — jornada completa (Task 8.3)", () => {
     expect(completed.completed_at).toBeTruthy();
 
       await page.reload();
-      await page.getByRole("tab", { name: "Fila" }).click();
-      await page.getByLabel("Buscar contato").fill(seed.contactName);
+      await page.getByRole("tab", { name: "File" }).click();
+      await page.getByLabel("Rechercher un contact").fill(seed.contactName);
       const finalRow = page
         .locator('[data-testid="queue-row"]', { hasText: seed.contactName })
         .filter({ hasText: flowName });
       await expect(finalRow).toBeVisible();
-      await expect(finalRow.getByText("Concluído", { exact: true })).toBeVisible();
+      await expect(finalRow.getByText("Terminé", { exact: true })).toBeVisible();
       await page.screenshot({
         path: path.join(ARTIFACTS_DIR, "followup-8.3-04-queue-completed.png"),
         fullPage: true,

@@ -93,12 +93,12 @@ async function loginComTotp(page: Page, email: string, secret: string): Promise<
   await expect(page.locator("#email")).toBeVisible({ timeout: ESPERA });
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/, { timeout: ESPERA });
 
   for (let tentativa = 0; tentativa < 3; tentativa++) {
     if (msUntilNextTotpWindow() < 3_000) await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    await page.locator('input[aria-label="Dígito 1"]').click();
+    await page.locator('input[aria-label="Chiffre 1"]').click();
     await page.keyboard.type(generateTotp(secret), { delay: 40 });
     try {
       await page.waitForURL(/\/app\//, { timeout: 20_000 });

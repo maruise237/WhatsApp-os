@@ -54,7 +54,7 @@ async function login(page: Page, password = OWNER_PASSWORD): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(OWNER_EMAIL);
   await page.locator("#password").fill(password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
 }
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
@@ -334,7 +334,7 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     // digita o código com retry na virada da janela TOTP
     for (let attempt = 0; attempt < 3; attempt++) {
       if (msUntilNextTotpWindow() < 4_000) await page.waitForTimeout(msUntilNextTotpWindow() + 300);
-      await page.locator('input[aria-label="Dígito 1"]').click();
+      await page.locator('input[aria-label="Chiffre 1"]').click();
       await page.keyboard.type(generateTotp(secret), { delay: 40 });
       try {
         await expect(page.getByRole("heading", { name: /códigos de recuperação/i })).toBeVisible({
@@ -344,7 +344,7 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
       } catch {
         if (attempt === 2) throw new Error("MFA enroll não chegou aos recovery codes");
         // código recusado (janela virou) → limpa e tenta de novo
-        await page.locator('input[aria-label="Dígito 1"]').click();
+        await page.locator('input[aria-label="Chiffre 1"]').click();
         for (let i = 0; i < 6; i++) await page.keyboard.press("Backspace");
       }
     }
@@ -376,7 +376,7 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     await login(page);
     await page.waitForURL(/\/login\/mfa/, { timeout: 20_000 });
     if (msUntilNextTotpWindow() < 4_000) await page.waitForTimeout(msUntilNextTotpWindow() + 300);
-    await page.locator('input[aria-label="Dígito 1"]').click();
+    await page.locator('input[aria-label="Chiffre 1"]').click();
     await page.keyboard.type(generateTotp(state.totp_secret), { delay: 40 });
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 
