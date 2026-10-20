@@ -27,7 +27,7 @@ interface Props {
 }
 
 const KIND_OPTIONS: Array<{ value: string; label: string }> = [
-  { value: "all", label: "Todas" },
+  { value: "all", label: "Toutes" },
   { value: "bot_respond", label: "bot_respond" },
   { value: "sentiment_check", label: "sentiment_check" },
   { value: "sentiment_classify", label: "sentiment_classify" },
@@ -79,13 +79,13 @@ export function UsageFilters({ agents, initial }: Props) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
       <div className="space-y-1">
-        <Label className="text-xs text-muted-foreground">Agente</Label>
+        <Label className="text-xs text-muted-foreground">Agent</Label>
         <Select value={agentId} onValueChange={setAgentId}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL_AGENTS}>Todos</SelectItem>
+            <SelectItem value={ALL_AGENTS}>Tous</SelectItem>
             {agents.map((a) => (
               <SelectItem key={a.id} value={a.id}>
                 {a.name}
@@ -96,7 +96,7 @@ export function UsageFilters({ agents, initial }: Props) {
       </div>
 
       <div className="space-y-1">
-        <Label className="text-xs text-muted-foreground">Tipo de uso</Label>
+        <Label className="text-xs text-muted-foreground">Type d’utilisation</Label>
         <Select value={kind} onValueChange={setKind}>
           <SelectTrigger>
             <SelectValue />
@@ -125,7 +125,7 @@ export function UsageFilters({ agents, initial }: Props) {
 
       <div className="space-y-1">
         <Label htmlFor="usage-to" className="text-xs text-muted-foreground">
-          Até
+          Jusqu’au
         </Label>
         <Input
           id="usage-to"

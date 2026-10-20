@@ -36,7 +36,7 @@ export async function requireOnboardingCtx(): Promise<OnboardingCtx> {
   const user = await loadAuthUser();
   if (!user) throw new OnboardingError("auth_required", "Auth required.");
   const activeOrg = await resolveActiveOrg(user);
-  if (!activeOrg) throw new OnboardingError("no_active_org", "Sem organização ativa.");
+  if (!activeOrg) throw new OnboardingError("no_active_org", "Aucune entreprise active.");
   return {
     userId: user.id,
     orgId: activeOrg.orgId,
@@ -58,7 +58,7 @@ export async function loadOnboardingState(orgId: string): Promise<{
     .eq("id", orgId)
     .maybeSingle();
   if (error) throw new OnboardingError("db_error", error.message);
-  if (!data) throw new OnboardingError("not_found", "Organização não encontrada.");
+  if (!data) throw new OnboardingError("not_found", "Entreprise introuvable.");
   return {
     state: (data.onboarding_state as OnboardingState | null) ?? {},
     onboardedAt: (data.onboarded_at as string | null) ?? null,

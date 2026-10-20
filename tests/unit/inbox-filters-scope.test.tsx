@@ -110,13 +110,13 @@ describe("InboxFilters render — 3 visões + escopo", () => {
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
     expect(screen.getByRole("tab", { name: /Minhas/ })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /Fila/ })).toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: /Todas/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("tab", { name: /Toutes/ })).not.toBeInTheDocument();
   });
 
   it("manager: mostra Todas", () => {
     setOrg("manager", "own_and_unassigned");
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
-    expect(screen.getByRole("tab", { name: /Todas/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Toutes/ })).toBeInTheDocument();
   });
 
   it("contagens por visão são renderizadas (Fila=3, Minhas=2)", () => {
@@ -124,7 +124,7 @@ describe("InboxFilters render — 3 visões + escopo", () => {
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
     expect(screen.getByRole("tab", { name: /Fila/ })).toHaveTextContent("3");
     expect(screen.getByRole("tab", { name: /Minhas/ })).toHaveTextContent("2");
-    expect(screen.getByRole("tab", { name: /Todas/ })).toHaveTextContent("5");
+    expect(screen.getByRole("tab", { name: /Toutes/ })).toHaveTextContent("5");
   });
 });
 
@@ -171,7 +171,7 @@ describe("InboxFilters — seletor de número e o filtro órfão", () => {
     );
     const seletor = screen.getByLabelText(SELETOR);
     expect(seletor).toHaveTextContent("Suporte");
-    expect(seletor).not.toHaveTextContent("Número removido");
+    expect(seletor).not.toHaveTextContent("Numéro supprimé");
   });
 
   /**
@@ -186,6 +186,6 @@ describe("InboxFilters — seletor de número e o filtro órfão", () => {
     render(
       <InboxFilters value={{ ...VALUE, channel_session_id: "canal-1" }} onChange={() => {}} />,
     );
-    expect(screen.queryByText("Número removido")).not.toBeInTheDocument();
+    expect(screen.queryByText("Numéro supprimé")).not.toBeInTheDocument();
   });
 });

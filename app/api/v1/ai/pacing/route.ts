@@ -49,7 +49,7 @@ export async function GET(): Promise<Response> {
       .eq("organization_id", org.orgId),
   ]);
   if (sErr || kErr) {
-    return fail("internal_error", "Falha ao carregar conexões/knobs.", 500, { requestId });
+    return fail("internal_error", "Impossible de charger les connexions et réglages.", 500, { requestId });
   }
 
   const byuSession = new Map<string, ChannelKnobsRow>(
@@ -72,11 +72,11 @@ export async function PUT(req: NextRequest): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = pacingKnobsUpdateSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -105,7 +105,7 @@ export async function PUT(req: NextRequest): Promise<Response> {
     .is("archived_at", null)
     .maybeSingle();
   if (!session) {
-    return fail("session_not_found", "Conexão não encontrada nesta organização.", 404, {
+    return fail("session_not_found", "Connexion introuvable dans cette organisation.", 404, {
       requestId,
     });
   }
@@ -134,7 +134,7 @@ export async function PUT(req: NextRequest): Promise<Response> {
   if (!windowIsValid(eff.windowStartHour, eff.windowEndHour)) {
     return fail(
       "validation_failed",
-      `Janela inválida: início (${eff.windowStartHour}h) precisa ser antes do fim (${eff.windowEndHour}h).`,
+      `Plage horaire invalide : le début (${eff.windowStartHour}h) doit être avant la fin (${eff.windowEndHour}h).`,
       422,
       { requestId },
     );
@@ -150,7 +150,7 @@ export async function PUT(req: NextRequest): Promise<Response> {
       { onConflict: "organization_id,channel_session_id" },
     );
     if (upErr) {
-      return fail("internal_error", "Falha ao salvar os knobs.", 500, { requestId });
+      return fail("internal_error", "Impossible d’enregistrer les réglages.", 500, { requestId });
     }
   }
 
@@ -161,7 +161,7 @@ export async function PUT(req: NextRequest): Promise<Response> {
       .eq("id", channel_session_id)
       .eq("organization_id", org.orgId);
     if (dlErr) {
-      return fail("internal_error", "Falha ao salvar o teto diário.", 500, { requestId });
+      return fail("internal_error", "Impossible d’enregistrer le plafond quotidien.", 500, { requestId });
     }
   }
 

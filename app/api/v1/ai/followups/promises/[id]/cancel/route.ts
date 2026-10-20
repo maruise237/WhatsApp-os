@@ -34,7 +34,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "followup_promises" });
@@ -54,14 +54,14 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     id,
     // Motivo fixo e legível: quem cancela pela fila não escreve texto, e o que
     // importa para o agente é QUEM desmarcou, não uma justificativa inventada.
-    { motivo: "desmarcado por uma pessoa da equipe" },
+    { motivo: "annulé par un membre de l’équipe" },
   );
 
   if (!resultado.ok) {
     if (resultado.codigo === "nao_encontrado") {
-      return fail("not_found", "Retorno não encontrado.", 404, { requestId });
+      return fail("not_found", "Rappel introuvable.", 404, { requestId });
     }
-    return fail("already_terminal", "Este retorno já aconteceu ou já foi cancelado.", 409, {
+    return fail("already_terminal", "Ce rappel a déjà eu lieu ou a déjà été annulé.", 409, {
       requestId,
     });
   }

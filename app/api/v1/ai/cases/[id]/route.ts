@@ -30,9 +30,9 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
   try {
     chamado = await lerChamado(createAdminClient(), org.orgId, id);
   } catch {
-    return fail("internal_error", "Falha ao carregar o caso.", 500, { requestId });
+    return fail("internal_error", "Impossible de charger le dossier.", 500, { requestId });
   }
-  if (!chamado) return fail("not_found", "Caso não encontrado.", 404, { requestId });
+  if (!chamado) return fail("not_found", "Dossier introuvable.", 404, { requestId });
 
   return ok(chamado, { requestId });
 }

@@ -21,7 +21,7 @@ interface Props {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString("pt-BR", {
+  return new Date(iso).toLocaleString("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -46,7 +46,7 @@ export function SkillsClient({ initialState }: Props) {
     setPendingName(name);
     install.mutate(name, {
       onSuccess: () => {
-        toast.success(`Skill "${name}" instalada — já vale para os agentes desta organização.`);
+        toast.success(`Compétence "${name}" installée — elle s’applique déjà aux agents de cette organisation.`);
         setPendingName(null);
       },
       onError: (err) => {
@@ -76,7 +76,7 @@ export function SkillsClient({ initialState }: Props) {
     if (!file) return;
     importSkill.mutate(file, {
       onSuccess: (res) => {
-        toast.success(`Skill "${res.data.name}" enviada e instalada com sucesso.`);
+        toast.success(`Compétence "${res.data.name}" envoyée et installée avec succès.`);
       },
       onError: showApiError,
     });
@@ -88,10 +88,9 @@ export function SkillsClient({ initialState }: Props) {
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <CardTitle>Skills instaladas</CardTitle>
+              <CardTitle>Compétences installées</CardTitle>
               <CardDescription>
-                O que seus agentes já sabem fazer além da conversa comum — cada skill só entra
-                em ação quando o assunto pede.
+                Ce que vos agents savent déjà faire au-delà de la conversation courante — chaque compétence n’entre en action que lorsque le sujet le demande.
               </CardDescription>
             </div>
             {canManage && (
@@ -109,7 +108,7 @@ export function SkillsClient({ initialState }: Props) {
                   disabled={importSkill.isPending}
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <UploadSimple /> {importSkill.isPending ? "Enviando…" : "Enviar skill (.zip)"}
+                  <UploadSimple /> {importSkill.isPending ? "Enviando…" : "Envoyer une compétence (.zip)"}
                 </Button>
               </>
             )}
@@ -118,8 +117,7 @@ export function SkillsClient({ initialState }: Props) {
         <CardContent className="flex flex-col gap-4">
           {installed.length === 0 ? (
             <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
-              Nenhuma skill instalada ainda. Instale uma pronta do catálogo abaixo ou envie a
-              sua em "Enviar skill (.zip)".
+              Aucune compétence installée pour le moment. Installez-en une toute prête depuis le catalogue ci-dessous ou envoyez la vôtre via « Envoyer une compétence (.zip) ».
             </p>
           ) : (
             <ul className="flex flex-col gap-2">
@@ -132,10 +130,10 @@ export function SkillsClient({ initialState }: Props) {
                     <PuzzlePiece className="text-accent" aria-hidden />
                     <span className="font-medium">{skill.name}</span>
                     <Badge variant={skill.source === "catalog" ? "info" : "neutral"} className="text-[10px]">
-                      {skill.source === "catalog" ? "do catálogo" : "manual"}
+                      {skill.source === "catalog" ? "du catalogue" : "manual"}
                     </Badge>
                     <span className="ml-auto text-xs text-muted-foreground">
-                      atualizada em {formatDate(skill.updated_at)}
+                      mise à jour le {formatDate(skill.updated_at)}
                     </span>
                   </div>
                   {skill.description && <p className="text-text-muted">{skill.description}</p>}
@@ -148,7 +146,7 @@ export function SkillsClient({ initialState }: Props) {
                         onClick={() => handleUninstall(skill.name)}
                         className="w-full sm:w-auto"
                       >
-                        <Trash /> Desinstalar
+                        <Trash /> Désinstaller
                       </Button>
                     </div>
                   )}
@@ -160,9 +158,7 @@ export function SkillsClient({ initialState }: Props) {
           <div className="flex items-start gap-2 rounded-md bg-accent-soft p-3 text-xs text-text-muted">
             <Info className="mt-0.5 shrink-0" aria-hidden />
             <p>
-              Para personalizar uma skill instalada, basta reenviar um .zip com o mesmo nome —
-              a sua versão passa a valer no lugar da do catálogo. Não há editor dentro do sistema
-              nesta fase.
+              Pour personnaliser une compétence installée, renvoyez simplement un .zip portant le même nom — votre version remplace celle du catalogue. Il n’y a pas d’éditeur dans le système pour l’instant.
             </p>
           </div>
         </CardContent>
@@ -170,16 +166,15 @@ export function SkillsClient({ initialState }: Props) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Catálogo</CardTitle>
+          <CardTitle>Catalogue</CardTitle>
           <CardDescription>
-            Skills prontas, mantidas pela plataforma, disponíveis para instalar com um clique.
+            Compétences prêtes à l’emploi, maintenues par la plateforme, installables en un clic.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {catalog.length === 0 ? (
             <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
-              Nenhuma skill nova no catálogo — você já instalou tudo que a plataforma oferece
-              hoje.
+              Aucune nouvelle compétence dans le catalogue — vous avez déjà installé tout ce que la plateforme propose aujourd’hui.
             </p>
           ) : (
             <ul className="flex flex-col gap-2">

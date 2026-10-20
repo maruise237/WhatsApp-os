@@ -50,7 +50,7 @@ export async function POST(
     if (raw !== undefined && raw !== null) {
       const parsed = reindexBodySchema.safeParse(raw);
       if (!parsed.success) {
-        return fail("validation_failed", "Campos inválidos.", 422, {
+        return fail("validation_failed", "Champs invalides.", 422, {
           requestId,
           details: parsed.error.flatten(),
         });
@@ -69,10 +69,10 @@ export async function POST(
 
   if (fetchErr) {
     console.error("[ai-knowledge-reindex] fetch failed:", fetchErr.message);
-    return fail("internal_error", "Erro ao verificar fonte.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la vérification de la source.", 500, { requestId });
   }
   if (!existing) {
-    return fail("not_found", "Fonte de conhecimento não encontrada.", 404, { requestId });
+    return fail("not_found", "Source de connaissances introuvable.", 404, { requestId });
   }
 
   const ksRow = existing as { id: string; agent_id: string; source_type: string };

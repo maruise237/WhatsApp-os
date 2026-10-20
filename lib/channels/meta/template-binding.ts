@@ -98,12 +98,12 @@ export function explainBindingState(
   const alvo = `${binding.name} (${binding.language})`;
   switch (state) {
     case "missing":
-      return `O template ${alvo} não existe mais na Meta. Escolha outro ou recrie-o antes do próximo disparo.`;
+      return `Le modèle ${alvo} n’existe plus chez Meta. Choisissez-en un autre ou recréez-le avant le prochain envoi.`;
     case "not_approved":
-      return `O template ${alvo} não está aprovado na Meta. Enquanto isso, nada será enviado por ele.`;
+      return `Le modèle ${alvo} n’est pas approuvé par Meta. En attendant, rien ne sera envoyé avec lui.`;
     case "stale":
-      return `O template ${alvo} mudou na Meta desde que foi configurado — os parâmetros precisam ser revistos antes do próximo disparo.`;
+      return `Le modèle ${alvo} a changé chez Meta depuis sa configuration — les paramètres doivent être revus avant le prochain envoi.`;
     case "ok":
-      return `O template ${alvo} está aprovado e com os parâmetros em dia.`;
+      return `Le modèle ${alvo} est approuvé et ses paramètres sont à jour.`;
   }
 }

@@ -96,7 +96,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     {
       ...created,
       plaintext,
-      _warning: "Salve este token agora — ele não será mostrado novamente.",
+      _warning: "Enregistrez ce jeton maintenant — il ne sera plus affiché.",
     },
     { status: 201, requestId },
   );

@@ -15,9 +15,9 @@ export type LgpdRequestType = "data_request" | "redact" | "store_redact";
 
 /** Rótulo em pt-BR — fonte única, para as cinco telas não divergirem. */
 export const LGPD_REQUEST_TYPE_LABELS: Record<LgpdRequestType, string> = {
-  data_request: "Solicitação de dados",
-  redact: "Anonimização cliente",
-  store_redact: "Anonimização tenant",
+  data_request: "Demande de données",
+  redact: "Anonymisation d’un client",
+  store_redact: "Anonymisation de l’entreprise",
 };
 
 export type LgpdScope = "contact" | "tenant";

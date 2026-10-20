@@ -327,7 +327,7 @@ describe("PUT /api/v1/pipelines/[id]/agent-mapping", () => {
     expect(body.error.code).toBe("unprocessable_entity");
     // A mensagem chega inteira, com o NOME da etapa e o rótulo em português.
     expect(body.error.details.erros).toEqual([
-      'A etapa «Novo» não é a etapa de fechamento (ganho) deste funil, então não pode representar «Ganho».',
+      'L’étape «Novo» n’est pas l’étape de conclusion (gagné) de ce tableau, elle ne peut donc pas représenter «Gagné».',
     ]);
     expect(body.error.message).toBe(body.error.details.erros[0]);
     expect(db.updates).toEqual([]);
@@ -454,7 +454,7 @@ describe("PUT /api/v1/pipelines/[id]/agent-mapping", () => {
     const body = (await res.json()) as { error: { code: string; message: string } };
     expect(body.error.code).toBe("state_conflict");
     expect(body.error.message).toContain("Proposta");
-    expect(body.error.message).toContain("Recarregue a página");
+    expect(body.error.message).toContain("Rechargez la page");
     expect(body.error.message).not.toContain("check constraint");
   });
 

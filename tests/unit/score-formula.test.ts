@@ -58,10 +58,10 @@ describe("fórmula do score", () => {
     expect(r.score).toBe(54);
     // TRÊS parcelas nomeadas (as de maior peso) — a quarta vira agregado, e não
     // some: truncar em silêncio quebraria a reconstrução da frase.
-    expect(r.reason).toContain("compromisso do cliente");
-    expect(r.reason).toContain("itens de qualificação");
-    expect(r.reason).toContain("conversa em dia");
-    expect(r.reason).toContain("outro fator");
+    expect(r.reason).toContain("engagement du client");
+    expect(r.reason).toContain("critères de qualification");
+    expect(r.reason).toContain("conversation à jour");
+    expect(r.reason).toContain("autre facteur");
     expect(r.reason.split(",").length).toBe(4); // 3 nomeadas + o agregado
   });
 
@@ -71,8 +71,8 @@ describe("fórmula do score", () => {
     const r = calculaScore(
       sinais({ commitments: ["a", "b", "c"], objections: ["x"], risco: "em_dia" }),
     );
-    expect(r.reason.indexOf("compromissos do cliente")).toBeLessThan(
-      r.reason.indexOf("objeção em aberto"),
+    expect(r.reason.indexOf("engagements du client")).toBeLessThan(
+      r.reason.indexOf("objection en suspens"),
     );
   });
 
@@ -180,7 +180,7 @@ describe("a razão é DERIVADA do cálculo, e isso é verificável", () => {
     // ficasse mudo, a razão pareceria errada — ou pior, pareceria gerada.
     const r = calculaScore(sinais({ objections: ["a", "b", "c"], risco: "critico" }));
     expect(r.score).toBe(0);
-    expect(r.reason).toContain("limitado a 0");
+    expect(r.reason).toContain("limité à 0");
   });
 
   it("somar os números da frase reproduz o score, quando não há clamp", () => {

@@ -33,10 +33,35 @@ export function Stepper({ passos }: { passos: PassoVisivel[] }) {
   const pathname = usePathname() ?? "";
   const idx = passos.findIndex((p) => pathname.includes(`/${p.segmento}`));
 
+  const atual = idx >= 0 ? passos[idx] : undefined;
+
   return (
+    <div className="w-full">
+    {/*
+      Téléphone : une ligne « Étape 2 sur 6 · Son numéro » et une barre en six
+      segments, au lieu de six ronds de 28 px qui ne disaient rien sans libellé.
+    */}
+    {atual ? (
+      <div className="sm:hidden">
+        <p className="mb-2 text-xs text-muted-foreground">
+          Étape {idx + 1} sur {passos.length} · <span className="font-medium text-foreground">{atual.rotulo}</span>
+        </p>
+        <div className="flex gap-1" aria-hidden>
+          {passos.map((p, i) => (
+            <span
+              key={p.segmento}
+              className={cn(
+                "h-1.5 flex-1 rounded-full",
+                i === idx ? "bg-primary" : p.cumprido || i < idx ? "bg-primary/40" : "bg-muted-foreground/20",
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    ) : null}
     <ol
-      aria-label="onboarding steps"
-      className="flex w-full items-center justify-between gap-2 px-2 py-3"
+      aria-label="Étapes de configuration"
+      className="hidden w-full items-center justify-between gap-2 px-2 py-3 sm:flex"
     >
       {passos.map((p, i) => {
         const isActive = i === idx;
@@ -75,5 +100,6 @@ export function Stepper({ passos }: { passos: PassoVisivel[] }) {
         );
       })}
     </ol>
+    </div>
   );
 }

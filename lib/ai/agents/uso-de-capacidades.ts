@@ -93,29 +93,29 @@ function recomendar(
   janelaEmDias: number,
 ): string {
   if (sinal === "recem_ligada") {
-    return "Ligada há pouco tempo. Ainda não houve atendimento em que ela fosse útil — volte aqui depois de alguns dias.";
+    return "Activée récemment. Aucune conversation n’en a encore eu besoin — revenez ici dans quelques jours.";
   }
   switch (sinal) {
     case "so_falha":
       return uso.total === 1
-        ? "A única tentativa falhou. Abra a execução para ver o motivo — enquanto isso o agente tenta e não consegue."
-        : `Todas as ${uso.total} tentativas falharam. Abra as execuções para ver o motivo — enquanto isso o agente tenta e não consegue.`;
+        ? "La seule tentative a échoué. Ouvrez l’exécution pour voir la raison — en attendant, l’assistant essaie sans y arriver."
+        : `Les ${uso.total} tentatives ont toutes échoué. Ouvrez les exécutions pour voir la raison — en attendant, l’assistant essaie sans y arriver.`;
     case "falhando":
-      return `${uso.falhas} de ${uso.total} tentativas falharam. Vale abrir as execuções e entender o que a impede.`;
+      return `${uso.falhas} tentatives sur ${uso.total} ont échoué. Ouvrez les exécutions pour comprendre ce qui bloque.`;
     case "fora_da_configuracao":
       // Não afirme a causa: quem cai aqui pode ser o pedido de ajuda humana
       // (que o sistema oferece sozinho) ou uma capacidade desligada DEPOIS de
       // já ter sido usada. Dizer "é o caso do pedido de ajuda humana" mente na
       // segunda hipótese, e foi o que a prova em tela pegou.
-      return "O agente usou esta capacidade sem ela estar ligada nesta configuração. Ou ela foi desligada depois de já ter sido usada, ou é o pedido de ajuda humana — esse o sistema oferece sozinho quando o repasse para uma pessoa está ativado.";
+      return "L’assistant a utilisé cette capacité alors qu’elle n’est pas activée dans ce réglage. Soit elle a été désactivée après avoir servi, soit c’est la demande d’aide à une personne — proposée automatiquement quand le passage à une personne est activé.";
     case "nunca_usada":
-      return `Ligada e nunca usada nos últimos ${janelaEmDias} dias. Ela ocupa uma das vagas e concorre com as outras quando o agente escolhe o que fazer — considere desligar.`;
+      return `Activée mais jamais utilisée ces ${janelaEmDias} derniers jours. Elle occupe une place et entre en concurrence avec les autres quand l’assistant choisit quoi faire — pensez à la désactiver.`;
     case "so_em_teste":
-      return "Só foi usada nos seus testes. Nenhum atendimento real precisou dela ainda.";
+      return "Utilisée seulement dans vos tests. Aucune vraie conversation n’en a encore eu besoin.";
     case "saudavel":
       return uso.em_teste > 0
-        ? `${uso.total} usos, nenhuma falha (${uso.em_teste} em teste).`
-        : `${uso.total} usos, nenhuma falha.`;
+        ? `${uso.total} utilisations, aucun échec (${uso.em_teste} en test).`
+        : `${uso.total} utilisations, aucun échec.`;
   }
 }
 
@@ -170,7 +170,7 @@ export function montarUsoDeCapacidades(input: MontarUsoInput): CapacidadeComUso[
       // Capacidade que saiu do catálogo entre a configuração e agora: mostrar o
       // id cru é feio, mas sumir com a linha esconderia uso real do agente.
       rotulo: conhecida?.rotulo ?? name,
-      o_que_toca: conhecida?.o_que_toca ?? "Capacidade removida do sistema",
+      o_que_toca: conhecida?.o_que_toca ?? "Capacité retirée de l’application",
       risco: conhecida?.risco ?? "atencao",
       ligada,
       total,
@@ -190,7 +190,7 @@ export function montarUsoDeCapacidades(input: MontarUsoInput): CapacidadeComUso[
     const porGravidade = GRAVIDADE[a.sinal] - GRAVIDADE[b.sinal];
     if (porGravidade !== 0) return porGravidade;
     if (b.total !== a.total) return b.total - a.total;
-    return a.rotulo.localeCompare(b.rotulo, "pt-BR");
+    return a.rotulo.localeCompare(b.rotulo, "fr-FR");
   });
 }
 

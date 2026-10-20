@@ -132,7 +132,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
     if (!grCheck.success) {
       const flat = grCheck.error.flatten();
       const firstErr =
-        Object.values(flat.fieldErrors)[0]?.[0] ?? flat.formErrors[0] ?? "Guardrails inválidos.";
+        Object.values(flat.fieldErrors)[0]?.[0] ?? flat.formErrors[0] ?? "Garde-fous invalides.";
       toast.error(`${t("Guardrails inválidos.")} ${firstErr}`);
       return;
     }
@@ -147,7 +147,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
     if (!validated.success) {
       const flat = validated.error.flatten();
       const firstErr =
-        Object.values(flat.fieldErrors)[0]?.[0] ?? flat.formErrors[0] ?? "Campos inválidos.";
+        Object.values(flat.fieldErrors)[0]?.[0] ?? flat.formErrors[0] ?? "Champs invalides.";
       toast.error(`${t("Erro ao salvar:")} ${firstErr}`);
       return;
     }
@@ -199,7 +199,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
         <TabsContent value="general">
           <Card className="space-y-4 p-4">
             <div className="space-y-1">
-              <Label htmlFor="name">Nome</Label>
+              <Label htmlFor="name">Nom</Label>
               <Input
                 id="name"
                 value={formState.name}
@@ -230,7 +230,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
               <Label htmlFor="is_active">{t("Agent ativo")}</Label>
             </div>
             <div className="bg-muted/40 rounded-md p-3 text-xs text-muted-foreground">
-              <strong>{t("Default:")}</strong> {agent.is_default ? t("Sim") : t("Não")} (read-only —{" "}
+              <strong>{t("Default:")}</strong> {agent.is_default ? t("Sim") : t("Não")} (lecture seule —{" "}
               {t("gerenciado pelo backend")}).
             </div>
           </Card>

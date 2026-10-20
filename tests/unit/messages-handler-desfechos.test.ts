@@ -221,7 +221,7 @@ describe('sendMessageHandler — os 6 desfechos do envio', () => {
 
     expect(msg.status).toBe('failed');
     expect(msg.error_code).toBe('missing_phone_number');
-    expect(msg.error_message).toBe('Contato sem telefone para envio WhatsApp.');
+    expect(msg.error_message).toBe('Ce contact n’a pas de téléphone pour un envoi WhatsApp.');
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

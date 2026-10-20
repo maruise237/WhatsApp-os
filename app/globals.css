@@ -108,7 +108,6 @@
   /* Motion */
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
   --ease-in-out: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --duration-fast: 120ms;
   --duration-base: 200ms;
   --duration-slow: 320ms;
@@ -342,6 +341,11 @@
        o componente que precisa de scroll horizontal (tabela, kanban)
        continua rolando, contido nele mesmo; só a página como um todo não. */
     overflow-x: hidden;
+    /* `clip` coupe pareil SANS faire de la page un conteneur de défilement :
+       avec `hidden` sur html ET body, body devenait ce conteneur et tout
+       `position: sticky` cessait de coller (mesuré à l'onboarding mobile).
+       `hidden` reste au-dessus comme repli des navigateurs sans `clip`. */
+    overflow-x: clip;
   }
   [data-theme="dark"] {
     color-scheme: dark;
@@ -360,6 +364,7 @@
        `html` em certas versões — as duas juntas é o par que realmente
        bloqueia em todo navegador testado pela comunidade. */
     overflow-x: hidden;
+    overflow-x: clip;
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-atkinson), ui-sans-serif, system-ui, -apple-system,
@@ -497,4 +502,98 @@
        a diferença entre os dois números é deliberada e está explicada lá. */
     border-color: var(--color-accent);
   }
+}
+
+/*
+ * Mobile : une seule marge latérale, celle du conteneur (16 px).
+ * `AppShell` met `p-6` sur <main> et une cinquantaine de pages remettent `p-6`
+ * sur leur racine : 48 px de chaque côté, il ne restait que 294 px utiles sur
+ * un écran de 390 px (colonnes coupées, noms sur trois lignes). Neutraliser la
+ * marge de la racine ICI, plutôt que dans chaque page, couvre aussi les pages
+ * de demain. Le bureau garde sa mise en page.
+ */
+@media (max-width: 767px) {
+  [data-app-main] > .p-6 {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+  }
+}
+
+/*
+ * Barre d'onglets du téléphone (`BottomNav`) : la page réserve sa hauteur pour
+ * que rien ne passe dessous. Dans une conversation ouverte (`data-conversa-aberta`,
+ * posé par l'inbox) la barre et sa réserve tombent ensemble.
+ */
+:root {
+  --bottom-nav-h: 0px;
+}
+@media (max-width: 767px) {
+  html:has([data-bottom-nav]):not(:has([data-conversa-aberta])) {
+    --bottom-nav-h: calc(4rem + env(safe-area-inset-bottom));
+  }
+  html:has([data-conversa-aberta]) [data-bottom-nav] {
+    display: none;
+  }
+  [data-app-main] {
+    padding-bottom: calc(1rem + var(--bottom-nav-h));
+  }
+}
+
+/*
+ * Onboarding sur téléphone (`data-onboarding`, posé par app/onboarding/layout).
+ * Mesuré en 390 px : chaque étape était une carte bordée (`p-6`) dans une page
+ * `px-4` — 40 px perdus de chaque côté — et les boutons d'action tombaient au
+ * hasard (à gauche, empilés de largeurs différentes, parfois sous la ligne de
+ * flottaison d'une page de 4 000 px). Ici : pages à plat, et la rangée
+ * d'actions (`onb-acoes`) collée en bas, pleine largeur, le bouton principal
+ * au-dessus de l'action secondaire. Le bureau garde ses cartes.
+ */
+@media (max-width: 639px) {
+  [data-onboarding] main .rounded-lg.border.bg-background.p-6 {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+  }
+  [data-onboarding] main h2.text-2xl {
+    font-size: 1.375rem;
+    line-height: 1.25;
+  }
+  [data-onboarding] .onb-acoes {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 0 calc(0.75rem + env(safe-area-inset-bottom));
+    background: var(--background);
+    /* Fond pleine largeur sans casser la colonne : la barre déborde de la marge. */
+    box-shadow:
+      0 0 0 100vmax var(--background),
+      0 -1px 0 100vmax var(--border);
+    clip-path: inset(-1px -100vmax 0);
+  }
+  [data-onboarding] .onb-acoes > *,
+  [data-onboarding] .onb-acoes > * > button {
+    width: 100%;
+  }
+  [data-onboarding] .onb-acoes > div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+}
+
+/*
+ * Cases et boutons radio natifs à la couleur de la marque : sans cette ligne,
+ * Chrome les dessine en bleu système (constaté à l'onboarding mobile), la seule
+ * couleur de l'écran qui n'appartient pas à la palette.
+ */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--primary);
 }

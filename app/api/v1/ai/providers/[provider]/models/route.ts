@@ -30,14 +30,14 @@ export async function GET(
   const { provider } = await ctx.params;
 
   if (!ehProvedorSuportado(provider)) {
-    return fail("not_found", "Provider desconhecido.", 404, { requestId });
+    return fail("not_found", "Fournisseur inconnu.", 404, { requestId });
   }
 
   const authUser = await loadAuthUser();
   if (!authUser) return fail("unauthenticated", "Auth required.", 401, { requestId });
   const activeOrg = await resolveActiveOrg(authUser);
   if (!activeOrg) {
-    return fail("forbidden_tenant", "Sem organização ativa.", 403, { requestId });
+    return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
   }
 
   const supabase = await createClient();
@@ -50,7 +50,7 @@ export async function GET(
     .order("input_price_per_million_cents", { ascending: true });
 
   if (error) {
-    return fail("internal_error", "Erro ao listar modelos.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des modèles.", 500, { requestId });
   }
 
   return ok({ models: data ?? [] }, { requestId });

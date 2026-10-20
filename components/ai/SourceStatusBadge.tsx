@@ -23,11 +23,11 @@ export function deriveBadgeStatus(
 }
 
 const MAP: Record<DerivedBadgeStatus, { label: string; variant: Variant }> = {
-  ready: { label: "Pronto", variant: "success" },
-  failed: { label: "Falhou", variant: "error" },
+  ready: { label: "Prêt", variant: "success" },
+  failed: { label: "Échec", variant: "error" },
   partial: { label: "Parcial", variant: "warning" },
-  archived: { label: "Arquivado", variant: "neutral" },
-  not_indexed: { label: "Não indexado", variant: "neutral" },
+  archived: { label: "Archivé", variant: "neutral" },
+  not_indexed: { label: "Non indexé", variant: "neutral" },
 };
 
 interface Props {

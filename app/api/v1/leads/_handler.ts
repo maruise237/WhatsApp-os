@@ -40,7 +40,7 @@ async function ownerPatchOrThrow(
       "validation_failed",
       undefined,
       ctx.requestId,
-      "Um lead tem um dono: informe owner_user_id OU owner_agent_id.",
+      "Un client n’a qu’un seul responsable : indiquez owner_user_id OU owner_agent_id.",
     );
   }
   if (!result.patch) return null;
@@ -63,7 +63,7 @@ async function ownerPatchOrThrow(
         "validation_failed",
         undefined,
         ctx.requestId,
-        "Agente não encontrado nesta organização.",
+        "Assistant introuvable dans cette organisation.",
       );
     }
   }
@@ -160,7 +160,7 @@ export async function listLeadsHandler(
   if (q.cursor) {
     const c = decLeadCursor(q.cursor);
     if (!c) {
-      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Cursor inválido.");
+      throw new ApiError(400, "invalid_cursor", undefined, ctx.requestId, "Curseur invalide.");
     }
     query = query.or(
       `created_at.lt.${c.created_at},and(created_at.eq.${c.created_at},id.lt.${c.id})`,
@@ -210,7 +210,7 @@ export async function getLeadHandler(
   if (!data) {
     // 404, e não 403: dizer "existe, mas não é seu" confirmaria a existência de
     // um recurso alheio a quem tentou adivinhar o id.
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Lead não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Client introuvable.");
   }
   return data as Record<string, unknown>;
 }
@@ -240,7 +240,7 @@ export async function createLeadHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, stageErr.message);
   }
   if (!stage || stage.organization_id !== ctx.organization_id) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Stage não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Étape introuvable.");
   }
   if (stage.pipeline_id !== input.pipeline_id) {
     throw new ApiError(
@@ -248,7 +248,7 @@ export async function createLeadHandler(
       "stage_pipeline_mismatch",
       undefined,
       ctx.requestId,
-      "Stage não pertence ao pipeline informado.",
+      "Cette étape n’appartient pas au tableau indiqué.",
     );
   }
 
@@ -305,7 +305,7 @@ export async function createLeadHandler(
       "internal_error",
       undefined,
       ctx.requestId,
-      insErr?.message ?? "Falha ao criar lead.",
+      insErr?.message ?? "Impossible de créer le client.",
     );
   }
 
@@ -375,7 +375,7 @@ export async function updateLeadHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, selErr.message);
   }
   if (!existing) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Lead não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Client introuvable.");
   }
 
   const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
@@ -413,7 +413,7 @@ export async function updateLeadHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, updErr.message);
   }
   if (!updated) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Lead não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Client introuvable.");
   }
 
   const a = actorAuditPayload(ctx.actor);
@@ -544,7 +544,7 @@ export async function moveLeadHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, selErr.message);
   }
   if (!lead || lead.organization_id !== ctx.organization_id) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Lead não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Client introuvable.");
   }
 
   const { data: stage, error: stageErr } = await supabase
@@ -556,7 +556,7 @@ export async function moveLeadHandler(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, stageErr.message);
   }
   if (!stage || stage.organization_id !== ctx.organization_id) {
-    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Stage não encontrado.");
+    throw new ApiError(404, "not_found", undefined, ctx.requestId, "Étape introuvable.");
   }
   if (stage.pipeline_id !== lead.pipeline_id) {
     throw new ApiError(
@@ -564,7 +564,7 @@ export async function moveLeadHandler(
       "pipeline_immutable_use_clone",
       undefined,
       ctx.requestId,
-      "Move cross-pipeline não é permitido.",
+      "Impossible de déplacer vers un autre tableau.",
     );
   }
 
@@ -602,7 +602,7 @@ export async function moveLeadHandler(
       "lead_stage_changed_concurrent",
       undefined,
       ctx.requestId,
-      "Lead foi modificado concorrentemente.",
+      "Ce client a été modifié en même temps par quelqu’un d’autre.",
     );
   }
 
@@ -713,8 +713,8 @@ export async function moveLeadHandler(
           actor: ctx.actor,
           reason:
             veredito.tipo === "devolucao"
-              ? "Uma pessoa devolveu o negócio para onde ele estava antes do assistente"
-              : "Uma pessoa levou o negócio para outra etapa, diferente da que o assistente escolheu",
+              ? "Une personne a remis l’affaire là où elle était avant l’assistant"
+              : "Une personne a déplacé l’affaire vers une autre étape que celle choisie par l’assistant",
           payload: {
             tipo: veredito.tipo,
             // A etapa da IA é o dado do agregado: é ela que aparece em "o

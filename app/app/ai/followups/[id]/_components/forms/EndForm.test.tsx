@@ -52,7 +52,7 @@ describe("EndForm — seletor de resultado", () => {
     await user.click(screen.getByRole("combobox", { name: "Résultat" }));
 
     const itens = await screen.findAllByRole("option");
-    expect(itens.map((i) => i.textContent)).toEqual(["Converti", "Épuisé", "Personnalisé"]);
+    expect(itens.map((i) => i.textContent)).toEqual(["Converti", "Tentatives épuisées", "Personnalisé"]);
 
     await user.click(screen.getByRole("option", { name: "Converti" }));
 

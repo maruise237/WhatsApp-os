@@ -6,7 +6,7 @@ import { useVariant } from "../lib/variant-context";
 
 const MOCK = [
   { name: "Maria Silva",   preview: "Confirmando o endereço de entrega para o pedido #12.443", ts: "14h32", initial: "MS", badge: "novo" },
-  { name: "João Pereira",  preview: "Já fiz o Pix, segue o comprovante em anexo agora",        ts: "14h28", initial: "JP", badge: null },
+  { name: "Jean Mbarga",  preview: "Já fiz o Pix, segue o comprovante em anexo agora",        ts: "14h28", initial: "JP", badge: null },
   { name: "Ana Beatriz",   preview: "Posso trocar o tamanho? G ficou apertado",                ts: "13h51", initial: "AB", badge: null },
   { name: "Carlos Lima",   preview: "Pedido chegou quebrado, mandei foto pelo Insta",          ts: "12h17", initial: "CL", badge: "urg" },
   { name: "Fernanda Reis", preview: "Obrigada pelo atendimento ontem, super rápido!",          ts: "11h44", initial: "FR", badge: null },
@@ -55,9 +55,7 @@ export function SectionDensity() {
     <div className="ds-section">
       <h2 className="ds-display">Densidade</h2>
       <p className="ds-lede">
-        Atendentes em jornada de 8h precisam de uma densidade que reduza scroll mas mantenha
-        respiração visual. Três modos, com row-height + gap como tokens primários.
-        Aplicado a uma lista de inbox mock.
+        Les conseillers qui travaillent 8 h par jour ont besoin d’une densité qui réduit le défilement tout en gardant de l’air visuel. Trois modes, avec row-height + gap comme jetons principaux. Appliqué à une liste de boîte de réception fictive.
       </p>
 
       {(Object.keys(DENSITIES) as DensityId[]).map((id) => {
@@ -69,7 +67,7 @@ export function SectionDensity() {
               <div>
                 <h3 style={{ margin: 0 }}>
                   {d.label}
-                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>ativa</span>}
+                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>active</span>}
                 </h3>
                 <p style={{ fontSize: 12.5, color: "var(--ds-text-muted)", marginTop: 4 }}>
                   row-height <span className="ds-mono">{d.rowH}</span> · gap <span className="ds-mono">{d.gap}</span>
@@ -77,7 +75,7 @@ export function SectionDensity() {
                 </p>
               </div>
               <button className="ds-btn ds-btn--secondary" onClick={() => v.setDensity(id)} disabled={active}>
-                Aplicar
+                Appliquer
               </button>
             </div>
             <DensityList id={id} />

@@ -18,9 +18,9 @@ export default async function TemplatesPage() {
             consumidos pelo composer do inbox. O nome "Templates" pertence aos da
             Meta (HSM), em Canais, onde é o termo técnico correto. Duas telas com
             o mesmo nome e propósitos opostos confundiam. A URL não muda. */}
-        <h1 className="text-2xl font-semibold tracking-tight">Respostas rápidas</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Réponses rapides</h1>
         <p className="text-sm text-muted-foreground">
-          Scripts salvos para responder mais rápido; pessoais ou compartilhados com a equipe.
+          Scripts enregistrés pour répondre plus vite ; personnels ou partagés avec l’équipe.
         </p>
       </header>
       <TemplatesClient canShare={canShare} currentUserId={user.id} />

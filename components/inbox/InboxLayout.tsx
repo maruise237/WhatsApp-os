@@ -242,14 +242,14 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
   const motivoDaJanela =
     janela.tipo === "fechada"
       ? janela.fechadaHaMs === null
-        ? "O cliente ainda não escreveu — a janela de 24h nunca abriu. Só um modelo aprovado sai daqui."
-        : `A janela de 24h fechou há ${formatarDecorrido(janela.fechadaHaMs)}. Só um modelo aprovado sai daqui — texto livre é recusado pela plataforma.`
+        ? "Le client n’a pas encore écrit — la fenêtre de 24 h ne s’est jamais ouverte. Seul un modèle approuvé peut partir d’ici."
+        : `La fenêtre de 24 h s’est fermée il y a ${formatarDecorrido(janela.fechadaHaMs)}. Seul un modèle approuvé peut partir d’ici — le texte libre est refusé par la plateforme.`
       : null;
 
   const blockedReason = selectedConversation?.contacts?.is_blocked
-    ? "Contato bloqueado — envio de mensagens desabilitado."
+    ? "Contact bloqué — envoi de messages désactivé."
     : selectedConversation?.contacts?.is_anonymized
-      ? "Contato anonimizado — não é possível enviar mensagens."
+      ? "Contact anonymisé — impossible d’envoyer des messages."
       : null;
 
   // Altura da grade: a conta desconta TUDO que fica acima e abaixo dela.
@@ -291,7 +291,9 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
   // deixava. Margem de 2px não é margem, é sorte.
   return (
     <div
-      className="grid h-[calc(100dvh-3.5rem-2*var(--space-6))] w-full grid-cols-1 md:grid-cols-[300px_1fr] xl:grid-cols-[272px_1fr_296px] 2xl:grid-cols-[300px_1fr_320px]"
+      // Conversation ouverte : la barre d'onglets du téléphone s'efface (globals.css).
+      data-conversa-aberta={selectedId ? "" : undefined}
+      className="grid h-[calc(100dvh-3.5rem-2*var(--space-6)-var(--bottom-nav-h))] w-full grid-cols-1 md:grid-cols-[300px_1fr] xl:grid-cols-[272px_1fr_296px] 2xl:grid-cols-[300px_1fr_320px]"
       /*
        * O ESTADO DO TEMPO REAL, LEGÍVEL DE FORA — mesmo par que o dossiê do lead
        * já publica (`LeadDossier`), e pela mesma razão: quando a entrega morre,
@@ -330,7 +332,7 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
       */}
       <div
         className={cn(
-          "h-full min-h-0 flex-col border-r border-border md:flex",
+          "h-full min-h-0 flex-col border-border md:flex md:border-r",
           colunas.lista,
         )}
       >
@@ -380,7 +382,7 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
               onClick={() => handleSelect(null)}
             >
               <CaretLeft size={16} />
-              Conversas
+              Conversations
             </Button>
             <div className="flex-1" />
             {selectedConversation && (
@@ -388,11 +390,11 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="sm" className="h-9 gap-1 px-2 xl:hidden">
                     <IdentificationCard size={16} />
-                    Ficha
+                    Fiche
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[min(22rem,90vw)] overflow-y-auto p-0">
-                  <SheetTitle className="sr-only">Ficha do contato</SheetTitle>
+                  <SheetTitle className="sr-only">Fiche du contact</SheetTitle>
                   <CRMSidePanel conversation={selectedConversation} />
                 </SheetContent>
               </Sheet>
@@ -427,11 +429,11 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
           </>
         ) : selectionNotFound ? (
           <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
-            Conversa não encontrada ou fora do seu acesso.
+            Conversation introuvable ou hors de votre accès.
           </div>
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            Selecione uma conversa
+            Sélectionnez une conversation
           </div>
         )}
       </div>

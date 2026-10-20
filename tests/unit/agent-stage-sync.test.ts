@@ -64,7 +64,7 @@ describe("resolveDestinoDoAgente", () => {
     // Mandar um negócio vivo para um estágio arquivado o esconderia do board —
     // desaparecer é pior que não se mover.
     const comArquivado: EstagioCandidato[] = [
-      { id: "x1", name: "Ativo", agent_stage_hint: null, is_archived: false },
+      { id: "x1", name: "Actif", agent_stage_hint: null, is_archived: false },
       { id: "x2", name: "Antigo", agent_stage_hint: "qualifying", is_archived: true },
     ];
     expect(resolveDestinoDoAgente(comArquivado, "qualifying", "x1")).toEqual({
@@ -87,7 +87,7 @@ describe("resolveDestinoDoAgente", () => {
     const r = razaoDaMudancaPeloAgente("Avaliação", "qualifying");
     expect(r).toContain("Avaliação");
     expect(r).toContain("qualifying");
-    expect(r).toContain("assistente");
+    expect(r).toContain("assistant");
   });
 });
 

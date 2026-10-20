@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const body = await req.json().catch(() => null);
   const parsed = postSchema.safeParse(body);
   if (!parsed.success) {
-    return fail("validation_failed", "title e body são obrigatórios.", 422, {
+    return fail("validation_failed", "title et body sont obligatoires.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .select("id")
     .single();
   if (error || !data) {
-    return fail("internal_error", "Erro ao criar entrada de memória.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la création de l’entrée de mémoire.", 500, { requestId });
   }
 
   await audit({

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import { Check, X } from "@/lib/ui/icons";
 function quando(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return formatDistanceToNowStrict(d, { addSuffix: true, locale: ptBR });
+  return formatDistanceToNowStrict(d, { addSuffix: true, locale: fr });
 }
 
 export function ProposalsList({ canDecide }: { canDecide: boolean }) {
@@ -31,9 +31,9 @@ export function ProposalsList({ canDecide }: { canDecide: boolean }) {
       <Tabs value={tab} onValueChange={(v) => setTab(v as "pending" | "history")}>
         <TabsList>
           <TabsTrigger value="pending">
-            Aguardando decisão{data ? ` (${data.pending.length})` : ""}
+            En attente de décision{data ? ` (${data.pending.length})` : ""}
           </TabsTrigger>
-          <TabsTrigger value="history">Já decididas</TabsTrigger>
+          <TabsTrigger value="history">Déjà décidées</TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -70,8 +70,8 @@ function Pendentes({
   if (itens.length === 0) {
     return (
       <Vazio
-        titulo="Nenhuma proposta esperando você"
-        detalhe="Quando o assistente sugerir um próximo passo, ele aparece aqui — e some daqui assim que você decidir."
+        titulo="Aucune proposition ne vous attend"
+        detalhe="Quand l’assistant suggère une prochaine étape, elle apparaît ici — et disparaît dès que vous avez décidé."
       />
     );
   }
@@ -93,7 +93,7 @@ function Pendentes({
             {/* Há quanto tempo espera é a informação que decide a ORDEM de quem
                 olha — por isso fica na linha do título, não escondida embaixo. */}
             <span className="text-xs text-muted-foreground">
-              proposta {quando(p.proposed_at)}
+              proposition {quando(p.proposed_at)}
             </span>
           </div>
 
@@ -107,7 +107,7 @@ function Pendentes({
               aria-label={`Aprovar: ${p.next_action}`}
             >
               <Check size={14} aria-hidden />
-              Aprovar
+              Approuver
             </Button>
             <Button
               size="sm"
@@ -117,7 +117,7 @@ function Pendentes({
               aria-label={`Ignorar: ${p.next_action}`}
             >
               <X size={14} aria-hidden />
-              Ignorar
+              Ignorer
             </Button>
           </div>
         </li>
@@ -130,8 +130,8 @@ function Historico({ itens }: { itens: DecisaoPassada[] }) {
   if (itens.length === 0) {
     return (
       <Vazio
-        titulo="Nenhuma decisão registrada ainda"
-        detalhe="Aprovar e ignorar viram registro — os dois. Quando você decidir a primeira, ela fica aqui."
+        titulo="Aucune décision enregistrée pour le moment"
+        detalhe="Approuver et ignorer sont tous deux enregistrés. Quand vous déciderez la première, elle apparaîtra ici."
       />
     );
   }
@@ -149,7 +149,7 @@ function Historico({ itens }: { itens: DecisaoPassada[] }) {
             </Badge>
             <span className="text-sm font-medium">{d.lead_title}</span>
             <span className="text-xs text-muted-foreground">
-              por {d.decided_by ?? "—"} · {quando(d.decided_at)}
+              par {d.decided_by ?? "—"} · {quando(d.decided_at)}
             </span>
           </div>
           <p className="text-sm text-muted-foreground">{d.next_action}</p>

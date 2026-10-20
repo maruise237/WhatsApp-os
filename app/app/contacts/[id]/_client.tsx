@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { ShieldCheck, PencilSimple } from "@/lib/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -69,7 +69,7 @@ export function ContactDetailClient({ contactId }: Props) {
           <span>
             {t("Contato anonimizado (LGPD)")}
             {contact.anonymized_at &&
-              ` le ${format(new Date(contact.anonymized_at), "dd/MM/yyyy", { locale: ptBR })}`}
+              ` le ${format(new Date(contact.anonymized_at), "dd/MM/yyyy", { locale: fr })}`}
             {` — ${t("edição bloqueada.")}`}
           </span>
         </div>
@@ -153,7 +153,7 @@ export function ContactDetailClient({ contactId }: Props) {
                 <dd className="mt-1">
                   {contact.last_activity_at
                     ? format(new Date(contact.last_activity_at), "dd/MM/yyyy HH:mm", {
-                        locale: ptBR,
+                        locale: fr,
                       })
                     : "—"}
                 </dd>
@@ -161,7 +161,7 @@ export function ContactDetailClient({ contactId }: Props) {
               <div>
                 <dt className="text-xs uppercase text-muted-foreground">{t("Criado em")}</dt>
                 <dd className="mt-1">
-                  {format(new Date(contact.created_at), "dd/MM/yyyy", { locale: ptBR })}
+                  {format(new Date(contact.created_at), "dd/MM/yyyy", { locale: fr })}
                 </dd>
               </div>
               <div>
@@ -199,7 +199,7 @@ export function ContactDetailClient({ contactId }: Props) {
                 <p className="text-sm text-muted-foreground">
                   {t("Este contato já foi anonimizado")}
                   {contact.anonymized_at &&
-                    ` em ${format(new Date(contact.anonymized_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}`}
+                    ` le ${format(new Date(contact.anonymized_at), "dd/MM/yyyy HH:mm", { locale: fr })}`}
                   .
                 </p>
               ) : (

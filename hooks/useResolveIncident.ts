@@ -21,10 +21,10 @@ export function useResolveIncident() {
       void queryClient.invalidateQueries({
         queryKey: ["admin", "incident", variables.id],
       });
-      toast.success("Incidente resolvido com sucesso");
+      toast.success("Incident résolu avec succès");
     },
     onError: (err: Error) => {
-      toast.error("Erro ao resolver incidente", { description: err.message });
+      toast.error("Erreur lors de la résolution de l’incident", { description: err.message });
     },
   });
 }

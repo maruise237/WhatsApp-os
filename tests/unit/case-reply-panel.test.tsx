@@ -35,7 +35,7 @@ describe("CaseReplyPanel", () => {
     renderWith("awaiting_lead");
 
     expect(screen.getByText(/en attente de la réponse du client/i)).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: /concluí/i })).toBeDisabled();
+    expect(screen.getByRole("radio", { name: /réglé/i })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Envoyer" })).toBeDisabled();
     expect(screen.getByPlaceholderText(/écrivez votre réponse/i)).toBeDisabled();
   });
@@ -91,7 +91,7 @@ describe("CaseReplyPanel", () => {
     postMock.mockRejectedValue(new Error("conflito"));
     renderWith("awaiting_human");
 
-    fireEvent.click(screen.getByRole("radio", { name: /concluí/i }));
+    fireEvent.click(screen.getByRole("radio", { name: /réglé/i }));
     fireEvent.change(screen.getByPlaceholderText(/écrivez votre réponse/i), {
       target: { value: "Concluído, avisei o cliente." },
     });

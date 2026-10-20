@@ -29,7 +29,7 @@ interface StageColumnProps {
 
 function formatBRL(cents: number): string {
   try {
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("fr-FR", {
       style: "currency",
       currency: "BRL",
       maximumFractionDigits: 0,
@@ -114,7 +114,7 @@ export function StageColumn({
             {provided.placeholder}
             {leads.length === 0 && !snapshot.isDraggingOver && (
               <div className="flex h-20 items-center justify-center text-[11px] text-text-muted/70">
-                vazio
+                vide
               </div>
             )}
           </div>

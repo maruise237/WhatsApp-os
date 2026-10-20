@@ -254,7 +254,7 @@ function cobrirRamos(
         node_id: node.id,
         code: 'missing_always_fallback',
         branch_id: branch.id,
-        message: `Nó "${node.id}" não tem a saída de escape: um lead que não se encaixar em nenhuma saída fica parado aqui.`,
+        message: `L’étape "${node.id}" n’a pas de sortie de secours : un client qui ne correspond à aucune sortie restera bloqué ici.`,
       });
       continue;
     }
@@ -262,7 +262,7 @@ function cobrirRamos(
       node_id: node.id,
       code: 'missing_branch_edge',
       branch_id: branch.id,
-      message: `Nó "${node.id}": a saída "${rotuloDoRamo(branch)}" não está ligada a nada.`,
+      message: `Étape "${node.id}" : la sortie "${rotuloDoRamo(branch)}" n’est reliée à rien.`,
     });
   }
 }
@@ -279,7 +279,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
     errors.push({
       node_id: null,
       code: 'no_trigger',
-      message: 'O fluxo precisa de exatamente um nó trigger.',
+      message: 'La séquence doit avoir exactement une étape de départ.',
     });
   }
   if (triggers.length > 1) {
@@ -287,7 +287,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
       errors.push({
         node_id: extra.id,
         code: 'multiple_triggers',
-        message: `Nó trigger duplicado: "${extra.id}".`,
+        message: `Étape de départ en double : "${extra.id}".`,
       });
     }
   }
@@ -300,7 +300,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
         errors.push({
           node_id: node.id,
           code: 'unreachable_node',
-          message: `Nó "${node.id}" não é alcançável a partir do trigger.`,
+          message: `L’étape "${node.id}" ne peut pas être atteinte depuis le départ.`,
         });
       }
     }
@@ -312,7 +312,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
         errors.push({
           node_id: node.id,
           code: 'no_end_path',
-          message: `Nó "${node.id}" não tem caminho até um nó de fim.`,
+          message: `L’étape "${node.id}" n’a pas de chemin vers une étape de fin.`,
         });
       }
     }
@@ -327,14 +327,14 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
       errors.push({
         node_id: id,
         code: 'long_wait_needs_template',
-        message: `Nó "${id}" acumula ≥24h de espera e precisa de fallback_template_id.`,
+        message: `L’étape "${id}" cumule ≥24 h d’attente et doit avoir un modèle de secours (fallback_template_id).`,
       });
     }
     if (maxStepsExceeded) {
       errors.push({
         node_id: null,
         code: 'max_steps_exceeded',
-        message: `O caminho mais longo a partir do trigger excede ${MAX_PATH_STEPS} passos.`,
+        message: `Le plus long chemin depuis le départ dépasse ${MAX_PATH_STEPS} étapes.`,
       });
     }
   }
@@ -364,7 +364,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
         errors.push({
           node_id: node.id,
           code: 'grace_too_short',
-          message: `Nó "${node.id}" tem grace_timeout_ms abaixo do mínimo de 15min.`,
+          message: `L’étape "${node.id}" a un délai de grâce inférieur au minimum de 15 min.`,
         });
       }
       continue;
@@ -378,7 +378,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
         errors.push({
           node_id: node.id,
           code: 'missing_class_edge',
-          message: `Nó "${node.id}" não tem edge class_match para a classe "${cls}".`,
+          message: `L’étape "${node.id}" n’a pas de sortie pour la catégorie "${cls}".`,
         });
       }
     }
@@ -390,7 +390,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
       errors.push({
         node_id: node.id,
         code: 'missing_no_reply_edge',
-        message: `Nó "${node.id}" não tem edge class_match para "no_reply".`,
+        message: `L’étape "${node.id}" n’a pas de sortie pour "pas de réponse".`,
       });
     }
 
@@ -399,7 +399,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
       errors.push({
         node_id: node.id,
         code: 'missing_always_fallback',
-        message: `Nó "${node.id}" não tem edge "always" de fallback.`,
+        message: `L’étape "${node.id}" n’a pas de sortie de secours.`,
       });
     }
 
@@ -407,7 +407,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
       errors.push({
         node_id: node.id,
         code: 'grace_too_short',
-        message: `Nó "${node.id}" tem grace_timeout_ms abaixo do mínimo de 15min.`,
+        message: `L’étape "${node.id}" a un délai de grâce inférieur au minimum de 15 min.`,
       });
     }
   }
@@ -431,7 +431,7 @@ export function validateFlowForPublish(graph: FlowGraph): PublishValidationResul
     errors.push({
       node_id: nodeId,
       code: 'cycle_without_wait',
-      message: `Ciclo sem espera mínima de 5min detectado (contém "${nodeId}").`,
+      message: `Boucle sans attente minimale de 5 min détectée (contient "${nodeId}").`,
     });
   }
 

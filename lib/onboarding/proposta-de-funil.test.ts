@@ -166,7 +166,7 @@ describe("validar", () => {
       etapas: OK.etapas.map((e) => (e.passo === "won" ? { ...e, passo: null } : e)),
     });
     expect(r.ok).toBe(false);
-    expect(r.ok ? "" : r.erros.join(" ")).toMatch(/fechado/i);
+    expect(r.ok ? "" : r.erros.join(" ")).toMatch(/conclue/i);
   });
 
   it("recusa quadro sem onde colocar quem desistiu", () => {
@@ -175,7 +175,7 @@ describe("validar", () => {
       etapas: OK.etapas.map((e) => (e.passo === "lost" ? { ...e, passo: null } : e)),
     });
     expect(r.ok).toBe(false);
-    expect(r.ok ? "" : r.erros.join(" ")).toMatch(/não fechou/i);
+    expect(r.ok ? "" : r.erros.join(" ")).toMatch(/perdues/i);
   });
 
   it("recusa quadro curto demais", () => {

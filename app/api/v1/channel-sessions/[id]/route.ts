@@ -130,7 +130,7 @@ export async function GET(
   const user = await loadAuthUser();
   if (!user) return fail("unauthenticated", "Auth required.", 401, { requestId });
   const activeOrg = await resolveActiveOrg(user);
-  if (!activeOrg) return fail("forbidden_tenant", "Nenhuma organização ativa.", 403, { requestId });
+  if (!activeOrg) return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
 
   const supabase = await createClient();
   const { data: session } = await supabase
@@ -139,7 +139,7 @@ export async function GET(
     .eq("organization_id", activeOrg.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (!session) return fail("not_found", "Canal não encontrado.", 404, { requestId });
+  if (!session) return fail("not_found", "Canal introuvable.", 404, { requestId });
 
   const impact =
     req.nextUrl.searchParams.get("impact") === "1"
@@ -295,7 +295,7 @@ export async function DELETE(
     .eq("organization_id", activeOrg.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (!session) return fail("not_found", "Canal não encontrado.", 404, { requestId });
+  if (!session) return fail("not_found", "Canal introuvable.", 404, { requestId });
 
   const impact = await loadDeletionImpact(activeOrg.orgId, id);
   const arquivar = impact.outcome === "archive";

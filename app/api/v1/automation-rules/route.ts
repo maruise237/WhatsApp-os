@@ -46,7 +46,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   const parsed = createAutomationRuleSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("invalid_request", "Dados inválidos.", 400, {
+    return fail("invalid_request", "Données invalides.", 400, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (safeActions === null) {
     return fail(
       "encryption_unavailable",
-      "Não foi possível guardar o segredo do webhook com segurança. Configure NUVEMSHOP_OAUTH_ENCRYPTION_KEY e tente de novo — ou crie a ação sem segredo.",
+      "Impossible de conserver le secret du webhook en toute sécurité. Configurez NUVEMSHOP_OAUTH_ENCRYPTION_KEY et réessayez — ou créez l’action sans secret.",
       422,
       { requestId },
     );

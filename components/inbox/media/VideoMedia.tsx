@@ -13,7 +13,7 @@ export function VideoMedia({ messageId }: { messageId: string }) {
   return (
     <div className="relative w-full max-w-sm aspect-video overflow-hidden rounded-lg bg-black/5">
       {failed ? (
-        <MediaUnavailable kind="Vídeo" className="h-full w-full" />
+        <MediaUnavailable kind="Vidéo" className="h-full w-full" />
       ) : (
         <>
           {!ready && <Skeleton className="absolute inset-0 h-full w-full" />}

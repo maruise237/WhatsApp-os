@@ -19,6 +19,10 @@ import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { useT } from "@/hooks/i18n/useT";
 
 const TIMEZONES = [
+  "Africa/Douala",
+  "Africa/Abidjan",
+  "Africa/Lagos",
+  "Europe/Paris",
   "America/Sao_Paulo",
   "America/Manaus",
   "America/Belem",
@@ -38,7 +42,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
   const t = useT();
   const [fullName, setFullName] = useState(initialFullName ?? "");
   const [locale, setLocale] = useState<Locale>(normalizarIdioma(initialLocale));
-  const [timezone, setTimezone] = useState("America/Sao_Paulo");
+  const [timezone, setTimezone] = useState("Africa/Douala");
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl ?? "");
   const [isPending, startTransition] = useTransition();
 

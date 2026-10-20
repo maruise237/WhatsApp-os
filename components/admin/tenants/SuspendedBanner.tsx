@@ -14,10 +14,10 @@ function formatRelativePtBr(isoDate: string): string {
 
   if (diffDays === 0) return "hoje";
   if (diffDays === 1) return "ontem";
-  if (diffDays < 7) return `há ${diffDays} dias`;
-  if (diffDays < 30) return `há ${Math.floor(diffDays / 7)} semana${Math.floor(diffDays / 7) > 1 ? "s" : ""}`;
+  if (diffDays < 7) return `il y a ${diffDays} jours`;
+  if (diffDays < 30) return `il y a ${Math.floor(diffDays / 7)} semaine${Math.floor(diffDays / 7) > 1 ? "s" : ""}`;
   if (diffDays < 365) return `há ${Math.floor(diffDays / 30)} mês${Math.floor(diffDays / 30) > 1 ? "es" : ""}`;
-  return `há ${Math.floor(diffDays / 365)} ano${Math.floor(diffDays / 365) > 1 ? "s" : ""}`;
+  return `il y a ${Math.floor(diffDays / 365)} an${Math.floor(diffDays / 365) > 1 ? "s" : ""}`;
 }
 
 export function SuspendedBanner({ suspendedAt, reason }: SuspendedBannerProps) {
@@ -29,10 +29,10 @@ export function SuspendedBanner({ suspendedAt, reason }: SuspendedBannerProps) {
     >
       <Warning size={18} weight="fill" className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
       <p className="text-sm">
-        <span className="font-semibold">Tenant suspenso</span>{" "}
+        <span className="font-semibold">Organisation suspendue</span>{" "}
         {formatRelativePtBr(suspendedAt)}.{" "}
         <span className="text-amber-800 dark:text-amber-300">
-          {reason ?? "Sem razão registrada."}
+          {reason ?? "Aucun motif enregistré."}
         </span>
       </p>
     </div>

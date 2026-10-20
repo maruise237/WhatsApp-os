@@ -34,7 +34,7 @@ export type ConnectionHealth = "connected" | "connecting" | "down" | "none" | "u
 export function channelLabel(
   c: Pick<ChannelSession, "display_name" | "phone_number" | "waha_session_name">,
 ): string {
-  return c.display_name || c.phone_number || c.waha_session_name || "Número sem nome";
+  return c.display_name || c.phone_number || c.waha_session_name || "Numéro sans nom";
 }
 
 /**

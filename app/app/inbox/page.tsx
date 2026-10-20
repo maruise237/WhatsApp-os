@@ -15,7 +15,7 @@ export default async function InboxPage({
   if (!activeOrg) {
     return (
       <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-        Você não tem nenhuma organização ativa. Aceite um convite ou contate o admin.
+        Vous n’avez aucune organisation active. Acceptez une invitation ou contactez l’administrateur.
       </div>
     );
   }

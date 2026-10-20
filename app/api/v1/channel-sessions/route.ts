@@ -33,7 +33,7 @@ export async function GET(): Promise<Response> {
   const user = await loadAuthUser();
   if (!user) return fail("unauthenticated", "Auth required.", 401, { requestId });
   const activeOrg = await resolveActiveOrg(user);
-  if (!activeOrg) return fail("forbidden_tenant", "Nenhuma organização ativa.", 403, { requestId });
+  if (!activeOrg) return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
 
   const supabase = await createClient();
   const base = () =>
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   const parsed = createChannelSchema.safeParse(raw ?? {});
   if (!parsed.success) {
-    return fail("validation_failed", "Dados inválidos.", 422, {
+    return fail("validation_failed", "Données invalides.", 422, {
       requestId,
       details: parsed.error.flatten().fieldErrors as Record<string, unknown>,
     });

@@ -175,8 +175,8 @@ export async function GET(_req: NextRequest) {
       tenant_name: (org as { display_name?: string })?.display_name ?? row.organization_id,
       message:
         row.status === "ban_suspected"
-          ? "Sessão WAHA com suspeita de banimento"
-          : `Sessão desconectada inesperadamente${row.status_reason ? `: ${row.status_reason}` : ""}`,
+          ? "Session WAHA suspectée de bannissement"
+          : `Session déconnectée de manière inattendue${row.status_reason ? ` : ${row.status_reason}` : ""}`,
       link: `/admin/tenants/${row.organization_id}/health`,
       created_at: row.updated_at,
     });
@@ -193,8 +193,8 @@ export async function GET(_req: NextRequest) {
       tenant_id: row.organization_id,
       tenant_name: (org as { display_name?: string })?.display_name ?? row.organization_id,
       message: isOverdue
-        ? `Requisição LGPD vencida em ${new Date(row.due_at).toLocaleDateString("pt-BR")}`
-        : `Prazo LGPD expira em ${new Date(row.due_at).toLocaleDateString("pt-BR")}`,
+        ? `Demande de données personnelles échue le ${new Date(row.due_at).toLocaleDateString("pt-BR")}`
+        : `Délai de protection des données expirant le ${new Date(row.due_at).toLocaleDateString("pt-BR")}`,
       link: "/admin/lgpd",
       created_at: row.created_at,
     });
@@ -266,8 +266,8 @@ export async function GET(_req: NextRequest) {
       tenant_name: row.nome,
       message:
         row.modo === "bloquear"
-          ? `Budget IA ${Math.round(row.pct * 100)}% do teto (gasto acumulado) — este tenant escolheu parar a IA no limite`
-          : `Budget IA ${Math.round(row.pct * 100)}% do teto (gasto acumulado)`,
+          ? `Budget IA à ${Math.round(row.pct * 100)} % du plafond (dépenses cumulées) — cette organisation a choisi d’arrêter l’IA à la limite`
+          : `Budget IA à ${Math.round(row.pct * 100)} % du plafond (dépenses cumulées)`,
       // Leva à saúde DO TENANT, e não a `/admin/usage`: é a única tela de admin
       // que lê a régua real (`fn_gasto_de_ia_do_mes`). Quem clicar por causa
       // deste alerta chega no número que decide, não em outro acumulado.
@@ -297,7 +297,7 @@ export async function GET(_req: NextRequest) {
         kind: "tenant_pending_overflow",
         tenant_id: orgId,
         tenant_name: name,
-        message: `${count} conversas pendentes sem atendimento`,
+        message: `${count} conversations en attente sans réponse`,
         link: `/admin/tenants/${orgId}/health`,
         created_at: new Date().toISOString(),
       });

@@ -103,7 +103,7 @@ export function AnonymizeDialog({ contactId, open, onOpenChange }: Props) {
         ) : (
           <div className="space-y-4">
             <div className="border-error-fg/30 rounded-md border bg-error-bg p-3 text-sm text-error-fg">
-              {t("Para confirmar, digite")} <strong>{CONFIRM_TEXT}</strong> abaixo.
+              {t("Para confirmar, digite")} <strong>{CONFIRM_TEXT}</strong> ci-dessous.
             </div>
             <div className="space-y-2">
               <Label htmlFor="anon-confirm">{t("Confirmação")}</Label>

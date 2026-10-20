@@ -81,7 +81,7 @@ const patchSchema = z
       v.monthly_limit_cents !== undefined ||
       v.alarm_threshold_pct !== undefined ||
       v.enforcement_mode !== undefined,
-    { message: "Informe ao menos um campo: teto, limiar ou modo." },
+    { message: "Indiquez au moins un champ : plafond, seuil ou mode." },
   );
 
 export async function GET(_req: NextRequest): Promise<Response> {
@@ -104,12 +104,12 @@ export async function PATCH(req: NextRequest): Promise<Response> {
   try {
     body = await req.json();
   } catch {
-    return fail("validation_failed", "JSON inválido.", 422, { requestId });
+    return fail("validation_failed", "JSON invalide.", 422, { requestId });
   }
 
   const parsed = patchSchema.safeParse(body);
   if (!parsed.success) {
-    return fail("validation_failed", "Payload inválido.", 422, {
+    return fail("validation_failed", "Données invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -128,7 +128,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
       request_id: requestId,
       causa: readErr.message,
     });
-    return fail("internal_error", "Erro ao ler o orçamento.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la lecture du budget.", 500, { requestId });
   }
 
   const modoAntes = normalizarModoDeOrcamento(existing?.enforcement_mode ?? null);
@@ -154,8 +154,8 @@ export async function PATCH(req: NextRequest): Promise<Response> {
     // matar. Quem garante o tempo é a CARÊNCIA de 72h, e é dela que a frase fala.
     return fail(
       "invalid_state_transition",
-      'Antes de fazer a IA parar no limite, salve "Me avisar" — assim o aviso já ' +
-        "está de pé quando a parada começar a valer, 72 horas depois de você armá-la.",
+      'Avant de faire s’arrêter l’IA à la limite, enregistrez « M’avertir » — ainsi l’alerte est déjà ' +
+        "en place quand l’arrêt prendra effet, 72 heures après son activation.",
       422,
       { requestId, details: { de: modoAntes, para: modoDepois, degrau_faltante: "avisar" } },
     );
@@ -175,8 +175,8 @@ export async function PATCH(req: NextRequest): Promise<Response> {
   if (modoDepois !== "off" && tetoDepois < PISO_DE_TETO_CENTS) {
     return fail(
       "unprocessable_entity",
-      `Para avisar ou parar no limite, o limite precisa ser de pelo menos ${PISO_LEGIVEL} por mês. ` +
-        'Se você só quer acompanhar o gasto sem limite, escolha "Só acompanhar".',
+      `Pour être averti ou arrêter l’IA à la limite, celle-ci doit être d’au moins ${PISO_LEGIVEL} par mois. ` +
+        'Si vous voulez seulement suivre les dépenses sans limite, choisissez « Suivre uniquement ».',
       422,
       {
         requestId,
@@ -226,7 +226,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
         request_id: requestId,
         causa: updErr.message,
       });
-      return fail("internal_error", "Erro ao atualizar orçamento.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de la mise à jour du budget.", 500, { requestId });
     }
   } else {
     const { error: insErr } = await admin.from("ai_budgets").insert({
@@ -242,7 +242,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
         request_id: requestId,
         causa: insErr.message,
       });
-      return fail("internal_error", "Erro ao criar orçamento.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de la création du budget.", 500, { requestId });
     }
   }
 

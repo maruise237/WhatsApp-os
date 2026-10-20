@@ -37,16 +37,16 @@ import {
  * quem não respondeu recebe a versão sem ele, e não uma inventada.
  */
 function ondeTrabalha(negocio: string, oQueFaz: string | undefined): string {
-  return oQueFaz ? `${negocio}, que é: ${oQueFaz}` : negocio;
+  return oQueFaz ? `${negocio}, dont l’activité est : ${oQueFaz}` : negocio;
 }
 
 const PROMPT_BODIES: Record<PromptTemplate, (onde: string) => string> = {
   ecommerce_friendly: (n) =>
-    `Você atende os clientes de ${n}. Fale de forma calorosa e próxima, como alguém que gosta de ajudar. Cumprimente, entenda o que a pessoa precisa e ofereça opções claras. Confirme os detalhes antes de agir.`,
+    `Vous répondez aux clients de ${n}. Parlez de façon chaleureuse et proche, comme quelqu’un qui aime rendre service. Saluez, comprenez ce dont la personne a besoin et proposez des options claires. Confirmez les détails avant d’agir.`,
   ecommerce_professional: (n) =>
-    `Você atende os clientes de ${n}. Fale de forma objetiva, cordial e profissional. Vá direto ao ponto, sem parecer frio, e sempre termine indicando o próximo passo.`,
+    `Vous répondez aux clients de ${n}. Parlez de façon claire, courtoise et professionnelle. Allez droit au but sans paraître froid, et terminez toujours en indiquant la prochaine étape.`,
   support_minimal: (n) =>
-    `Você atende os clientes de ${n}. Responda em frases curtas, peça apenas o que for necessário e chame uma pessoa do time assim que a dúvida sair do seu alcance.`,
+    `Vous répondez aux clients de ${n}. Répondez par des phrases courtes, demandez uniquement le nécessaire et appelez une personne de l’équipe dès que la question dépasse vos compétences.`,
 };
 
 /** O agente padrão desta organização, do jeito que este passo precisa vê-lo. */
@@ -326,7 +326,7 @@ export async function createDefaultAgent(formData: FormData): Promise<CreateAgen
   }
 
   const raw = {
-    name: String(formData.get("name") ?? "Atendente IA").trim(),
+    name: String(formData.get("name") ?? "Assistant IA").trim(),
     prompt_template: String(formData.get("prompt_template") ?? "ecommerce_friendly"),
     regras_da_casa: String(formData.get("regras_da_casa") ?? "").trim() || undefined,
   };

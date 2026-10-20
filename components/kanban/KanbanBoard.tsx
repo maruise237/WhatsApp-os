@@ -220,7 +220,7 @@ export function KanbanBoard({
   if (isError) {
     return (
       <Card className="m-4 p-6 text-sm text-text-muted">
-        Falha ao carregar o board.
+        Échec du chargement du tableau.
         {error instanceof Error ? ` ${error.message}` : null}
       </Card>
     );
@@ -233,7 +233,7 @@ export function KanbanBoard({
   if (data.stages.length === 0) {
     return (
       <Card className="m-4 p-6 text-sm text-text-muted">
-        Nenhum lead nesta pipeline ainda.
+        Aucun lead dans ce pipeline pour le moment.
       </Card>
     );
   }

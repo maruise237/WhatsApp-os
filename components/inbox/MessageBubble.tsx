@@ -1,6 +1,6 @@
 "use client";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { ArrowBendUpLeft, Check, Checks, Robot, WarningOctagon } from "@/lib/ui/icons";
 import { cn } from "@/lib/utils";
 import { useT } from "@/hooks/i18n/useT";
@@ -39,7 +39,7 @@ function AckIndicator({ status }: { status: string }) {
 export function MessageBubble({ message, debugCitations, onResponder, citada }: Props) {
   const t = useT();
   const isOutbound = message.direction === "outbound";
-  const time = format(new Date(message.sent_at), "HH:mm", { locale: ptBR });
+  const time = format(new Date(message.sent_at), "HH:mm", { locale: fr });
   const isFailed = message.status === "failed";
   const hasMedia = Boolean(message.media_url || message.media_storage_path);
   const isContact = message.type === "contact";

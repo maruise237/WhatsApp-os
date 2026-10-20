@@ -19,7 +19,7 @@ export async function GET(): Promise<Response> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("sales_orders")
-    .select("*, sales_order_items(*), payment_proofs(*)")
+    .select("*, sales_order_items(*), payment_proofs(*), contacts(id, name, display_name, phone_number)")
     .eq("organization_id", authz.org.orgId)
     .order("updated_at", { ascending: false });
 
@@ -34,19 +34,19 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const idempotencyKey = request.headers.get("Idempotency-Key")?.trim() ?? "";
   if (!idempotencyKey || idempotencyKey.length > 200) {
-    return fail("invalid_request", "O header Idempotency-Key é obrigatório.", 400, { requestId });
+    return fail("invalid_request", "L’en-tête Idempotency-Key est obligatoire.", 400, { requestId });
   }
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return fail("invalid_request", "Corpo JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createSalesOrderSchema.safeParse(body);
   if (!parsed.success) {
-    return fail("validation_failed", "Dados da commande invalides.", 422, {
+    return fail("validation_failed", "Données de la commande invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

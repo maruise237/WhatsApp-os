@@ -8,7 +8,7 @@ import { env } from "@/lib/env";
 
 import { FormularioDaMarca } from "./_form";
 
-export const metadata = { title: "Marca da instalação" };
+export const metadata = { title: "Marque de l’installation" };
 export const dynamic = "force-dynamic";
 
 /**
@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
  */
 function instanteLegivel(iso: string | null): string | null {
   if (!iso) return null;
-  return new Date(iso).toLocaleString("pt-BR", {
+  return new Date(iso).toLocaleString("fr-FR", {
     timeZone: "America/Sao_Paulo",
     dateStyle: "short",
     timeStyle: "short",
@@ -77,9 +77,9 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Marca</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Marque</h1>
         <p className="mt-1 text-sm text-text-muted">
-          O nome e a cor que este sistema mostra para todo mundo que usa esta instalação.
+          Le nom et la couleur que ce système affiche à toutes les personnes qui utilisent cette installation.
         </p>
       </div>
 

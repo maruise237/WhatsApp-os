@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Conta suspensa",
+  title: "Compte suspendu",
 };
 
 /**
@@ -20,27 +20,26 @@ export default function AccountSuspendedPage() {
   return (
     <main className="flex min-h-screen items-center justify-center p-8">
       <Card className="w-full max-w-md p-8 text-center space-y-4">
-        <h1 className="text-2xl font-semibold">Conta suspensa</h1>
+        <h1 className="text-2xl font-semibold">Compte suspendu</h1>
         {suporte ? (
           <p className="text-sm text-muted-foreground">
-            Sua conta está suspensa. Entre em contato com{" "}
+            Votre compte est suspendu. Contactez{" "}
             <a
               href={`mailto:${suporte}`}
               className="underline underline-offset-4 hover:text-foreground transition-colors"
             >
               {suporte}
             </a>{" "}
-            para mais informações.
+            pour plus d’informations.
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Sua conta está suspensa. Fale com quem administra este sistema para
-            saber o motivo e como reativá-la.
+            Votre compte est suspendu. Contactez la personne qui administre ce système pour connaître le motif et la marche à suivre pour le réactiver.
           </p>
         )}
         <div className="pt-2">
           <Button asChild variant="outline">
-            <Link href="/login">Sair</Link>
+            <Link href="/login">Se déconnecter</Link>
           </Button>
         </div>
       </Card>

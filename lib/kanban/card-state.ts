@@ -248,18 +248,18 @@ function clampPercent(value: number): number {
 
 /** "Sem resposta há 6 dias" — dias quando passa de 48h, senão horas. */
 export function coolingLabel(hoursInStage: number | null): string {
-  if (hoursInStage == null) return "Sem resposta";
+  if (hoursInStage == null) return "Sans réponse";
   const hours = Math.max(0, Math.floor(hoursInStage));
-  if (hours >= 48) return `Sem resposta há ${Math.floor(hours / 24)} dias`;
-  if (hours >= 1) return `Sem resposta há ${hours}h`;
-  return "Sem resposta";
+  if (hours >= 48) return `Sans réponse depuis ${Math.floor(hours / 24)} jours`;
+  if (hours >= 1) return `Sans réponse depuis ${hours} h`;
+  return "Sans réponse";
 }
 
 /** "3d" / "5h" / "agora" — o tempo parado no estágio, no rodapé do card. */
 export function stageAgeLabel(hoursInStage: number | null): string {
   if (hoursInStage == null) return "";
   const hours = Math.floor(hoursInStage);
-  if (hours >= 24) return `${Math.floor(hours / 24)}d`;
+  if (hours >= 24) return `${Math.floor(hours / 24)}j`;
   if (hours >= 1) return `${hours}h`;
-  return "agora";
+  return "maintenant";
 }

@@ -2,7 +2,7 @@
 import * as React from "react";
 import { toast } from "sonner";
 import { formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ function actionLabel(type: string): string {
 }
 
 function relativeCreatedAt(iso: string): string {
-  return formatDistanceToNowStrict(new Date(iso), { addSuffix: true, locale: ptBR });
+  return formatDistanceToNowStrict(new Date(iso), { addSuffix: true, locale: fr });
 }
 
 function statusBadgeVariant(
@@ -43,8 +43,8 @@ function statusBadgeVariant(
 }
 
 function statusBadgeLabel(status: AutomationRuleRunRow["status"]): string {
-  if (status === "success") return "Sucesso";
-  if (status === "failed") return "Falhou";
+  if (status === "success") return "Succès";
+  if (status === "failed") return "Échec";
   // "Aguardando envio", e não "Aguardando horário": desde que o agregador passou
   // a marcar `adiado` também quando a mensagem ficou na fila do canal (número
   // desconectado, transporte não configurado), o rótulo antigo afirmava uma
@@ -92,7 +92,7 @@ function horarioDeRetorno(action: AutomationRuleRunActionResult): string | null 
   if (typeof retryAt !== "string") return null;
   const quando = new Date(retryAt);
   if (Number.isNaN(quando.getTime())) return null;
-  return quando.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+  return quando.toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
 }
 
 function ActionLine({ action, run }: { action: AutomationRuleRunActionResult; run: AutomationRuleRunRow }) {
@@ -134,7 +134,7 @@ function ActionLine({ action, run }: { action: AutomationRuleRunActionResult; ru
                 IA ele é o código (`sem_agente_publicado`) — e é para esses que
                 `explicacao` existe. O `??` mantém o erro do webhook externo,
                 que não tem tradução possível e é a única pista real. */}
-            {explicacao ?? action.error ?? "Essa ação não funcionou."}
+            {explicacao ?? action.error ?? "Cette action n’a pas fonctionné."}
           </p>
           {action.type === "call_webhook" ? (
             <Button
@@ -149,7 +149,7 @@ function ActionLine({ action, run }: { action: AutomationRuleRunActionResult; ru
                 })
               }
             >
-              <PaperPlaneTilt /> Reenviar
+              <PaperPlaneTilt /> Renvoyer
             </Button>
           ) : null}
         </div>
@@ -159,7 +159,7 @@ function ActionLine({ action, run }: { action: AutomationRuleRunActionResult; ru
         <div className="ml-6 rounded-sm bg-muted px-2 py-1.5">
           <p className="break-words text-xs text-muted-foreground">
             {explicacao}
-            {retorno ? ` Nova tentativa em ${retorno}.` : null}
+            {retorno ? ` Nouvelle tentative ${retorno}.` : null}
           </p>
         </div>
       ) : null}
@@ -181,7 +181,7 @@ export function ActivityTab() {
           disabled={isRefetching}
           className="w-full sm:w-auto"
         >
-          <ArrowsClockwise className={cn(isRefetching && "animate-spin")} /> Atualizar
+          <ArrowsClockwise className={cn(isRefetching && "animate-spin")} /> Actualiser
         </Button>
       </div>
 
@@ -194,8 +194,7 @@ export function ActivityTab() {
         <div className="flex justify-center pt-10">
           <Card className="max-w-md">
             <CardContent className="pt-6 text-center text-sm text-muted-foreground">
-              Nenhuma automação rodou ainda. Assim que uma regra ligada disparar, o histórico
-              aparece aqui.
+              Aucune automatisation n’a encore été exécutée. Dès qu’une règle activée se déclenchera, l’historique apparaîtra ici.
             </CardContent>
           </Card>
         </div>
@@ -206,7 +205,7 @@ export function ActivityTab() {
               <CardHeader className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
                   <CardTitle className="truncate text-sm">
-                    {run.automation_rules?.name ?? "Automação removida"}
+                    {run.automation_rules?.name ?? "Automatisation supprimée"}
                   </CardTitle>
                   <Badge variant={statusBadgeVariant(run.status)}>{statusBadgeLabel(run.status)}</Badge>
                 </div>

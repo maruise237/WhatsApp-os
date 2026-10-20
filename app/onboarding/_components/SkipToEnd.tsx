@@ -17,7 +17,7 @@ export function SkipToEnd() {
         });
       }}
     >
-      Pular tudo (DEV)
+      Tout passer (DEV)
     </Button>
   );
 }

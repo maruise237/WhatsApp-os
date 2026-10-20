@@ -39,10 +39,10 @@ interface TabItem {
 }
 
 const TABS: TabItem[] = [
-  { label: "Visão Geral", href: "", disabled: false },
-  { label: "Saúde", href: "/health", disabled: false },
-  { label: "Equipe", href: "/team", disabled: true },
-  { label: "Uso", href: "/usage", disabled: true },
+  { label: "Vue d’ensemble", href: "", disabled: false },
+  { label: "Santé", href: "/health", disabled: false },
+  { label: "Équipe", href: "/team", disabled: true },
+  { label: "Utilisation", href: "/usage", disabled: true },
 ];
 
 // ---------------------------------------------------------------------------
@@ -82,7 +82,7 @@ export default async function TenantDetailLayout({
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <CaretLeft size={14} aria-hidden />
-        Tenants
+        Organisations
       </Link>
 
       {/* Header */}

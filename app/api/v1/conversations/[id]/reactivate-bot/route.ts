@@ -53,12 +53,12 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
 
   if (!resultado.ok) {
     if (resultado.erro === "conversation_not_found") {
-      return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+      return fail("not_found", "Conversation introuvable.", 404, { requestId });
     }
     if (resultado.erro === "assignment_conflict") {
       return fail(
         "state_conflict",
-        "Alguém assumiu esta conversa agora — recarregue e tente de novo.",
+        "Quelqu’un vient de prendre en charge cette conversation — rechargez et réessayez.",
         409,
         { requestId },
       );
@@ -67,7 +67,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     // acompanhamento pausado. Repetir a chamada é seguro (tudo é idempotente).
     return fail(
       "internal_error",
-      "Atendimento devolvido, mas o sinal de retomada do acompanhamento falhou — tente de novo.",
+      "Conversation rendue, mais le signal de reprise du suivi a échoué — réessayez.",
       500,
       { requestId },
     );

@@ -71,11 +71,11 @@ export function LgpdAdminClient() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">LGPD — Cross-tenant</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">RGPD — Multi-organisations</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {isLoading
             ? "Carregando..."
-            : `${total} solicitaç${total !== 1 ? "ões" : "ão"}${hasNextPage ? "+" : ""}`}
+            : `${total} demande${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
         </p>
       </div>
 
@@ -83,39 +83,39 @@ export function LgpdAdminClient() {
       <div className="flex flex-wrap items-center gap-3">
         <Select onValueChange={setStatus} value={filters.status ?? NONE}>
           <SelectTrigger className="h-8 w-[160px] text-xs">
-            <SelectValue placeholder="Status" />
+            <SelectValue placeholder="Statut" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={NONE}>Todos os status</SelectItem>
-            <SelectItem value="received">Recebido</SelectItem>
-            <SelectItem value="processing">Processando</SelectItem>
-            <SelectItem value="pending_review">Revisão</SelectItem>
-            <SelectItem value="completed">Concluído</SelectItem>
-            <SelectItem value="failed">Falhou</SelectItem>
+            <SelectItem value={NONE}>Tous les statuts</SelectItem>
+            <SelectItem value="received">Reçue</SelectItem>
+            <SelectItem value="processing">En traitement</SelectItem>
+            <SelectItem value="pending_review">Révision</SelectItem>
+            <SelectItem value="completed">Terminée</SelectItem>
+            <SelectItem value="failed">Échec</SelectItem>
           </SelectContent>
         </Select>
 
         <Select onValueChange={setType} value={filters.request_type ?? NONE}>
           <SelectTrigger className="h-8 w-[200px] text-xs">
-            <SelectValue placeholder="Tipo" />
+            <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={NONE}>Todos os tipos</SelectItem>
-            <SelectItem value="redact">Anonimização cliente</SelectItem>
-            <SelectItem value="data_request">Solicitação de dados</SelectItem>
-            <SelectItem value="store_redact">Anonimização tenant</SelectItem>
+            <SelectItem value={NONE}>Tous les types</SelectItem>
+            <SelectItem value="redact">Anonymisation client</SelectItem>
+            <SelectItem value="data_request">Demande de données</SelectItem>
+            <SelectItem value="store_redact">Anonymisation organisation</SelectItem>
           </SelectContent>
         </Select>
 
         <Select onValueChange={setRisk} value={filters.risk_level ?? NONE}>
           <SelectTrigger className="h-8 w-[160px] text-xs">
-            <SelectValue placeholder="Risco" />
+            <SelectValue placeholder="Risque" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={NONE}>Todos os riscos</SelectItem>
-            <SelectItem value="expired">Vencido</SelectItem>
-            <SelectItem value="at_risk">Crítico (&lt;24h)</SelectItem>
-            <SelectItem value="warning">Alerta (&gt;50%)</SelectItem>
+            <SelectItem value={NONE}>Tous les risques</SelectItem>
+            <SelectItem value="expired">Échue</SelectItem>
+            <SelectItem value="at_risk">Critique (&lt;24h)</SelectItem>
+            <SelectItem value="warning">Alerte (&gt;50%)</SelectItem>
             <SelectItem value="ok">OK</SelectItem>
           </SelectContent>
         </Select>
@@ -126,7 +126,7 @@ export function LgpdAdminClient() {
             className="cursor-pointer text-xs"
             onClick={clearFilters}
           >
-            Limpar filtros ×
+            Effacer les filtres ×
           </Badge>
         )}
       </div>

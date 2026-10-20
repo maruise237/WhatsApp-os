@@ -55,9 +55,9 @@ function padraoDoAmbiente(): Record<string, boolean> {
 export async function GET(): Promise<Response> {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.manager) {
-    return fail("forbidden", "requer papel de gerente ou superior", 403);
+    return fail("forbidden", "nécessite le rôle de manager ou supérieur", 403);
   }
 
   const db = await createClient();
@@ -93,14 +93,14 @@ const corpoDoPut = z.object({
 export async function PUT(req: NextRequest): Promise<Response> {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.admin) {
-    return fail("forbidden", "requer papel de administrador", 403);
+    return fail("forbidden", "nécessite le rôle d’administrateur", 403);
   }
 
   const parsed = corpoDoPut.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("invalid_body", "corpo inválido", 422, { details: parsed.error.issues });
+    return fail("invalid_body", "corps de requête invalide", 422, { details: parsed.error.issues });
   }
   const corpo = parsed.data;
 
@@ -123,7 +123,7 @@ export async function PUT(req: NextRequest): Promise<Response> {
   if (!gravado) {
     // Upsert que casa zero linhas devolve sucesso no PostgREST — a tela diria
     // "salvo" sem nada ter sido gravado. Mesmo cuidado da rota de provedores.
-    return fail("save_failed", "nada foi gravado — verifique as permissões da organização", 500);
+    return fail("save_failed", "rien n’a été enregistré — vérifiez les permissions de l’organisation", 500);
   }
 
   void audit({

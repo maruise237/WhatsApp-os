@@ -365,7 +365,7 @@ describe("renderVetoDeVazamento — o veto ensina a SAÍDA, não só o problema"
   it("quando o termo é uma tool, oferece o rótulo em português do catálogo", () => {
     const texto = renderVetoDeVazamento(["crm_list_webhook_sources"]);
     expect(texto).toContain("crm_list_webhook_sources");
-    expect(texto.toLowerCase()).toContain("entradas automáticas");
+    expect(texto.toLowerCase()).toContain("arrivées automatiques de contacts");
   });
 
   it("manda REESCREVER — um veto que só nega faz o modelo tentar de novo igual", () => {

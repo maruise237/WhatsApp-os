@@ -18,54 +18,54 @@ export type AgentInboxSeverity = "info" | "warn" | "critical";
  * de quê.
  */
 export const KIND_LABEL = {
-  qr_rescan: "Conexão do WhatsApp caiu — precisa escanear o QR de novo",
-  job_dead: "Uma tarefa do assistente falhou e parou de tentar",
-  event_dead: "Um evento recebido não pôde ser processado",
-  budget_exceeded: "O orçamento de IA foi atingido",
-  handoff: "O assistente passou um atendimento para um humano",
-  promotion_review: "Proposta de melhoria do assistente aguardando sua revisão",
-  judge_unaligned: "O avaliador de qualidade precisa de recalibragem",
-  followup_dead: "Um fluxo de follow-up parou de tentar",
-  snooze_expired: "O lead não respondeu no prazo que você definiu",
-  next_action_ambiguous: "Próxima ação sem negócio definido — precisa da sua escolha",
-  risk_backlog_seeded: "Negócios que já estavam parados — precisam de uma decisão",
-  reactivation_expired: "A sugestão de retomar contato venceu — decida",
+  qr_rescan: "La connexion WhatsApp est coupée — il faut rescanner le code QR",
+  job_dead: "Une tâche de l’assistant a échoué et ne réessaie plus",
+  event_dead: "Un événement reçu n’a pas pu être traité",
+  budget_exceeded: "Le budget IA est atteint",
+  handoff: "L’assistant a passé une conversation à une personne",
+  promotion_review: "Une amélioration proposée par l’assistant attend votre avis",
+  judge_unaligned: "Le contrôle qualité doit être réajusté",
+  followup_dead: "Une séquence de relance ne réessaie plus",
+  snooze_expired: "Le client n’a pas répondu dans le délai que vous avez fixé",
+  next_action_ambiguous: "Prochaine action sans affaire précise — à vous de choisir",
+  risk_backlog_seeded: "Des affaires déjà à l’arrêt — une décision est nécessaire",
+  reactivation_expired: "La proposition de recontacter a expiré — à vous de décider",
   // Diz o que ACONTECEU com o cliente, não o que falhou por dentro: o dono do
   // negócio precisa saber que um atendimento saiu capado, não que um token
   // colidiu. O motivo técnico fica no corpo do aviso, para quem for investigar.
-  capabilities_missing: "Um atendimento saiu sem as ferramentas que você ligou",
+  capabilities_missing: "Une conversation s’est faite sans les outils que vous avez activés",
   // Diz o que o CLIENTE viu, não o que o worker registrou: uma resposta que
   // ficou "enviando" para sempre é, do lado de lá, uma mensagem que nunca
   // chegou. O motivo técnico fica no corpo do aviso.
-  message_send_stuck: "Uma resposta ficou presa e não chegou ao cliente",
-  midia_nao_lida: "O agente não conseguiu ler uma foto ou áudio que o cliente enviou",
+  message_send_stuck: "Une réponse est restée bloquée et n’est pas arrivée au client",
+  midia_nao_lida: "L’assistant n’a pas pu lire une photo ou un audio envoyé par le client",
   // Diz o que o CLIENTE está esperando, não o que o sistema deixou de gravar.
   // "Promessa não cumprida" é a única frase que faz o dono do negócio agir: do
   // lado de lá existe uma pessoa que ouviu um compromisso e está aguardando.
   // O que a PLATAFORMA decidiu, não o assistente. O texto diz o que mudou e
   // por que importa agora — quem lê a Central quer saber se pode trabalhar, não
   // qual evento chegou.
-  channel_template_review: "Um modelo de mensagem mudou de situação na revisão",
-  channel_number_alert: "Seu número de WhatsApp precisa de atenção",
+  channel_template_review: "Un modèle de message a changé de statut lors de la validation",
+  channel_number_alert: "Votre numéro WhatsApp demande votre attention",
   // "ninguém cumpriu" é um veredito que NENHUMA linha de código apura — o
   // sistema não sabe se a promessa foi cumprida, e agendar um retorno não é
   // cumprir. "ninguém ficou responsável" é exatamente o que `apuraDonoDaPromessa`
   // mede: houve ferramenta neste turno? há retorno vivo? Se não, ninguém assumiu.
-  promise_unfulfilled: "O assistente prometeu algo a um cliente e ninguém ficou responsável",
+  promise_unfulfilled: "L’assistant a promis quelque chose à un client et personne n’en est responsable",
   contact_proposal_expired:
-    "Uma informação que o assistente ouviu de um cliente venceu sem ninguém conferir",
+    "Une info donnée par un client à l’assistant a expiré sans que personne ne la vérifie",
   // Diz o que ACONTECEU, e nunca que algo parou — contraste deliberado com
   // `budget_exceeded` ("foi atingido"). Quem lê este aviso ainda tem a IA
   // respondendo; confundir os dois faria o dono do negócio correr atrás de uma
   // parada que não houve, ou ignorar a que houve.
-  budget_warning: "O gasto de IA passou do aviso que você definiu",
-  other: "Aviso do assistente",
+  budget_warning: "Les dépenses IA ont dépassé le seuil d’alerte que vous avez fixé",
+  other: "Alerte de l’assistant",
 } as const satisfies Record<InboxKind, string>;
 
 export const SEVERITY_LABEL: Record<AgentInboxSeverity, string> = {
-  info: "informativo",
-  warn: "atenção",
-  critical: "crítico",
+  info: "information",
+  warn: "attention",
+  critical: "critique",
 };
 
 /**
@@ -75,7 +75,7 @@ export const SEVERITY_LABEL: Record<AgentInboxSeverity, string> = {
  * cobrir esquecimento, que agora o compilador pega acima.
  */
 export function kindLabel(kind: string): string {
-  return (KIND_LABEL as Record<string, string>)[kind] ?? "Aviso do assistente";
+  return (KIND_LABEL as Record<string, string>)[kind] ?? "Alerte de l’assistant";
 }
 
 /** Por que ninguém ficou responsável — o que muda é a AÇÃO que cabe a quem lê. */
@@ -107,23 +107,23 @@ export function copyDaPromessaSemDono(
 ): { title: string; body: string } {
   const title =
     quantas === 1
-      ? "O assistente prometeu algo ao cliente e ninguém ficou responsável"
-      : `${quantas} promessas ao cliente sem ninguém responsável`;
+      ? "L’assistant a promis quelque chose au client et personne n’en est responsable"
+      : `${quantas} promesses faites à des clients sans personne responsable`;
 
   const CORPO: Record<PromessaSemDono, string> = {
     operador_sem_ferramentas:
-      "Nesta conversa o assistente combinou algo com o cliente. Ele ainda não tem nenhuma " +
-      "capacidade marcada para registrar isso no sistema, então nada foi agendado nem anotado. " +
-      "Abra a conversa para ver o que foi combinado — e, na tela do assistente, marque o que ele " +
-      "pode fazer.",
+      "Dans cette conversation, l’assistant a convenu de quelque chose avec le client. Il n’a encore " +
+      "aucune capacité activée pour l’enregistrer, donc rien n’a été programmé ni noté. " +
+      "Ouvrez la conversation pour voir ce qui a été convenu — et, sur l’écran de l’assistant, cochez ce qu’il " +
+      "peut faire.",
     operador_nao_agiu:
-      "Nesta conversa o assistente combinou algo com o cliente e não registrou nenhum próximo " +
-      "passo para isso — não há retorno agendado. Abra a conversa, veja o que foi combinado e " +
-      "decida quem faz.",
+      "Dans cette conversation, l’assistant a convenu de quelque chose avec le client sans prévoir de " +
+      "suite — aucune relance n’est programmée. Ouvrez la conversation, voyez ce qui a été convenu et " +
+      "décidez qui s’en charge.",
     operador_nao_rodou:
-      "Nesta conversa o assistente combinou algo com o cliente, e a parte que organiza o sistema " +
-      "não rodou neste atendimento. Nada foi agendado. Abra a conversa para ver o que foi " +
-      "combinado e decida quem faz.",
+      "Dans cette conversation, l’assistant a convenu de quelque chose avec le client, mais la partie qui organise le suivi " +
+      "ne s’est pas lancée. Rien n’a été programmé. Ouvrez la conversation pour voir ce qui a été " +
+      "convenu et décidez qui s’en charge.",
   };
 
   return { title, body: CORPO[porque] };

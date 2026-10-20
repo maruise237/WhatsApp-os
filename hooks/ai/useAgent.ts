@@ -97,7 +97,7 @@ export function useUpdateAgent(id: string) {
     onSuccess: (data) => {
       qc.setQueryData(agentQueryKey(id), data);
       qc.invalidateQueries({ queryKey: ["ai", "agents", "list"] });
-      toast.success("Salvo");
+      toast.success("Enregistré");
     },
   });
 }

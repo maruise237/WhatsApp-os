@@ -40,20 +40,20 @@ import { useIdioma, useT } from "@/hooks/i18n/useT";
  * escondia.
  */
 const SCOPES: { id: string; label: string }[] = [
-  { id: "mcp:read", label: "Agentes de IA podem LER o CRM (MCP)" },
-  { id: "mcp:write", label: "Agentes de IA podem AGIR no CRM (MCP)" },
+  { id: "mcp:read", label: "Les agents IA peuvent LIRE le CRM (MCP)" },
+  { id: "mcp:write", label: "Les agents IA peuvent AGIR dans le CRM (MCP)" },
   // Sem isto o token nasce como 'agent' e as ferramentas de nível gerente
   // (criar lead, atribuir conversa) respondem "Role 'agent' insufficient".
   // O papel viaja junto dos escopos (ver lib/mcp/auth.ts) e também não
   // aparecia em lugar nenhum da interface.
-  { id: "role:manager", label: "Tratar o token como gerente (necessário p/ criar e atribuir)" },
-  { id: "contacts:read", label: "Ler contatos" },
-  { id: "contacts:write", label: "Criar e editar contatos" },
+  { id: "role:manager", label: "Traiter le jeton comme un manager (nécessaire pour créer et attribuer)" },
+  { id: "contacts:read", label: "Lire les contacts" },
+  { id: "contacts:write", label: "Créer et modifier des contacts" },
   { id: "leads:read", label: "Ler leads" },
-  { id: "leads:write", label: "Criar e editar leads" },
-  { id: "messages:read", label: "Ler mensagens" },
-  { id: "messages:write", label: "Enviar mensagens" },
-  { id: "audit:read", label: "Ler o log de auditoria" },
+  { id: "leads:write", label: "Créer et modifier des leads" },
+  { id: "messages:read", label: "Lire les messages" },
+  { id: "messages:write", label: "Envoyer des messages" },
+  { id: "audit:read", label: "Lire le journal d’audit" },
 ];
 
 export function ApiTokensClient() {

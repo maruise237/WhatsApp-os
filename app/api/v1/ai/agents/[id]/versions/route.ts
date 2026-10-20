@@ -44,7 +44,7 @@ async function assertAgentInOrg(
 export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  if (!UUID_RX.test(id)) return fail("invalid_request", "id inválido.", 400, { requestId });
+  if (!UUID_RX.test(id)) return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 
   const authz = await requireRole("manager", { requestId, resource: "ai_agents" });
   if (!authz.ok) return authz.response;
@@ -58,14 +58,14 @@ export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("agent_id", id)
     .order("version_number", { ascending: false });
 
-  if (error) return fail("internal_error", "Erro ao listar versions.", 500, { requestId });
+  if (error) return fail("internal_error", "Erreur lors du chargement des versions.", 500, { requestId });
   return ok(data ?? [], { requestId });
 }
 
 export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  if (!UUID_RX.test(id)) return fail("invalid_request", "id inválido.", 400, { requestId });
+  if (!UUID_RX.test(id)) return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
   if (!authz.ok) return authz.response;
@@ -75,12 +75,12 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = versionCreateSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
 
   const agentCheck = await assertAgentInOrg(id, activeOrg.orgId);
   if (!agentCheck.ok) {
-    return fail("not_found", "Agent não encontrado.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable.", 404, { requestId });
   }
 
   const admin = createAdminClient();
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
     if (v.credential_id === null && lerAmbiente().chavesDeProvedor[v.provider] !== true) {
       return fail(
         "credential_required",
-        `Esta instalação não tem chave de ${v.provider} no ambiente. Cadastre uma chave em IA › Credenciais ou escolha outra empresa de inteligência artificial.`,
+        `Cette installation n’a pas de clé ${v.provider} dans son environnement. Ajoutez une clé dans IA › Identifiants ou choisissez un autre fournisseur d’intelligence artificielle.`,
         422,
         { requestId },
       );
@@ -164,9 +164,9 @@ export async function POST(req: NextRequest, ctx: Ctx): Promise<Response> {
       return ok(data, { status: 201, requestId });
     }
     if (error?.code !== "23505") {
-      return fail("internal_error", "Erro ao criar version.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de la création de la version.", 500, { requestId });
     }
   }
 
-  return fail("internal_error", "Conflito de versionamento — tente novamente.", 500, { requestId });
+  return fail("internal_error", "Conflit de version — veuillez réessayer.", 500, { requestId });
 }

@@ -47,18 +47,18 @@ export function ConversaSlot({ conversa }: { conversa: Lead["conversa"] }) {
         "group/conversa mt-1 flex items-center gap-1.5 rounded px-1 py-0.5 text-[11px]",
         "text-text-muted transition-colors hover:bg-muted hover:text-foreground",
       )}
-      title="Abrir esta conversa no Inbox"
+      title="Ouvrir cette conversation dans la boîte de réception"
     >
       <ChatCircle size={12} weight="regular" className="shrink-0" aria-hidden />
       <span className="truncate">
-        {preview || <span className="italic">conversa sem mensagens</span>}
+        {preview || <span className="italic">conversation sans messages</span>}
       </span>
       {temNaoLidas && (
         // O número, não um ponto: "3 sem ler" e "12 sem ler" pedem urgências
         // diferentes, e um ponto colapsa as duas.
         <span
           className="ml-auto shrink-0 rounded-full bg-primary px-1.5 text-[10px] font-medium text-primary-foreground tabular-nums"
-          aria-label={`${conversa.unread} sem ler`}
+          aria-label={`${conversa.unread} non lus`}
         >
           {conversa.unread}
         </span>

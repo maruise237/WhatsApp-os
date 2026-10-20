@@ -80,6 +80,6 @@ describe("ApiErrorToast", () => {
   it("calls toast.error with generic message for non-ApiError", () => {
     showApiError(new Error("oops"));
     expect(toast.error).toHaveBeenCalledTimes(1);
-    expect(toast.error).toHaveBeenCalledWith("Erro inesperado. Tente novamente.");
+    expect(toast.error).toHaveBeenCalledWith("Erreur inattendue. Réessayez.");
   });
 });

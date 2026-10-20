@@ -64,14 +64,14 @@ function CreateOrMoveLeadForm({
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       <div className="space-y-1">
-        <Label>Funil</Label>
+        <Label>Tableau</Label>
         <Select
           value={config.pipeline_id}
           onValueChange={(v) => onChange({ pipeline_id: v, stage_id: "" })}
           disabled={pipelinesLoading}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Escolha o funil" />
+            <SelectValue placeholder="Choisissez le tableau" />
           </SelectTrigger>
           <SelectContent>
             {pipelines.map((p) => (
@@ -83,7 +83,7 @@ function CreateOrMoveLeadForm({
         </Select>
       </div>
       <div className="space-y-1">
-        <Label>Etapa</Label>
+        <Label>Étape</Label>
         <Select
           value={config.stage_id}
           onValueChange={(v) => onChange({ ...config, stage_id: v })}
@@ -91,7 +91,7 @@ function CreateOrMoveLeadForm({
         >
           <SelectTrigger>
             <SelectValue
-              placeholder={config.pipeline_id ? "Escolha a etapa" : "Escolha o funil primeiro"}
+              placeholder={config.pipeline_id ? "Choisissez l’étape" : "Choisissez d’abord le tableau"}
             />
           </SelectTrigger>
           <SelectContent>
@@ -108,9 +108,9 @@ function CreateOrMoveLeadForm({
 }
 
 const TEMPLATE_VARS = [
-  { token: "{{nome}}", label: "Nome" },
-  { token: "{{telefone}}", label: "Telefone" },
-  { token: "{{lead.title}}", label: "Título do lead" },
+  { token: "{{nome}}", label: "Nom" },
+  { token: "{{telefone}}", label: "Téléphone" },
+  { token: "{{lead.title}}", label: "Titre du lead" },
 ];
 
 function SendWhatsappForm({
@@ -136,13 +136,13 @@ function SendWhatsappForm({
   return (
     <div className="space-y-2">
       <div className="space-y-1">
-        <Label>Número de WhatsApp</Label>
+        <Label>Numéro WhatsApp</Label>
         <Select
           value={config.channel_session_id}
           onValueChange={(v) => onChange({ ...config, channel_session_id: v })}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Escolha o número" />
+            <SelectValue placeholder="Choisissez le numéro" />
           </SelectTrigger>
           <SelectContent>
             {(sessions ?? []).map((s) => (
@@ -154,12 +154,12 @@ function SendWhatsappForm({
         </Select>
         {(sessions ?? []).some((s) => s.status !== "WORKING") ? (
           <p className="text-xs text-muted-foreground">
-            Números desconectados aparecem desabilitados — reconecte em Conexões antes de usar.
+            Les numéros déconnectés apparaissent désactivés — reconnectez-les dans Connexions avant de les utiliser.
           </p>
         ) : null}
       </div>
       <div className="space-y-1">
-        <Label>Mensagem</Label>
+        <Label>Message</Label>
         <div className="flex flex-wrap gap-1">
           {TEMPLATE_VARS.map((v) => (
             <Button
@@ -178,14 +178,13 @@ function SendWhatsappForm({
           rows={4}
           value={config.template}
           onChange={(e) => onChange({ ...config, template: e.target.value })}
-          placeholder="Oi {{nome}}, tudo bem?"
+          placeholder="Bonjour {{nome}}, comment allez-vous ?"
         />
         <p className="text-xs text-muted-foreground">
           {/* NÃO cravar "7h e 22h": a janela passou a vir dos ajustes DO NÚMERO
               (Conexões), no fuso da sua organização, e quem a mudou lá veria a
               tela continuar prometendo outro horário. Rótulo visível é contrato. */}
-          Respeitamos a janela de envio e o limite diário configurados para esse número em
-          Conexões — fora da janela, a mensagem espera a próxima.
+          Nous respectons la plage d’envoi et la limite quotidienne configurées pour ce numéro dans Connexions — hors de la plage, le message attend la suivante.
         </p>
       </div>
     </div>
@@ -217,37 +216,37 @@ function SendAiMessageForm({
   return (
     <div className="space-y-3">
       <div className="space-y-1">
-        <Label>Qual agente escreve</Label>
+        <Label>Quel agent écrit</Label>
         <Select
           value={config.agent_id}
           onValueChange={(v) => onChange({ ...config, agent_id: v })}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Escolha o agente" />
+            <SelectValue placeholder="Choisissez l’agent" />
           </SelectTrigger>
           <SelectContent>
             {(agentes ?? []).map((a) => (
               <SelectItem key={a.id} value={a.id} disabled={!a.published_version_id}>
-                {a.name + (a.published_version_id ? "" : " — não publicado")}
+                {a.name + (a.published_version_id ? "" : "— non publié")}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <p className="text-xs text-muted-foreground">
           {semPublicado
-            ? "Nenhum agente está publicado. Publique um em Agentes de IA para poder usá-lo aqui."
-            : "Ele escreve com o mesmo tom e o mesmo conhecimento que usa no atendimento."}
+            ? "Aucun agent n’est publié. Publiez-en un dans Agents IA pour pouvoir l’utiliser ici."
+            : "Il écrit avec le même ton et les mêmes connaissances que pendant les échanges."}
         </p>
       </div>
 
       <div className="space-y-1">
-        <Label>Número de WhatsApp</Label>
+        <Label>Numéro WhatsApp</Label>
         <Select
           value={config.channel_session_id}
           onValueChange={(v) => onChange({ ...config, channel_session_id: v })}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Escolha o número" />
+            <SelectValue placeholder="Choisissez le numéro" />
           </SelectTrigger>
           <SelectContent>
             {(sessions ?? []).map((s) => (
@@ -260,7 +259,7 @@ function SendAiMessageForm({
       </div>
 
       <div className="space-y-1">
-        <Label htmlFor="ai-instruction">O que a IA deve fazer com os dados</Label>
+        <Label htmlFor="ai-instruction">Ce que l’IA doit faire des données</Label>
         <Textarea
           id="ai-instruction"
           rows={4}
@@ -273,9 +272,7 @@ function SendAiMessageForm({
           }
         />
         <p className="text-xs text-muted-foreground">
-          O agente já sabe que é a PRIMEIRA mensagem, logo depois de a pessoa preencher o
-          formulário, e recebe todos os campos que ela respondeu. Aqui você diz o que fazer com
-          eles — quanto mais concreto, melhor a mensagem.
+          L’agent sait déjà qu’il s’agit du PREMIER message, juste après que la personne a rempli le formulaire, et il reçoit tous les champs qu’elle a renseignés. Ici, vous indiquez quoi en faire — plus c’est concret, meilleur sera le message.
         </p>
       </div>
     </div>
@@ -286,7 +283,7 @@ function AddTagForm({ config, onChange }: FormProps<{ tags: string[] }>) {
   const [text, setText] = React.useState(config.tags.join(", "));
   return (
     <div className="space-y-1">
-      <Label>Tags (separadas por vírgula)</Label>
+      <Label>Tags (séparés par des virgules)</Label>
       <Input
         value={text}
         onChange={(e) => {
@@ -297,7 +294,7 @@ function AddTagForm({ config, onChange }: FormProps<{ tags: string[] }>) {
             .filter(Boolean);
           onChange({ tags });
         }}
-        placeholder="boas-vindas, novo-lead"
+        placeholder="bienvenue, nouveau-lead"
       />
     </div>
   );
@@ -307,10 +304,10 @@ function AssignOwnerForm({ config, onChange }: FormProps<{ user_id: string }>) {
   const { data: members } = useAssignableMembers(true);
   return (
     <div className="space-y-1">
-      <Label>Atendente</Label>
+      <Label>Conseiller</Label>
       <Select value={config.user_id} onValueChange={(v) => onChange({ user_id: v })}>
         <SelectTrigger>
-          <SelectValue placeholder="Escolha o atendente" />
+          <SelectValue placeholder="Choisissez le conseiller" />
         </SelectTrigger>
         <SelectContent>
           {(members ?? []).map((m) => (
@@ -335,16 +332,16 @@ function CallWebhookForm({
   return (
     <div className="space-y-2">
       <div className="space-y-1">
-        <Label>Endereço (URL)</Label>
+        <Label>Adresse (URL)</Label>
         <Input
           type="url"
           value={config.url}
           onChange={(e) => onChange({ ...config, url: e.target.value })}
-          placeholder="https://meusistema.com/webhook"
+          placeholder="https://monsysteme.com/webhook"
         />
       </div>
       <div className="space-y-1">
-        <Label>Segredo (opcional)</Label>
+        <Label>Secret (facultatif)</Label>
         <Input
           type="password"
           value={config.secret ?? ""}
@@ -354,12 +351,12 @@ function CallWebhookForm({
             const { secret_enc: _enc, ...rest } = config;
             onChange(next ? { ...rest, secret: next } : { ...rest, secret: undefined });
           }}
-          placeholder={hasStoredSecret ? "•••••••• (definido — digite para trocar)" : "uma senha só sua"}
+          placeholder={hasStoredSecret ? "•••••••• (défini — saisissez pour remplacer)" : "un mot de passe rien qu’à vous"}
         />
         <p className="text-xs text-muted-foreground">
           {hasStoredSecret
-            ? "Já existe um segredo guardado com segurança. Digitar aqui substitui; limpar remove."
-            : "Se preencher, enviaremos uma assinatura para o outro sistema conferir que fomos nós."}
+            ? "Un secret est déjà stocké en sécurité. Saisir ici le remplace ; vider le supprime."
+            : "Si vous le renseignez, nous enverrons une signature pour que l’autre système vérifie que c’est bien nous."}
         </p>
       </div>
     </div>

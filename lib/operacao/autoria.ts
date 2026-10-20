@@ -82,8 +82,8 @@ export function especieDe(actor: Actor): EspecieDeAutor {
  * dois casos com nome e hora.
  */
 export function autorNaTela(kind: string | null): string | null {
-  if (kind === "ai") return "alterado pelo assistente";
-  if (kind === "system") return "alterado automaticamente pelo sistema";
+  if (kind === "ai") return "modifié par l’assistant";
+  if (kind === "system") return "modifié automatiquement par l’application";
   // `user` e `null` não falam: ver o aviso acima.
   return null;
 }

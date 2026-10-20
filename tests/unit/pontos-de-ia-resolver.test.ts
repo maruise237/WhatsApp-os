@@ -213,7 +213,7 @@ describe("a decisão explica a si mesma", () => {
       }),
     );
     expect(d.avisos).toHaveLength(1);
-    expect(d.avisos[0]).toContain("versão publicada do agente");
+    expect(d.avisos[0]).toContain("version publiée de l’assistant");
   });
 
   it("não inventa aviso quando não há conflito", () => {
@@ -232,7 +232,7 @@ describe("aviso de capacidade que não precisa de catálogo", () => {
         binding: binding({ purpose: "embedding_consultar", model_id: "claude-sonnet-5" }),
       }),
     );
-    expect(d.avisos.join(" ")).toContain("modelo de embedding");
+    expect(d.avisos.join(" ")).toContain("modèle d’embedding");
   });
 
   it("aceita modelo de embedding sem reclamar", () => {

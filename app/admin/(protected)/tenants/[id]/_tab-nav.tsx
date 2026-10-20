@@ -45,7 +45,7 @@ export function TabNav({ basePath, tabs }: TabNavProps) {
             {tab.label}
             {tab.disabled && (
               <span className="ml-1.5 text-[10px] font-normal opacity-60">
-                em breve
+                bientôt
               </span>
             )}
           </Link>

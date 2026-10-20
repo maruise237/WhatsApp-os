@@ -57,10 +57,10 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (error) {
-    return fail("internal_error", "Erro ao buscar mensagem.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la recherche du message.", 500, { requestId });
   }
   if (!msg || (!msg.media_storage_path && !msg.media_url)) {
-    return fail("not_found", "Mensagem sem mídia.", 404, { requestId });
+    return fail("not_found", "Message sans média.", 404, { requestId });
   }
 
   if (msg.media_storage_path) {
@@ -105,7 +105,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
       if (!adapter.fetchInboundMedia || !sessionRef) {
         // Canal sem mídia de entrada não é defeito: é estado normal. 404 diz a
         // verdade ("não há o que servir"); 502 acusaria uma falha inexistente.
-        return fail("not_found", "Mensagem sem mídia.", 404, { requestId });
+        return fail("not_found", "Message sans média.", 404, { requestId });
       }
 
       const media = await adapter.fetchInboundMedia({
@@ -123,9 +123,9 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
         },
       });
     } catch {
-      return fail("bad_gateway", "Mídia indisponível no momento.", 502, { requestId });
+      return fail("bad_gateway", "Média indisponible pour le moment.", 502, { requestId });
     }
   }
 
-  return fail("not_found", "Mensagem sem mídia.", 404, { requestId });
+  return fail("not_found", "Message sans média.", 404, { requestId });
 }

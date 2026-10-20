@@ -16,7 +16,7 @@ export type UseRecoveryCodeResult =
 
 const inputSchema = z.object({
   email: z.string().email(),
-  code: z.string().regex(/^[A-Z0-9]{8}$/, "Código inválido"),
+  code: z.string().regex(/^[A-Z0-9]{8}$/, "Code invalide"),
 });
 
 /**

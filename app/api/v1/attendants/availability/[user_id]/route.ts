@@ -45,7 +45,7 @@ export async function PATCH(
   if (!isSelf && !isManager) {
     return fail(
       "forbidden_role",
-      "Só o próprio atendente ou um manager pode alterar esta disponibilidade.",
+      "Seul l’agent concerné ou un manager peut modifier cette disponibilité.",
       403,
       { requestId },
     );
@@ -77,7 +77,7 @@ export async function PATCH(
       .is("revoked_at", null)
       .maybeSingle();
     if (memberErr) return fail("internal_error", memberErr.message, 500, { requestId });
-    if (!member) return fail("not_found", "Atendente não encontrado na organização.", 404, { requestId });
+    if (!member) return fail("not_found", "Agent introuvable dans l’organisation.", 404, { requestId });
   }
 
   const now = new Date().toISOString();

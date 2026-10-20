@@ -22,6 +22,10 @@ interface Props {
 }
 
 const TIMEZONES = [
+  "Africa/Douala",
+  "Africa/Abidjan",
+  "Africa/Lagos",
+  "Europe/Paris",
   "America/Sao_Paulo",
   "America/Manaus",
   "America/Belem",

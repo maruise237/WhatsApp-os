@@ -66,7 +66,7 @@ describe('validarArquivamento', () => {
     // criação de lead que resolve funil por default fica sem destino.
     const r = validarArquivamento(funis, 'f1', semDependencia);
     expect(r.ok).toBe(false);
-    expect(r.ok === false && r.erro).toMatch(/padrão/i);
+    expect(r.ok === false && r.erro).toMatch(/par défaut/i);
   });
 
   it('recusa quando é destino de fonte de webhook, NOMEANDO a fonte', () => {
@@ -97,7 +97,7 @@ describe('validarArquivamento', () => {
     // Mandar "eleja outro padrão" para quem só tem um funil é um beco sem saída.
     const soUm = [funis[0]!];
     const r = validarArquivamento(soUm, 'f1', semDependencia);
-    expect(r.ok === false && r.erro).toMatch(/único/i);
+    expect(r.ok === false && r.erro).toMatch(/seul tableau/i);
   });
 });
 
@@ -105,7 +105,7 @@ describe('podeExcluirDeVez', () => {
   it('recusa excluir funil com negócios, oferecendo arquivar', () => {
     const r = podeExcluirDeVez(funis, 'f2', { ...semDependencia, negocios: 3 });
     expect(r.ok).toBe(false);
-    expect(r.ok === false && r.erro).toMatch(/arquiv/i);
+    expect(r.ok === false && r.erro).toMatch(/archiv/i);
   });
 
   it('permite excluir o funil criado por engano — zero de tudo', () => {

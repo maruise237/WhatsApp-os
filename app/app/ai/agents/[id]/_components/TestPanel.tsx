@@ -177,7 +177,7 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
       toast.success(t("Teste executado."));
     } catch (err) {
       if (err instanceof ApiError) {
-        toast.error(err.message ?? `Erro: ${err.code}`);
+        toast.error(err.message ?? `Erreur : ${err.code}`);
       } else {
         toast.error(t("Erro inesperado."));
       }

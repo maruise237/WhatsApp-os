@@ -112,7 +112,7 @@ describe("veto vira atividade no negócio certo", () => {
       source_module: "agent_guardrails",
       source_id: traceId,
       trace_no_lastro: traceId,
-      reason: "Não enviei: o contato pediu para parar de receber mensagens",
+      reason: "Non envoyé : le contact a demandé à ne plus recevoir de messages",
     });
   });
 
@@ -136,7 +136,7 @@ describe("veto vira atividade no negócio certo", () => {
     expect(rows[0]).toMatchObject({
       actor_kind: "system",
       actor_agent_id: null,
-      reason: "Não enviei: fora da janela de horário permitida",
+      reason: "Non envoyé : en dehors des heures autorisées",
     });
   });
 });
@@ -184,13 +184,13 @@ describe("veto sem negócio para pendurar", () => {
 
 describe("vetoReason", () => {
   it("traduz os gates conhecidos para linguagem de gente", () => {
-    expect(vetoReason("stop", "opted_out")).toContain("pediu para parar");
-    expect(vetoReason("budget", "exhausted")).toContain("orçamento");
+    expect(vetoReason("stop", "opted_out")).toContain("ne plus recevoir");
+    expect(vetoReason("budget", "exhausted")).toContain("budget");
   });
 
   it("gate desconhecido não vira linha vazia — mostra a regra e o código", () => {
     expect(vetoReason("gate_novo", "cod_x")).toBe(
-      'Não enviei: bloqueado pela regra "gate_novo" (cod_x)',
+      'Non envoyé : bloqué par la règle "gate_novo" (cod_x)',
     );
   });
 });

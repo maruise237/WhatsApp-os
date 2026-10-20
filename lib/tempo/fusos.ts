@@ -31,6 +31,13 @@
  * termina — e a busca é justamente onde ele digita errado.
  */
 export const FUSOS_OFERECIDOS: { codigo: string; rotulo: string }[] = [
+  { codigo: "Africa/Douala", rotulo: "Douala, Yaoundé (Afrique centrale)" },
+  { codigo: "Africa/Abidjan", rotulo: "Abidjan, Dakar (Afrique de l’Ouest, GMT)" },
+  { codigo: "Africa/Lagos", rotulo: "Lagos, Cotonou (Afrique de l’Ouest, GMT+1)" },
+  { codigo: "Africa/Casablanca", rotulo: "Casablanca (Maroc)" },
+  { codigo: "Africa/Johannesburg", rotulo: "Lubumbashi, Kigali (GMT+2)" },
+  { codigo: "Indian/Antananarivo", rotulo: "Antananarivo, Nairobi (GMT+3)" },
+  { codigo: "Europe/Paris", rotulo: "Paris (France)" },
   { codigo: "America/Asuncion", rotulo: "Assunção (Paraguai)" },
   { codigo: "America/Argentina/Buenos_Aires", rotulo: "Buenos Aires (Argentina)" },
   { codigo: "America/Montevideo", rotulo: "Montevidéu (Uruguai)" },

@@ -45,12 +45,12 @@ export function PreviaDaDefinicao({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-xs font-medium text-muted-foreground">Como o cliente vai ver</p>
+      <p className="text-xs font-medium text-muted-foreground">Ce que verra le client</p>
 
       <div className="rounded-lg bg-muted/60 p-3">
         {vazia ? (
           <p className="text-xs italic text-muted-foreground">
-            Preencha o texto para ver a prévia.
+            Remplissez le texte pour voir l’aperçu.
           </p>
         ) : (
           <div className="max-w-[22rem] rounded-lg rounded-tl-sm bg-background p-2.5 shadow-sm">
@@ -59,7 +59,7 @@ export function PreviaDaDefinicao({
               // Next a buscaria de novo depois de ela expirar.
               <Image
                 src={midiaUrl}
-                alt="Cabeçalho"
+                alt="En-tête"
                 width={320}
                 height={180}
                 unoptimized
@@ -87,8 +87,7 @@ export function PreviaDaDefinicao({
 
       {faltando.length > 0 && (
         <p className="text-[11px] text-destructive">
-          Falta {faltando.map((n) => `{{${n}}}`).join(", ")} no texto. A numeração é sequencial e a
-          plataforma recusa quando há buraco.
+          Manque {faltando.map((n) => `{{${n}}}`).join(", ")} dans le texte. La numérotation est séquentielle et la plateforme refuse s’il y a un trou.
         </p>
       )}
     </div>

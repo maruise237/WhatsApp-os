@@ -13,9 +13,9 @@ export function PlatformAdminsClient() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Platform Admins</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Administrateurs de la plateforme</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Administradores com acesso privilegiado à plataforma
+          Administrateurs disposant d’un accès privilégié à la plateforme
         </p>
       </div>
 
@@ -27,7 +27,7 @@ export function PlatformAdminsClient() {
         <PlatformAdminsTableSkeleton />
       ) : isError ? (
         <div className="flex items-center justify-center rounded-lg border py-12 text-sm text-muted-foreground">
-          Erro ao carregar platform admins. Tente recarregar.
+          Erreur lors du chargement des administrateurs de la plateforme. Essayez de recharger.
         </div>
       ) : (
         <PlatformAdminsTable data={data ?? []} />

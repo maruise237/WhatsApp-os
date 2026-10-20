@@ -124,5 +124,5 @@ export async function resolverOperador(): Promise<Operador> {
 
 /** Como o documento se refere ao operador quando não dá para saber quem é. */
 export function nomeDoOperador(op: Operador): string {
-  return op.razaoSocial ?? op.nome ?? "o operador desta instalação";
+  return op.razaoSocial ?? op.nome ?? "l’exploitant de cette installation";
 }

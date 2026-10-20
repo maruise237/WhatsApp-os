@@ -117,7 +117,7 @@ describe("header do inbox — não trava a largura da tela", () => {
     // em que o painel lateral entra na tela com um "Ver contato" próprio. A
     // distinção importa — remover do DOM tiraria a ação de quem usa 1024px, que
     // é onde o painel não existe e esta é a única porta para o contato.
-    const link = screen.getByText("Ver contato").closest("a, button") as HTMLElement;
+    const link = screen.getByText("Voir le contact").closest("a, button") as HTMLElement;
     expect(link, "o link para o contato sumiu do markup").toBeTruthy();
     const classes = `${link.className} ${link.parentElement?.className ?? ""}`;
     expect(

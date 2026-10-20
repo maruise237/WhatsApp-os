@@ -44,7 +44,7 @@ const bodySchema = z
     depois_de: z.string().min(1).nullable().optional(),
   })
   .strict()
-  .refine((b) => Object.keys(b).length > 0, { message: "Nada para alterar." });
+  .refine((b) => Object.keys(b).length > 0, { message: "Rien à modifier." });
 
 export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
@@ -57,12 +57,12 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   try {
     json = await req.json();
   } catch {
-    return fail("invalid_request", "Corpo não é JSON válido.", 400, { requestId });
+    return fail("invalid_request", "Le corps de la requête n’est pas un JSON valide.", 400, { requestId });
   }
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return fail("unprocessable_entity", "Não entendi o que mudar nesta etapa.", 422, {
+    return fail("unprocessable_entity", "Je n’ai pas compris ce qu’il faut modifier dans cette étape.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

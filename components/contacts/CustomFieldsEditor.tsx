@@ -116,7 +116,7 @@ export function CustomFieldsEditor({ fields, value, onChange, disabled }: Props)
                   disabled={disabled}
                 >
                   <SelectTrigger id={id}>
-                    <SelectValue placeholder="Selecione…" />
+                    <SelectValue placeholder="Sélectionnez…" />
                   </SelectTrigger>
                   <SelectContent>
                     {f.options?.map((o) => (
@@ -194,7 +194,7 @@ export function CustomFieldsEditor({ fields, value, onChange, disabled }: Props)
                   onChange={(e) => set(f.key, e.target.value)}
                   disabled={disabled}
                 />
-                <p className="text-xs text-muted-foreground">Formato E.164</p>
+                <p className="text-xs text-muted-foreground">Format E.164</p>
               </div>
             );
           case "url":

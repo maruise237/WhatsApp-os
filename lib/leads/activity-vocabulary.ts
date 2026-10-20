@@ -76,56 +76,56 @@ export type ActivityType =
   | "conversation_ai_paused";
 
 export const ACTIVITY_LABELS: Record<ActivityType, string> = {
-  lead_created: "Entrou pelo WhatsApp",
-  stage_changed: "Mudou de estágio",
-  agent_move_corrected: "Correção do que o assistente tinha feito",
-  note: "Anotação",
-  ai_turn: "Atendimento da IA",
-  send_vetoed: "Envio bloqueado",
-  handoff_triggered: "Passou para humano",
+  lead_created: "Arrivé par WhatsApp",
+  stage_changed: "A changé de colonne",
+  agent_move_corrected: "Correction de ce que l’assistant avait fait",
+  note: "Note",
+  ai_turn: "Réponse de l’IA",
+  send_vetoed: "Envoi bloqué",
+  handoff_triggered: "Confié à une personne",
   // A IDA existia e a VOLTA não: a linha do tempo mostrava o cliente saindo para
   // uma pessoa e nunca voltando, como se o atendimento tivesse parado ali. Meia
   // continuidade lida como continuidade — e é justamente na volta que quem lê
   // precisa saber que o combinado com a pessoa foi repassado ao agente.
-  handoff_resolved: "Voltou para o atendimento automático",
+  handoff_resolved: "Rendu aux réponses automatiques",
   // A RECUSA é sinal, não ausência de sinal: "o humano viu e disse não" é o que
   // impede o agente de repropor o mesmo. Ignorar sem registro faz a IA insistir
   // no que já foi negado — por isso os dois lados geram atividade.
-  next_action_approved: "Próxima ação aprovada",
-  next_action_dismissed: "Próxima ação descartada",
+  next_action_approved: "Prochaine action approuvée",
+  next_action_dismissed: "Prochaine action écartée",
   // Editar campo era INVISÍVEL na timeline: a IA deixava rastro e o humano não.
   // Não era "falta um emissor" — era meia continuidade vendida como
   // continuidade, e o dossiê teria mostrado só metade da vida do lead.
-  lead_edited: "Dados do negócio alterados",
+  lead_edited: "Infos de l’affaire modifiées",
   // O NEGÓCIO ESFRIANDO É ACONTECIMENTO, não telemetria: é o sistema dizendo
   // "ninguém falou com esta pessoa dentro do prazo deste estágio". Sem linha na
   // timeline, o card mudaria de cor e o dossiê não teria explicação — e o
   // usuário concluiria que a timeline está incompleta, não que o negócio esfriou.
-  lead_cooled: "Negócio esfriou",
-  lead_reactivated: "Negócio voltou a andar",
+  lead_cooled: "Affaire refroidie",
+  lead_reactivated: "L’affaire avance à nouveau",
   // As três decisões sobre a proposta de reativação. VENCER é uma delas: a
   // ausência de decisão humana é informação sobre o negócio, e a proposta some
   // do card justamente para não simular atenção — a timeline é onde isso fica
   // dito, senão o botão sumiria sem explicação.
-  reactivation_accepted: "Retomada de contato aprovada",
-  reactivation_dismissed: "Retomada de contato descartada",
-  reactivation_expired: "Sugestão de retomada venceu sem decisão",
+  reactivation_accepted: "Reprise de contact approuvée",
+  reactivation_dismissed: "Reprise de contact écartée",
+  reactivation_expired: "Proposition de reprise expirée sans décision",
   // O RETORNO É O ANTI-MORTE (invariante 4): marcar e desmarcar são os dois
   // acontecimentos que decidem se a demanda continua viva. Sem as duas linhas,
   // o negócio some do radar (ou volta a ele) e a timeline não sabe explicar por
   // quê — e é justamente o cancelamento que o agente precisa enxergar ao
   // retomar, para não repropor o que uma pessoa já desmarcou.
-  followup_scheduled: "Retorno agendado",
-  followup_cancelled: "Retorno cancelado",
+  followup_scheduled: "Relance programmée",
+  followup_cancelled: "Relance annulée",
   // PAUSAR NÃO É CANCELAR, e a diferença importa para quem pega o atendimento
   // depois: cancelado é decisão fechada, pausado é o fluxo parado esperando uma
   // pessoa. Sem as duas linhas, quem lê a timeline não sabe se o silêncio do
   // agente é desistência ou espera — e, no caso do adiamento, nem que existe
   // uma data combinada.
-  followup_paused: "Follow-up pausado",
-  followup_resumed: "Follow-up retomado",
-  followup_snoozed: "Follow-up adiado",
-  followup_step_skipped: "Passo do follow-up pulado",
+  followup_paused: "Relance en pause",
+  followup_resumed: "Relance reprise",
+  followup_snoozed: "Relance reportée",
+  followup_step_skipped: "Étape de relance sautée",
   // PROMESSA SEM RESPONSÁVEL. Entra na timeline pelo mesmo critério do
   // `diffCheckpoint`: só o que muda o que alguém faria a seguir. Turno em que o
   // Operador AGIU não gera linha própria — as ferramentas dele já geram as delas
@@ -134,27 +134,27 @@ export const ACTIVITY_LABELS: Record<ActivityType, string> = {
   //
   // O rótulo não diz "não cumprida": o sistema não apura cumprimento, apura se
   // alguém assumiu.
-  promise_unowned: "Promessa sem responsável",
+  promise_unowned: "Promesse sans responsable",
   // ENCERRAR É O OUTRO LADO do invariante 4: uma demanda aberta precisa de
   // próximo passo OU de desfecho registrado. Fechar como ganho ou perdido era
   // invisível na timeline — só existia em audit e event_log, que ninguém lê na
   // tela — e o dossiê de um negócio fechado terminava sem dizer que fechou.
-  demand_closed: "Demanda encerrada",
-  consent_declined: "Consentimento de contato recusado no formulário",
+  demand_closed: "Demande clôturée",
+  consent_declined: "Accord de contact refusé dans le formulaire",
   // Rótulos com OBJETO, nunca verbo nu: "Liberou" sozinho não diz o quê, e numa
   // clínica "liberar" é o que se faz com um exame. O resto do arquivo já segue
   // essa régua ("Retorno agendado", "Demanda encerrada").
-  conversation_claimed: "Assumiu a conversa",
-  conversation_transferred: "Transferiu a conversa",
-  conversation_released: "Liberou a conversa",
+  conversation_claimed: "A pris la conversation",
+  conversation_transferred: "A transféré la conversation",
+  conversation_released: "A libéré la conversation",
   // "automático" e não "IA": a palavra do estado já é contrato em quatro
   // arquivos e o controle NEGATIVO de `handoff-por-orcamento.test.ts` usa
   // literalmente "Voltar para a IA" como a sabotagem que deve reprovar.
-  conversation_ai_paused: "Pausou o automático",
+  conversation_ai_paused: "A mis l’automatique en pause",
 };
 
 /** Quando o tipo é legado/desconhecido, a linha ainda é honesta — sem jargão. */
-export const ACTIVITY_LABEL_FALLBACK = "Atividade registrada";
+export const ACTIVITY_LABEL_FALLBACK = "Activité enregistrée";
 
 /**
  * Rótulo para exibir. Aceita `string` porque o banco tem histórico anterior a
@@ -215,32 +215,32 @@ export function actorName(
 export function actorLabel(actorKind: string | null): string {
   switch (actorKind) {
     case "user":
-      return "Você/time";
+      return "Vous/équipe";
     case "ai":
-      return "Agente";
+      return "Assistant";
     case "contact":
-      return "Cliente";
+      return "Client";
     case "rule":
-      return "Automação";
+      return "Automatisation";
     case "system":
-      return "Sistema";
+      return "Système";
     default:
-      return "Autor não registrado";
+      return "Auteur non enregistré";
   }
 }
 
 /** Como os campos do lead se chamam para quem lê — nunca o nome da coluna. */
 const NOME_DO_CAMPO: Record<string, string> = {
-  title: "o título",
-  description: "a descrição",
-  value_cents: "o valor",
-  currency: "a moeda",
-  owner_user_id: "o responsável",
-  owner_agent_id: "o agente responsável",
-  expected_close_date: "a data prevista de fechamento",
-  tags: "as tags",
-  custom_fields: "os campos personalizados",
-  lost_reason: "o motivo da perda",
+  title: "le titre",
+  description: "la description",
+  value_cents: "le montant",
+  currency: "la devise",
+  owner_user_id: "le responsable",
+  owner_agent_id: "l’assistant responsable",
+  expected_close_date: "la date de clôture prévue",
+  tags: "les étiquettes",
+  custom_fields: "les champs personnalisés",
+  lost_reason: "la raison de la perte",
 };
 
 /**
@@ -260,5 +260,5 @@ export function listaLegivel(campos: string[]): string {
   const nomes = campos.map((c) => NOME_DO_CAMPO[c] ?? c);
   if (nomes.length === 0) return "nada";
   if (nomes.length === 1) return nomes[0]!;
-  return `${nomes.slice(0, -1).join(", ")} e ${nomes[nomes.length - 1]!}`;
+  return `${nomes.slice(0, -1).join(", ")} et ${nomes[nomes.length - 1]!}`;
 }

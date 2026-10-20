@@ -54,7 +54,7 @@
 | D-002 | [x] | P2, F-003 | Implémenter création, statut, QR, déconnexion et suppression d’une instance par vendeur via le gateway. | Provisioning, statut, QR, reconnexion et suppression passent par l’adaptateur/gateway ; tests transport réel encore dépendants de Docker. |
 | D-003 | [x] | F-012 | Adapter les payloads Evolution Go vers le modèle canonique de message Deskcomm. | `lib/channels/evolution/inbound.ts` normalise messages/statuts/médias et réutilise l’ingest CRM ; tests de fixtures restent un durcissement recommandé. |
 | D-004 | [~] | F-032, F-042 | Ajouter SeaweedFS au compose et implémenter upload, lecture signée, expiration et suppression des médias. | Services Compose et abstraction S3 privée avec URL signée, expiration et suppression livrés ; branchement des routes de preuves et tests S3 réels restent à faire. |
-| D-005 | [ ] | P7 | Mettre à jour les images et scripts de packaging sans service de production build-only. | `pnpm test:shell`, build CI et test de compose fresh. |
+| D-005 | [~] | P7 | Mettre à jour les images et scripts de packaging sans service de production build-only. | Stack Dokploy allégée (7 conteneurs par défaut, ~312 Mo au repos contre ~807 Mo, mesuré) ; gateway publié par le CI ; worker compilé (89 Mo contre 197 Mo) ; garde-fou `tests/unit/stack-legere-dokploy.test.ts` ; guide `docs/runbooks/stack-legere.md`. Reste : premier déploiement réel sur la VPS après publication des images. |
 
 ## Lot E — Catalogue, agent et commandes
 
@@ -62,11 +62,11 @@
 |---|---|---|---|---|
 | E-001 | [x] | F-030–F-032 | Ajouter les routes `/api/v1/products` et l’écran catalogue minimal. | Routes tenant-scoped avec Zod/RBAC/audit et page `/app/sales` responsive livrées ; E2E réel reste à faire. |
 | E-002 | [ ] | F-032 | Brancher Gemini vision pour produire un brouillon de produit sans bloquer en cas d’échec. | Fixtures vision, faible confiance visible et aucun prix inventé. |
-| E-003 | [ ] | F-020–F-021 | Restreindre les tools de l’agent au catalogue, brouillon de commande, demande de preuve et handoff. | Test négatif : aucun tool `mark_paid`. |
+| E-003 | [x] | F-020–F-021 | Restreindre les tools de l’agent au catalogue, brouillon de commande, demande de preuve et handoff. | Outils `search_catalog`, `create_order_draft`, `request_payment_proof`, `register_payment_proof` (`lib/agent-engine/agent/sales-tools.ts`) ; test négatif sur les noms d’outils ET sur le SQL émis (aucun `payée`, aucun `fn_approve_sales_payment`) ; invariant pg17 `tests/invariants/agent-outils-de-vente.test.ts` (8 cas, isolation 2 organisations) vert. |
 | E-004 | [~] | F-040–F-041 | Implémenter création de commande et passage à `en_attente_paiement`. | RPC atomique idempotente, stock, total serveur et routes livrés ; intégration PostgreSQL bloquée sans Docker. |
-| E-005 | [ ] | F-042 | Ingest de capture, stockage SeaweedFS, extraction Gemini et création de l’item Central. | Test photo brute conservée lorsque Gemini échoue. |
-| E-006 | [~] | F-043–F-045 | Ajouter la file de preuves et l’action vendeur d’approbation/refus. | Dépôt pending, rejet/approbation RPC et onglet Central vendeur livrés ; upload SeaweedFS et E2E restent à faire. |
-| E-007 | [~] | P4 | Ajouter les opérations à livrer, livrée, annulée et refusée avec historique. | Machine d’états et audit status livrés ; historique détaillé et tests DB restent à ajouter. |
+| E-005 | [~] | F-042 | Ingest de capture, stockage SeaweedFS, extraction Gemini et création de l’item Central. | La capture reçue sur WhatsApp devient une preuve `pending` liée au message (lecture par le modèle multimodal : montant, opérateur, référence ; écart avec le total signalé). Reste : extraction Gemini dédiée hors tour d’agent et copie vers SeaweedFS. |
+| E-006 | [~] | F-043–F-045 | Ajouter la file de preuves et l’action vendeur d’approbation/refus. | Onglet « À vérifier » : aperçu de la capture (route `payment-proofs/:id/media`, WhatsApp ou SeaweedFS), montant lu vs total, approbation confirmée, refus motivé, dépôt manuel. Reste : E2E par l’écran. |
+| E-007 | [~] | P4 | Ajouter les opérations à livrer, livrée, annulée et refusée avec historique. | Actions vendeur par état (attente de paiement, préparer la livraison avec note, livrée, refuser, annuler) dérivées de `order-state.ts`. Reste : historique détaillé et remise en stock à l’annulation. |
 
 ## Lot F — Cohabitation, Central et mobile
 

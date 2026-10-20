@@ -96,7 +96,7 @@ export function CanalOficialClient() {
           <div>
             <h2 className="font-medium">{t("Cole isto no painel da Meta")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Em <strong>WhatsApp → {t("Configuração")}</strong>,{" "}
+              Dans <strong>WhatsApp → {t("Configuração")}</strong>,{" "}
               {t(
                 "na seção de Webhook. Sem esse passo o canal envia, mas não recebe — as respostas do cliente não chegam e a janela de 24 horas nunca abre.",
               )}

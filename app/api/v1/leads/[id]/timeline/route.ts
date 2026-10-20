@@ -71,7 +71,7 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const cursorRaw = url.searchParams.get("cursor");
   const cursor = cursorRaw ? decodeCursor(cursorRaw) : null;
   if (cursorRaw && !cursor) {
-    return fail("invalid_cursor", "Cursor inválido.", 400, { requestId });
+    return fail("invalid_cursor", "Curseur invalide.", 400, { requestId });
   }
 
   // O lead vem pela RLS do caller — é ele que prova a org, nunca o body.
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("id", leadId)
     .maybeSingle();
   if (leadErr) return fail("internal_error", leadErr.message, 500, { requestId });
-  if (!lead) return fail("not_found", "Negócio não encontrado.", 404, { requestId });
+  if (!lead) return fail("not_found", "Affaire introuvable.", 404, { requestId });
 
   const contactId = (lead as { contact_id: string | null }).contact_id;
 

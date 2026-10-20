@@ -28,13 +28,13 @@ export interface AtendimentoConfig {
 
 const MODO_COPY: Record<RoutingMode, { titulo: string; corpo: string }> = {
   manual: {
-    titulo: "Cada um pega o que quiser",
+    titulo: "Chacun prend ce qu’il veut",
     corpo:
       "Todo cliente novo cai numa fila aberta e o primeiro atendente que clicar assume. " +
       "Simples, e é onde nasce a discussão de quem furou a fila.",
   },
   round_robin: {
-    titulo: "Rodízio automático entre os atendentes",
+    titulo: "Rotation automatique entre les conseillers",
     corpo:
       "Cliente 1 vai para o atendente A, cliente 2 para o B, e ao acabar a lista volta ao " +
       "primeiro. Quem recebe é sempre quem está há mais tempo sem receber — entre os que " +
@@ -44,17 +44,17 @@ const MODO_COPY: Record<RoutingMode, { titulo: string; corpo: string }> = {
 
 const VISIBILIDADE_COPY: Record<VisibilityMode, { titulo: string; corpo: string }> = {
   all: {
-    titulo: "Todos veem tudo",
+    titulo: "Tout le monde voit tout",
     corpo: "Qualquer atendente abre a conversa e o negócio de qualquer colega.",
   },
   own_and_unassigned: {
-    titulo: "Os seus, mais os que ainda não têm dono",
+    titulo: "Les vôtres, plus ceux qui n’ont pas encore de responsable",
     corpo:
       "O atendente vê a própria carteira e a fila de quem chegou agora. Não vê o que já é " +
       "de um colega.",
   },
   own: {
-    titulo: "Só os seus",
+    titulo: "Uniquement les vôtres",
     corpo:
       "O atendente vê apenas o que foi direcionado a ele — nem a fila. Combine com o " +
       "rodízio: sem alguém distribuindo, ninguém recebe nada e as telas ficam vazias.",

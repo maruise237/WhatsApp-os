@@ -55,11 +55,9 @@ export default async function AiUsagePage({ searchParams }: PageProps) {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Uso de IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Utilisation de l’IA</h1>
         <p className="text-sm text-muted-foreground">
-          Quanto a inteligência artificial custou, quantos atendimentos ela fez, quanto
-          demorou para responder e quantas vezes precisou chamar uma pessoa — nos
-          últimos 30 dias.
+          Combien l’intelligence artificielle a coûté, combien d’échanges elle a menés, combien de temps elle a mis à répondre et combien de fois elle a dû appeler une personne — sur les 30 derniers jours.
         </p>
       </header>
       <BudgetCard initialData={budget} isAdmin={isAdmin} />

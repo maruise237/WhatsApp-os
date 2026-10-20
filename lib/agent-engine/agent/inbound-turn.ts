@@ -103,6 +103,14 @@ import {
 } from './skills';
 import { readSkillReference, skillHasReferences } from './skill-references';
 import { READ_ONLY_TOOLS, wrapToolsWithBreaker, type ToolBreakerThresholds } from './tool-breaker';
+import {
+  SALES_TOOL_DEFS,
+  applyCreateOrderDraft,
+  applyRegisterPaymentProof,
+  applyRequestPaymentProof,
+  applySearchCatalog,
+  type SalesToolName,
+} from './sales-tools';
 import { loadChannelProvider, runBeforeSend } from '../guardrails/before-send';
 import { isStatusSendable } from '../../channels/meta/template-binding';
 import { capabilitiesOf } from '@/lib/channels/capabilities';
@@ -142,7 +150,7 @@ export const AGENT_TOOL_DEFS = {
     description:
       'Envia UMA mensagem de WhatsApp ao lead desta conversa. É o ÚNICO jeito de falar com o lead; texto fora desta tool nunca é enviado.',
     inputSchema: z.object({
-      body: z.string().min(1).describe('corpo da mensagem, em pt-br, pronto para envio'),
+      body: z.string().min(1).describe('corpo da mensagem, na língua do cliente, pronto para envio'),
     }),
   },
   update_lead_state: {
@@ -211,7 +219,7 @@ export const AGENT_TOOL_DEFS = {
       'preço, prazo, política ou funcionamento — responda com base nos trechos retornados e não ' +
       'invente o que não encontrar. Sem resultados = diga que vai confirmar, nunca chute.',
     inputSchema: z.object({
-      query: z.string().min(2).describe('a pergunta ou termos a buscar, em pt-br'),
+      query: z.string().min(2).describe('a pergunta ou termos a buscar, na língua da base'),
     }).passthrough(),
   },
   request_human_handoff: {
@@ -279,6 +287,9 @@ export const AGENT_TOOL_DEFS = {
         .describe('valor de cada parâmetro, na chave que a tela de templates mostra (ex.: "1", "2")'),
     }).passthrough(),
   },
+  // Sales OS (E-003) : catalogue → commande → demande de preuve → preuve en
+  // attente. Aucun outil ne confirme un paiement (P3) — voir sales-tools.ts.
+  ...SALES_TOOL_DEFS,
 } as const;
 
 /**
@@ -2107,6 +2118,32 @@ async function executarTurnoDoAgente(
       },
     }),
   };
+
+  // Sales OS (E-003) : organisation, conversation et job viennent de la LIGNE du
+  // job (closure), jamais des arguments du modèle. Mutantes sauf search_catalog.
+  const salesScope = { tenantId, conversationId: input.conversationId, jobId: job.id };
+  const salesApply = {
+    search_catalog: applySearchCatalog,
+    create_order_draft: applyCreateOrderDraft,
+    request_payment_proof: applyRequestPaymentProof,
+    register_payment_proof: applyRegisterPaymentProof,
+  } satisfies Record<SalesToolName, unknown>;
+  for (const name of Object.keys(salesApply) as SalesToolName[]) {
+    rawTools[name] = tool({
+      ...(SALES_TOOL_DEFS[name] as { description: string; inputSchema: z.ZodTypeAny }),
+      execute: async (raw: unknown) => {
+        try {
+          return await salesApply[name](pool, salesScope, raw);
+        } catch (err) {
+          noteRunError(err instanceof Error ? err : new Error(String(err)));
+          return {
+            ok: false,
+            error: { code: 'internal_error', message: 'erreur interne de vente — transfère à un humain et termine le tour.' },
+          };
+        }
+      },
+    });
+  }
 
   // F3-02: a tool de agendamento (schedule_followup) só entra quando sua janela
   // está configurada — main.ts sempre a preenche pelos knobs do env; tenant/lead

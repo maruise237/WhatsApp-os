@@ -68,10 +68,10 @@ const DESLOCADO_NOS_DOIS_MODOS: MotivoLido[] = [
 describe("avisosDaMarca", () => {
   it("diz 'mais escuro' quando o botão desceu na escala e 'mais claro' quando subiu", () => {
     const avisos = avisosDaMarca(DESLOCADO_NOS_DOIS_MODOS, { claro: 3, escuro: -1 });
-    expect(avisos.some((a) => /modo claro.*mais escuro que a sua cor/.test(a.texto))).toBe(true);
-    expect(avisos.some((a) => /modo escuro.*mais claro que a sua cor/.test(a.texto))).toBe(true);
+    expect(avisos.some((a) => /mode clair.*plus foncée que votre couleur/.test(a.texto))).toBe(true);
+    expect(avisos.some((a) => /mode sombre.*plus claire que votre couleur/.test(a.texto))).toBe(true);
     // O fecho só aparece quando o botão de fato deixou de ser a cor da pessoa.
-    expect(avisos.some((a) => a.texto.includes("continua no logo"))).toBe(true);
+    expect(avisos.some((a) => a.texto.includes("reste dans le logo"))).toBe(true);
   });
 
   it("distância zero: o botão É a cor da pessoa, e a frase não inventa ajuste", () => {
@@ -80,7 +80,7 @@ describe("avisosDaMarca", () => {
     // função lia o deslocamento do motor e dizia "um tom mais escuro da sua
     // cor" — falso, e falso justamente na cor que mais estressa o contraste.
     const avisos = avisosDaMarca(DESLOCADO_NOS_DOIS_MODOS, { claro: 3, escuro: 0 });
-    expect(avisos.some((a) => /modo escuro.*exatamente a sua cor/.test(a.texto))).toBe(true);
+    expect(avisos.some((a) => /mode sombre.*exactement votre couleur/.test(a.texto))).toBe(true);
     expect(avisos.some((a) => /modo escuro.*mais (escuro|claro)/.test(a.texto))).toBe(false);
   });
 
@@ -89,7 +89,7 @@ describe("avisosDaMarca", () => {
       [{ codigo: "accent_deslocado", tema: "claro", alvo: "--color-accent" }],
       { claro: 0, escuro: 0 },
     );
-    expect(avisos.some((a) => a.texto.includes("continua no logo"))).toBe(false);
+    expect(avisos.some((a) => a.texto.includes("reste dans le logo"))).toBe(false);
   });
 
   it("marca neutra: nenhuma frase começa com 'sua cor', porque ela não pinta nada", () => {
@@ -106,7 +106,7 @@ describe("avisosDaMarca", () => {
       { claro: null, escuro: null },
     );
     expect(avisos).toHaveLength(1);
-    expect(avisos[0]?.texto).toContain("tom neutro");
+    expect(avisos[0]?.texto).toContain("neutre");
     expect(avisos.some((a) => a.texto.startsWith("Sua cor ficou parecida"))).toBe(false);
   });
 
@@ -124,8 +124,8 @@ describe("avisosDaMarca", () => {
       { claro: 0, escuro: 0 },
     );
     expect(avisos).toHaveLength(1);
-    expect(avisos[0]?.texto).toContain("ainda não afasta");
-    expect(avisos[0]?.texto).toContain("erro");
+    expect(avisos[0]?.texto).toContain("ne sépare pas encore");
+    expect(avisos[0]?.texto).toContain("erreur");
   });
 
   it("agrupa as cores de alerta numa frase só, ordenadas", () => {
@@ -138,7 +138,7 @@ describe("avisosDaMarca", () => {
       { claro: 0, escuro: 0 },
     );
     expect(avisos).toHaveLength(1);
-    expect(avisos[0]?.texto).toContain("atenção, erro e sucesso");
+    expect(avisos[0]?.texto).toContain("attention, erreur et succès");
   });
 
   it("não repete a mesma frase quando dois temas emitem o mesmo código", () => {
@@ -180,7 +180,7 @@ describe("motivosDoFallback", () => {
     // defeito da tela e é onde o operador para de acreditar no alarme.
     const avisos = motivosDoFallback("motivo_de_outra_versao");
     expect(avisos).toHaveLength(1);
-    expect(avisos[0]?.texto).toContain("não sabe explicar");
+    expect(avisos[0]?.texto).toContain("ne sait pas expliquer");
   });
 
   it("sem alarme, nenhuma linha", () => {

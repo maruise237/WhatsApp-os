@@ -44,26 +44,25 @@ export function ResolveIncidentDialog({ incidentId }: ResolveIncidentDialogProps
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="default" size="sm">
-          Resolver incidente
+          Résoudre l’incident
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Resolver incidente</AlertDialogTitle>
+          <AlertDialogTitle>Résoudre l’incident</AlertDialogTitle>
           <AlertDialogDescription>
-            Descreva como o incidente foi resolvido. Esta ação é registrada no
-            audit log e não pode ser desfeita.
+            Décrivez comment l’incident a été résolu. Cette action est enregistrée dans le journal d’audit et est irréversible.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="space-y-2 py-2">
           <Label htmlFor="resolution-note">
-            Nota de resolução{" "}
-            <span className="text-muted-foreground font-normal">(mín. 10 caracteres)</span>
+            Note de résolution{" "}
+            <span className="text-muted-foreground font-normal">(10 caractères min.)</span>
           </Label>
           <Textarea
             id="resolution-note"
-            placeholder="Descreva a causa raiz e as ações tomadas para resolver o incidente..."
+            placeholder="Décrivez la cause racine et les actions menées pour résoudre l’incident..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={4}
@@ -72,18 +71,18 @@ export function ResolveIncidentDialog({ incidentId }: ResolveIncidentDialogProps
           />
           {note.trim().length > 0 && note.trim().length < 10 && (
             <p className="text-xs text-destructive">
-              Mínimo de 10 caracteres ({note.trim().length}/10)
+              10 caractères minimum ({note.trim().length}/10)
             </p>
           )}
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Annuler</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleResolve}
             disabled={!isValid || isPending}
           >
-            {isPending ? "Resolvendo..." : "Confirmar resolução"}
+            {isPending ? "Resolvendo..." : "Confirmer la résolution"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

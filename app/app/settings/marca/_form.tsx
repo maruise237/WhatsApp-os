@@ -108,9 +108,9 @@ const COR_NEUTRA_DO_SELETOR = "#808080";
  * para ele e some.
  */
 function origemEmPortugues(origem: string): string {
-  if (origem === "organizacao") return "você definiu aqui";
-  if (origem === "padrao") return "é o padrão do sistema";
-  return "veio de quem instalou o sistema";
+  if (origem === "organizacao") return "vous l’avez défini ici";
+  if (origem === "padrao") return "c’est la valeur par défaut du système";
+  return "provient de la personne qui a installé le système";
 }
 
 function LinhaDeOrigem({ campo, valor }: { campo: string; valor: string }) {

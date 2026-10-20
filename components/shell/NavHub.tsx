@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { Card } from "@/components/ui/card";
 import type { Role } from "@/lib/auth/types";
+import { traduzir } from "@/lib/i18n/dicionario";
+import { IDIOMA_PADRAO, type Idioma } from "@/lib/i18n/idiomas";
 import { hubSections, type NavGroupId } from "@/lib/navigation/registry";
 
 interface NavHubProps {
@@ -10,6 +12,8 @@ interface NavHubProps {
   role: Role | null;
   title: string;
   subtitle: string;
+  /** Langue de la personne connectée : les libellés du registre sont des clés du dictionnaire. */
+  idioma?: Idioma;
 }
 
 /**
@@ -38,8 +42,9 @@ function slug(texto: string): string {
     .replace(/^-|-$/g, "");
 }
 
-export function NavHub({ group, isPlatformAdmin, role, title, subtitle }: NavHubProps) {
+export function NavHub({ group, isPlatformAdmin, role, title, subtitle, idioma = IDIOMA_PADRAO }: NavHubProps) {
   const secoes = hubSections(group, isPlatformAdmin, role);
+  const t = (texto: string) => traduzir(texto, idioma);
 
   return (
     <div className="flex h-full flex-col gap-8 p-6">
@@ -54,7 +59,7 @@ export function NavHub({ group, isPlatformAdmin, role, title, subtitle }: NavHub
             id={`hub-${group}-${slug(section)}`}
             className="text-xs font-medium uppercase tracking-wider text-muted-foreground/70"
           >
-            {section}
+            {t(section)}
           </h2>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {items.map((item) => {
@@ -64,8 +69,8 @@ export function NavHub({ group, isPlatformAdmin, role, title, subtitle }: NavHub
                   <Card className="flex h-full gap-3 p-4 transition-colors hover:border-border-strong">
                     <Icon size={20} weight="regular" aria-hidden className="mt-0.5 shrink-0 text-muted-foreground" />
                     <div>
-                      <h3 className="text-sm font-semibold">{item.label}</h3>
-                      <p className="mt-1 text-xs text-muted-foreground">{item.description}</p>
+                      <h3 className="text-sm font-semibold">{t(item.label)}</h3>
+                      <p className="mt-1 text-xs text-muted-foreground">{t(item.description)}</p>
                     </div>
                   </Card>
                 </Link>

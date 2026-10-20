@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 import { Robot, Gear } from "@/lib/ui/icons";
 import { autorNaTela, mudadoPorAgente } from "@/lib/operacao/autoria";
@@ -44,7 +44,7 @@ export function SeloDeAutoria({
   const doAgente = mudadoPorAgente(kind);
   const Icone = doAgente ? Robot : Gear;
   const quando = em
-    ? ` ${formatDistanceToNowStrict(new Date(em), { addSuffix: true, locale: ptBR })}`
+    ? ` ${formatDistanceToNowStrict(new Date(em), { addSuffix: true, locale: fr })}`
     : "";
 
   return (
@@ -56,12 +56,12 @@ export function SeloDeAutoria({
         className,
       )}
       data-autoria={kind ?? "desconhecida"}
-      title="Ver no histórico o que foi alterado"
+      title="Voir dans l’historique ce qui a été modifié"
     >
       <Icone className="h-3.5 w-3.5 shrink-0" aria-hidden />
       <span>
         {texto}
-        {quando} — ver o que mudou
+        {quando} — voir ce qui a changé
       </span>
     </Link>
   );

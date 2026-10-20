@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,7 +28,7 @@ const SEVERITY_VARIANTS: Record<IncidentSeverity, "error" | "warning" | "info"> 
 
 const SEVERITY_LABELS: Record<IncidentSeverity, string> = {
   critical: "Crítico",
-  warning: "Atenção",
+  warning: "Attention",
   info: "Info",
 };
 
@@ -66,7 +66,7 @@ function relativeDate(iso: string): string {
   // Uma célula com "—" é melhor do que perder a tela por um timestamp ausente.
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return formatDistanceToNow(d, { addSuffix: true, locale: ptBR });
+  return formatDistanceToNow(d, { addSuffix: true, locale: fr });
 }
 
 // ---------------------------------------------------------------------------
@@ -79,11 +79,11 @@ export function IncidentsTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[140px]">Quando</TableHead>
-            <TableHead>Tipo</TableHead>
-            <TableHead className="w-[160px]">Tenant</TableHead>
-            <TableHead className="w-[110px]">Severidade</TableHead>
-            <TableHead className="w-[120px]">Status</TableHead>
+            <TableHead className="w-[140px]">Quand</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead className="w-[160px]">Organisation</TableHead>
+            <TableHead className="w-[110px]">Gravité</TableHead>
+            <TableHead className="w-[120px]">Statut</TableHead>
             <TableHead className="w-[60px]" />
           </TableRow>
         </TableHeader>
@@ -124,9 +124,9 @@ export function IncidentsTable({
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-md border py-16 text-center text-muted-foreground">
         <Warning size={36} weight="duotone" className="opacity-40" aria-hidden />
-        <p className="text-sm font-medium">Nenhum incidente encontrado</p>
+        <p className="text-sm font-medium">Aucun incident trouvé</p>
         <p className="max-w-xs text-xs opacity-70">
-          Ajuste os filtros para ver outros incidentes.
+          Ajustez les filtres pour voir d’autres incidents.
         </p>
       </div>
     );
@@ -138,11 +138,11 @@ export function IncidentsTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[140px]">Quando</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead className="w-[160px]">Tenant</TableHead>
-              <TableHead className="w-[110px]">Severidade</TableHead>
-              <TableHead className="w-[120px]">Status</TableHead>
+              <TableHead className="w-[140px]">Quand</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead className="w-[160px]">Organisation</TableHead>
+              <TableHead className="w-[110px]">Gravité</TableHead>
+              <TableHead className="w-[120px]">Statut</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>
@@ -171,7 +171,7 @@ export function IncidentsTable({
                     href={`/admin/incidents/${row.id}`}
                     className="text-xs font-medium text-accent hover:underline"
                   >
-                    Ver
+                    Voir
                   </Link>
                 </TableCell>
               </TableRow>

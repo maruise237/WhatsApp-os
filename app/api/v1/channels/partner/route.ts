@@ -111,7 +111,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const parsed = conectarSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("invalid_request", "account_id e api_key são obrigatórios", 422, { requestId });
+    return fail("invalid_request", "account_id et api_key sont obligatoires", 422, { requestId });
   }
 
   // A rota não sabe com quem fala: pergunta se a credencial presta e o canal responde.
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // operador precisa saber que falta configuração de servidor.
     return fail(
       "invalid_request",
-      "cifra indisponível nesta instalação — a chave não foi gravada",
+      "chiffrement indisponible sur cette installation — la clé n’a pas été enregistrée",
       422,
       { requestId },
     );

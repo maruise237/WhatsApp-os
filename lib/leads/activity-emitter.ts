@@ -143,7 +143,7 @@ export function actorParaAtividade(actor: Actor): {
 
 /** "Movido de Avaliação para Proposta enviada" — o porquê legível do 2.2. */
 export function stageChangeReason(fromStageName: string | null, toStageName: string | null): string {
-  if (fromStageName && toStageName) return `Movido de ${fromStageName} para ${toStageName}`;
-  if (toStageName) return `Movido para ${toStageName}`;
-  return "Mudou de estágio";
+  if (fromStageName && toStageName) return `Déplacé de ${fromStageName} vers ${toStageName}`;
+  if (toStageName) return `Déplacé vers ${toStageName}`;
+  return "A changé de colonne";
 }

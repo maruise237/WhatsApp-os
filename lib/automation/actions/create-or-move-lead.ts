@@ -42,7 +42,7 @@ async function execute(ctx: ActionCtx, config: Record<string, unknown>): Promise
       const created = await createLeadHandler(ctx.admin, handlerCtx, {
         pipeline_id: pipelineId,
         stage_id: stageId,
-        title: contact.name ?? contact.display_name ?? contact.phone_number ?? "Lead da automação",
+        title: contact.name ?? contact.display_name ?? contact.phone_number ?? "Client issu de l’automatisation",
         contact_id: contact.id,
         source: "automation",
       } as Parameters<typeof createLeadHandler>[2]);

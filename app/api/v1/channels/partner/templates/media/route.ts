@@ -49,27 +49,27 @@ export async function POST(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
 
   const user = await loadAuthUser();
-  if (!user) return fail("unauthenticated", "Faça login.", 401, { requestId });
+  if (!user) return fail("unauthenticated", "Connectez-vous.", 401, { requestId });
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("forbidden", "Sem organização ativa.", 403, { requestId });
+  if (!org) return fail("forbidden", "Aucune organisation active.", 403, { requestId });
 
   const form = await req.formData().catch(() => null);
   const file = form?.get("file");
   if (!(file instanceof File)) {
-    return fail("validation_failed", "Campo 'file' (multipart) obrigatório.", 422, { requestId });
+    return fail("validation_failed", "Le champ « file » (multipart) est obligatoire.", 422, { requestId });
   }
 
   const mime = file.type || "application/octet-stream";
   if (!TIPOS.has(mime)) {
     return fail(
       "unsupported_media_type",
-      "O cabeçalho aceita imagem JPG ou PNG.",
+      "L’en-tête accepte une image JPG ou PNG.",
       415,
       { requestId },
     );
   }
   if (file.size > TAMANHO_MAX) {
-    return fail("payload_too_large", "A imagem precisa ter até 5 MB.", 413, { requestId });
+    return fail("payload_too_large", "L’image doit faire 5 Mo maximum.", 413, { requestId });
   }
 
   const ext = mime === "image/png" ? "png" : "jpg";
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .upload(caminho, Buffer.from(await file.arrayBuffer()), { contentType: mime, upsert: false });
   if (erroUp) {
     logger.error("[partner/templates/media] upload falhou", { detail: erroUp.message, requestId });
-    return fail("internal_error", "Erro ao subir a imagem.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’envoi de l’image.", 500, { requestId });
   }
 
   const { data: assinada, error: erroUrl } = await admin.storage
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       detail: erroUrl?.message ?? "sem url",
       requestId,
     });
-    return fail("internal_error", "Erro ao preparar o link da imagem.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la préparation du lien de l’image.", 500, { requestId });
   }
 
   return ok({ url: assinada.signedUrl, path: caminho }, { requestId });

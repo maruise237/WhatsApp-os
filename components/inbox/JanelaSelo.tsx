@@ -58,15 +58,15 @@ export function JanelaSelo({
     // conversa esfriou. "Fechada" sozinho não distingue vinte minutos de um mês.
     const quanto =
       estado.fechadaHaMs === null
-        ? "O cliente nunca escreveu"
-        : `Janela fechada há ${formatarDecorrido(estado.fechadaHaMs)}`;
+        ? "Le client n’a jamais écrit"
+        : `Fenêtre fermée il y a ${formatarDecorrido(estado.fechadaHaMs)}`;
     return (
       <Badge
         variant="outline"
         className="h-4 border-amber-400 px-1.5 text-[10px] text-amber-700 dark:border-amber-700 dark:text-amber-300"
-        title="Passaram 24h desde a última mensagem do cliente. Só um modelo aprovado sai daqui — texto livre é recusado pela plataforma."
+        title="24 h se sont écoulées depuis le dernier message du client. Seul un modèle approuvé peut partir d’ici — le texte libre est refusé par la plateforme."
       >
-        {quanto} · só modelo
+        {quanto} · modèle uniquement
       </Badge>
     );
   }
@@ -79,9 +79,9 @@ export function JanelaSelo({
         "h-4 px-1.5 text-[10px]",
         urgente && "border-amber-400 text-amber-700 dark:border-amber-700 dark:text-amber-300",
       )}
-      title="Tempo restante para escrever texto livre. Depois disso, só modelo aprovado."
+      title="Temps restant pour écrire du texte libre. Ensuite, uniquement un modèle approuvé."
     >
-      Janela {formatarRestante(estado.restanteMs)}
+      Fenêtre {formatarRestante(estado.restanteMs)}
     </Badge>
   );
 }

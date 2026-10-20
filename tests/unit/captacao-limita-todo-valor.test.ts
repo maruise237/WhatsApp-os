@@ -52,7 +52,7 @@ describe("limitarCampos — o teto vale para todo valor", () => {
     const circular: Record<string, unknown> = { nome: "ana" };
     circular.self = circular;
     expect(() => limitarCampos({ payload: circular })).not.toThrow();
-    expect(limitarCampos({ payload: circular }).payload).toBe("[valor não serializável]");
+    expect(limitarCampos({ payload: circular }).payload).toBe("[valeur non lisible]");
   });
 
   it("CONTROLE: valor pequeno passa INTACTO, com o tipo original", () => {

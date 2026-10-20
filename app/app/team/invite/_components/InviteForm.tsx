@@ -34,11 +34,11 @@ export function InviteForm() {
       .filter(Boolean);
     const unique = Array.from(new Set(emails));
     if (unique.length === 0) {
-      toast.error("Adicione ao menos um email.");
+      toast.error("Ajoutez au moins un e-mail.");
       return;
     }
     if (unique.length > 20) {
-      toast.error("Máximo 20 emails por convite.");
+      toast.error("20 e-mails maximum par invitation.");
       return;
     }
     try {
@@ -59,17 +59,17 @@ export function InviteForm() {
     <div className="grid gap-6 md:grid-cols-[1fr,2fr]">
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="emails">Emails</Label>
+          <Label htmlFor="emails">E-mails</Label>
           <Textarea
             id="emails"
             value={emailsRaw}
             onChange={(e) => setEmailsRaw(e.target.value)}
             rows={8}
-            placeholder={"alice@empresa.com\nbob@empresa.com"}
+            placeholder={"alice@entreprise.com bob@entreprise.com"}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="role">Role</Label>
+          <Label htmlFor="role">Rôle</Label>
           <Select value={role} onValueChange={(v) => setRole(v as Role)}>
             <SelectTrigger id="role">
               <SelectValue />
@@ -84,7 +84,7 @@ export function InviteForm() {
           </Select>
         </div>
         <Button type="submit" disabled={invite.isPending}>
-          {invite.isPending ? "Enviando…" : "Enviar convites"}
+          {invite.isPending ? "Enviando…" : "Envoyer les invitations"}
         </Button>
       </form>
 
@@ -93,7 +93,7 @@ export function InviteForm() {
           <>
             {result.sent.length > 0 ? (
               <section>
-                <h2 className="text-sm font-semibold">Enviados ({result.sent.length})</h2>
+                <h2 className="text-sm font-semibold">Envoyés ({result.sent.length})</h2>
                 <ul className="mt-2 space-y-2 text-sm">
                   {result.sent.map((s) => (
                     <li key={s.email} className="rounded-md border p-2">
@@ -101,7 +101,7 @@ export function InviteForm() {
                       <div className="text-xs text-muted-foreground">
                         {s.email_dispatched
                           ? "Email enviado."
-                          : "Resend não configurado — link copiável abaixo (DEV)."}
+                          : "Resend non configuré — lien copiable ci-dessous (DEV)."}
                       </div>
                       {!s.email_dispatched ? (
                         <code className="mt-1 block break-all text-xs">{s.accept_url}</code>
@@ -114,7 +114,7 @@ export function InviteForm() {
             {result.failed.length > 0 ? (
               <section>
                 <h2 className="text-sm font-semibold text-destructive">
-                  Falhas ({result.failed.length})
+                  Échecs ({result.failed.length})
                 </h2>
                 <ul className="mt-2 space-y-1 text-sm">
                   {result.failed.map((f) => (
@@ -129,7 +129,7 @@ export function InviteForm() {
           </>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Resultados aparecerão aqui após o envio.
+            Les résultats apparaîtront ici après l’envoi.
           </p>
         )}
       </div>

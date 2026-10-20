@@ -53,21 +53,21 @@ interface CuratedField {
 }
 
 const LEAD_FIELDS: CuratedField[] = [
-  { value: "lead.title", label: "Nome do lead", op: "eq" },
-  { value: "lead.tags", label: "Tags do lead", op: "contains" },
+  { value: "lead.title", label: "Nom du lead", op: "eq" },
+  { value: "lead.tags", label: "Tags du lead", op: "contains" },
   // utm_* entram pelo webhook em source_metadata (decisão da rota inbound),
   // não em custom_fields — o path aqui tem que apontar pra onde o dado mora.
-  { value: "lead.source_metadata.utm_source", label: "Origem (utm_source)", op: "eq" },
+  { value: "lead.source_metadata.utm_source", label: "Origine (utm_source)", op: "eq" },
 ];
 const STAGE_FIELD: CuratedField = {
   value: "event.to_stage_id",
-  label: "Etapa de destino",
+  label: "Étape de destination",
   op: "eq",
   kind: "stage",
 };
 const MESSAGE_FIELDS: CuratedField[] = [
-  { value: "event.body_preview", label: "Texto da mensagem", op: "contains" },
-  { value: "contact.tags", label: "Tags do contato", op: "contains" },
+  { value: "event.body_preview", label: "Texte du message", op: "contains" },
+  { value: "contact.tags", label: "Tags du contact", op: "contains" },
 ];
 const TAG_ADDED_FIELD: CuratedField = {
   value: "event.added_tags",

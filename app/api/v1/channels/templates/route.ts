@@ -65,7 +65,7 @@ function textPreviews(components: unknown): Array<{ onde: string; text: string }
       }
       const texto = typeof c.text === "string" ? c.text : "";
       if (!texto.includes("{{")) continue;
-      out.push({ onde: `${prefixo}${tipo === "HEADER" ? "cabeçalho" : "corpo"}`, text: texto });
+      out.push({ onde: `${prefixo}${tipo === "HEADER" ? "en-tête" : "corps"}`, text: texto });
     }
   };
   visita(components, "");

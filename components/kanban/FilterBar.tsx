@@ -26,10 +26,10 @@ interface FilterBarProps {
 }
 
 const STATUS_OPTIONS: Array<{ value: NonNullable<LeadFilters["status"]>; label: string }> = [
-  { value: "all", label: "Todos" },
-  { value: "open", label: "Abertos" },
-  { value: "won", label: "Ganhos" },
-  { value: "lost", label: "Perdidos" },
+  { value: "all", label: "Tous" },
+  { value: "open", label: "Ouverts" },
+  { value: "won", label: "Gagnés" },
+  { value: "lost", label: "Perdus" },
 ];
 
 export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
@@ -89,7 +89,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
         version: a.version_number,
       })),
     ];
-    return rows.sort((x, y) => x.name.localeCompare(y.name, "pt-BR"));
+    return rows.sort((x, y) => x.name.localeCompare(y.name, "fr-FR"));
   }, [members, agents, user.id, t]);
   const ownerLabel =
     filters.owner === "unassigned"
@@ -165,7 +165,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
-            Status: {statusLabel}
+            Statut : {statusLabel}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

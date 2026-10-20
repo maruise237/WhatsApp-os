@@ -32,7 +32,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams): Promise<
   const raw = await req.json().catch(() => null);
   const parsed = updateTemplateSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Dados inválidos.", 422, {
+    return fail("validation_failed", "Données invalides.", 422, {
       requestId,
       details: parsed.error.flatten().fieldErrors as Record<string, unknown>,
     });
@@ -46,7 +46,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams): Promise<
     .eq("organization_id", org.orgId)
     .select(COLS)
     .single();
-  if (error || !data) return fail("not_found", "Template não encontrado.", 404, { requestId });
+  if (error || !data) return fail("not_found", "Modèle introuvable.", 404, { requestId });
 
   void audit({
     action: "template.updated",
@@ -78,8 +78,8 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
     .eq("organization_id", org.orgId)
     .select("id")
     .maybeSingle();
-  if (error) return fail("internal_error", "Erro ao excluir template.", 500, { requestId });
-  if (!deleted) return fail("not_found", "Template não encontrado.", 404, { requestId });
+  if (error) return fail("internal_error", "Erreur lors de la suppression du modèle.", 500, { requestId });
+  if (!deleted) return fail("not_found", "Modèle introuvable.", 404, { requestId });
 
   void audit({
     action: "template.deleted",

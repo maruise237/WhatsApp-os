@@ -592,10 +592,9 @@
 /* ── Section banner (page header) ───────────────────────── */
 .ds-banner {
   border: 1px solid var(--ds-border);
-  border-left: 3px solid var(--ds-accent);
   background: var(--ds-surface);
   padding: 18px 22px;
-  border-radius: 0 12px 12px 0;
+  border-radius: 12px;
   margin-bottom: 36px;
 }
 .ds-banner h1 {

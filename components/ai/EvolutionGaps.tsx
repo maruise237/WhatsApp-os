@@ -59,10 +59,10 @@ interface Lacuna {
 function ressalvaDeFechamento(steps: string[]): string {
   const fechamento = steps.filter((s) => s === "won" || s === "lost");
   if (fechamento.length === 0) return "";
-  const nomes = fechamento.map((s) => `«${ROTULO_DO_PASSO[s as LeadStage]}»`).join(" e ");
+  const nomes = fechamento.map((s) => `«${ROTULO_DO_PASSO[s as LeadStage]}»`).join(" et ");
   return (
-    ` ${nomes} ${plural(fechamento.length, "é exceção", "são exceção")}: ${plural(fechamento.length, "ele só pode apontar", "eles só podem apontar")} ` +
-    `para a etapa de fechamento ou de perda do funil. Se o seu funil não tem essas etapas, isso é com quem instalou o sistema.`
+    ` ${nomes} ${plural(fechamento.length, "fait exception", "font exception")} : ${plural(fechamento.length, "il ne peut pointer", "ils ne peuvent pointer")} ` +
+    `que vers l’étape de conclusion ou de perte du tableau. Si votre tableau n’a pas ces étapes, voyez avec la personne qui a installé le système.`
   );
 }
 
@@ -79,21 +79,21 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
       // mandaria o dono da clínica arrumar um funil que já está certo. O texto conta
       // a CONSEQUÊNCIA e devolve a decisão para quem conhece o próprio negócio.
       texto:
-        `No funil "${p.pipeline_name}", ${p.steps.length} ${plural(p.steps.length, "passo do atendimento não tem", "passos do atendimento não têm")} ` +
+        `Dans le tableau "${p.pipeline_name}", ${p.steps.length} ${plural(p.steps.length, "étape du suivi n’a pas", "étapes du suivi n’ont pas")} ` +
         // "card" e não "cartão": é o nome que a tela do conserto usa na opção
         // «Não mover o card». Um objeto, um nome — senão o usuário lê sobre
         // "cartão" aqui e procura essa palavra lá.
-        `etapa correspondente: ${nomeiaPassos(p.steps)}. Quando o agente chega em um desses passos, o card do cliente ` +
-        `não se move — ele fica onde está. Às vezes isso é proposital: nem todo funil precisa de uma etapa para cada passo. ` +
-        `Mas se você esperava ver esses clientes andarem sozinhos no quadro, é aqui que falta o vínculo — e você mesmo ` +
-        `escolhe, passo a passo, para qual etapa o card vai.` +
+        `de colonne correspondante : ${nomeiaPassos(p.steps)}. Quand l’agent atteint l’une de ces étapes, la carte du client ` +
+        `ne bouge pas — elle reste où elle est. C’est parfois voulu : tous les tableaux n’ont pas besoin d’une colonne pour chaque étape. ` +
+        `Mais si vous vous attendiez à voir ces clients avancer seuls dans le tableau, c’est ici que manque le lien — et c’est vous qui ` +
+        `choisissez, étape par étape, vers quelle colonne va la carte.` +
         ressalvaDeFechamento(p.steps),
       // ⚠️ ESTE LINK É O QUE FECHA O CICLO. Antes ele apontava para o quadro com o
       // verbo "Ver", porque não existia lugar nenhum no produto para escrever
       // `agent_stage_hint` — o painel relatava uma lacuna e parava aí. Agora leva
       // à tela que a conserta, e o verbo diz o que se faz lá.
       href: "/app/settings/tenant/pipelines",
-      cta: "Escolher a etapa de cada passo",
+      cta: "Choisir l’étape de chaque passage",
     });
   }
 
@@ -101,11 +101,11 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
     out.push({
       chave: "knowledge-empty",
       texto:
-        `${gaps.knowledge_empty} ${plural(gaps.knowledge_empty, "pergunta de cliente não encontrou", "perguntas de clientes não encontraram")} ` +
-        `resposta nos seus materiais. São os assuntos que ainda faltam escrever — cada um deles é uma conversa em que o ` +
-        `agente teve que improvisar ou passar adiante.`,
+        `${gaps.knowledge_empty} ${plural(gaps.knowledge_empty, "question de client n’a pas trouvé", "questions de clients n’ont pas trouvé")} ` +
+        `de réponse dans vos documents. Ce sont les sujets qu’il reste à écrire — chacun d’eux est une conversation où l’` +
+        `agent a dû improviser ou passer la main.`,
       href: "/app/ai/knowledge/sources",
-      cta: "Abrir a base de conhecimento",
+      cta: "Ouvrir la base de connaissances",
     });
   }
 
@@ -113,12 +113,12 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
     out.push({
       chave: "knowledge-near",
       texto:
-        `Destas, ${gaps.knowledge_near_misses} ${plural(gaps.knowledge_near_misses, "chegou perto", "chegaram perto")}: ` +
-        `havia material parecido, mas não parecido o bastante para o agente arriscar usar. Aqui o conteúdo provavelmente ` +
-        `já existe — só está escrito com palavras diferentes das que o cliente usa. Vale reescrever esses materiais com as ` +
-        `perguntas do jeito que chegam.`,
+        `Parmi elles, ${gaps.knowledge_near_misses} ${plural(gaps.knowledge_near_misses, "s’en est approchée", "s’en sont approchées")} : ` +
+        `il existait un document proche, mais pas assez pour que l’agent prenne le risque de l’utiliser. Ici, le contenu existe ` +
+        `probablement déjà — il est seulement écrit avec d’autres mots que ceux du client. Il vaut la peine de réécrire ces documents avec les ` +
+        `questions telles qu’elles arrivent.`,
       href: "/app/ai/knowledge/sources",
-      cta: "Abrir a base de conhecimento",
+      cta: "Ouvrir la base de connaissances",
     });
   }
 
@@ -126,11 +126,11 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
     out.push({
       chave: "router-no-match",
       texto:
-        `Em ${gaps.router_no_match} ${plural(gaps.router_no_match, "conversa", "conversas")} o agente não soube para qual ` +
-        `atendimento encaminhar e usou o atendimento padrão. Se isso se repete, falta cadastrar esse assunto no roteador ` +
-        `do seu número.`,
+        `Dans ${gaps.router_no_match} ${plural(gaps.router_no_match, "conversation", "conversations")}, l’agent n’a pas su vers quel ` +
+        `service orienter et a utilisé le service par défaut. Si cela se répète, il manque ce sujet dans le routeur ` +
+        `de votre numéro.`,
       href: "/app/ai/routers",
-      cta: "Abrir os roteadores",
+      cta: "Ouvrir les routeurs",
     });
   }
 
@@ -138,11 +138,11 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
     out.push({
       chave: "router-failed",
       texto:
-        `Em ${gaps.router_failed} ${plural(gaps.router_failed, "conversa a leitura falhou", "conversas a leitura falhou")} ` +
-        `por problema técnico, e ela caiu no atendimento padrão. Isso não é configuração: é a IA que não respondeu na hora. ` +
-        `Se o número for alto, vale conferir a conexão com o provedor de IA.`,
+        `Dans ${gaps.router_failed} ${plural(gaps.router_failed, "conversation, la lecture a échoué", "conversations, la lecture a échoué")} ` +
+        `pour un problème technique, et elle est passée au service par défaut. Ce n’est pas un problème de configuration : c’est l’IA qui n’a pas répondu à temps. ` +
+        `Si le nombre est élevé, vérifiez la connexion avec le fournisseur d’IA.`,
       href: "/app/ai/credentials",
-      cta: "Conferir a conexão de IA",
+      cta: "Vérifier la connexion à l’IA",
     });
   }
 
@@ -166,23 +166,23 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
  */
 export function boaNoticia(buscas: number, decisoes: number, funis: number): string {
   const partes: string[] = [];
-  if (buscas > 0) partes.push("toda pergunta encontrou resposta nos seus materiais");
-  if (decisoes > 0) partes.push("toda conversa achou para onde ir");
-  if (funis > 0) partes.push("todo passo do atendimento tem uma etapa do funil que o recebe");
+  if (buscas > 0) partes.push("chaque question a trouvé une réponse dans vos documents");
+  if (decisoes > 0) partes.push("chaque conversation a trouvé où aller");
+  if (funis > 0) partes.push("chaque étape du suivi a une colonne du tableau pour la recevoir");
 
   const faltando: string[] = [];
-  if (buscas === 0) faltando.push("ninguém consultou sua base de conhecimento");
-  if (decisoes === 0) faltando.push("nenhuma conversa foi encaminhada");
-  if (funis === 0) faltando.push("você ainda não tem nenhum funil montado");
+  if (buscas === 0) faltando.push("personne n’a consulté votre base de connaissances");
+  if (decisoes === 0) faltando.push("aucune conversation n’a été orientée");
+  if (funis === 0) faltando.push("vous n’avez encore aucun tableau configuré");
 
   // Nenhuma evidência: a tela não tem o que elogiar, e dizer "nada travando"
   // seco seria elogio. Abre pelo motivo, não pela boa notícia.
   if (partes.length === 0) {
-    return `Ainda não dá para dizer se algo está travando: ${faltando.join(", ")}. Volte aqui depois que seu agente tiver atendido.`;
+    return `Impossible de dire pour l’instant si quelque chose bloque : ${faltando.join(", ")}. Revenez ici quand votre agent aura répondu à des clients.`;
   }
-  const frase = `Nada travando neste período: ${partes.join(", ")}.`;
+  const frase = `Rien ne bloque sur cette période : ${partes.join(", ")}.`;
   if (faltando.length === 0) return frase;
-  return `${frase} Uma ressalva: ${faltando.join(", ")} — sobre isso não dá para dizer nem que está bem nem que está mal.`;
+  return `${frase} Une réserve : ${faltando.join(", ")} — sur ce point, impossible de dire si c’est bien ou mal.`;
 }
 
 export function EvolutionGaps({

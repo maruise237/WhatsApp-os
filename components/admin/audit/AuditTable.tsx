@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -30,7 +30,7 @@ function maskEmail(email: string | null | undefined): string {
 
 function relativeDate(iso: string): string {
   try {
-    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: ptBR });
+    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: fr });
   } catch {
     return iso;
   }
@@ -81,10 +81,10 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center">
       <p className="text-sm font-medium text-muted-foreground">
-        Nenhum evento encontrado
+        Aucun événement trouvé
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Ajuste os filtros para ver entradas do audit log.
+        Ajustez les filtres pour voir les entrées du journal d’audit.
       </p>
     </div>
   );
@@ -117,11 +117,11 @@ export function AuditTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[130px]">Quando</TableHead>
+              <TableHead className="w-[130px]">Quand</TableHead>
               <TableHead>Action</TableHead>
-              <TableHead className="w-[130px]">Tenant</TableHead>
-              <TableHead className="w-[160px]">Actor</TableHead>
-              <TableHead className="w-[180px]">Recurso</TableHead>
+              <TableHead className="w-[130px]">Organisation</TableHead>
+              <TableHead className="w-[160px]">Acteur</TableHead>
+              <TableHead className="w-[180px]">Ressource</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>
@@ -156,7 +156,7 @@ export function AuditTable({
                 </TableCell>
                 <TableCell>
                   <Button asChild variant="ghost" size="sm" className="h-7 px-2 text-xs">
-                    <Link href={`/admin/audit/${row.id}`}>Ver</Link>
+                    <Link href={`/admin/audit/${row.id}`}>Voir</Link>
                   </Button>
                 </TableCell>
               </TableRow>

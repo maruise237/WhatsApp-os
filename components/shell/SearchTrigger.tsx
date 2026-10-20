@@ -17,11 +17,14 @@ export function SearchTrigger() {
       <Button
         variant="outline"
         size="sm"
-        className="gap-2 text-muted-foreground"
+        // Sur mobile : une icône à côté de la cloche, pas un champ vide flottant
+        // au milieu de l'en-tête.
+        className="gap-2 text-muted-foreground max-md:size-9 max-md:border-0 max-md:bg-transparent max-md:px-0 max-md:shadow-none"
+        aria-label="Rechercher"
         onClick={() => setOpen(true)}
       >
-        <MagnifyingGlass size={14} aria-hidden />
-        <span className="hidden md:inline">Buscar...</span>
+        <MagnifyingGlass size={18} className="md:size-3.5" aria-hidden />
+        <span className="hidden md:inline">Rechercher...</span>
         <kbd className="ml-2 hidden md:inline rounded border bg-muted px-1.5 py-0.5 text-[10px]">⌘K</kbd>
       </Button>
       <CommandPalette open={open} onOpenChange={setOpen} />

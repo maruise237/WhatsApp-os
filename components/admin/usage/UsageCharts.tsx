@@ -17,20 +17,20 @@ interface UsageChartsProps {
 
 function formatDateTick(date: string): string {
   const d = new Date(date + "T00:00:00");
-  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
 }
 
 // DÓLAR: o número é `llm_calls.cost_cents`, e `pricing.ts` cota o provedor em USD.
 const formatCurrency = formatCentsUSD;
 
 function formatNumber(n: number): string {
-  return n.toLocaleString("pt-BR");
+  return n.toLocaleString("fr-FR");
 }
 
 function EmptyChart() {
   return (
     <div className="flex h-40 items-center justify-center text-sm text-muted-foreground">
-      Sem dados no período
+      Aucune donnée sur la période
     </div>
   );
 }
@@ -57,7 +57,7 @@ export function UsageCharts({ series }: UsageChartsProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {/* Messages per day */}
-      <ChartCard title="Mensagens / dia">
+      <ChartCard title="Messages / jour">
         {!hasMessages ? (
           <EmptyChart />
         ) : (

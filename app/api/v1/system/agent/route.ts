@@ -76,12 +76,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   const bearer = auth.startsWith("Bearer ") ? auth.slice("Bearer ".length).trim() : "";
   const provided = bearer || (req.headers.get("x-cron-secret")?.trim() ?? "");
   if (!provided || !secretMatches(provided)) {
-    return fail("unauthorized", "Credencial inválida.", 401);
+    return fail("unauthorized", "Identifiant invalide.", 401);
   }
 
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("validation_failed", "Corpo inválido.", 422, { details: parsed.error.flatten() });
+    return fail("validation_failed", "Corps de requête invalide.", 422, { details: parsed.error.flatten() });
   }
 
   const db = createAdminClient();
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       .eq("id", 1);
     if (error) {
       logger.error("[system/agent] heartbeat falhou", { error: error.message });
-      return fail("internal_error", "Não consegui gravar o estado.", 500);
+      return fail("internal_error", "Impossible d’enregistrer l’état.", 500);
     }
 
     // "Há pedido?" tem UMA fonte de verdade: o run em `dispatched`. O flag
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       logger.error("[system/agent] heartbeat não conseguiu achar o run pendente", {
         error: runLookupError.message,
       });
-      return fail("internal_error", "Não consegui checar o pedido de atualização.", 500);
+      return fail("internal_error", "Impossible de vérifier la demande de mise à jour.", 500);
     }
 
     return ok({ update_requested: Boolean(run), run_id: run?.id ?? null });
@@ -152,14 +152,14 @@ export async function POST(req: NextRequest): Promise<Response> {
       error: runReadError.message,
       runId: payload.run_id,
     });
-    return fail("internal_error", "Não consegui ler a atualização.", 500);
+    return fail("internal_error", "Impossible de lire la mise à jour.", 500);
   }
 
-  if (!run) return fail("not_found", "Atualização não encontrada.", 404);
+  if (!run) return fail("not_found", "Mise à jour introuvable.", 404);
 
   if (payload.kind === "run_progress") {
     if (run.status !== "dispatched") {
-      return fail("state_conflict", "Esta atualização já terminou.", 409);
+      return fail("state_conflict", "Cette mise à jour est déjà terminée.", 409);
     }
     const { error } = await db
       .from("system_update_runs")
@@ -167,13 +167,13 @@ export async function POST(req: NextRequest): Promise<Response> {
       .eq("id", payload.run_id);
     if (error) {
       logger.error("[system/agent] run_progress falhou", { error: error.message, runId: payload.run_id });
-      return fail("internal_error", "Não consegui gravar o passo.", 500);
+      return fail("internal_error", "Impossible d’enregistrer l’étape.", 500);
     }
     return ok({ update_requested: false, run_id: payload.run_id });
   }
 
   if (!canTransition(run.status as RunStatus, payload.status)) {
-    return fail("invalid_state_transition", "Esta atualização já terminou.", 409);
+    return fail("invalid_state_transition", "Cette mise à jour est déjà terminée.", 409);
   }
 
   // Finaliza o run PRIMEIRO. Se essa escrita falhar, nada mais acontece: sobra
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       error: runUpdateError.message,
       runId: payload.run_id,
     });
-    return fail("internal_error", "Não consegui finalizar a atualização.", 500);
+    return fail("internal_error", "Impossible de finaliser la mise à jour.", 500);
   }
 
   // Nada a "limpar" além disto: fechar o run É o fim do pedido, porque o run

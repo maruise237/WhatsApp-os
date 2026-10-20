@@ -73,7 +73,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     return fail("internal_error", error.message, 500, { requestId });
   }
   if (!data) {
-    return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+    return fail("not_found", "Conversation introuvable.", 404, { requestId });
   }
 
   const conv = data as unknown as Conversation;

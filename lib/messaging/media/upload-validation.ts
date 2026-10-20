@@ -35,15 +35,15 @@ type Fail = { ok: false; code: "unsupported_media_type" | "payload_too_large" | 
 
 export function validateOutboundMedia(mime: string, sizeBytes: number): Ok | Fail {
   if (!sizeBytes || sizeBytes <= 0) {
-    return { ok: false, code: "validation_failed", message: "Arquivo vazio." };
+    return { ok: false, code: "validation_failed", message: "Fichier vide." };
   }
   if (sizeBytes > MAX_MEDIA_BYTES) {
-    return { ok: false, code: "payload_too_large", message: "Arquivo acima de 50MB." };
+    return { ok: false, code: "payload_too_large", message: "Fichier de plus de 50 Mo." };
   }
   const base = mime.split(";")[0]!.trim().toLowerCase();
   if (base.startsWith("image/")) return { ok: true, kind: "image" };
   if (base.startsWith("video/")) return { ok: true, kind: "video" };
   if (base.startsWith("audio/")) return { ok: true, kind: "audio" };
   if (DOCUMENT_MIMES.has(base)) return { ok: true, kind: "document" };
-  return { ok: false, code: "unsupported_media_type", message: "Tipo de arquivo não suportado." };
+  return { ok: false, code: "unsupported_media_type", message: "Type de fichier non pris en charge." };
 }

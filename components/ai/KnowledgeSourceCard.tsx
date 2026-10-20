@@ -41,26 +41,26 @@ const TYPE_META: Record<
   faq: {
     label: "FAQ",
     Icon: HelpCircle,
-    description: "Perguntas frequentes do tenant.",
+    description: "Questions fréquentes de l’organisation.",
     comoSePreenche: null,
   },
   policy: {
-    label: "Política",
+    label: "Politique",
     Icon: ShieldCheck,
-    description: "Documento PDF de políticas (troca, devolução, privacidade).",
+    description: "Document PDF des politiques (échange, retour, confidentialité).",
     comoSePreenche: null,
   },
   conversations: {
-    label: "Conversas opt-in",
+    label: "Conversations avec consentement",
     Icon: MessageSquare,
-    description: "Conversas anonimizadas para aprendizado.",
+    description: "Conversations anonymisées pour l’apprentissage.",
     comoSePreenche:
       "Entra sozinha: conversas resolvidas que alguém marcar como aproveitáveis pela IA são anonimizadas e indexadas em lote. Não há conteúdo para colar aqui.",
   },
   catalog: {
-    label: "Catálogo",
+    label: "Catalogue",
     Icon: Package,
-    description: "Produtos sincronizados do e-commerce.",
+    description: "Produits synchronisés depuis la boutique en ligne.",
     comoSePreenche:
       "Os produtos vêm da sincronização com o e-commerce, não de conteúdo digitado aqui.",
   },
@@ -78,7 +78,7 @@ function formatRelative(iso: string | null, t: (text: string) => string): string
   if (diffHr < 24) return `${t("há")} ${diffHr} ${t("h")}`;
   const diffDay = Math.floor(diffHr / 24);
   if (diffDay < 30) return `${t("há")} ${diffDay} ${t("d")}`;
-  return new Date(iso).toLocaleDateString("pt-BR");
+  return new Date(iso).toLocaleDateString("fr-FR");
 }
 
 export function KnowledgeSourceCard({

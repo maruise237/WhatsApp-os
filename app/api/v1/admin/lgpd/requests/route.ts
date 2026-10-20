@@ -92,7 +92,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     Object.fromEntries(req.nextUrl.searchParams.entries()),
   );
   if (!parsed.success) {
-    return fail("validation_error", "Parâmetros inválidos.", 400, {
+    return fail("validation_error", "Paramètres invalides.", 400, {
       requestId,
       details: parsed.error.flatten(),
     });

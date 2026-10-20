@@ -3,17 +3,34 @@ import { z } from "zod";
 const currencySchema = z.string().regex(/^[A-Z]{3}$/, "currency must be an ISO 4217 code");
 const uuidSchema = z.string().uuid();
 
+/** Devise par défaut d'un produit ou d'une commande : franc CFA d'Afrique centrale. */
+export const DEFAULT_SALES_CURRENCY = "XAF";
+
 export const createProductSchema = z.object({
   title: z.string().trim().min(1).max(240),
   description: z.string().trim().max(5000).nullable().optional(),
   price_cents: z.number().int().nonnegative(),
-  currency: currencySchema.default("BRL"),
+  currency: currencySchema.default(DEFAULT_SALES_CURRENCY),
   stock: z.number().int().nonnegative().default(0),
   is_active: z.boolean().default(true),
   metadata: z.record(z.string(), z.unknown()).default({}),
 });
 
-export const updateProductSchema = createProductSchema.partial();
+// Sans défauts, champ par champ : `createProductSchema.partial()` réappliquait
+// les `.default()` — un PATCH `{ stock: 5 }` remettait la devise, l'état actif et
+// les métadonnées à leur valeur initiale.
+export const updateProductSchema = z
+  .object({
+    title: z.string().trim().min(1).max(240),
+    description: z.string().trim().max(5000).nullable(),
+    price_cents: z.number().int().nonnegative(),
+    currency: currencySchema,
+    stock: z.number().int().nonnegative(),
+    is_active: z.boolean(),
+    metadata: z.record(z.string(), z.unknown()),
+  })
+  .partial()
+  .strict();
 
 export const createSalesOrderSchema = z.object({
   conversation_id: uuidSchema,
@@ -27,7 +44,7 @@ export const createSalesOrderSchema = z.object({
     )
     .min(1)
     .max(100),
-  currency: currencySchema.default("BRL"),
+  currency: currencySchema.default(DEFAULT_SALES_CURRENCY),
 });
 
 export const createPaymentProofSchema = z.object({

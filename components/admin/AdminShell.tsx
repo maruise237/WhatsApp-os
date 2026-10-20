@@ -73,7 +73,7 @@ export function AdminShell({ userEmail, children }: AdminShellProps) {
           <AdminSidebar userEmail={userEmail} />
           <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
             <SheetContent side="left" className="w-72 max-w-[85vw] gap-0 p-0 lg:hidden">
-              <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
+              <SheetTitle className="sr-only">Menu de navigation</SheetTitle>
               <AdminSidebar userEmail={userEmail} variant="mobile" />
             </SheetContent>
           </Sheet>
@@ -88,11 +88,11 @@ export function AdminShell({ userEmail, children }: AdminShellProps) {
                 size="icon"
                 className="shrink-0"
                 onClick={() => setMobileNavOpen(true)}
-                aria-label="Abrir menu de navegação"
+                aria-label="Ouvrir le menu de navigation"
               >
                 <List size={20} aria-hidden />
               </Button>
-              <span className="text-sm font-semibold tracking-tight">Admin Plataforma</span>
+              <span className="text-sm font-semibold tracking-tight">Admin plateforme</span>
             </header>
             {/* `overflow-x-hidden` como rede de segurança — mesmo motivo do
                 `AppShell` (ver comentário lá): se algo estourar a largura, a

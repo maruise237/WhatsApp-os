@@ -54,7 +54,7 @@ const bodySchema = z
     depois_de: z.string().min(1).nullable().optional(),
   })
   .strict()
-  .refine((b) => Object.keys(b).length > 0, { message: "Nada para alterar." });
+  .refine((b) => Object.keys(b).length > 0, { message: "Rien à modifier." });
 
 type PatchDoFunil = { name?: string; description?: string | null; position?: number; is_default?: boolean };
 
@@ -70,12 +70,12 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   try {
     json = await req.json();
   } catch {
-    return fail("invalid_request", "Corpo não é JSON válido.", 400, { requestId });
+    return fail("invalid_request", "Le corps de la requête n’est pas un JSON valide.", 400, { requestId });
   }
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return fail("unprocessable_entity", "Não entendi o que mudar neste funil.", 422, {
+    return fail("unprocessable_entity", "Je n’ai pas compris ce qu’il faut modifier dans ce tableau.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -96,7 +96,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // resposta é a mesma de um funil inexistente (dizer "existe, mas não é seu" já
   // vaza a existência).
   const alvo = funis.find((f) => f.id === pipelineId);
-  if (!alvo) return fail("not_found", "Funil não encontrado.", 404, { requestId });
+  if (!alvo) return fail("not_found", "Tableau introuvable.", 404, { requestId });
 
   // ⚠️ ARQUIVADO NÃO SE EDITA. `uniq_crm_pipelines_org_default` é PARCIAL
   // (`where is_archived = false`): marcar um funil arquivado como padrão passa
@@ -106,7 +106,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (alvo.is_archived) {
     return fail(
       "state_conflict",
-      `O funil «${alvo.name}» foi arquivado e não está mais na sua lista. Recarregue a página.`,
+      `Le tableau « ${alvo.name} » a été archivé et n’est plus dans votre liste. Rechargez la page.`,
       409,
       { requestId },
     );
@@ -123,8 +123,8 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (pedido.is_default === false) {
     return fail(
       "unprocessable_entity",
-      `«${alvo.name}» é o funil padrão e a organização precisa de um. Marque OUTRO funil como padrão — ` +
-        `o padrão se muda, não se apaga.`,
+      `« ${alvo.name} » est le tableau par défaut et l’organisation en a besoin d’un. Définissez un AUTRE tableau par défaut — ` +
+        `le tableau par défaut se remplace, il ne se supprime pas.`,
       422,
       { requestId },
     );
@@ -143,7 +143,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     if (pedido.depois_de !== null && i < 0) {
       return fail(
         "unprocessable_entity",
-        "O funil que você escolheu como vizinho não está mais na lista. Recarregue a página.",
+        "Le tableau choisi comme voisin n’est plus dans la liste. Rechargez la page.",
         422,
         { requestId },
       );
@@ -156,7 +156,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     if (!Number.isFinite(posicao)) {
       return fail(
         "state_conflict",
-        "Os funis desta lista estão empatados na ordenação. Recarregue a página e mova o funil para outro lugar.",
+        "Les tableaux de cette liste sont à égalité dans le classement. Rechargez la page et déplacez le tableau ailleurs.",
         409,
         { requestId },
       );
@@ -232,7 +232,7 @@ export async function DELETE(req: NextRequest, ctx: RouteCtx): Promise<Response>
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
   const alvo = funis.find((f) => f.id === pipelineId);
-  if (!alvo) return fail("not_found", "Funil não encontrado.", 404, { requestId });
+  if (!alvo) return fail("not_found", "Tableau introuvable.", 404, { requestId });
 
   let deps;
   try {

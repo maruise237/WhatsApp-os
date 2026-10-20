@@ -64,7 +64,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("invalid_body", "decision é obrigatório (accept | dismiss).", 400, { requestId });
+    return fail("invalid_body", "decision est obligatoire (accept | dismiss).", 400, { requestId });
   }
   const { decision, motivo } = parsed.data;
 
@@ -101,12 +101,12 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
       const st = (existe as { status: string }).status;
       return fail(
         "proposal_not_pending",
-        st === "expired" ? "Esta sugestão venceu pelo prazo." : "Esta sugestão já foi decidida.",
+        st === "expired" ? "Cette suggestion a expiré." : "Une décision a déjà été prise sur cette suggestion.",
         409,
         { requestId },
       );
     }
-    return fail("not_found", "Sugestão não encontrada.", 404, { requestId });
+    return fail("not_found", "Suggestion introuvable.", 404, { requestId });
   }
 
   const p = decidida as PropostaDecidida;
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
           transactional: {
             granted: true,
             granted_at: new Date().toISOString(),
-            source: `informado pelo titular em atendimento; confirmado por usuário ${userId}`,
+            source: `indiqué par la personne concernée pendant la conversation ; confirmé par l’utilisateur ${userId}`,
           },
         },
       } as never,
@@ -164,9 +164,9 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
       // decisão humana, e ela é fato mesmo que a escrita tenha sido barrada.
       // Reverter para `pending` reapresentaria o botão e convidaria ao mesmo
       // clique, sem que nada tivesse mudado.
-      return fail(err.code, err.message ?? "Não foi possível gravar.", err.status, { requestId });
+      return fail(err.code, err.message ?? "Impossible d’enregistrer.", err.status, { requestId });
     }
-    return fail("internal_error", "Não foi possível gravar o dado.", 500, { requestId });
+    return fail("internal_error", "Impossible d’enregistrer la donnée.", 500, { requestId });
   }
 
   await audit({

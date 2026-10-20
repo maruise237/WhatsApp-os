@@ -189,9 +189,9 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
       const excedente = exigidas - TETO_TOOLS_POR_AGENTE;
       aplicar(
         proximo,
-        `Ligar este pacote passaria de ${TETO_TOOLS_POR_AGENTE} capacidades (faltam ${excedente} ${
-          excedente === 1 ? "vaga" : "vagas"
-        }). Desligue um pacote que você usa menos antes.`,
+        `Activer ce pack dépasserait ${TETO_TOOLS_POR_AGENTE} capacités (il manque ${excedente} ${
+          excedente === 1 ? "place" : "places"
+        }). Désactivez d’abord un pack que vous utilisez moins.`,
         exigidas,
       );
     } else {
@@ -208,7 +208,7 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
     }
     aplicar(
       [...catalogo.map((c) => c.name), ...orfas].filter((n) => value.includes(n) || n === name),
-      `Você já ligou ${TETO_TOOLS_POR_AGENTE} capacidades. Desligue uma antes de ligar outra.`,
+      `Vous avez déjà activé ${TETO_TOOLS_POR_AGENTE} capacités. Désactivez-en une avant d’en activer une autre.`,
     );
   }
 

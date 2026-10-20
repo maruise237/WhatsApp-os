@@ -72,6 +72,12 @@ jobs:
           - name: deskcomm-scheduler
             dockerfile: Dockerfile.scheduler
             title: DeskcommCRM scheduler
+          # Le gateway Evolution Go (P6) était le dernier service build-only :
+          # construit sur la VPS du client, jamais mis à jour par un pull.
+          - name: whatsapp-gateway
+            dockerfile: services/whatsapp-gateway/Dockerfile
+            context: services/whatsapp-gateway
+            title: WhatsApp OS gateway
 
     steps:
       - uses: actions/checkout@v7
@@ -134,7 +140,7 @@ jobs:
       - name: Build e push (imagem genérica — sem segredos)
         uses: docker/build-push-action@v7
         with:
-          context: .
+          context: ${{ matrix.context || '.' }}
           file: ${{ matrix.dockerfile }}
           # linux/amd64: o VPS HostGator e a imagem do WAHA são amd64.
           platforms: linux/amd64

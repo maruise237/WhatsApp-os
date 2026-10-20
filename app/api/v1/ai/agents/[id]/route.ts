@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const { id } = await ctx.params;
 
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "ai_agents" });
@@ -53,10 +53,10 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .maybeSingle();
 
   if (error) {
-    return fail("internal_error", "Erro ao buscar agent.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la recherche de l’assistant.", 500, { requestId });
   }
   if (!data) {
-    return fail("not_found", "Agent não encontrado.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable.", 404, { requestId });
   }
 
   return ok(data, { requestId });
@@ -71,7 +71,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const { id } = await ctx.params;
 
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
@@ -82,7 +82,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   // Extract priority (mcp_agent-only) before strict-schema parse so we don't
@@ -96,7 +96,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
       p < 0 ||
       p > 1000
     ) {
-      return fail("validation_failed", "priority inválido (0..1000).", 422, { requestId });
+      return fail("validation_failed", "priority invalide (0..1000).", 422, { requestId });
     }
     priorityPatch = p;
     delete (rawBody as Record<string, unknown>).priority;
@@ -104,7 +104,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
 
   const parsed = agentPatchSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -122,10 +122,10 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .maybeSingle();
 
   if (loadErr) {
-    return fail("internal_error", "Erro ao carregar agent.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement de l’assistant.", 500, { requestId });
   }
   if (!existing) {
-    return fail("not_found", "Agent não encontrado.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable.", 404, { requestId });
   }
 
   // Build UPDATE payload. Para `config`, faz merge preservando defaults.
@@ -163,7 +163,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     .single();
 
   if (updErr || !updated) {
-    return fail("internal_error", "Erro ao atualizar agent.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la mise à jour de l’assistant.", 500, { requestId });
   }
 
   return ok(updated, { requestId });
@@ -178,7 +178,7 @@ export async function DELETE(_req: NextRequest, ctx: RouteCtx): Promise<Response
   const { id } = await ctx.params;
 
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("admin", { requestId, resource: "ai_agents" });
@@ -195,15 +195,15 @@ export async function DELETE(_req: NextRequest, ctx: RouteCtx): Promise<Response
     .maybeSingle();
 
   if (loadErr) {
-    return fail("internal_error", "Erro ao carregar agent.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement de l’assistant.", 500, { requestId });
   }
   if (!existing) {
-    return fail("not_found", "Agent não encontrado.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable.", 404, { requestId });
   }
   if (existing.is_default) {
     return fail(
       "state_conflict",
-      "Não é possível desativar o agent default da organização.",
+      "Impossible de désactiver l’assistant par défaut de l’organisation.",
       409,
       { requestId },
     );
@@ -223,7 +223,7 @@ export async function DELETE(_req: NextRequest, ctx: RouteCtx): Promise<Response
     .eq("organization_id", activeOrg.orgId);
 
   if (updErr) {
-    return fail("internal_error", "Erro ao desativar agent.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la désactivation de l’assistant.", 500, { requestId });
   }
 
   void audit({

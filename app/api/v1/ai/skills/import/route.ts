@@ -35,19 +35,19 @@ export async function POST(req: NextRequest): Promise<Response> {
   const MAX_UPLOAD_BYTES = 6 * 1024 * 1024; // 6MB: teto do envelope multipart (5MB skill + overhead)
   const contentLength = Number(req.headers.get("content-length") ?? "0");
   if (contentLength > MAX_UPLOAD_BYTES) {
-    return fail("skill_upload_too_large", "O arquivo enviado é grande demais (máx. 5 MB por skill).", 413, { requestId });
+    return fail("skill_upload_too_large", "Le fichier envoyé est trop volumineux (5 Mo max. par compétence).", 413, { requestId });
   }
 
   let formData: FormData;
   try {
     formData = await req.formData();
   } catch {
-    return fail("invalid_request", "Falha ao processar multipart/form-data.", 400, { requestId });
+    return fail("invalid_request", "Impossible de traiter le multipart/form-data.", 400, { requestId });
   }
 
   const fileEntry = formData.get("file");
   if (!(fileEntry instanceof File)) {
-    return fail("invalid_request", "Campo 'file' ausente ou inválido.", 400, { requestId });
+    return fail("invalid_request", "Champ « file » absent ou invalide.", 400, { requestId });
   }
 
   const zipBytes = new Uint8Array(await fileEntry.arrayBuffer());
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   } catch (err) {
     console.error("[skills-import] importSkillPackage falhou:", err);
-    return fail("internal_error", "Erro ao importar o pacote de skill.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’import du paquet de compétence.", 500, { requestId });
   }
 
   await audit({

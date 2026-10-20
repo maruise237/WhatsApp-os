@@ -1,10 +1,10 @@
 import type { PipelineVocabulary } from "./types";
 
 const DEFAULTS: Required<PipelineVocabulary> = {
-  lead: "Lead",
-  deal: "Negócio",
-  won: "Ganho",
-  lost: "Perdido",
+  lead: "Client",
+  deal: "Affaire",
+  won: "Gagné",
+  lost: "Perdu",
 };
 
 export function resolveVocabulary(

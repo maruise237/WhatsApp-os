@@ -364,6 +364,6 @@ describe("POST /api/v1/system/update", () => {
     expect(res.status).toBe(409);
     const body = await res.json();
     expect(body.error.code).toBe("state_conflict");
-    expect(body.error.message).toBe("Já existe uma atualização em andamento.");
+    expect(body.error.message).toBe("Une mise à jour est déjà en cours.");
   });
 });

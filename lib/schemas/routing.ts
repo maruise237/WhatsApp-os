@@ -60,10 +60,10 @@ export type AtendimentoConfigPatch = z.infer<typeof atendimentoConfigPatchSchema
 export const scheduleWindowSchema = z
   .object({
     dow: z.number().int().min(0).max(6),
-    start: z.string().regex(HHMM, "start deve ser HH:MM"),
-    end: z.string().regex(HHMM, "end deve ser HH:MM"),
+    start: z.string().regex(HHMM, "le début doit être au format HH:MM"),
+    end: z.string().regex(HHMM, "la fin doit être au format HH:MM"),
   })
-  .refine((w) => w.start < w.end, { message: "start deve ser antes de end" });
+  .refine((w) => w.start < w.end, { message: "le début doit être avant la fin" });
 export type ScheduleWindow = z.infer<typeof scheduleWindowSchema>;
 
 /**
@@ -89,7 +89,7 @@ export const availabilityScheduleSchema = z.object({
     .string()
     .min(1)
     .max(64)
-    .refine(fusoValido, "fuso horário inválido (ex.: America/Asuncion)")
+    .refine(fusoValido, "fuseau horaire invalide (ex. : Africa/Abidjan)")
     .default("America/Sao_Paulo"),
   windows: z.array(scheduleWindowSchema).max(50).default([]),
 });
@@ -104,6 +104,6 @@ export const availabilityPatchSchema = z
   })
   .partial()
   .refine((v) => Object.keys(v).length > 0, {
-    message: "Informe ao menos um campo (is_available, capacity ou schedule).",
+    message: "Indiquez au moins un champ (is_available, capacity ou schedule).",
   });
 export type AvailabilityPatch = z.infer<typeof availabilityPatchSchema>;

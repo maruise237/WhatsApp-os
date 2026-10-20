@@ -72,8 +72,8 @@ describe("descreveEspera", () => {
       clampado: true,
       motivo: "o cliente pediu para retomar depois do almoço",
     });
-    expect(d.escolhido).toBe("4 horas");
-    expect(d.faixa).toBe("seu limite: de 1 hora a 4 horas");
+    expect(d.escolhido).toBe("4 heures");
+    expect(d.faixa).toBe("votre limite : de 1 heure à 4 heures");
     expect(d.motivo).toBe("o cliente pediu para retomar depois do almoço");
   });
 
@@ -86,7 +86,7 @@ describe("descreveEspera", () => {
       clampado: true,
       motivo: "cliente sumiu, vale esperar bastante",
     });
-    expect(d.pedido).toBe("3 dias");
+    expect(d.pedido).toBe("3 jours");
   });
 
   it("sem corte não há diferença a contar — e a linha não aparece", () => {

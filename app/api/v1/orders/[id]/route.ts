@@ -22,7 +22,7 @@ export async function GET(_request: NextRequest, { params }: Context): Promise<R
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("sales_orders")
-    .select("*, sales_order_items(*), payment_proofs(*)")
+    .select("*, sales_order_items(*), payment_proofs(*), contacts(id, name, display_name, phone_number)")
     .eq("id", id)
     .eq("organization_id", authz.org.orgId)
     .maybeSingle();
@@ -42,7 +42,7 @@ export async function PATCH(request: NextRequest, { params }: Context): Promise<
   try {
     body = await request.json();
   } catch {
-    return fail("invalid_request", "Corpo JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
   const parsed = transitionSalesOrderSchema.safeParse(body);
   if (!parsed.success) {

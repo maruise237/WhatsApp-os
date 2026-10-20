@@ -118,7 +118,7 @@ async function registrarAdiamento(
           reason: "fora_da_janela_de_envio",
           retry_at: retryAt,
           explicacao:
-            "A regra casou e está esperando a janela de envio do número reabrir — nada foi tentado ainda.",
+            "La règle s’applique et attend la réouverture des heures d’envoi du numéro — rien n’a encore été tenté.",
         },
       },
     ],

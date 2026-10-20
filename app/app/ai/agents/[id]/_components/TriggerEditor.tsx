@@ -44,7 +44,7 @@ const WEEKDAYS = [
   { id: 3, label: "Qua" },
   { id: 4, label: "Qui" },
   { id: 5, label: "Sex" },
-  { id: 6, label: "Sáb" },
+  { id: 6, label: "Sam" },
 ];
 
 export function TriggerEditor({ value, onChange, disabled }: Props) {

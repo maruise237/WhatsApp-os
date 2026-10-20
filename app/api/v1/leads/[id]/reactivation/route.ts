@@ -48,7 +48,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("invalid_body", "decision e proposal_id são obrigatórios.", 400, { requestId });
+    return fail("invalid_body", "decision et proposal_id sont obligatoires.", 400, { requestId });
   }
   const { decision, proposal_id } = parsed.data;
 
@@ -84,14 +84,14 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     if (existe) {
       return fail(
         "reactivation_not_pending",
-        `Esta sugestão já foi ${
-          (existe as { status: string }).status === "expired" ? "encerrada pelo prazo" : "decidida"
+        `Cette suggestion a déjà été ${
+          (existe as { status: string }).status === "expired" ? "clôturée car expirée" : "traitée"
         }.`,
         409,
         { requestId },
       );
     }
-    return fail("not_found", "Sugestão não encontrada.", 404, { requestId });
+    return fail("not_found", "Suggestion introuvable.", 404, { requestId });
   }
 
   const { data: lead } = await supabase
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
         // decisão em promessa, que é o que a wave inteira combate.
         next_run_at: new Date().toISOString(),
         payload: {
-          reason: "Retomada de contato autorizada por um humano",
+          reason: "Reprise de contact autorisée par une personne",
           promise: null,
           promised_at: null,
           source: "reactivation",
@@ -158,8 +158,8 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     // Nomeia a decisão, nunca o conteúdo da proposta nem dado do negócio.
     reason:
       decision === "accept"
-        ? "Retomada de contato aprovada"
-        : "Retomada de contato descartada — decisão registrada",
+        ? "Reprise de contact approuvée"
+        : "Reprise de contact écartée — décision enregistrée",
     payload: { proposal_id },
   });
   if (!atividade.ok) {
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     });
     return fail(
       "activity_write_failed",
-      "A decisão não pôde ser registrada. Nada foi enviado ao cliente.",
+      "La décision n’a pas pu être enregistrée. Rien n’a été envoyé au client.",
       500,
       { requestId },
     );

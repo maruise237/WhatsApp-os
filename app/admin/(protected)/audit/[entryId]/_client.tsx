@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow, format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,7 +23,7 @@ function maskEmail(email: string | null | undefined): string {
 
 function formatDate(iso: string): string {
   try {
-    return format(new Date(iso), "dd/MM/yyyy HH:mm:ss", { locale: ptBR });
+    return format(new Date(iso), "dd/MM/yyyy HH:mm:ss", { locale: fr });
   } catch {
     return iso;
   }
@@ -31,7 +31,7 @@ function formatDate(iso: string): string {
 
 function relativeDate(iso: string): string {
   try {
-    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: ptBR });
+    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: fr });
   } catch {
     return iso;
   }
@@ -84,7 +84,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
   if (isError || !detail) {
     return (
       <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-10 text-center text-sm text-destructive">
-        Entrada de audit não encontrada.
+        Entrée d’audit introuvable.
       </div>
     );
   }
@@ -98,7 +98,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
       <Button asChild variant="ghost" size="sm" className="gap-1.5 -ml-2">
         <Link href="/admin/audit">
           <CaretLeft size={14} aria-hidden />
-          Audit Log
+          Journal d’audit
         </Link>
       </Button>
 
@@ -126,7 +126,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Metadata JSON viewer */}
         <div className="space-y-3">
-          <h2 className="text-sm font-medium">Metadata</h2>
+          <h2 className="text-sm font-medium">Métadonnées</h2>
           <pre className="overflow-auto rounded-md border bg-muted/40 p-4 text-xs leading-relaxed">
             {JSON.stringify(entry.metadata, null, 2)}
           </pre>
@@ -136,7 +136,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
             <Row label="Request ID" value={entry.request_id ?? "—"} mono />
             <Row label="Resource Type" value={entry.resource_type ?? "—"} />
             <Row label="Resource ID" value={entry.resource_id ?? "—"} mono />
-            <Row label="Bypassed RLS" value={entry.bypassed_rls ? "Sim" : "Não"} />
+            <Row label="Bypassed RLS" value={entry.bypassed_rls ? "Oui" : "Non"} />
             <Row label="Actor IP" value={entry.actor_ip ?? "—"} mono />
             <Row
               label="User Agent"
@@ -150,17 +150,17 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
         <div className="space-y-4">
           {/* Actor card */}
           <div className="rounded-md border p-4 space-y-2">
-            <h2 className="text-sm font-medium">Actor</h2>
+            <h2 className="text-sm font-medium">Acteur</h2>
             {actor ? (
               <div className="space-y-1 text-sm">
                 <Row label="User ID" value={actor.id} mono />
-                <Row label="Email" value={maskEmail(actor.email)} />
+                <Row label="E-mail" value={maskEmail(actor.email)} />
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
                 {entry.actor_user_id
                   ? `ID: ${entry.actor_user_id}`
-                  : "Sem actor registrado"}
+                  : "Aucun acteur enregistré"}
               </p>
             )}
           </div>
@@ -168,15 +168,15 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
           {/* Tenant card */}
           {tenant && (
             <div className="rounded-md border p-4 space-y-2">
-              <h2 className="text-sm font-medium">Tenant</h2>
+              <h2 className="text-sm font-medium">Organisation</h2>
               <div className="space-y-1 text-sm">
-                <Row label="Nome" value={tenant.display_name} />
+                <Row label="Nom" value={tenant.display_name} />
                 <Row label="Slug" value={tenant.slug} mono />
-                <Row label="Status" value={tenant.status} />
+                <Row label="Statut" value={tenant.status} />
               </div>
               <Button asChild variant="outline" size="sm" className="mt-2">
                 <Link href={`/admin/tenants/${tenant.id}`}>
-                  Ver tenant
+                  Voir l’organisation
                 </Link>
               </Button>
             </div>
@@ -185,14 +185,14 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
           {/* Resource deep link */}
           {deepLink && (
             <div className="rounded-md border p-4">
-              <h2 className="text-sm font-medium mb-2">Recurso</h2>
+              <h2 className="text-sm font-medium mb-2">Ressource</h2>
               <p className="text-sm text-muted-foreground mb-3">
                 {entry.resource_type}&nbsp;·&nbsp;
                 <span className="font-mono">{entry.resource_id}</span>
               </p>
               <Button asChild variant="outline" size="sm">
                 <Link href={deepLink}>
-                  Abrir recurso
+                  Ouvrir la ressource
                 </Link>
               </Button>
             </div>

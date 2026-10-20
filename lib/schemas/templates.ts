@@ -16,5 +16,5 @@ export const updateTemplateSchema = z
     shortcut: z.string().trim().min(1).max(40).nullable(),
   })
   .partial()
-  .refine((d) => Object.keys(d).length > 0, { message: "Informe ao menos um campo." });
+  .refine((d) => Object.keys(d).length > 0, { message: "Indiquez au moins un champ." });
 export type UpdateTemplateInput = z.infer<typeof updateTemplateSchema>;

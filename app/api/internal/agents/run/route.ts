@@ -70,14 +70,14 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, {
+    return fail("invalid_request", "Corps JSON invalide.", 400, {
       requestId,
       details: { meta: { requestId } },
     });
   }
   const parsed = bodySchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: { meta: { requestId }, errors: parsed.error.flatten() },
     });

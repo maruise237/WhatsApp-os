@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow, differenceInHours } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,7 +31,7 @@ function shortId(id: string): string {
 
 function relativeDate(iso: string): string {
   try {
-    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: ptBR });
+    return formatDistanceToNow(new Date(iso), { addSuffix: true, locale: fr });
   } catch {
     return iso;
   }
@@ -43,7 +43,7 @@ function countdownLabel(dueAt: string | null, status: AdminLgpdStatus): string {
   const now = new Date();
   const due = new Date(dueAt);
   const hours = differenceInHours(due, now);
-  if (hours < 0) return `${Math.abs(hours)}h em atraso`;
+  if (hours < 0) return `${Math.abs(hours)} h de retard`;
   if (hours < 24) return `${hours}h restantes`;
   const days = Math.floor(hours / 24);
   return `${days}d restantes`;
@@ -132,9 +132,9 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center">
       <p className="text-sm font-medium text-muted-foreground">
-        Nenhuma solicitação encontrada
+        Aucune demande trouvée
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">Ajuste os filtros para ver solicitações.</p>
+      <p className="mt-1 text-xs text-muted-foreground">Ajustez les filtres pour voir les demandes.</p>
     </div>
   );
 }
@@ -165,12 +165,12 @@ export function LgpdRequestsTable({
           <TableHeader>
             <TableRow>
               <TableHead className="w-[90px]">ID</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead className="w-[160px]">Tenant</TableHead>
-              <TableHead className="w-[130px]">Recebido em</TableHead>
-              <TableHead className="w-[130px]">Vence em</TableHead>
-              <TableHead className="w-[80px]">Risco</TableHead>
-              <TableHead className="w-[100px]">Status</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead className="w-[160px]">Organisation</TableHead>
+              <TableHead className="w-[130px]">Reçue le</TableHead>
+              <TableHead className="w-[130px]">Échéance le</TableHead>
+              <TableHead className="w-[80px]">Risque</TableHead>
+              <TableHead className="w-[100px]">Statut</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>
@@ -213,7 +213,7 @@ export function LgpdRequestsTable({
                 </TableCell>
                 <TableCell>
                   <Button asChild variant="ghost" size="sm" className="h-7 px-2 text-xs">
-                    <Link href={`/admin/lgpd/requests/${row.id}`}>Ver</Link>
+                    <Link href={`/admin/lgpd/requests/${row.id}`}>Voir</Link>
                   </Button>
                 </TableCell>
               </TableRow>

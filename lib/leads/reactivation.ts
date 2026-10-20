@@ -163,7 +163,7 @@ export async function venceReativacoes(
       actor: { type: "webhook_source", id: "reactivation-watcher" },
       // Nomeia o que aconteceu, não o conteúdo da proposta: o reason vai para a
       // tela, e a regra do §9 vale igual aqui.
-      reason: "A sugestão de retomar contato venceu sem decisão",
+      reason: "La proposition de recontacter a expiré sans décision",
       payload: { proposta_id: p.id, expires_at: p.expires_at },
     });
     if (!atividade.ok) {
@@ -196,12 +196,12 @@ export async function venceReativacoes(
           organization_id: organizationId,
           kind: "reactivation_expired",
           severity: "warn",
-          title: `Decida sobre ${r.vencidas} ${r.vencidas === 1 ? "negócio parado" : "negócios parados"} — a sugestão de retomar venceu`,
+          title: `Décidez pour ${r.vencidas} ${r.vencidas === 1 ? "affaire à l’arrêt" : "affaires à l’arrêt"} — la proposition de reprise a expiré`,
           body:
-            `${r.vencidas === 1 ? "Um negócio esfriou" : `${r.vencidas} negócios esfriaram`} e a sugestão de ` +
-            `retomar contato ficou sem resposta até o prazo. Eles saíram do quadro para não ` +
-            `parecerem em andamento. Retomar ou encerrar — as duas são decisões; deixar como ` +
-            `está é a única que não é.`,
+            `${r.vencidas === 1 ? "Une affaire s’est refroidie" : `${r.vencidas} affaires se sont refroidies`} et la proposition de ` +
+            `recontacter est restée sans réponse jusqu’à l’échéance. Elles ont été retirées du tableau pour ne pas ` +
+            `sembler en cours. Reprendre ou clôturer — ce sont deux décisions ; laisser en ` +
+            `l’état est la seule qui n’en est pas une.`,
           ref_kind: "organization",
           ref_id: organizationId,
         })

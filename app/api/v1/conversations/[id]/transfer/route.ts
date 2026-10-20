@@ -67,7 +67,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
       return fail("internal_error", memberErr.message, 500, { requestId });
     }
     if (!member || member.role === "viewer") {
-      return fail("unprocessable_entity", "Destino não é um atendente desta organização.", 422, {
+      return fail("unprocessable_entity", "Le destinataire n’est pas un agent de cette organisation.", 422, {
         requestId,
       });
     }
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
   const row = data?.[0];
   if (!row) {
-    return fail("not_found", "Conversa não encontrada.", 404, { requestId });
+    return fail("not_found", "Conversation introuvable.", 404, { requestId });
   }
 
   const conv = row as unknown as Conversation;
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     actor: { type: "user", id: user.id, role: authz.org.role },
     motivo: input.reason?.trim()
       ? `Transferiu a conversa: ${input.reason.trim()}`
-      : "Transferiu a conversa para outro atendente",
+      : "A transféré la conversation à un autre agent",
     payload: { to_user_id: input.to_user_id },
   });
 

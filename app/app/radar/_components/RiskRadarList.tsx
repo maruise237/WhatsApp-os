@@ -22,9 +22,9 @@ const RISK_META: Record<
   Exclude<RiskBucket, "em_dia">,
   { label: string; variant: "error" | "warning" | "info" }
 > = {
-  critico: { label: "Crítico", variant: "error" },
-  em_risco: { label: "Em risco", variant: "warning" },
-  em_voo: { label: "Em voo", variant: "info" },
+  critico: { label: "Critique", variant: "error" },
+  em_risco: { label: "À risque", variant: "warning" },
+  em_voo: { label: "En vol", variant: "info" },
 };
 
 function coldFor(hours: number, t: (texto: string) => string): string {

@@ -65,10 +65,9 @@ export default async function OrgMemoryPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Memória da IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Mémoire de l’IA</h1>
         <p className="text-sm text-muted-foreground">
-          Regras e aprendizados que TODOS os agentes de IA desta organização seguem em qualquer
-          conversa — não é uma configuração de um agente específico.
+          Règles et apprentissages que TOUS les agents IA de cette organisation suivent dans chaque conversation — ce n’est pas un réglage d’un agent en particulier.
         </p>
       </header>
       <OrgMemoryClient initialState={initialState} />

@@ -54,8 +54,8 @@ export function diffCheckpoint(
     reason: emit
       ? motivo(addedObjections, addedCommitments, nextActionChanged, atual.next_action)
       : anterior === null
-        ? "primeiro checkpoint sem compromisso, objeção ou próxima ação"
-        : "só reescreveu o resumo — não muda o que fazer a seguir",
+        ? "premier point d’étape sans engagement, objection ni prochaine action"
+        : "a seulement réécrit le résumé — ne change pas la suite à donner",
   };
 }
 
@@ -67,14 +67,14 @@ function motivo(
   proximaAcao: string | null,
 ): string {
   const partes: string[] = [];
-  if (objecoes.length === 1) partes.push(`Nova objeção: ${objecoes[0]}`);
-  else if (objecoes.length > 1) partes.push(`${objecoes.length} novas objeções: ${objecoes.join("; ")}`);
+  if (objecoes.length === 1) partes.push(`Nouvelle objection : ${objecoes[0]}`);
+  else if (objecoes.length > 1) partes.push(`${objecoes.length} nouvelles objections : ${objecoes.join("; ")}`);
 
-  if (compromissos.length === 1) partes.push(`Novo compromisso: ${compromissos[0]}`);
+  if (compromissos.length === 1) partes.push(`Nouvel engagement : ${compromissos[0]}`);
   else if (compromissos.length > 1)
-    partes.push(`${compromissos.length} novos compromissos: ${compromissos.join("; ")}`);
+    partes.push(`${compromissos.length} nouveaux engagements : ${compromissos.join("; ")}`);
 
-  if (mudouAcao && proximaAcao) partes.push(`Próxima ação: ${proximaAcao}`);
+  if (mudouAcao && proximaAcao) partes.push(`Prochaine action : ${proximaAcao}`);
   return partes.join(" · ");
 }
 

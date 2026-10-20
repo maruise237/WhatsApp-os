@@ -46,13 +46,13 @@ export async function applyProposal(
     .eq("organization_id", orgId)
     .maybeSingle();
   if (!proposal) {
-    return { ok: false, code: "proposal_not_found", message: "Proposta não encontrada." };
+    return { ok: false, code: "proposal_not_found", message: "Proposition introuvable." };
   }
   if (proposal.applied_at !== null) {
     return {
       ok: false,
       code: "proposal_already_applied",
-      message: "Proposta já foi aplicada.",
+      message: "Cette proposition a déjà été appliquée.",
     };
   }
   if (proposal.type === "org_memory_entry") {
@@ -72,7 +72,7 @@ export async function applyProposal(
       .select("id")
       .single();
     if (entryErr || !entry) {
-      return { ok: false, code: "internal_error", message: "Falha ao gravar a memória da org." };
+      return { ok: false, code: "internal_error", message: "Impossible d’enregistrer la mémoire de l’entreprise." };
     }
     const { error: markErr } = await admin
       .from("flywheel_distiller_proposals")
@@ -83,7 +83,7 @@ export async function applyProposal(
       return {
         ok: false,
         code: "internal_error",
-        message: "Memória gravada, mas falhou ao marcar a proposta.",
+        message: "Mémoire enregistrée, mais impossible de marquer la proposition.",
       };
     }
     return { ok: true, entryId: entry.id };
@@ -93,7 +93,7 @@ export async function applyProposal(
     return {
       ok: false,
       code: "proposal_type_unsupported",
-      message: `Aplicação automática só existe para playbook_bullet (esta é ${proposal.type}).`,
+      message: `L’application automatique n’existe que pour playbook_bullet (celle-ci est ${proposal.type}).`,
     };
   }
 
@@ -107,7 +107,7 @@ export async function applyProposal(
     return {
       ok: false,
       code: "agent_not_published",
-      message: "O agente precisa de uma versão publicada para receber a proposta.",
+      message: "L’assistant doit avoir une version publiée pour recevoir la proposition.",
     };
   }
 
@@ -118,7 +118,7 @@ export async function applyProposal(
     .eq("organization_id", orgId)
     .maybeSingle();
   if (!base) {
-    return { ok: false, code: "internal_error", message: "Versão publicada não encontrada." };
+    return { ok: false, code: "internal_error", message: "Version publiée introuvable." };
   }
 
   const { data: maxRow } = await admin
@@ -157,7 +157,7 @@ export async function applyProposal(
     .select("id, version_number")
     .single();
   if (insErr || !created) {
-    return { ok: false, code: "internal_error", message: "Falha ao criar a versão nova." };
+    return { ok: false, code: "internal_error", message: "Impossible de créer la nouvelle version." };
   }
 
   const published = await publishAgentVersion(admin, {
@@ -171,7 +171,7 @@ export async function applyProposal(
     return {
       ok: false,
       code: "publish_failed",
-      message: `Publicação vetada: ${published.code}. A proposta segue pendente.`,
+      message: `Publication refusée : ${published.code}. La proposition reste en attente.`,
     };
   }
 
@@ -186,7 +186,7 @@ export async function applyProposal(
     .eq("organization_id", orgId)
     .is("applied_at", null);
   if (markErr) {
-    return { ok: false, code: "internal_error", message: "Versão publicada, mas falhou ao marcar a proposta." };
+    return { ok: false, code: "internal_error", message: "Version publiée, mais impossible de marquer la proposition." };
   }
 
   return { ok: true, versionId: created.id, versionNumber: created.version_number };

@@ -30,9 +30,9 @@ export function PlanoDeTempoBloco({ plano, nos, decididoRelativo }: Props) {
   return (
     <section className="rounded-md border border-border p-4" data-testid="dossie-plano-de-tempo">
       <header className="mb-3">
-        <h2 className="text-sm font-medium">O tempo que o agente escolheu</h2>
+        <h2 className="text-sm font-medium">Le délai choisi par l’agent</h2>
         <p className="text-xs text-text-muted">
-          Decidido {decididoRelativo ?? "no início do follow-up"}
+          Décidé {decididoRelativo ?? "au début de la relance"}
           {plano.modelo ? ` · ${plano.modelo}` : ""}
         </p>
       </header>
@@ -43,10 +43,10 @@ export function PlanoDeTempoBloco({ plano, nos, decididoRelativo }: Props) {
             <li key={nodeId} className="flex flex-col gap-0.5" data-testid="dossie-espera">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm text-text">{porId[nodeId]?.rotulo ?? nodeId}</span>
-                <span className="text-sm font-medium text-text">esperar {d.escolhido}</span>
+                <span className="text-sm font-medium text-text">attendre {d.escolhido}</span>
                 {espera.clampado && (
                   <Badge variant="warning" data-testid="dossie-espera-clampada">
-                    bateu no seu limite
+                    a atteint votre limite
                   </Badge>
                 )}
               </div>
@@ -58,7 +58,7 @@ export function PlanoDeTempoBloco({ plano, nos, decididoRelativo }: Props) {
               */}
               {d.pedido && (
                 <p className="text-xs text-warning-fg" data-testid="dossie-espera-pedido">
-                  a IA pediu {d.pedido}
+                  l’IA l’a demandé {d.pedido}
                 </p>
               )}
               <p className="text-xs text-text-muted">{d.motivo}</p>

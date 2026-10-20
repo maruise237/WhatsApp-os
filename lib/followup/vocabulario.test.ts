@@ -309,7 +309,7 @@ describe("a tradução não é o valor cru disfarçado", () => {
     // quebrado devolveria pouca coisa e as varreduras abaixo passariam por
     // omissão — que é exatamente como a lista à mão falhava.
     expect(rotulosPorValor.length).toBeGreaterThan(30);
-    for (const esperado of ["Parou por falha", "Uma saída para cada regra", "Convertido", "Etiqueta do contato"]) {
+    for (const esperado of ["Arrêté sur un échec", "Une sortie par règle", "Converti", "Étiquette du contact"]) {
       expect(
         rotulosPorValor.map(([, r]) => r),
         `'${esperado}' não foi colhido — algum mapa ficou fora da varredura`,
@@ -384,9 +384,9 @@ describe("etiqueta é pertinência, não igualdade", () => {
   it("tag + eq lê 'tem a etiqueta'; tag + neq, 'não tem a etiqueta'", () => {
     // `evaluateCheck` em node-handlers.ts trata `tag` como lista: `eq` testa
     // pertinência. "é igual a" prometeria outra coisa.
-    expect(comparador("tag", "eq").rotulo).toBe("tem a etiqueta");
-    expect(comparador("tag", "neq").rotulo).toBe("não tem a etiqueta");
-    expect(fraseDaCondicao("tag", "eq", "vip")).toBe("O contato tem a etiqueta “vip”");
+    expect(comparador("tag", "eq").rotulo).toBe("a l’étiquette");
+    expect(comparador("tag", "neq").rotulo).toBe("n’a pas l’étiquette");
+    expect(fraseDaCondicao("tag", "eq", "vip")).toBe("Le contact a l’étiquette « vip »");
     expect(comparador("tag", "eq").rotulo).not.toMatch(/igual/i);
   });
 
@@ -408,7 +408,7 @@ describe("o ramo em frase — o registro do dossiê", () => {
     // O risco do v2 é silencioso: `no_reply` deixa de chegar como `class_match`
     // e vira `branch_id`, então a linha que o tratava fica órfã e a frase vira
     // o identificador — sem exceção nenhuma. Este caso é o que reprova nisso.
-    expect(fraseDoRamo(NO_REPLY_BRANCH_ID)).toBe("quando ninguém responde");
+    expect(fraseDoRamo(NO_REPLY_BRANCH_ID)).toBe("quand personne ne répond");
     for (const ramo of RESERVED_BRANCH_IDS) {
       expect(fraseDoRamo(ramo), `ramo reservado '${ramo}' sem frase`).toBeTruthy();
       expect(fraseDoRamo(ramo) ?? "", `frase de '${ramo}' devolve o id`).not.toContain(ramo);
@@ -418,8 +418,8 @@ describe("o ramo em frase — o registro do dossiê", () => {
   it("classe da IA e regra do negócio têm moldes DIFERENTES — um só mentiria em metade dos casos", () => {
     // "quando a resposta é “Tem a etiqueta VIP”" não é resposta de ninguém: é
     // regra do negócio. O molde único obrigaria um dos dois lados a mentir.
-    expect(fraseDaClasse("interessado")).toBe("quando a IA classifica a resposta como “interessado”");
-    expect(fraseDaRegraNomeada("Cliente VIP")).toBe("quando vale a regra “Cliente VIP”");
+    expect(fraseDaClasse("interessado")).toBe("quand l’IA classe la réponse comme « interessado »");
+    expect(fraseDaRegraNomeada("Cliente VIP")).toBe("quand la règle « Cliente VIP » s’applique");
     expect(fraseDaClasse("x")).not.toBe(fraseDaRegraNomeada("x"));
   });
 
@@ -427,15 +427,15 @@ describe("o ramo em frase — o registro do dossiê", () => {
     // Sem isto sairia "quando O contato tem…" — maiúscula no meio da frase, que
     // ninguém revisa e todo mundo lê. E jamais o id: `regra-2` na tela é o
     // defeito que este módulo existe para impedir.
-    expect(fraseDaRegraSemNome("tag", "eq", "vip")).toBe("quando o contato tem a etiqueta “vip”");
-    expect(fraseDaRegraSemNome("steps_taken", "gte", 3)).toBe("quando o fluxo já deu pelo menos 3 passos");
+    expect(fraseDaRegraSemNome("tag", "eq", "vip")).toBe("quand le contact a l’étiquette « vip »");
+    expect(fraseDaRegraSemNome("steps_taken", "gte", 3)).toBe("quand la séquence a déjà fait au moins 3 étapes");
   });
 
   it("fraseDoRamo devolve null para ramo não reservado, em vez de inventar", () => {
     // Quem chama precisa escolher o molde (classe ou regra) com o contexto do
     // NÓ, que este módulo não tem. Devolver texto aqui seria adivinhar.
     expect(fraseDoRamo("br_7f3a")).toBeNull();
-    expect(fraseDoRamo(NO_REPLY_BRANCH_ID)).toBe("quando ninguém responde");
+    expect(fraseDoRamo(NO_REPLY_BRANCH_ID)).toBe("quand personne ne répond");
   });
 
   it("os dois registros dizem a mesma coisa em tons diferentes, e nenhum é cópia do outro", () => {
@@ -471,23 +471,23 @@ describe("rótulos sob contrato de e2e", () => {
   it("o nó final continua dizendo Convertido/Esgotado", () => {
     // tests/e2e/followup-journey.spec.ts escolhe a opção pelo nome e confere o
     // texto no card. Trocar a palavra sem trocar o spec quebra o e2e.
-    expect(RESULTADOS_DO_FIM.converted).toBe("Convertido");
-    expect(RESULTADOS_DO_FIM.exhausted).toBe("Esgotado");
+    expect(RESULTADOS_DO_FIM.converted).toBe("Converti");
+    expect(RESULTADOS_DO_FIM.exhausted).toBe("Tentatives épuisées");
   });
 
   it("o gatilho continua dizendo Manual/Silêncio", () => {
     // tests/e2e/followup-builder.spec.ts seleciona as duas opções pelo nome exato.
     expect(GATILHOS.manual).toBe("Manual");
-    expect(GATILHOS.silence).toBe("Silêncio");
+    expect(GATILHOS.silence).toBe("Silence");
   });
 });
 
 describe("opcoes()", () => {
   it("preserva a ordem de declaração do mapa", () => {
     expect(opcoes(RESULTADOS_DO_FIM)).toEqual([
-      { valor: "converted", rotulo: "Convertido" },
-      { valor: "exhausted", rotulo: "Esgotado" },
-      { valor: "custom", rotulo: "Personalizado" },
+      { valor: "converted", rotulo: "Converti" },
+      { valor: "exhausted", rotulo: "Tentatives épuisées" },
+      { valor: "custom", rotulo: "Personnalisé" },
     ]);
   });
 });

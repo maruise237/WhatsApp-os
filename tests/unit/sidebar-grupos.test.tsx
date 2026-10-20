@@ -74,7 +74,7 @@ describe("Sidebar agrupado", () => {
     // O rótulo mudou: "Funis" passou a ser a LISTA (/app/kanban) e esta tela,
     // que configura as colunas, virou "Etapas do funil". Antes as duas
     // disputavam o mesmo nome no mesmo grupo do menu.
-    const etapas = screen.getByRole("link", { name: "Étapes de l'entonnoir" });
+    const etapas = screen.getByRole("link", { name: "Étapes du tableau" });
     expect(etapas).toHaveAttribute("href", "/app/settings/tenant/pipelines");
   });
 
@@ -85,7 +85,7 @@ describe("Sidebar agrupado", () => {
         <Sidebar collapsed={false} />
       </IdiomaProvider>,
     );
-    expect(screen.getByRole("link", { name: "Entonnoirs" })).toHaveAttribute("href", "/app/kanban");
+    expect(screen.getByRole("link", { name: "Tableaux" })).toHaveAttribute("href", "/app/kanban");
   });
 
   it("desenterra Nuvemshop e Audit Log", () => {
@@ -112,7 +112,7 @@ describe("Sidebar agrupado", () => {
     const config = screen.getByRole("link", { name: /Paramètres/ });
     expect(config).toHaveAttribute("href", "/app/settings");
     // Fora da <nav> que rola.
-    const nav = screen.getByRole("navigation", { name: "Navegação principal" });
+    const nav = screen.getByRole("navigation", { name: "Navigation principale" });
     expect(nav.contains(config)).toBe(false);
   });
 
@@ -158,7 +158,7 @@ describe("Sidebar agrupado", () => {
       </IdiomaProvider>,
     );
     expect(screen.getByRole("link", { name: /Inbox/ })).toHaveAttribute("aria-current", "page");
-    // "Kanban" saiu da interface; o item da mesma URL agora se chama "Entonnoirs".
-    expect(screen.getByRole("link", { name: "Entonnoirs" })).not.toHaveAttribute("aria-current");
+    // "Kanban" saiu da interface; o item da mesma URL agora se chama "Tableaux".
+    expect(screen.getByRole("link", { name: "Tableaux" })).not.toHaveAttribute("aria-current");
   });
 });

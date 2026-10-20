@@ -174,7 +174,7 @@ function buildState(args: { agent?: AgentRow; version: AgentVersionRow | null })
     credential_id: version ? (version.credential_id ?? CHAVE_DA_INSTALACAO) : "",
     channel_session_id: version?.channel_session_id ?? "",
     system_prompt:
-      version?.system_prompt ?? "Você é um atendente. Responda de forma educada e clara, em pt-BR.",
+      version?.system_prompt ?? "Vous êtes un conseiller. Répondez de manière polie et claire, en français.",
     tool_ids: version?.tool_ids ?? [],
     trigger_config: (version?.trigger_config as unknown as TriggerValue) ?? DEFAULT_TRIGGER,
     max_steps: version?.max_steps ?? 10,
@@ -182,7 +182,7 @@ function buildState(args: { agent?: AgentRow; version: AgentVersionRow | null })
     cost_budget_cents: version?.cost_budget_cents ?? 50,
     history_message_window: version?.history_message_window ?? 20,
     history_token_window: version?.history_token_window ?? 8_000,
-    handoff_keywords: version?.handoff_keywords ?? ["falar com humano", "atendente", "pessoa real"],
+    handoff_keywords: version?.handoff_keywords ?? ["parler à un humain", "conseiller", "vraie personne"],
     handoff_tool_enabled: version?.handoff_tool_enabled ?? true,
     cases_enabled: version?.cases_enabled ?? false,
     split_messages: version?.split_messages ?? false,
@@ -277,6 +277,12 @@ export function AgentForm(props: Props) {
   // ---------------------------------------------------------------------
   // Validação (espelha versionCreateSchema, no client; server revalida).
   // ---------------------------------------------------------------------
+  // Avant toute tentative d'enregistrement, ces messages sont des CONSIGNES
+  // (gris, sans bordure rouge) : un formulaire tout juste ouvert couvert de rouge
+  // se lit comme « vous avez déjà fait une erreur ».
+  const [tentouSalvar, setTentouSalvar] = React.useState(false);
+  const dica = tentouSalvar ? "text-xs text-destructive" : "text-xs text-muted-foreground";
+
   const validation = React.useMemo(() => {
     const errors: Record<string, string> = {};
     // As mensagens abaixo aparecem embaixo do campo ANTES de a pessoa tentar
@@ -356,6 +362,7 @@ export function AgentForm(props: Props) {
   // ---------------------------------------------------------------------
 
   async function handleSave() {
+    setTentouSalvar(true);
     if (!isValid) {
       const first = Object.values(validation)[0];
       toast.error(first ?? t("Formulário inválido."));
@@ -366,7 +373,7 @@ export function AgentForm(props: Props) {
       if (isEdit) {
         const res = await saveAgentDraftAction(props.agent.id, toVersionPayload(form));
         if (!res.ok) {
-          toast.error(res.message ?? `Erro: ${res.error}`);
+          toast.error(res.message ?? `Erreur : ${res.error}`);
           return;
         }
         toast.success(
@@ -387,7 +394,7 @@ export function AgentForm(props: Props) {
         }
         const res = await createMcpAgentAction(validated.data);
         if (!res.ok) {
-          toast.error(res.message ?? `Erro: ${res.error}`);
+          toast.error(res.message ?? `Erreur : ${res.error}`);
           return;
         }
         toast.success(t("Agent criado."));
@@ -605,10 +612,10 @@ export function AgentForm(props: Props) {
                 onChange={(e) => patch({ name: e.target.value })}
                 disabled={disabled}
                 maxLength={120}
-                aria-invalid={!!validation.name}
+                aria-invalid={tentouSalvar && !!validation.name}
               />
               {validation.name ? (
-                <p className="text-xs text-destructive">{validation.name}</p>
+                <p className={dica}>{validation.name}</p>
               ) : null}
             </div>
             <div className="space-y-1">
@@ -681,7 +688,7 @@ export function AgentForm(props: Props) {
               id="model"
             />
             {validation.model ? (
-              <p className="text-xs text-destructive">{validation.model}</p>
+              <p className={dica}>{validation.model}</p>
             ) : null}
 
             <CredentialPicker
@@ -694,7 +701,7 @@ export function AgentForm(props: Props) {
               instalacaoTemChave={(props.provedoresDaInstalacao ?? []).includes(form.provider)}
             />
             {validation.credential_id ? (
-              <p className="text-xs text-destructive">{validation.credential_id}</p>
+              <p className={dica}>{validation.credential_id}</p>
             ) : null}
             {cred && credSt !== "validated" ? (
               <p className="text-xs text-amber-600 dark:text-amber-400">
@@ -756,7 +763,7 @@ export function AgentForm(props: Props) {
                 </SelectContent>
               </Select>
               {validation.channel_session_id ? (
-                <p className="text-xs text-destructive">{validation.channel_session_id}</p>
+                <p className={dica}>{validation.channel_session_id}</p>
               ) : null}
             </div>
           </Card>
@@ -883,10 +890,10 @@ export function AgentForm(props: Props) {
                */
               spellCheck={false}
               className="font-mono text-xs"
-              aria-invalid={!!validation.system_prompt}
+              aria-invalid={tentouSalvar && !!validation.system_prompt}
             />
             {validation.system_prompt ? (
-              <p className="text-xs text-destructive">{validation.system_prompt}</p>
+              <p className={dica}>{validation.system_prompt}</p>
             ) : null}
           </Card>
 
@@ -921,10 +928,10 @@ export function AgentForm(props: Props) {
                   value={form.split_max_chars}
                   onChange={(e) => patch({ split_max_chars: Number(e.target.value) })}
                   disabled={disabled}
-                  aria-invalid={!!validation.split_max_chars}
+                  aria-invalid={tentouSalvar && !!validation.split_max_chars}
                 />
                 {validation.split_max_chars ? (
-                  <p className="text-xs text-destructive">{validation.split_max_chars}</p>
+                  <p className={dica}>{validation.split_max_chars}</p>
                 ) : null}
               </div>
             ) : null}
@@ -944,7 +951,7 @@ export function AgentForm(props: Props) {
               disabled={disabled}
             />
             {validation.tool_ids ? (
-              <p className="text-xs text-destructive">{validation.tool_ids}</p>
+              <p className={dica}>{validation.tool_ids}</p>
             ) : null}
           </Card>
 

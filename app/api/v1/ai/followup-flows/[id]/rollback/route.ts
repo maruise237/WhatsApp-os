@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
   if (!UUID_RX.test(id)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   const authz = await requireRole("manager", { requestId, resource: "followup_flows" });
@@ -41,12 +41,12 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = rollbackFollowupFlowSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
-  if (!pointer) return fail("not_found", "Fluxo não encontrado.", 404, { requestId });
+  if (!pointer) return fail("not_found", "Scénario introuvable.", 404, { requestId });
 
   const { data: version, error: versionErr } = await supabase
     .from("followup_flow_versions")
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("pointer_id", id)
     .maybeSingle();
   if (versionErr) return fail("internal_error", versionErr.message, 500, { requestId });
-  if (!version) return fail("not_found", "Version não encontrada.", 404, { requestId });
+  if (!version) return fail("not_found", "Version introuvable.", 404, { requestId });
 
   const { data: updated, error: updErr } = await supabase
     .from("followup_flow_pointers")

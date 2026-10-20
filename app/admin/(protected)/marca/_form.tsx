@@ -148,13 +148,13 @@ export function FormularioDaMarca({
     if (!derivada || !degraus) return [];
     return [
       {
-        rotulo: "Sua cor",
+        rotulo: "Votre couleur",
         hex: derivada.marca,
         indice: degraus.suaCor,
-        nota: degraus.suaCor === null ? "fora da escala — fica só no logo" : undefined,
+        nota: degraus.suaCor === null ? "hors de l’échelle — reste seulement dans le logo" : undefined,
       },
-      { rotulo: "Botões no modo claro", hex: derivada.claro.accent, indice: degraus.claro },
-      { rotulo: "Botões no modo escuro", hex: derivada.escuro.accent, indice: degraus.escuro },
+      { rotulo: "Boutons en mode clair", hex: derivada.claro.accent, indice: degraus.claro },
+      { rotulo: "Boutons en mode sombre", hex: derivada.escuro.accent, indice: degraus.escuro },
     ];
   }, [derivada, degraus]);
 
@@ -185,7 +185,7 @@ export function FormularioDaMarca({
 
     const lido = platformBrandingSchema.safeParse(candidato);
     if (!lido.success) {
-      toast.error("Confira os campos: algum valor não está no formato esperado.");
+      toast.error("Vérifiez les champs : une valeur n’est pas au format attendu.");
       return;
     }
 
@@ -198,7 +198,7 @@ export function FormularioDaMarca({
         router.refresh();
         return;
       }
-      toast.error(ERRO_EM_PORTUGUES[resultado.error] ?? "Não consegui salvar a marca agora.");
+      toast.error(ERRO_EM_PORTUGUES[resultado.error] ?? "Impossible d’enregistrer la marque pour le moment.");
       // Recusa que esta tela não sabe nomear não pode virar só um toast genérico:
       // o texto cru é o que torna o problema diagnosticável para quem tem acesso
       // ao servidor. Falhar fechado na ação, aberto na informação.
@@ -209,7 +209,7 @@ export function FormularioDaMarca({
   return (
     <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
       <Card className="space-y-2 p-6">
-        <Label htmlFor="app_name">Nome do sistema</Label>
+        <Label htmlFor="app_name">Nom du système</Label>
         <Input
           id="app_name"
           value={nome}
@@ -251,18 +251,13 @@ export function FormularioDaMarca({
           se os dois viessem da mesma fonte.
         */}
         <p className="text-xs text-text-muted">
-          Deixe em branco para voltar ao nome padrão. Este nome já aparece no título da aba do
-          navegador, nos menus laterais, nos e-mails que o sistema envia (para as empresas que
-          não definiram um nome próprio), no aplicativo de verificação em duas etapas e no
-          arquivo de códigos de recuperação que o usuário baixa. Ainda NÃO chega às telas de
-          entrada e cadastro nem às da configuração inicial: essas continuam com o nome gravado
-          no arquivo de instalação do servidor até a próxima atualização da stack.
+          Laissez vide pour revenir au nom par défaut. Ce nom apparaît déjà dans le titre de l’onglet du navigateur, dans les menus latéraux, dans les e-mails envoyés par le système (pour les entreprises qui n’ont pas défini leur propre nom), dans l’application de validation en deux étapes et dans le fichier de codes de récupération que l’utilisateur télécharge. Il n’apparaît PAS encore sur les écrans de connexion et d’inscription ni sur ceux de la configuration initiale : ceux-ci gardent le nom inscrit dans le fichier d’installation du serveur jusqu’à la prochaine mise à jour de la stack.
         </p>
       </Card>
 
       <Card className="space-y-4 p-6">
         <div className="space-y-2">
-          <Label htmlFor="accent_hex">Cor da marca</Label>
+          <Label htmlFor="accent_hex">Couleur de la marque</Label>
           <div className="flex items-center gap-3">
             {/* Atalho, nunca o controle principal: o seletor do navegador escolhe
                 UM pixel e não mostra o que o sistema faz com ele. Quem ensina é a
@@ -275,7 +270,7 @@ export function FormularioDaMarca({
                   : COR_NEUTRA_DO_SELETOR,
               }}
             >
-              <span className="sr-only">Escolher a cor visualmente</span>
+              <span className="sr-only">Choisir la couleur visuellement</span>
               <input
                 type="color"
                 value={ehHexValido(hexLimpo) ? normalizarHex(hexLimpo) : COR_NEUTRA_DO_SELETOR}
@@ -296,20 +291,19 @@ export function FormularioDaMarca({
             />
             {hexLimpo.length > 0 && !hexValido ? (
               <span className="text-sm text-error-fg">
-                Use um código de cor como #7a5cd6.
+                Utilisez un code couleur comme #7a5cd6.
               </span>
             ) : null}
           </div>
           <p id="ajuda-da-cor" className="text-xs text-text-muted">
-            Deixe em branco para voltar à cor padrão do sistema.
+            Laissez vide pour revenir à la couleur par défaut du système.
           </p>
         </div>
 
         {derivada ? (
           <div className="space-y-2">
             <p className="text-sm text-text-muted">
-              A partir da sua cor o sistema monta esta escala e escolhe, dentro dela, o tom que
-              vai nos botões:
+              À partir de votre couleur, le système construit cette échelle et choisit, dans celle-ci, la teinte des boutons :
             </p>
             <TiraDeTons tons={derivada.rampa} legenda={legenda} />
             {/* Fato de desenho do produto, não diagnóstico desta cor: o modo
@@ -317,13 +311,12 @@ export function FormularioDaMarca({
                 esta linha, ver dois tons diferentes marcados na tira parece
                 incoerência do sistema. */}
             <p className="text-xs text-text-muted">
-              No modo escuro o sistema usa naturalmente um tom mais claro da escala, para a cor
-              não se perder no fundo escuro.
+              En mode sombre, le système utilise naturellement une teinte plus claire de l’échelle, pour que la couleur ne se perde pas sur le fond sombre.
             </p>
           </div>
         ) : (
           <p className="text-sm text-text-muted">
-            Sem cor definida, o sistema usa a cor padrão dele.
+            Sans couleur définie, le système utilise sa couleur par défaut.
           </p>
         )}
       </Card>
@@ -340,7 +333,7 @@ export function FormularioDaMarca({
           // campo que houve render NOVO do servidor. Ver os Props de CampoDeLogo.
           logoDaCamada={{ url: gravada.logo_path ? logoEmVigor : null }}
           logoHerdado={logoDoAmbiente}
-          origemDoHerdado="do arquivo de instalação do servidor"
+          origemDoHerdado="du fichier d’installation du serveur"
           nomeEmVigor={nomeEmVigor}
         />
       </Card>
@@ -360,7 +353,7 @@ export function FormularioDaMarca({
           <span className="font-mono text-xs text-text-muted">{erroTecnico}</span>
         ) : null}
         <Button type="submit" disabled={isPending || !hexValido}>
-          {isPending ? "Salvando…" : "Salvar"}
+          {isPending ? "Salvando…" : "Enregistrer"}
         </Button>
       </div>
     </form>

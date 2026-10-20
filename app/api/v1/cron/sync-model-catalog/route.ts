@@ -135,7 +135,7 @@ function autorizado(req: NextRequest): boolean {
 async function handler(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
   if (!autorizado(req)) {
-    return fail("unauthorized", "cron secret ausente ou inválido", 401, { requestId });
+    return fail("unauthorized", "secret cron absent ou invalide", 401, { requestId });
   }
   try {
     const resultado = await sincronizarCatalogo(createAdminClient(), buscarDaOpenRouter);

@@ -15,10 +15,9 @@ export default async function AgentInboxPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Central de avisos</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Centre d’alertes</h1>
         <p className="text-sm text-muted-foreground">
-          O que o assistente precisou escalar para o time: conexões caídas, tarefas que
-          falharam, atendimentos passados a humanos.
+          Ce que l’assistant a dû remonter à l’équipe : connexions perdues, tâches échouées, échanges transférés à des humains.
         </p>
       </header>
       <AgentInboxList canResolve={canResolve} />

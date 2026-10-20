@@ -22,7 +22,7 @@ function Swatches({ scale, onDarkAfter = 600 }: { scale: ColorScale; onDarkAfter
             data-on-dark={onDark}
             style={{ background: hex }}
             onClick={() => void copyToClipboard(hex)}
-            title={`${stop} · ${hex} (clique para copiar)`}
+            title={`${stop} · ${hex} (cliquer pour copier)`}
           >
             <span>{stop}</span>
           </button>
@@ -39,9 +39,7 @@ export function SectionPalettes() {
     <div className="ds-section">
       <h2 className="ds-display">Paletas</h2>
       <p className="ds-lede">
-        Cinco variantes de accent dentro do território &ldquo;soft-tech calmo&rdquo;: nenhuma satura mais
-        que ~45% (medido em HSL). Cada uma tem 11 stops do accent, 11 stops de neutro greige (não slate/zinc)
-        e versões light/dark <em>definidas separadamente</em>, não invertidas.
+        Cinq variantes d’accent dans le registre &ldquo;soft-tech calme&rdquo; : aucune ne dépasse ~45 % de saturation (mesuré en HSL). Chacune a 11 paliers d’accent, 11 paliers de neutre greige (pas slate/zinc) et des versions light/dark <em>definidas separadamente</em>, non inversées.
       </p>
 
       {Object.values(PALETTES).map((p) => {
@@ -52,7 +50,7 @@ export function SectionPalettes() {
               <div>
                 <h3 style={{ margin: 0 }}>
                   {p.name}
-                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>ativa</span>}
+                  {active && <span className="ds-badge ds-badge--accent" style={{ marginLeft: 10 }}>active</span>}
                 </h3>
                 <p style={{ fontSize: 13, color: "var(--ds-text-muted)", marginTop: 4 }}>{p.description}</p>
               </div>
@@ -61,7 +59,7 @@ export function SectionPalettes() {
                 onClick={() => v.setPalette(p.id as PaletteId)}
                 disabled={active}
               >
-                Aplicar paleta
+                Appliquer la palette
               </button>
             </div>
 
@@ -99,22 +97,22 @@ export function SectionPalettes() {
                   <div className="ds-preview-light" style={{ background: p.surfaces.light.bg, color: p.surfaces.light.text, border: `1px solid ${p.surfaces.light.border}` }}>
                     <div className="ds-preview-label">Preview · Light</div>
                     <div style={{ background: p.surfaces.light.surface, border: `1px solid ${p.surfaces.light.border}`, borderRadius: 8, padding: 14 }}>
-                      <div style={{ fontFamily: "var(--ds-font-display)", fontWeight: 600, marginBottom: 4 }}>Pedido #12.443</div>
+                      <div style={{ fontFamily: "var(--ds-font-display)", fontWeight: 600, marginBottom: 4 }}>Commande n° 12 443</div>
                       <div style={{ fontSize: 12, color: p.surfaces.light.textMuted }}>Enviado às 14h32 · cliente respondeu</div>
                       <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                        <button style={{ background: p.accent[600], color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Responder</button>
-                        <button style={{ background: "transparent", color: p.accent[600], border: `1px solid ${p.surfaces.light.border}`, padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Arquivar</button>
+                        <button style={{ background: p.accent[600], color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Répondre</button>
+                        <button style={{ background: "transparent", color: p.accent[600], border: `1px solid ${p.surfaces.light.border}`, padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Archiver</button>
                       </div>
                     </div>
                   </div>
                   <div className="ds-preview-dark" style={{ background: p.surfaces.dark.bg, color: p.surfaces.dark.text, border: `1px solid ${p.surfaces.dark.border}` }}>
                     <div className="ds-preview-label">Preview · Dark</div>
                     <div style={{ background: p.surfaces.dark.surface, border: `1px solid ${p.surfaces.dark.border}`, borderRadius: 8, padding: 14 }}>
-                      <div style={{ fontFamily: "var(--ds-font-display)", fontWeight: 600, marginBottom: 4 }}>Pedido #12.443</div>
+                      <div style={{ fontFamily: "var(--ds-font-display)", fontWeight: 600, marginBottom: 4 }}>Commande n° 12 443</div>
                       <div style={{ fontSize: 12, color: p.surfaces.dark.textMuted }}>Enviado às 14h32 · cliente respondeu</div>
                       <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                        <button style={{ background: p.accent[400], color: "#0a0908", border: "none", padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Responder</button>
-                        <button style={{ background: "transparent", color: p.accent[400], border: `1px solid ${p.surfaces.dark.border}`, padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Arquivar</button>
+                        <button style={{ background: p.accent[400], color: "#0a0908", border: "none", padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Répondre</button>
+                        <button style={{ background: "transparent", color: p.accent[400], border: `1px solid ${p.surfaces.dark.border}`, padding: "6px 12px", borderRadius: 4, fontSize: 12, cursor: "pointer" }}>Archiver</button>
                       </div>
                     </div>
                   </div>

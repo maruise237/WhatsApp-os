@@ -16,15 +16,15 @@ import { isRunStale } from "@/lib/system/update-run";
 
 export const dynamic = "force-dynamic";
 
-const RUN_IN_PROGRESS_MESSAGE = "Já existe uma atualização em andamento.";
+const RUN_IN_PROGRESS_MESSAGE = "Une mise à jour est déjà en cours.";
 
 export async function POST(_req: NextRequest): Promise<Response> {
   const user = await loadAuthUser();
   // `unauthenticated` (não `unauthorized`): esse último é reservado ao segredo
   // interno das rotas host↔app (lib/api/errors.ts) — aqui falta é sessão.
-  if (!user) return fail("unauthenticated", "Faça login para continuar.", 401);
+  if (!user) return fail("unauthenticated", "Connectez-vous pour continuer.", 401);
   if (!user.is_platform_admin) {
-    return fail("forbidden", "Só o dono do servidor pode atualizar o sistema.", 403);
+    return fail("forbidden", "Seul le propriétaire du serveur peut mettre à jour le système.", 403);
   }
 
   const db = createAdminClient();
@@ -39,14 +39,14 @@ export async function POST(_req: NextRequest): Promise<Response> {
   // pior mensagem possível bem na hora de uma falha de infraestrutura.
   if (versionError) {
     logger.error("[system/update] leitura de system_version falhou", { error: versionError.message });
-    return fail("internal_error", "Não consegui ler o estado da atualização.", 500);
+    return fail("internal_error", "Impossible de lire l’état de la mise à jour.", 500);
   }
 
   const current = version?.current_version ?? "";
   const latest = version?.latest_version ?? "";
 
   if (!latest || latest === current) {
-    return fail("state_conflict", "Você já está na versão mais recente.", 409);
+    return fail("state_conflict", "Vous avez déjà la version la plus récente.", 409);
   }
 
   const { data: running } = await db
@@ -76,7 +76,7 @@ export async function POST(_req: NextRequest): Promise<Response> {
       .update({
         status: "failed",
         finished_at: new Date().toISOString(),
-        log_tail: "Run abandonado: o agente do host não reportou o desfecho a tempo (agente parado ou travado).",
+        log_tail: "Exécution abandonnée : l’agent du serveur n’a pas transmis le résultat à temps (agent arrêté ou bloqué).",
       })
       .eq("id", running.id)
       .eq("status", "dispatched");
@@ -85,7 +85,7 @@ export async function POST(_req: NextRequest): Promise<Response> {
         error: staleError.message,
         runId: running.id,
       });
-      return fail("internal_error", "Não consegui liberar a atualização travada.", 500);
+      return fail("internal_error", "Impossible de débloquer la mise à jour bloquée.", 500);
     }
   }
 
@@ -106,11 +106,11 @@ export async function POST(_req: NextRequest): Promise<Response> {
       return fail("state_conflict", RUN_IN_PROGRESS_MESSAGE, 409);
     }
     logger.error("[system/update] insert do run falhou", { error: error.message });
-    return fail("internal_error", "Não consegui registrar o pedido de atualização.", 500);
+    return fail("internal_error", "Impossible d’enregistrer la demande de mise à jour.", 500);
   }
 
   if (!run) {
-    return fail("internal_error", "Não consegui registrar o pedido de atualização.", 500);
+    return fail("internal_error", "Impossible d’enregistrer la demande de mise à jour.", 500);
   }
 
   // O run criado acima é a ordem — e é a ÚNICA. Havia aqui um segundo write

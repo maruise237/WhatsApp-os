@@ -41,6 +41,17 @@ describe("escolher o pacote pelo que o dono escreveu", () => {
     expect(escolherPacotePorTexto("Loja de roupas").id).toBe("loja");
   });
 
+  it("reconhece o ramo em francês — o mercado do produto", () => {
+    expect(escolherPacotePorTexto("Vente de pagnes et tissus wax via WhatsApp").id).toBe("loja");
+    expect(escolherPacotePorTexto("Ex. : vente de vêtements de sport via WhatsApp").id).toBe("loja");
+    expect(escolherPacotePorTexto("Cabinet dentaire à Douala").id).toBe("clinica");
+    expect(escolherPacotePorTexto("Salon de coiffure").id).toBe("clinica");
+    expect(escolherPacotePorTexto("Agence immobilière, location d'appartements").id).toBe("imobiliaria");
+    expect(escolherPacotePorTexto("Cabinet d'avocats").id).toBe("servicos");
+    expect(escolherPacotePorTexto("Formation en ligne en marketing digital").id).toBe("curso");
+    expect(escolherPacotePorTexto("ecole de langues").id).toBe("curso");
+  });
+
   it("cai no genérico quando não reconhece — nunca em nada", () => {
     expect(escolherPacotePorTexto("xyzzy").id).toBe(PACOTE_PADRAO.id);
     expect(escolherPacotePorTexto("").id).toBe(PACOTE_PADRAO.id);
@@ -57,7 +68,7 @@ describe("o pedido", () => {
   it("leva o exemplo do ramo, não uma descrição do formato em prosa", () => {
     // Descrever o formato produz JSON válido com conteúdo de manual de vendas.
     const { prompt } = pedidoDeSugestao(CTX, escolherPacotePorTexto("clínica"));
-    expect(prompt).toContain("Consulta marcada");
+    expect(prompt).toContain("Rendez-vous pris");
     expect(prompt).toContain("Clínica Bem Viver");
     expect(prompt).toContain("Atendimento odontológico");
   });
@@ -66,7 +77,7 @@ describe("o pedido", () => {
     // Sem isto o modelo devolve o exemplo de volta, e toda clínica do mundo
     // termina com o mesmo quadro.
     const { prompt } = pedidoDeSugestao(CTX, escolherPacotePorTexto("clínica"));
-    expect(prompt).toMatch(/não copie/i);
+    expect(prompt).toMatch(/ne copie pas/i);
   });
 
   it("proíbe explicitamente a língua de manual de vendas", () => {
@@ -122,7 +133,7 @@ describe("sugerir", () => {
     });
     const s = await sugerirFunil(CTX, responde(semGanho));
     expect(s.origem).toBe("pacote");
-    expect(s.origem === "pacote" && s.porque).toMatch(/fechado/i);
+    expect(s.origem === "pacote" && s.porque).toMatch(/conclue/i);
   });
 
   it("a chave sem saldo vira pacote + motivo, nunca uma tela quebrada", async () => {

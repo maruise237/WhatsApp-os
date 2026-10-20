@@ -89,7 +89,7 @@ function contar(n: number, singular: string, plural: string): string | null {
 function enumerar(partes: (string | null)[]): string {
   const uteis = partes.filter((p): p is string => p !== null);
   const ultimo = uteis.pop() ?? "";
-  return uteis.length > 0 ? `${uteis.join(", ")} e ${ultimo}` : ultimo;
+  return uteis.length > 0 ? `${uteis.join(", ")} et ${ultimo}` : ultimo;
 }
 
 export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean }) {
@@ -624,7 +624,7 @@ function QrDialog({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
-            No celular: WhatsApp → Aparelhos conectados → Conectar um aparelho → escaneie o código.
+            Sur le téléphone : WhatsApp → Appareils connectés → Connecter un appareil → scannez le code.
           </DialogDescription>
         </DialogHeader>
         <div className="flex min-h-[16rem] flex-col items-center justify-center gap-3 py-2">
@@ -635,13 +635,13 @@ function QrDialog({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={`/api/v1/channel-sessions/${sessionId}/qr?t=${tick}`}
-              alt="QR Code para conectar WhatsApp"
+              alt="QR code pour connecter WhatsApp"
               className="h-64 w-64 rounded-md border bg-white p-2"
             />
           ) : status === "WORKING" ? (
             <div className="flex flex-col items-center gap-2 text-sm font-medium text-success-fg">
               <CheckCircle size={28} weight="fill" aria-hidden />
-              Conectado!
+              Connecté !
             </div>
           ) : status === "FAILED" || status === "STOPPED" ? (
             // Chegar aqui quase sempre significa credencial revogada: o número
@@ -651,8 +651,7 @@ function QrDialog({
             // única ação que de fato resolve.
             <div className="flex flex-col items-center gap-3 text-center">
               <p className="text-sm text-error-fg">
-                Este número foi desvinculado do WhatsApp. Para usá-lo de novo é preciso parear outra
-                vez.
+                Ce numéro a été dissocié de WhatsApp. Pour l’utiliser à nouveau, il faut l’appairer une nouvelle fois.
               </p>
               <Button
                 size="sm"
@@ -674,13 +673,13 @@ function QrDialog({
                 ) : (
                   <ArrowsClockwise size={14} aria-hidden />
                 )}
-                Gerar novo QR
+                Générer un nouveau QR
               </Button>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
               <CircleNotch size={28} className="animate-spin" aria-hidden />
-              Preparando o código…
+              Préparation du code…
             </div>
           )}
         </div>

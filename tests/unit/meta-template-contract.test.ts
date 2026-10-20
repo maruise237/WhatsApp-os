@@ -68,7 +68,7 @@ describe("deriveTemplateContract contra payload real da Meta", () => {
       { kind: "card", cardIndex: 0, inner: { kind: "header" } },
       { kind: "card", cardIndex: 1, inner: { kind: "header" } },
     ]);
-    expect(describeAddress(c.slots[0]!.address)).toBe("card 1 › cabeçalho");
+    expect(describeAddress(c.slots[0]!.address)).toBe("carte 1 › en-tête");
   });
 
   it("parameterFormat vem da Meta, não é inferido da chave", () => {

@@ -23,7 +23,7 @@ import { Card } from "@/components/ui/card";
  * O MESMO formato da tela de Uso — as duas leem `llm_calls.cost_cents`, que é
  * centavo de DÓLAR (`pricing.ts` cota o provedor em USD).
  */
-const usd = new Intl.NumberFormat("pt-BR", {
+const usd = new Intl.NumberFormat("fr-FR", {
   style: "currency",
   currency: "USD",
   // 4 casas porque uma execução isolada custa fração de centavo, e arredondar
@@ -75,18 +75,18 @@ export function ExecucoesDeIa() {
       try {
         json = JSON.parse(texto);
       } catch {
-        setErro(`resposta inesperada do servidor (${res.status}): ${texto.slice(0, 200)}`);
+        setErro(`réponse inattendue du serveur (${res.status}) : ${texto.slice(0, 200)}`);
         return;
       }
       if (!res.ok) {
-        setErro(json?.error?.message ?? `não consegui carregar (${res.status})`);
+        setErro(json?.error?.message ?? `impossible de charger (${res.status})`);
         return;
       }
       setErro(null);
       setExecucoes(json.data!.execucoes);
       setResumo(json.data!.resumo);
     } catch (e) {
-      setErro(e instanceof Error ? e.message : "não consegui falar com o servidor");
+      setErro(e instanceof Error ? e.message : "impossible de joindre le serveur");
     }
   }, [soErros]);
 
@@ -98,10 +98,10 @@ export function ExecucoesDeIa() {
     return (
       <div className="p-6">
         <Card className="border-destructive/40 p-6">
-          <h2 className="font-medium">Não consegui carregar as execuções</h2>
+          <h2 className="font-medium">Impossible de charger les exécutions</h2>
           <p className="mt-2 text-sm text-muted-foreground">{erro}</p>
           <Button className="mt-4" variant="outline" onClick={() => void carregar()}>
-            Tentar de novo
+            Réessayer
           </Button>
         </Card>
       </div>
@@ -109,16 +109,15 @@ export function ExecucoesDeIa() {
   }
 
   if (!execucoes || !resumo) {
-    return <div className="p-6 text-sm text-muted-foreground">Carregando…</div>;
+    return <div className="p-6 text-sm text-muted-foreground">Chargement…</div>;
   }
 
   return (
     <div className="mx-auto w-full max-w-5xl p-6" data-testid="execucoes-de-ia">
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Execuções de IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Exécutions de l’IA</h1>
         <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Tudo que a inteligência artificial fez por aqui — e, quando algo falhou, o que
-          aconteceu e o que fazer.
+          Tout ce que l’intelligence artificielle a fait ici — et, quand quelque chose a échoué, ce qui s’est passé et quoi faire.
         </p>
       </header>
 
@@ -127,14 +126,14 @@ export function ExecucoesDeIa() {
         {resumo.erros === 0 ? (
           <p className="text-sm">
             <span className="font-medium text-emerald-600 dark:text-emerald-500">
-              Nenhuma falha
+              Aucun échec
             </span>{" "}
-            nas últimas {resumo.total} execuções.
+            sur les {resumo.total} dernières exécutions.
           </p>
         ) : (
           <div>
             <p className="text-sm font-medium text-destructive" data-testid="tem-falhas">
-              {resumo.erros} de {resumo.total} execuções falharam.
+              {resumo.erros} de {resumo.total} exécutions ont échoué.
             </p>
             <ul className="mt-3 space-y-2">
               {resumo.porCodigo.map((c) => (
@@ -157,15 +156,15 @@ export function ExecucoesDeIa() {
           onClick={() => setSoErros((v) => !v)}
           data-testid="filtro-erros"
         >
-          {soErros ? "Mostrando só as falhas" : "Ver só as falhas"}
+          {soErros ? "Affichage des échecs uniquement" : "Voir uniquement les échecs"}
         </Button>
       </div>
 
       {execucoes.length === 0 ? (
         <Card className="p-6 text-sm text-muted-foreground" data-testid="lista-vazia">
           {soErros
-            ? "Nenhuma falha registrada."
-            : "Nenhuma execução ainda. Assim que o agente atender alguém, aparece aqui."}
+            ? "Aucun échec enregistré."
+            : "Aucune exécution pour le moment. Dès que l’agent répondra à quelqu’un, elle apparaîtra ici."}
         </Card>
       ) : (
         <div className="space-y-2">
@@ -180,7 +179,7 @@ export function ExecucoesDeIa() {
                   <span className="font-medium">{e.pontoRotulo}</span>
                   {e.status === "erro" && (
                     <Badge variant="destructive" className="text-xs">
-                      falhou
+                      a échoué
                     </Badge>
                   )}
                 </div>
@@ -194,22 +193,22 @@ export function ExecucoesDeIa() {
                   {/* 1º: o que o CLIENTE viu. */}
                   {e.consequencia && (
                     <p data-testid="consequencia">
-                      <span className="font-medium">O que aconteceu:</span> {e.consequencia}
+                      <span className="font-medium">Ce qui s’est passé :</span> {e.consequencia}
                     </p>
                   )}
                   {/* 2º: o que fazer. */}
                   {e.oQueFazer && (
                     <p className="text-muted-foreground" data-testid="o-que-fazer">
-                      <span className="font-medium">O que fazer:</span> {e.oQueFazer}
+                      <span className="font-medium">Que faire :</span> {e.oQueFazer}
                     </p>
                   )}
                   {/* 3º: só então, o texto cru — para quem for investigar. */}
                   {e.error_message && (
                     <details className="text-xs text-muted-foreground">
-                      <summary className="cursor-pointer">Mensagem técnica do provedor</summary>
+                      <summary className="cursor-pointer">Message technique du fournisseur</summary>
                       <pre className="mt-1 overflow-x-auto whitespace-pre-wrap break-words rounded bg-muted p-2">
                         {e.error_message}
-                        {e.http_status ? `\n(código ${e.http_status})` : ""}
+                        {e.http_status ? `\n(code ${e.http_status})` : ""}
                       </pre>
                     </details>
                   )}
@@ -228,7 +227,7 @@ export function ExecucoesDeIa() {
               )}
 
               <p className="mt-2 text-xs text-muted-foreground">
-                {new Date(e.created_at).toLocaleString("pt-BR")}
+                {new Date(e.created_at).toLocaleString("fr-FR")}
                 {e.porQueEsteModelo ? ` · ${e.porQueEsteModelo}` : ""}
               </p>
             </Card>

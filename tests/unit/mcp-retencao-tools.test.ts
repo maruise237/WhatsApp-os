@@ -811,7 +811,7 @@ describe("o texto que aparece na linha do tempo", () => {
       cap.inserts.find((i) => i.table === "crm_lead_activities")?.values.reason,
     );
     expect(semRedundancia(ACTIVITY_LABELS.demand_closed, reason)).toBe(true);
-    expect(reason).toBe("Perdido — sem orçamento");
+    expect(reason).toBe("Perdu — sem orçamento");
   });
 });
 

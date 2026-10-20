@@ -58,7 +58,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     return fail("internal_error", selErr.message, 500, { requestId });
   }
   if (!existing) {
-    return fail("not_found", "Contato não encontrado.", 404, { requestId });
+    return fail("not_found", "Contact introuvable.", 404, { requestId });
   }
 
   // Permission: admin NA ORG DO CONTATO (pode diferir da org ativa do cookie)

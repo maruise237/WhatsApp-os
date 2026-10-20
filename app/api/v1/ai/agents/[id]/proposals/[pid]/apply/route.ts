@@ -31,7 +31,7 @@ export async function POST(_req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id, pid } = await ctx.params;
   if (!UUID_RX.test(id) || !UUID_RX.test(pid)) {
-    return fail("invalid_request", "id inválido.", 400, { requestId });
+    return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
   }
 
   // Publicar versão é ato de admin — mesmo rank da rota de publish existente.

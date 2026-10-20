@@ -31,10 +31,9 @@ export default async function EvolutionPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Evolução da IA</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Évolution de l’IA</h1>
         <p className="text-sm text-text-muted">
-          O que seu agente aprendeu no período, o que ele fez com isso, o que mudou no seu
-          resultado — e o que ainda está travando.
+          Ce que votre agent a appris sur la période, ce qu’il en a fait, ce qui a changé dans vos résultats — et ce qui bloque encore.
         </p>
       </header>
       <EvolutionClient defaultRange={ultimosTrintaDiasUtc()} />

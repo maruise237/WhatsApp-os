@@ -29,21 +29,21 @@ interface ApproveButtonProps {
 const VARIANT_LABELS: Record<LgpdRequestType, { button: string; title: string; description: string }> = {
   data_request: {
     button: "Aprovar export",
-    title: "Aprovar exportação de dados",
+    title: "Approuver l’export des données",
     description:
-      "Ao confirmar, esta solicitação será colocada em fila para exportação dos dados do titular. A ação não pode ser desfeita.",
+      "En confirmant, cette demande sera mise en file pour l’export des données de la personne concernée. Cette action est irréversible.",
   },
   redact: {
     button: "Aprovar anonimização",
-    title: "Aprovar anonimização de contato",
+    title: "Approuver l’anonymisation du contact",
     description:
-      "Ao confirmar, todos os dados pessoais do titular serão anonimizados (irreversível). O histórico de timestamps é preservado.",
+      "En confirmant, toutes les données personnelles de la personne concernée seront anonymisées (irréversible). L’historique des horodatages est conservé.",
   },
   store_redact: {
     button: "Aprovar anonimização (tenant)",
-    title: "Aprovar anonimização de tenant",
+    title: "Approuver l’anonymisation de l’organisation",
     description:
-      "Ao confirmar, todos os dados pessoais do tenant serão anonimizados (irreversível). Esta ação afeta todos os contatos do tenant.",
+      "En confirmant, toutes les données personnelles de l’organisation seront anonymisées (irréversible). Cette action concerne tous les contacts de l’organisation.",
   },
 };
 
@@ -64,12 +64,12 @@ export function ApproveButton({ requestId, requestType, status }: ApproveButtonP
       { id: requestId, approved_reason: reason.trim() },
       {
         onSuccess: () => {
-          toast.success("Aprovação registrada — request mudou para processing");
+          toast.success("Approbation enregistrée — la demande est passée en traitement");
           setOpen(false);
           setReason("");
         },
         onError: () => {
-          toast.error("Falha ao aprovar a solicitação. Tente novamente.");
+          toast.error("Échec de l’approbation de la demande. Réessayez.");
         },
       },
     );
@@ -92,26 +92,26 @@ export function ApproveButton({ requestId, requestType, status }: ApproveButtonP
 
         <div className="space-y-2 py-2">
           <Label htmlFor="approved_reason">
-            Justificativa{" "}
-            <span className="text-muted-foreground text-xs">(mínimo 10 caracteres)</span>
+            Justification{" "}
+            <span className="text-muted-foreground text-xs">(10 caractères minimum)</span>
           </Label>
           <Textarea
             id="approved_reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            placeholder="Descreva o motivo da aprovação manual desta solicitação…"
+            placeholder="Décrivez le motif de l’approbation manuelle de cette demande…"
             rows={3}
             maxLength={500}
             className="resize-none"
             aria-describedby="approved_reason_hint"
           />
           <p id="approved_reason_hint" className="text-xs text-muted-foreground">
-            {reason.trim().length}/500 caracteres
+            {reason.trim().length}/500 caractères
           </p>
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel>Annuler</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
@@ -119,7 +119,7 @@ export function ApproveButton({ requestId, requestType, status }: ApproveButtonP
             }}
             disabled={!isValid || isPending}
           >
-            {isPending ? "Aprovando…" : "Confirmar aprovação"}
+            {isPending ? "Aprovando…" : "Confirmer l’approbation"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

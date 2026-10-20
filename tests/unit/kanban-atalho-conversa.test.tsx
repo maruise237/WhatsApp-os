@@ -57,17 +57,17 @@ describe("mostra a última mensagem", () => {
     // "3 sem ler" e "12 sem ler" pedem urgências diferentes; um ponto colapsa
     // as duas.
     render(<ConversaSlot conversa={conversa({ unread: 12 })} />);
-    expect(screen.getByLabelText("12 sem ler")).toHaveTextContent("12");
+    expect(screen.getByLabelText("12 non lus")).toHaveTextContent("12");
   });
 
   it("sem não lidas não pinta contador", () => {
     render(<ConversaSlot conversa={conversa({ unread: 0 })} />);
-    expect(screen.queryByLabelText(/sem ler/)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/non lus/)).not.toBeInTheDocument();
   });
 
   it("conversa existente mas vazia diz isso, em vez de linha em branco", () => {
     render(<ConversaSlot conversa={conversa({ preview: null })} />);
-    expect(screen.getByText("conversa sem mensagens")).toBeInTheDocument();
+    expect(screen.getByText("conversation sans messages")).toBeInTheDocument();
     expect(screen.getByRole("link")).toBeInTheDocument();
   });
 });

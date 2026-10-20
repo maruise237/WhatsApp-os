@@ -67,7 +67,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       estagio: "roteamento",
       campos: roteamento.campos,
     });
-    return fail("validation_failed", "payload fora do contrato do canal", 400, {
+    return fail("validation_failed", "données hors du format attendu par le canal", 400, {
       requestId,
       details: { campos: roteamento.campos },
     });
@@ -165,7 +165,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       estagio: "conteudo",
       campos: contrato.campos,
     });
-    return fail("validation_failed", "payload fora do contrato do canal", 400, {
+    return fail("validation_failed", "données hors du format attendu par le canal", 400, {
       requestId,
       details: { campos: contrato.campos },
     });

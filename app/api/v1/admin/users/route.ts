@@ -194,7 +194,7 @@ export async function GET(req: NextRequest) {
       // indisponibilidade em "Nenhum usuário encontrado" — indistinguível de
       // banco vazio, e uma regressão silenciosa em cima do 500 explícito que a
       // rota dava antes.
-      return fail("upstream_unavailable", "Auth indisponível", 503, {
+      return fail("upstream_unavailable", "Authentification indisponible", 503, {
         requestId,
         details: res.error.message,
       });
@@ -228,7 +228,7 @@ export async function GET(req: NextRequest) {
       const pendentes = needed.size - authMap.size;
       return fail(
         "upstream_unavailable",
-        "Varredura do diretório de usuários atingiu o teto de páginas sem resolver todos os vínculos",
+        "La recherche dans l’annuaire des utilisateurs a atteint la limite de pages sans résoudre tous les liens",
         503,
         {
           requestId,

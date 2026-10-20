@@ -81,7 +81,7 @@ export function validarNomeDeFunil(
   funilId: string | null,
 ): Resultado {
   if (!nome.trim()) {
-    return { ok: false, erro: "Dê um nome ao funil — é o que aparece na lista e no topo do quadro." };
+    return { ok: false, erro: "Donnez un nom au tableau — c’est ce qui s’affiche dans la liste et en haut du tableau." };
   }
 
   const chave = chaveDeNome(nome);
@@ -89,7 +89,7 @@ export function validarNomeDeFunil(
   // seria um erro sem saída — o usuário não consegue nem ver o que colidiu.
   const colisao = ativos(funis).find((f) => f.id !== funilId && chaveDeNome(f.name) === chave);
   if (colisao) {
-    return { ok: false, erro: `Já existe um funil chamado «${colisao.name}». Escolha outro nome.` };
+    return { ok: false, erro: `Un tableau nommé «${colisao.name}» existe déjà. Choisissez un autre nom.` };
   }
 
   return { ok: true };
@@ -109,15 +109,15 @@ export function validarArquivamento(
 ): Resultado {
   const funil = funis.find((f) => f.id === funilId);
   if (!funil) {
-    return { ok: false, erro: "Esse funil não está mais na sua lista. Recarregue a página e tente de novo." };
+    return { ok: false, erro: "Ce tableau n’est plus dans votre liste. Rechargez la page et réessayez." };
   }
 
   if (ativos(funis).filter((f) => f.id !== funilId).length === 0) {
     return {
       ok: false,
       erro:
-        `«${funil.name}» é o único funil ativo. Sem nenhum funil não há quadro para abrir nem para onde ` +
-        `mandar negócio novo — crie outro funil antes de arquivar este.`,
+        `«${funil.name}» est le seul tableau actif. Sans tableau, il n’y a rien à ouvrir ni d’endroit où ` +
+        `envoyer les nouvelles affaires — créez un autre tableau avant d’archiver celui-ci.`,
     };
   }
 
@@ -125,8 +125,8 @@ export function validarArquivamento(
     return {
       ok: false,
       erro:
-        `«${funil.name}» é o funil padrão: é para ele que vai o negócio criado sem funil escolhido. ` +
-        `Marque OUTRO funil como padrão antes de arquivar este.`,
+        `«${funil.name}» est le tableau par défaut : c’est là que vont les affaires créées sans tableau choisi. ` +
+        `Choisissez un AUTRE tableau par défaut avant d’archiver celui-ci.`,
     };
   }
 
@@ -139,9 +139,9 @@ export function validarArquivamento(
     return {
       ok: false,
       erro:
-        `«${funil.name}» é o destino ${plural ? "dos formulários" : "do formulário"} ${lista(deps.fontesDeWebhook)}. ` +
-        `Aponte ${plural ? "os formulários" : "o formulário"} para outro funil antes de arquivar este — senão o lead ` +
-        `que chegar por ${plural ? "eles" : "ele"} fica sem quadro.`,
+        `«${funil.name}» est la destination ${plural ? "des formulaires" : "du formulaire"} ${lista(deps.fontesDeWebhook)}. ` +
+        `Redirigez ${plural ? "les formulaires" : "le formulaire"} vers un autre tableau avant d’archiver celui-ci — sinon le client ` +
+        `qui arrivera par ${plural ? "eux" : "lui"} n’aura pas de tableau.`,
     };
   }
 
@@ -150,8 +150,8 @@ export function validarArquivamento(
     return {
       ok: false,
       erro:
-        `${plural ? "As automações" : "A automação"} ${lista(deps.regrasAtivas)} ${plural ? "mandam" : "manda"} card para ` +
-        `«${funil.name}». Ajuste ${plural ? "essas automações" : "essa automação"} antes de arquivar o funil.`,
+        `${plural ? "Les automatisations" : "L’automatisation"} ${lista(deps.regrasAtivas)} ${plural ? "envoient" : "envoie"} des fiches vers ` +
+        `«${funil.name}». Modifiez ${plural ? "ces automatisations" : "cette automatisation"} avant d’archiver le tableau.`,
     };
   }
 
@@ -181,8 +181,8 @@ export function podeExcluirDeVez(
     return {
       ok: false,
       erro:
-        `«${funil.name}» tem ${n} ${n === 1 ? "negócio" : "negócios"}, e o histórico ${n === 1 ? "dele" : "deles"} ` +
-        `aponta para este funil. Arquive em vez de excluir — o funil sai da lista e nada se perde.`,
+        `«${funil.name}» contient ${n} ${n === 1 ? "affaire" : "affaires"}, et ${n === 1 ? "son" : "leur"} historique ` +
+        `renvoie à ce tableau. Archivez-le plutôt que de le supprimer — il sort de la liste et rien n’est perdu.`,
     };
   }
 
@@ -264,10 +264,10 @@ export const ETAPAS_INICIAIS: ReadonlyArray<{
   is_won: boolean;
   is_lost: boolean;
 }> = [
-  { name: "Novo", slug: "novo", is_won: false, is_lost: false },
-  { name: "Em andamento", slug: "em_andamento", is_won: false, is_lost: false },
-  { name: "Ganho", slug: "ganho", is_won: true, is_lost: false },
-  { name: "Perdido", slug: "perdido", is_won: false, is_lost: true },
+  { name: "Nouveau", slug: "novo", is_won: false, is_lost: false },
+  { name: "En cours", slug: "em_andamento", is_won: false, is_lost: false },
+  { name: "Gagné", slug: "ganho", is_won: true, is_lost: false },
+  { name: "Perdu", slug: "perdido", is_won: false, is_lost: true },
 ];
 
 /**

@@ -40,9 +40,9 @@ const DIAS = 30;
 export async function GET(): Promise<Response> {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.manager) {
-    return fail("forbidden", "requer papel de gerente ou superior", 403);
+    return fail("forbidden", "nécessite le rôle de manager ou supérieur", 403);
   }
 
   const db = await createClient();
@@ -88,6 +88,6 @@ export async function GET(): Promise<Response> {
       quisAgirENaoPode: semFerramenta,
     });
   } catch (err) {
-    return fail("read_failed", err instanceof Error ? err.message : "falha ao ler", 500);
+    return fail("read_failed", err instanceof Error ? err.message : "échec de la lecture", 500);
   }
 }

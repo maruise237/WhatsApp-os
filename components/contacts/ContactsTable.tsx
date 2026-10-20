@@ -59,12 +59,14 @@ function SortableHead({
   const emphasis = "text-foreground";
 
   return (
-    <TableHead className={className}>
+    <TableHead
+      className={className}
+      aria-sort={active ? (orderDir === "asc" ? "ascending" : "descending") : "none"}
+    >
       <button
         type="button"
         onClick={() => onSort(column)}
-        className="inline-flex items-center gap-1 font-medium hover:text-foreground"
-        aria-sort={active ? (orderDir === "asc" ? "ascending" : "descending") : "none"}
+        className="-my-3 inline-flex items-center gap-1 py-3 font-medium hover:text-foreground"
       >
         {label}
         <span className="inline-flex flex-col -space-y-1" aria-hidden>
@@ -106,6 +108,7 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
+            className="hidden md:table-cell"
           />
           <SortableHead
             label={t("Telefone")}
@@ -114,15 +117,16 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
             orderDir={orderDir}
             onSort={onSort}
           />
-          <TableHead>{t("Tags")}</TableHead>
+          <TableHead className="hidden md:table-cell">{t("Tags")}</TableHead>
           <SortableHead
             label={t("Última atividade")}
             column="last_activity_at"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
+            className="hidden md:table-cell"
           />
-          <TableHead>{t("Status")}</TableHead>
+          <TableHead className="hidden md:table-cell">{t("Status")}</TableHead>
           <TableHead className="w-[52px]">
             <span className="sr-only">{t("Conversa")}</span>
           </TableHead>
@@ -132,17 +136,18 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
         {contacts.map((c) => (
           <TableRow key={c.id} className="cursor-pointer">
             <TableCell className="font-medium">
-              <Link href={`/app/contacts/${c.id}`} className="hover:underline">
+              <Link href={`/app/contacts/${c.id}`} className="-my-3 block py-3 hover:underline">
                 {displayName(c)}
               </Link>
             </TableCell>
-            <TableCell className="text-muted-foreground">
+            {/* Mobile : nom, téléphone et conversation — le reste au-delà de md. */}
+            <TableCell className="text-muted-foreground hidden md:table-cell">
               {c.email ?? "—"}
             </TableCell>
             <TableCell className="text-muted-foreground">
               {c.phone_number ?? "—"}
             </TableCell>
-            <TableCell>
+            <TableCell className="hidden md:table-cell">
               <div className="flex flex-wrap gap-1">
                 {c.tags.length === 0
                   ? <span className="text-muted-foreground text-xs">—</span>
@@ -151,12 +156,12 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
                     ))}
               </div>
             </TableCell>
-            <TableCell className="text-muted-foreground text-sm">
+            <TableCell className="text-muted-foreground text-sm hidden md:table-cell">
               {c.last_activity_at
                 ? formatUltimaAtividade(c.last_activity_at, locale)
                 : "—"}
             </TableCell>
-            <TableCell>
+            <TableCell className="hidden md:table-cell">
               <div className="flex flex-wrap gap-1">
                 {c.is_anonymized && <Badge variant="destructive">{t("Anonimizado")}</Badge>}
                 {c.is_blocked && <Badge variant="warning">{t("Bloqueado")}</Badge>}
@@ -170,12 +175,12 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
                 <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
                   <Link
                     href={`/app/inbox?id=${c.conversa.id}`}
-                    title="Abrir conversa no Inbox"
-                    aria-label={`Abrir conversa com ${displayName(c)} no Inbox`}
+                    title="Ouvrir la conversation dans la boîte de réception"
+                    aria-label={`Ouvrir la conversation avec ${displayName(c)} dans la boîte de réception`}
                   >
                     <ChatCircle size={16} weight="regular" aria-hidden />
                     {c.conversa.unread > 0 && (
-                      <span className="sr-only">{c.conversa.unread} sem ler</span>
+                      <span className="sr-only">{c.conversa.unread} non lus</span>
                     )}
                   </Link>
                 </Button>

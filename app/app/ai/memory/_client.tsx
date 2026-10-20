@@ -34,7 +34,7 @@ interface Props {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString("pt-BR", {
+  return new Date(iso).toLocaleString("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -77,7 +77,7 @@ export function OrgMemoryClient({ initialState }: Props) {
   function handlePublish() {
     publish.mutate(content, {
       onSuccess: (res) => {
-        toast.success(`Versão v${res.data.version_number} publicada — já vale para todos os agentes.`);
+        toast.success(`Version v${res.data.version_number} publiée — elle s’applique déjà à tous les agents.`);
       },
       onError: showApiError,
     });
@@ -86,7 +86,7 @@ export function OrgMemoryClient({ initialState }: Props) {
   function handleRestore(versionContent: string, versionNumber: number) {
     setContent(versionContent);
     setHistoryTarget(null);
-    toast.info(`Conteúdo da v${versionNumber} carregado no editor. Clique em "Publicar versão" para confirmar.`);
+    toast.info(`Contenu de la v${versionNumber} chargé dans l’éditeur. Cliquez sur « Publier la version » pour confirmer.`);
   }
 
   function handleCreateEntry(e: React.FormEvent) {
@@ -126,16 +126,15 @@ export function OrgMemoryClient({ initialState }: Props) {
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <CardTitle>Documento da organização</CardTitle>
+              <CardTitle>Document de l’organisation</CardTitle>
               <CardDescription>
-                O texto-base que qualquer agente de IA lê antes de responder — como a "política
-                da casa" que todo atendente novo teria que decorar.
+                Le texte de base que tout agent IA lit avant de répondre — comme la « politique de la maison » que tout nouveau conseiller devrait apprendre par cœur.
               </CardDescription>
             </div>
             {document ? (
-              <Badge variant="success">v{document.version_number} ativa</Badge>
+              <Badge variant="success">v{document.version_number} active</Badge>
             ) : (
-              <Badge variant="neutral">Nenhuma versão publicada ainda</Badge>
+              <Badge variant="neutral">Aucune version publiée pour le moment</Badge>
             )}
           </div>
         </CardHeader>
@@ -143,29 +142,29 @@ export function OrgMemoryClient({ initialState }: Props) {
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Ex.: Nunca prometa desconto sem confirmar com um humano. Horário de atendimento: 9h–18h, seg-sex. Sempre chame o cliente pelo primeiro nome."
+            placeholder="Ex. : Ne jamais promettre de remise sans confirmer avec un humain. Horaires : 9h–18h, lun-ven. Toujours appeler le client par son prénom."
             className="min-h-[220px] font-mono text-[13px]"
           />
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs text-muted-foreground">{content.length} caracteres</span>
+            <span className="text-xs text-muted-foreground">{content.length} caractères</span>
             <div className="flex items-center gap-2">
               {!canPublish && (
                 <span className="text-xs text-muted-foreground">
-                  Somente admins podem publicar uma nova versão.
+                  Seuls les admins peuvent publier une nouvelle version.
                 </span>
               )}
               <Button
                 onClick={handlePublish}
                 disabled={!canSubmitPublish || publish.isPending}
               >
-                {publish.isPending ? "Publicando…" : "Publicar versão"}
+                {publish.isPending ? "Publicando…" : "Publier la version"}
               </Button>
             </div>
           </div>
 
           {versions.length > 0 && (
             <div className="mt-4 border-t border-border pt-3">
-              <p className="mb-2 text-xs font-medium text-muted-foreground">Histórico de versões</p>
+              <p className="mb-2 text-xs font-medium text-muted-foreground">Historique des versions</p>
               <ul className="flex flex-col gap-1">
                 {versions.map((v) => (
                   <li key={v.id}>
@@ -177,7 +176,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                       <span className="font-mono text-xs">v{v.version_number}</span>
                       <span className="text-xs text-muted-foreground">{formatDate(v.created_at)}</span>
                       {document?.version_id === v.id && (
-                        <Badge variant="success" className="text-[10px]">ativa</Badge>
+                        <Badge variant="success" className="text-[10px]">active</Badge>
                       )}
                     </button>
                   </li>
@@ -192,14 +191,13 @@ export function OrgMemoryClient({ initialState }: Props) {
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <CardTitle>Aprendizados</CardTitle>
+              <CardTitle>Apprentissages</CardTitle>
               <CardDescription>
-                Fatos e correções pontuais que os agentes também levam em conta — adicionados à
-                mão ou aprendidos automaticamente pelo sistema a partir de conversas reais.
+                Faits et corrections ponctuels que les agents prennent aussi en compte — ajoutés à la main ou appris automatiquement par le système à partir de vraies conversations.
               </CardDescription>
             </div>
             <Button variant="secondary" size="sm" onClick={() => setFormOpen((v) => !v)}>
-              <Plus /> Novo aprendizado
+              <Plus /> Nouvel apprentissage
             </Button>
           </div>
         </CardHeader>
@@ -210,33 +208,33 @@ export function OrgMemoryClient({ initialState }: Props) {
               className="flex flex-col gap-3 rounded-md border border-border bg-surface-elevated p-4"
             >
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="entry-title">Título</Label>
+                <Label htmlFor="entry-title">Titre</Label>
                 <Input
                   id="entry-title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Ex.: Não oferecer frete grátis no primeiro contato"
+                  placeholder="Ex. : Ne pas proposer la livraison gratuite au premier contact"
                   maxLength={200}
                   required
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="entry-body">O que o agente deve saber</Label>
+                <Label htmlFor="entry-body">Ce que l’agent doit savoir</Label>
                 <Textarea
                   id="entry-body"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  placeholder="Descreva a regra ou o aprendizado em texto simples."
+                  placeholder="Décrivez la règle ou l’apprentissage en texte simple."
                   className="min-h-[100px]"
                   required
                 />
               </div>
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="ghost" size="sm" onClick={() => setFormOpen(false)}>
-                  Cancelar
+                  Annuler
                 </Button>
                 <Button type="submit" size="sm" disabled={createEntry.isPending}>
-                  {createEntry.isPending ? "Salvando…" : "Salvar aprendizado"}
+                  {createEntry.isPending ? "Salvando…" : "Enregistrer l’apprentissage"}
                 </Button>
               </div>
             </form>
@@ -255,8 +253,8 @@ export function OrgMemoryClient({ initialState }: Props) {
           {visibleEntries.length === 0 ? (
             <p className="rounded-md border border-dashed border-border p-4 text-sm text-muted-foreground">
               {showArchived
-                ? "Nenhum aprendizado arquivado."
-                : "Nenhum aprendizado ainda. Use \"+ Novo aprendizado\" para ensinar algo que os agentes devem lembrar em toda conversa — ou aguarde o sistema sugerir aprendizados automaticamente a partir do atendimento real."}
+                ? "Aucun apprentissage archivé."
+                : "Aucun apprentissage pour le moment. Utilisez « + Nouvel apprentissage » pour enseigner quelque chose dont les agents doivent se souvenir dans chaque conversation — ou attendez que le système suggère automatiquement des apprentissages à partir des vrais échanges."}
             </p>
           ) : (
             <ol className="flex flex-col gap-2">
@@ -285,11 +283,11 @@ export function OrgMemoryClient({ initialState }: Props) {
                     >
                       {entry.status === "active" ? (
                         <>
-                          <Archive /> Arquivar
+                          <Archive /> Archiver
                         </>
                       ) : (
                         <>
-                          <ArrowsClockwise /> Reativar
+                          <ArrowsClockwise /> Réactiver
                         </>
                       )}
                     </Button>
@@ -304,13 +302,13 @@ export function OrgMemoryClient({ initialState }: Props) {
       <Dialog open={historyTarget != null} onOpenChange={(o) => !o && setHistoryTarget(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Versão v{historyTarget?.version_number}</DialogTitle>
+            <DialogTitle>Version v{historyTarget?.version_number}</DialogTitle>
             <DialogDescription>
-              {historyTarget ? `Publicada em ${formatDate(historyTarget.created_at)}` : null}
+              {historyTarget ? `Publiée le ${formatDate(historyTarget.created_at)}` : null}
             </DialogDescription>
           </DialogHeader>
           {versionDetail.isLoading ? (
-            <p className="text-sm text-muted-foreground">Carregando…</p>
+            <p className="text-sm text-muted-foreground">Chargement…</p>
           ) : (
             <pre className="max-h-[50vh] overflow-y-auto whitespace-pre-wrap rounded-md border border-border bg-surface-elevated p-4 font-mono text-[13px]">
               {versionDetail.data?.content}
@@ -325,7 +323,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                 handleRestore(versionDetail.data.content, versionDetail.data.version_number)
               }
             >
-              Restaurar como nova versão
+              Restaurer en tant que nouvelle version
             </Button>
           </DialogFooter>
         </DialogContent>

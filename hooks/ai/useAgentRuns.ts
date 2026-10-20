@@ -82,16 +82,16 @@ export function useAgentRuns(
       const payload = raw as { eventType?: string; new?: AgentRunRow } | null;
       qc.invalidateQueries({ queryKey: agentRunsKey(agentId) });
       if (payload?.eventType === "INSERT" && !payload.new?.is_dry_run) {
-        toast.info("Nova execução iniciada.");
+        toast.info("Nouvelle exécution lancée.");
       }
       if (payload?.eventType === "UPDATE" && payload.new?.status === "completed") {
-        toast.success("Execução concluída.");
+        toast.success("Exécution terminée.");
       }
       if (
         payload?.eventType === "UPDATE" &&
         (payload.new?.status === "failed" || payload.new?.status === "aborted")
       ) {
-        toast.error(`Execução ${payload.new?.status}.`);
+        toast.error(`Exécution ${payload.new?.status}.`);
       }
     },
     [agentId, qc],

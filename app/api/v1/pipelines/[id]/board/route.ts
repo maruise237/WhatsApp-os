@@ -156,8 +156,8 @@ async function avisaAmbiguas(
       organization_id: organizationId,
       kind: "next_action_ambiguous",
       severity: "warn",
-      title: `A IA propôs uma próxima ação, mas o contato tem ${a.candidateIds.length} negócios abertos`,
-      body: `Proposta: "${a.texto}". Escolha a qual negócio ela pertence — o sistema não adivinha para não executar no negócio errado.`,
+      title: `L’IA a proposé une prochaine action, mais le contact a ${a.candidateIds.length} affaires ouvertes`,
+      body: `Proposition : « ${a.texto} ». Choisissez à quelle affaire elle correspond — le système ne devine pas, pour ne pas agir sur la mauvaise affaire.`,
       ref_kind: "contact",
       ref_id: a.contact_id,
       status: "open",
@@ -379,7 +379,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (pipelineErr) return fail("internal_error", pipelineErr.message, 500, { requestId });
   if (stagesErr) return fail("internal_error", stagesErr.message, 500, { requestId });
   if (leadsErr) return fail("internal_error", leadsErr.message, 500, { requestId });
-  if (!pipeline) return fail("resource_not_found", "Pipeline não encontrado.", 404, { requestId });
+  if (!pipeline) return fail("resource_not_found", "Tableau introuvable.", 404, { requestId });
 
   const leadsWithOwner = await withOwnerAgents(
     supabase,

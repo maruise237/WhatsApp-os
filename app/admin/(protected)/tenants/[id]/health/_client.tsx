@@ -35,13 +35,13 @@ export function TenantHealthClient({ id }: TenantHealthClientProps) {
   if (isError || !data?.data) {
     return (
       <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-6 py-10 text-center text-sm text-destructive">
-        Não foi possível carregar o status de saúde do tenant. Tente recarregar a página.
+        Impossible de charger l’état de santé de l’organisation. Essayez de recharger la page.
       </div>
     );
   }
 
   const lastChecked = dataUpdatedAt
-    ? new Intl.DateTimeFormat("pt-BR", {
+    ? new Intl.DateTimeFormat("fr-FR", {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -53,7 +53,7 @@ export function TenantHealthClient({ id }: TenantHealthClientProps) {
       {/* Toolbar */}
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-          Status de Saúde
+          État de santé
         </h2>
         <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
           {isFetching && (

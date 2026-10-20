@@ -13,15 +13,22 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
   const t = useT();
   const [pending, startTransition] = useTransition();
   const pendentes = itens.filter((i) => !i.feito);
+  // Sans numéro, l'assistant ne parle à personne : le dire, plutôt que
+  // « déjà opérationnel » (constaté à l'écran avec le numéro ignoré).
+  const semNumero = itens.some((i) => i.segmento === "connect-whatsapp" && !i.feito);
 
   return (
     <div className="space-y-6 rounded-lg border bg-background p-6">
       <div className="space-y-1 text-center">
-        <h2 className="text-2xl font-semibold tracking-tight">{t("Tudo pronto!")}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">
+          {semNumero ? "Presque prêt" : t("Tudo pronto!")}
+        </h2>
         <p className="text-sm text-muted-foreground">
           {pendentes.length === 0
             ? t("Seu funcionário está montado. Daqui em diante é só acompanhar.")
-            : t("Seu funcionário já está de pé. O que ficou para depois continua te esperando.")}
+            : semNumero
+              ? "Votre assistant est créé, mais il ne répondra à vos clients qu’une fois le numéro WhatsApp connecté (Menu › Connexions)."
+              : t("Seu funcionário já está de pé. O que ficou para depois continua te esperando.")}
         </p>
       </div>
 
@@ -108,7 +115,7 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
         </ul>
       </section>
 
-      <div className="flex justify-center">
+      <div className="onb-acoes flex justify-center">
         <Button
           type="button"
           disabled={pending}

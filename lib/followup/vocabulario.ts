@@ -90,10 +90,10 @@ export interface CampoDeCondicao {
 }
 
 export const CAMPOS_DA_CONDICAO: Record<CampoDaCondicao, CampoDeCondicao> = {
-  lead_stage: { rotulo: "Etapa do funil", tipoDeValor: "etapa" },
-  tag: { rotulo: "Etiqueta do contato", tipoDeValor: "etiqueta" },
-  steps_taken: { rotulo: "Passos já dados no fluxo", tipoDeValor: "numero" },
-  last_outcome: { rotulo: "Desfecho do passo anterior", tipoDeValor: "texto" },
+  lead_stage: { rotulo: "Colonne du tableau", tipoDeValor: "etapa" },
+  tag: { rotulo: "Étiquette du contact", tipoDeValor: "etiqueta" },
+  steps_taken: { rotulo: "Étapes déjà faites dans la séquence", tipoDeValor: "numero" },
+  last_outcome: { rotulo: "Issue de l’étape précédente", tipoDeValor: "texto" },
 };
 
 // ─── condição: o par (campo, operador) ───────────────────────────────────
@@ -115,14 +115,14 @@ export interface Comparador {
 }
 
 const AVISO_SO_NUMERO =
-  "Comparar maior/menor só funciona com número. Do jeito que está, esta condição nunca é verdadeira.";
-const AVISO_SO_TEXTO = "“Contém” só funciona com texto. Em número, esta condição nunca é verdadeira.";
+  "Comparer plus grand/plus petit ne marche qu’avec un nombre. En l’état, cette condition n’est jamais vraie.";
+const AVISO_SO_TEXTO = "« Contient » ne marche qu’avec du texte. Avec un nombre, cette condition n’est jamais vraie.";
 
-const aspas = (valor: string | number): string => `“${valor}”`;
+const aspas = (valor: string | number): string => `« ${valor} »`;
 
 function passos(valor: string | number): string {
   const n = Number(valor);
-  return Number.isFinite(n) && Math.abs(n) === 1 ? `${valor} passo` : `${valor} passos`;
+  return Number.isFinite(n) && Math.abs(n) === 1 ? `${valor} étape` : `${valor} étapes`;
 }
 
 /**
@@ -132,31 +132,31 @@ function passos(valor: string | number): string {
 const COMPARADORES: Record<CampoDaCondicao, Record<OperadorDaCondicao, Comparador>> = {
   lead_stage: {
     eq: {
-      rotulo: "está na etapa",
-      frase: (v) => `O lead está na etapa ${aspas(v)}`,
+      rotulo: "est dans la colonne",
+      frase: (v) => `Le client est dans la colonne ${aspas(v)}`,
       oferecido: true,
     },
     neq: {
-      rotulo: "não está na etapa",
-      frase: (v) => `O lead não está na etapa ${aspas(v)}`,
+      rotulo: "n’est pas dans la colonne",
+      frase: (v) => `Le client n’est pas dans la colonne ${aspas(v)}`,
       oferecido: true,
     },
     contains: {
-      rotulo: "contém",
-      frase: (v) => `O identificador da etapa do lead contém ${aspas(v)}`,
+      rotulo: "contient",
+      frase: (v) => `L’identifiant de la colonne du client contient ${aspas(v)}`,
       oferecido: false,
       aviso:
-        "A etapa é comparada pelo identificador interno, não pelo nome — escolha a etapa em vez de digitar um pedaço dela.",
+        "La colonne est comparée par son identifiant interne, pas par son nom — choisissez la colonne au lieu d’en taper un morceau.",
     },
     gte: {
-      rotulo: "é pelo menos",
-      frase: (v) => `A etapa do lead é pelo menos ${aspas(v)}`,
+      rotulo: "est au moins",
+      frase: (v) => `La colonne du client est au moins ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_NUMERO,
     },
     lte: {
-      rotulo: "é no máximo",
-      frase: (v) => `A etapa do lead é no máximo ${aspas(v)}`,
+      rotulo: "est au plus",
+      frase: (v) => `La colonne du client est au plus ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_NUMERO,
     },
@@ -164,88 +164,88 @@ const COMPARADORES: Record<CampoDaCondicao, Record<OperadorDaCondicao, Comparado
   tag: {
     // O par que dá nome à regra deste módulo: no motor, `tag` é lista.
     eq: {
-      rotulo: "tem a etiqueta",
-      frase: (v) => `O contato tem a etiqueta ${aspas(v)}`,
+      rotulo: "a l’étiquette",
+      frase: (v) => `Le contact a l’étiquette ${aspas(v)}`,
       oferecido: true,
     },
     neq: {
-      rotulo: "não tem a etiqueta",
-      frase: (v) => `O contato não tem a etiqueta ${aspas(v)}`,
+      rotulo: "n’a pas l’étiquette",
+      frase: (v) => `Le contact n’a pas l’étiquette ${aspas(v)}`,
       oferecido: true,
     },
     contains: {
       // Mesmo resultado que `eq` (o motor testa pertinência nos dois): descreve
       // o que está salvo, mas não repete a opção no seletor.
-      rotulo: "tem a etiqueta",
-      frase: (v) => `O contato tem a etiqueta ${aspas(v)}`,
+      rotulo: "a l’étiquette",
+      frase: (v) => `Le contact a l’étiquette ${aspas(v)}`,
       oferecido: false,
     },
     gte: {
-      rotulo: "é pelo menos",
-      frase: (v) => `A etiqueta do contato é pelo menos ${aspas(v)}`,
+      rotulo: "est au moins",
+      frase: (v) => `L’étiquette du contact est au moins ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_NUMERO,
     },
     lte: {
-      rotulo: "é no máximo",
-      frase: (v) => `A etiqueta do contato é no máximo ${aspas(v)}`,
+      rotulo: "est au plus",
+      frase: (v) => `L’étiquette du contact est au plus ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_NUMERO,
     },
   },
   steps_taken: {
     gte: {
-      rotulo: "é pelo menos",
-      frase: (v) => `O fluxo já deu pelo menos ${passos(v)}`,
+      rotulo: "est au moins",
+      frase: (v) => `La séquence a déjà fait au moins ${passos(v)}`,
       oferecido: true,
     },
     lte: {
-      rotulo: "é no máximo",
-      frase: (v) => `O fluxo já deu no máximo ${passos(v)}`,
+      rotulo: "est au plus",
+      frase: (v) => `La séquence a déjà fait au plus ${passos(v)}`,
       oferecido: true,
     },
     eq: {
-      rotulo: "é exatamente",
-      frase: (v) => `O fluxo já deu exatamente ${passos(v)}`,
+      rotulo: "est exactement",
+      frase: (v) => `La séquence a déjà fait exactement ${passos(v)}`,
       oferecido: true,
     },
     neq: {
-      rotulo: "não é",
-      frase: (v) => `O fluxo não deu exatamente ${passos(v)}`,
+      rotulo: "n’est pas",
+      frase: (v) => `La séquence n’a pas fait exactement ${passos(v)}`,
       oferecido: true,
     },
     contains: {
-      rotulo: "contém",
-      frase: (v) => `O número de passos contém ${aspas(v)}`,
+      rotulo: "contient",
+      frase: (v) => `Le nombre d’étapes contient ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_TEXTO,
     },
   },
   last_outcome: {
     eq: {
-      rotulo: "foi",
-      frase: (v) => `O desfecho do passo anterior foi ${aspas(v)}`,
+      rotulo: "a été",
+      frase: (v) => `L’issue de l’étape précédente a été ${aspas(v)}`,
       oferecido: true,
     },
     neq: {
-      rotulo: "não foi",
-      frase: (v) => `O desfecho do passo anterior não foi ${aspas(v)}`,
+      rotulo: "n’a pas été",
+      frase: (v) => `L’issue de l’étape précédente n’a pas été ${aspas(v)}`,
       oferecido: true,
     },
     contains: {
-      rotulo: "contém",
-      frase: (v) => `O desfecho do passo anterior contém ${aspas(v)}`,
+      rotulo: "contient",
+      frase: (v) => `L’issue de l’étape précédente contient ${aspas(v)}`,
       oferecido: true,
     },
     gte: {
-      rotulo: "é pelo menos",
-      frase: (v) => `O desfecho do passo anterior é pelo menos ${aspas(v)}`,
+      rotulo: "est au moins",
+      frase: (v) => `L’issue de l’étape précédente est au moins ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_NUMERO,
     },
     lte: {
-      rotulo: "é no máximo",
-      frase: (v) => `O desfecho do passo anterior é no máximo ${aspas(v)}`,
+      rotulo: "est au plus",
+      frase: (v) => `L’issue de l’étape précédente est au plus ${aspas(v)}`,
       oferecido: false,
       aviso: AVISO_SO_NUMERO,
     },
@@ -276,8 +276,8 @@ export function fraseDaCondicao(
 }
 
 export const COMBINADORES: Record<Combinador, string> = {
-  and: "Todas as condições",
-  or: "Qualquer uma das condições",
+  and: "Toutes les conditions",
+  or: "Au moins une des conditions",
 };
 
 /**
@@ -286,8 +286,8 @@ export const COMBINADORES: Record<Combinador, string> = {
  * id estável do ramo.
  */
 export const MODOS_DE_RAMIFICACAO: Record<ModoDeRamificacao, string> = {
-  combined: "Uma saída para todas as regras juntas",
-  per_check: "Uma saída para cada regra",
+  combined: "Une seule sortie pour toutes les règles",
+  per_check: "Une sortie par règle",
 };
 
 /**
@@ -299,7 +299,7 @@ export const MODOS_DE_RAMIFICACAO: Record<ModoDeRamificacao, string> = {
  * Os mesmos ramos, em frase — o registro do DOSSIÊ, não o da etiqueta.
  *
  * Dois registros de propósito. "Sem resposta" cabe num chip ao lado de uma
- * aresta, onde o contexto está no desenho; "quando ninguém responde" cabe numa
+ * aresta, onde o contexto está no desenho; "quand personne ne répond" cabe numa
  * linha de histórico, onde a frase precisa se sustentar sozinha. Achatar os
  * dois num só empobrece as duas telas.
  *
@@ -309,10 +309,10 @@ export const MODOS_DE_RAMIFICACAO: Record<ModoDeRamificacao, string> = {
  * (v1) ou como `branch_id` (v2). Um dicionário, duas portas, um texto.
  */
 export const RAMOS_RESERVADOS_EM_FRASE: Record<RamoReservado, string> = {
-  [FALLBACK_BRANCH_ID]: "caminho normal",
-  [NO_REPLY_BRANCH_ID]: "quando ninguém responde",
-  [CONDITION_TRUE_BRANCH_ID]: "quando a condição é verdadeira",
-  [CONDITION_FALSE_BRANCH_ID]: "quando a condição é falsa",
+  [FALLBACK_BRANCH_ID]: "chemin normal",
+  [NO_REPLY_BRANCH_ID]: "quand personne ne répond",
+  [CONDITION_TRUE_BRANCH_ID]: "quand la condition est vraie",
+  [CONDITION_FALSE_BRANCH_ID]: "quand la condition est fausse",
 };
 
 /**
@@ -335,7 +335,7 @@ export function fraseDoRamo(branchId: string): string | null {
  * meio de outra frase é o tipo de detalhe que ninguém revisa e todo mundo lê.
  */
 function encaixa(frase: string): string {
-  return frase.charAt(0).toLocaleLowerCase("pt-BR") + frase.slice(1);
+  return frase.charAt(0).toLocaleLowerCase("fr-FR") + frase.slice(1);
 }
 
 /**
@@ -343,12 +343,12 @@ function encaixa(frase: string): string {
  * o histórico precisa saber que um modelo decidiu, não uma regra fixa.
  */
 export function fraseDaClasse(nomeDaClasse: string): string {
-  return `quando a IA classifica a resposta como “${nomeDaClasse}”`;
+  return `quand l’IA classe la réponse comme « ${nomeDaClasse} »`;
 }
 
 /** Ramo de uma REGRA que o usuário batizou. Regra do negócio não é resposta de ninguém. */
 export function fraseDaRegraNomeada(rotulo: string): string {
-  return `quando vale a regra “${rotulo}”`;
+  return `quand la règle « ${rotulo} » s’applique`;
 }
 
 /**
@@ -360,7 +360,7 @@ export function fraseDaRegraSemNome(
   op: OperadorDaCondicao,
   valor: string | number,
 ): string {
-  return `quando ${encaixa(fraseDaCondicao(campo, op, valor))}`;
+  return `quand ${encaixa(fraseDaCondicao(campo, op, valor))}`;
 }
 
 export const RAMOS_RESERVADOS: Record<RamoReservado, string> = {
@@ -386,29 +386,29 @@ const MINIMO_MINUTOS_DE_ESPERA = 15;
  * pela aresta `no_reply` sem chamar o modelo.
  */
 export const ESPERA_PELA_RESPOSTA = {
-  rotulo: "Esperar a resposta por (minutos)",
+  rotulo: "Attendre la réponse pendant (minutes)",
   ajuda:
-    `Se o contato não responder dentro desse tempo, o fluxo segue sozinho pelo caminho ` +
-    `“${conditionLabel({ type: "class_match", value: "no_reply" })}”. ` +
-    `Mínimo de ${MINIMO_MINUTOS_DE_ESPERA} minutos.`,
+    `Si le contact ne répond pas dans ce délai, la séquence continue toute seule par le chemin ` +
+    `« ${conditionLabel({ type: "class_match", value: "no_reply" })} ». ` +
+    `Minimum ${MINIMO_MINUTOS_DE_ESPERA} minutes.`,
   minimoMinutos: MINIMO_MINUTOS_DE_ESPERA,
 } as const;
 
 export const ALVOS_DA_CLASSIFICACAO: Record<AlvoDaClassificacao, string> = {
-  last_reply: "Última resposta",
-  summary: "Resumo",
+  last_reply: "Dernière réponse",
+  summary: "Résumé",
 };
 
 // ─── espera e ação ───────────────────────────────────────────────────────
 
 export const MODOS_DE_ESPERA: Record<ModoDeEspera, string> = {
-  fixed: "Tempo fixo",
-  smart: "A IA escolhe a hora",
+  fixed: "Délai fixe",
+  smart: "L’IA choisit le moment",
 };
 
 export const MODOS_DA_ACAO: Record<ModoDaAcao, string> = {
-  ai_message: "Mensagem escrita pela IA",
-  template: "Modelo de mensagem pronto",
+  ai_message: "Message écrit par l’IA",
+  template: "Modèle de message tout prêt",
 };
 
 // ─── nó final ────────────────────────────────────────────────────────────
@@ -419,9 +419,9 @@ export const MODOS_DA_ACAO: Record<ModoDaAcao, string> = {
  * aqui quebra aquele spec — o que é o ponto: a mudança passa a ser deliberada.
  */
 export const RESULTADOS_DO_FIM: Record<ResultadoDoFim, string> = {
-  converted: "Convertido",
-  exhausted: "Esgotado",
-  custom: "Personalizado",
+  converted: "Converti",
+  exhausted: "Tentatives épuisées",
+  custom: "Personnalisé",
 };
 
 // ─── o acompanhamento depois de rodar ────────────────────────────────────
@@ -433,21 +433,21 @@ export const RESULTADOS_DO_FIM: Record<ResultadoDoFim, string> = {
  * do que a pessoa precisa fazer — `dead` é o estado que abre aviso na Central.
  */
 export const SITUACOES_DO_ACOMPANHAMENTO: Record<EnrollmentStatus, string> = {
-  active: "Em andamento",
-  waiting_reply: "Aguardando resposta",
-  paused_handoff: "Pausado — um humano assumiu",
-  completed: "Concluído",
-  cancelled: "Cancelado",
-  dead: "Parou por falha",
+  active: "En cours",
+  waiting_reply: "En attente de réponse",
+  paused_handoff: "En pause — une personne a pris le relais",
+  completed: "Terminé",
+  cancelled: "Annulé",
+  dead: "Arrêté sur un échec",
 };
 
 /** Como o acompanhamento terminou. Sem tradução em lugar nenhum do produto até aqui. */
 export const DESFECHOS: Record<EnrollmentOutcome, string> = {
-  converted: "Convertido",
-  replied: "O contato respondeu",
-  exhausted: "Esgotado",
-  opted_out: "Pediu para parar",
-  handoff: "Passou para um humano",
+  converted: "Converti",
+  replied: "Le contact a répondu",
+  exhausted: "Tentatives épuisées",
+  opted_out: "A demandé d’arrêter",
+  handoff: "Confié à une personne",
 };
 
 // ─── gatilho do fluxo ────────────────────────────────────────────────────
@@ -458,11 +458,11 @@ export const DESFECHOS: Record<EnrollmentOutcome, string> = {
  */
 export const GATILHOS: Record<TipoDeGatilho, string> = {
   manual: "Manual",
-  silence: "Silêncio",
-  stage_change: "Mudança de etapa no funil",
+  silence: "Silence",
+  stage_change: "Changement de colonne dans le tableau",
   // "Caso" é a palavra que a tela de escalação já usa. O rótulo diz o FATO que
   // dispara ("o agente pediu ajuda"), não o nome da tabela — quem lê é dono de
   // clínica, não quem escreveu o schema.
-  case_opened: "Quando o agente pede ajuda de um humano",
-  conversation_end: "Fim da conversa",
+  case_opened: "Quand l’assistant demande l’aide d’une personne",
+  conversation_end: "Fin de la conversation",
 };

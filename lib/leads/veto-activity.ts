@@ -51,14 +51,14 @@ export async function emitVetoActivity(
 /** Motivo legível — o humano lê "não enviei porque", não um código de gate. */
 export function vetoReason(gate: string, code: string): string {
   const porGate: Record<string, string> = {
-    stop: "Não enviei: o contato pediu para parar de receber mensagens",
-    window: "Não enviei: fora da janela de horário permitida",
-    pacing: "Não enviei: limite de ritmo de envio atingido",
-    budget: "Não enviei: orçamento de IA esgotado",
-    warmup: "Não enviei: número ainda em aquecimento",
-    promise: "Não enviei: a mensagem prometia algo que não posso garantir",
+    stop: "Non envoyé : le contact a demandé à ne plus recevoir de messages",
+    window: "Non envoyé : en dehors des heures autorisées",
+    pacing: "Non envoyé : limite de rythme d’envoi atteinte",
+    budget: "Non envoyé : budget IA épuisé",
+    warmup: "Non envoyé : numéro encore en période de rodage",
+    promise: "Non envoyé : le message promettait quelque chose que je ne peux pas garantir",
     internal_vocabulary:
-      "Não enviei: a mensagem usava termos internos do sistema que o cliente não deve ler",
+      "Non envoyé : le message contenait des termes internes que le client ne doit pas lire",
   };
-  return porGate[gate] ?? `Não enviei: bloqueado pela regra "${gate}" (${code})`;
+  return porGate[gate] ?? `Non envoyé : bloqué par la règle "${gate}" (${code})`;
 }

@@ -63,12 +63,12 @@ export async function PATCH(
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = patchSourceSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -87,10 +87,10 @@ export async function PATCH(
 
   if (fetchErr) {
     console.error("[ai-knowledge-sources] PATCH fetch failed:", fetchErr.message);
-    return fail("internal_error", "Erro ao verificar fonte.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la vérification de la source.", 500, { requestId });
   }
   if (!existing) {
-    return fail("not_found", "Fonte de conhecimento não encontrada.", 404, { requestId });
+    return fail("not_found", "Source de connaissances introuvable.", 404, { requestId });
   }
 
   const ksRow = existing as { id: string; source_type: string; agent_id: string };
@@ -111,7 +111,7 @@ export async function PATCH(
 
     if (updateErr) {
       console.error("[ai-knowledge-sources] PATCH update failed:", updateErr.message);
-      return fail("internal_error", "Erro ao atualizar fonte.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de la mise à jour de la source.", 500, { requestId });
     }
   }
 
@@ -127,7 +127,7 @@ export async function PATCH(
 
     if (delErr) {
       console.error("[ai-knowledge-sources] PATCH delete items failed:", delErr.message);
-      return fail("internal_error", "Erro ao remover itens antigos.", 500, { requestId });
+      return fail("internal_error", "Erreur lors de la suppression des anciens éléments.", 500, { requestId });
     }
 
     if (input.items.length > 0) {
@@ -145,7 +145,7 @@ export async function PATCH(
 
       if (insertErr) {
         console.error("[ai-knowledge-sources] PATCH insert items failed:", insertErr.message);
-        return fail("internal_error", "Erro ao inserir novos itens FAQ.", 500, { requestId });
+        return fail("internal_error", "Erreur lors de l’ajout des nouvelles questions de la FAQ.", 500, { requestId });
       }
       itemsCount = rows.length;
     } else {
@@ -202,10 +202,10 @@ export async function DELETE(
 
   if (fetchErr) {
     console.error("[ai-knowledge-sources] DELETE fetch failed:", fetchErr.message);
-    return fail("internal_error", "Erro ao verificar fonte.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la vérification de la source.", 500, { requestId });
   }
   if (!existing) {
-    return fail("not_found", "Fonte de conhecimento não encontrada.", 404, { requestId });
+    return fail("not_found", "Source de connaissances introuvable.", 404, { requestId });
   }
 
   const admin = createAdminClient();
@@ -217,7 +217,7 @@ export async function DELETE(
 
   if (archiveErr) {
     console.error("[ai-knowledge-sources] DELETE archive failed:", archiveErr.message);
-    return fail("internal_error", "Erro ao arquivar fonte.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’archivage de la source.", 500, { requestId });
   }
 
   return ok({ id: sourceId, status: "archived" }, { requestId });

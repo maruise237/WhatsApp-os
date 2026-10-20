@@ -46,7 +46,7 @@ export function ContactCard({ message }: Props) {
 
       <div className="rounded-lg border border-current/20 bg-background/10 px-3 py-2 text-xs opacity-80">
 
-        Contato
+        Contact
 
       </div>
 
@@ -98,7 +98,7 @@ export function ContactCard({ message }: Props) {
 
       if (!res.ok || !json.data?.conversation_id) {
 
-        throw new Error(json.error?.message ?? "Não foi possível abrir a conversa.");
+        throw new Error(json.error?.message ?? "Impossible d’ouvrir la conversation.");
 
       }
 
@@ -106,7 +106,7 @@ export function ContactCard({ message }: Props) {
 
     } catch (err) {
 
-      toast.error(err instanceof Error ? err.message : "Não foi possível abrir a conversa.");
+      toast.error(err instanceof Error ? err.message : "Impossible d’ouvrir la conversation.");
 
     } finally {
 
@@ -128,7 +128,7 @@ export function ContactCard({ message }: Props) {
 
       onClick={handleOpen}
 
-      title={canOpen ? "Abrir conversa com este contato" : undefined}
+      title={canOpen ? "Ouvrir une conversation avec ce contact" : undefined}
 
       className={cn(
 

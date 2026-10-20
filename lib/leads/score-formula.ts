@@ -109,10 +109,10 @@ const PESO_RISCO: Record<RiskBucket, number> = {
 };
 
 const FRASE_RISCO: Record<RiskBucket, string> = {
-  em_dia: "conversa em dia",
-  em_voo: "resposta da IA a caminho",
-  em_risco: "sem resposta além do esperado",
-  critico: "sem resposta há muito tempo",
+  em_dia: "conversation à jour",
+  em_voo: "réponse de l’IA en route",
+  em_risco: "sans réponse plus longtemps que prévu",
+  critico: "sans réponse depuis longtemps",
 };
 
 function plural(n: number, singular: string, plural_: string): string {
@@ -164,7 +164,7 @@ export function calculaScore(sinais: SinaisDoLead): ScoreCalculado {
   if (nComp > 0) {
     fatores.push({
       pontos: nComp * POR_COMPROMISSO,
-      frase: plural(nComp, "compromisso do cliente", "compromissos do cliente"),
+      frase: plural(nComp, "engagement du client", "engagements du client"),
       ancora,
     });
   }
@@ -172,7 +172,7 @@ export function calculaScore(sinais: SinaisDoLead): ScoreCalculado {
   if (nObj > 0) {
     fatores.push({
       pontos: nObj * POR_OBJECAO,
-      frase: plural(nObj, "objeção em aberto", "objeções em aberto"),
+      frase: plural(nObj, "objection en suspens", "objections en suspens"),
       ancora,
     });
   }
@@ -180,7 +180,7 @@ export function calculaScore(sinais: SinaisDoLead): ScoreCalculado {
   if (nBant > 0) {
     fatores.push({
       pontos: nBant * POR_CAMPO_BANT,
-      frase: plural(nBant, "item de qualificação", "itens de qualificação"),
+      frase: plural(nBant, "critère de qualification", "critères de qualification"),
     });
   }
   // Recência não ganha âncora: ela não é um ponto no tempo da conversa, é a
@@ -205,7 +205,7 @@ export function calculaScore(sinais: SinaisDoLead): ScoreCalculado {
   if (resto.length > 0 && pontosDoResto !== 0) {
     partes.push(
       `${pontosDoResto > 0 ? "+" : "−"}${Math.abs(pontosDoResto)} ` +
-        plural(resto.length, "outro fator", "outros fatores"),
+        plural(resto.length, "autre facteur", "autres facteurs"),
     );
   }
 
@@ -214,12 +214,12 @@ export function calculaScore(sinais: SinaisDoLead): ScoreCalculado {
   // indistinguível de razão gerada, que é o que a C1 proíbe. Dizer "limitado a
   // 0" custa quatro palavras e mantém a conta auditável por quem lê.
   if (score !== bruto) {
-    partes.push(`limitado a ${score}`);
+    partes.push(`limité à ${score}`);
   }
 
   return {
     score,
-    reason: partes.length > 0 ? partes.join(", ") : "sem parcelas relevantes além da base",
+    reason: partes.length > 0 ? partes.join(", ") : "aucun facteur notable en plus de la base",
     evidence: { formula_v: FORMULA_V, factors: relevantes },
     band: resolveBand(score, sinais.bandAnterior),
   };

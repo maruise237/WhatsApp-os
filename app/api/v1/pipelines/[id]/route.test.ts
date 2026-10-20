@@ -215,7 +215,7 @@ describe("DELETE /api/v1/pipelines/[id]", () => {
     const { DELETE } = await import("./route");
     const res = await DELETE(reqDelete(), ctx());
     expect(res.status).toBe(422);
-    expect((await res.json()).error.message).toMatch(/único/i);
+    expect((await res.json()).error.message).toMatch(/seul tableau/i);
     expect(db.escritas).toEqual([]);
   });
 
@@ -225,7 +225,7 @@ describe("DELETE /api/v1/pipelines/[id]", () => {
     const { DELETE } = await import("./route");
     const res = await DELETE(reqDelete(PIPE), ctx(PIPE));
     expect(res.status).toBe(422);
-    expect((await res.json()).error.message).toMatch(/padrão/i);
+    expect((await res.json()).error.message).toMatch(/par défaut/i);
     expect(db.escritas).toEqual([]);
   });
 
@@ -298,7 +298,7 @@ describe("DELETE /api/v1/pipelines/[id]", () => {
     const { DELETE } = await import("./route");
     const res = await DELETE(reqDelete(OUTRO, "?definitivo=1"), ctx());
     expect(res.status).toBe(422);
-    expect((await res.json()).error.message).toMatch(/arquiv/i);
+    expect((await res.json()).error.message).toMatch(/archiv/i);
     expect(db.escritas).toEqual([]);
   });
 

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -54,7 +54,7 @@ function relativeDate(iso: string | null): string {
   try {
     return formatDistanceToNow(new Date(iso), {
       addSuffix: true,
-      locale: ptBR,
+      locale: fr,
     });
   } catch {
     return iso;
@@ -115,9 +115,9 @@ export function UsersTableAdmin({
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-md border py-16 text-center text-muted-foreground">
         <Users size={36} weight="duotone" className="opacity-40" aria-hidden />
-        <p className="text-sm font-medium">Nenhum usuário encontrado</p>
+        <p className="text-sm font-medium">Aucun utilisateur trouvé</p>
         <p className="max-w-xs text-xs opacity-70">
-          Ajuste os filtros para refinar a busca.
+          Ajustez les filtres pour affiner la recherche.
         </p>
       </div>
     );
@@ -129,12 +129,12 @@ export function UsersTableAdmin({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Email</TableHead>
-              <TableHead className="w-[160px]">Nome</TableHead>
-              <TableHead className="w-[160px]">Tenant</TableHead>
-              <TableHead className="w-[100px]">Role</TableHead>
-              <TableHead className="w-[160px]">Último acesso</TableHead>
-              <TableHead className="w-[100px]">Status</TableHead>
+              <TableHead>E-mail</TableHead>
+              <TableHead className="w-[160px]">Nom</TableHead>
+              <TableHead className="w-[160px]">Organisation</TableHead>
+              <TableHead className="w-[100px]">Rôle</TableHead>
+              <TableHead className="w-[160px]">Dernier accès</TableHead>
+              <TableHead className="w-[100px]">Statut</TableHead>
               <TableHead className="w-[60px]" />
             </TableRow>
           </TableHeader>
@@ -163,9 +163,9 @@ export function UsersTableAdmin({
                 </TableCell>
                 <TableCell>
                   {row.revoked_at ? (
-                    <Badge variant="error">Revogado</Badge>
+                    <Badge variant="error">Révoqué</Badge>
                   ) : (
-                    <Badge variant="success">Ativo</Badge>
+                    <Badge variant="success">Actif</Badge>
                   )}
                 </TableCell>
                 <TableCell>
@@ -173,7 +173,7 @@ export function UsersTableAdmin({
                     href={`/admin/users/${row.user_id}`}
                     className="text-xs font-medium text-accent hover:underline"
                   >
-                    Ver
+                    Voir
                   </Link>
                 </TableCell>
               </TableRow>

@@ -35,7 +35,7 @@ export function TenantActions({
     <>
       <div className="rounded-lg border bg-card p-5 space-y-4">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-          Ações
+          Actions
         </h2>
 
         {/* Impersonate (S-11.07) */}
@@ -44,7 +44,7 @@ export function TenantActions({
           displayName={displayName}
           disabled={isRedacted}
           disabledReason={
-            isRedacted ? "Tenant redigido — ação não disponível" : undefined
+            isRedacted ? "Organisation caviardée — action indisponible" : undefined
           }
         />
 
@@ -54,9 +54,9 @@ export function TenantActions({
             className="w-full"
             variant="destructive"
             onClick={() => setSuspendOpen(true)}
-            aria-label="Suspender tenant"
+            aria-label="Suspendre l’organisation"
           >
-            Suspender tenant
+            Suspendre l’organisation
           </Button>
         )}
 
@@ -66,15 +66,15 @@ export function TenantActions({
             className="w-full"
             variant="outline"
             onClick={() => setReactivateOpen(true)}
-            aria-label="Reativar tenant"
+            aria-label="Réactiver l’organisation"
           >
-            Reativar tenant
+            Réactiver l’organisation
           </Button>
         )}
 
         {isRedacted && (
           <p className="text-xs text-muted-foreground text-center py-2">
-            Tenant redigido — ações de gestão não disponíveis.
+            Organisation caviardée — actions de gestion indisponibles.
           </p>
         )}
       </div>

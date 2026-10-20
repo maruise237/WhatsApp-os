@@ -41,14 +41,20 @@ export interface ContextoDoNegocio {
  * "Prospecção", "Nutrição" e "Fundo de funil" — nomes de manual, não os que
  * estão na cabeça de quem atende no WhatsApp.
  */
+// Vocabulaire portugais d'origine + français (le marché du produit). Sans le
+// français, « Vente de pagnes et tissus wax via WhatsApp » tombait dans le
+// tableau générique : constaté par l'écran à l'onboarding (pile locale, 2026-10-19).
 const PISTAS: Record<string, RegExp> = {
   clinica:
-    /\b(cl[ií]nic|consult[óo]ri|dentist|odonto|m[ée]dic|terapeut|psic[óo]log|fisioterap|est[ée]tic|sal[ãa]o|barbear|petshop|veterin[áa]ri|nutricion)/i,
-  imobiliaria: /\b(imobili[áa]ri|corret|im[óo]ve|apartament|alugu[ée]|loteament|terren)/i,
+    /\b(cl[ií]nic|consult[óo]ri|dentist|dentair|odonto|m[ée]dic|terapeut|th[ée]rapeut|psic[óo]log|psycholog|fisioterap|kin[ée]|est[ée]tic|esth[ée]ti|sal[ãa]o|salon|coiff|barbear|barbier|onglerie|petshop|veterin[áa]ri|v[ée]t[ée]rinai|nutricion|nutritionn|pharmac)/i,
+  imobiliaria:
+    /\b(imobili[áa]ri|immobili|corret|im[óo]ve|apartament|appartement|alugu[ée]|logement|loteament|terren|terrain)/i,
   servicos:
-    /\b(ag[êe]nci|consultori|advocac|advogad|contabil|arquitet|engenhar|reform|obra|marcenar|servi[çc]o|manuten[çc]|instala[çc])/i,
-  curso: /\b(curso|mentori|infoprodut|aula|treinament|workshop|escola|ensino|coach)/i,
-  loja: /\b(loja|e-?commerce|revend|distribuidor|atacad|varej|vend[oa] produt|boutique|moda)/i,
+    /\b(ag[êe]nci|agence|consultori|conseil|advocac|advogad|avocat|contabil|comptab|arquitet|architect|engenhar|ing[ée]nier|reform|r[ée]novation|obra|chantier|marcenar|menuis|servi[çc]o|service|manuten[çc]|maintenance|instala[çc]|installation|plomb|[ée]lectricit|nettoyage)/i,
+  curso:
+    /\b(curso|cours|formation|mentori|mentorat|infoprodut|aula|treinament|workshop|atelier|escola|[ée]cole|ensino|enseignement|coach|soutien scolaire)/i,
+  loja:
+    /\b(loja|magasin|e-?commerce|commerce|revend|distribuidor|distribut|atacad|grossiste|varej|d[ée]tail|vend[oa] produt|vente|vend|boutique|moda|mode|pagne|wax|tissu|v[êe]tement|habit|chaussure|sac|bijou|cosm[ée]ti|perruque|m[èe]che|[ée]picerie|alimentation)/i,
 };
 
 /**
@@ -79,32 +85,32 @@ export function pedidoDeSugestao(
   exemplo: PacoteDeFunil,
 ): { system: string; prompt: string } {
   const passos = [
-    '"new" — acabou de chamar, ninguém respondeu ainda',
-    '"contacted" — já foi respondido',
-    '"qualifying" — está entendendo o que a pessoa precisa',
-    '"qualified" — já sabe o que oferecer',
-    '"negotiating" — está fechando preço, horário ou condições',
-    '"won" — fechou (exatamente UMA coluna)',
-    '"lost" — não fechou (exatamente UMA coluna)',
-    "null — coluna que só uma pessoa move, sem equivalente no atendimento",
+    '"new" — vient d’écrire, personne n’a encore répondu',
+    '"contacted" — a déjà reçu une réponse',
+    '"qualifying" — on comprend ce dont la personne a besoin',
+    '"qualified" — on sait déjà quoi proposer',
+    '"negotiating" — on fixe le prix, l’horaire ou les conditions',
+    '"won" — vente conclue (exactement UNE colonne)',
+    '"lost" — vente perdue (exactement UNE colonne)',
+    "null — colonne que seule une personne déplace, sans équivalent dans la conversation",
   ].join("\n- ");
 
   return {
     system:
-      "Você monta o quadro de clientes de um negócio brasileiro que atende por WhatsApp. " +
-      "Escreva do jeito que o DONO fala, não como um manual de vendas: nada de " +
-      '"prospecção", "MQL", "nutrição" ou "fundo de funil". ' +
-      "Cada coluna é um momento concreto do atendimento dele. " +
-      "Responda APENAS com o JSON, sem comentário e sem crases.",
+      "Tu construis le tableau des clients d’une petite entreprise d’Afrique francophone qui vend par WhatsApp. " +
+      "Écris comme parle le PATRON, pas comme un manuel de vente : pas de " +
+      '"prospection", "MQL", "nurturing" ni "fond de tunnel". Écris en français. ' +
+      "Chaque colonne est un moment concret de sa relation avec le client. " +
+      "Réponds UNIQUEMENT avec le JSON, sans commentaire et sans backticks.",
     prompt: [
-      `Negócio: ${ctx.nome}`,
-      `O que faz: ${ctx.oQueFaz}`,
+      `Entreprise : ${ctx.nome}`,
+      `Activité : ${ctx.oQueFaz}`,
       "",
-      "Monte de 5 a 7 colunas, na ordem em que o cliente passa por elas.",
-      'Cada coluna tem "nome" (o que aparece no topo) e "passo", que diz quando o atendente move o cliente para lá:',
+      "Crée de 5 à 7 colonnes, dans l’ordre où le client les traverse.",
+      'Chaque colonne a un "nome" (ce qui s’affiche en haut) et un "passo", qui indique quand l’assistant y déplace le client :',
       `- ${passos}`,
       "",
-      `Exemplo do formato (é de outro negócio — não copie os nomes, adapte ao "${ctx.nome}"):`,
+      `Exemple de format (d’une autre entreprise — ne copie pas les noms, adapte-les à "${ctx.nome}") :`,
       JSON.stringify({ nome: exemplo.proposta.nome, etapas: exemplo.proposta.etapas }, null, 2),
     ].join("\n"),
   };
@@ -171,7 +177,7 @@ export async function sugerirFunil(ctx: ContextoDoNegocio, gerar: Gerar): Promis
 
   const bruta = extrairJson(texto);
   if (!bruta || typeof bruta !== "object") {
-    return { origem: "pacote", pacote: exemplo, porque: "a resposta não veio no formato esperado" };
+    return { origem: "pacote", pacote: exemplo, porque: "la réponse n’était pas au format attendu" };
   }
 
   const proposta = normalizarProposta(bruta as { nome?: unknown; etapas?: unknown });

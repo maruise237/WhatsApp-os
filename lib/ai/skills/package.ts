@@ -110,7 +110,7 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
         if (f.originalSize > MAX_FILE_BYTES) {
           oversize = {
             code: 'skill_file_too_large',
-            message: `O arquivo "${f.name}" tem mais de ${MAX_FILE_BYTES / 1024 / 1024}MB.`,
+            message: `Le fichier "${f.name}" dépasse ${MAX_FILE_BYTES / 1024 / 1024} Mo.`,
           };
           return false;
         }
@@ -118,7 +118,7 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
         if (declaredTotal > MAX_TOTAL_BYTES) {
           oversize = {
             code: 'skill_package_too_large',
-            message: `O pacote descompactado passa de ${MAX_TOTAL_BYTES / 1024 / 1024}MB.`,
+            message: `Le paquet décompressé dépasse ${MAX_TOTAL_BYTES / 1024 / 1024} Mo.`,
           };
           return false;
         }
@@ -126,7 +126,7 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
       },
     });
   } catch {
-    return fail('skill_zip_invalid', 'Não consegui abrir o arquivo .zip — verifique se o pacote não está corrompido.');
+    return fail('skill_zip_invalid', 'Impossible d’ouvrir le fichier .zip — vérifiez que le paquet n’est pas corrompu.');
   }
   // O filtro acima descarta entradas silenciosamente — não podemos seguir como se o
   // arquivo parcial resultante fosse o pacote completo.
@@ -135,12 +135,12 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
   const entryNames = Object.keys(unzipped).filter((p) => !p.endsWith('/'));
 
   if (entryNames.length > MAX_FILES) {
-    return fail('skill_too_many_files', `O pacote tem ${entryNames.length} arquivos — o limite é ${MAX_FILES}.`);
+    return fail('skill_too_many_files', `Le paquet contient ${entryNames.length} fichiers — la limite est de ${MAX_FILES}.`);
   }
 
   for (const p of entryNames) {
     if (!isSafePath(p)) {
-      return fail('skill_unsafe_path', `Caminho não permitido no pacote: "${p}" (sem "..", sem caminho absoluto).`);
+      return fail('skill_unsafe_path', `Chemin non autorisé dans le paquet : "${p}" (pas de "..", pas de chemin absolu).`);
     }
   }
 
@@ -149,38 +149,38 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
     const bytes = unzipped[p];
     if (bytes === undefined) continue;
     if (bytes.byteLength > MAX_FILE_BYTES) {
-      return fail('skill_file_too_large', `O arquivo "${p}" tem mais de ${MAX_FILE_BYTES / 1024 / 1024}MB.`);
+      return fail('skill_file_too_large', `Le fichier "${p}" dépasse ${MAX_FILE_BYTES / 1024 / 1024} Mo.`);
     }
     totalBytes += bytes.byteLength;
     if (totalBytes > MAX_TOTAL_BYTES) {
-      return fail('skill_package_too_large', `O pacote descompactado passa de ${MAX_TOTAL_BYTES / 1024 / 1024}MB.`);
+      return fail('skill_package_too_large', `Le paquet décompressé dépasse ${MAX_TOTAL_BYTES / 1024 / 1024} Mo.`);
     }
   }
 
   const skillMdBytes = unzipped['SKILL.md'];
   if (skillMdBytes === undefined) {
-    return fail('skill_md_missing', 'O pacote precisa de um arquivo SKILL.md na raiz.');
+    return fail('skill_md_missing', 'Le paquet doit contenir un fichier SKILL.md à la racine.');
   }
 
   const skillMdRaw = new TextDecoder('utf-8').decode(skillMdBytes);
   const fmMatch = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/.exec(skillMdRaw);
   if (!fmMatch) {
-    return fail('skill_frontmatter_invalid', 'SKILL.md precisa começar com um frontmatter delimitado por "---".');
+    return fail('skill_frontmatter_invalid', 'SKILL.md doit commencer par un frontmatter délimité par "---".');
   }
   const [, frontmatterRaw, bodyRaw] = fmMatch;
   const { name, description, matcher } = parseFrontmatter(frontmatterRaw ?? '');
 
   if (name === undefined || name === '') {
-    return fail('skill_frontmatter_invalid', 'SKILL.md precisa de um campo "name" no frontmatter.');
+    return fail('skill_frontmatter_invalid', 'SKILL.md doit avoir un champ "name" dans le frontmatter.');
   }
   if (description === undefined || description === '') {
-    return fail('skill_frontmatter_invalid', 'SKILL.md precisa de um campo "description" no frontmatter.');
+    return fail('skill_frontmatter_invalid', 'SKILL.md doit avoir un champ "description" dans le frontmatter.');
   }
   const matcherResult = skillMatcherSchema.safeParse(matcher);
   if (!matcherResult.success) {
     return fail(
       'skill_frontmatter_invalid',
-      'O "matcher" do SKILL.md precisa de "any_keywords" (lista com pelo menos 1 palavra).',
+      'Le "matcher" de SKILL.md doit avoir "any_keywords" (liste d’au moins 1 mot).',
     );
   }
 
@@ -188,7 +188,7 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
   try {
     validateSkillBody(body);
   } catch (e) {
-    return fail('skill_frontmatter_invalid', e instanceof Error ? e.message : 'corpo de skill inválido');
+    return fail('skill_frontmatter_invalid', e instanceof Error ? e.message : 'contenu de compétence invalide');
   }
 
   const files: Array<{ path: string; bytes: Uint8Array; entry: SkillManifestEntry }> = [];
@@ -203,13 +203,13 @@ export function parseSkillPackage(zipBytes: Uint8Array): ParseSkillResult {
     } else if (p.startsWith('assets/')) {
       const ext = extensionOf(p);
       if (!ASSET_EXTENSIONS.has(ext)) {
-        return fail('skill_asset_extension_invalid', `Extensão não permitida em "${p}" — use: ${[...ASSET_EXTENSIONS].join(', ')}.`);
+        return fail('skill_asset_extension_invalid', `Extension non autorisée pour "${p}" — utilisez : ${[...ASSET_EXTENSIONS].join(', ')}.`);
       }
       kind = 'asset';
     } else {
       return fail(
         'skill_unexpected_path',
-        `Arquivo fora do esperado: "${p}" — o pacote só aceita SKILL.md, references/ e assets/.`,
+        `Fichier inattendu : "${p}" — le paquet n’accepte que SKILL.md, references/ et assets/.`,
       );
     }
 

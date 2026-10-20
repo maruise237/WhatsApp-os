@@ -112,7 +112,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
   const fonteDaCaptacao = {
     organizationId: source.organization_id as string,
     webhookSourceId: source.id as string,
-    sourceName: (source.name as string) ?? "Fonte sem nome",
+    sourceName: (source.name as string) ?? "Source sans nom",
   };
 
   const sigHeader = req.headers.get("x-deskcomm-signature");
@@ -281,7 +281,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       outcome: "recusado",
       rejectReason: "sem_campo_mapeavel",
     });
-    return fail("invalid_request", "Nenhum campo mapeável (nome/telefone/email).", 400, { requestId });
+    return fail("invalid_request", "Aucun champ exploitable (nom/téléphone/e-mail).", 400, { requestId });
   }
 
   // Contato: upsert por telefone (se houver) — reusa a coluna E.164 canônica.
@@ -438,7 +438,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
     stage_id: source.default_stage_id,
     title: respondiMapped
       ? respondiLeadTitle(respondiMapped)
-      : (mapped.name ?? mapped.phone ?? mapped.email ?? "Lead sem nome"),
+      : (mapped.name ?? mapped.phone ?? mapped.email ?? "Client sans nom"),
     contact_id: contactId,
     currency: "BRL",
     tags: [],
@@ -489,7 +489,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
         outcome: "recusado",
         rejectReason: "erro_ao_criar_lead",
       });
-      return fail(err.code, err.message ?? "erro", err.status, { requestId });
+      return fail(err.code, err.message ?? "erreur", err.status, { requestId });
     }
     throw err;
   }
@@ -521,7 +521,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       sourceModule: "webhook",
       sourceId: source.id,
       actor: { type: "webhook_source", id: source.id },
-      reason: "Respondente não concedeu consentimento de contato no formulário Respondi.",
+      reason: "La personne n’a pas donné son consentement pour être contactée dans le formulaire Respondi.",
       payload: {
         webhook_source_id: source.id,
         detected_via: respondiMapped.consent.detectedVia,

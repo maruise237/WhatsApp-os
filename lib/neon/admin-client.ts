@@ -80,6 +80,19 @@ function normalizeDatabaseError(error: unknown): Error {
   return normalized;
 }
 
+type NeonAuthUserRow = { id: string; email: string; name: string | null; image: string | null; createdAt: Date | string };
+
+/** Un compte Neon Auth au format `User` de Supabase que les appelants lisent. */
+function utilisateurSupabase(row: NeonAuthUserRow) {
+  return {
+    id: row.id,
+    email: row.email,
+    user_metadata: { full_name: row.name || null, avatar_url: row.image ?? null },
+    app_metadata: {},
+    created_at: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
+  };
+}
+
 function authAdminSurface() {
   const auth = createNeonAuthForNextRequest() as NeonAuth;
   const authRecord = auth as unknown as Record<string, unknown>;
@@ -96,9 +109,38 @@ function authAdminSurface() {
 
   return {
     admin: {
-      getUserById: (userId: string) =>
-        invoke("getUserById", ["getUserById", "getUser"], { userId }),
-      listUsers: (input?: unknown) => invoke("listUsers", ["listUsers"], input),
+      // Lecture directe de `neon_auth."user"` : Neon Auth y range ses comptes,
+      // dans la base du projet (les FK du schéma public pointent dessus). Le SDK
+      // serveur n'expose pas `getUserById`, et l'appel par le SDK faisait planter
+      // toute page qui affiche le nom d'un membre (Équipe, Métriques, Cas).
+      getUserById: async (userId: string) => {
+        try {
+          const { rows } = await getPool().query<NeonAuthUserRow>(
+            `select id, email, name, image, "createdAt" from neon_auth."user" where id = $1`,
+            [userId],
+          );
+          const row = rows[0];
+          return row
+            ? { data: { user: utilisateurSupabase(row) }, error: null }
+            : { data: { user: null }, error: Object.assign(new Error("User not found"), { status: 404 }) };
+        } catch (error) {
+          return { data: { user: null }, error: normalizeDatabaseError(error) };
+        }
+      },
+      listUsers: async (input?: { page?: number; perPage?: number }) => {
+        const perPage = Math.min(Math.max(input?.perPage ?? 50, 1), 1000);
+        const page = Math.max(input?.page ?? 1, 1);
+        try {
+          const { rows } = await getPool().query<NeonAuthUserRow>(
+            `select id, email, name, image, "createdAt" from neon_auth."user"
+              order by "createdAt" asc, id asc limit $1 offset $2`,
+            [perPage, (page - 1) * perPage],
+          );
+          return { data: { users: rows.map(utilisateurSupabase) }, error: null };
+        } catch (error) {
+          return { data: { users: [] }, error: normalizeDatabaseError(error) };
+        }
+      },
       createUser: (input?: unknown) => invoke("createUser", ["createUser"], input),
       updateUserById: (input?: unknown) =>
         invoke("updateUserById", ["updateUser", "updateUserById"], input),
@@ -223,34 +265,37 @@ function relationForeignKey(
   throw new Error(`neon_admin_relation_key_unknown:${sourceTable}:${targetTable}`);
 }
 
+/**
+ * `colonnes, table:fk(colonnes, autre:fk(…))` — une relation peut en contenir
+ * une autre, comme dans PostgREST. L'ancienne expression régulière n'acceptait
+ * qu'un niveau : `agent_cases → conversations → contacts` levait
+ * `neon_admin_invalid_identifier` et la page des dossiers répondait 500.
+ */
 function parseSelection(columns: string): { base: string; relations: RelationSelection[] } {
   const relations: RelationSelection[] = [];
-  const relationPattern =
-    /([A-Za-z_][A-Za-z0-9_]*)(!inner)?(?::([A-Za-z_][A-Za-z0-9_]*))?\(([^()]*)\)/g;
   const baseParts: string[] = [];
-  let cursor = 0;
-  let match: RegExpExecArray | null;
-  while ((match = relationPattern.exec(columns)) !== null) {
-    baseParts.push(columns.slice(cursor, match.index));
+  for (const part of splitTopLevel(columns)) {
+    const match = /^([A-Za-z_][A-Za-z0-9_]*)(!inner)?(?::([A-Za-z_][A-Za-z0-9_]*))?\(([\s\S]*)\)$/.exec(part);
+    if (!match) {
+      baseParts.push(part);
+      continue;
+    }
     const table = match[1] ?? "";
-    const explicitKey = match[3];
     relations.push({
       output: table,
       table,
-      foreignKey: relationForeignKey("", table, explicitKey),
+      foreignKey: relationForeignKey("", table, match[3]),
       columns: match[4] ?? "*",
       required: Boolean(match[2]),
     });
-    cursor = match.index + match[0].length;
   }
-  baseParts.push(columns.slice(cursor));
-  const base = baseParts
-    .join(",")
-    .split(",")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .join(", ");
-  return { base: base || "*", relations };
+  // Une liste explicite doit porter les clés des relations, sinon rien à hydrater.
+  if (baseParts.length > 0 && !baseParts.includes("*")) {
+    for (const relation of relations) {
+      if (!baseParts.includes(relation.foreignKey)) baseParts.push(relation.foreignKey);
+    }
+  }
+  return { base: baseParts.join(", ") || "*", relations };
 }
 
 async function hydrateRelations(rows: PgRow[], relations: RelationSelection[]): Promise<PgRow[]> {
@@ -265,11 +310,13 @@ async function hydrateRelations(rows: PgRow[], relations: RelationSelection[]): 
         row[relation.output] = null;
         continue;
       }
+      const nested = parseSelection(relation.columns);
       const result = await getPool().query<PgRow>(
-        `SELECT ${columnList(relation.columns)} FROM ${identifier(`public.${relation.table}`)} WHERE "id" = $1 LIMIT 1`,
+        `SELECT ${columnList(nested.base)} FROM ${identifier(`public.${relation.table}`)} WHERE "id" = $1 LIMIT 1`,
         [value],
       );
-      const related = result.rows[0] ?? null;
+      const found = result.rows[0] ?? null;
+      const related = found ? ((await hydrateRelations([found], nested.relations))[0] ?? null) : null;
       if (relation.required && related === null) keep = false;
       row[relation.output] = related;
     }
@@ -278,9 +325,115 @@ async function hydrateRelations(rows: PgRow[], relations: RelationSelection[]): 
   return hydrated;
 }
 
-function valuesForRow(row: PgRow, keys?: string[]): { keys: string[]; values: unknown[] } {
+/**
+ * Valeur destinée à une colonne ou un paramètre `json`/`jsonb`.
+ *
+ * node-postgres sérialise un objet en JSON mais un TABLEAU en littéral de
+ * tableau Postgres (`{...}`) : une liste d'objets envoyée à un `jsonb` arrivait
+ * comme `{"{\"nome\":…}"}` et Postgres répondait `invalid input syntax for type
+ * json` — l'étape « tableau » de l'onboarding ne s'enregistrait jamais. PostgREST
+ * (le chemin d'avant le cutover Neon) envoyait du JSON ; on rétablit ce contrat
+ * en ne sérialisant QUE ce que le catalogue déclare json/jsonb, pour qu'un
+ * `text[]`/`uuid[]` reste un tableau Postgres.
+ */
+export function valeurPourJson(value: unknown): unknown {
+  if (value === null || value === undefined || typeof value !== "object") return value;
+  if (value instanceof Date || Buffer.isBuffer(value)) return value;
+  return JSON.stringify(value);
+}
+
+const cacheColonnesJson = new Map<string, Promise<Set<string>>>();
+const cacheArgumentsJson = new Map<string, Promise<Set<string>>>();
+type FormeRetour = { ensemble: boolean; scalaire: boolean; vide: boolean };
+const cacheFormeRetour = new Map<string, Promise<FormeRetour>>();
+
+/**
+ * Forme du retour d'une fonction, pour rendre ce que rendait PostgREST :
+ * scalaire → la valeur elle-même ; ligne composite → l'objet ; `setof`/`table`
+ * → un tableau. Sans ça, `SELECT * FROM fn()` rendait `[{ fn: valeur }]` et tout
+ * appelant écrit pour PostgREST lisait `undefined` (`typeof data === "string"`
+ * du déchiffrement OAuth, `Number(data)` du budget IA, `data.ok` de l'onboarding).
+ */
+function formeDuRetour(functionName: string): Promise<FormeRetour> {
+  let cached = cacheFormeRetour.get(functionName);
+  if (!cached) {
+    const [schema, name] = functionName.includes(".") ? functionName.split(".", 2) : ["public", functionName];
+    cached = getPool()
+      .query<FormeRetour>(
+        `select p.proretset as ensemble,
+                (t.typtype <> 'c' and t.typname not in ('record', 'void')) as scalaire,
+                t.typname = 'void' as vide
+           from pg_proc p
+           join pg_namespace n on n.oid = p.pronamespace
+           join pg_type t on t.oid = p.prorettype
+          where n.nspname = $1 and p.proname = $2
+          limit 1`,
+        [schema, name],
+      )
+      .then((r) => r.rows[0] ?? { ensemble: false, scalaire: false, vide: false });
+    cached.catch(() => cacheFormeRetour.delete(functionName));
+    cacheFormeRetour.set(functionName, cached);
+  }
+  return cached;
+}
+
+/** Applique la forme PostgREST aux lignes de `SELECT * FROM fn(...)`. */
+export function formerRetourRpc(rows: PgRow[], forme: FormeRetour): unknown {
+  if (forme.vide) return null;
+  const valeur = (row: PgRow | undefined) => (row ? Object.values(row)[0] ?? null : null);
+  if (forme.ensemble) return forme.scalaire ? rows.map((row) => valeur(row)) : rows;
+  return forme.scalaire ? valeur(rows[0]) : (rows[0] ?? null);
+}
+
+function colonnesJson(qualifiedTable: string): Promise<Set<string>> {
+  const [schema, table] = qualifiedTable.includes(".") ? qualifiedTable.split(".", 2) : ["public", qualifiedTable];
+  const key = `${schema}.${table}`;
+  let cached = cacheColonnesJson.get(key);
+  if (!cached) {
+    cached = getPool()
+      .query<{ column_name: string }>(
+        `select column_name from information_schema.columns
+          where table_schema = $1 and table_name = $2 and data_type in ('json', 'jsonb')`,
+        [schema, table],
+      )
+      .then((r) => new Set(r.rows.map((row) => row.column_name)));
+    cached.catch(() => cacheColonnesJson.delete(key));
+    cacheColonnesJson.set(key, cached);
+  }
+  return cached;
+}
+
+function argumentsJson(functionName: string): Promise<Set<string>> {
+  let cached = cacheArgumentsJson.get(functionName);
+  if (!cached) {
+    const [schema, name] = functionName.includes(".") ? functionName.split(".", 2) : ["public", functionName];
+    cached = getPool()
+      .query<{ arg: string }>(
+        `select a.name as arg
+           from pg_proc p
+           join pg_namespace n on n.oid = p.pronamespace
+           cross join lateral unnest(p.proargnames, p.proargtypes::oid[]) as a(name, type)
+          where n.nspname = $1 and p.proname = $2
+            and a.type in ('json'::regtype, 'jsonb'::regtype)`,
+        [schema, name],
+      )
+      .then((r) => new Set(r.rows.map((row) => row.arg)));
+    cached.catch(() => cacheArgumentsJson.delete(functionName));
+    cacheArgumentsJson.set(functionName, cached);
+  }
+  return cached;
+}
+
+function valuesForRow(
+  row: PgRow,
+  keys?: string[],
+  jsonKeys: Set<string> = new Set(),
+): { keys: string[]; values: unknown[] } {
   const selected = keys ?? Object.keys(row).filter((key) => row[key] !== undefined);
-  return { keys: selected, values: selected.map((key) => row[key]) };
+  return {
+    keys: selected,
+    values: selected.map((key) => (jsonKeys.has(key) ? valeurPourJson(row[key]) : row[key])),
+  };
 }
 
 class PostgresQuery implements AdminQuery {
@@ -511,10 +664,11 @@ class PostgresQuery implements AdminQuery {
           : `SELECT ${this.returning} FROM ${table}${where}${order}${limit}${offset}`;
       } else if (this.operation === "insert" || this.operation === "upsert") {
         const rows = Array.isArray(this.payload) ? this.payload : [this.payload ?? {}];
-        const first = valuesForRow(rows[0] ?? {});
+        const jsonKeys = await colonnesJson(this.table);
+        const first = valuesForRow(rows[0] ?? {}, undefined, jsonKeys);
         if (first.keys.length === 0) throw new Error("neon_admin_empty_insert");
         const rowSql = rows.map((row) => {
-          const current = valuesForRow(row, first.keys);
+          const current = valuesForRow(row, first.keys, jsonKeys);
           return `(${current.values.map(bind).join(", ")})`;
         });
         sql = `INSERT INTO ${table} (${first.keys.map(identifier).join(", ")}) VALUES ${rowSql.join(", ")} `;
@@ -536,7 +690,7 @@ class PostgresQuery implements AdminQuery {
         }
         sql += `RETURNING ${this.returning}`;
       } else if (this.operation === "update") {
-        const values = valuesForRow(this.payload as PgRow);
+        const values = valuesForRow(this.payload as PgRow, undefined, await colonnesJson(this.table));
         if (values.keys.length === 0) throw new Error("neon_admin_empty_update");
         const assignments = values.keys
           .map((key, index) => `${identifier(key)} = ${bind(values.values[index])}`)
@@ -585,7 +739,10 @@ function createDirectAdminClient(): AdminClient {
         const safeName = identifier(
           functionName.includes(".") ? functionName : `public.${functionName}`,
         );
-        const entries = Object.entries(args);
+        const jsonArgs = await argumentsJson(functionName);
+        const entries = Object.entries(args).map(
+          ([key, value]) => [key, jsonArgs.has(key) ? valeurPourJson(value) : value] as const,
+        );
         const sql = `SELECT * FROM ${safeName}(${entries
           .map(([key], index) => `${identifier(key)} => $${index + 1}`)
           .join(", ")})`;
@@ -594,7 +751,7 @@ function createDirectAdminClient(): AdminClient {
           entries.map(([, value]) => value),
         );
         return {
-          data: result.rows,
+          data: formerRetourRpc(result.rows, await formeDuRetour(functionName)),
           error: null,
           count: result.rowCount,
           status: 200,

@@ -42,12 +42,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     raw = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createFollowupFlowSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (insErr || !created) {
     if (insErr?.code === "23505") {
-      return fail("conflict", "Já existe um fluxo com este nome.", 409, { requestId });
+      return fail("conflict", "Un scénario porte déjà ce nom.", 409, { requestId });
     }
     return fail("internal_error", insErr?.message ?? "followup_flow_insert_failed", 500, {
       requestId,

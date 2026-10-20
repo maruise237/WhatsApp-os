@@ -63,7 +63,7 @@ describe("estado do número", () => {
   it("suspenso é crítico e diz que NÃO dá para enviar", () => {
     const a = ev("whatsapp.number.suspended", "falta de pagamento");
     expect(a?.severity).toBe("critical");
-    expect(a?.title).toMatch(/SUSPENSO/);
+    expect(a?.title).toMatch(/SUSPENDU/);
     expect(a?.body).toBe("falta de pagamento");
   });
 

@@ -97,7 +97,7 @@ export function RunDetailDrawer({ run, open, onOpenChange }: Props) {
             <div className="flex flex-wrap gap-2">
               {run.conversation_id ? (
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/app/inbox?conversation=${run.conversation_id}`}>
+                  <Link href={`/app/inbox?id=${run.conversation_id}`}>
                     {t("Ver conversa")}
                   </Link>
                 </Button>

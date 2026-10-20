@@ -50,7 +50,7 @@ export async function GET(): Promise<Response> {
     .order("created_at", { ascending: false });
 
   if (error) {
-    return fail("internal_error", "Erro ao listar credentials.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du chargement des identifiants.", 500, { requestId });
   }
   return ok(data ?? [], { requestId });
 }
@@ -65,12 +65,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = createSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Campos inválidos.", 422, {
+    return fail("validation_failed", "Champs invalides.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -96,12 +96,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (guardado.motivo === "label_em_uso") {
       return fail(
         "label_already_used",
-        "Já existe uma credential com este label e provider.",
+        "Un identifiant avec ce libellé et ce fournisseur existe déjà.",
         409,
         { requestId },
       );
     }
-    return fail("internal_error", "Erro ao criar credential.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la création de l’identifiant.", 500, { requestId });
   }
 
   // A resposta continua saindo da view segura: ela é quem garante que nenhum

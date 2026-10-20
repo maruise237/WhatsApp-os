@@ -55,7 +55,7 @@ export async function enrollMfa(): Promise<EnrollMfaResult> {
   const marca = await marcaDaSaida(null);
   const { data, error } = await supabase.auth.mfa.enroll({
     factorType: "totp",
-    friendlyName: `Acesso ${new Date().toISOString().slice(0, 10)}`,
+    friendlyName: `Accès ${new Date().toISOString().slice(0, 10)}`,
     issuer: marca.nome,
   });
   if (error || !data) {

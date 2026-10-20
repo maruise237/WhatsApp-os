@@ -63,11 +63,11 @@ export function TemplatesClient({ canShare, currentUserId }: Props) {
     <div className="space-y-4">
       <div className="flex sm:justify-end">
         <Button type="button" onClick={openNew} className="w-full sm:w-auto">
-          <Plus /> Novo template
+          <Plus /> Nouveau modèle
         </Button>
       </div>
       {!templates?.length ? (
-        <p className="text-sm text-muted-foreground">Nenhum template ainda.</p>
+        <p className="text-sm text-muted-foreground">Aucun modèle pour le moment.</p>
       ) : (
         <ul className="space-y-2">
           {templates.map((template) => {
@@ -97,7 +97,7 @@ export function TemplatesClient({ canShare, currentUserId }: Props) {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      aria-label="Editar template"
+                      aria-label="Modifier le modèle"
                       onClick={() => openEdit(template)}
                     >
                       <PencilSimple />
@@ -108,28 +108,28 @@ export function TemplatesClient({ canShare, currentUserId }: Props) {
                           type="button"
                           variant="ghost"
                           size="icon"
-                          aria-label="Excluir template"
+                          aria-label="Supprimer le modèle"
                         >
                           <Trash />
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Excluir este template?</AlertDialogTitle>
+                          <AlertDialogTitle>Supprimer ce modèle ?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Essa ação não pode ser desfeita.
+                            Cette action est irréversible.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogCancel>Annuler</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() =>
                               del.mutate(template.id, {
-                                onSuccess: () => toast.success("Template excluído."),
+                                onSuccess: () => toast.success("Modèle supprimé."),
                               })
                             }
                           >
-                            Excluir
+                            Supprimer
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>

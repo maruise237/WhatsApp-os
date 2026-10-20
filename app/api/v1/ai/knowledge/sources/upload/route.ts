@@ -57,7 +57,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     formData = await req.formData();
   } catch {
-    return fail("invalid_request", "Falha ao processar multipart/form-data.", 400, { requestId });
+    return fail("invalid_request", "Impossible de traiter le multipart/form-data.", 400, { requestId });
   }
 
   const fileEntry = formData.get("file");
@@ -65,17 +65,17 @@ export async function POST(req: NextRequest): Promise<Response> {
   const nameRaw = formData.get("name");
 
   if (!(fileEntry instanceof File)) {
-    return fail("invalid_request", "Campo 'file' ausente ou inválido.", 400, { requestId });
+    return fail("invalid_request", "Champ « file » absent ou invalide.", 400, { requestId });
   }
 
   // --- Validate agent_id and name ---
   const agentIdParsed = agentIdSchema.safeParse(agentIdRaw);
   if (!agentIdParsed.success) {
-    return fail("validation_failed", "Campo 'agent_id' deve ser UUID válido.", 422, { requestId });
+    return fail("validation_failed", "Le champ « agent_id » doit être un UUID valide.", 422, { requestId });
   }
   const nameParsed = nameSchema.safeParse(nameRaw);
   if (!nameParsed.success) {
-    return fail("validation_failed", "Campo 'name' inválido (2-120 chars).", 422, { requestId });
+    return fail("validation_failed", "Champ « name » invalide (2 à 120 caractères).", 422, { requestId });
   }
 
   const agentId = agentIdParsed.data;
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // --- File size check ---
   if (file.size > MAX_FILE_SIZE) {
-    return fail("payload_too_large", "Arquivo excede o limite de 20MB.", 413, { requestId });
+    return fail("payload_too_large", "Le fichier dépasse la limite de 20 Mo.", 413, { requestId });
   }
 
   // --- MIME / extension validation ---
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (!isMimeAllowed || !ext) {
     return fail(
       "unsupported_media_type",
-      "Tipo de arquivo não suportado. Envie PDF ou Markdown (.pdf, .md).",
+      "Type de fichier non pris en charge. Envoyez un PDF ou un Markdown (.pdf, .md).",
       415,
       { requestId },
     );
@@ -115,10 +115,10 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (agentErr) {
     console.error("[ai-policy-upload] agent lookup failed:", agentErr.message);
-    return fail("internal_error", "Erro ao validar agent_id.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la validation de agent_id.", 500, { requestId });
   }
   if (!agent) {
-    return fail("not_found", "Agent não encontrado nesta organização.", 404, { requestId });
+    return fail("not_found", "Assistant introuvable dans cette organisation.", 404, { requestId });
   }
 
   // --- Upload to Storage ---
@@ -134,7 +134,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   if (uploadErr) {
     console.error("[ai-policy-upload] storage upload failed:", uploadErr.message);
-    return fail("internal_error", "Erro ao fazer upload do arquivo.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’envoi du fichier.", 500, { requestId });
   }
 
   // --- Validate extraction inline before committing the DB row ---
@@ -158,13 +158,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (err instanceof PdfExtractError) {
       return fail(
         "unprocessable_entity",
-        "Não foi possível extrair texto do PDF. Verifique se o arquivo não é somente imagens.",
+        "Impossible d’extraire le texte du PDF. Vérifiez que le fichier ne contient pas uniquement des images.",
         422,
         { requestId },
       );
     }
     console.error("[ai-policy-upload] extraction failed:", err);
-    return fail("internal_error", "Erro ao processar o arquivo.", 500, { requestId });
+    return fail("internal_error", "Erreur lors du traitement du fichier.", 500, { requestId });
   }
 
   // --- Insert ai_knowledge_sources ---
@@ -196,7 +196,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Cleanup blob
     await admin.storage.from("ai-policy").remove([blobPath]);
     console.error("[ai-policy-upload] insert knowledge source failed:", ksErr?.message);
-    return fail("internal_error", "Erro ao registrar fonte de conhecimento.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de l’enregistrement de la source de connaissances.", 500, { requestId });
   }
 
   const ksId = (ks as { id: string }).id;

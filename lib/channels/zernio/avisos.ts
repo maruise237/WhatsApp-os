@@ -59,27 +59,27 @@ const GRAVIDADE_DO_TEMPLATE: Record<string, "info" | "warn" | "critical"> = {
  * algo" a "não dá mais para enviar".
  */
 const GRAVIDADE_DO_NUMERO: Record<string, { sev: "info" | "warn" | "critical"; texto: string }> = {
-  "whatsapp.number.activated": { sev: "info", texto: "Número ativado." },
-  "whatsapp.number.reactivated": { sev: "info", texto: "Número reativado." },
-  "whatsapp.number.kyc_submitted": { sev: "info", texto: "Documentação enviada para verificação." },
+  "whatsapp.number.activated": { sev: "info", texto: "Numéro activé." },
+  "whatsapp.number.reactivated": { sev: "info", texto: "Numéro réactivé." },
+  "whatsapp.number.kyc_submitted": { sev: "info", texto: "Documents envoyés pour vérification." },
   "whatsapp.number.verification_required": {
     sev: "warn",
-    texto: "A plataforma pede verificação deste número.",
+    texto: "La plateforme demande la vérification de ce numéro.",
   },
   "whatsapp.number.action_required": {
     sev: "warn",
-    texto: "A plataforma pede uma ação neste número.",
+    texto: "La plateforme demande une action sur ce numéro.",
   },
-  "whatsapp.number.declined": { sev: "critical", texto: "Número recusado pela plataforma." },
-  "whatsapp.number.suspended": { sev: "critical", texto: "Número SUSPENSO — não é possível enviar." },
+  "whatsapp.number.declined": { sev: "critical", texto: "Numéro refusé par la plateforme." },
+  "whatsapp.number.suspended": { sev: "critical", texto: "Numéro SUSPENDU — impossible d’envoyer." },
   "whatsapp.number.released": {
     sev: "critical",
-    texto: "Número liberado e não utilizável (terminal).",
+    texto: "Numéro libéré et inutilisable (définitif).",
   },
-  "account.disconnected": { sev: "critical", texto: "A conta do canal foi desconectada." },
-  "account.connected": { sev: "info", texto: "Conta do canal conectada." },
-  "verification.failed": { sev: "critical", texto: "Verificação recusada." },
-  "verification.approved": { sev: "info", texto: "Verificação aprovada." },
+  "account.disconnected": { sev: "critical", texto: "Le compte du canal a été déconnecté." },
+  "account.connected": { sev: "info", texto: "Compte du canal connecté." },
+  "verification.failed": { sev: "critical", texto: "Vérification refusée." },
+  "verification.approved": { sev: "info", texto: "Vérification approuvée." },
 };
 
 /** O evento merece um aviso? `null` quando não é dos nossos. */
@@ -96,7 +96,7 @@ export function avisoDoEvento(payload: unknown): AvisoDeCanal | null {
     return {
       kind: "channel_template_review",
       severity: GRAVIDADE_DO_TEMPLATE[estado] ?? "warn",
-      title: `Modelo "${nome}": ${estado}`,
+      title: `Modèle "${nome}" : ${estado}`,
       // "NONE" é como a plataforma diz "sem motivo" — repassá-lo seria mostrar
       // ruído no lugar onde o operador procura a explicação.
       body: motivo && motivo.toUpperCase() !== "NONE" ? motivo : null,

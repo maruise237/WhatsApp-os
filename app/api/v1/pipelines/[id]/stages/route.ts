@@ -47,12 +47,12 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   try {
     json = await req.json();
   } catch {
-    return fail("invalid_request", "Corpo não é JSON válido.", 400, { requestId });
+    return fail("invalid_request", "Le corps de la requête n’est pas un JSON valide.", 400, { requestId });
   }
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return fail("unprocessable_entity", "Dê um nome à etapa — é o que aparece no topo da coluna.", 422, {
+    return fail("unprocessable_entity", "Donnez un nom à l’étape — c’est ce qui s’affiche en haut de la colonne.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });

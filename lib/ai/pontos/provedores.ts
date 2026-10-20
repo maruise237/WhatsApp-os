@@ -45,7 +45,7 @@ export const PROVEDORES = [
     id: "anthropic",
     rotulo: "Anthropic (Claude)",
     quandoUsar:
-      "O padrão recomendado para conversar com o cliente: é o que melhor segue instruções longas e usa as ferramentas do CRM.",
+      "Le choix recommandé pour parler avec le client : c’est celui qui suit le mieux les longues consignes et utilise les outils du CRM.",
     aceitaEndpointProprio: false,
     catalogoSincronizavel: false,
     ondePegarAChave: "https://console.anthropic.com/settings/keys",
@@ -54,7 +54,7 @@ export const PROVEDORES = [
     id: "openai",
     rotulo: "OpenAI (GPT)",
     quandoUsar:
-      "Necessário para transcrever áudio e para indexar o seu material — esses dois pontos usam tecnologia da OpenAI mesmo quando o resto está em outro provedor.",
+      "Nécessaire pour transcrire l’audio et indexer vos documents — ces deux usages passent par OpenAI même quand le reste utilise un autre fournisseur.",
     aceitaEndpointProprio: true,
     catalogoSincronizavel: false,
     ondePegarAChave: "https://platform.openai.com/api-keys",
@@ -63,7 +63,7 @@ export const PROVEDORES = [
     id: "google",
     rotulo: "Google (Gemini)",
     quandoUsar:
-      "Alternativa com contexto muito longo e custo baixo para tarefas de classificação.",
+      "Alternative avec une très grande mémoire de contexte et un coût faible pour les tâches de tri.",
     aceitaEndpointProprio: false,
     catalogoSincronizavel: false,
     ondePegarAChave: "https://aistudio.google.com/apikey",
@@ -72,7 +72,7 @@ export const PROVEDORES = [
     id: "openrouter",
     rotulo: "OpenRouter",
     quandoUsar:
-      "Uma chave só dá acesso a centenas de modelos de dezenas de fabricantes, inclusive os gratuitos. É o caminho mais simples para experimentar sem abrir conta em cada provedor.",
+      "Une seule clé donne accès à des centaines de modèles de dizaines de fabricants, y compris des gratuits. C’est le moyen le plus simple d’essayer sans ouvrir un compte chez chaque fournisseur.",
     aceitaEndpointProprio: true,
     catalogoSincronizavel: true,
     ondePegarAChave: "https://openrouter.ai/keys",

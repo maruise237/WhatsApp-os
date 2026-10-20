@@ -16,7 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { CircleNotch, MagnifyingGlass } from "@/lib/ui/icons";
 import { cn } from "@/lib/utils";
 import { format, formatDistanceToNowStrict } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { fr } from "date-fns/locale";
 
 function useDebounced<T>(value: T, delay: number): T {
   const [debounced, setDebounced] = useState<T>(value);
@@ -41,12 +41,12 @@ function relativeTime(iso: string | null): string {
   const now = new Date();
   if (d.toDateString() === now.toDateString()) return format(d, "HH:mm");
   const diff = (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
-  if (diff < 7) return formatDistanceToNowStrict(d, { addSuffix: false, locale: ptBR });
+  if (diff < 7) return formatDistanceToNowStrict(d, { addSuffix: false, locale: fr });
   return format(d, "dd/MM");
 }
 
 function contactName(row: AdminConversationRow): string {
-  return row.contacts?.name?.trim() || row.contacts?.phone_number || "Sem nome";
+  return row.contacts?.name?.trim() || row.contacts?.phone_number || "Sans nom";
 }
 
 // ---------------------------------------------------------------------------
@@ -54,8 +54,8 @@ function contactName(row: AdminConversationRow): string {
 // ---------------------------------------------------------------------------
 
 const STATUS_OPTIONS = [
-  { value: "all", label: "Todos" },
-  { value: "pending", label: "Pendente" },
+  { value: "all", label: "Tous" },
+  { value: "pending", label: "En attente" },
   { value: "open", label: "Aberto" },
   { value: "resolved", label: "Resolvido" },
 ] as const;
@@ -115,7 +115,7 @@ export function InboxList() {
           <Input
             value={rawSearch}
             onChange={(e) => setRawSearch(e.target.value)}
-            placeholder="Buscar mensagem..."
+            placeholder="Rechercher un message..."
             className="h-8 pl-8 text-xs"
           />
         </div>
@@ -142,19 +142,19 @@ export function InboxList() {
       <div className="flex-1 overflow-y-auto">
         {isLoading && (
           <div className="flex items-center justify-center py-8 text-muted-foreground">
-            <CircleNotch size={20} className="animate-spin" aria-label="Carregando" />
+            <CircleNotch size={20} className="animate-spin" aria-label="Chargement" />
           </div>
         )}
 
         {isError && (
           <p className="p-4 text-center text-xs text-destructive">
-            Falha ao carregar conversas.
+            Échec du chargement des conversations.
           </p>
         )}
 
         {!isLoading && rows.length === 0 && (
           <p className="p-4 text-center text-xs text-muted-foreground">
-            Nenhuma conversa encontrada.
+            Aucune conversation trouvée.
           </p>
         )}
 
@@ -163,7 +163,7 @@ export function InboxList() {
           const name = contactName(row);
           const org = row.organizations;
           const unread = row.unread_count_for_assignee ?? 0;
-          const preview = row.last_message_preview?.trim() || "Sem mensagens";
+          const preview = row.last_message_preview?.trim() || "Aucun message";
           const time = relativeTime(row.last_message_at);
 
           return (
@@ -208,7 +208,7 @@ export function InboxList() {
               disabled={isFetchingNextPage}
               className="text-xs text-muted-foreground underline-offset-2 hover:underline disabled:opacity-50"
             >
-              {isFetchingNextPage ? "Carregando…" : "Carregar mais"}
+              {isFetchingNextPage ? "Chargement…" : "Carregar mais"}
             </button>
           </div>
         )}

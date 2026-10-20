@@ -17,9 +17,9 @@ export default async function AuditPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Audit Log</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Journal d’audit</h1>
         <p className="text-sm text-muted-foreground">
-          Histórico append-only de mutações na organização. Manager+.
+          Historique en ajout seul des modifications de l’organisation. Manager et plus.
         </p>
       </header>
       <AuditClient />

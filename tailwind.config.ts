@@ -1,5 +1,28 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Couleurs en `var(--…)` : Tailwind 3 ne sait pas leur appliquer une opacité,
+ * et il NE GÉNÈRE PAS la classe au lieu de prévenir. Mesuré le 2026-10-19 dans
+ * le CSS compilé : seul `.bg-primary` existait — les 248 `bg-primary/10`,
+ * `border-border/60`, `bg-destructive/10`… de l'app étaient des classes mortes
+ * (barre de progression de l'onboarding invisible, fonds d'erreur absents).
+ * `color-mix` avec `<alpha-value>` rend l'opacité à toute couleur-variable ;
+ * sans modificateur, `<alpha-value>` vaut 1 et la couleur est identique.
+ */
+type Couleurs = { [cle: string]: string | Couleurs };
+function avecOpacite(couleurs: Couleurs): Couleurs {
+  return Object.fromEntries(
+    Object.entries(couleurs).map(([cle, valeur]) => [
+      cle,
+      typeof valeur !== "string"
+        ? avecOpacite(valeur)
+        : valeur.startsWith("var(")
+          ? `color-mix(in srgb, ${valeur} calc(<alpha-value> * 100%), transparent)`
+          : valeur,
+    ]),
+  );
+}
+
 const config: Config = {
   // Strategy: attribute selector to allow runtime swap via <html data-theme="dark">.
   darkMode: ["class", "[data-theme='dark']"],
@@ -16,7 +39,7 @@ const config: Config = {
       screens: { "2xl": "1400px" },
     },
     extend: {
-      colors: {
+      colors: avecOpacite({
         // Foundation
         bg: "var(--color-bg)",
         surface: {
@@ -117,7 +140,7 @@ const config: Config = {
           DEFAULT: "var(--color-surface)",
           foreground: "var(--color-text)",
         },
-      },
+      }),
       fontFamily: {
         sans: [
           "var(--font-atkinson)",

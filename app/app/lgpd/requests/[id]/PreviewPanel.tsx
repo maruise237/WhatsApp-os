@@ -44,7 +44,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
         className="gap-2"
       >
         <Eye size={16} aria-hidden />
-        Pré-visualizar dados
+        Prévisualiser les données
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -52,7 +52,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <ChartBar size={18} aria-hidden />
-              Prévia de dados do titular
+              Aperçu des données de la personne concernée
             </DialogTitle>
           </DialogHeader>
 
@@ -70,7 +70,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
           {error && (
             <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300">
               <Warning size={16} aria-hidden />
-              Falha ao carregar prévia.
+              Échec du chargement de l’aperçu.
             </div>
           )}
 
@@ -78,7 +78,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
             <div className="space-y-4">
               {preview.no_local_footprint && (
                 <div className="rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm text-yellow-800 dark:border-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-300">
-                  Nenhum dado local encontrado para este titular.
+                  Aucune donnée locale trouvée pour cette personne.
                 </div>
               )}
 
@@ -93,7 +93,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
                     <p className="text-muted-foreground">{preview.contact.phone_number}</p>
                   )}
                   {preview.contact.cpf_present && (
-                    <p className="text-xs text-muted-foreground">CPF: presente (valor ocultado)</p>
+                    <p className="text-xs text-muted-foreground">CPF : présent (valeur masquée)</p>
                   )}
                 </div>
               )}
@@ -129,22 +129,22 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
               {showSample && (
                 <div className="space-y-4">
                   {preview.sample.conversations.length > 0 && (
-                    <SampleBlock label="Conversas" rows={preview.sample.conversations} />
+                    <SampleBlock label="Conversations" rows={preview.sample.conversations} />
                   )}
                   {preview.sample.messages_recent.length > 0 && (
-                    <SampleBlock label="Mensagens (recentes)" rows={preview.sample.messages_recent} />
+                    <SampleBlock label="Messages (récents)" rows={preview.sample.messages_recent} />
                   )}
                   {preview.sample.leads.length > 0 && (
                     <SampleBlock label="Leads" rows={preview.sample.leads} />
                   )}
                   {preview.sample.orders.length > 0 && (
-                    <SampleBlock label="Pedidos" rows={preview.sample.orders} />
+                    <SampleBlock label="Commandes" rows={preview.sample.orders} />
                   )}
                 </div>
               )}
 
               <p className="text-center text-xs text-muted-foreground">
-                Gerado em {new Date(preview.generated_at).toLocaleString("pt-BR")} · PII mascarada · CPF não exibido
+                Généré le {new Date(preview.generated_at).toLocaleString("fr-FR")} · Données personnelles masquées · CPF non affiché
               </p>
             </div>
           )}

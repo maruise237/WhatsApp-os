@@ -32,10 +32,10 @@ export const TOOLS_RETENCAO = declararTools([
   {
     name: "crm_schedule_followup",
     category: "write",
-    rotulo: "Agendar um retorno para o cliente",
+    rotulo: "Programmer une relance du client",
     explicacao:
-      "Marca um horário para o agente voltar a falar com o cliente, para que a conversa não morra sem resposta.",
-    oQueToca: "Retornos e acompanhamento",
+      "Fixe un moment où l’assistant recontactera le client, pour que la conversation ne reste pas sans suite.",
+    oQueToca: "Relances et suivi",
     // `atencao` e não `critico`: agendar não fala com ninguém agora. O envio no
     // horário combinado passa pelos mesmos portões de sempre, e o humano vê o
     // retorno na fila e no Radar, com botão de cancelar. É reversível pela tela —
@@ -46,41 +46,41 @@ export const TOOLS_RETENCAO = declararTools([
   {
     name: "crm_cancel_followup",
     category: "write",
-    rotulo: "Cancelar um retorno agendado",
+    rotulo: "Annuler une relance programmée",
     explicacao:
-      "Desmarca um retorno que ainda não aconteceu, para o agente não insistir com quem já respondeu.",
-    oQueToca: "Retornos e acompanhamento",
+      "Annule une relance pas encore faite, pour que l’assistant n’insiste pas auprès de quelqu’un qui a déjà répondu.",
+    oQueToca: "Relances et suivi",
     risco: "atencao",
     pacotes: ["reter"],
   },
   {
     name: "crm_list_followups",
     category: "read",
-    rotulo: "Ver os retornos de um cliente",
+    rotulo: "Voir les relances d’un client",
     explicacao:
-      "Mostra os retornos combinados com o cliente: o que está marcado, o que já aconteceu e o que foi desmarcado.",
-    oQueToca: "Retornos e acompanhamento",
+      "Montre les relances prévues avec le client : ce qui est programmé, ce qui a déjà eu lieu et ce qui a été annulé.",
+    oQueToca: "Relances et suivi",
     risco: "seguro",
     pacotes: ["reter"],
   },
   {
     name: "crm_list_at_risk_leads",
     category: "read",
-    rotulo: "Ver quem esfriou e quem ficou sem próximo passo",
+    rotulo: "Voir qui s’est refroidi et qui n’a pas de suite prévue",
     explicacao:
-      "Lista as oportunidades abertas que passaram do prazo sem movimento, das mais críticas para as menos " +
-      "urgentes — e, junto, as pessoas que estão esperando sem que nada esteja marcado para acontecer.",
-    oQueToca: "Radar de risco",
+      "Liste les affaires ouvertes restées sans mouvement trop longtemps, des plus critiques aux moins " +
+      "urgentes — et, avec elles, les personnes qui attendent sans que rien ne soit prévu.",
+    oQueToca: "Radar des risques",
     risco: "seguro",
     pacotes: ["reter"],
   },
   {
     name: "crm_close_demand",
     category: "write",
-    rotulo: "Encerrar o negócio como ganho ou perdido",
+    rotulo: "Clôturer l’affaire comme gagnée ou perdue",
     explicacao:
-      "Fecha a oportunidade dizendo se ela foi ganha ou perdida e por quê, para o que já acabou parar de ser cobrado.",
-    oQueToca: "Funil de vendas",
+      "Clôture l’affaire en indiquant si elle est gagnée ou perdue et pourquoi, pour ne plus relancer ce qui est terminé.",
+    oQueToca: "Tableau des ventes",
     // `critico` porque encerrar é o desfecho: o negócio sai do quadro, some do
     // radar e das cobranças, e voltar atrás é trabalho manual. Nunca entra ligado
     // por pacote — exige marcação explícita de quem configura.
@@ -90,10 +90,10 @@ export const TOOLS_RETENCAO = declararTools([
   {
     name: "crm_propose_reactivation",
     category: "write",
-    rotulo: "Sugerir retomar contato com quem sumiu",
+    rotulo: "Proposer de recontacter un client disparu",
     explicacao:
-      "Cria uma sugestão de retomar o contato com um cliente que esfriou, para uma pessoa aprovar antes de qualquer envio.",
-    oQueToca: "Radar de risco",
+      "Crée une proposition pour recontacter un client refroidi, qu’une personne approuve avant tout envoi.",
+    oQueToca: "Radar des risques",
     // Escreve uma SUGESTÃO que uma pessoa decide — nada sai para o cliente por
     // conta dela. É `atencao`, e o `critico` mora na aprovação humana.
     risco: "atencao",

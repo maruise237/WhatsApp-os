@@ -43,7 +43,7 @@ const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
     classe: "border-destructive/40 text-destructive",
   },
   fora_da_configuracao: {
-    rotulo: "usada sem estar ligada",
+    rotulo: "utilisée sans être activée",
     classe: "border-amber-500/40 text-amber-700 dark:text-amber-400",
   },
   nunca_usada: {
@@ -51,11 +51,11 @@ const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
     classe: "border-amber-500/40 text-amber-700 dark:text-amber-400",
   },
   recem_ligada: {
-    rotulo: "ligada agora",
+    rotulo: "activée maintenant",
     classe: "border-border/60 text-muted-foreground",
   },
   so_em_teste: {
-    rotulo: "só em teste",
+    rotulo: "en test uniquement",
     classe: "border-border/60 text-muted-foreground",
   },
   saudavel: {

@@ -52,7 +52,7 @@ function ParCard({ par }: { par: Par }) {
         {/* O custo disso. Mesmo cartão, sempre. */}
         <div className="min-w-0 flex-1 border-t pt-3 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0">
           <p className="mb-1 text-xs uppercase tracking-wide text-muted-foreground">
-            O que isso custou
+            Ce que cela a coûté
           </p>
           {par.danos.map((d) => (
             <MedidaLinha key={d.chave} m={d} />
@@ -79,23 +79,23 @@ function ReguaAbandono({ horas, padrao, podeEditar }: { horas: number; padrao: n
   if (!podeEditar) {
     return (
       <p className="text-xs text-muted-foreground">
-        Uma conversa conta como perdida no silêncio após <strong>{horas}h</strong> sem resposta
-        {horas === padrao ? " (padrão do sistema)" : ""}.
+        Une conversation est considérée comme perdue après un silence de <strong>{horas}h</strong> sans réponse
+        {horas === padrao ? "(valeur par défaut du système)" : ""}.
       </p>
     );
   }
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-      <span>Contar como perdida no silêncio após</span>
+      <span>Considérer comme perdue après un silence de</span>
       <Input
         className="h-7 w-20 text-xs"
         value={valor}
         inputMode="numeric"
-        aria-label="Horas de silêncio até considerar a conversa perdida"
+        aria-label="Heures de silence avant de considérer la conversation comme perdue"
         onChange={(e) => setValor(e.target.value)}
       />
-      <span>horas sem resposta.</span>
+      <span>heures sans réponse.</span>
       {sujo ? (
         <Button
           size="sm"
@@ -104,18 +104,18 @@ function ReguaAbandono({ horas, padrao, podeEditar }: { horas: number; padrao: n
           disabled={!valido || salvar.isPending}
           onClick={() => salvar.mutate(n)}
         >
-          {salvar.isPending ? "Salvando…" : "Salvar"}
+          {salvar.isPending ? "Salvando…" : "Enregistrer"}
         </Button>
       ) : null}
       {sujo && !valido ? (
-        <span className="text-destructive">Use um número inteiro entre 1 e 2160.</span>
+        <span className="text-destructive">Utilisez un nombre entier entre 1 et 2160.</span>
       ) : null}
       {/* Falha VISÍVEL: sem isto, um erro de escrita deixaria a tela mostrando o
           valor digitado como se tivesse sido salvo. */}
       {salvar.isError ? (
-        <span className="text-destructive">Não foi possível salvar. Tente de novo.</span>
+        <span className="text-destructive">Impossible d’enregistrer. Réessayez.</span>
       ) : null}
-      {horas === padrao && !sujo ? <span>(padrão do sistema)</span> : null}
+      {horas === padrao && !sujo ? <span>(valeur par défaut du système)</span> : null}
     </div>
   );
 }
@@ -124,12 +124,12 @@ export function AtritoPanel({ podeEditarRegua }: { podeEditarRegua: boolean }) {
   const { data, isLoading, isError } = useAtritoMetrics();
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">Carregando o índice de atrito…</p>;
+    return <p className="text-sm text-muted-foreground">Chargement de l’indice de friction…</p>;
   }
   // Falha aberta na informação: dizer que não carregou é melhor que sumir com a
   // seção — seção ausente lê-se como "não há atrito" (doutrina cap. 4.5).
   if (isError || !data) {
-    return <p className="text-sm text-destructive">Erro ao carregar o índice de atrito.</p>;
+    return <p className="text-sm text-destructive">Erreur lors du chargement de l’indice de friction.</p>;
   }
 
   const { escopo, pares, regua } = data.data;
@@ -140,16 +140,15 @@ export function AtritoPanel({ podeEditarRegua }: { podeEditarRegua: boolean }) {
   return (
     <section className="flex flex-col gap-3">
       <div>
-        <h2 className="text-base font-medium">Atrito</h2>
+        <h2 className="text-base font-medium">Friction</h2>
         <p className="text-sm text-muted-foreground">
-          O que o resultado custou para os dois lados.{" "}
+          Ce que le résultat a coûté aux deux parties.{" "}
           {escopo.demandas === 0 ? (
-            <>Nenhuma demanda encerrada no período — os números abaixo ainda não têm base.</>
+            <>Aucune demande clôturée sur la période — les chiffres ci-dessous n’ont pas encore de base.</>
           ) : (
             <>
               Base: {escopo.demandas}{" "}
-              {escopo.demandas === 1 ? "demanda encerrada" : "demandas encerradas"} nos últimos 30
-              dias, e {escopo.demandas_abertas} ainda abertas.
+              {escopo.demandas === 1 ? "demanda encerrada" : "demandas encerradas"} sur les 30 derniers jours, et {escopo.demandas_abertas} encore ouvertes.
             </>
           )}
         </p>
@@ -175,7 +174,7 @@ export function AtritoPanel({ podeEditarRegua }: { podeEditarRegua: boolean }) {
           não está na tela é ruído, e ruído compete com o que importava. */}
       {temMedidaAusente ? (
         <p className="text-xs text-muted-foreground">
-          &quot;—&quot; significa que não houve dado suficiente para medir, e não que o valor seja zero.
+          &quot;—&quot; signifie qu’il n’y a pas eu assez de données pour mesurer, et non que la valeur est nulle.
         </p>
       ) : null}
     </section>

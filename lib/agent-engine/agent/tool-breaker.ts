@@ -62,6 +62,7 @@ export const READ_ONLY_TOOLS = [
   'get_lead_note',
   'search_knowledge',
   'read_skill_reference',
+  'search_catalog',
 ] as const;
 
 /** Resultado sintético de bloqueio — mesma convenção de ensino das tools do run. */

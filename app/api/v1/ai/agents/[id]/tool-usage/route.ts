@@ -46,7 +46,7 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  if (!UUID_RX.test(id)) return fail("invalid_request", "id inválido.", 400, { requestId });
+  if (!UUID_RX.test(id)) return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 
   const authz = await requireRole("manager", { requestId, resource: "ai_agents" });
   if (!authz.ok) return authz.response;
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
     days: req.nextUrl.searchParams.get("days") ?? undefined,
   });
   if (!parsed.success) {
-    return fail("validation_failed", "Janela inválida.", 422, {
+    return fail("validation_failed", "Période invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -74,8 +74,8 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
     .eq("organization_id", activeOrg.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (erroAgente) return fail("internal_error", "Erro ao carregar o agente.", 500, { requestId });
-  if (!agente) return fail("not_found", "Agente não encontrado.", 404, { requestId });
+  if (erroAgente) return fail("internal_error", "Erreur lors du chargement de l’assistant.", 500, { requestId });
+  if (!agente) return fail("not_found", "Assistant introuvable.", 404, { requestId });
 
   // O que está VALENDO: a versão publicada. Sem publicada, o rascunho mais
   // recente — é o que o humano tem na frente na aba de configuração.
@@ -105,7 +105,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
     p_since: desde,
   });
   if (erroUso) {
-    return fail("internal_error", "Erro ao ler o uso das capacidades.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la lecture de l’utilisation des capacités.", 500, { requestId });
   }
 
   const capacidades = montarUsoDeCapacidades({

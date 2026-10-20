@@ -17,7 +17,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-4 px-6 py-4">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">{marca.name}</p>
           <Link href="/login" className="text-sm underline underline-offset-2">
-            Voltar
+            Retour
           </Link>
         </div>
       </header>

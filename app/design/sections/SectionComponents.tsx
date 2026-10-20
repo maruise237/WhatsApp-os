@@ -21,8 +21,7 @@ export function SectionComponents() {
     <div className="ds-section">
       <h2 className="ds-display">Componentes</h2>
       <p className="ds-lede">
-        Estados completos: default, hover, focus, active, disabled, loading, error.
-        Componentes reagem em runtime ao paleta/tipografia/densidade selecionados.
+        États complets : default, hover, focus, active, disabled, loading, error. Les composants réagissent à l’exécution à la palette, à la typographie et à la densité sélectionnées.
       </p>
 
       {/* Buttons */}
@@ -30,10 +29,10 @@ export function SectionComponents() {
       <div className="ds-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <Stack label="Variants">
           <button className="ds-btn ds-btn--primary">Confirmar envio</button>
-          <button className="ds-btn ds-btn--secondary">Cancelar</button>
-          <button className="ds-btn ds-btn--ghost">Adiar</button>
-          <button className="ds-btn ds-btn--destructive">Excluir conversa</button>
-          <button className="ds-btn ds-btn--link">ver detalhes</button>
+          <button className="ds-btn ds-btn--secondary">Annuler</button>
+          <button className="ds-btn ds-btn--ghost">Reporter</button>
+          <button className="ds-btn ds-btn--destructive">Supprimer la conversation</button>
+          <button className="ds-btn ds-btn--link">voir les détails</button>
         </Stack>
         <Stack label="Estados">
           <button className="ds-btn ds-btn--primary">Default</button>
@@ -53,27 +52,27 @@ export function SectionComponents() {
       <h3>Inputs</h3>
       <div className="ds-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
         <div>
-          <label className="ds-label">E-mail do cliente</label>
-          <input className="ds-input" placeholder="maria@empresa.com.br" />
+          <label className="ds-label">E-mail du client</label>
+          <input className="ds-input" placeholder="marie@entreprise.cm" />
         </div>
         <div>
-          <label className="ds-label">Nome</label>
+          <label className="ds-label">Nom</label>
           <input className="ds-input" defaultValue="Maria Silva" />
         </div>
         <div>
-          <label className="ds-label">Buscar conversa</label>
+          <label className="ds-label">Rechercher une conversation</label>
           <div style={{ position: "relative" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
               style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "var(--ds-text-muted)" }}>
               <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
             </svg>
-            <input className="ds-input" placeholder="pedido, cliente, telefone…" style={{ paddingLeft: 32 }} />
+            <input className="ds-input" placeholder="commande, client, téléphone…" style={{ paddingLeft: 32 }} />
           </div>
         </div>
         <div>
-          <label className="ds-label">CPF (com erro)</label>
+          <label className="ds-label">CPF (avec erreur)</label>
           <input className="ds-input" defaultValue="000.000.000-00" aria-invalid="true" />
-          <span style={{ color: "var(--ds-error)", fontSize: 11.5, marginTop: 4, display: "block" }}>CPF inválido — verifique os dígitos.</span>
+          <span style={{ color: "var(--ds-error)", fontSize: 11.5, marginTop: 4, display: "block" }}>CPF invalide — vérifiez les chiffres.</span>
         </div>
         <div>
           <label className="ds-label">Disabled</label>
@@ -81,7 +80,7 @@ export function SectionComponents() {
         </div>
         <div style={{ gridColumn: "1 / -1" }}>
           <label className="ds-label">Resposta</label>
-          <textarea className="ds-input" rows={4} placeholder="Digite sua resposta…" style={{ height: "auto", padding: 12, resize: "vertical" }} />
+          <textarea className="ds-input" rows={4} placeholder="Saisissez votre réponse…" style={{ height: "auto", padding: 12, resize: "vertical" }} />
         </div>
       </div>
 
@@ -113,19 +112,19 @@ export function SectionComponents() {
       <h3>Cards</h3>
       <div className="ds-grid-3">
         <div className="ds-card">
-          <div className="ds-key">Receita do dia</div>
+          <div className="ds-key">Chiffre d’affaires du jour</div>
           <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>R$ 12.443,00</div>
-          <div style={{ fontSize: 12, color: "var(--ds-success)", marginTop: 4 }}>+8.4% vs ontem</div>
+          <div style={{ fontSize: 12, color: "var(--ds-success)", marginTop: 4 }}>+8,4 % vs hier</div>
         </div>
         <div className="ds-card ds-card--interactive">
-          <div className="ds-key">Conversas abertas</div>
+          <div className="ds-key">Conversations ouvertes</div>
           <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>27</div>
-          <div style={{ fontSize: 12, color: "var(--ds-text-muted)", marginTop: 4 }}>hover para abrir →</div>
+          <div style={{ fontSize: 12, color: "var(--ds-text-muted)", marginTop: 4 }}>survoler pour ouvrir →</div>
         </div>
         <div className="ds-card">
           <div className="ds-key">SLA</div>
           <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>97.2%</div>
-          <div style={{ fontSize: 12, color: "var(--ds-warning)", marginTop: 4 }}>3 conversas próximas do limite</div>
+          <div style={{ fontSize: 12, color: "var(--ds-warning)", marginTop: 4 }}>3 conversations proches de la limite</div>
         </div>
       </div>
 
@@ -139,18 +138,18 @@ export function SectionComponents() {
               <div className="ds-avatar">MS<span className="ds-avatar-status" /></div>
               <div className="body">
                 <div className="title">Maria Silva</div>
-                <div className="preview">Confirmando o endereço de entrega…</div>
+                <div className="preview">Confirmation de l’adresse de livraison…</div>
               </div>
               <div className="meta">
                 <span className="ts">14h32</span>
-                <span className="ds-badge ds-badge--accent">novo</span>
+                <span className="ds-badge ds-badge--accent">nouveau</span>
               </div>
             </div>
             <div className="ds-list-item">
               <div className="ds-avatar">JP</div>
               <div className="body">
-                <div className="title">João Pereira</div>
-                <div className="preview">Já fiz o Pix, segue o comprovante…</div>
+                <div className="title">Jean Mbarga</div>
+                <div className="preview">J’ai déjà payé par Mobile Money, voici le reçu…</div>
               </div>
               <div className="meta">
                 <span className="ts">14h28</span>
@@ -162,10 +161,10 @@ export function SectionComponents() {
           <div className="ds-key" style={{ marginBottom: 8 }}>KanbanCard</div>
           <div className="ds-kanban-card" style={{ background: "var(--ds-surface)" }}>
             <div className="row">
-              <span className="title">Pedido #12.443</span>
+              <span className="title">Commande n° 12 443</span>
               <span className="value">R$ 1.234,56</span>
             </div>
-            <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · cliente recorrente</div>
+            <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Marie Ngo · cliente fidèle</div>
             <div className="row">
               <div className="tags">
                 <span className="ds-badge ds-badge--info">pix</span>
@@ -180,12 +179,12 @@ export function SectionComponents() {
       <div className="ds-card" style={{ marginTop: 16 }}>
         <div className="ds-key" style={{ marginBottom: 12 }}>MessageBubble</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 480 }}>
-          <div className="ds-bubble in">Oi! Confirma pra mim o endereço da entrega? Quero ver se está certo.</div>
+          <div className="ds-bubble in">Bonjour ! Vous me confirmez l’adresse de livraison ? Je veux vérifier qu’elle est correcte.</div>
           <div className="ds-bubble out">
-            Claro Maria, é Rua das Acácias 144, apto 23 — Vila Madalena. Pode confirmar?
+            Bien sûr Marie, c’est 144 rue des Acacias, appt 23 — Bonapriso. Vous confirmez ?
             <div className="meta">14h32 · ✓✓</div>
           </div>
-          <div className="ds-bubble in">Perfeito! Pode enviar.</div>
+          <div className="ds-bubble in">Parfait ! Vous pouvez envoyer.</div>
         </div>
       </div>
 
@@ -200,7 +199,7 @@ export function SectionComponents() {
           ))}
         </div>
         <div style={{ padding: "20px 4px", fontSize: 13.5, color: "var(--ds-text-muted)" }}>
-          Conteúdo da aba <span className="ds-mono" style={{ color: "var(--ds-accent)" }}>/{tab}</span>.
+          Contenu de l’onglet <span className="ds-mono" style={{ color: "var(--ds-accent)" }}>/{tab}</span>.
         </div>
       </div>
 
@@ -208,10 +207,10 @@ export function SectionComponents() {
       <h3>Tooltip · Modal · Toast</h3>
       <div className="ds-card ds-row">
         <span className="ds-tooltip-host">
-          <button className="ds-btn ds-btn--secondary">Hover para tooltip</button>
+          <button className="ds-btn ds-btn--secondary">Survoler pour l’info-bulle</button>
           <span className="ds-tooltip">Atalho: ⌘K</span>
         </span>
-        <button className="ds-btn ds-btn--primary" onClick={() => setShowModal(true)}>Abrir modal</button>
+        <button className="ds-btn ds-btn--primary" onClick={() => setShowModal(true)}>Ouvrir la fenêtre</button>
         <button className="ds-btn ds-btn--secondary" onClick={() => { setShowToast(true); setTimeout(() => setShowToast(false), 2600); }}>
           Disparar toast
         </button>
@@ -235,12 +234,12 @@ export function SectionComponents() {
       {/* Empty */}
       <h3>Empty state</h3>
       <div className="ds-empty">
-        <div className="marker">∅ · sem conversas</div>
-        <div className="ds-display" style={{ fontSize: 18, fontWeight: 600 }}>Tudo em dia.</div>
+        <div className="marker">∅ · aucune conversation</div>
+        <div className="ds-display" style={{ fontSize: 18, fontWeight: 600 }}>Tout est à jour.</div>
         <div style={{ fontSize: 13, color: "var(--ds-text-muted)", maxWidth: 360 }}>
-          Você zerou a inbox. Aproveite o silêncio — ele costuma durar pouco em e-commerce.
+          Votre boîte de réception est vide. Profitez du calme — en e-commerce, il dure rarement.
         </div>
-        <button className="ds-btn ds-btn--ghost" style={{ marginTop: 6 }}>Ver pedidos pendentes</button>
+        <button className="ds-btn ds-btn--ghost" style={{ marginTop: 6 }}>Voir les commandes en attente</button>
       </div>
 
       {/* Floating modal */}
@@ -248,14 +247,14 @@ export function SectionComponents() {
         <div className="ds-modal-backdrop" onClick={() => setShowModal(false)}>
           <div className="ds-modal" onClick={(e) => e.stopPropagation()}>
             <div className="ds-display" style={{ fontSize: 20, fontWeight: 600, marginBottom: 6 }}>
-              Arquivar conversa?
+              Archiver la conversation ?
             </div>
             <p style={{ fontSize: 13.5, color: "var(--ds-text-muted)", marginBottom: 18 }}>
-              A conversa com Maria Silva será movida para o histórico. Você pode restaurá-la a qualquer momento.
+              La conversation avec Marie Ngo sera déplacée dans l’historique. Vous pouvez la restaurer à tout moment.
             </p>
             <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-              <button className="ds-btn ds-btn--ghost" onClick={() => setShowModal(false)}>Cancelar</button>
-              <button className="ds-btn ds-btn--primary" onClick={() => setShowModal(false)}>Arquivar</button>
+              <button className="ds-btn ds-btn--ghost" onClick={() => setShowModal(false)}>Annuler</button>
+              <button className="ds-btn ds-btn--primary" onClick={() => setShowModal(false)}>Archiver</button>
             </div>
           </div>
         </div>
@@ -267,7 +266,7 @@ export function SectionComponents() {
           <div className="ds-toast">
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--ds-success)", marginTop: 6 }} />
             <div>
-              <div style={{ fontWeight: 500, fontSize: 13.5 }}>Mensagem enviada</div>
+              <div style={{ fontWeight: 500, fontSize: 13.5 }}>Message envoyé</div>
               <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · WhatsApp</div>
             </div>
           </div>

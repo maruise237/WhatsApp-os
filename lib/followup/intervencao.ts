@@ -289,20 +289,20 @@ async function aplicaPatchComGuarda(
 
   const relido = await carrega(deps, alvo.id);
   if (relido && "ok" in relido) return relido;
-  if (!relido) return { ok: false, codigo: "nao_encontrado", mensagem: "Follow-up não encontrado." };
+  if (!relido) return { ok: false, codigo: "nao_encontrado", mensagem: "Relance introuvable." };
 
   if (relido.claimed_until && Date.parse(relido.claimed_until) > Date.parse(agoraIso)) {
     return {
       ok: false,
       codigo: "motor_ocupado",
       mensagem:
-        "O automático está executando este follow-up agora. Nada foi alterado — tente de novo em alguns instantes.",
+        "L’automatisme traite cette relance en ce moment. Rien n’a été modifié — réessayez dans quelques instants.",
     };
   }
   return {
     ok: false,
     codigo: "estado_incompativel",
-    mensagem: "Este follow-up mudou de estado enquanto você decidia. Nada foi alterado — recarregue e confira.",
+    mensagem: "Cette relance a changé d’état pendant que vous décidiez. Rien n’a été modifié — rechargez et vérifiez.",
   };
 }
 
@@ -411,7 +411,7 @@ async function abre(
 ): Promise<{ ok: true; alvo: EnrollmentParaIntervir } | FalhaDaIntervencao> {
   const lido = await carrega(deps, id);
   if (lido && "ok" in lido) return lido;
-  if (!lido) return { ok: false, codigo: "nao_encontrado", mensagem: "Follow-up não encontrado." };
+  if (!lido) return { ok: false, codigo: "nao_encontrado", mensagem: "Relance introuvable." };
   if (!aceita(lido.status)) {
     return { ok: false, codigo: "estado_incompativel", mensagem: mensagemDeEstado };
   }
@@ -428,7 +428,7 @@ export async function pausaEnrollment(
     deps,
     id,
     podePausar,
-    "Só dá para pausar um follow-up que está andando (ativo ou aguardando resposta).",
+    "Seule une relance en cours (active ou en attente de réponse) peut être mise en pause.",
   );
   if (!aberto.ok) return aberto;
   const alvo = aberto.alvo;
@@ -451,7 +451,7 @@ export async function pausaEnrollment(
     deps,
     alvo,
     "followup_paused",
-    "O fluxo automático não vai mandar mensagens até alguém retomar",
+    "La séquence automatique n’enverra plus de messages tant que personne ne la relance",
     { enrollment_id: alvo.id, restante_ms: restante },
   );
 
@@ -464,7 +464,7 @@ export async function retomaEnrollment(
 ): Promise<ResultadoDaIntervencao> {
   const agora = deps.agora ?? new Date();
   const agoraIso = agora.toISOString();
-  const aberto = await abre(deps, id, podeRetomar, "Este follow-up não está pausado por uma pessoa.");
+  const aberto = await abre(deps, id, podeRetomar, "Cette relance n’a pas été mise en pause par une personne.");
   if (!aberto.ok) return aberto;
   const alvo = aberto.alvo;
 
@@ -492,7 +492,7 @@ export async function retomaEnrollment(
     status: volta.status,
     next_eval_at: volta.next_eval_at,
   });
-  await registraNaTimeline(deps, alvo, "followup_resumed", "O fluxo automático voltou a andar", {
+  await registraNaTimeline(deps, alvo, "followup_resumed", "La séquence automatique a repris", {
     enrollment_id: alvo.id,
     next_eval_at: volta.next_eval_at,
   });
@@ -512,10 +512,10 @@ export async function adiaEnrollment(
   if (!validacao.ok) {
     const mensagem =
       validacao.motivo === "data_invalida"
-        ? "Data inválida."
+        ? "Date invalide."
         : validacao.motivo === "data_no_passado"
-          ? "Escolha um horário no futuro."
-          : "O adiamento máximo é de 90 dias.";
+          ? "Choisissez une heure dans le futur."
+          : "Le report maximum est de 90 jours.";
     return { ok: false, codigo: "adiamento_invalido", mensagem, detalhes: { motivo: validacao.motivo } };
   }
 
@@ -523,7 +523,7 @@ export async function adiaEnrollment(
     deps,
     id,
     podeAdiarOuPular,
-    "Só dá para adiar um follow-up que está andando (ativo ou aguardando resposta).",
+    "Seule une relance en cours (active ou en attente de réponse) peut être reportée.",
   );
   if (!aberto.ok) return aberto;
   const alvo = aberto.alvo;
@@ -541,7 +541,7 @@ export async function adiaEnrollment(
     de: alvo.next_eval_at,
     next_eval_at: novo,
   });
-  await registraNaTimeline(deps, alvo, "followup_snoozed", "O próximo passo do fluxo foi remarcado", {
+  await registraNaTimeline(deps, alvo, "followup_snoozed", "La prochaine étape de la séquence a été reprogrammée", {
     enrollment_id: alvo.id,
     de: alvo.next_eval_at,
     para: novo,
@@ -561,7 +561,7 @@ export async function pulaPassoDoEnrollment(
     deps,
     id,
     podeAdiarOuPular,
-    "Só dá para pular o passo de um follow-up que está andando (ativo ou aguardando resposta).",
+    "On ne peut sauter l’étape que d’une relance en cours (active ou en attente de réponse).",
   );
   if (!aberto.ok) return aberto;
   const alvo = aberto.alvo;
@@ -574,7 +574,7 @@ export async function pulaPassoDoEnrollment(
     .maybeSingle();
   if (versaoErr) return { ok: false, codigo: "erro_interno", mensagem: versaoErr.message };
   if (!versao) {
-    return { ok: false, codigo: "erro_interno", mensagem: "A versão do fluxo em que este follow-up anda sumiu." };
+    return { ok: false, codigo: "erro_interno", mensagem: "La version de la séquence suivie par cette relance a disparu." };
   }
 
   const grafo = flowGraphSchema.safeParse(versao.graph);
@@ -582,7 +582,7 @@ export async function pulaPassoDoEnrollment(
     return {
       ok: false,
       codigo: "erro_interno",
-      mensagem: "A versão do fluxo em que este follow-up anda não pôde ser lida.",
+      mensagem: "La version de la séquence suivie par cette relance n’a pas pu être lue.",
     };
   }
 
@@ -595,10 +595,10 @@ export async function pulaPassoDoEnrollment(
   if (!escolha.ok) {
     const mensagem =
       escolha.codigo === "sem_caminho"
-        ? "Este passo não tem saída no fluxo — não há para onde pular."
+        ? "Cette étape n’a pas de sortie dans la séquence — impossible de sauter."
         : escolha.codigo === "caminho_invalido"
-          ? "O caminho escolhido não sai deste passo."
-          : "Este passo tem mais de um caminho. Escolha por onde seguir.";
+          ? "Le chemin choisi ne part pas de cette étape."
+          : "Cette étape a plusieurs chemins. Choisissez par où continuer.";
     return { ok: false, codigo: escolha.codigo, mensagem, detalhes: { opcoes: escolha.opcoes } };
   }
 
@@ -632,7 +632,7 @@ export async function pulaPassoDoEnrollment(
     deps,
     alvo,
     "followup_step_skipped",
-    "O fluxo seguiu direto para o passo seguinte",
+    "La séquence est passée directement à l’étape suivante",
     { enrollment_id: alvo.id, de: alvo.current_node_id, para: destino },
   );
 

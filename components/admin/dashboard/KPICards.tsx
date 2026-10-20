@@ -54,27 +54,27 @@ export function KPICards({ kpis }: KPICardsProps) {
       <KPICard
         label="Tenants Ativos"
         value={kpis.tenants_active}
-        subtitle="organizações ativas"
+        subtitle="organisations actives"
         Icon={Buildings}
       />
       <KPICard
         label="Pendentes >10min"
         value={kpis.conv_pending_10min}
-        subtitle="conversas sem resposta"
+        subtitle="conversations sans réponse"
         Icon={Clock}
         accent={kpis.conv_pending_10min > 0}
       />
       <KPICard
-        label="Alertas WAHA"
+        label="Alertes WAHA"
         value={kpis.waha_ban_alerts}
-        subtitle="sessões com problema"
+        subtitle="sessions en difficulté"
         Icon={WifiSlash}
         accent={kpis.waha_ban_alerts > 0}
       />
       <KPICard
-        label="LGPD em Risco"
+        label="RGPD à risque"
         value={kpis.lgpd_at_risk}
-        subtitle="requisições próximas do prazo"
+        subtitle="demandes proches de l’échéance"
         Icon={Scales}
         danger={kpis.lgpd_at_risk > 0}
       />
@@ -87,7 +87,7 @@ export function KPICards({ kpis }: KPICardsProps) {
       <KPICard
         label="Budgets IA"
         value={kpis.ai_budget_warnings}
-        subtitle="tenants com gasto acumulado ≥80% do teto"
+        subtitle="organisations avec une dépense cumulée ≥80 % du plafond"
         Icon={ChartBar}
         accent={kpis.ai_budget_warnings > 0}
       />

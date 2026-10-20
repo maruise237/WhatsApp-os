@@ -56,8 +56,8 @@ export type Traducao =
 
 /** A mesma frase serve aos três códigos da serialização: para quem lê, o fato é um só. */
 const BARRADO_NA_SEGURANCA =
-  "A verificação de segurança barrou o resultado antes de ele chegar à tela, " +
-  "e a marca não foi aplicada.";
+  "La vérification de sécurité a bloqué le résultat avant l’affichage, " +
+  "et la marque n’a pas été appliquée.";
 
 export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
   // ── resolução: o que a camada de configuração achou do que estava gravado ──
@@ -69,40 +69,40 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
   envelope_malformado: {
     modo: "frase",
     tom: "problema",
-    texto: "O valor gravado para a cor não está na forma que o sistema entende.",
+    texto: "La valeur enregistrée pour la couleur n’est pas dans un format compris par l’application.",
   },
   semente_invalida: {
     modo: "frase",
     tom: "problema",
-    texto: "A cor gravada não é um código de cor válido.",
+    texto: "La couleur enregistrée n’est pas un code couleur valide.",
   },
   formato_desconhecido: {
     modo: "frase",
     tom: "problema",
-    texto: "A cor foi gravada por uma versão mais nova do sistema, e esta não sabe lê-la.",
+    texto: "La couleur a été enregistrée par une version plus récente de l’application, et celle-ci ne sait pas la lire.",
   },
   algoritmo_desconhecido: {
     modo: "frase",
     tom: "informativo",
     texto:
-      "A cor foi salva por outra versão do sistema. Ela continua valendo — esta versão " +
-      "recalcula os tons a partir dela.",
+      "La couleur a été enregistrée par une autre version de l’application. Elle reste valable — cette version " +
+      "recalcule les nuances à partir d’elle.",
   },
   papel_desconhecido: {
     modo: "frase",
     tom: "problema",
     texto:
-      "Esta versão do sistema não sabe onde aplicar a cor gravada, então ela não pinta a interface.",
+      "Cette version de l’application ne sait pas où appliquer la couleur enregistrée, elle ne colore donc pas l’interface.",
   },
   papel_nao_pinta: {
     modo: "frase",
     tom: "informativo",
-    texto: "A cor está guardada só como identidade: ela aparece no logo, mas não pinta os botões.",
+    texto: "La couleur est gardée seulement comme identité : elle apparaît dans le logo, mais ne colore pas les boutons.",
   },
   derivacao_falhou: {
     modo: "frase",
     tom: "problema",
-    texto: "O cálculo dos tons a partir dessa cor não terminou.",
+    texto: "Le calcul des nuances à partir de cette couleur n’a pas abouti.",
   },
 
   // ── derivação: o que o sistema fez com a cor para ela caber na interface ──
@@ -110,8 +110,8 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
     modo: "frase",
     tom: "atencao",
     texto:
-      "Sua cor é um tom neutro (cinza, preto ou branco), e uma cor assim não destaca nada " +
-      "na tela. Os botões seguem com a cor padrão do sistema, e a sua fica reservada ao logo.",
+      "Votre couleur est neutre (gris, noir ou blanc), et une telle couleur ne fait rien ressortir " +
+      "à l’écran. Les boutons gardent la couleur par défaut, et la vôtre est réservée au logo.",
   },
   accent_deslocado: {
     modo: "com_contexto",
@@ -122,8 +122,8 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
     modo: "frase",
     tom: "problema",
     texto:
-      "Não existe tom desta cor que deixe todos os elementos legíveis. Alguns detalhes — " +
-      "como o contorno que marca o campo em foco — ficam difíceis de enxergar.",
+      "Aucune nuance de cette couleur ne rend tous les éléments lisibles. Certains détails — " +
+      "comme le contour du champ sélectionné — sont difficiles à voir.",
   },
   semantica_deslocada: {
     modo: "com_contexto",
@@ -149,9 +149,9 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
 
 /** Como o dono da instalação chama cada cor de estado do sistema. */
 const NOME_DA_COR_DE_ALERTA: Record<string, string> = {
-  success: "sucesso",
-  warning: "atenção",
-  error: "erro",
+  success: "succès",
+  warning: "attention",
+  error: "erreur",
   info: "informação",
 };
 
@@ -162,7 +162,7 @@ function ehCodigoConhecido(codigo: string): codigo is CodigoDaMarca {
 /** "a" · "a e b" · "a, b e c" */
 function listar(itens: readonly string[]): string {
   if (itens.length <= 1) return itens[0] ?? "";
-  return `${itens.slice(0, -1).join(", ")} e ${itens[itens.length - 1] ?? ""}`;
+  return `${itens.slice(0, -1).join(", ")} et ${itens[itens.length - 1] ?? ""}`;
 }
 
 /**
@@ -250,7 +250,7 @@ export function avisosDaMarca(
       // Ver `suaCorPinta`: comparar com "a sua cor" apontaria para uma cor que
       // não está em degrau nenhum da escala mostrada.
       if (degraus === null) continue;
-      const modo = noEscuro ? "escuro" : "claro";
+      const modo = noEscuro ? "sombre" : "clair";
       if (degraus === 0) {
         // O sistema mexeu na escala, mas o botão pousou na cor dela. Dizer que
         // houve ajuste aqui assustaria sem motivo — e calar deixaria o modo sem
@@ -258,8 +258,8 @@ export function avisosDaMarca(
         avisos.push({
           tom: "informativo",
           texto:
-            `No modo ${modo}, os botões usam exatamente a sua cor — o sistema conferiu que o ` +
-            `texto em cima dela fica legível.`,
+            `En mode ${modo}, les boutons utilisent exactement votre couleur — l’application a vérifié que le ` +
+            `texte posé dessus reste lisible.`,
         });
         continue;
       }
@@ -267,8 +267,8 @@ export function avisosDaMarca(
       avisos.push({
         tom: "informativo",
         texto:
-          `No modo ${modo}, os botões usam um tom ${degraus > 0 ? "mais escuro" : "mais claro"} ` +
-          `que a sua cor — é o que mantém o texto em cima deles legível.`,
+          `En mode ${modo}, les boutons utilisent une nuance ${degraus > 0 ? "plus foncée" : "plus claire"} ` +
+          `que votre couleur — c’est ce qui garde le texte posé dessus lisible.`,
       });
       continue;
     }
@@ -283,16 +283,16 @@ export function avisosDaMarca(
   if (saiuDaSuaCor) {
     avisos.push({
       tom: "informativo",
-      texto: "A sua cor original continua no logo e nos destaques.",
+      texto: "Votre couleur d’origine reste dans le logo et les éléments mis en avant.",
     });
   }
   if (coresDeAlerta.size > 0) {
     avisos.push({
       tom: "atencao",
       texto:
-        `Sua cor ficou parecida com a que o sistema usa para indicar ` +
-        `${listar([...coresDeAlerta].sort())}. Nesta versão ele ainda não afasta esses tons ` +
-        `sozinho — vale conferir se os avisos continuam fáceis de distinguir.`,
+        `Votre couleur ressemble à celle que l’application utilise pour indiquer ` +
+        `${listar([...coresDeAlerta].sort())}. Cette version ne sépare pas encore ces nuances ` +
+        `toute seule — vérifiez que les alertes restent faciles à distinguer.`,
     });
   }
 
@@ -324,7 +324,7 @@ export function motivosDoFallback(motivo: string | null): Aviso[] {
         : {
             tom: "problema",
             texto:
-              "O sistema recusou a cor gravada por um motivo que esta versão não sabe explicar.",
+              "L’application a refusé la couleur enregistrée pour une raison que cette version ne sait pas expliquer.",
           },
     );
   }

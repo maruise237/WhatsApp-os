@@ -241,12 +241,12 @@ export async function semeiaEstadosDeRisco(
         severity: emRisco > 10 ? "warn" : "info",
         // A AÇÃO VAI NO TÍTULO. "48 negócios em risco" é um número e não move
         // ninguém; o item precisa dizer o que fazer com ele.
-        title: `Revise ${emRisco} ${emRisco === 1 ? "negócio parado" : "negócios parados"} e decida quais encerrar`,
+        title: `Passez en revue ${emRisco} ${emRisco === 1 ? "affaire à l’arrêt" : "affaires à l’arrêt"} et décidez lesquelles clôturer`,
         body:
-          `${porBucket.critico} sem resposta há muito tempo e ${porBucket.em_risco} esfriando. ` +
-          `Eles já estavam assim antes de o sistema passar a acompanhar — por isso ` +
-          `aparecem juntos agora, e não porque algo aconteceu hoje. ` +
-          `Encerrar o que morreu é o que faz o radar voltar a significar alguma coisa.`,
+          `${porBucket.critico} sans réponse depuis longtemps et ${porBucket.em_risco} en train de refroidir. ` +
+          `Elles étaient déjà dans cet état avant que l’application ne les suive — c’est pourquoi ` +
+          `elles apparaissent ensemble maintenant, et non parce qu’il s’est passé quelque chose aujourd’hui. ` +
+          `Clôturer ce qui est mort, c’est ce qui redonne du sens au radar.`,
         ref_kind: "organization",
         ref_id: organizationId,
       })

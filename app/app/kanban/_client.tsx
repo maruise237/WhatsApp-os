@@ -48,7 +48,7 @@ export function vizinhoAoMover(
 function textoDoErro(e: unknown): string {
   if (e instanceof ApiError) return e.message;
   if (e instanceof Error && e.message) return e.message;
-  return "Não consegui completar essa ação. Tente de novo.";
+  return "Impossible de terminer cette action. Réessayez.";
 }
 
 export function FunisClient({
@@ -143,17 +143,17 @@ export function FunisClient({
           if (e.key === "Enter") criarFunil();
           if (e.key === "Escape") setNovo(null);
         }}
-        placeholder="Nome do funil — ex.: Consultas, Obras, Matrículas"
-        aria-label="Nome do novo funil"
+        placeholder="Nom du tableau — ex. : Consultations, Chantiers, Inscriptions"
+        aria-label="Nom du nouveau tableau"
         data-testid="nome-do-novo-funil"
         disabled={ocupado}
       />
       <div className="flex gap-2">
         <Button onClick={criarFunil} disabled={ocupado || !novo.trim()} data-testid="confirmar-novo-funil">
-          Criar funil
+          Créer le tableau
         </Button>
         <Button variant="ghost" onClick={() => setNovo(null)} disabled={ocupado}>
-          Cancelar
+          Annuler
         </Button>
       </div>
     </Card>
@@ -172,7 +172,7 @@ export function FunisClient({
           <EmptyPipeline
             primary={
               podeGerenciar
-                ? { label: "Criar meu primeiro funil", onClick: () => setNovo("") }
+                ? { label: "Créer mon premier tableau", onClick: () => setNovo("") }
                 : undefined
             }
           />
@@ -192,7 +192,7 @@ export function FunisClient({
         <div className="flex sm:justify-end">
           {novo === null ? (
             <Button onClick={() => setNovo("")} disabled={ocupado} data-testid="novo-funil" className="w-full sm:w-auto">
-              <Plus size={16} className="mr-2" aria-hidden /> Novo funil
+              <Plus size={16} className="mr-2" aria-hidden /> Nouveau tableau
             </Button>
           ) : null}
         </div>
@@ -214,13 +214,14 @@ export function FunisClient({
 
           return (
             <li key={funil.id} className="flex flex-col gap-3 p-4" data-testid={`funil-${funil.id}`}>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                {podeGerenciar && (
-                  <div className="flex shrink-0 flex-wrap gap-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                {/* Monter/descendre n'a de sens qu'à partir de deux tableaux. */}
+                {podeGerenciar && funis.length > 1 && (
+                  <div className="flex shrink-0 gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`Subir «${funil.name}» na lista`}
+                      aria-label={`Monter «${funil.name}» dans la liste`}
                       data-testid={`subir-${funil.id}`}
                       disabled={ocupado || i === 0}
                       onClick={() => aplicar(funil.id, { depois_de: vizinhoAoMover(funis, i, "subir") })}
@@ -230,7 +231,7 @@ export function FunisClient({
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`Descer «${funil.name}» na lista`}
+                      aria-label={`Descendre «${funil.name}» dans la liste`}
                       data-testid={`descer-${funil.id}`}
                       disabled={ocupado || i === funis.length - 1}
                       onClick={() => aplicar(funil.id, { depois_de: vizinhoAoMover(funis, i, "descer") })}
@@ -240,7 +241,7 @@ export function FunisClient({
                   </div>
                 )}
 
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 basis-48">
                   {renomeandoAqui ? (
                     <div className="flex gap-2">
                       <Input
@@ -251,7 +252,7 @@ export function FunisClient({
                           if (e.key === "Enter") aplicar(funil.id, { name: renomeandoAqui.nome });
                           if (e.key === "Escape") setRenomeando(null);
                         }}
-                        aria-label={`Novo nome de «${funil.name}»`}
+                        aria-label={`Nouveau nom de «${funil.name}»`}
                         data-testid={`nome-${funil.id}`}
                         disabled={ocupado}
                       />
@@ -261,23 +262,23 @@ export function FunisClient({
                         disabled={ocupado || !renomeandoAqui.nome.trim()}
                         data-testid={`salvar-nome-${funil.id}`}
                       >
-                        Salvar
+                        Enregistrer
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => setRenomeando(null)} disabled={ocupado}>
-                        Cancelar
+                        Annuler
                       </Button>
                     </div>
                   ) : (
                     <Link
                       href={`/app/pipelines/${funil.id}`}
-                      className="group flex flex-col"
+                      className="group -my-2 flex flex-col py-2"
                       data-testid={`abrir-${funil.id}`}
                     >
                       <span className="flex items-center gap-2">
                         <span className="text-sm font-medium group-hover:underline">{funil.name}</span>
                         {funil.is_default && (
                           <Badge variant="secondary" className="text-[10px]">
-                            Padrão
+                            Par défaut
                           </Badge>
                         )}
                       </span>
@@ -288,10 +289,10 @@ export function FunisClient({
                   )}
                 </div>
 
-                <span className="shrink-0 text-xs text-muted-foreground">/{funil.slug}</span>
+                <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline">/{funil.slug}</span>
 
                 {podeGerenciar && !renomeandoAqui && (
-                  <div className="flex shrink-0 flex-wrap gap-1">
+                  <div className="-ml-3 flex w-full shrink-0 flex-wrap gap-1 sm:ml-0 sm:w-auto">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -299,7 +300,7 @@ export function FunisClient({
                       disabled={ocupado}
                       data-testid={`renomear-${funil.id}`}
                     >
-                      <PencilSimple size={16} className="mr-1" aria-hidden /> Renomear
+                      <PencilSimple size={16} className="mr-1" aria-hidden /> Renommer
                     </Button>
                     {!funil.is_default && (
                       <Button
@@ -309,7 +310,7 @@ export function FunisClient({
                         disabled={ocupado}
                         data-testid={`padrao-${funil.id}`}
                       >
-                        <Check size={16} className="mr-1" aria-hidden /> Tornar padrão
+                        <Check size={16} className="mr-1" aria-hidden /> Définir par défaut
                       </Button>
                     )}
                     <Button
@@ -322,7 +323,7 @@ export function FunisClient({
                       disabled={ocupado}
                       data-testid={`arquivar-${funil.id}`}
                     >
-                      <Archive size={16} className="mr-1" aria-hidden /> Arquivar
+                      <Archive size={16} className="mr-1" aria-hidden /> Archiver
                     </Button>
                   </div>
                 )}
@@ -344,8 +345,7 @@ export function FunisClient({
                     </p>
                   ) : (
                     <p className="text-sm leading-relaxed">
-                      Arquivar «{funil.name}»? Ele sai desta lista e para de receber negócio novo. O
-                      histórico continua guardado, e nada é apagado.
+                      Archiver «{funil.name}» ? Il disparaît de cette liste et ne reçoit plus de nouvelles affaires. L’historique reste conservé, et rien n’est supprimé.
                     </p>
                   )}
                   <div className="flex flex-wrap gap-2">
@@ -355,7 +355,7 @@ export function FunisClient({
                       disabled={ocupado}
                       data-testid={`arquivar-confirmar-${funil.id}`}
                     >
-                      Arquivar
+                      Archiver
                     </Button>
                     {/* Excluir de vez só passa no funil que NUNCA recebeu negócio.
                         A tela não sabe disso antes de perguntar — e não precisa
@@ -369,10 +369,10 @@ export function FunisClient({
                       disabled={ocupado}
                       data-testid={`excluir-${funil.id}`}
                     >
-                      Excluir de vez
+                      Supprimer définitivement
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => setArquivando(null)} disabled={ocupado}>
-                      Cancelar
+                      Annuler
                     </Button>
                   </div>
                 </Card>

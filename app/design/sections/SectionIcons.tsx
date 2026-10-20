@@ -87,10 +87,10 @@ const SET = [
 ];
 
 const STYLES = [
-  { id: "lucide",   label: "Lucide",   stroke: 2,    desc: "Linear · stroke 2px · padrão React/shadcn. Familiar mas saturado em training data." },
-  { id: "phosphor", label: "Phosphor (duotone)", stroke: 1.5, desc: "Duotone · fill+stroke. Mais 'soft-tech', combina com a paleta calma." },
-  { id: "iconoir",  label: "Iconoir",  stroke: 1.5,  desc: "Linear hairline · stroke 1.5px. Elegante, leve. Bom para densidade compacta." },
-  { id: "tabler",   label: "Tabler",   stroke: 1.75, desc: "Linear médio · stroke 1.75px. Mais robusto que Iconoir, mais fino que Lucide." },
+  { id: "lucide",   label: "Lucide",   stroke: 2,    desc: "Linéaire · trait 2px · standard React/shadcn. Familier mais surreprésenté dans les données d’entraînement." },
+  { id: "phosphor", label: "Phosphor (duotone)", stroke: 1.5, desc: "Duotone · remplissage + trait. Plus « soft-tech », s’accorde avec la palette calme." },
+  { id: "iconoir",  label: "Iconoir",  stroke: 1.5,  desc: "Linéaire fin · trait 1.5px. Élégant, léger. Idéal pour la densité compacte." },
+  { id: "tabler",   label: "Tabler",   stroke: 1.75, desc: "Linéaire moyen · trait 1.75px. Plus robuste qu’Iconoir, plus fin que Lucide." },
 ];
 
 export function SectionIcons() {
@@ -98,8 +98,7 @@ export function SectionIcons() {
     <div className="ds-section">
       <h2 className="ds-display">Iconografia</h2>
       <p className="ds-lede">
-        Quatro estilos comparados lado a lado nos mesmos 7 ícones. SVGs simulam o estilo (stroke + fill)
-        sem instalar 4 pacotes — a decisão é sobre <em>peso visual</em> e <em>combinação com a paleta</em>.
+        Quatre styles comparés côte à côte sur les mêmes 7 icônes. Les SVG simulent le style (trait + remplissage) sans installer 4 paquets — la décision porte sur <em>peso visual</em> e <em>l’accord avec la palette</em>.
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -130,18 +129,12 @@ export function SectionIcons() {
       </div>
 
       <div className="ds-card" style={{ marginTop: 24, borderLeft: "3px solid var(--ds-accent)" }}>
-        <h3 style={{ marginTop: 0 }}>Recomendação</h3>
+        <h3 style={{ marginTop: 0 }}>Recommandation</h3>
         <p style={{ fontSize: 13.5, color: "var(--ds-text-muted)", lineHeight: 1.6 }}>
-          <strong style={{ color: "var(--ds-text)" }}>Phosphor (duotone)</strong> como default.
-          Justificativa: (1) o fill discreto cria peso visual sem ruído, casando com o accent dessaturado;
-          (2) o duotone diferencia o sistema de 80%+ dos CRMs que usam Lucide/Heroicons; (3) o pacote oferece
-          variações <span className="ds-mono">regular / bold / fill</span> para compor estados (hover/active)
-          sem trocar de ícone. Uso secundário: <strong style={{ color: "var(--ds-text)" }}>Tabler</strong> para
-          densidade compacta onde o duotone fica pesado.
+          <strong style={{ color: "var(--ds-text)" }}>Phosphor (duotone)</strong> par défaut. Justification : (1) le remplissage discret crée du poids visuel sans bruit, en accord avec l’accent désaturé ; (2) le duotone distingue le système de plus de 80 % des CRM qui utilisent Lucide/Heroicons ; (3) le paquet propose des variantes <span className="ds-mono">regular / bold / fill</span> pour composer les états (hover/active) sans changer d’icône. Usage secondaire : <strong style={{ color: "var(--ds-text)" }}>Tabler</strong> pour la densité compacte où le duotone devient lourd.
         </p>
         <p style={{ fontSize: 12.5, color: "var(--ds-text-muted)", marginTop: 8 }}>
-          Lucide segue disponível para componentes shadcn já instalados — o objetivo é não ser
-          a identidade icônica do produto.
+          Lucide reste disponible pour les composants shadcn déjà installés — l’objectif est qu’il ne soit pas l’identité iconographique du produit.
         </p>
       </div>
     </div>

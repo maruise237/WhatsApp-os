@@ -116,14 +116,14 @@ export async function triggerSlaAlarm(
       const appUrl = env.NEXT_PUBLIC_APP_URL;
       const requestUrl = `${appUrl}/app/lgpd/requests/${request.id}`;
 
-      const subject = `[LGPD] Solicitação ${shortId} próxima do vencimento`;
+      const subject = `[LGPD] Demande ${shortId} bientôt échue`;
 
       const thresholdLabel =
         threshold === "data_request_d5"
-          ? "D+5 (acesso a dados)"
-          : "D+10 (anonimização/exclusão)";
+          ? "J+5 (accès aux données)"
+          : "J+10 (anonymisation/suppression)";
 
-      const dueFmt = new Date(request.due_at).toLocaleString("pt-BR", {
+      const dueFmt = new Date(request.due_at).toLocaleString("fr-FR", {
         timeZone: "America/Sao_Paulo",
         day: "2-digit",
         month: "2-digit",
@@ -135,35 +135,35 @@ export async function triggerSlaAlarm(
       // verde deixa de comunicar urgência — a cor aqui é a informação.
       const overdueNote =
         daysOverdue > 0
-          ? `<p style="color:#dc2626;font-weight:600;">⚠ Esta solicitação está ${daysOverdue} dia(s) em atraso.</p>`
-          : `<p>O prazo vence em <strong>${dueFmt}</strong>.</p>`;
+          ? `<p style="color:#dc2626;font-weight:600;">⚠ Cette demande a ${daysOverdue} jour(s) de retard.</p>`
+          : `<p>L’échéance est le <strong>${dueFmt}</strong>.</p>`;
 
       const html = `<!doctype html>
-<html lang="pt-BR">
+<html lang="fr">
 <body style="font-family:-apple-system,Helvetica,Arial,sans-serif;color:${NEUTROS_DE_SAIDA.texto};line-height:1.5;max-width:560px;margin:0 auto;padding:24px;">
-  <h2 style="margin:0 0 12px;font-size:18px;">[LGPD] Alerta de SLA — Solicitação #${shortId}</h2>
-  <p>Olá,</p>
-  <p>A solicitação LGPD <strong>#${shortId}</strong> de <strong>${orgName}</strong> atingiu o limiar <strong>${thresholdLabel}</strong>.</p>
+  <h2 style="margin:0 0 12px;font-size:18px;">[LGPD] Alerte de délai — Demande #${shortId}</h2>
+  <p>Bonjour,</p>
+  <p>La demande de données personnelles <strong>#${shortId}</strong> de <strong>${orgName}</strong> a atteint le seuil <strong>${thresholdLabel}</strong>.</p>
   ${overdueNote}
-  <p>Status atual: <code>${request.request_type}</code> / <code>${request.status}</code></p>
+  <p>Statut actuel : <code>${request.request_type}</code> / <code>${request.status}</code></p>
   <p style="margin:24px 0;">
-    <a href="${requestUrl}" style="background:${marca.accent};color:${marca.accentFg};padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Ver solicitação no painel</a>
+    <a href="${requestUrl}" style="background:${marca.accent};color:${marca.accentFg};padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Voir la demande dans le panneau</a>
   </p>
-  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base legal: LGPD Lei nº 13.709/2018, Art. 18. SLA obrigatório conforme regulamentação vigente.</p>
+  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base légale : LGPD, loi nº 13.709/2018, art. 18. Délai obligatoire selon la réglementation en vigueur.</p>
 </body>
 </html>`;
 
       // Texto puro não escapa: `&amp;` no corpo de um alarme é ruído.
-      const text = `[LGPD] Alerta de SLA — Solicitação #${shortId}
+      const text = `[LGPD] Alerte de délai — Demande #${shortId}
 
-A solicitação LGPD #${shortId} de ${organizationName || marca.nome} atingiu o limiar ${thresholdLabel}.
-${daysOverdue > 0 ? `Esta solicitação está ${daysOverdue} dia(s) em atraso.` : `Prazo: ${dueFmt}.`}
+La demande de données personnelles #${shortId} de ${organizationName || marca.nome} a atteint le seuil ${thresholdLabel}.
+${daysOverdue > 0 ? `Cette demande a ${daysOverdue} jour(s) de retard.` : `Échéance : ${dueFmt}.`}
 
-Status: ${request.request_type} / ${request.status}
+Statut : ${request.request_type} / ${request.status}
 
-Acesse: ${requestUrl}
+Accès : ${requestUrl}
 
-Base legal: LGPD Lei nº 13.709/2018, Art. 18.`;
+Base légale : LGPD, loi nº 13.709/2018, art. 18.`;
 
       const result = await sendEmail({
         to: recipientEmail,

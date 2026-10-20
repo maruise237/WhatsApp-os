@@ -43,7 +43,7 @@ export async function POST(
   if (!idempotencyKey) {
     return fail(
       "missing_idempotency_key",
-      "Header Idempotency-Key é obrigatório.",
+      "L’en-tête Idempotency-Key est obligatoire.",
       422,
       { requestId },
     );
@@ -58,12 +58,12 @@ export async function POST(
   try {
     rawBody = await req.json();
   } catch {
-    return fail("invalid_request", "Body JSON inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps JSON invalide.", 400, { requestId });
   }
 
   const parsed = bodySchema.safeParse(rawBody);
   if (!parsed.success) {
-    return fail("validation_failed", "Parâmetros inválidos.", 422, {
+    return fail("validation_failed", "Paramètres invalides.", 422, {
       details: parsed.error.flatten(),
       requestId,
     });
@@ -110,14 +110,14 @@ export async function POST(
     return fail("internal_error", reqErr.message, 500, { requestId });
   }
   if (!request) {
-    return fail("not_found", "Solicitação não encontrada.", 404, { requestId });
+    return fail("not_found", "Demande introuvable.", 404, { requestId });
   }
 
   // Only 'received' can be approved
   if (request.status !== "received") {
     return fail(
       "conflict",
-      `Solicitação está em status '${request.status}' — apenas 'received' pode ser aprovada.`,
+      `La demande est au statut « ${request.status} » — seule une demande « received » peut être approuvée.`,
       409,
       { requestId },
     );

@@ -18,7 +18,7 @@ interface Props {
 
 function formatDateTick(s: string): string {
   const d = new Date(`${s}T00:00:00Z`);
-  return d.toLocaleDateString("pt-BR", {
+  return d.toLocaleDateString("fr-FR", {
     day: "2-digit",
     month: "2-digit",
     timeZone: "UTC",
@@ -26,7 +26,7 @@ function formatDateTick(s: string): string {
 }
 
 function formatNumber(n: number): string {
-  return n.toLocaleString("pt-BR");
+  return n.toLocaleString("fr-FR");
 }
 
 function formatTokens(n: number): string {
@@ -47,7 +47,7 @@ function ChartCard({ title, children }: { title: string; children: React.ReactNo
 function EmptyChart() {
   return (
     <div className="flex h-[200px] items-center justify-center text-sm text-muted-foreground">
-      Sem dados no período
+      Aucune donnée sur la période
     </div>
   );
 }
@@ -123,7 +123,7 @@ export function UsageChart({ payload }: Props) {
         )}
       </ChartCard>
 
-      <ChartCard title="Volume de texto processado por dia">
+      <ChartCard title="Volume de texte traité par jour">
         {!hasTokens ? (
           <EmptyChart />
         ) : (
@@ -165,7 +165,7 @@ export function UsageChart({ payload }: Props) {
         )}
       </ChartCard>
 
-      <ChartCard title="Tempo de resposta por dia (segundos)">
+      <ChartCard title="Temps de réponse par jour (secondes)">
         {!hasLatency ? (
           <EmptyChart />
         ) : (
@@ -191,7 +191,7 @@ export function UsageChart({ payload }: Props) {
                 // deixaria a régua contradizendo o rótulo — o gráfico diria
                 // "segundos" e mostraria 24.000 na lateral.
                 tickFormatter={(v: number) =>
-                  (v / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 0 })
+                  (v / 1000).toLocaleString("fr-FR", { maximumFractionDigits: 0 })
                 }
                 width={40}
               />
@@ -199,7 +199,7 @@ export function UsageChart({ payload }: Props) {
                 // Segundos, não milissegundos: 17.621 ms não diz nada a quem
                 // atende; 17,6 s diz.
                 formatter={(value, name) => [
-                  `${(Number(value) / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} s`,
+                  `${(Number(value) / 1000).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} s`,
                   name,
                 ]}
                 labelFormatter={(label) => formatDateTick(String(label))}
@@ -227,7 +227,7 @@ export function UsageChart({ payload }: Props) {
         )}
       </ChartCard>
 
-      <ChartCard title="Quanto foi para uma pessoa (%)">
+      <ChartCard title="Part transférée à une personne (%)">
         {!hasHandoff ? (
           <EmptyChart />
         ) : (

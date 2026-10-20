@@ -232,12 +232,12 @@ export function deriveTemplateContract(t: {
 export function describeAddress(a: SlotAddress): string {
   switch (a.kind) {
     case "header":
-      return "cabeçalho";
+      return "en-tête";
     case "body":
-      return "corpo";
+      return "corps";
     case "button":
-      return `botão ${a.index + 1} (${a.subType})`;
+      return `bouton ${a.index + 1} (${a.subType})`;
     case "card":
-      return `card ${a.cardIndex + 1} › ${describeAddress(a.inner)}`;
+      return `carte ${a.cardIndex + 1} › ${describeAddress(a.inner)}`;
   }
 }

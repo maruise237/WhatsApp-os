@@ -21,7 +21,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={cycle}
-      aria-label={`Tema: ${theme}. Cmd+Shift+L para alternar.`}
+      aria-label={`Thème : ${theme}. Cmd+Shift+L pour basculer.`}
     >
       <Icon size={16} aria-hidden />
     </Button>

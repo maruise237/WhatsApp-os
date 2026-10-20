@@ -44,13 +44,13 @@ export async function POST(
     .maybeSingle();
 
   if (fetchErr) {
-    return fail("internal_error", "Erro ao consultar credential.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la lecture de l’identifiant.", 500, { requestId });
   }
   if (!row || row.organization_id !== activeOrg.orgId) {
-    return fail("not_found", "Credential não encontrada.", 404, { requestId });
+    return fail("not_found", "Identifiant introuvable.", 404, { requestId });
   }
   if (!row.is_active) {
-    return fail("credential_inactive", "Credential desativada.", 409, { requestId });
+    return fail("credential_inactive", "Identifiant désactivé.", 409, { requestId });
   }
 
   // Leitura direta + decifragem (sem passar pelo gate `validated_at` do
@@ -64,7 +64,7 @@ export async function POST(
     });
   } catch (err) {
     console.error("[ai.credentials] decrypt failed during revalidate", err);
-    return fail("decrypt_failed", "Falha ao decifrar credential.", 500, { requestId });
+    return fail("decrypt_failed", "Impossible de déchiffrer l’identifiant.", 500, { requestId });
   }
 
   const result = await validateProviderKey(row.provider, apiKey);
@@ -88,7 +88,7 @@ export async function POST(
     .single();
 
   if (updErr || !updated) {
-    return fail("internal_error", "Erro ao atualizar credential.", 500, { requestId });
+    return fail("internal_error", "Erreur lors de la mise à jour de l’identifiant.", 500, { requestId });
   }
 
   await audit({

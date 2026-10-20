@@ -55,7 +55,7 @@ describe("POST /api/v1/pipelines", () => {
 
     expect(res.status).toBe(422);
     const body = (await res.json()) as { error: { message: string } };
-    expect(body.error.message).toBe("Já existe um funil chamado «Pedidos». Escolha outro nome.");
+    expect(body.error.message).toBe("Un tableau nommé «Pedidos» existe déjà. Choisissez un autre nom.");
     expect(db.escritas).toEqual([]);
   });
 
@@ -79,7 +79,7 @@ describe("POST /api/v1/pipelines", () => {
     const stagesInsert = db.escritas.find((e) => e.table === "crm_stages");
     const etapas = stagesInsert?.patch as Record<string, unknown>[];
     expect(etapas).toHaveLength(4);
-    expect(etapas.map((e) => e.name)).toEqual(["Novo", "Em andamento", "Ganho", "Perdido"]);
+    expect(etapas.map((e) => e.name)).toEqual(["Nouveau", "En cours", "Gagné", "Perdu"]);
     expect(etapas.filter((e) => e.is_won)).toHaveLength(1);
     expect(etapas.every((e) => e.organization_id === ORG_ID)).toBe(true);
   });

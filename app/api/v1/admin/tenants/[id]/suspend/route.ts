@@ -18,8 +18,8 @@ import { audit } from "@/lib/audit";
 const bodySchema = z.object({
   reason: z
     .string()
-    .min(10, "Motivo deve ter ao menos 10 caracteres")
-    .max(500, "Motivo deve ter no máximo 500 caracteres"),
+    .min(10, "Le motif doit contenir au moins 10 caractères")
+    .max(500, "Le motif doit contenir au maximum 500 caractères"),
 });
 
 export async function POST(

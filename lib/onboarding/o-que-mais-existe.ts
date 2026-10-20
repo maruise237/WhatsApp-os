@@ -35,71 +35,82 @@ const CURADORIA: {
 }[] = [
   {
     href: "/app/inbox",
-    comoChamar: "As conversas",
-    porQue: "É aqui que as conversas chegam, com você e ele atendendo lado a lado.",
+    comoChamar: "Les conversations",
+    porQue: "C’est ici que les conversations arrivent, et que vous répondez côte à côte avec lui.",
     comoFunciona: [
-      "O cliente manda uma mensagem no WhatsApp",
-      "Ele responde sozinho, seguindo as regras da casa que você escreveu",
-      "Se você entrar na conversa, ele sai da frente e deixa você atender",
+      "Le client envoie un message sur WhatsApp",
+      "Il répond tout seul, en suivant les règles de la maison que vous avez écrites",
+      "Si vous intervenez dans la conversation, il s’efface et vous laisse répondre",
+    ],
+  },
+  {
+    // Le cœur du produit pour une vendeuse, et il manquait à cette visite.
+    href: "/app/sales",
+    comoChamar: "Vos ventes",
+    porQue: "Les preuves de paiement à vérifier, les commandes à livrer et votre catalogue — au même endroit.",
+    comoFunciona: [
+      "Il conduit la vente dans WhatsApp et demande la capture du paiement",
+      "Vous vérifiez la preuve et confirmez le paiement — lui ne le fait jamais",
+      "Vous préparez puis marquez la livraison ; le client est tenu au courant",
     ],
   },
   {
     href: "/app/kanban",
-    comoChamar: "O quadro de clientes",
-    porQue: "Cada cliente vira um card, e ele mesmo move o card conforme a conversa anda.",
+    comoChamar: "Le tableau des clients",
+    porQue: "Chaque client devient une fiche, et il la déplace lui-même au fil de la conversation.",
     comoFunciona: [
-      "Cada cliente vira um cartão, na primeira coluna",
-      "Conforme a conversa avança, ele move o cartão de coluna sozinho",
-      "Você arrasta o cartão na mão quando quiser — o quadro é seu",
+      "Chaque client devient une fiche, dans la première colonne",
+      "Au fil de la conversation, il change la fiche de colonne tout seul",
+      "Vous déplacez la fiche à la main quand vous voulez — le tableau est à vous",
     ],
   },
   {
     href: "/app/ai/followups",
-    comoChamar: "Voltar a falar com quem sumiu",
-    porQue: "Para nenhum cliente sumir no silêncio — ele volta a falar sozinho, na hora certa.",
+    comoChamar: "Relancer ceux qui ont disparu",
+    porQue: "Pour qu’aucun client ne se perde dans le silence — il relance tout seul, au bon moment.",
     // A peça mais técnica do produto, e a que mais assusta quem lê o nome. Os
     // passos abaixo são o comportamento real: `reactivity.ts` reage a mensagem
     // recebida, a pedido de parar e a atendimento humano; `intervencao.ts` é
     // quem dá as quatro formas de mexer no meio do caminho.
     comoFunciona: [
-      "O cliente para de responder no meio da conversa",
-      "Depois do tempo que você definir, ele manda uma mensagem puxando o assunto",
-      "Se o cliente responder, o retorno para na hora — ninguém é perseguido",
-      "Se o cliente pedir para parar, ele para e não volta a escrever",
-      "E você pode pausar, adiar, pular um passo ou cancelar quando quiser",
+      "Le client arrête de répondre au milieu de la conversation",
+      "Après le délai que vous avez choisi, il envoie un message pour relancer",
+      "Si le client répond, la relance s’arrête aussitôt — personne n’est harcelé",
+      "Si le client demande d’arrêter, il s’arrête et ne réécrit plus",
+      "Et vous pouvez mettre en pause, reporter, sauter une étape ou annuler quand vous voulez",
     ],
   },
   {
     href: "/app/radar",
-    comoChamar: "O que está esfriando",
-    porQue: "Quem esfriou e ainda está aberto, para você agir antes de perder.",
+    comoChamar: "Ce qui se refroidit",
+    porQue: "Les clients refroidis encore en cours, pour agir avant de les perdre.",
     comoFunciona: [
-      "Ele observa há quanto tempo cada negócio em aberto não tem resposta",
-      "Os que estão esfriando sobem para o topo desta lista",
-      "Você decide quem merece um empurrão seu, em vez de descobrir tarde demais",
+      "Il surveille depuis combien de temps chaque affaire en cours est sans réponse",
+      "Ceux qui se refroidissent remontent en haut de cette liste",
+      "Vous décidez qui mérite un coup de pouce de votre part, au lieu de le découvrir trop tard",
     ],
   },
   {
     href: "/app/ai/inbox",
-    comoChamar: "Quando ele pede ajuda",
-    porQue: "Quando ele trava em algo que só uma pessoa resolve, o pedido aparece aqui.",
+    comoChamar: "Quand il demande de l’aide",
+    porQue: "Quand il bloque sur quelque chose que seule une personne peut régler, la demande apparaît ici.",
     comoFunciona: [
-      "Ele encontra algo que não pode decidir sozinho — um desconto, uma exceção, um caso estranho",
-      "Em vez de inventar, ele para e abre um pedido aqui",
-      "Você decide, e ele volta a andar com a sua resposta",
+      "Il tombe sur quelque chose qu’il ne peut pas décider seul — une remise, une exception, un cas bizarre",
+      "Au lieu d’inventer, il s’arrête et ouvre une demande ici",
+      "Vous décidez, et il repart avec votre réponse",
     ],
   },
   {
     href: "/app/ai/proposals",
-    comoChamar: "As ideias dele",
-    porQue: "Com o tempo ele sugere as próprias melhorias — e você decide se entram.",
+    comoChamar: "Ses idées",
+    porQue: "Avec le temps, il propose ses propres améliorations — et vous décidez si elles s’appliquent.",
     // `apply-proposal.ts`: nada auto-aplica. O clique de aplicar é o gate humano,
     // e o que ele faz é criar uma versão NOVA do agente — a publicada não muda
     // até o ponteiro virar.
     comoFunciona: [
-      "Ele acompanha os próprios atendimentos e percebe o que poderia ir melhor",
-      "Escreve a sugestão aqui, em português, e espera",
-      "Nada muda sozinho: só entra em vigor quando VOCÊ aprovar",
+      "Il suit ses propres conversations et repère ce qui pourrait aller mieux",
+      "Il écrit sa suggestion ici, en français, et attend",
+      "Rien ne change tout seul : ça ne s’applique que quand VOUS approuvez",
     ],
   },
 ];

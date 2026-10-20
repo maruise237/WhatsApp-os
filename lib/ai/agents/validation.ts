@@ -108,7 +108,7 @@ const versionShapeSchema = z
     handoff_keywords: z
       .array(z.string().trim().min(1).max(60))
       .max(20)
-      .default(["falar com humano", "atendente", "pessoa real"]),
+      .default(["parler à un humain", "conseiller", "vraie personne"]),
     handoff_tool_enabled: z.boolean().default(true),
     cases_enabled: z.boolean().default(false),
     // Onda 4 — quebra a resposta em bolhas curtas (splitIntoBubbles) espaçadas

@@ -59,7 +59,7 @@ export async function GET(
   if (cursorRaw) {
     cursor = decodeCursor(cursorRaw);
     if (!cursor) {
-      return fail("invalid_cursor", "Cursor inválido.", 400, { requestId });
+      return fail("invalid_cursor", "Curseur invalide.", 400, { requestId });
     }
   }
 
@@ -70,7 +70,7 @@ export async function GET(
     .eq("id", contactId)
     .maybeSingle();
   if (cErr) return fail("internal_error", cErr.message, 500, { requestId });
-  if (!contactRow) return fail("not_found", "Contato não encontrado.", 404, { requestId });
+  if (!contactRow) return fail("not_found", "Contact introuvable.", 404, { requestId });
 
   // Resolve owned lead ids first.
   const { data: leadRows, error: lErr } = await supabase

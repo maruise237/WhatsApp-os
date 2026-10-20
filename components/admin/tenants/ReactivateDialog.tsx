@@ -46,7 +46,7 @@ export function ReactivateDialog({ open, onClose, organizationId }: ReactivateDi
   function handleConfirm() {
     const parsed = reasonSchema.safeParse(reason);
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Razão inválida");
+      setError(parsed.error.issues[0]?.message ?? "Motif invalide");
       return;
     }
     reactivate.mutate(
@@ -71,23 +71,22 @@ export function ReactivateDialog({ open, onClose, organizationId }: ReactivateDi
     <AlertDialog open={open} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Reativar tenant</AlertDialogTitle>
+          <AlertDialogTitle>Réactiver l’organisation</AlertDialogTitle>
           <AlertDialogDescription>
-            A reativação restabelece o acesso dos usuários deste tenant à plataforma.
-            Informe o motivo da reativação para o registro de auditoria.
+            La réactivation rétablit l’accès des utilisateurs de cette organisation à la plateforme. Indiquez le motif de la réactivation pour le journal d’audit.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="space-y-2 py-2">
           <Label htmlFor="reactivate-reason">
-            Motivo da reativação{" "}
+            Motif de la réactivation{" "}
             <span className="text-muted-foreground text-xs font-normal">
               ({reason.length}/500)
             </span>
           </Label>
           <Textarea
             id="reactivate-reason"
-            placeholder="Descreva o motivo da reativação (mínimo 10 caracteres)..."
+            placeholder="Décrivez le motif de la réactivation (10 caractères minimum)..."
             value={reason}
             onChange={(e) => {
               setReason(e.target.value);
@@ -105,13 +104,13 @@ export function ReactivateDialog({ open, onClose, organizationId }: ReactivateDi
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleClose}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel onClick={handleClose}>Annuler</AlertDialogCancel>
           <Button
             variant="default"
             onClick={handleConfirm}
             disabled={!isValid || reactivate.isPending}
           >
-            {reactivate.isPending ? "Reativando..." : "Confirmar reativação"}
+            {reactivate.isPending ? "Reativando..." : "Confirmer la réactivation"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

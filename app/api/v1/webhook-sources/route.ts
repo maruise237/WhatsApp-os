@@ -64,7 +64,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   const parsed = createWebhookSourceSchema.safeParse(raw);
   if (!parsed.success) {
-    return fail("invalid_request", "Dados inválidos.", 400, {
+    return fail("invalid_request", "Données invalides.", 400, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (secretEncrypted === null) {
       return fail(
         "encryption_unavailable",
-        "Não foi possível guardar o segredo com segurança. Configure NUVEMSHOP_OAUTH_ENCRYPTION_KEY (chave de cifra do banco) e tente de novo — ou crie a fonte sem segredo.",
+        "Impossible de conserver le secret en toute sécurité. Configurez NUVEMSHOP_OAUTH_ENCRYPTION_KEY (clé de chiffrement de la base) et réessayez — ou créez la source sans secret.",
         422,
         { requestId },
       );

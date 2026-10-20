@@ -30,7 +30,7 @@ export async function GET(_req: Request, ctx: RouteCtx): Promise<Response> {
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (sourceErr) return fail("internal_error", sourceErr.message, 500, { requestId });
-  if (!source) return fail("not_found", "Fonte não encontrada.", 404, { requestId });
+  if (!source) return fail("not_found", "Source introuvable.", 404, { requestId });
 
   const { data, error } = await supabase
     .from("webhook_events_log")

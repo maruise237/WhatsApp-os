@@ -14609,6 +14609,61 @@ begin
   end if;
 end $$;
 
+-- ---- Tableau par défaut en français pour les nouvelles organisations (migration 0181) ----
+-- Noms seulement ; slugs inchangés ; tableaux existants non renommés.
+create or replace function public.fn_seed_default_pipeline_for_org() returns trigger
+  language plpgsql
+  set search_path to 'public', 'pg_temp'
+  as $$
+declare
+  v_pipeline_id uuid;
+  v_position numeric := 1000;
+  r record;
+begin
+  insert into public.crm_pipelines (organization_id, name, slug, is_default, position)
+  values (new.id, 'Commandes', 'pedidos', true, 1000)
+  returning id into v_pipeline_id;
+
+  for r in
+    select * from (values
+      ('Panier abandonné',   'carrinho_abandonado',  false, false),
+      ('Paiement attendu',   'aguardando_pagamento', false, false),
+      ('Payée',              'pago',                 true,  false),
+      ('En préparation',     'em_separacao',         false, false),
+      ('Expédiée',           'enviado',              false, false),
+      ('Livrée',             'entregue',             false, false),
+      ('Après-vente',        'pos_venda',            false, false),
+      ('Annulée',            'cancelado',            false, true)
+    ) as t(stage_name, stage_slug, won, lost)
+  loop
+    insert into public.crm_stages (organization_id, pipeline_id, name, slug, position, is_won, is_lost)
+    values (new.id, v_pipeline_id, r.stage_name, r.stage_slug, v_position, r.won, r.lost);
+    v_position := v_position + 1000;
+  end loop;
+
+  return new;
+end$$;
+
+-- ---- Une commande payée peut partir en livraison (migration 0182) ----
+-- Équivalence status/paid_at remplacée par deux implications ; voir la migration.
+alter table public.sales_orders drop constraint if exists sales_orders_check;
+alter table public.sales_orders drop constraint if exists sales_orders_check1;
+
+alter table public.sales_orders drop constraint if exists sales_orders_payee_a_un_auteur;
+alter table public.sales_orders add constraint sales_orders_payee_a_un_auteur
+  check (status <> 'payée' or (paid_at is not null and paid_by_user_id is not null));
+
+alter table public.sales_orders drop constraint if exists sales_orders_paiement_seulement_si_payee;
+alter table public.sales_orders add constraint sales_orders_paiement_seulement_si_payee
+  check (paid_at is null or status in ('payée', 'a_livrer', 'livree'));
+
+
+-- ---- Mots-clés de passage à un humain en français (migration 0183) ----
+-- Seul le défaut change ; les versions existantes gardent leurs mots-clés.
+alter table public.ai_agent_versions
+  alter column handoff_keywords
+  set default array['parler à un humain', 'conseiller', 'vraie personne']::text[];
+
 -- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 --
 -- ⚠️ ESTE BLOCO É, DE PROPÓSITO, O ÚLTIMO DO ARQUIVO. Apêndice novo entra ANTES

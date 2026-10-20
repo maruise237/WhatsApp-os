@@ -128,8 +128,8 @@ export function conflitoDoBanco(
   if (erro?.code !== "23505") return null;
   return fail(
     "state_conflict",
-    `«${nomeDoFunil}» mudou enquanto você editava — outro funil já ocupa esse nome ou o lugar de padrão. ` +
-      `Recarregue a página e tente de novo.`,
+    `« ${nomeDoFunil} » a changé pendant votre modification — un autre tableau porte déjà ce nom ou est déjà le tableau par défaut. ` +
+      `Rechargez la page et réessayez.`,
     409,
     { requestId },
   );

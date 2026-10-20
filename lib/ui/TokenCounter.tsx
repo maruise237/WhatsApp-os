@@ -42,10 +42,10 @@ export function TokenCounter({ text, contextWindow, className }: Props) {
 
   return (
     <span className={`${tone} ${className ?? ""}`} aria-live="polite">
-      ~{count.toLocaleString("pt-BR")} tokens
-      {contextWindow ? ` / ${contextWindow.toLocaleString("pt-BR")}` : ""}
-      {warn && !danger ? " · próximo do limite" : ""}
-      {danger ? " · acima do limite" : ""}
+      ~{count.toLocaleString("fr-FR")} tokens
+      {contextWindow ? ` / ${contextWindow.toLocaleString("fr-FR")}` : ""}
+      {warn && !danger ? " · proche de la limite" : ""}
+      {danger ? " · au-dessus de la limite" : ""}
     </span>
   );
 }

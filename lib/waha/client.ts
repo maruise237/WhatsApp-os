@@ -458,10 +458,10 @@ export class WahaClient {
 export function wahaFriendlyError(erro: unknown): string {
   const falha = classificarFalhaDeAlcance(erro);
   if (falha !== "indeterminada") {
-    return explicarFalhaDeAlcance(falha, "o WhatsApp (WAHA)");
+    return explicarFalhaDeAlcance(falha, "WhatsApp (WAHA)");
   }
   const msg = erro instanceof Error ? erro.message : String(erro ?? "unknown");
-  return `Falha na comunicação com o WhatsApp (WAHA): ${msg}`;
+  return `Échec de communication avec WhatsApp (WAHA) : ${msg}`;
 }
 
 /**

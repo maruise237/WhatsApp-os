@@ -28,9 +28,9 @@ export function StatusToast() {
     handled.current = true;
 
     if (ok) {
-      toast.success("Nuvemshop conectada com sucesso.");
+      toast.success("Nuvemshop connectée avec succès.");
     } else if (error) {
-      toast.error(ERROR_MESSAGES[error] ?? `Erro: ${error}`);
+      toast.error(ERROR_MESSAGES[error] ?? `Erreur : ${error}`);
     }
 
     // Strip the query params so reload doesn't replay the toast.

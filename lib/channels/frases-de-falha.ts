@@ -20,21 +20,21 @@
 const FRASES: Record<string, string> = {
   // Sessão do canal fora de WORKING — o número está desconectado.
   channel_session_not_working:
-    "O número escolhido não está conectado no momento. Reconecte em Conexões — a mensagem sai sozinha quando ele voltar.",
+    "Le numéro choisi n’est pas connecté pour le moment. Reconnectez-le dans Connexions — le message partira tout seul à son retour.",
   // Credencial do transporte ausente no ambiente da instalação.
-  waha_not_configured: "A conexão de WhatsApp ainda não foi configurada nesta instalação.",
-  meta_not_configured: "A conexão de WhatsApp ainda não foi configurada nesta instalação.",
-  zernio_not_configured: "A conexão de WhatsApp ainda não foi configurada nesta instalação.",
+  waha_not_configured: "La connexion WhatsApp n’est pas encore configurée sur cette installation.",
+  meta_not_configured: "La connexion WhatsApp n’est pas encore configurée sur cette installation.",
+  zernio_not_configured: "La connexion WhatsApp n’est pas encore configurée sur cette installation.",
   // Canal excluído da Central de Conexões (migration 0106).
   channel_archived:
-    "Esse número foi excluído da Central de Conexões. Escolha outro número nesta automação.",
-  missing_phone_number: "O contato não tem telefone para receber a mensagem.",
+    "Ce numéro a été supprimé des Connexions. Choisissez un autre numéro dans cette automatisation.",
+  missing_phone_number: "Le contact n’a pas de numéro de téléphone pour recevoir le message.",
   // O transporte não respondeu, ou respondeu erro.
-  waha_error: "Não conseguimos falar com o serviço de WhatsApp. Confira se ele está no ar.",
-  meta_error: "O WhatsApp Oficial recusou o envio. Confira a conexão em Conexões.",
-  zernio_error: "O canal recusou o envio. Confira a conexão em Conexões.",
+  waha_error: "Impossible de joindre le service WhatsApp. Vérifiez qu’il est en ligne.",
+  meta_error: "WhatsApp officiel a refusé l’envoi. Vérifiez la connexion dans Connexions.",
+  zernio_error: "Le canal a refusé l’envoi. Vérifiez la connexion dans Connexions.",
   // Falha do NOSSO Storage ao preparar a mídia — não é do canal.
-  storage_sign_failed: "Não conseguimos preparar o arquivo para envio.",
+  storage_sign_failed: "Impossible de préparer le fichier pour l’envoi.",
 };
 
 /**

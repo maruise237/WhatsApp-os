@@ -38,8 +38,8 @@ interface Proposta {
 
 const NOME_DO_CAMPO: Record<string, string> = {
   email: "E-mail",
-  name: "Nome",
-  phone_number: "Telefone",
+  name: "Nom",
+  phone_number: "Téléphone",
 };
 
 interface Props {

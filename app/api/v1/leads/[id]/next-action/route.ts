@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
-    return fail("validation_failed", "Corpo inválido.", 422, {
+    return fail("validation_failed", "Corps de requête invalide.", 422, {
       requestId,
       details: { issues: parsed.error.issues },
     });
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .eq("id", leadId)
     .maybeSingle();
   if (leadErr) return fail("internal_error", leadErr.message, 500, { requestId });
-  if (!lead) return fail("not_found", "Lead não encontrado.", 404, { requestId });
+  if (!lead) return fail("not_found", "Client introuvable.", 404, { requestId });
 
   const row = lead as {
     id: string;
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!row.contact_id) {
     return fail(
       "next_action_absent",
-      "Este negócio não tem contato, então não há proposta do agente.",
+      "Cette affaire n’a pas de contact, il n’y a donc pas de proposition de l’assistant.",
       409,
       { requestId },
     );
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const linha = estado as { next_action: string | null; next_action_seq: number } | null;
   const atual = linha?.next_action?.trim() ?? null;
   if (!atual) {
-    return fail("next_action_absent", "Não há proposta pendente para este negócio.", 409, {
+    return fail("next_action_absent", "Aucune proposition en attente pour cette affaire.", 409, {
       requestId,
     });
   }
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     // identidade e não texto é o que pega a reescrita com as mesmas palavras.
     return fail(
       "next_action_changed",
-      "A proposta mudou desde que você a leu. Confira a nova antes de decidir.",
+      "La proposition a changé depuis que vous l’avez lue. Consultez la nouvelle avant de décider.",
       409,
       { requestId, details: { current_text: atual, current_seq: linha!.next_action_seq } },
     );

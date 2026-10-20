@@ -39,8 +39,8 @@ describe("SnoozeButton", () => {
 
     render(wrap(<SnoozeButton conversationId="conv-1" snoozeUntil={null} />));
 
-    openTrigger(screen.getByRole("button", { name: /lembrar/i }));
-    fireEvent.click(await screen.findByText("Em 3 horas"));
+    openTrigger(screen.getByRole("button", { name: /^rappeler/i }));
+    fireEvent.click(await screen.findByText("Dans 3 heures"));
 
     await waitFor(() =>
       expect(postMock).toHaveBeenCalledWith("/api/v1/conversations/conv-1/snooze", {
@@ -55,9 +55,9 @@ describe("SnoozeButton", () => {
 
     render(wrap(<SnoozeButton conversationId="conv-1" snoozeUntil={futureIso} />));
 
-    expect(screen.getByRole("button", { name: /lembrete ativo/i })).toBeInTheDocument();
-    openTrigger(screen.getByRole("button", { name: /lembrete ativo/i }));
-    fireEvent.click(await screen.findByText("Cancelar lembrete"));
+    expect(screen.getByRole("button", { name: /rappel actif/i })).toBeInTheDocument();
+    openTrigger(screen.getByRole("button", { name: /rappel actif/i }));
+    fireEvent.click(await screen.findByText("Annuler le rappel"));
 
     await waitFor(() =>
       expect(deleteMock).toHaveBeenCalledWith("/api/v1/conversations/conv-1/snooze"),
@@ -66,15 +66,15 @@ describe("SnoozeButton", () => {
 
   it("disabled prop desabilita o botão", () => {
     render(wrap(<SnoozeButton conversationId="conv-1" snoozeUntil={null} disabled />));
-    expect(screen.getByRole("button", { name: /lembrar/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /^rappeler/i })).toBeDisabled();
   });
 
   it("erro na mutation chama showApiError", async () => {
     postMock.mockRejectedValue(new Error("falhou"));
 
     render(wrap(<SnoozeButton conversationId="conv-1" snoozeUntil={null} />));
-    openTrigger(screen.getByRole("button", { name: /lembrar/i }));
-    fireEvent.click(await screen.findByText("Em 1 hora"));
+    openTrigger(screen.getByRole("button", { name: /^rappeler/i }));
+    fireEvent.click(await screen.findByText("Dans 1 heure"));
 
     await waitFor(() => expect(showApiErrorMock).toHaveBeenCalled());
   });

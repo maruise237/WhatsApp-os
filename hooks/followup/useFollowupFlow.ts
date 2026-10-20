@@ -115,7 +115,7 @@ export function useRollbackFollowupFlow(id: string) {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: followupFlowQueryKey(id) });
-      toast.success("Fluxo revertido para a versão anterior.");
+      toast.success("Flux rétabli à la version précédente.");
     },
     onError: (err) => showApiError(err),
   });
@@ -154,7 +154,7 @@ export function useUpdateHandoffPolicy(id: string) {
       qc.setQueryData<FollowupFlowDetailRow>(followupFlowQueryKey(id), (prev) =>
         prev ? { ...prev, ...updated } : prev,
       );
-      toast.success("Política de handoff atualizada.");
+      toast.success("Politique de transfert mise à jour.");
     },
     onError: (err) => showApiError(err),
   });

@@ -8,17 +8,17 @@ interface Props {
 }
 
 const BINDINGS: { keys: string; description: string }[] = [
-  { keys: "j", description: "Próxima conversa" },
-  { keys: "k", description: "Conversa anterior" },
+  { keys: "j", description: "Conversation suivante" },
+  { keys: "k", description: "Conversation précédente" },
   { keys: "r", description: "Focar resposta" },
   // O atalho mais usado do inbox não estava aqui — vivia só no placeholder do
   // composer, que some no instante em que você começa a escrever, ou seja,
   // exatamente quando ia precisar dele para quebrar linha.
-  { keys: "Enter", description: "Enviar a mensagem" },
-  { keys: "Shift + Enter", description: "Quebrar linha sem enviar" },
-  { keys: "a", description: "Assumir conversa" },
-  { keys: "e", description: "Fechar conversa" },
-  { keys: "?", description: "Mostrar atalhos" },
+  { keys: "Enter", description: "Envoyer le message" },
+  { keys: "Shift + Enter", description: "Aller à la ligne sans envoyer" },
+  { keys: "a", description: "Prendre la conversation" },
+  { keys: "e", description: "Clôturer la conversation" },
+  { keys: "?", description: "Afficher les raccourcis" },
 ];
 
 export function ShortcutsHelpDialog({ open, onOpenChange }: Props) {

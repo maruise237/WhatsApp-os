@@ -97,7 +97,7 @@ async function handle(req: NextRequest): Promise<Response> {
         organization_id: c.organization_id,
         kind: "snooze_expired",
         severity: "warn",
-        title: "Lead não respondeu no prazo",
+        title: "Le client n’a pas répondu dans le délai",
         ref_kind: "conversation",
         ref_id: c.id,
       });

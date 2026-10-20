@@ -105,11 +105,11 @@ export function formatarRestante(ms: number): string {
  */
 export function formatarDecorrido(ms: number): string {
   const min = Math.floor(ms / 60_000);
-  if (min < 1) return "agora mesmo";
+  if (min < 1) return "à l’instant";
   if (min < 60) return `${min}m`;
   const h = Math.floor(min / 60);
   if (h < 24) return `${h}h`;
-  return `${Math.floor(h / 24)}d`;
+  return `${Math.floor(h / 24)} j`;
 }
 
 /**

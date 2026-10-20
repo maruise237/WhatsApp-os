@@ -22,8 +22,8 @@ export function ConnectNuvemshopClient() {
   return (
     <div className="space-y-4 rounded-lg border bg-background p-6">
       <p className="text-sm">
-        Ao clicar em <strong>Conectar</strong>, você será redirecionado para autorizar o
-        {marca.name} na sua conta Nuvemshop.
+        En cliquant sur <strong>Connecter</strong>, vous serez redirigé pour autoriser
+        {marca.name} sur votre compte Nuvemshop.
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -35,17 +35,17 @@ export function ConnectNuvemshopClient() {
               const res = await connectNuvemshop();
               if (res && !res.ok) {
                 if (res.error === "not_configured") {
-                  toast.message("Nuvemshop ainda não configurado neste ambiente.", {
-                    description: "Pule por enquanto e configure depois em Integrações.",
+                  toast.message("Nuvemshop n’est pas encore configuré dans cet environnement.", {
+                    description: "Passez cette étape pour l’instant et configurez-la plus tard dans Intégrations.",
                   });
                 } else {
-                  toast.error(`Erro: ${res.error}`);
+                  toast.error(`Erreur : ${res.error}`);
                 }
               }
             })
           }
         >
-          Conectar
+          Connecter
         </Button>
         <Button
           type="button"
@@ -53,7 +53,7 @@ export function ConnectNuvemshopClient() {
           disabled={pending}
           onClick={() => startTransition(() => void markNuvemshopConfigured())}
         >
-          Já conectei
+          C’est connecté
         </Button>
         <Button
           type="button"
@@ -61,7 +61,7 @@ export function ConnectNuvemshopClient() {
           disabled={pending}
           onClick={() => startTransition(() => void skipNuvemshop())}
         >
-          Pular por enquanto
+          Passer pour l’instant
         </Button>
       </div>
     </div>

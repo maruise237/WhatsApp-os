@@ -155,7 +155,7 @@ export function vetosPorExecucao(e: AtritoRaw["empresa"]): number | null {
   return razao(e.vetos, e.execucoes_medidas);
 }
 
-const ESCOPO_PARCIAL = "Sobre as demandas encerradas no período.";
+const ESCOPO_PARCIAL = "Sur les demandes clôturées pendant la période.";
 
 export function montarPares(raw: AtritoRaw): Par[] {
   const { cliente, empresa, eficiencia, escopo } = raw;
@@ -163,27 +163,27 @@ export function montarPares(raw: AtritoRaw): Par[] {
   return [
     {
       chave: "conversao",
-      titulo: "Conversão",
+      titulo: "Conversion",
       eficiencia: {
         chave: "ganhos",
-        rotulo: "Negócios ganhos",
+        rotulo: "Affaires gagnées",
         valor: eficiencia.ganhos,
         unidade: "contagem",
       },
       danos: [
         {
           chave: "turnos_p50",
-          rotulo: "Turnos até o desfecho (mediana)",
+          rotulo: "Échanges jusqu’à l’issue (médiane)",
           valor: cliente.turnos_p50,
           unidade: "media",
           nota: ESCOPO_PARCIAL,
         },
         {
           chave: "insistencia_media",
-          rotulo: "Insistência do agente (média de retornos)",
+          rotulo: "Insistance de l’assistant (moyenne de relances)",
           valor: cliente.insistencia_media,
           unidade: "media",
-          nota: `Quantas vezes o agente voltou ao cliente por conta própria. Medido sobre as ${escopo.demandas_com_caso} demandas que passaram por atendimento humano.`,
+          nota: `Combien de fois l’assistant a relancé le client de lui-même. Mesuré sur les ${escopo.demandas_com_caso} demandes passées par une personne.`,
         },
         // O MÁXIMO ao lado da média, e não no lugar dela. A spec 17 nasceu do
         // agente que insiste seis vezes: numa base de 40 demandas, seis retornos
@@ -192,17 +192,17 @@ export function montarPares(raw: AtritoRaw): Par[] {
         // exibição — o sistema mediria o dano e a tela o esconderia.
         {
           chave: "insistencia_max",
-          rotulo: "Insistência no pior caso",
+          rotulo: "Insistance dans le pire cas",
           valor: cliente.insistencia_max,
           unidade: "contagem",
-          nota: "O cliente que mais recebeu retornos. A média esconde o exagero pontual.",
+          nota: "Le client qui a reçu le plus de relances. La moyenne cache les excès ponctuels.",
         },
         {
           chave: "descadastros",
-          rotulo: "Descadastros no período",
+          rotulo: "Désinscriptions sur la période",
           valor: cliente.descadastros,
           unidade: "contagem",
-          nota: "Atrito máximo: a pessoa pediu para sair.",
+          nota: "Friction maximale : la personne a demandé à partir.",
         },
         // ABANDONO é irmão do descadastro e muito mais comum: em vez de pedir
         // para sair, a pessoa simplesmente para de responder. Não gera ticket,
@@ -210,54 +210,54 @@ export function montarPares(raw: AtritoRaw): Par[] {
         // mais acontece. A régua vem do payload para o rótulo não mentir.
         {
           chave: "taxa_de_abandono",
-          rotulo: `Conversas que morreram no silêncio (após ${escopo.abandono_horas}h)`,
+          rotulo: `Conversations mortes dans le silence (après ${escopo.abandono_horas} h)`,
           valor: taxaDeAbandono(cliente),
           unidade: "razao",
-          nota: `${cliente.abandonos} de ${cliente.conversas_com_fala_nossa} conversas em que falamos: a pessoa não respondeu e ninguém encerrou.`,
+          nota: `${cliente.abandonos} sur ${cliente.conversas_com_fala_nossa} conversations où nous avons écrit : la personne n’a pas répondu et personne n’a clôturé.`,
         },
       ],
     },
     {
       chave: "automacao",
-      titulo: "Automação",
+      titulo: "Automatisation",
       eficiencia: {
         chave: "taxa_automacao",
-        rotulo: "Respostas dadas pelo agente",
+        rotulo: "Réponses données par l’assistant",
         valor: taxaDeAutomacao(empresa),
         unidade: "razao",
       },
       danos: [
         {
           chave: "pedidos_de_humano",
-          rotulo: "Passagens para humano",
+          rotulo: "Passages à une personne",
           valor: cliente.pedidos_de_humano,
           unidade: "contagem",
-          nota: "Confiança perdida na automação.",
+          nota: "Confiance perdue dans l’automatisation.",
         },
         {
           chave: "taxa_de_contorno",
-          rotulo: "Respostas humanas fora do sistema",
+          rotulo: "Réponses de l’équipe hors de l’application",
           valor: taxaDeContorno(empresa),
           unidade: "razao",
-          nota: "O time respondeu pelo celular, contornando a ferramenta.",
+          nota: "L’équipe a répondu depuis son téléphone, en contournant l’outil.",
         },
         // O agente respondeu — e a pessoa teve de perguntar de novo. É o dano
         // direto da automação: responder não é resolver.
         {
           chave: "taxa_de_repergunta",
-          rotulo: "Perguntas que a pessoa teve de repetir",
+          rotulo: "Questions que la personne a dû répéter",
           valor: taxaDeRepergunta(cliente),
           unidade: "razao",
-          nota: `Piso: ${cliente.reperguntas} de ${cliente.perguntas_com_resposta}. Conta só a repergunta quase literal — reformulada com outras palavras escapa desta medida.`,
+          nota: `Minimum : ${cliente.reperguntas} sur ${cliente.perguntas_com_resposta}. Ne compte que les questions répétées presque mot pour mot — reformulées autrement, elles échappent à cette mesure.`,
         },
       ],
     },
     {
       chave: "custo_humano",
-      titulo: "Custo humano",
+      titulo: "Coût humain",
       eficiencia: {
         chave: "demandas",
-        rotulo: "Demandas encerradas",
+        rotulo: "Demandes clôturées",
         valor: escopo.demandas,
         unidade: "contagem",
         nota: ESCOPO_PARCIAL,
@@ -265,19 +265,19 @@ export function montarPares(raw: AtritoRaw): Par[] {
       danos: [
         {
           chave: "intervencoes_por_demanda",
-          rotulo: "Intervenções humanas por demanda",
+          rotulo: "Interventions humaines par demande",
           valor: empresa.intervencoes_por_demanda,
           unidade: "media",
         },
         {
           chave: "espera_humana_p50_s",
-          rotulo: "Espera na fila humana (mediana)",
+          rotulo: "Attente dans la file humaine (médiane)",
           valor: empresa.espera_humana_p50_s,
           unidade: "segundos",
         },
         {
           chave: "espera_humana_p90_s",
-          rotulo: "Espera na fila humana (p90)",
+          rotulo: "Attente dans la file humaine (p90)",
           valor: empresa.espera_humana_p90_s,
           unidade: "segundos",
           // Mediana e p90 iguais denunciam base pequena, não uma fila homogênea.
@@ -285,22 +285,22 @@ export function montarPares(raw: AtritoRaw): Par[] {
           nota:
             empresa.espera_humana_p50_s !== null &&
             empresa.espera_humana_p50_s === empresa.espera_humana_p90_s
-              ? "Igual à mediana: há poucas esperas medidas no período para os dois se separarem."
-              : "O p90 é a experiência de quem espera mais — a mediana a esconde.",
+              ? "Égale à la médiane : trop peu d’attentes mesurées sur la période pour que les deux se distinguent."
+              : "Le p90 reflète ceux qui attendent le plus — la médiane le cache.",
         },
         // O INVARIANTE 4 como número: demanda aberta sem próximo passo é o
         // vazamento que a doutrina inteira combate — e vazamento que ninguém vê
         // é o pior tipo. Antes da entidade de demanda isto não era enumerável.
         {
           chave: "demandas_sem_proximo_passo",
-          rotulo: "Demandas abertas sem próximo passo",
+          rotulo: "Demandes ouvertes sans suite prévue",
           valor: empresa.demandas_sem_proximo_passo,
           unidade: "contagem",
-          nota: `De ${escopo.demandas_abertas} abertas agora. Cada uma é alguém esperando sem que nada esteja marcado para acontecer.`,
+          nota: `Sur ${escopo.demandas_abertas} ouvertes actuellement. Chacune est une personne qui attend sans que rien ne soit prévu.`,
         },
         {
           chave: "retrabalho",
-          rotulo: "Demandas que precisaram subir de nível",
+          rotulo: "Demandes qui ont dû être escaladées",
           valor: empresa.retrabalho,
           unidade: "contagem",
         },
@@ -308,29 +308,29 @@ export function montarPares(raw: AtritoRaw): Par[] {
         // calada: a pessoa falou e ficou sem nenhuma palavra nossa.
         {
           chave: "taxa_de_espera_calada",
-          rotulo: `Esperas sem nenhuma resposta por mais de ${escopo.espera_horas}h`,
+          rotulo: `Attentes sans aucune réponse pendant plus de ${escopo.espera_horas} h`,
           valor: taxaDeEsperaCalada(cliente),
           unidade: "razao",
-          nota: `${cliente.esperas_caladas} de ${cliente.esperas_medidas} falas do cliente. Quem sabe que vai esperar, espera; quem não sabe, desiste.`,
+          nota: `${cliente.esperas_caladas} sur ${cliente.esperas_medidas} messages du client. Qui sait qu’il va attendre, attend ; qui ne le sait pas, abandonne.`,
         },
       ],
     },
     {
       chave: "contencao",
-      titulo: "Contenção",
+      titulo: "Retenue",
       eficiencia: {
         chave: "envios_por_ia",
-        rotulo: "Mensagens enviadas pelo agente",
+        rotulo: "Messages envoyés par l’assistant",
         valor: empresa.envios_por_ia,
         unidade: "contagem",
       },
       danos: [
         {
           chave: "vetos_por_execucao",
-          rotulo: "Vetos por execução",
+          rotulo: "Blocages par exécution",
           valor: vetosPorExecucao(empresa),
           unidade: "media",
-          nota: "Quanto o sistema precisou ser contido de si mesmo antes de falar.",
+          nota: "À quel point l’application a dû se retenir elle-même avant de parler.",
         },
       ],
     },

@@ -46,7 +46,7 @@ const COLUNAS =
 
 function semConfig(linha: Record<string, unknown>): RegraVisivel {
   const acoes = Array.isArray(linha.actions)
-    ? (linha.actions as Array<{ type?: unknown }>).map((a) => String(a?.type ?? "desconhecida"))
+    ? (linha.actions as Array<{ type?: unknown }>).map((a) => String(a?.type ?? "inconnue"))
     : [];
   const condicoes = Array.isArray(linha.conditions) ? linha.conditions.length : 0;
   return {
@@ -91,7 +91,7 @@ async function regraDaOrg(
     .maybeSingle();
   if (error) throw new ApiError(500, "internal_error", undefined, deps.requestId, error.message);
   if (!data) {
-    throw new ApiError(404, "not_found", undefined, deps.requestId, "Essa regra não existe aqui.");
+    throw new ApiError(404, "not_found", undefined, deps.requestId, "Cette règle n’existe pas ici.");
   }
   return data as unknown as { id: string; name: string; is_active: boolean };
 }
@@ -190,8 +190,8 @@ export async function execucoesDasRegras(
       falhas: resultados
         .filter((a) => a?.status === "failed")
         .map((a) => ({
-          acao: String(a?.type ?? "desconhecida"),
-          erro: String(a?.error ?? r.error ?? "sem detalhe"),
+          acao: String(a?.type ?? "inconnue"),
+          erro: String(a?.error ?? r.error ?? "sans détail"),
         })),
     };
   });

@@ -126,23 +126,23 @@ export type ResultadoDaProposta =
 export function validarProposta(p: PropostaDeFunil): ResultadoDaProposta {
   const erros: string[] = [];
 
-  if (!p.nome) erros.push("O quadro precisa de um nome.");
+  if (!p.nome) erros.push("Le tableau doit avoir un nom.");
 
   if (p.etapas.length < MIN_ETAPAS) {
     erros.push(
-      `Um quadro com ${p.etapas.length} ${p.etapas.length === 1 ? "coluna" : "colunas"} não conta a história de uma venda — o mínimo é ${MIN_ETAPAS}.`,
+      `Un tableau de ${p.etapas.length} ${p.etapas.length === 1 ? "colonne" : "colonnes"} ne raconte pas l’histoire d’une vente — le minimum est de ${MIN_ETAPAS}.`,
     );
   }
 
   // Sem etapa de ganho, `/leads/[id]/win` responde 422 `pipeline_no_won_stage` e
   // nenhum negócio deste tenant consegue ser fechado.
   if (!p.etapas.some((e) => e.passo === "won")) {
-    erros.push("Falta a coluna onde o negócio é fechado.");
+    erros.push("Il manque la colonne où la vente est conclue.");
   }
   // Sem etapa de perda, o funcionário não tem para onde mandar quem desistiu — e
   // o card fica para sempre numa coluna do meio, inflando o quadro.
   if (!p.etapas.some((e) => e.passo === "lost")) {
-    erros.push("Falta a coluna de quem não fechou.");
+    erros.push("Il manque la colonne des ventes perdues.");
   }
 
   return erros.length === 0 ? { ok: true, proposta: p } : { ok: false, erros };

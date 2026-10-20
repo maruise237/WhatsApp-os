@@ -39,7 +39,7 @@ export async function GET(): Promise<Response> {
     });
     return ok(pipelines, { requestId });
   } catch {
-    return fail("internal_error", "Falha ao listar funis.", 500, { requestId });
+    return fail("internal_error", "Impossible de charger les tableaux.", 500, { requestId });
   }
 }
 
@@ -75,12 +75,12 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     json = await req.json();
   } catch {
-    return fail("invalid_request", "Corpo não é JSON válido.", 400, { requestId });
+    return fail("invalid_request", "Le corps de la requête n’est pas un JSON valide.", 400, { requestId });
   }
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return fail("unprocessable_entity", "Dê um nome ao funil — é o que aparece na lista.", 422, {
+    return fail("unprocessable_entity", "Donnez un nom au tableau — c’est ce qui s’affiche dans la liste.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -150,7 +150,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       .eq("organization_id", orgId);
     return fail(
       "internal_error",
-      `Não consegui criar as etapas de «${name}». Nada foi salvo — tente de novo.`,
+      `Impossible de créer les étapes de « ${name} ». Rien n’a été enregistré — réessayez.`,
       500,
       { requestId, details: { erro: etapasErr.message } },
     );

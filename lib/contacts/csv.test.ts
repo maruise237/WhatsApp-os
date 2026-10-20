@@ -78,7 +78,7 @@ describe("mapHeader", () => {
 
   it("sem identificador (telefone/e-mail) falha aberto com motivo", () => {
     const { motivo } = mapHeader(["Nome", "Idade"]);
-    expect(motivo).toMatch(/sem coluna de telefone nem e-mail/);
+    expect(motivo).toMatch(/sans colonne téléphone ni e-mail/);
   });
 });
 
@@ -134,7 +134,7 @@ describe("mapLinha", () => {
 
   it("linha sem telefone e sem e-mail é pulada com motivo", () => {
     const { motivo } = mapLinha(["Só Nome", "", "", ""], indices);
-    expect(motivo).toMatch(/sem telefone nem e-mail/);
+    expect(motivo).toMatch(/sans téléphone ni e-mail/);
   });
 
   it("telefone malformado gera erro nominal da linha", () => {

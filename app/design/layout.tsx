@@ -5,7 +5,7 @@ import "./showcase.css";
 
 export const metadata: Metadata = {
   title: "Design Showcase — DeskcommCRM",
-  description: "Painel navegável de design system. Soft-tech / calmo.",
+  description: "Panneau navigable du design system. Soft-tech / calme.",
   robots: { index: false, follow: false },
 };
 

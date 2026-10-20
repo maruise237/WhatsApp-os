@@ -78,11 +78,11 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
   try {
     payload = await req.json();
   } catch {
-    return fail("invalid_request", "Body inválido.", 400, { requestId });
+    return fail("invalid_request", "Corps de requête invalide.", 400, { requestId });
   }
   const parsed = bodySchema.safeParse(payload);
   if (!parsed.success) {
-    return fail("validation_failed", "Body inválido.", 422, {
+    return fail("validation_failed", "Corps de requête invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
   try {
     pool = getRequestPool();
   } catch {
-    return fail("unavailable", "Resposta ao caso indisponível (config).", 503, { requestId });
+    return fail("unavailable", "Réponse au dossier indisponible (configuration).", 503, { requestId });
   }
 
   const { rows } = await pool.query<CaseRow>(
@@ -106,18 +106,18 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
   );
   const caseRow = rows[0];
   if (caseRow === undefined) {
-    return fail("not_found", "Caso não encontrado.", 404, { requestId });
+    return fail("not_found", "Dossier introuvable.", 404, { requestId });
   }
   if (caseRow.status !== "awaiting_human") {
     return fail(
       "invalid_state",
-      "O caso não está aguardando resposta do atendente (awaiting_human).",
+      "Ce dossier n’attend pas de réponse d’un agent (awaiting_human).",
       409,
       { requestId },
     );
   }
   if (caseRow.contact_id === null) {
-    return fail("unprocessable_entity", "Conversa do caso sem contato associado.", 422, {
+    return fail("unprocessable_entity", "La conversation de ce dossier n’a pas de contact associé.", 422, {
       requestId,
     });
   }
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
       // Corrida perdida entre a leitura e o update. O handoff já aconteceu (e é
       // idempotente), então não mentimos dizendo que escalamos: devolvemos o
       // conflito para a UI reler o caso.
-      return fail("invalid_state", "Este caso já foi respondido por outra pessoa.", 409, {
+      return fail("invalid_state", "Quelqu’un d’autre a déjà répondu à ce dossier.", 409, {
         requestId,
       });
     }
@@ -177,7 +177,7 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
       client.release();
     }
     if (!transitioned) {
-      return fail("invalid_state", "Este caso já foi respondido por outra pessoa.", 409, {
+      return fail("invalid_state", "Quelqu’un d’autre a déjà répondu à ce dossier.", 409, {
         requestId,
       });
     }

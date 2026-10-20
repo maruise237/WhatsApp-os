@@ -112,7 +112,7 @@ describe("TenantOverview — status da Nuvemshop", () => {
 
   it("tenant sem integração diz 'Não integrado' em tom neutro", () => {
     const badge = badgeNuvemshop(null);
-    expect(badge).toHaveTextContent("Não integrado");
+    expect(badge).toHaveTextContent("Non intégré");
     expect(badge.className).toBe(classeDaVariante("neutral"));
   });
 

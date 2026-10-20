@@ -22,7 +22,7 @@ import { formatCentsUSD } from "@/lib/money";
 const fmtUSD = formatCentsUSD;
 
 function fmtNum(n: number): string {
-  return n.toLocaleString("pt-BR");
+  return n.toLocaleString("fr-FR");
 }
 
 // ---------------------------------------------------------------------------
@@ -76,9 +76,9 @@ export function UsageTable({ tenants, range }: UsageTableProps) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-md border py-16 text-center text-muted-foreground">
         <ChartBar size={36} weight="duotone" className="opacity-40" aria-hidden />
-        <p className="text-sm font-medium">Nenhum tenant encontrado</p>
+        <p className="text-sm font-medium">Aucune organisation trouvée</p>
         <p className="max-w-xs text-xs opacity-70">
-          Não há dados de uso no período selecionado.
+          Aucune donnée d’utilisation sur la période sélectionnée.
         </p>
       </div>
     );
@@ -88,7 +88,7 @@ export function UsageTable({ tenants, range }: UsageTableProps) {
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-muted-foreground">
-          Uso por tenant
+          Utilisation par organisation
         </h2>
         <Button
           variant="outline"
@@ -96,7 +96,7 @@ export function UsageTable({ tenants, range }: UsageTableProps) {
           onClick={() => exportCSV(tenants, range)}
           className="gap-1.5 text-xs"
         >
-          Exportar CSV
+          Exporter en CSV
         </Button>
       </div>
 
@@ -104,12 +104,12 @@ export function UsageTable({ tenants, range }: UsageTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tenant</TableHead>
-              <TableHead className="text-right">Mensagens</TableHead>
-              <TableHead className="text-right">Conversas</TableHead>
-              <TableHead className="text-right">Invoc. AI</TableHead>
+              <TableHead>Organisation</TableHead>
+              <TableHead className="text-right">Messages</TableHead>
+              <TableHead className="text-right">Conversations</TableHead>
+              <TableHead className="text-right">Appels IA</TableHead>
               <TableHead className="text-right">Tokens</TableHead>
-              <TableHead className="text-right">Custo AI</TableHead>
+              <TableHead className="text-right">Coût IA</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

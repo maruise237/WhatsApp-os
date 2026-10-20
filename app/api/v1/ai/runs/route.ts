@@ -30,23 +30,23 @@ export const dynamic = "force-dynamic";
  */
 const O_QUE_FAZER: Record<string, string> = {
   credencial_recusada:
-    "O provedor não aceitou a chave. Confira se ela ainda é válida em Credenciais — chaves são revogadas ou expiram.",
+    "Le fournisseur n’a pas accepté la clé. Vérifiez qu’elle est toujours valide dans Identifiants — les clés peuvent être révoquées ou expirer.",
   modelo_inexistente:
-    "O modelo escolhido não existe mais nesse provedor. Escolha outro no painel de Provedores.",
+    "Le modèle choisi n’existe plus chez ce fournisseur. Choisissez-en un autre dans le panneau Fournisseurs.",
   limite_ou_saldo:
-    "O provedor recusou por limite de uso ou saldo. Verifique o faturamento na conta do provedor.",
+    "Le fournisseur a refusé pour cause de limite d’utilisation ou de solde. Vérifiez la facturation sur votre compte chez le fournisseur.",
   provedor_indisponivel:
-    "O provedor está fora do ar ou demorou demais. Costuma se resolver sozinho; se persistir, troque de provedor nesse ponto.",
+    "Le fournisseur est indisponible ou a mis trop de temps à répondre. Cela se règle généralement tout seul ; si le problème persiste, changez de fournisseur pour ce point.",
   modelo_sem_ferramentas:
-    "O modelo escolhido não sabe usar as ferramentas do CRM. Troque por um que saiba, no painel de Provedores.",
+    "Le modèle choisi ne sait pas se servir des outils du CRM. Remplacez-le par un modèle compatible dans le panneau Fournisseurs.",
   // A única linha desta tabela em que o produto parou de propósito. Ela existe
   // porque o `throw` do gate de orçamento caía FORA do `try` que grava a falha:
   // a tela que nasceu para explicar o silêncio da IA nunca mostrava o único
   // caso em que o silêncio é intencional.
   orcamento_esgotado:
-    "A IA parou porque o gasto do mês atingiu o limite que você definiu. Ajuste o limite (ou desligue a parada) em Uso de IA › Orçamento.",
+    "L’IA s’est arrêtée car les dépenses du mois ont atteint la limite que vous avez fixée. Ajustez la limite (ou désactivez l’arrêt) dans Utilisation de l’IA › Budget.",
   erro_desconhecido:
-    "Não conseguimos classificar esta falha. A mensagem original do provedor está abaixo.",
+    "Nous n’avons pas pu identifier cette erreur. Le message d’origine du fournisseur se trouve ci-dessous.",
 };
 
 interface LinhaDeExecucao {
@@ -75,9 +75,9 @@ const filtrosDaQuery = z.object({
 export async function GET(req: NextRequest): Promise<Response> {
   const user = await requireAuth();
   const org = await resolveActiveOrg(user);
-  if (!org) return fail("no_active_org", "nenhuma organização ativa", 400);
+  if (!org) return fail("no_active_org", "aucune organisation active", 400);
   if (ROLE_RANK[org.role] < ROLE_RANK.manager) {
-    return fail("forbidden", "requer papel de gerente ou superior", 403);
+    return fail("forbidden", "nécessite le rôle de manager ou supérieur", 403);
   }
 
   // Zod na query string, como a rota irmã de uso já faz. `Math.min(Number(…))`
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   // crua no corpo — resposta de servidor para um erro do cliente.
   const filtros = filtrosDaQuery.safeParse(Object.fromEntries(new URL(req.url).searchParams));
   if (!filtros.success) {
-    return fail("invalid_query", "filtros inválidos", 422, { details: filtros.error.issues });
+    return fail("invalid_query", "filtres invalides", 422, { details: filtros.error.issues });
   }
   const { purpose, status, limit: limite } = filtros.data;
 

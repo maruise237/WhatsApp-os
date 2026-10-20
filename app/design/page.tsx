@@ -23,7 +23,7 @@ const NAV: Array<{ id: SectionId; label: string }> = [
   { id: "tipografia",  label: "Tipografia" },
   { id: "densidade",   label: "Densidade" },
   { id: "componentes", label: "Componentes" },
-  { id: "padroes",     label: "Padrões" },
+  { id: "padroes",     label: "Modèles" },
   { id: "motion",      label: "Motion" },
   { id: "icones",      label: "Iconografia" },
 ];
@@ -75,7 +75,7 @@ export default function DesignShowcasePage() {
           </button>
         ))}
 
-        <div className="ds-nav-section">Sensação</div>
+        <div className="ds-nav-section">Sensation</div>
         {NAV.slice(6).map((n) => (
           <button
             key={n.id}
@@ -90,7 +90,7 @@ export default function DesignShowcasePage() {
         <div style={{ marginTop: 32, padding: 12, border: "1px solid var(--ds-border)", borderRadius: 8, fontSize: 11, color: "var(--ds-text-muted)", lineHeight: 1.55 }}>
           <div style={{ color: "var(--ds-accent)", fontFamily: "var(--ds-font-mono)", marginBottom: 6 }}>SELECIONADO</div>
           <div>Paleta · <span style={{ color: "var(--ds-text)" }}>{PALETTES[v.palette].name}</span></div>
-          <div>Tipo · <span style={{ color: "var(--ds-text)" }}>{TYPOS[v.typo].name}</span></div>
+          <div>Type · <span style={{ color: "var(--ds-text)" }}>{TYPOS[v.typo].name}</span></div>
           <div>Densidade · <span style={{ color: "var(--ds-text)" }}>{DENSITIES[v.density].label}</span></div>
           <div>Tema · <span style={{ color: "var(--ds-text)" }}>{v.theme}</span></div>
         </div>
@@ -99,19 +99,18 @@ export default function DesignShowcasePage() {
       <main className="ds-canvas">
         <div className="ds-topbar">
           <div className="ds-topbar-title">
-            Showcase de Design System
-            <small>navegue pela sidebar · troque variantes acima</small>
+            Vitrine du design system
+            <small>naviguez via la barre latérale · changez les variantes ci-dessus</small>
           </div>
           <Switcher />
         </div>
 
         <div className="ds-scroll">
           <div className="ds-banner">
-            <h1>Showcase de Design System — DeskcommCRM</h1>
+            <h1>Vitrine du design system — DeskcommCRM</h1>
             <p>
-              Use a sidebar pra navegar pelas seções. Use o switcher (canto superior direito) pra trocar
-              <strong> paleta · tipografia · densidade · tema</strong> em runtime — escolhas persistem em localStorage.
-              Quando bater o ponto certo, me diga: <em>paleta X + tipo Y + densidade Z</em>.
+              Utilisez la barre latérale pour parcourir les sections. Utilisez le sélecteur (coin supérieur droit) pour changer
+              <strong> paleta · tipografia · densidade · tema</strong> à l’exécution — les choix sont conservés dans localStorage. Quand vous trouvez le bon réglage, dites-le-moi : <em>palette X + type Y + densité Z</em>.
             </p>
           </div>
           {content}

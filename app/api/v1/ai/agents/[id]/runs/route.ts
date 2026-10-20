@@ -44,7 +44,7 @@ function decodeCursor(raw: string): CursorPayload | null {
 export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  if (!UUID_RX.test(id)) return fail("invalid_request", "id inválido.", 400, { requestId });
+  if (!UUID_RX.test(id)) return fail("invalid_request", "Identifiant invalide.", 400, { requestId });
 
   const authz = await requireRole("manager", { requestId, resource: "ai_agents" });
   if (!authz.ok) return authz.response;
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
     status: sp.get("status") ?? undefined,
   });
   if (!parsed.success) {
-    return fail("validation_failed", "Query inválida.", 422, {
+    return fail("validation_failed", "Requête invalide.", 422, {
       requestId,
       details: parsed.error.flatten(),
     });
@@ -78,7 +78,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
 
   if (q.cursor) {
     const c = decodeCursor(q.cursor);
-    if (!c) return fail("invalid_request", "cursor inválido.", 400, { requestId });
+    if (!c) return fail("invalid_request", "Curseur invalide.", 400, { requestId });
     // Tuple-aware seek: started_at < c.started_at OR (=, id < c.id).
     query = query.or(
       `started_at.lt.${c.started_at},and(started_at.eq.${c.started_at},id.lt.${c.id})`,
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
   }
 
   const { data, error } = await query;
-  if (error) return fail("internal_error", "Erro ao listar runs.", 500, { requestId });
+  if (error) return fail("internal_error", "Erreur lors du chargement des exécutions.", 500, { requestId });
 
   const rows = data ?? [];
   const hasMore = rows.length > q.limit;
