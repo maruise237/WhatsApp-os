@@ -567,10 +567,7 @@ export const DICIONARIO: Traducoes = {
     "fr-FR":
       "La validation en deux étapes de votre compte, les codes de récupération et les sessions ouvertes.",
   },
-  "Verificação em duas etapas": {
-    "fr-FR":
-      "Utilisez l’un des 10 codes enregistrés lors de la configuration de la validation en deux étapes.",
-  },
+  "Verificação em duas etapas": { "fr-FR": "Validation en deux étapes" },
   Ativada: { "fr-FR": "Activée" },
   Desativada: { "fr-FR": "Désactivée" },
   "Além da senha, o sistema pede um código de 6 dígitos que só existe no seu celular. É a proteção que segura uma senha vazada.":
