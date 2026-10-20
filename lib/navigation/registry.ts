@@ -18,12 +18,10 @@ import {
   Gauge,
   Inbox,
   Kanban,
-  Key,
   Lightbulb,
   ListChecks,
   Lock,
   Palette,
-  Plugs,
   PlugsConnected,
   PuzzlePiece,
   Receipt,
@@ -247,32 +245,6 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     section: "Montar o agente",
     minRole: "manager",
     sidebar: true,
-  },
-  {
-    href: "/app/ai/credentials",
-    label: "Credenciais",
-    description: "A chave do provedor de IA que os agentes usam para pensar.",
-    icon: Key,
-    group: "ia",
-    section: "Montar o agente",
-    minRole: "manager",
-  },
-  {
-    // O sistema chama modelo em 23 lugares e, até esta tela, a escolha vivia
-    // espalhada por três pilhas de código e sete variáveis de ambiente — não
-    // havia onde responder "quem usa IA aqui, e com qual chave?".
-    href: "/app/ai/providers",
-    label: "Provedores",
-    description: "Qual inteligência atende cada parte do sistema — e o que acontece se ela falhar.",
-    icon: Plugs,
-    group: "ia",
-    section: "Montar o agente",
-    minRole: "manager",
-    // SEM `sidebar: true`, como as outras nove telas deste grupo. Adicionar as
-    // duas telas novas à sidebar estourou a dobra em 900px — medido pelo e2e
-    // `navegacao.spec.ts`, que existe justamente porque agrupar o menu o faz
-    // crescer. Configurar provedor é tarefa de poucas vezes; o caminho é o hub
-    // "Ver tudo em IA", igual a Credenciais, Conhecimento, Memória e Skills.
   },
   {
     href: "/app/ai/knowledge/sources",

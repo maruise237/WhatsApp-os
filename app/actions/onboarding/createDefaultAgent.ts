@@ -15,6 +15,7 @@ import { capacidadesPadraoDoOnboarding } from "@/lib/ai/agents/capacidades-padra
 import { publicarMemoriaDaOrg } from "@/lib/ai/memoria-da-org";
 import { escolherModeloDoProvedor } from "@/lib/ai/agents/escolher-modelo";
 import { chaveDePlataforma } from "@/lib/ai/runtime/agent";
+import { FOURNISSEUR_PLATEFORME, iaDeLaPlateformeDepuisProcessEnv } from "@/lib/ai/plateforme";
 import {
   requireOnboardingCtx,
   patchOnboardingState,
@@ -163,7 +164,10 @@ async function publishFirstVersion(
     .maybeSingle();
   if (orgErr) return { published: false, reason: "failed", message: orgErr.message };
 
-  const provider = provedorDaInstalacao(org?.settings);
+  // IA de la plateforme : pas de fournisseur à deviner, pas de catalogue à
+  // consulter, pas de clé à chercher — l'exploitant a tout fourni.
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  const provider = ia ? FOURNISSEUR_PLATEFORME : provedorDaInstalacao(org?.settings);
 
   // O modelo daquele provedor. Não existe fallback literal: um id de outro
   // provedor (ou inventado) produz o pior desfecho do produto — o agente
@@ -174,19 +178,24 @@ async function publishFirstVersion(
   // sincronizados e NENHUM marcado como padrão, porque o cron de catálogo não
   // escreve esse campo. A regra de escolha (com o requisito de ferramentas)
   // vive em `escolherModeloDoProvedor`.
-  const { data: modelos } = await admin
-    .from("ai_models")
-    .select("model_id, is_default_for_provider, supports_tools, input_price_per_million_cents, output_price_per_million_cents")
-    .eq("provider", provider)
-    .is("deprecated_at", null);
+  let modelId: string;
+  if (ia) {
+    modelId = ia.model;
+  } else {
+    const { data: modelos } = await admin
+      .from("ai_models")
+      .select("model_id, is_default_for_provider, supports_tools, input_price_per_million_cents, output_price_per_million_cents")
+      .eq("provider", provider)
+      .is("deprecated_at", null);
 
-  const escolha = escolherModeloDoProvedor(
-    (modelos ?? []) as Parameters<typeof escolherModeloDoProvedor>[0],
-  );
-  if (!escolha.escolhido) {
-    return { published: false, reason: "no_model", provider, motivo: escolha.motivo };
+    const escolha = escolherModeloDoProvedor(
+      (modelos ?? []) as Parameters<typeof escolherModeloDoProvedor>[0],
+    );
+    if (!escolha.escolhido) {
+      return { published: false, reason: "no_model", provider, motivo: escolha.motivo };
+    }
+    modelId = escolha.modelId;
   }
-  const modelId = escolha.modelId;
 
   // "Em que negócios ele pode mexer". Toda organização nasce com um funil de
   // entrada, criado por gatilho no INSERT de `organizations`. Sem preencher
@@ -214,7 +223,9 @@ async function publishFirstVersion(
   //
   // `validated_at` não nulo é exigência de `loadCredential`, não capricho: uma
   // credencial que o provedor ainda não confirmou não é utilizável pelo turno.
-  const { data: credencial } = await admin
+  const { data: credencial } = ia
+    ? { data: null }
+    : await admin
     .from("ai_provider_credentials")
     .select("id")
     .eq("organization_id", orgId)

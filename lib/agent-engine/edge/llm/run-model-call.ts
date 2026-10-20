@@ -23,6 +23,7 @@ import { scrubMessage } from '@/lib/sentry/scrub';
 
 import type { Logger } from '../../obs/logger';
 import { decidirParaOSeam } from './binding-do-ponto';
+import type { DecisaoDeBinding } from '../../../ai/pontos/resolver';
 import { resolveOrgLlmConfig, type LlmEdgeConfig, type OrcamentoDaOrg } from './credentials';
 import {
   AVISO_CORPO,
@@ -308,7 +309,20 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
   // só um rótulo de custo e virar decisão. Sem binding configurado, `decisao`
   // reproduz exatamente o comportamento anterior — a origem volta como
   // 'variavel_de_ambiente' ou 'padrao_da_organizacao'.
-  const decisao = await decidirParaOSeam(db, {
+  //
+  // IA de la plateforme : ni panneau, ni agent, ni organisation ne choisissent.
+  // Le modèle est celui de l'exploitant ; la décision est écrite comme venant de
+  // l'environnement, ce qu'elle est.
+  const decisao: DecisaoDeBinding = cfg.plateforme
+    ? {
+        provider: padrao.provider,
+        modelId: cfg.plateforme.model,
+        credentialId: null,
+        baseUrl: cfg.plateforme.baseUrl,
+        origem: 'variavel_de_ambiente',
+        avisos: [],
+      }
+    : await decidirParaOSeam(db, {
     organizationId: input.tenantId,
     purpose,
     modeloDoCallSite: input.model,
@@ -336,8 +350,9 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
   // comparar contra ele é comparar contra o que de fato está carregado.
   const credencialJaCarregada = input.llmOverride?.credentialId ?? null;
   const precisaOutraCredencial =
-    decisao.provider !== padrao.provider ||
-    (decisao.credentialId !== null && decisao.credentialId !== credencialJaCarregada);
+    !cfg.plateforme &&
+    (decisao.provider !== padrao.provider ||
+      (decisao.credentialId !== null && decisao.credentialId !== credencialJaCarregada));
 
   const config = precisaOutraCredencial
     ? await resolveOrgLlmConfig(db, cfg, input.tenantId, {

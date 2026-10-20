@@ -19,6 +19,12 @@ for (const envFile of [".env", ".env.local"]) {
   }
 }
 
+// L'IA de la plateforme (DEEPSEEK_*) gagne sur tout réglage d'organisation :
+// héritée du shell ou d'un .env local, elle ferait mentir chaque test qui exerce le
+// choix d'un fournisseur. Les tests qui la veulent la posent eux-mêmes.
+for (const nom of ["DEEPSEEK_API_KEY", "DEEPSEEK_BASE_URL", "DEEPSEEK_MODEL"]) delete process.env[nom];
+
+
 /**
  * Placeholders para as vars que `lib/env.ts` exige na IMPORTAÇÃO.
  *

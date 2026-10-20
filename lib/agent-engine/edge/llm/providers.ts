@@ -4,10 +4,13 @@
  * BYOK da org: sem pool global de chave, sem fallback silencioso.
  */
 import { createAnthropic } from '@ai-sdk/anthropic';
+import { createDeepSeek } from '@ai-sdk/deepseek';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import type { LanguageModel } from 'ai';
 import { MockLanguageModelV3 } from 'ai/test';
+
+import { FOURNISSEUR_PLATEFORME, URL_PLATEFORME_PAR_DEFAUT } from '@/lib/ai/plateforme';
 
 import { allowlistedFetch, buildAllowlist } from '../egress';
 
@@ -103,6 +106,16 @@ export function createDefaultRegistry(opts?: { allowedHosts?: string[] }): Provi
      * endpoint canônico faria o egress bloquear a própria configuração que a
      * tela ofereceu, com erro de rede que ninguém liga ao painel.
      */
+    /**
+     * L'IA de la plateforme (`lib/ai/plateforme.ts`). Le provider officiel, et
+     * pas `createOpenAI` sur l'URL DeepSeek : les modèles V4+ réfléchissent par
+     * défaut et exigent `reasoning_content` renvoyé à chaque tour d'outil, ce que
+     * seul ce provider sait faire.
+     */
+    [FOURNISSEUR_PLATEFORME]: (apiKey, modelId, baseUrl) => {
+      const endpoint = baseUrl ?? URL_PLATEFORME_PAR_DEFAUT;
+      return createDeepSeek({ apiKey, baseURL: endpoint, fetch: contain(endpoint) })(modelId);
+    },
     openrouter: (apiKey, modelId, baseUrl) => {
       const endpoint = baseUrl ?? OPENROUTER_ENDPOINT;
       return createOpenAI({

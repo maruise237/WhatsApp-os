@@ -15,6 +15,7 @@
  *    ninguém consegue escolher pela tela — trabalho feito e inalcançável, que é
  *    a forma como funcionalidade morre neste produto.
  */
+import { FOURNISSEUR_PLATEFORME } from "@/lib/ai/plateforme";
 import { describe, expect, it } from "vitest";
 
 import { createDefaultRegistry } from "@/lib/agent-engine/edge/llm/providers";
@@ -42,7 +43,11 @@ describe("lista de provedores × registry", () => {
   });
 
   it("todo provedor executável é oferecido na tela", () => {
-    const semPorta = Object.keys(registry).filter((id) => !ehProvedorSuportado(id));
+    // L'IA de la plateforme n'a pas de porte À DESSEIN : la clé est celle de
+    // l'exploitant (DEEPSEEK_API_KEY), et aucune vendeuse ne la choisit.
+    const semPorta = Object.keys(registry).filter(
+      (id) => id !== FOURNISSEUR_PLATEFORME && !ehProvedorSuportado(id),
+    );
     expect(
       semPorta,
       "o sistema saberia usar um provedor que ninguém consegue escolher — trabalho inalcançável",

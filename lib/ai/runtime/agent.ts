@@ -24,6 +24,7 @@
  */
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createDeepSeek } from "@ai-sdk/deepseek";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText, stepCountIs, type LanguageModel, type StopCondition, type ToolSet } from "ai";
 
@@ -34,6 +35,11 @@ import {
   OPENROUTER_ENDPOINT,
 } from "@/lib/agent-engine/edge/llm/providers";
 import { CredentialUnavailableError, loadCredential } from "@/lib/ai/credentials";
+import {
+  FOURNISSEUR_PLATEFORME,
+  iaDeLaPlateformeDepuisProcessEnv,
+  modeleDeLaPlateforme,
+} from "@/lib/ai/plateforme";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { audit } from "@/lib/audit";
 import type { McpAuthResult } from "@/lib/mcp/auth";
@@ -153,6 +159,8 @@ function buildSentinelRegex(keywords: string[]): RegExp | null {
  * lá não existe faria o ensaio passar e a mensagem real falhar.
  */
 export function chaveDePlataforma(provider: string): string | null {
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  if (ia) return ia.apiKey;
   const nome = { anthropic: "ANTHROPIC_API_KEY", openai: "OPENAI_API_KEY", openrouter: "OPENROUTER_API_KEY" }[
     provider
   ];
@@ -162,7 +170,12 @@ export function chaveDePlataforma(provider: string): string | null {
 }
 
 export function buildModel(provider: string, apiKey: string, modelId: string): LanguageModel {
+  // IA de la plateforme : un seul modèle, quelle que soit la version demandée.
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  if (ia) return modeleDeLaPlateforme(ia);
   switch (provider) {
+    case FOURNISSEUR_PLATEFORME:
+      return createDeepSeek({ apiKey })(modelId);
     case "anthropic":
       return createAnthropic({ apiKey })(modelId);
     case "openai":
@@ -266,10 +279,16 @@ export async function runAgent(input: RunAgentInput): Promise<RunAgentResult> {
       .eq("id", run.agent_version_id)
       .eq("organization_id", run.organization_id)
       .maybeSingle();
-    const version = versionRaw as VersionRow | null;
-    if (!version) {
+    const lue = versionRaw as VersionRow | null;
+    if (!lue) {
       return await failRun(run, "version_not_found", "agent version missing", startedAt);
     }
+    // IA de la plateforme : le fournisseur, la clé et le modèle de la version ne
+    // décident plus. L'essai doit parler au même modèle que le vrai tour.
+    const ia = iaDeLaPlateformeDepuisProcessEnv();
+    const version: VersionRow = ia
+      ? { ...lue, provider: FOURNISSEUR_PLATEFORME, model: ia.model, credential_id: null }
+      : lue;
 
     const { data: agentRaw } = await admin
       .from("ai_agents")

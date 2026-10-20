@@ -181,6 +181,12 @@ const schema = z.object({
   VERCEL_AI_GATEWAY_URL: z.string().optional().default(""),
   ANTHROPIC_API_KEY: z.string().optional().default(""),
   OPENAI_API_KEY: z.string().optional().default(""),
+  // IA fournie par la plateforme (lib/ai/plateforme.ts) : une clé pour toutes
+  // les organisations, posée dans l'environnement Dokploy. Présente, elle gagne
+  // sur toute clé ou tout modèle choisi par une organisation.
+  DEEPSEEK_API_KEY: z.string().optional().default(""),
+  DEEPSEEK_BASE_URL: z.string().optional().default(""),
+  DEEPSEEK_MODEL: z.string().optional().default(""),
 
   // Fusão (Fase 4): DONO ÚNICO dos eventos ai_agent.dispatch_requested.
   // 'engine' (default) = o worker agent-engine é o único consumidor (o cron
@@ -367,10 +373,10 @@ export const env = parsed.data;
 // cadastrava uma chave da Anthropic que não precisava, só para calar o aviso.
 // O texto era verdadeiro enquanto a Anthropic era a única chave que o
 // instalador pedia; o menu novo o tornou falso.
-if (!env.AI_GATEWAY_API_KEY && !env.ANTHROPIC_API_KEY && !env.OPENROUTER_API_KEY) {
+if (!env.AI_GATEWAY_API_KEY && !env.ANTHROPIC_API_KEY && !env.OPENROUTER_API_KEY && !env.DEEPSEEK_API_KEY) {
   console.warn(
-    "[env] Nenhuma chave de IA configurada (AI_GATEWAY_API_KEY, ANTHROPIC_API_KEY ou OPENROUTER_API_KEY) — " +
-      "o agente vai pular toda resposta com reason='ai_gateway_key_missing'.",
+    "[env] Aucune clé d'IA configurée (DEEPSEEK_API_KEY) — " +
+      "l'assistant ne répondra à aucun message (reason='ai_gateway_key_missing').",
   );
 }
 if (!env.OPENAI_API_KEY) {
