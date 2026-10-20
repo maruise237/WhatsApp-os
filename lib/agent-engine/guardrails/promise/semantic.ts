@@ -68,7 +68,7 @@ export function parsePromiseClassification(text: string, log?: Logger): PromiseC
     // degrade OBSERVÁVEL (F4-08 ressalva 2): sem o warn, um classificador sistematicamente
     // quebrado ficaria invisível (todo envio "sem promessa"). Loga só o FATO do parse-fail —
     // nunca o texto do modelo (poderia carregar trecho da candidata, PII fora de log).
-    log?.warn('classificador semântico de promessa: saída sem JSON — fail-open p/ "sem promessa"', {
+    log?.warn('classificateur sémantique de promesse : sortie sans JSON — fail-open vers « pas de promesse »', {
       event: 'promise_semantic_parse_fail',
       reason: 'no_json',
     });
@@ -80,7 +80,7 @@ export function parsePromiseClassification(text: string, log?: Logger): PromiseC
   } catch {
     // saída do auxiliar não é JSON válido → degrada para "sem promessa" (não bloqueia envio
     // por falha de parse; a camada determinística já cobriu o valor estruturado).
-    log?.warn('classificador semântico de promessa: JSON inválido — fail-open p/ "sem promessa"', {
+    log?.warn('classificateur sémantique de promesse : JSON invalide — fail-open vers « pas de promesse »', {
       event: 'promise_semantic_parse_fail',
       reason: 'invalid_json',
     });

@@ -163,7 +163,7 @@ async function runFlush(
   } catch {
     // Aux batch malformado NÃO é incidente do turno: loga sem PII e segue (a compaction
     // ainda roda; a memória durável simplesmente não ganha notas neste turno).
-    deps.log.warn('flush pré-compaction: saída do modelo auxiliar sem JSON de notas — nenhuma nota gravada');
+    deps.log.warn('flush pré-compaction : sortie du modèle auxiliaire sans JSON de notes — aucune note enregistrée');
     return;
   }
 
@@ -173,7 +173,7 @@ async function runFlush(
       // ponytail: hard cap do índice (F3-05) no flush automático — loga LOUD e segue
       // (best-effort). Se saturar recorrentemente, subir COMPACTION para consolidar via
       // supersedes num flush dedicado é o próximo degrau. Sem PII: só o código.
-      deps.log.warn('flush pré-compaction: nota durável recusada pelo cap do índice de notas', {
+      deps.log.warn('flush pré-compaction : note durable refusée par le plafond de l’index des notes', {
         code: res.error.code,
       });
     }
@@ -240,7 +240,7 @@ export async function maybeCompact(
   try {
     return compactionOutputSchema.parse(extractJson(call.result.text));
   } catch {
-    deps.log.warn('compaction: saída do modelo auxiliar sem JSON estruturado — turno segue com transcript cru');
+    deps.log.warn('compaction : sortie du modèle auxiliaire sans JSON structuré — le tour continue avec le transcript brut');
     return null;
   }
 }

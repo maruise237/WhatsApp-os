@@ -60,7 +60,7 @@ export function ehHexValido(hex: string): boolean {
  */
 export function hexParaRgb(hex: string): Rgb {
   const bruto = hex.trim();
-  if (!HEX.test(bruto)) throw new TypeError(`hex inválido: ${JSON.stringify(hex)}`);
+  if (!HEX.test(bruto)) throw new TypeError(`hex invalide : ${JSON.stringify(hex)}`);
   const corpo = bruto.replace("#", "");
   const seis =
     corpo.length === 3

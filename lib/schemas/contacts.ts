@@ -37,9 +37,9 @@ export const contactCreateSchema = z.object({
   email: z.string().email().optional(),
   phone_number: z
     .string()
-    .regex(PHONE_REGEX, "Telefone deve estar em formato E.164 (+5511999998888)")
+    .regex(PHONE_REGEX, "Le téléphone doit être au format E.164 (+237699998888)")
     .optional(),
-  cpf: z.string().refine(isValidCpf, "CPF inválido").optional(),
+  cpf: z.string().refine(isValidCpf, "CPF invalide").optional(),
   birthdate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)

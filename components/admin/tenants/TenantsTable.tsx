@@ -31,8 +31,8 @@ const STATUS_VARIANTS: Record<
 const STATUS_LABELS: Record<string, string> = {
   active: "Actif",
   onboarding: "Onboarding",
-  suspended: "Suspenso",
-  redacted: "Redigido",
+  suspended: "Suspendue",
+  redacted: "Anonymisée",
 };
 
 function StatusBadge({

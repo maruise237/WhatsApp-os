@@ -250,7 +250,7 @@ function GraficoDiario({
                   width={36}
                 />
                 <Tooltip
-                  formatter={(v) => [num(Number(v)), "no dia"]}
+                  formatter={(v) => [num(Number(v)), "ce jour-là"]}
                   labelFormatter={(l) => diaCurto(String(l))}
                   contentStyle={{
                     borderRadius: "8px",

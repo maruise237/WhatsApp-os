@@ -86,7 +86,7 @@ export function TemplatesClient({ canShare, currentUserId }: Props) {
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{template.title}</span>
                     <Badge variant={template.owner_user_id ? "neutral" : "default"}>
-                      {template.owner_user_id ? "Pessoal" : "Partagé"}
+                      {template.owner_user_id ? "Personnel" : "Partagé"}
                     </Badge>
                   </div>
                   <p className="line-clamp-2 text-sm text-muted-foreground">{template.body}</p>

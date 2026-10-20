@@ -31,7 +31,7 @@ export const PAPEIS_HUMANOS: ReadonlyArray<Role> = ["viewer", "agent", "manager"
 
 /** Rótulo pt-BR para quem configura. `ai_operator` nunca aparece em seletor de time. */
 export const ROTULO_DO_PAPEL: Record<Role, string> = {
-  viewer: "Somente leitura",
+  viewer: "Lecture seule",
   agent: "Agent",
   ai_operator: "Assistant autonome",
   manager: "Gerente",

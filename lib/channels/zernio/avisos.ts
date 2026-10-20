@@ -90,7 +90,7 @@ export function avisoDoEvento(payload: unknown): AvisoDeCanal | null {
 
   if (evento === "whatsapp.template.status_updated") {
     const t = obj(p.template) ?? {};
-    const nome = str(t.name) ?? "(sem nome)";
+    const nome = str(t.name) ?? "(sans nom)";
     const estado = (str(t.status) ?? "UNKNOWN").toUpperCase();
     const motivo = str(t.reason);
     return {

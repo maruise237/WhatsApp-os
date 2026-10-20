@@ -18,7 +18,7 @@ import { CAMPOS_PROPONIVEIS, proporDadoDoContato } from "@/lib/contacts/proposta
 import { audit } from "@/lib/audit";
 
 const searchInputShape = {
-  query: z.string().min(1).max(200).describe("Termo de busca (nome, email ou telefone)."),
+  query: z.string().min(1).max(200).describe("Terme de recherche (nom, e-mail ou téléphone)."),
   limit: z.number().int().min(1).max(50).default(10),
   cursor: z.string().optional(),
 };
@@ -26,7 +26,7 @@ const searchInputShape = {
 export const crmSearchContacts: McpToolDefinition<typeof searchInputShape> = {
   name: "crm_search_contacts",
   description:
-    "Busca contatos do CRM por nome, email ou telefone. Retorna ate 50 matches com id, nome, telefone, email, tags e timestamps. Sempre escopado a organization do token.",
+    "Recherche des contacts du CRM par nom, e-mail ou téléphone. Renvoie jusqu’à 50 résultats avec id, nom, téléphone, e-mail, tags et horodatages. Toujours limité à l’organisation du jeton.",
   inputSchema: searchInputShape,
   category: "read",
   requiresRole: "agent",
@@ -64,13 +64,13 @@ export const crmSearchContacts: McpToolDefinition<typeof searchInputShape> = {
 };
 
 const getInputShape = {
-  contact_id: z.string().uuid().describe("UUID do contato."),
+  contact_id: z.string().uuid().describe("UUID du contact."),
 };
 
 export const crmGetContact: McpToolDefinition<typeof getInputShape> = {
   name: "crm_get_contact",
   description:
-    "Retorna detalhes de um contato pelo UUID. Inclui tags, consent, source. CPF nunca retornado em plaintext via MCP (sempre mascarado).",
+    "Renvoie les détails d’un contact par son UUID. Inclut tags, consent, source. Le CPF n’est jamais renvoyé en clair via MCP (toujours masqué).",
   inputSchema: getInputShape,
   category: "read",
   requiresRole: "agent",
@@ -109,13 +109,13 @@ export const crmGetContact: McpToolDefinition<typeof getInputShape> = {
 
 const propostaShape = {
   contact_id: z.string().uuid(),
-  campo: z.enum(CAMPOS_PROPONIVEIS).describe("Qual informação: email, name ou phone_number."),
-  valor: z.string().min(1).max(200).describe("O valor exatamente como a pessoa informou."),
+  campo: z.enum(CAMPOS_PROPONIVEIS).describe("Quelle information : email, name ou phone_number."),
+  valor: z.string().min(1).max(200).describe("La valeur exactement telle que la personne l’a indiquée."),
   trecho: z
     .string()
     .max(500)
     .optional()
-    .describe("O que a pessoa escreveu, para quem for confirmar poder conferir."),
+    .describe("Ce que la personne a écrit, pour que celui qui confirme puisse vérifier."),
 };
 
 /**
@@ -133,11 +133,11 @@ const propostaShape = {
 export const crmProposeContactField: McpToolDefinition<typeof propostaShape> = {
   name: "crm_propose_contact_field",
   description:
-    "Registra uma informação que o cliente forneceu (email, nome ou telefone) como PROPOSTA para " +
-    "uma pessoa confirmar. NADA é gravado no cadastro por conta desta chamada, e a proposta vence " +
-    "sozinha se ninguém decidir. Nunca diga ao cliente que o cadastro foi atualizado. Recusa se já " +
-    "houver proposta do mesmo campo aguardando decisão, se o valor for igual ao que já está " +
-    "gravado, ou se o contato foi anonimizado.",
+    "Enregistre une information fournie par le client (e-mail, nom ou téléphone) comme PROPOSITION " +
+    "à confirmer par une personne. RIEN n’est écrit dans la fiche par cet appel, et la proposition expire " +
+    "toute seule si personne ne décide. Ne dites jamais au client que sa fiche a été mise à jour. Refusé s’il " +
+    "existe déjà une proposition pour le même champ en attente de décision, si la valeur est identique à celle déjà " +
+    "enregistrée, ou si le contact a été anonymisé.",
   inputSchema: propostaShape,
   category: "write",
   requiresRole: "agent",
@@ -156,14 +156,14 @@ export const crmProposeContactField: McpToolDefinition<typeof propostaShape> = {
       // nenhuma delas é para repetir ao cliente. Falam do fluxo interno, não do
       // atendimento.
       const explicacao: Record<string, string> = {
-        contato_nao_encontrado: "não encontrei esse contato nesta conta.",
+        contato_nao_encontrado: "je n’ai pas trouvé ce contact sur ce compte.",
         contato_anonimizado:
-          "esse contato exerceu o direito de exclusão de dados; não é possível registrar informações dele.",
-        valor_invalido: "o valor não tem forma de email/telefone/nome válido — confirme com a pessoa.",
-        valor_igual_ao_atual: "essa informação já está no cadastro; não há o que confirmar.",
+          "ce contact a exercé son droit à l’effacement des données ; impossible d’enregistrer des informations le concernant.",
+        valor_invalido: "la valeur n’a pas la forme d’un e-mail/téléphone/nom valide — confirmez avec la personne.",
+        valor_igual_ao_atual: "cette information figure déjà dans la fiche ; il n’y a rien à confirmer.",
         ja_existe_proposta:
-          "já existe uma proposta desse mesmo campo aguardando decisão de uma pessoa — não crie outra.",
-        erro: "não consegui registrar a proposta agora.",
+          "une proposition pour ce même champ attend déjà la décision d’une personne — n’en créez pas une autre.",
+        erro: "je n’ai pas pu enregistrer la proposition pour le moment.",
       };
       return { proposta_criada: false, motivo: r.motivo, mensagem: explicacao[r.motivo] };
     }
@@ -197,7 +197,7 @@ export const crmProposeContactField: McpToolDefinition<typeof propostaShape> = {
       proposta_criada: true,
       proposta_id: r.id,
       campo: input.campo,
-      aguardando: "confirmação de uma pessoa",
+      aguardando: "confirmation par une personne",
     };
   },
 };

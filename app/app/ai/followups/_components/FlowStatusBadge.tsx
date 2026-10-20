@@ -5,7 +5,7 @@ import { useT } from "@/hooks/i18n/useT";
 const LABEL: Record<FollowupFlowStatus, string> = {
   draft: "Rascunho",
   active: "Actif",
-  disabled: "Desativado",
+  disabled: "Désactivé",
 };
 
 const VARIANT: Record<FollowupFlowStatus, "neutral" | "success" | "warning"> = {

@@ -14,9 +14,9 @@ const CONNECT_ERRORS: Record<string, string> = {
 };
 
 const DISCONNECT_ERRORS: Record<string, string> = {
-  auth_required: "Faça login para desconectar.",
+  auth_required: "Connectez-vous pour déconnecter la boutique.",
   no_active_org: "Aucune organisation active.",
-  forbidden: "Apenas admins podem desconectar.",
+  forbidden: "Seuls les administrateurs peuvent déconnecter.",
   not_connected: "L’intégration n’est pas connectée.",
   db_error: "Erreur de base de données lors de la déconnexion.",
 };

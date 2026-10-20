@@ -125,7 +125,7 @@ export async function classifyIntent(
     return parseIntentVerdict(result.text, input.router.members);
   } catch (err) {
     // Falha do classificador NUNCA derruba o turno — chamador cai no fallback do router.
-    deps.log.warn('intent-classifier: falha ao classificar intenção — turno cai no fallback', {
+    deps.log.warn('intent-classifier : échec de la classification d’intention — le tour bascule sur le fallback', {
       error: err instanceof Error ? err.message : String(err),
     });
     return null;

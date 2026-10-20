@@ -51,7 +51,7 @@ function statusBadgeLabel(status: AutomationRuleRunRow["status"]): string {
   // causa — o relógio — que muitas vezes não é a certa. A causa exata aparece
   // na linha da ação, logo abaixo, onde ela pode ser específica.
   if (status === "adiado") return "En attente d’envoi";
-  return "Parcial";
+  return "Partiel";
 }
 
 /**

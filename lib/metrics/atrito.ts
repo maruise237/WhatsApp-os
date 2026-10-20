@@ -273,13 +273,13 @@ export function montarPares(raw: AtritoRaw): Par[] {
           chave: "espera_humana_p50_s",
           rotulo: "Attente dans la file humaine (médiane)",
           valor: empresa.espera_humana_p50_s,
-          unidade: "segundos",
+          unidade: "secondes",
         },
         {
           chave: "espera_humana_p90_s",
           rotulo: "Attente dans la file humaine (p90)",
           valor: empresa.espera_humana_p90_s,
-          unidade: "segundos",
+          unidade: "secondes",
           // Mediana e p90 iguais denunciam base pequena, não uma fila homogênea.
           // Sem dizer isso, dois números idênticos lado a lado leem-se como bug.
           nota:
@@ -343,7 +343,7 @@ export function formatarMedida(m: Medida): string {
   switch (m.unidade) {
     case "razao":
       return `${(m.valor * 100).toFixed(1)}%`;
-    case "segundos":
+    case "secondes":
       return formatarDuracao(m.valor);
     case "media":
       return m.valor.toFixed(1);

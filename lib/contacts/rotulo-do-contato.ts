@@ -7,7 +7,7 @@
  * copiada em **seis** arquivos, com **quatro** finais diferentes (`Sem nome`,
  * `Contato sem nome`, `—`, `—`) e duas variações de conteúdo: a ficha do contato
  * e a tabela de contatos **não usavam o telefone**, então quem tinha número mas
- * não tinha nome aparecia como "Sem nome" numa tela e com o número em outra.
+ * não tinha nome aparecia como "Sans nom" numa tela e com o número em outra.
  *
  * Seis cópias não divergem por descuido — divergem porque cada tela nova
  * reescreve a cadeia do jeito que parece certo naquele arquivo. A sétima ia
@@ -33,7 +33,7 @@ export interface ContatoNomeavel {
 }
 
 /** Quando não há nada apresentável. Um literal, não quatro. */
-export const SEM_NOME = "Sem nome";
+export const SEM_NOME = "Sans nom";
 
 /**
  * Cheira a identificador de máquina?
@@ -76,7 +76,7 @@ export function rotuloDoContato(c: ContatoNomeavel | null | undefined): string {
   const tel = (c.phone_number ?? "").trim();
   // O telefone escapa da recusa acima de propósito: "5531988887777" é
   // identificador para a regra de nome, e é informação ÚTIL para quem atende —
-  // muito melhor que "Sem nome".
+  // muito melhor que "Sans nom".
   if (tel !== "") return tel;
 
   return SEM_NOME;

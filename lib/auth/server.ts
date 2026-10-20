@@ -149,8 +149,8 @@ export async function loadAuthUser(): Promise<AuthUser | null> {
       message: detalhe.message,
     });
     throw new Error(
-      `auth_permissions_unavailable: ${detalhe.message} — permissões não puderam ser ` +
-        `resolvidas; a sessão NÃO foi rebaixada por decisão de autorização.`,
+      `auth_permissions_unavailable: ${detalhe.message} — les permissions n’ont pas pu être ` +
+        `résolues ; la session n’a PAS été rétrogradée par décision d’autorisation.`,
     );
   }
 

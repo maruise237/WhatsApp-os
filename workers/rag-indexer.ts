@@ -258,7 +258,7 @@ async function handleProductSynced(
   // perde o RAG em silêncio, que é pior que a indexação ter falhado. Falhando
   // aqui, a versão anterior continua ativa.
   if (successCount === 0) {
-    await markVersionFailed(versionId, row.organization_id, "nenhum chunk gravado");
+    await markVersionFailed(versionId, row.organization_id, "aucun chunk enregistré");
     return { type: "error", detail: "no_chunks_written" };
   }
 
@@ -391,7 +391,7 @@ async function handleKnowledgeSourceUpdated(
   // perde o RAG em silêncio, que é pior que a indexação ter falhado. Falhando
   // aqui, a versão anterior continua ativa.
   if (gravados === 0) {
-    await markVersionFailed(versionId, row.organization_id, "nenhum chunk gravado");
+    await markVersionFailed(versionId, row.organization_id, "aucun chunk enregistré");
     return { type: "error", detail: "no_chunks_written" };
   }
 
@@ -408,7 +408,7 @@ async function handleKnowledgeSourceUpdated(
       .from("ai_knowledge_sources")
       .update({
         last_index_status: doFonte > 0 ? "success" : "failed",
-        last_index_error: doFonte > 0 ? null : "nenhum chunk foi gravado nesta indexação",
+        last_index_error: doFonte > 0 ? null : "aucun chunk n’a été enregistré lors de cette indexation",
         last_indexed_at: agora,
         chunks_count: doFonte,
       })

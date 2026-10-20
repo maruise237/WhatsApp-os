@@ -48,7 +48,7 @@ const COPY: Record<string, { variant: Variant; msg: string }> = {
   },
   rate_limited: {
     variant: "warning",
-    msg: "Calma — muitas tentativas. Espere alguns segundos.",
+    msg: "Doucement — trop de tentatives. Patientez quelques secondes.",
   },
   lgpd_anonymization_irreversible: {
     variant: "error",

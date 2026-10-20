@@ -82,8 +82,8 @@ const listInputShape = {
 export const crmListLeads: McpToolDefinition<typeof listInputShape> = {
   name: "crm_list_leads",
   description:
-    "Lista leads do CRM filtrando por pipeline, stage, status e owner. Cursor base64 para paginação. " +
-    "Governança por lead: owner_user_id + owner_user_name (só o nome do dono, sem email/telefone), stage ({ id, name } legível além do stage_id) e tags[].",
+    "Liste les leads du CRM filtrés par pipeline, stage, status et owner. Curseur base64 pour la pagination. " +
+    "Gouvernance par lead : owner_user_id + owner_user_name (uniquement le nom du responsable, sans e-mail/téléphone), stage ({ id, name } lisible en plus du stage_id) et tags[].",
   inputSchema: listInputShape,
   category: "read",
   requiresRole: "agent",
@@ -124,8 +124,8 @@ const getInputShape = {
 export const crmGetLead: McpToolDefinition<typeof getInputShape> = {
   name: "crm_get_lead",
   description:
-    "Retorna um lead pelo UUID. Inclui pipeline_id, stage_id, status, owner. " +
-    "Governança: owner_user_id + owner_user_name (só o nome, sem email/telefone), stage ({ id, name } legível) e tags[].",
+    "Renvoie un lead par son UUID. Inclut pipeline_id, stage_id, status, owner. " +
+    "Gouvernance : owner_user_id + owner_user_name (uniquement le nom, sans e-mail/téléphone), stage ({ id, name } lisible) et tags[].",
   inputSchema: getInputShape,
   category: "read",
   requiresRole: "agent",
@@ -175,7 +175,7 @@ const createInputShape = {
 export const crmCreateLead: McpToolDefinition<typeof createInputShape> = {
   name: "crm_create_lead",
   description:
-    "Cria um lead no pipeline informado. Use após qualificar um contato. Position é gerenciado pelo servidor.",
+    "Crée un lead dans le pipeline indiqué. À utiliser après avoir qualifié un contact. La position est gérée par le serveur.",
   inputSchema: createInputShape,
   category: "write",
   requiresRole: "agent",
@@ -232,7 +232,7 @@ const updateInputShape = {
 export const crmUpdateLead: McpToolDefinition<typeof updateInputShape> = {
   name: "crm_update_lead",
   description:
-    "Atualiza campos editáveis de um lead. Stage transitions são via crm_move_lead_stage; status é gerenciado por triggers.",
+    "Met à jour les champs modifiables d’un lead. Les changements d’étape passent par crm_move_lead_stage ; le statut est géré par des triggers.",
   inputSchema: updateInputShape,
   category: "write",
   requiresRole: "agent",
@@ -268,7 +268,7 @@ const moveInputShape = {
 export const crmMoveLeadStage: McpToolDefinition<typeof moveInputShape> = {
   name: "crm_move_lead_stage",
   description:
-    "Move um lead para outro stage dentro do MESMO pipeline. Cross-pipeline é proibido (use clone). Audit registra from/to stage e reason.",
+    "Déplace un lead vers une autre étape du MÊME pipeline. Le changement de pipeline est interdit (utilisez un clone). L’audit enregistre l’étape from/to et la reason.",
   inputSchema: moveInputShape,
   category: "write",
   requiresRole: "agent",

@@ -426,5 +426,5 @@ export async function encerrarChamadoPeloAgente(
 
 /** Resumo curto do caso para o inbox de escalação (mesmo espírito de buildHandoffSummary). */
 export function buildCaseSummary(caseRow: { title: string; summary: string; blocker: string }): string {
-  return `${caseRow.title}\n${caseRow.summary}\nBloqueio: ${caseRow.blocker}`;
+  return `${caseRow.title}\n${caseRow.summary}\nBlocage : ${caseRow.blocker}`;
 }

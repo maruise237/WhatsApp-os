@@ -366,7 +366,7 @@ async function registraNaTimeline(
         organizationId: deps.orgId,
         leadId: alvo.contact_id,
         tipo,
-        origem: "lib/followup/intervencao (sem negócio aberto para ancorar)",
+        origem: "lib/followup/intervencao (aucune affaire ouverte à laquelle se rattacher)",
         erro: undefined,
         requestId: deps.requestId,
       });

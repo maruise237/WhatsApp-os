@@ -135,7 +135,7 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
       // ---- pré-execução: bloqueios ------------------------------------------
       if (halted.has(toolName)) {
         const n = toolFailures.get(toolName) ?? 0;
-        logWarn('breaker: chamada bloqueada (same_tool_failure halt)', {
+        logWarn('breaker : appel bloqué (same_tool_failure halt)', {
           tool: toolName,
           mode: 'same_tool_failure',
           failures: n,
@@ -149,7 +149,7 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
       }
       const exactCount = exactFailures.get(exactKey) ?? 0;
       if (exactCount >= t.exactFailureBlock) {
-        logWarn('breaker: chamada bloqueada (exact_failure)', {
+        logWarn('breaker : appel bloqué (exact_failure)', {
           tool: toolName,
           mode: 'exact_failure',
           failures: exactCount,
@@ -163,7 +163,7 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
       }
       const prog = readOnly.has(toolName) ? progress.get(exactKey) : undefined;
       if (prog !== undefined && prog.repeats >= t.noProgressBlock) {
-        logWarn('breaker: chamada bloqueada (idempotent_no_progress)', {
+        logWarn('breaker : appel bloqué (idempotent_no_progress)', {
           tool: toolName,
           mode: 'idempotent_no_progress',
           repeats: prog.repeats,
@@ -188,7 +188,7 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
 
         if (perTool >= t.sameToolFailureHalt) {
           halted.add(toolName);
-          logWarn('breaker: tool desativada pelo resto do run (same_tool_failure halt)', {
+          logWarn('breaker : outil désactivé pour le reste du run (same_tool_failure halt)', {
             tool: toolName,
             mode: 'same_tool_failure',
             failures: perTool,

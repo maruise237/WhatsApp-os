@@ -117,7 +117,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .eq("contact_id", existing.id);
   const redactedLeadIds: string[] = [];
   for (const row of (leadRows ?? []) as { id: string; title: string | null }[]) {
-    const newTitle = `${(row.title ?? "").slice(0, 20)} (anonimizado)`;
+    const newTitle = `${(row.title ?? "").slice(0, 20)} (anonymisé)`;
     const { error: leadErr } = await supabase
       .from("crm_leads")
       .update({ title: newTitle })

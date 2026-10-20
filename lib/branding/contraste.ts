@@ -318,7 +318,7 @@ export function extrairRegua(css: string): Regua {
     (r) => r.seletor.includes('[data-theme="dark"]') && r.decls.some((d) => d.prop === "--color-bg"),
   );
   if (!raiz || !escuro) {
-    throw new Error("régua: não achei os blocos :root e [data-theme=\"dark\"] no CSS");
+    throw new Error("règle : blocs :root et [data-theme=\"dark\"] introuvables dans le CSS");
   }
 
   const rampaDoProduto = lerRampa(raiz.decls);
@@ -787,8 +787,8 @@ function derivarTema(tema: TemaDaRegua, rampa: Rampa): { tokens: TokensDoTema; m
       tema: tema.nome,
       alvo: null,
       detalhe:
-        `nenhum deslocamento da rampa satisfaz os ${escolha.pares.length} pares; ` +
-        `${escolha.reprovas.length} seguem abaixo do piso no melhor caso (d=${d})`,
+        `aucun décalage de la rampe ne satisfait les ${escolha.pares.length} pares; ` +
+        `${escolha.reprovas.length} restent sous le plancher dans le meilleur des cas (d=${d})`,
     });
   }
   for (const m of reconciliacao.movimentos) {
@@ -807,8 +807,8 @@ function derivarTema(tema: TemaDaRegua, rampa: Rampa): { tokens: TokensDoTema; m
       tema: tema.nome,
       alvo: s.nome,
       detalhe:
-        `sem rotação até ${ROTACAO_MAXIMA}° que separe do accent (ΔE ${s.separacao.toFixed(4)} ` +
-        `< ${PISO_DE_SEPARACAO_SIMULADA}); ligar ícone/rótulo neste papel`,
+        `sans rotation jusqu’à ${ROTACAO_MAXIMA}° que separe do accent (ΔE ${s.separacao.toFixed(4)} ` +
+        `< ${PISO_DE_SEPARACAO_SIMULADA}) ; associer une icône/un libellé dans ce rôle`,
     });
   }
 
@@ -852,8 +852,8 @@ export function derivarMarca(semente: string, regua: Regua): Marca {
       tema: null,
       alvo: "--color-brand",
       detalhe:
-        `croma ${C.toFixed(4)} abaixo do limiar ${LIMIAR_ACROMATICO}: a rampa do produto ` +
-        `permanece como accent e a cor da marca fica só em --color-brand`,
+        `croma ${C.toFixed(4)} sous le seuil ${LIMIAR_ACROMATICO}: a rampa do produto ` +
+        `reste l’accent et la couleur de la marque ne vit que dans --color-brand`,
     });
   }
 

@@ -254,9 +254,9 @@ export async function runFlywheelLoop(
     if (signal.aborted) return;
     try {
       const result = await runFlywheelOnce(pool, llmCfg, { limit: opts.limit, log: opts.log });
-      opts.log.info('flywheel: rodada agendada concluída', result as unknown as Record<string, unknown>);
+      opts.log.info('flywheel : passe planifiée terminée', result as unknown as Record<string, unknown>);
     } catch (err) {
-      opts.log.error('flywheel: rodada agendada falhou', {
+      opts.log.error('flywheel : passe planifiée échouée', {
         error: (err instanceof Error ? err.message : String(err)).slice(0, 200),
       });
     }

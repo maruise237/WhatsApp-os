@@ -49,7 +49,7 @@ const SCOPES: { id: string; label: string }[] = [
   { id: "role:manager", label: "Traiter le jeton comme un manager (nécessaire pour créer et attribuer)" },
   { id: "contacts:read", label: "Lire les contacts" },
   { id: "contacts:write", label: "Créer et modifier des contacts" },
-  { id: "leads:read", label: "Ler leads" },
+  { id: "leads:read", label: "Lire les leads" },
   { id: "leads:write", label: "Créer et modifier des leads" },
   { id: "messages:read", label: "Lire les messages" },
   { id: "messages:write", label: "Envoyer des messages" },

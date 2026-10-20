@@ -119,7 +119,7 @@ export function blocoDeModo(veioDeFormulario: boolean, nonce: string, instrucao:
       'C’est le PREMIER message qu’elle va recevoir.';
 
   return (
-    `[MODO ABORDAGEM INICIAL]\n${situacao}\n\n` +
+    `[MODE PREMIER CONTACT]\n${situacao}\n\n` +
     'Écrivez-lui UN message WhatsApp. Règles :\n' +
     '- Saluez-la et dites en une phrase pourquoi vous la contactez, en lien avec ce qu’elle a rempli.\n' +
     '- Utilisez les données pour personnaliser vraiment — la personne remarque quand un message pourrait s’adresser à n’importe qui.\n' +
@@ -161,7 +161,7 @@ export async function gerarAbordagemDeFormulario(
   // mesmo bloco por simplicidade: um dado a mais dentro da cerca não custa nada,
   // e deixá-lo fora abriria uma segunda porta para manter.
   const conteudo = [
-    input.origem ? `Origem: ${input.origem}` : null,
+    input.origem ? `Origine : ${input.origem}` : null,
     formatarDados(input.dados),
   ]
     .filter((p): p is string => p !== null)

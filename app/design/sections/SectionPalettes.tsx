@@ -70,11 +70,11 @@ export function SectionPalettes() {
                   <Swatches scale={p.accent} />
                 </div>
                 <div>
-                  <div className="ds-key" style={{ marginBottom: 6 }}>Neutro · Light</div>
+                  <div className="ds-key" style={{ marginBottom: 6 }}>Neutre · Clair</div>
                   <Swatches scale={p.neutralLight} />
                 </div>
                 <div>
-                  <div className="ds-key" style={{ marginBottom: 6 }}>Neutro · Dark</div>
+                  <div className="ds-key" style={{ marginBottom: 6 }}>Neutre · Sombre</div>
                   <Swatches scale={p.neutralDark} />
                 </div>
                 <div>

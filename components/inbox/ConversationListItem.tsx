@@ -212,7 +212,7 @@ export function ConversationListItem({
             <Badge
               variant="outline"
               className="h-4 gap-1 px-1.5 text-[10px] font-normal text-muted-foreground"
-              title={`Entrou por ${rotuloCanal}`}
+              title={`Arrivé par ${rotuloCanal}`}
             >
               <Phone size={9} weight="regular" aria-hidden />
               {rotuloCanal}

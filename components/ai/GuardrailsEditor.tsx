@@ -56,7 +56,7 @@ function defaultForKind(kind: GuardrailKind): GuardrailItem {
         start_hour: 7,
         end_hour: 22,
         timezone: "America/Sao_Paulo",
-        reason: "Janela operacional 7h-22h",
+        reason: "Plage d’activité 7h-22h",
       };
     case "contact_flag":
       return {

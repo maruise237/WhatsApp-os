@@ -496,7 +496,7 @@ export async function comHandoffSeOrcamentoAcabar<T>(
         log: ctx.log,
       },
     );
-    ctx.log.warn('turno interrompido pelo teto de gasto — conversa devolvida à fila humana');
+    ctx.log.warn('tour interrompu par le plafond de dépenses — conversation rendue à la file humaine');
     throw err;
   }
 }
@@ -515,7 +515,7 @@ async function resumoDoCheckpointDuravel(
   try {
     return buildHandoffSummary(await latestCheckpoint(pool, tenantId, leadId));
   } catch (err) {
-    log.warn('resumo do checkpoint não pôde ser lido — o handoff segue sem ele', {
+    log.warn('le résumé du checkpoint n’a pas pu être lu — le relais continue sans lui', {
       error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
     });
     return buildHandoffSummary(null);
@@ -764,7 +764,7 @@ export function parseCheckpointText(text: string): CheckpointContent {
   }
   const parsed = checkpointContentSchema.safeParse(raw);
   if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => `${i.path.join('.') || '(raiz)'}: ${i.code}`).join('; ');
+    const issues = parsed.error.issues.map((i) => `${i.path.join('.') || '(racine)'}: ${i.code}`).join('; ');
     throw new Error(`checkpoint de clôture de forme invalide (${issues}) — run relancé par la file`);
   }
   return parsed.data;
@@ -959,7 +959,7 @@ export async function avisarCapacidadesAusentes(
       ],
     );
   } catch (err) {
-    log.warn('aviso de capacidades ausentes não foi gravado', {
+    log.warn('l’alerte de capacités absentes n’a pas été enregistrée', {
       error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
     });
   }

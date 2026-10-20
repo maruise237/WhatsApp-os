@@ -113,7 +113,7 @@ export function podeOperarNoFunil(
   if (!pipelineId) {
     // Sem saber o funil não há como autorizar — mas isto é falta de INFORMAÇÃO,
     // não veredito sobre o card. Ver `indisponivel` abaixo.
-    return { permitido: false, motivo: "indisponivel", detalhe: "funil do alvo não resolvido" };
+    return { permitido: false, motivo: "indisponivel", detalhe: "tableau de la cible non résolu" };
   }
   return marcados.includes(pipelineId)
     ? { permitido: true }
@@ -199,13 +199,13 @@ async function resolverPeloLead(
     return {
       permitido: false,
       motivo: "indisponivel",
-      detalhe: e instanceof Error ? e.message.slice(0, 120) : "falha ao resolver o funil",
+      detalhe: e instanceof Error ? e.message.slice(0, 120) : "échec de la résolution du tableau",
     };
   }
   // `null` aqui é "o lead não existe (ou não é desta organização)". Não é
   // veredito de escopo: quem responde isso é o handler, com 404.
   if (pipelineId === null) {
-    return { permitido: false, motivo: "indisponivel", detalhe: "lead não encontrado" };
+    return { permitido: false, motivo: "indisponivel", detalhe: "lead introuvable" };
   }
   return podeOperarNoFunil(entrada.escopo, pipelineId);
 }
@@ -223,17 +223,17 @@ export function recusaParaOModelo(v: VereditoDoEscopo): string | null {
   switch (v.motivo) {
     case "escopo_vazio":
       return (
-        "este assistente ainda não tem nenhum funil liberado para mexer em negócios. " +
-        "Não tente por outro caminho — quem cuida do sistema precisa liberar isso na configuração."
+        "cet assistant n’a encore aucun tableau autorisé pour modifier les affaires. " +
+        "N’essayez pas par un autre moyen — la personne qui gère le système doit l’autoriser dans la configuration."
       );
     case "funil_fora_do_escopo":
       return (
-        "este negócio está num funil que não é da sua alçada. Você pode conversar sobre ele, " +
-        "mas não alterar o cartão. Não tente por outra ferramenta."
+        "cette affaire se trouve dans un tableau qui n’est pas de votre ressort. Vous pouvez en parler, " +
+        "mais pas modifier la carte. N’essayez pas avec un autre outil."
       );
     case "ferramenta_nao_classificada":
-      return "esta capacidade ainda não foi liberada para uso com negócios.";
+      return "cette capacité n’a pas encore été autorisée pour les affaires.";
     case "indisponivel":
-      return "não consegui confirmar a qual funil este negócio pertence agora. Tente de novo em instantes.";
+      return "je n’ai pas pu confirmer à quel tableau appartient cette affaire pour le moment. Réessayez dans quelques instants.";
   }
 }

@@ -6,7 +6,7 @@ import { useRealtimeChannel } from "@/hooks/realtime/useRealtimeChannel";
 import type { AlertKind } from "@/app/api/v1/admin/dashboard/kpis/route";
 
 const KIND_LABELS: Record<AlertKind, string> = {
-  waha_ban: "Alerta WAHA",
+  waha_ban: "Alerte WAHA",
   lgpd_at_risk: "Échéance RGPD",
   ai_budget: "Budget IA",
   tenant_pending_overflow: "Débordement de conversations",

@@ -56,7 +56,7 @@ function contactName(row: AdminConversationRow): string {
 const STATUS_OPTIONS = [
   { value: "all", label: "Tous" },
   { value: "pending", label: "En attente" },
-  { value: "open", label: "Aberto" },
+  { value: "open", label: "Ouverte" },
   { value: "resolved", label: "Résolue" },
 ] as const;
 

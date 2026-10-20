@@ -389,7 +389,7 @@ export async function channelHealthTick(harness: pg.Pool, log?: Logger): Promise
       result.released += delta.released;
       result.alerts += delta.alerts;
     } catch (err) {
-      log?.error('health: avaliação de sessão falhou — segue as demais', {
+      log?.error('health : l’évaluation de la session a échoué — on continue avec les autres', {
         channel_session_id: s.channel_session_id,
         error: errMsg(err),
       });

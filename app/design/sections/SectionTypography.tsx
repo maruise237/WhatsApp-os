@@ -49,7 +49,7 @@ function PairBlock({ id }: { id: TypoId }) {
           onClick={() => v.setTypo(id)}
           disabled={active}
         >
-          Aplicar par
+          Appliquer par
         </button>
       </div>
 
@@ -118,7 +118,7 @@ function PairBlock({ id }: { id: TypoId }) {
 export function SectionTypography() {
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Tipografia</h2>
+      <h2 className="ds-display">Typographie</h2>
       <p className="ds-lede">
         Quatre associations évaluées. Critères : lisibilité sur des journées de 8 h, chiffres tabulaires, graisses extrêmes disponibles, vraie italique (pas inclinée). Inter / Geist / Space Grotesk ont été écartées car surreprésentées dans les données d’entraînement.
       </p>

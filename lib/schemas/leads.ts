@@ -17,7 +17,7 @@ import { z } from "zod";
 const flexibleTimestamp = z
   .string()
   .min(10)
-  .refine((s) => !Number.isNaN(Date.parse(s)), "expected_updated_at deve ser um timestamp válido");
+  .refine((s) => !Number.isNaN(Date.parse(s)), "expected_updated_at doit être un horodatage valide");
 
 export const moveLeadSchema = z.object({
   stage_id: z.string().uuid(),
@@ -51,7 +51,7 @@ export type CanonicalLostReason = (typeof CANONICAL_LOST_REASONS)[number];
  * permissive here to not block tenant-specific extensions.
  */
 export const loseLeadSchema = z.object({
-  lost_reason: z.string().min(1, "lost_reason é obrigatório").max(500),
+  lost_reason: z.string().min(1, "lost_reason est obligatoire").max(500),
 });
 export type LoseLeadInput = z.infer<typeof loseLeadSchema>;
 

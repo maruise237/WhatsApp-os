@@ -189,7 +189,7 @@ const LARGURA = { ordem: "sm:w-[76px]", papel: "sm:w-56", arquivar: "sm:w-[104px
  */
 export const ROTULO = {
   nome: "Nom de la colonne (cliquez pour renommer)",
-  ordem: "Ordem",
+  ordem: "Ordre",
   papel: "Ce qui se passe dans cette colonne",
 } as const;
 

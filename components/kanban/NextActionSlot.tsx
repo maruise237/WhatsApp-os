@@ -61,7 +61,7 @@ export function NextActionSlot({
           type="button"
           disabled={decidir.isPending}
           onClick={(e) => decide(e, "dismiss")}
-          aria-label={`Ignorar: ${label}`}
+          aria-label={`Ignorer : ${label}`}
           className={cn(
             "rounded px-1.5 py-0.5 text-[11px] transition-colors",
             "text-text-muted hover:bg-surface-muted hover:text-text",

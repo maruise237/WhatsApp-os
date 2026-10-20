@@ -42,23 +42,23 @@ import { catalogEntry } from "@/lib/mcp/tools/catalog";
  */
 export function recusaDeCapacidadeParaOModelo(toolName: string): string {
   const entrada = catalogEntry(toolName);
-  const oQue = entrada?.rotulo ? `«${entrada.rotulo.toLowerCase()}»` : "essa alteração";
+  const oQue = entrada?.rotulo ? `«${entrada.rotulo.toLowerCase()}»` : "cette modification";
 
   if (entrada?.apenasHumano) {
     return [
-      `Esta ação (${oQue}) é operada por uma PESSOA do time com acesso de gestor — você não a executa.`,
-      "Não é falha sua nem falta de permissão de quem está falando com você:",
-      "é assim que o sistema foi configurado, e a tela de capacidades declara isso.",
-      "Explique em uma frase, sem citar cargos internos do sistema nem termos como",
-      '"agent", "manager", "papel" ou "permissão", e ofereça que alguém do time faça.',
-      "Se você já apurou algo útil (por exemplo, que o item ainda não existe), diga junto.",
+      `Cette action (${oQue}) est effectuée par une PERSONNE de l’équipe disposant d’un accès gestionnaire — ce n’est pas vous qui l’exécutez.`,
+      "Ce n’est ni votre faute ni un manque d’autorisation de la personne qui vous parle :",
+      "c’est ainsi que le système a été configuré, et l’écran des capacités l’indique.",
+      "Expliquez-le en une phrase, sans citer de fonctions internes du système ni de termes comme",
+      '"agent", "manager", "rôle" ou "autorisation", et proposez que quelqu’un de l’équipe s’en charge.',
+      "Si vous avez déjà établi quelque chose d’utile (par exemple, que l’élément n’existe pas encore), dites-le aussi.",
     ].join(" ");
   }
 
   return [
-    `Você não consegue executar esta ação (${oQue}) neste momento.`,
-    "Isso é uma limitação da configuração do sistema, não um problema de quem está falando com você.",
-    "Diga que não conseguiu, sem citar cargos internos nem termos como",
-    '"agent", "manager", "papel" ou "permissão", e oriente a pessoa a falar com quem cuida do sistema.',
+    `Vous ne pouvez pas exécuter cette action (${oQue}) pour le moment.`,
+    "C’est une limite de la configuration du système, pas un problème de la personne qui vous parle.",
+    "Dites que vous n’avez pas pu, sans citer de fonctions internes ni de termes comme",
+    '"agent", "manager", "rôle" ou "autorisation", et orientez la personne vers celui qui gère le système.',
   ].join(" ");
 }

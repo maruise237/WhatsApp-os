@@ -89,7 +89,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .createSignedUrl(caminho, VALIDADE_SEGUNDOS);
   if (erroUrl || !assinada?.signedUrl) {
     logger.error("[partner/templates/media] assinatura falhou", {
-      detail: erroUrl?.message ?? "sem url",
+      detail: erroUrl?.message ?? "aucune URL",
       requestId,
     });
     return fail("internal_error", "Erreur lors de la préparation du lien de l’image.", 500, { requestId });

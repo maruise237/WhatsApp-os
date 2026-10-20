@@ -85,7 +85,7 @@ export async function handleInboundWebhook(
     default:
       // Token de um canal que não entra por aqui. É configuração trocada, não
       // ataque — mas processar seria ler o payload com o parser errado.
-      return { ok: false, code: "provider_mismatch", message: "canal não recebe por esta rota" };
+      return { ok: false, code: "provider_mismatch", message: "ce canal ne reçoit pas par cette route" };
   }
 }
 
@@ -125,7 +125,7 @@ async function zernioInbound(
     return {
       ok: false,
       code: "contrato_violado",
-      message: `payload fora do contrato do canal: ${leitura.campos.join(", ")}`,
+      message: `payload hors du contrat du canal : ${leitura.campos.join(", ")}`,
     };
   }
   const payload = leitura.envelope;
@@ -165,7 +165,7 @@ async function zernioInbound(
         // produzia `WhatsApp "Número SUSPENSO — não é possível enviar." fora do
         // ar (FAILED)`: título quebrado que não identifica a conexão — exatamente
         // o que o apelido existe para resolver. E fica gravado na linha.
-        input.session.display_name ?? input.session.phone_number ?? "sem nome",
+        input.session.display_name ?? input.session.phone_number ?? "sans nom",
         // Empurrão do provedor: ele é a autoridade sobre o estado do NÚMERO, e
         // por isso a varredura não fecha o que ele abriu.
         "empurrao",

@@ -53,7 +53,7 @@ export function SectionDensity() {
   const v = useVariant();
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Densidade</h2>
+      <h2 className="ds-display">Densité</h2>
       <p className="ds-lede">
         Les conseillers qui travaillent 8 h par jour ont besoin d’une densité qui réduit le défilement tout en gardant de l’air visuel. Trois modes, avec row-height + gap comme jetons principaux. Appliqué à une liste de boîte de réception fictive.
       </p>

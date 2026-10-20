@@ -186,16 +186,16 @@ export async function performHumanHandoff(
       payload: { conversation_id: ids.conversationId },
     });
     if (!roteou.routed) {
-      opts.log.warn('handoff: atividade não roteada para um negócio', { reason: roteou.reason });
+      opts.log.warn('handoff : activité non rattachée à une affaire', { reason: roteou.reason });
     }
   } catch (err) {
-    opts.log.warn('handoff: atividade da passagem não foi gravada', {
+    opts.log.warn('handoff : l’activité du transfert n’a pas été enregistrée', {
       error: err instanceof Error ? err.message.slice(0, 200) : 'erreur inconnue',
     });
   }
 
   // PII fora do log: só ids/motivo — nunca o resumo da conversa (regra dura 8).
-  opts.log.info('handoff humano aplicado (force_human + silêncio + crons cancelados + inbox)', {
+  opts.log.info('relais humain appliqué (force_human + silence + crons annulés + inbox)', {
     reason: opts.reason,
   });
 }

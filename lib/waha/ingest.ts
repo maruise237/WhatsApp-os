@@ -135,7 +135,7 @@ function ehEnderecavel(parsed: ChatIdentity): boolean {
 function sufixoDeChatId(chatId: string): string {
   const at = chatId.lastIndexOf("@");
   if (at !== -1) return chatId.slice(at);
-  return chatId === "" ? "(vazio)" : "(sem @)";
+  return chatId === "" ? "(vazio)" : "(sans @)";
 }
 
 /**
@@ -842,7 +842,7 @@ async function handleSessionStatus(
     { reachable: true, status, detail: null },
     (apelidoRow?.display_name as string | null) ??
       (apelidoRow?.phone_number as string | null) ??
-      "sem nome",
+      "sans nom",
   );
 }
 

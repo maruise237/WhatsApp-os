@@ -69,7 +69,7 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
   clay: {
     id: "clay",
     name: "Clay",
-    description: "Terracota quente. Acolhedor, artesanal, brasileiro.",
+    description: "Terre cuite chaude. Accueillant, artisanal, chaleureux.",
     accent: {
       50: "#fbf3ef", 100: "#f4e0d3", 200: "#e7bda5", 300: "#d79376",
       400: "#c47353", 500: "#b05a3d", 600: "#934531", 700: "#76382a",
@@ -153,7 +153,7 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
   olive: {
     id: "olive",
     name: "Olive",
-    description: "Verde-oliva quente. Robusto, terroso, mediterrâneo.",
+    description: "Vert olive chaud. Robuste, terreux, méditerranéen.",
     accent: {
       50: "#f6f5ec", 100: "#e9e6cf", 200: "#d2cc9f", 300: "#b1a96b",
       400: "#928a4a", 500: "#776f3a", 600: "#5e572f", 700: "#4a4527",
@@ -185,7 +185,7 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
 export const DENSITIES: Record<DensityId, { label: string; rowH: string; gap: string; padX: string; padY: string }> = {
   aerada:      { label: "Aérée",      rowH: "56px", gap: "24px", padX: "20px", padY: "16px" },
   equilibrada: { label: "Équilibrée", rowH: "44px", gap: "16px", padX: "16px", padY: "10px" },
-  compacta:    { label: "Compacta",    rowH: "32px", gap: "8px",  padX: "10px", padY: "6px"  },
+  compacta:    { label: "Compacte",    rowH: "32px", gap: "8px",  padX: "10px", padY: "6px"  },
 };
 
 // ─── Typography pairings ───────────────────────────────────────────────────
@@ -204,7 +204,7 @@ export const TYPOS: Record<TypoId, { name: string; display: string; body: string
     display: '"Fraunces", Georgia, serif',
     body: '"Manrope", system-ui, sans-serif',
     mono: '"JetBrains Mono", ui-monospace, monospace',
-    description: "Serif quente com SOFT/WONK + sans humanista.",
+    description: "Serif chaude avec SOFT/WONK + sans humaniste.",
     scale: 1.333,
   },
   "atkinson": {
@@ -239,16 +239,16 @@ export const SPACING = [
 export const RADII = [
   { token: "none", value: "0px",   use: "Tableaux denses, zones de données, en-têtes de colonne." },
   { token: "xs",   value: "4px",   use: "Boutons, champs, badges. Par défaut pour les contrôles." },
-  { token: "sm",   value: "8px",   use: "Cards de lista, item de inbox, kanban card." },
-  { token: "md",   value: "12px",  use: "Containers maiores, modais menores, panels." },
-  { token: "lg",   value: "16px",  use: "Modais, popovers grandes, surfaces premium." },
+  { token: "sm",   value: "8px",   use: "Cartes de liste, élément d’inbox, carte kanban." },
+  { token: "md",   value: "12px",  use: "Conteneurs plus grands, petites modales, panneaux." },
+  { token: "lg",   value: "16px",  use: "Modales, grands popovers, surfaces premium." },
   { token: "full", value: "9999px",use: "Avatar, pill badge, dot indicator." },
 ];
 
 export const BORDERS = [
-  { token: "hairline", value: "0.5px solid var(--border)", use: "Separadores internos. Apenas em densidade compacta." },
-  { token: "thin",     value: "1px solid var(--border)",   use: "Default para cards, inputs, dividers." },
-  { token: "focus",    value: "2px solid var(--accent-500)",use: "Focus ring (a11y). Sempre 2px." },
+  { token: "hairline", value: "0.5px solid var(--border)", use: "Séparateurs internes. Uniquement en densité compacte." },
+  { token: "thin",     value: "1px solid var(--border)",   use: "Par défaut pour cartes, champs, séparateurs." },
+  { token: "focus",    value: "2px solid var(--accent-500)",use: "Anneau de focus (a11y). Toujours 2px." },
 ];
 
 export const SHADOWS = [

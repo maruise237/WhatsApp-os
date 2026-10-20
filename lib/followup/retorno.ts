@@ -115,7 +115,7 @@ export function duracaoLegivel(ms: number): string {
   if (minutos < 60) return `${minutos} min`;
   const horas = Math.round(ms / 3_600_000);
   if (horas < 48) return `${horas} h`;
-  return `${Math.round(ms / 86_400_000)} dias`;
+  return `${Math.round(ms / 86_400_000)} jours`;
 }
 
 /**

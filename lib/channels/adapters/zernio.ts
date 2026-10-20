@@ -163,7 +163,7 @@ export const zernioAdapter: ChannelAdapter = {
 
   async send(envelope: OutboundEnvelope): Promise<{ externalId: string | null }> {
     if (envelope.kind === "contact") {
-      throw new Error("zernio_contact_not_supported: envio de cartão de contato não suportado neste canal.");
+      throw new Error("zernio_contact_not_supported : l’envoi de carte de contact n’est pas pris en charge sur ce canal.");
     }
     const admin = createAdminClient();
     const creds = await resolveZernioCreds(admin, {
@@ -175,7 +175,7 @@ export const zernioAdapter: ChannelAdapter = {
     // dizendo "enviado" para algo que nunca saiu.
     if (!creds) {
       throw new Error(
-        "zernio_not_configured: nenhuma credencial para esta conta (nem na sessão, nem no ambiente).",
+        "zernio_not_configured : aucun identifiant pour ce compte (ni dans la session, ni dans l’environnement).",
       );
     }
 
@@ -184,8 +184,8 @@ export const zernioAdapter: ChannelAdapter = {
     // 404 que ninguém consegue interpretar seis meses depois.
     if (!envelope.providerConversationId) {
       throw new Error(
-        "zernio_no_conversation: envio livre exige a thread do provider; " +
-          "abra a conversa com um template antes (a thread chega no webhook).",
+        "zernio_no_conversation : l’envoi libre exige le fil du fournisseur ; " +
+          "ouvrez la conversation avec un modèle d’abord (le fil arrive dans le webhook).",
       );
     }
 
@@ -260,7 +260,7 @@ export const zernioAdapter: ChannelAdapter = {
     });
     if (!creds) {
       throw new Error(
-        "zernio_not_configured: nenhuma credencial para esta conta (nem na sessão, nem no ambiente).",
+        "zernio_not_configured : aucun identifiant pour ce compte (ni dans la session, ni dans l’environnement).",
       );
     }
 
@@ -321,7 +321,7 @@ export const zernioAdapter: ChannelAdapter = {
       organizationId: input.organizationId,
       accountId: input.sessionRef,
     });
-    if (!creds) throw new Error("zernio_not_configured: sem credencial para baixar a mídia.");
+    if (!creds) throw new Error("zernio_not_configured : aucun identifiant pour télécharger le média.");
 
     // A URL do anexo vem do PAYLOAD do webhook, e este fetch leva a API key do
     // tenant no Authorization. Sem guarda, um payload com

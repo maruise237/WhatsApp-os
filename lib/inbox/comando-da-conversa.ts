@@ -231,11 +231,11 @@ export function comandoDaConversa(fatos: FatosDoComando, agora: Date = new Date(
  * NEGATIVO usa literalmente "Voltar para a IA" como a sabotagem que deve reprovar.
  */
 export const ROTULO_DO_COMANDO: Record<Comando["quem"], string> = {
-  humano: "Em atendimento",
+  humano: "Prise en charge en cours",
   automatico: "Automatique en cours",
-  ninguem: "Sem atendente",
+  ninguem: "Sans conseiller",
   aguardando: "En attente d'un agent",
-  encerrada: "Encerrada",
+  encerrada: "Clôturée",
 };
 
 export const ROTULO_DO_MOTIVO: Record<MotivoDoSilencio, string> = {

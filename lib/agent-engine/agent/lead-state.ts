@@ -102,7 +102,7 @@ function teachInvalidTransition(current: LeadStage, to: LeadStage): LeadStateUpd
 }
 
 const PAYLOAD_TEACHING =
-  'Campos aceitos: stage, qualification {budget, authority, need, timeline}, next_action, reason — ' +
+  'Champs acceptés : stage, qualification {budget, authority, need, timeline}, next_action, reason — ' +
   'rien d’autre. Le lead et l’organisation viennent du runtime, jamais du payload de l’outil.';
 
 function teachInvalidPayload(issues: string): LeadStateUpdateResult {
@@ -121,7 +121,7 @@ export function zodIssuesSummary(error: z.ZodError): string {
     .map((i) =>
       i.code === 'unrecognized_keys'
         ? `champs non reconnus : ${i.keys.join(', ')}`
-        : `${i.path.join('.') || '(raiz)'}: ${i.code}`,
+        : `${i.path.join('.') || '(racine)'}: ${i.code}`,
     )
     .join('; ');
 }

@@ -56,10 +56,10 @@ export interface LeituraDoEstado {
 
 const LEITURA: Record<EstadoDoCanal, LeituraDoEstado> = {
   WORKING: { rotulo: "Connecté", tom: "success", utilizavel: true },
-  SCAN_QR_CODE: { rotulo: "Escaneie o QR", tom: "warning", utilizavel: false },
-  STARTING: { rotulo: "Conectando…", tom: "warning", utilizavel: false },
-  STOPPED: { rotulo: "Parado", tom: "error", utilizavel: false },
-  FAILED: { rotulo: "Caiu", tom: "error", utilizavel: false },
+  SCAN_QR_CODE: { rotulo: "Scannez le QR code", tom: "warning", utilizavel: false },
+  STARTING: { rotulo: "Connexion…", tom: "warning", utilizavel: false },
+  STOPPED: { rotulo: "Arrêté", tom: "error", utilizavel: false },
+  FAILED: { rotulo: "Tombé", tom: "error", utilizavel: false },
 };
 
 /**

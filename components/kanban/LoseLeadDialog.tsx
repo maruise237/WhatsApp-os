@@ -16,7 +16,7 @@ import { CANONICAL_LOST_REASONS } from "@/lib/schemas/leads";
 import { useT } from "@/hooks/i18n/useT";
 
 const REASON_LABELS: Record<(typeof CANONICAL_LOST_REASONS)[number], string> = {
-  requested_by_customer: "Cliente solicitou cancelamento",
+  requested_by_customer: "Le client a demandé l’annulation",
   price: "Prix",
   no_response: "Aucune réponse du client",
   product_unavailable: "Produit indisponible",

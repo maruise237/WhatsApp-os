@@ -99,7 +99,7 @@ export function SectionPatterns() {
                 </div>
                 <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Client {i + 1} · pix</div>
                 <div className="row">
-                  <span className="ds-badge ds-badge--neutral">2 itens</span>
+                  <span className="ds-badge ds-badge--neutral">2 articles</span>
                   <span className="ds-avatar ds-avatar--sm">RM</span>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export function SectionPatterns() {
                 <div style={{ fontWeight: 500 }}>Instagram Direct</div>
                 <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Token expirou — reconecte</div>
               </div>
-              <button className="ds-btn ds-btn--secondary">Reconectar</button>
+              <button className="ds-btn ds-btn--secondary">Reconnecter</button>
             </div>
           </div>
         </div>

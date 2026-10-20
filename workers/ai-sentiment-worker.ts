@@ -46,11 +46,11 @@ const sentimentSchema = z.object({
     .number()
     .min(0)
     .max(1)
-    .describe("0 = muito negativo, 0.5 = neutro, 1 = muito positivo"),
+    .describe("0 = très négatif, 0.5 = neutre, 1 = très positif"),
   reasoning_short: z
     .string()
     .max(280)
-    .describe("Justificativa curta da nota, em NO MÁXIMO 100 caracteres"),
+    .describe("Justification courte de la note, en 100 caractères AU MAXIMUM"),
 });
 
 export interface SentimentResult {

@@ -193,7 +193,7 @@ export async function processMessageReceived(row: EventRow): Promise<ProcessResu
     return {
       status: "skipped",
       reason: "ai_gateway_key_missing",
-      detail: `nenhuma chave configurada atende o modelo "${ctx.agent.model}"`,
+      detail: `aucune clé configurée ne prend en charge le modèle "${ctx.agent.model}"`,
     };
   }
 

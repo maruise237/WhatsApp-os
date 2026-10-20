@@ -100,7 +100,7 @@ async function creds(escopo: EscopoDaConta) {
     organizationId: escopo.organizationId,
     accountId: escopo.sessionRef,
   });
-  if (!c) throw new Error("zernio_not_configured: sem credencial para esta conta.");
+  if (!c) throw new Error("zernio_not_configured : aucun identifiant pour ce compte.");
   return c;
 }
 

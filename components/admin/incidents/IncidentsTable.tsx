@@ -39,7 +39,7 @@ const STATUS_VARIANTS: Record<IncidentStatus, "neutral" | "info" | "success"> = 
 };
 
 const STATUS_LABELS: Record<IncidentStatus, string> = {
-  open: "Aberto",
+  open: "Ouvert",
   acknowledged: "Pris en compte",
   resolved: "Résolu",
 };

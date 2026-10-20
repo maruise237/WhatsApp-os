@@ -107,7 +107,7 @@ export function UsageChart({ payload }: Props) {
                 width={70}
               />
               <Tooltip
-                formatter={(value) => [formatCentsUSD(Number(value)), "Custo"]}
+                formatter={(value) => [formatCentsUSD(Number(value)), "Coût"]}
                 labelFormatter={(label) => formatDateTick(String(label))}
                 contentStyle={tooltipStyle}
               />

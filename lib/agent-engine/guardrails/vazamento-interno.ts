@@ -259,7 +259,7 @@ const REGRAS: ReadonlyArray<RegraTexto> = [
   // que o cliente conhece.
   {
     categoria: 'erro_cru',
-    rotulo: 'identificador interno',
+    rotulo: 'identifiant interne',
     re: /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi,
   },
   // (E3) CÓDIGO DE ERRO OPACO — a outra metade da terceira porta: o código veio do

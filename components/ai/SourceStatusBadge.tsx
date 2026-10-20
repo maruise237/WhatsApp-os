@@ -25,7 +25,7 @@ export function deriveBadgeStatus(
 const MAP: Record<DerivedBadgeStatus, { label: string; variant: Variant }> = {
   ready: { label: "Prêt", variant: "success" },
   failed: { label: "Échec", variant: "error" },
-  partial: { label: "Parcial", variant: "warning" },
+  partial: { label: "Partiel", variant: "warning" },
   archived: { label: "Archivé", variant: "neutral" },
   not_indexed: { label: "Non indexé", variant: "neutral" },
 };

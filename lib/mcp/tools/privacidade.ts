@@ -23,16 +23,16 @@ const inputShape = {
     .string()
     .uuid()
     .optional()
-    .describe("Filtra por um contato. Sem ele, devolve os pedidos abertos da organização."),
+    .describe("Filtre par contact. Sans contact, renvoie les demandes ouvertes de l’organisation."),
   limite: z.number().int().min(1).max(50).optional().default(20),
 };
 
 export const crmListPrivacyRequests: McpToolDefinition<typeof inputShape> = {
   name: "crm_list_privacy_requests",
   description:
-    "Lista pedidos de privacidade (LGPD) da organização — exportação ou exclusão de dados — com " +
-    "tipo, situação, quando chegou e o prazo. NÃO executa nada: é leitura. Use para não insistir " +
-    "com quem pediu exclusão e para explicar o prazo a quem perguntar pelo próprio pedido.",
+    "Liste les demandes de confidentialité (RGPD) de l’organisation — export ou suppression de données — avec " +
+    "type, situation, date d’arrivée et échéance. N’EXÉCUTE rien : c’est de la lecture. À utiliser pour ne pas insister " +
+    "auprès de qui a demandé la suppression et pour expliquer l’échéance à qui interroge sur sa propre demande.",
   inputSchema: inputShape,
   category: "read",
   requiresRole: "agent",
@@ -62,7 +62,7 @@ export const crmListPrivacyRequests: McpToolDefinition<typeof inputShape> = {
       ...(exclusaoAberta
         ? {
             atencao:
-              "há pedido de exclusão em aberto: não envie campanha nem retorno para este contato, e não peça dados novos.",
+              "une demande de suppression est en cours : n’envoyez ni campagne ni relance à ce contact, et ne demandez pas de nouvelles données.",
           }
         : {}),
     };

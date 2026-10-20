@@ -33,7 +33,7 @@ const ROLE_VARIANTS: Record<
 const ROLE_LABELS: Record<string, string> = {
   admin: "Admin",
   manager: "Manager",
-  agent: "Agente",
+  agent: "Agent",
   viewer: "Viewer",
 };
 

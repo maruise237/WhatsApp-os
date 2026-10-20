@@ -153,7 +153,7 @@ export function EstadoDaMarca({
             valor={origemEmPortugues(origens.logoUrl, definidoNestaTela)}
           />
           <LinhaDeOrigem
-            campo="Cor"
+            campo="Couleur"
             valor={origemEmPortugues(origens.cor, definidoNestaTela)}
           />
         </div>

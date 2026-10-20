@@ -393,7 +393,7 @@ export type FlowBranch = {
 };
 
 const FALLBACK_ALWAYS_LABEL = 'Toujours';
-const FALLBACK_NONE_LABEL = 'Nenhuma delas';
+const FALLBACK_NONE_LABEL = 'Aucune d’entre elles';
 const NO_REPLY_LABEL = 'Sans réponse';
 
 function fallbackBranch(label: string): FlowBranch {

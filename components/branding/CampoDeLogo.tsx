@@ -297,13 +297,13 @@ export function CampoDeLogo({
         <div className="grid gap-3 sm:grid-cols-2">
           {(
             [
-              { rotulo: "Aparência clara", fundo: SUPERFICIE_CLARA },
-              { rotulo: "Aparência escura", fundo: SUPERFICIE_ESCURA },
+              { rotulo: "Apparence claire", fundo: SUPERFICIE_CLARA },
+              { rotulo: "Apparence sombre", fundo: SUPERFICIE_ESCURA },
             ] as const
           ).map(({ rotulo, fundo }) => (
             <div key={rotulo} className="space-y-1">
               <div
-                data-previa-do-logo={rotulo === "Aparência clara" ? "claro" : "escuro"}
+                data-previa-do-logo={rotulo === "Apparence claire" ? "claro" : "escuro"}
                 className="flex h-24 items-center justify-center rounded-sm border border-border px-4"
                 style={{ backgroundColor: fundo }}
               >

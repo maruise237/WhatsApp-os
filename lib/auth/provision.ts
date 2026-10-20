@@ -48,7 +48,7 @@ export async function ensureTenantForUser(
   const orgName =
     (user.user_metadata?.org_name as string | undefined)?.trim() ||
     user.email?.split("@")[0] ||
-    "Minha empresa";
+    "Mon entreprise";
   const base = slugify(orgName);
 
   // ponytail: check-then-insert tem janela de corrida se o mesmo link for

@@ -110,10 +110,10 @@ export async function completeTurnForEnrollment(
 
   if (result.kind === "sent") {
     if (node.type !== "action") {
-      throw new Error(`completeTurnForEnrollment: resultado 'sent' mas o nó "${node.id}" não é 'action'`);
+      throw new Error(`completeTurnForEnrollment : résultat 'sent' mais le nœud "${node.id}" n’est pas 'action'`);
     }
     const edge = selectEdge(graph.edges, node.id, { type: "always" });
-    if (!edge) throw new Error(`action node "${node.id}" sem aresta 'always' de saída`);
+    if (!edge) throw new Error(`action node "${node.id}" sans arête 'always' sortante`);
     await applyStep(
       "action_sent",
       {},
@@ -124,11 +124,11 @@ export async function completeTurnForEnrollment(
 
   if (result.kind === "classified") {
     if (node.type !== "ai_classify") {
-      throw new Error(`completeTurnForEnrollment: resultado 'classified' mas o nó "${node.id}" não é 'ai_classify'`);
+      throw new Error(`completeTurnForEnrollment : résultat 'classified' mais le nœud "${node.id}" n’est pas 'ai_classify'`);
     }
     const edge = selectEdge(graph.edges, node.id, classEdgeMatch(node, result.class));
     if (!edge) {
-      throw new Error(`ai_classify node "${node.id}" sem aresta pra classe "${result.class}" (fallback 'always' também ausente)`);
+      throw new Error(`ai_classify node "${node.id}" sans arête vers la classe "${result.class}" (fallback 'always' également absent)`);
     }
     await applyStep(
       "ai_classified",
@@ -140,7 +140,7 @@ export async function completeTurnForEnrollment(
 
   // 'planned' — o acionamento decidiu os instantes de TODAS as esperas adaptativas.
   if (node.type !== "trigger") {
-    throw new Error(`completeTurnForEnrollment: resultado 'planned' mas o nó "${node.id}" não é 'trigger'`);
+    throw new Error(`completeTurnForEnrollment : résultat 'planned' mais le nœud "${node.id}" n’est pas 'trigger'`);
   }
   // Clampa contra o GRAFO PINADO, nunca contra o que o payload do modelo afirma
   // que o intervalo era: quem propõe é a IA, quem decide o intervalo é o nó.
@@ -151,7 +151,7 @@ export async function completeTurnForEnrollment(
     agora: now,
   });
   const edge = selectEdge(graph.edges, node.id, { type: "always" });
-  if (!edge) throw new Error(`trigger node "${node.id}" sem aresta 'always' de saída`);
+  if (!edge) throw new Error(`trigger node "${node.id}" sans arête 'always' sortante`);
   await applyStep(
     "timing_plan_decidido",
     // O plano inteiro no evento (não só um ponteiro pra coluna): a timeline do

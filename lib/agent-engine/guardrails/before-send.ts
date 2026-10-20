@@ -782,14 +782,14 @@ export async function runBeforeSend(args: RunBeforeSendArgs): Promise<BeforeSend
           agentId: args.agentId ?? null,
         });
         if (!r.routed) {
-          args.log.info('veto sem negócio para pendurar: registrado no event_log', {
+          args.log.info('veto sans affaire à laquelle se rattacher : enregistré dans l’event_log', {
             channel_session_id: args.channelSessionId,
             reason: r.reason,
           });
         }
       } catch (err) {
         // A timeline do veto não pode derrubar o veto.
-        args.log.error('falha ao registrar atividade de veto (segue)', {
+        args.log.error('échec de l’enregistrement de l’activité de veto (on continue)', {
           channel_session_id: args.channelSessionId,
           error: err instanceof Error ? err.name : 'unknown',
         });
@@ -942,7 +942,7 @@ async function persistTrace(
     );
     return rows[0]?.id ?? null;
   } catch (err) {
-    args.log.error('falha ao persistir trace de auditoria before_send (segue: logger é backup)', {
+    args.log.error('échec de la persistance de la trace d’audit before_send (on continue : le logger sert de secours)', {
       channel_session_id: args.channelSessionId,
       error: err instanceof Error ? err.name : 'unknown',
     });

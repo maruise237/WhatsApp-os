@@ -87,7 +87,7 @@ const RISK_VARIANT: Record<
 const RISK_LABELS: Record<AdminLgpdRiskLevel, string> = {
   expired: "Échue",
   at_risk: "Critique",
-  warning: "Alerta",
+  warning: "Alerte",
   ok: "OK",
 };
 

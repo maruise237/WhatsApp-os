@@ -70,7 +70,7 @@ const SLA_VARIANT: Record<
 const SLA_LABELS: Record<SlaBucket, string> = {
   overdue: "Échue",
   critical: "Critique",
-  warning: "Alerta",
+  warning: "Alerte",
   ok: "OK",
 };
 

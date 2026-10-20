@@ -25,7 +25,7 @@ interface Props {
 }
 
 const STATUS_LABEL: Record<string, string> = {
-  open: "Aberta",
+  open: "Ouverte",
   // É EXATAMENTE o estado em que a passagem para humano deixa a conversa
   // (`performHumanHandoff`: 'ai_handling' → 'pending'), e o rótulo faltava — toda
   // conversa escalada mostrava `pending` cru no rosto do atendente. O

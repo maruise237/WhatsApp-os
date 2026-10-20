@@ -143,5 +143,5 @@ export const PACOTES: readonly PacoteDeFunil[] = [
 export const PACOTE_PADRAO: PacoteDeFunil =
   PACOTES.find((p) => p.id === "generico") ??
   (() => {
-    throw new Error("PACOTES sem o pacote genérico — ele é o último recurso do passo do funil");
+    throw new Error("PACOTES sans le paquet générique — c’est le dernier recours de l’étape du tableau");
   })();

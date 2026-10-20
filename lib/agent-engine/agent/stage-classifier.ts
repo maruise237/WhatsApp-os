@@ -113,7 +113,7 @@ export async function classifyStage(
   const suggestion = parseStageSuggestion(call.result.text);
   if (suggestion === null) {
     // aux batch sem estágio reconhecível NÃO é incidente do turno: sem PII, só o aviso.
-    deps.log.warn('stage-classifier: saída do modelo auxiliar sem estágio reconhecível — turno segue sem hint');
+    deps.log.warn('stage-classifier : sortie du modèle auxiliaire sans étape reconnaissable — le tour continue sans indication');
   }
   return suggestion;
 }
@@ -171,7 +171,7 @@ export async function recordStageDivergenceCandidate(
   const file = path.join(dir, `stage-divergence_${trace.jobId}.json`);
   await writeFile(file, `${JSON.stringify(record, null, 2)}\n`, 'utf8');
   // PII fora do log: só os nomes dos estágios (não o sinal).
-  log.info('candidato ao golden set registrado (divergência de estágio classificador×modelo)', {
+  log.info('candidat au golden set enregistré (divergence d’étape classificateur×modèle)', {
     suggested,
     confirmed,
   });

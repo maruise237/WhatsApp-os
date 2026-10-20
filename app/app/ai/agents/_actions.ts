@@ -199,7 +199,7 @@ export async function renameAgentAction(id: string, name: string): Promise<Actio
   if (!UUID_RX.test(id)) return { ok: false, error: "invalid_request" };
   const trimmed = (name ?? "").trim();
   if (trimmed.length < 1 || trimmed.length > 120) {
-    return { ok: false, error: "validation_failed", message: "Nome entre 1 e 120 caracteres." };
+    return { ok: false, error: "validation_failed", message: "Le nom doit contenir entre 1 et 120 caractères." };
   }
   const guard = await ensureAdmin();
   if (guard.kind === "fail") return guard.result;

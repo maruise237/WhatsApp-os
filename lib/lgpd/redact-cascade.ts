@@ -93,7 +93,7 @@ export async function cascadeRedactContact(args: CascadeArgs): Promise<CascadeRe
     // redação ocorreu, e o rosto ainda no bucket sem ninguém capaz de achá-lo.
     // Melhor abortar a cascata e reprocessar do que anonimizar pela metade.
     if (filaErro) {
-      throw new Error(`[lgpd-redact-cascade] avatar não enfileirado: ${filaErro.message}`);
+      throw new Error(`[lgpd-redact-cascade] avatar non mis en file : ${filaErro.message}`);
     }
 
     await admin

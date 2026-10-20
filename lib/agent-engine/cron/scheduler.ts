@@ -176,7 +176,7 @@ async function applyFailure(
     await client.query(
       `insert into agent_inbox_items (organization_id, kind, severity, title, body, ref_kind, ref_id)
        values ($1, 'job_dead', 'critical', 'Cron désactivé après un échec de déclenchement', $2, 'cron_jobs', $3)`,
-      [cron.organization_id, `kind=${cron.kind}; job_kind=${cron.job_kind}; motivo=${classification}; attempts=${attempts}`, cron.id],
+      [cron.organization_id, `kind=${cron.kind}; job_kind=${cron.job_kind}; motif=${classification}; attempts=${attempts}`, cron.id],
     );
     return { outcome: 'disabled', classification, attempts };
   }

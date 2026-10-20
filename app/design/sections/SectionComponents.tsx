@@ -19,7 +19,7 @@ export function SectionComponents() {
 
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Componentes</h2>
+      <h2 className="ds-display">Composants</h2>
       <p className="ds-lede">
         États complets : default, hover, focus, active, disabled, loading, error. Les composants réagissent à l’exécution à la palette, à la typographie et à la densité sélectionnées.
       </p>

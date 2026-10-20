@@ -209,7 +209,7 @@ function resolverCor(
   // AUSENTE é a instalação de fábrica e não merece aviso nenhum — avisar sobre o
   // caso normal ensina o operador a ignorar avisos.
   if (cru === null || (typeof cru === "object" && Object.keys(cru).length === 0)) {
-    anotar("cor_ausente", "a camada declara cor, mas sem conteúdo");
+    anotar("cor_ausente", "la couche déclare une couleur, mais sans contenu");
     return { cor: null, motivos };
   }
   if (cru === undefined) return { cor: null, motivos };
@@ -226,12 +226,12 @@ function resolverCor(
       (i) => i.path[0] === "semente_hex" && i.code === "custom",
     );
     if (noHex) {
-      anotar("semente_invalida", "semente_hex não é um hex de cor (#rgb ou #rrggbb)");
+      anotar("semente_invalida", "semente_hex n’est pas un hex de couleur (#rgb ou #rrggbb)");
     } else {
       const campos = [
         ...new Set(lido.error.issues.map((i) => i.path.join(".") || "(raiz)")),
       ].sort();
-      anotar("envelope_malformado", `campos fora da forma esperada: ${campos.join(", ")}`);
+      anotar("envelope_malformado", `champs hors de la forme attendue : ${campos.join(", ")}`);
     }
     return { cor: null, motivos };
   }
@@ -244,8 +244,8 @@ function resolverCor(
   if (envelope.format !== FORMATO_ATUAL) {
     anotar(
       "formato_desconhecido",
-      `formato ${envelope.format} não é o desta versão (${FORMATO_ATUAL}); ` +
-        `a cor do produto permanece`,
+      `format ${envelope.format} n’est pas celui de cette version (${FORMATO_ATUAL}); ` +
+        `la couleur du produit reste en place`,
     );
     return { cor: null, motivos };
   }
@@ -256,8 +256,8 @@ function resolverCor(
   if (envelope.algo !== ALGORITMO_ATUAL) {
     anotar(
       "algoritmo_desconhecido",
-      `derivação gravada na versão ${envelope.algo}; esta instalação deriva na ` +
-        `${ALGORITMO_ATUAL} e usa a semente como entrada`,
+      `dérivation enregistrée dans la version ${envelope.algo}; cette installation dérive dans la ` +
+        `${ALGORITMO_ATUAL} et utilise la graine comme entrée`,
     );
   }
 
@@ -270,7 +270,7 @@ function resolverCor(
     // `--color-brand`, que é inerte: nenhum componente muda de cor por ela).
     anotar(
       "papel_desconhecido",
-      "papel da semente não é conhecido nesta versão; a cor não pinta a interface",
+      "le rôle de la graine n’est pas connu dans cette version ; la couleur ne s’applique pas à l’interface",
       "--color-brand",
     );
     return { cor: { semente, papel: "desconhecido", derivada: null }, motivos };
@@ -279,7 +279,7 @@ function resolverCor(
   if (papel !== "accent") {
     anotar(
       "papel_nao_pinta",
-      "a semente foi configurada só como identidade; a interface segue com a cor do produto",
+      "la graine a été configurée uniquement comme identité ; l’interface garde la couleur du produit",
       "--color-brand",
     );
     return { cor: { semente, papel, derivada: null }, motivos };

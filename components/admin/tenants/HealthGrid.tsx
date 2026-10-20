@@ -47,7 +47,7 @@ function formatCents(cents: number): string {
 const MODO_LABEL: Record<TenantHealthResponse["ai"]["enforcement_mode"], string> = {
   off: "Non appliqué",
   avisar: "Avertit seulement",
-  bloquear: "Para a IA no limite",
+  bloquear: "Arrête l’IA au plafond",
 };
 
 // ---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ export function HealthGrid({ health }: HealthGridProps) {
       ? [{ label: "Expire le", value: `${nuvemshop.days_until_expiry}d` }]
       : []),
     ...(nuvemshop.expires_at
-      ? [{ label: "Token expira", value: formatDate(nuvemshop.expires_at) }]
+      ? [{ label: "Le jeton expire", value: formatDate(nuvemshop.expires_at) }]
       : []),
   ];
 

@@ -83,7 +83,7 @@ export async function observaTravessias(
     .from("crm_lead_risk_states")
     .select("lead_id, bucket")
     .eq("organization_id", organizationId);
-  if (error) throw new Error(`observador de risco: ${error.message}`);
+  if (error) throw new Error(`observateur de risque : ${error.message}`);
   const anterior = new Map<string, RiskBucket>(
     ((gravados ?? []) as EstadoGravado[]).map((g) => [g.lead_id, g.bucket]),
   );
@@ -119,7 +119,7 @@ export async function observaTravessias(
       },
       { onConflict: "lead_id" },
     );
-    if (upErr) throw new Error(`observador de risco (gravação): ${upErr.message}`);
+    if (upErr) throw new Error(`observateur de risque (enregistrement) : ${upErr.message}`);
 
     if (!linha) {
       r.silenciosas += 1;

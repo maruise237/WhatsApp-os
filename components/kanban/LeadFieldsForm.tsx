@@ -147,7 +147,7 @@ export function LeadFieldsForm({ lead, pipelineId, onSaved, onCancel }: Props) {
 
       <div className="space-y-2">
         <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
-        <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
+        <Input id="tagsRaw" placeholder="vip, réachat" {...form.register("tagsRaw")} />
       </div>
 
       <div className="flex justify-end gap-2">

@@ -114,7 +114,7 @@ function Pendentes({
               variant="outline"
               disabled={!canDecide || pending}
               onClick={() => onDecidir(p.lead_id, "dismiss", p.seq)}
-              aria-label={`Ignorar: ${p.next_action}`}
+              aria-label={`Ignorer : ${p.next_action}`}
             >
               <X size={14} aria-hidden />
               Ignorer
