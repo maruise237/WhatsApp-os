@@ -77,7 +77,7 @@ async function main(): Promise<void> {
       })
       .select("id")
       .single();
-    if (error) throw new Error(`falha ao criar a segunda org: ${error.message}`);
+    if (error) throw new Error(`échec de création de la seconde org : ${error.message}`);
     segundaOrgId = (data as { id: string }).id;
     // O gatilho `trg_seed_default_pipeline_for_org` já semeou o funil "Pedidos"
     // aqui dentro — é exatamente esse homônimo que o spec não pode ver na lista.
@@ -95,7 +95,7 @@ async function main(): Promise<void> {
     },
     { onConflict: "user_id,organization_id" },
   );
-  if (vincErr) throw new Error(`falha ao vincular o manager: ${vincErr.message}`);
+  if (vincErr) throw new Error(`échec du rattachement du manager : ${vincErr.message}`);
 
   creds.funis = { segunda_org_id: segundaOrgId };
   fs.writeFileSync(CREDS_PATH, JSON.stringify(creds, null, 2));
@@ -105,7 +105,7 @@ async function main(): Promise<void> {
     .select("id", { count: "exact", head: true })
     .eq("organization_id", segundaOrgId);
 
-  console.log(`✅ segunda org ${segundaOrgId} com ${count ?? 0} funil(is); manager vinculado.`);
+  console.log(`✅ seconde org ${segundaOrgId} avec ${count ?? 0} entonnoir(s) ; manager rattaché.`);
 }
 
 main().catch((e) => {

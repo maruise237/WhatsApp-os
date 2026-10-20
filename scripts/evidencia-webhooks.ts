@@ -68,7 +68,7 @@ async function main(): Promise<void> {
   await page.screenshot({ path: path.join(DESTINO, "04-acao-mensagem-pela-ia.png") });
 
   await browser.close();
-  console.log(`evidência em ${DESTINO}`);
+  console.log(`preuve dans ${DESTINO}`);
 }
 
 void main().catch((err) => {

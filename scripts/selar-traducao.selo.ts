@@ -122,8 +122,8 @@ export function hashDoOriginal(conteudo: string): string {
 export function conferirVacuidade(pares: readonly ParTraduzido[]): void {
   if (pares.length === 0) {
     throw new Error(
-      "TRADUCOES está vazio — o gate de tradução não está medindo nada. " +
-        "Se a intenção foi remover um par, remova também o teste que o cita.",
+      "TRADUCOES est vide — le contrôle de traduction ne mesure rien. " +
+        "Si l'intention était de retirer une paire, retirez aussi le test qui la cite.",
     );
   }
 }

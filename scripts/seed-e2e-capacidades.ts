@@ -67,8 +67,8 @@ async function main(): Promise<void> {
   }
   if (!fixtures) {
     throw new Error(
-      "`followup_agent_fixtures` continua ausente mesmo depois de rodar " +
-        "seed-e2e-followup-agent.ts — o problema não é a ordem dos seeds.",
+      "`followup_agent_fixtures` reste absent même après avoir lancé " +
+        "seed-e2e-followup-agent.ts — le problème n'est pas l'ordre des seeds.",
     );
   }
 
@@ -246,8 +246,8 @@ async function main(): Promise<void> {
     .eq("action", "mcp.tool_called");
 
   console.info(
-    `\n✅ Seed de capacidades completo. agent=${agentId} version=${versionId} ` +
-      `chamadas auditadas na org=${count ?? "?"}`,
+    `\n✅ Seed des capacités terminé. agent=${agentId} version=${versionId} ` +
+      `appels audités dans l'org=${count ?? "?"}`,
   );
 }
 

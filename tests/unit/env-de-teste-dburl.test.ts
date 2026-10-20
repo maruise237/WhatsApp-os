@@ -146,7 +146,7 @@ describe("credenciaisSupabaseDeTeste — a travessia chega inteira", () => {
   it("sem credencial nenhuma, lança em vez de devolver vazio", () => {
     // Guarda de vacuidade: se a função passasse a devolver objeto vazio, todos
     // os casos acima virariam comparações contra ausência de dado.
-    expect(() => credenciaisSupabaseDeTeste()).toThrow(/credenciais do Supabase/i);
+    expect(() => credenciaisSupabaseDeTeste()).toThrow(/identifiants de la base/i);
   });
 });
 
@@ -198,7 +198,7 @@ describe("anunciarDestino — o rótulo diz a verdade sobre os DOIS canais", () 
 
   it("tudo local: mantém o formato que o operador já conhece, em info", () => {
     const { info, warn } = capturar({});
-    expect(info.join("\n")).toContain("escrevendo em LOCAL");
+    expect(info.join("\n")).toContain("écriture en LOCAL");
     expect(warn).toEqual([]);
   });
 
@@ -206,10 +206,10 @@ describe("anunciarDestino — o rótulo diz a verdade sobre os DOIS canais", () 
     const { info, warn } = capturar({ dbUrl: REMOTO_DB });
     expect(info, "estado misto não pode sair como informação de rotina").toEqual([]);
     const texto = warn.join("\n");
-    expect(texto).toContain("MISTO");
+    expect(texto).toContain("MIXTE");
     // Nomear o canal é o que torna o aviso acionável: quem lê precisa saber que
     // é o pg.Pool, não a API, que vai para o banco errado.
-    expect(texto).toMatch(/Postgres para REMOTO/);
+    expect(texto).toMatch(/Postgres en DISTANT/);
     expect(texto).toMatch(/pg\.Pool/);
   });
 
@@ -224,7 +224,7 @@ describe("anunciarDestino — o rótulo diz a verdade sobre os DOIS canais", () 
   it("tudo remoto: continua avisando (e não vira MISTO por engano)", () => {
     const { warn } = capturar({ url: "https://porysaiysiztn.supabase.co", dbUrl: REMOTO_DB });
     const texto = warn.join("\n");
-    expect(texto).toContain("REMOTO");
-    expect(texto).not.toContain("MISTO");
+    expect(texto).toContain("DISTANT");
+    expect(texto).not.toContain("MIXTE");
   });
 });

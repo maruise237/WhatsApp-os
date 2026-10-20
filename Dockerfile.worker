@@ -1,12 +1,12 @@
-# Worker 24/7 do agent-engine — processo long-running fora do Next.
+# Worker 24/7 de l'agent-engine — processus de longue durée hors de Next.
 #
-# Duas etapas : a primeira instala as dependências e compila o worker em UM
-# arquivo JS (scripts/build-worker.mjs) ; a segunda só leva esse arquivo.
-# Antes, a imagem rodava TypeScript via `tsx` com todas as devDependencies :
-# 286 MB de RSS no boot contra 169 MB do bundle, e uma imagem de ~1 GB.
+# Deux étapes : la première installe les dépendances et compile le worker en UN
+# fichier JS (scripts/build-worker.mjs) ; la seconde n'emporte que ce fichier.
+# Avant, l'image exécutait du TypeScript via `tsx` avec toutes les devDependencies :
+# 286 Mo de RSS au démarrage contre 169 Mo pour le bundle, et une image d'~1 Go.
 FROM node:22-alpine AS build
 WORKDIR /app
-# pnpm fixado na versão do lockfile do repo (pnpm 10 bloquearia build scripts).
+# pnpm fixé sur la version du lockfile du dépôt (pnpm 10 bloquerait les scripts de build).
 RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
@@ -16,7 +16,7 @@ RUN node scripts/build-worker.mjs
 FROM node:22-alpine
 WORKDIR /app
 
-# Procedência (doutrina de packaging, invariante 2).
+# Provenance (doctrine de packaging, invariant 2).
 LABEL org.opencontainers.image.source="https://github.com/maruise237/WhatsApp-os" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.title="WhatsApp OS worker"
@@ -37,7 +37,7 @@ COPY --from=build /app/dist/worker/worker.mjs ./worker.mjs
 COPY --from=build /app/lib/agent-engine/playbooks ./lib/agent-engine/playbooks
 
 USER node
-# Healthz do worker (bind 0.0.0.0 dentro do container).
+# Healthz du worker (écoute sur 0.0.0.0 dans le conteneur).
 EXPOSE 8787
 
 CMD ["node", "worker.mjs"]

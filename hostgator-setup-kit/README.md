@@ -1,150 +1,150 @@
-# DeskcommCRM — Kit de Instalação (HostGator)
+# DeskcommCRM — Kit d'installation (HostGator)
 
-Este kit sobe o **DeskcommCRM** no seu servidor VPS da HostGator. Você tem dois caminhos:
+Ce kit met **DeskcommCRM** en ligne sur votre serveur VPS HostGator. Vous avez deux chemins :
 
-> **Ainda nem tem servidor?** Comece por `comecar.sh` — ele roda **no seu computador**, antes
-> de existir VPS, e responde a pergunta que trava todo mundo no início: *o que eu preciso
-> contratar?* Ele nomeia o plano (VPS Turing, 2 vCPU / 4 GB — o Cartesius não dá conta do
-> WhatsApp), abre a página se você quiser, e devolve o comando exato do seu caso. Depois que
-> a VPS existir, o caminho é o `install.sh` daqui de baixo.
+> **Vous n'avez pas encore de serveur ?** Commencez par `comecar.sh` — il tourne **sur votre ordinateur**, avant
+> que le VPS n'existe, et répond à la question qui bloque tout le monde au début : *que dois-je
+> louer ?* Il nomme l'offre (VPS Turing, 2 vCPU / 4 Go — la Cartesius ne suffit pas pour
+> WhatsApp), ouvre la page si vous le souhaitez, et vous donne la commande exacte pour votre cas. Une fois
+> le VPS créé, le chemin est l'`install.sh` ci-dessous.
 >
 > ```bash
 > bash comecar.sh
 > ```
 
-> **Outra hospedagem?** O kit é feito para a HostGator (é a parceria do projeto e o caminho
-> testado de ponta a ponta), mas roda em qualquer VPS com Docker. Se a sua já vem com um
-> **proxy reverso próprio** ocupando as portas 80/443 — caso de Hostinger, Coolify, Dokploy
-> e CapRover —, o instalador **detecta isso sozinho** e publica o CRM através dele, em vez
-> de tentar subir um Caddy que não caberia. Ver
-> [VPS que já vem com proxy próprio](#vps-que-já-vem-com-proxy-próprio-hostinger-coolify-dokploy).
+> **Autre hébergeur ?** Le kit est conçu pour HostGator (c'est le partenariat du projet et le chemin
+> testé de bout en bout), mais il tourne sur n'importe quel VPS avec Docker. Si le vôtre arrive déjà avec un
+> **proxy inverse propre** qui occupe les ports 80/443 — cas d'Hostinger, Coolify, Dokploy
+> et CapRover —, l'installateur **le détecte tout seul** et publie le CRM à travers lui, au lieu
+> d'essayer de démarrer un Caddy qui n'aurait pas sa place. Voir
+> [VPS livré avec son propre proxy](#vps-livré-avec-son-propre-proxy-hostinger-coolify-dokploy).
 
-## 🤖 Caminho fácil: deixe o Claude Code fazer
+## 🤖 Chemin facile : laissez un assistant de code le faire
 
-1. Contrate um **VPS na HostGator** e acesse-o por SSH.
-2. Jogue esta pasta (ou o `.zip`) no chat do **Claude Code** rodando dentro do VPS.
-3. Diga: *"instala o DeskcommCRM pra mim"*. Ele lê o `CLAUDE.md` e conduz tudo —
-   cria o banco, gera as senhas, sobe o CRM e te ajuda a conectar o WhatsApp.
+1. Louez un **VPS chez HostGator** et accédez-y en SSH.
+2. Déposez ce dossier (ou le `.zip`) dans le chat de votre **assistant de code** qui tourne dans le VPS.
+3. Dites : *« installe DeskcommCRM pour moi »*. Il lit le `CLAUDE.md` et conduit tout —
+   crée la base, génère les mots de passe, démarre le CRM et vous aide à connecter WhatsApp.
 
-## ⚙️ Caminho manual: um comando
+## ⚙️ Chemin manuel : une seule commande
 
-Dentro do VPS:
+Dans le VPS :
 
 ```bash
 bash install.sh
 ```
 
-> **VPS sem Docker?** O instalador resolve. Se não encontrar o Docker, ele **pergunta**
-> antes e instala pelo `get.docker.com` — o instalador oficial da Docker, que roda como
-> root, como manda a documentação deles. Com `--yes` ele segue sem perguntar, que é o
-> contrato desse modo. Se preferir instalar por conta própria, responda `n` e rode
-> `curl -fsSL https://get.docker.com | sh` antes.
+> **VPS sans Docker ?** L'installateur s'en occupe. S'il ne trouve pas Docker, il **demande**
+> d'abord puis l'installe via `get.docker.com` — l'installateur officiel de Docker, qui tourne en
+> root, comme le prescrit leur documentation. Avec `--yes` il continue sans demander, c'est le
+> contrat de ce mode. Si vous préférez l'installer vous-même, répondez `n` et lancez
+> `curl -fsSL https://get.docker.com | sh` avant.
 
-O instalador pergunta o que precisa (domínio, chaves do Supabase e da Anthropic,
-e-mail/senha do admin), gera o resto e sobe tudo.
+L'installateur demande ce dont il a besoin (domaine, clés de la base et du fournisseur d'IA,
+e-mail/mot de passe de l'admin), génère le reste et démarre tout.
 
-> Modo não-interativo: copie `.env.hostgator.example` (do repositório) para `.env`,
-> preencha, e rode `bash install.sh --yes`.
+> Mode non interactif : copiez `.env.hostgator.example` (du dépôt) vers `.env`,
+> remplissez-le, et lancez `bash install.sh --yes`.
 
-## Criar o Supabase automaticamente (opcional)
+## Créer la base Supabase automatiquement (optionnel)
 
-Criar o projeto no navegador e copiar as 4 credenciais é o passo mais demorado da
-instalação — e o mais fácil de errar (copiar a *Direct connection*, que é IPv6-only e
-não conecta de um VPS IPv4, é a armadilha mais comum). Dá para pular tudo isso:
+Créer le projet dans le navigateur et copier les 4 identifiants est l'étape la plus longue de
+l'installation — et la plus facile à rater (copier la *Direct connection*, qui est IPv6 uniquement et
+ne se connecte pas depuis un VPS IPv4, est le piège le plus courant). Vous pouvez sauter tout cela :
 
 ```bash
 export SUPABASE_ACCESS_TOKEN=sbp_...        # supabase.com/dashboard/account/tokens
-bash install.sh                             # cria o projeto e segue a instalação
+bash install.sh                             # crée le projet et poursuit l'installation
 ```
 
-O `install.sh` chama o provisionamento sozinho quando encontra o token e as
-credenciais ainda vazias — as 4 variáveis entram no fluxo sem copiar e colar.
-Para criar só o projeto, sem instalar, o script também roda sozinho:
+`install.sh` appelle le provisionnement tout seul quand il trouve le jeton et que les
+identifiants sont encore vides — les 4 variables entrent dans le flux sans copier-coller.
+Pour créer seulement le projet, sans installer, le script tourne aussi seul :
 
 ```bash
-bash supabase-provision.sh "Nome do Projeto" sa-east-1 >> .env
+bash supabase-provision.sh "Nom du Projet" sa-east-1 >> .env
 ```
 
-O script cria o projeto, **espera o banco ficar `ACTIVE_HEALTHY`** (projeto novo não
-nasce pronto), busca as chaves e **descobre o host do pooler testando conexão real** em
-vez de adivinhar. Imprime as 4 linhas prontas para colar no `.env`.
+Le script crée le projet, **attend que la base soit `ACTIVE_HEALTHY`** (un nouveau projet ne
+naît pas prêt), récupère les clés et **découvre l'hôte du pooler en testant une vraie connexion** au
+lieu de deviner. Il affiche les 4 lignes prêtes à coller dans le `.env`.
 
-⚠️ **O token é uma chave mestra** — dá acesso a todos os projetos da conta. Ele é lido do
-ambiente e nunca gravado em disco. Instalando para terceiros, use o token DO CLIENTE, ou
-rode o script na sua máquina e leve só as 4 credenciais para o servidor dele.
+⚠️ **Le jeton est une clé maîtresse** — il donne accès à tous les projets du compte. Il est lu depuis
+l'environnement et jamais écrit sur disque. Si vous installez pour des tiers, utilisez le jeton DU CLIENT, ou
+lancez le script sur votre machine et n'emportez que les 4 identifiants sur son serveur.
 
-⚠️ **Plano grátis: 2 projetos por usuário**, contados em todas as organizações onde ele é
-Owner/Admin. Não dá para hospedar vários clientes numa conta só.
+⚠️ **Offre gratuite : 2 projets par utilisateur**, comptés sur toutes les organisations où il est
+Owner/Admin. Impossible d'héberger plusieurs clients sur un seul compte.
 
-## O que você precisa antes
+## Ce dont vous avez besoin avant
 
-| Item | Onde conseguir |
+| Élément | Où l'obtenir |
 |---|---|
-| VPS (Docker) | HostGator — VPS com Docker (n8n/OpenClaw/GatorClaw). Outras hospedagens com Docker também servem — se a sua já tiver proxy próprio nas portas 80/443, [veja aqui](#vps-que-já-vem-com-proxy-próprio-hostinger-coolify-dokploy) |
-| Domínio | Registro de domínio (aponte um A-record pro IP do VPS) |
-| Banco de dados | Conta grátis no [supabase.com](https://supabase.com) (3 chaves + connection string) |
-| IA | Chave da [Anthropic](https://console.anthropic.com) |
-| WhatsApp | Seu número — conectado por QR code no onboarding |
+| VPS (Docker) | HostGator — VPS avec Docker (n8n/OpenClaw/GatorClaw). D'autres hébergeurs avec Docker conviennent aussi — si le vôtre a déjà son propre proxy sur les ports 80/443, [voir ici](#vps-livré-avec-son-propre-proxy-hostinger-coolify-dokploy) |
+| Domaine | Registre de domaine (pointez un enregistrement A vers l'IP du VPS) |
+| Base de données | Compte gratuit sur [supabase.com](https://supabase.com) (3 clés + connection string) |
+| IA | Une clé de votre fournisseur d'IA |
+| WhatsApp | Votre numéro — connecté par QR code pendant l'onboarding |
 
-## Requisitos do VPS
+## Prérequis du VPS
 
-- **4 GB RAM recomendados.** A imagem é pré-buildada, então o servidor não compila nada e a
-  stack SOBE com 2 GB — mas operar é outra coisa: são 7 contêineres, e o WAHA consome
-  ~150 MB por sessão de WhatsApp além de ~300 MB de overhead do Node. Com 2 GB você roda
-  no limite e vai precisar de swap. Ver `docs/runbooks/waha-hostgator.md`.
-- Portas **80** e **443** abertas (`ufw allow 80,443,22/tcp`).
-- Docker + Docker Compose v2 — o `install.sh` instala o Docker sozinho se faltar (ver acima).
+- **4 Go de RAM recommandés.** L'image est pré-construite, donc le serveur ne compile rien et la
+  stack DÉMARRE avec 2 Go — mais l'exploiter est autre chose : il y a 7 conteneurs, et WAHA consomme
+  ~150 Mo par session WhatsApp en plus de ~300 Mo de surcoût Node. Avec 2 Go vous tournez
+  à la limite et aurez besoin de swap. Voir `docs/runbooks/waha-hostgator.md`.
+- Ports **80** et **443** ouverts (`ufw allow 80,443,22/tcp`).
+- Docker + Docker Compose v2 — `install.sh` installe Docker tout seul s'il manque (voir ci-dessus).
 
-### VPS que já vem com proxy próprio (Hostinger, Coolify, Dokploy…)
+### VPS livré avec son propre proxy (Hostinger, Coolify, Dokploy…)
 
-Algumas hospedagens entregam a VPS com um **Traefik** já ocupando as portas 80/443 — é ele
-que dá HTTPS automático ao que o painel instala. O Caddy do kit quer as mesmas portas e não
-sobe. O instalador **detecta isso sozinho** e grava `REVERSE_PROXY=traefik` no `.env`; a
-partir daí os scripts do kit incluem o override que desliga o Caddy e publica o app pelo
-Traefik da hospedagem. Rodando compose na mão nessas instalações, use os dois arquivos:
+Certains hébergeurs livrent le VPS avec un **Traefik** qui occupe déjà les ports 80/443 — c'est lui
+qui donne le HTTPS automatique à ce que le panneau installe. Le Caddy du kit veut les mêmes ports et ne
+démarre pas. L'installateur **le détecte tout seul** et écrit `REVERSE_PROXY=traefik` dans le `.env` ; à
+partir de là les scripts du kit incluent l'override qui désactive Caddy et publie l'app via le
+Traefik de l'hébergeur. Si vous lancez compose à la main sur ces installations, utilisez les deux fichiers :
 
 ```bash
 docker compose -f docker-compose.prod.yml -f docker-compose.traefik.yml up -d
 ```
 
-Não desligue o Traefik da hospedagem para liberar as portas — isso quebra as automações do
-painel dela. Se o seu Traefik usa nomes diferentes de `websecure`/`letsencrypt`, ajuste
-`TRAEFIK_ENTRYPOINT` e `TRAEFIK_CERTRESOLVER` no `.env`.
+N'arrêtez pas le Traefik de l'hébergeur pour libérer les ports — cela casse les automatisations de
+son panneau. Si votre Traefik utilise des noms différents de `websecure`/`letsencrypt`, ajustez
+`TRAEFIK_ENTRYPOINT` et `TRAEFIK_CERTRESOLVER` dans le `.env`.
 
-Há um caso em que o instalador **pergunta em vez de decidir**: quando o Traefik da
-hospedagem roda em `--network host` (a Hostinger faz assim), o Docker não mostra porta
-publicada em contêiner nenhum, e então não dá para provar que é ele quem atende o seu
-domínio — poderia ser um nginx instalado direto no servidor. Como publicar o CRM atrás do
-proxy errado deixa o site no ar sem responder, o instalador mostra o que encontrou e pede
-confirmação. Em `bash install.sh --yes` não há a quem perguntar: ele para e pede que você
-declare `REVERSE_PROXY=traefik` no `.env` — aí a escolha é sua e ele segue sem perguntar.
+Il y a un cas où l'installateur **demande au lieu de décider** : quand le Traefik de
+l'hébergeur tourne en `--network host` (Hostinger fait ainsi), Docker n'affiche de port
+publié pour aucun conteneur, et alors il est impossible de prouver que c'est lui qui sert votre
+domaine — ce pourrait être un nginx installé directement sur le serveur. Comme publier le CRM derrière le
+mauvais proxy laisse le site en ligne sans répondre, l'installateur montre ce qu'il a trouvé et demande
+confirmation. Avec `bash install.sh --yes` il n'y a personne à qui demander : il s'arrête et vous demande de
+déclarer `REVERSE_PROXY=traefik` dans le `.env` — alors le choix est le vôtre et il continue sans demander.
 
-## Scripts do kit
+## Scripts du kit
 
-| Script | Função |
+| Script | Rôle |
 |---|---|
-| `install.sh` | Instala tudo (idempotente) |
-| `update.sh` | Atualiza pra versão nova |
-| `backup.sh` | Backup do banco + sessões WhatsApp |
-| `restore.sh` | Restaura um backup |
-| `reset-password.sh` | Redefine senha de um usuário |
-| `reset-mfa.sh` | Remove o MFA de um usuário travado |
-| `healthcheck.sh` | Diagnóstico dos serviços |
+| `install.sh` | Installe tout (idempotent) |
+| `update.sh` | Met à jour vers la nouvelle version |
+| `backup.sh` | Sauvegarde de la base + sessions WhatsApp |
+| `restore.sh` | Restaure une sauvegarde |
+| `reset-password.sh` | Réinitialise le mot de passe d'un utilisateur |
+| `reset-mfa.sh` | Retire le MFA d'un utilisateur bloqué |
+| `healthcheck.sh` | Diagnostic des services |
 
-## Automações e webhooks
+## Automatisations et webhooks
 
-O `install.sh` (e o `update.sh`, a cada atualização) já ativa sozinho um cron que roda todo minuto e "puxa" a fila de eventos pendentes (`/api/v1/cron/event-log-drain`) — é isso que faz uma automação disparar de verdade no seu servidor (ex.: enviar uma mensagem de WhatsApp quando um pedido muda de status). **Sem esse cron, as automações ficam paradas na fila e nunca rodam** — é um requisito, não um extra.
+`install.sh` (et `update.sh`, à chaque mise à jour) active déjà tout seul un cron qui tourne chaque minute et « tire » la file des événements en attente (`/api/v1/cron/event-log-drain`) — c'est ce qui fait qu'une automatisation se déclenche vraiment sur votre serveur (ex. : envoyer un message WhatsApp quand une commande change de statut). **Sans ce cron, les automatisations restent bloquées dans la file et ne tournent jamais** — c'est une exigence, pas un bonus.
 
-Rodar de novo o `install.sh`/`update.sh` não duplica a linha do cron (ele mesmo substitui a antiga). Na 1ª vez que o cron é ativado numa instalação que já existia há um tempo, o script também limpa eventos pendentes com mais de 7 dias (marcando como concluídos, sem apagar histórico) — assim o primeiro drain não sai disparando efeitos atrasados de semanas atrás.
+Relancer `install.sh`/`update.sh` ne duplique pas la ligne du cron (il remplace lui-même l'ancienne). La 1re fois que le cron est activé sur une installation qui existait depuis un moment, le script nettoie aussi les événements en attente depuis plus de 7 jours (en les marquant comme terminés, sans effacer l'historique) — ainsi le premier drain ne déclenche pas des effets en retard de plusieurs semaines.
 
-Pra testar na mão, rode no próprio VPS (usa o `INTERNAL_SECRET` do seu `.env`):
+Pour tester à la main, lancez sur le VPS lui-même (utilise l'`INTERNAL_SECRET` de votre `.env`) :
 
 ```bash
 source .env && curl -s -H "Authorization: Bearer ${INTERNAL_SECRET}" "${NEXT_PUBLIC_APP_URL}/api/v1/cron/event-log-drain"
 ```
 
-Resposta esperada: `{"data":{"scanned":N,...}}` (N pode ser 0 se não houver eventos na fila — o importante é receber esse formato, não um erro de autenticação ou de conexão).
+Réponse attendue : `{"data":{"scanned":N,...}}` (N peut être 0 s'il n'y a pas d'événements dans la file — l'important est de recevoir ce format, pas une erreur d'authentification ou de connexion).
 
-## Suporte
+## Support
 
-Problemas comuns e como resolver estão no `CLAUDE.md` (seção "Quando der problema").
+Les problèmes courants et comment les résoudre sont dans le `CLAUDE.md` (section « Quand il y a un problème »).

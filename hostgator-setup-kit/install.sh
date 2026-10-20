@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 #
-# DeskcommCRM — instalador self-host para VPS (HostGator).
+# DeskcommCRM — installateur auto-hébergé pour VPS (HostGator).
 #
-# Idempotente: pode rodar de novo sem estragar nada. Dependências no host:
-# só docker, docker compose, git, openssl, curl. psql/bootstrap rodam via Docker.
+# Idempotent : peut être relancé sans rien casser. Dépendances sur l'hôte :
+# seulement docker, docker compose, git, openssl, curl. psql/bootstrap tournent via Docker.
 #
-# Uso:
-#   bash install.sh            # interativo (pergunta o que falta)
-#   bash install.sh --yes      # não-interativo (usa .env já preenchido)
+# Usage :
+#   bash install.sh            # interactif (demande ce qui manque)
+#   bash install.sh --yes      # non interactif (utilise le .env déjà rempli)
 #
 set -euo pipefail
 
-# Diretório onde este script (e _common.sh, seu irmão) vivem — capturado ANTES
-# de qualquer 'cd' (step 2 pode entrar num repo clonado à parte).
+# Répertoire où vivent ce script (et _common.sh, son frère) — capturé AVANT
+# tout 'cd' (l'étape 2 peut entrer dans un dépôt cloné à part).
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
 REPO_URL="${REPO_URL:-https://github.com/melgarafael/DeskcommCRM.git}"
-# Uma constante, dois usos (o fim feliz e o fim travado) — e o comecar.sh tem a
-# gêmea. Link repetido à mão vira link divergente na primeira troca.
+# Une constante, deux usages (la fin heureuse et la fin bloquée) — et comecar.sh a sa
+# jumelle. Un lien répété à la main devient un lien divergent au premier changement.
 COMUNIDADE_URL="https://lp-comunidade.automatiklabs.com.br"
 REPO_DIR="${REPO_DIR:-deskcommcrm}"
 COMPOSE="docker-compose.prod.yml"
@@ -25,9 +25,9 @@ COMPOSE_TRAEFIK="docker-compose.traefik.yml"
 NONINTERACTIVE=0
 [ "${1:-}" = "--yes" ] && NONINTERACTIVE=1
 
-# Este script é standalone de propósito (roda antes do clone, então não dá para
-# usar o _common.sh). As duas funções abaixo são gêmeas das de lá — se mexer
-# numa, mexa na outra.
+# Ce script est autonome exprès (il tourne avant le clone, donc impossible
+# d'utiliser _common.sh). Les deux fonctions ci-dessous sont les jumelles de celles de là-bas — si vous
+# modifiez l'une, modifiez l'autre.
 dc() {
   if [ "${REVERSE_PROXY:-caddy}" = "traefik" ]; then
     docker compose -f "$COMPOSE" -f "$COMPOSE_TRAEFIK" "$@"
@@ -43,20 +43,20 @@ dc_files() {
   fi
 }
 
-# ── Aparência ───────────────────────────────────────────────────────────────
-# Cor só quando há terminal de verdade. Antes o ANSI saía sempre, inclusive
-# quando a saída vai para arquivo — o agent.sh redireciona o update.sh (`>
-# "$LOG"`) e o esc() de lá precisa varrer byte a byte para tirar esses escapes
-# do heartbeat. Desligar na origem é a correção de causa. NO_COLOR é a
-# convenção que quem roda em CI espera; FORCE_COLOR é a válvula de quem quer
-# cor mesmo em pipe.
+# ── Apparence ───────────────────────────────────────────────────────────────
+# Couleur seulement quand il y a un vrai terminal. Avant, l'ANSI sortait toujours, y compris
+# quand la sortie va dans un fichier — agent.sh redirige update.sh (`>
+# "$LOG"`) et l'esc() de là-bas doit balayer octet par octet pour retirer ces échappements
+# du heartbeat. Couper à la source est la correction de fond. NO_COLOR est la
+# convention qu'attend qui tourne en CI ; FORCE_COLOR est la soupape de qui veut
+# de la couleur même dans un pipe.
 if   [ -n "${NO_COLOR:-}" ];    then COLOR=0
 elif [ -n "${FORCE_COLOR:-}" ]; then COLOR=1
 elif [ -t 1 ];                  then COLOR=1
 else                                 COLOR=0
 fi
 
-# paint <código ANSI> <texto…>. Sem cor, imprime o texto cru — nunca some.
+# paint <code ANSI> <texte…>. Sans couleur, affiche le texte brut — il ne disparaît jamais.
 paint() { local code="$1"; shift; if [ "$COLOR" = 1 ]; then printf '\033[%sm%s\033[0m\n' "$code" "$*"; else printf '%s\n' "$*"; fi; }
 c_red() { paint 31 "$*"; }
 c_grn() { paint 32 "$*"; }
@@ -65,51 +65,51 @@ c_dim() { paint 2  "$*"; }
 die()   { c_red "✖ $*"; exit 1; }
 step()  { printf '\n'; paint 1 "▶ $*"; }
 
-# A resposta é sim? Aceita o que gente digita de verdade: s, S, sim, SIM, y,
-# yes, com espaço em volta. Cada prompt comparava a resposta com uma string
-# exata, então "S" e "sim" — a resposta certa, com a tecla errada — caíam no
-# ramo do NÃO. No gate do DNS isso encerrava a instalação com uma frase que nem
-# correspondia à escolha da pessoa. Gêmea da de _common.sh: se mexer numa,
-# mexa na outra. Coberta por test-validators.sh.
+# La réponse est-elle oui ? Accepte ce que les gens tapent vraiment : o, O, oui, OUI, y,
+# yes, avec des espaces autour (s/sim restent acceptés pour les anciens scripts). Chaque invite comparait la réponse à une chaîne
+# exacte, donc « O » et « oui » — la bonne réponse, avec la mauvaise touche — tombaient dans la
+# branche du NON. Au contrôle DNS, cela terminait l'installation avec une phrase qui ne
+# correspondait même pas au choix de la personne. Jumelle de celle de _common.sh : si vous modifiez l'une,
+# modifiez l'autre. Couverte par test-validators.sh.
 resposta_sim() {
   local r
   r="$(printf '%s' "${1:-}" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')"
-  case "$r" in s|sim|y|yes) return 0;; *) return 1;; esac
+  case "$r" in o|oui|s|sim|y|yes) return 0;; *) return 1;; esac
 }
 
-# ── Fases da jornada ────────────────────────────────────────────────────────
-# Os passos técnicos (step) são muitos e alguns são condicionais — numerá-los
-# daria um "7 de 11" que muda conforme o caminho de cada instalação. As FASES
-# são estáveis: são o mapa que a pessoa acompanha para saber onde está e
-# quanto falta, num processo que leva minutos e é o primeiro contato dela com
-# o produto.
+# ── Phases du parcours ──────────────────────────────────────────────────────
+# Les étapes techniques (step) sont nombreuses et certaines sont conditionnelles — les numéroter
+# donnerait un « 7 sur 11 » qui change selon le chemin de chaque installation. Les PHASES
+# sont stables : c'est la carte que la personne suit pour savoir où elle en est et
+# combien il reste, dans un processus qui prend des minutes et qui est son premier contact avec
+# le produit.
 FASE_TOTAL=4
-fase() { printf '\n'; paint 1 "━━━ Fase $1/$FASE_TOTAL · $2"; }
+fase() { printf '\n'; paint 1 "━━━ Phase $1/$FASE_TOTAL · $2"; }
 
-# ── Marca ───────────────────────────────────────────────────────────────────
-# Logo em blocos (fonte ANSI Shadow). Os blocos saem no MESMO verde do "✓" já
-# usado aqui, e o relevo (═╗║╝╚╔) em dim: essa dupla lê tanto em terminal de
-# fundo escuro quanto claro, sem precisar detectar o tema — uma cor de acento
-# clara sumiria no branco de quem usa terminal claro.
+# ── Marque ──────────────────────────────────────────────────────────────────
+# Logo en blocs (police ANSI Shadow). Les blocs sortent dans le MÊME vert que le « ✓ » déjà
+# utilisé ici, et le relief (═╗║╝╚╔) en atténué : ce duo se lit aussi bien sur un terminal à
+# fond sombre que clair, sans avoir besoin de détecter le thème — une couleur d'accent
+# claire disparaîtrait dans le blanc de qui utilise un terminal clair.
 #
-# A pintura é por substituição literal de string (${x//…}), não por classe de
-# caractere em sed/awk: sob LC_ALL=C essas ferramentas tratam a entrada como
-# BYTES, e todos esses glifos começam com 0xE2 — uma classe [╗║…] casaria
-# pedaço de █ e embaralharia o desenho na VPS de quem roda em locale C.
+# La peinture se fait par substitution littérale de chaîne (${x//…}), pas par classe de
+# caractères dans sed/awk : sous LC_ALL=C ces outils traitent l'entrée comme des
+# OCTETS, et tous ces glyphes commencent par 0xE2 — une classe [╗║…] correspondrait
+# à un morceau de █ et brouillerait le dessin sur le VPS de qui tourne en locale C.
 LOGO_COLS=71
 banner() {
   local cols linha ch
   cols="$(tput cols 2>/dev/null || echo 80)"
   case "$cols" in ''|*[!0-9]*) cols=80;; esac
   printf '\n'
-  # Terminal estreito recebe a versão de uma linha: logo quebrado no meio é
-  # pior do que logo nenhum.
+  # Un terminal étroit reçoit la version sur une ligne : un logo cassé au milieu est
+  # pire que pas de logo du tout.
   if [ "$COLOR" != 1 ] || [ "$cols" -lt $((LOGO_COLS + 2)) ]; then
     paint 1 "  DESKCOMM"
   else
-    # Tela limpa: tira o ruído do clone/apt de cima do logo. Exige TTY de
-    # verdade (não basta COLOR=1): com FORCE_COLOR numa saída redirecionada, um
-    # "limpe a tela" no meio do arquivo é lixo que ninguém pediu.
+    # Écran propre : retire le bruit du clone/apt au-dessus du logo. Exige un vrai
+    # TTY (COLOR=1 ne suffit pas) : avec FORCE_COLOR sur une sortie redirigée, un
+    # « effacer l'écran » au milieu du fichier est un déchet que personne n'a demandé.
     [ -t 1 ] && printf '\033[2J\033[H'
     while IFS= read -r linha; do
       linha="${linha//█/$'\033[32m'█$'\033[0m'}"
@@ -125,41 +125,41 @@ banner() {
 LOGO
   fi
   printf '\n'
-  c_dim "  Agentes de IA que atendem no WhatsApp, dentro do seu CRM."
-  c_dim "  Open-source · roda no seu servidor · os dados são seus."
+  c_dim "  Des agents qui vendent sur WhatsApp, au cœur de votre CRM."
+  c_dim "  Open source · tourne sur votre serveur · vos données restent à vous."
 }
 
-# ── Rede de segurança: nenhuma saída silenciosa ─────────────────────────────
-# Antes, qualquer comando que falhasse sob `set -e` derrubava o script sem
-# dizer nada (o caso real: um psql com connection string errada saía com
-# código 2 dentro de uma substituição, e a pessoa só via o terminal voltar).
-# Instalação é o primeiro contato com o produto: morrer mudo aqui é perder o
-# usuário. Este trap garante que TODA saída != 0 explique o que fazer.
+# ── Filet de sécurité : aucune sortie silencieuse ───────────────────────────
+# Avant, toute commande qui échouait sous `set -e` faisait tomber le script sans
+# rien dire (le cas réel : un psql avec une connection string erronée sortait avec
+# le code 2 dans une substitution, et la personne voyait seulement le terminal revenir).
+# L'installation est le premier contact avec le produit : mourir en silence ici, c'est perdre
+# l'utilisateur. Ce trap garantit que TOUTE sortie != 0 explique quoi faire.
 show_recovery() {
   local dir="${PROJECT_DIR:-$(pwd)}"
   c_red ""
   c_red "═══════════════════════════════════════════════════════"
-  c_red " A instalação parou. Nada ficou pela metade sem conserto."
+  c_red " L'installation s'est arrêtée. Rien n'est resté à moitié sans remède."
   c_red "═══════════════════════════════════════════════════════"
-  printf '\n%s\n\n' "Como voltar atrás e recomeçar do zero:"
+  printf '\n%s\n\n' "Comment revenir en arrière et tout recommencer :"
   printf '  %s\n' "cd ${dir}"
-  printf '  %s\n' "rm -f .env                                    # apaga a configuração digitada"
-  printf '  %s\n' "docker compose $(dc_files) down -v          # derruba o que subiu"
-  printf '  %s\n' "bash ${KIT_DIR:-hostgator-setup-kit}/install.sh   # começa de novo"
-  printf '\n%s\n' "Se o schema chegou a ser aplicado e você quer o banco limpo de novo,"
-  printf '%s\n'   "abra o Supabase > SQL Editor e rode (ATENÇÃO: apaga todos os dados):"
+  printf '  %s\n' "rm -f .env                                    # efface la configuration saisie"
+  printf '  %s\n' "docker compose $(dc_files) down -v          # arrête ce qui a démarré"
+  printf '  %s\n' "bash ${KIT_DIR:-hostgator-setup-kit}/install.sh   # recommence"
+  printf '\n%s\n' "Si le schéma a déjà été appliqué et que vous voulez de nouveau une base propre,"
+  printf '%s\n'   "ouvrez Supabase > SQL Editor et lancez (ATTENTION : efface toutes les données) :"
   printf '  %s\n\n' "drop schema public cascade; create schema public;"
 }
 trap 'rc=$?; [ "$rc" -ne 0 ] && show_recovery; exit $rc' EXIT
 
-# ── Validadores ─────────────────────────────────────────────────────────────
-# Cada validador recebe o valor, imprime a explicação do problema em português
-# e devolve != 0. Rodam ANTES de o valor entrar no .env — é o único momento em
-# que a pessoa ainda pode corrigir sem desfazer nada. Um dado errado que passa
-# daqui só aparece minutos depois, como erro técnico em outro lugar.
+# ── Validateurs ─────────────────────────────────────────────────────────────
+# Chaque validateur reçoit la valeur, affiche l'explication du problème en français
+# et renvoie != 0. Ils tournent AVANT que la valeur n'entre dans le .env — c'est le seul moment où
+# la personne peut encore corriger sans rien défaire. Une donnée erronée qui passe
+# d'ici n'apparaît que des minutes plus tard, comme erreur technique ailleurs.
 
-# Lê uma claim de um JWT do Supabase (chaves legadas 'eyJ...'). Só serve para
-# dar mensagem de erro melhor — quem decide de verdade é a chamada HTTP real.
+# Lit une claim d'un JWT (clés héritées 'eyJ...'). Ne sert qu'à
+# donner un meilleur message d'erreur — c'est l'appel HTTP réel qui décide vraiment.
 jwt_claim() {
   local p="${1#*.}"; p="${p%%.*}"
   p="${p//-/+}"; p="${p//_//}"
@@ -167,40 +167,40 @@ jwt_claim() {
   printf '%s' "$p" | base64 -d 2>/dev/null \
     | grep -o "\"$2\":\"[^\"]*\"" | head -1 | cut -d'"' -f4
 }
-# Referência do projeto (o 'abcdef' de https://abcdef.supabase.co)
+# Référence du projet (le 'abcdef' de https://abcdef.supabase.co)
 sb_ref() { local u="${1#https://}"; printf '%s' "${u%%.*}"; }
 
 v_domain() {
   case "$1" in
-    http*) echo "Digite só o domínio, sem https:// — ex.: crm.suaempresa.com.br"; return 1;;
-    */*)   echo "Digite só o domínio, sem barra nem caminho — ex.: crm.suaempresa.com.br"; return 1;;
+    http*) echo "Tapez seulement le domaine, sans https:// — ex. : crm.votreentreprise.com"; return 1;;
+    */*)   echo "Tapez seulement le domaine, sans barre ni chemin — ex. : crm.votreentreprise.com"; return 1;;
     *.*)   return 0;;
-    *)     echo "Isso não parece um domínio (falta o ponto) — ex.: crm.suaempresa.com.br"; return 1;;
+    *)     echo "Cela ne ressemble pas à un domaine (il manque le point) — ex. : crm.votreentreprise.com"; return 1;;
   esac
 }
 
 v_email() {
   case "$1" in *@*.*) return 0;; esac
-  echo "E-mail inválido — precisa ter @ e um domínio, ex.: voce@suaempresa.com.br"
+  echo "E-mail invalide — il faut un @ et un domaine, ex. : vous@votreentreprise.com"
   return 1
 }
 
-# A cor da marca. Aceita SÓ `#` + 6 dígitos hex, e essa estreiteza é medida, não
-# gosto: o `marca-emails.sh:125` reconhece exatamente essa forma e cai calado no
-# verde do produto em qualquer outra (`case "$ACCENT" in \#[0-9a-fA-F]x6`),
-# enquanto o `ehHexValido` de `lib/branding/rampa.ts:49` aceita mais quatro
-# formas (`#abc`, `abc`, `aabbcc` além de `#aabbcc`) e pinta a tela com elas. Um
-# validador frouxo produziria o pior desfecho possível: a cor do revendedor na
-# TELA e o verde do produto no PRIMEIRO e-mail que o cliente dele recebe — e
-# split-brain de marca ninguém percebe, porque cada metade parece certa sozinha.
+# La couleur de la marque. N'accepte QUE `#` + 6 chiffres hex, et cette étroitesse est mesurée, pas
+# une question de goût : `marca-emails.sh:125` reconnaît exactement cette forme et retombe en silence sur le
+# vert du produit pour toute autre (`case "$ACCENT" in \#[0-9a-fA-F]x6`),
+# alors que l'`ehHexValido` de `lib/branding/rampa.ts:49` accepte quatre formes de plus
+# (`#abc`, `abc`, `aabbcc` en plus de `#aabbcc`) et colore l'écran avec. Un
+# validateur laxiste produirait la pire issue possible : la couleur du revendeur à
+# l'ÉCRAN et le vert du produit dans le PREMIER e-mail que reçoit son client — et
+# une marque coupée en deux, personne ne la remarque, parce que chaque moitié semble correcte seule.
 #
-# Vazio passa porque o campo é opcional. Na entrevista o `ask_one` sequer chama
-# o validador nesse caso (ele trata `-z "$input"` antes), então o `''` aqui é
-# para quem reusar a função fora dela — e para que tirar o `opcional` do campo
-# amanhã não vire uma instalação travada em quem não quer cor nenhuma.
+# Le vide passe parce que le champ est optionnel. Dans l'entretien, `ask_one` n'appelle même pas
+# le validateur dans ce cas (il traite `-z "$input"` avant), donc le `''` ici est
+# pour qui réutiliserait la fonction ailleurs — et pour que retirer l'`opcional` du champ
+# demain ne devienne pas une installation bloquée chez qui ne veut aucune couleur.
 v_hex() {
   case "$1" in ''|'#'[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]) return 0;; esac
-  echo "Use um código de cor como #7a5cd6 — cerquilha e 6 dígitos —, ou Enter para a cor do sistema"
+  echo "Utilisez un code couleur comme #7a5cd6 — dièse et 6 chiffres —, ou Entrée pour la couleur du système"
   return 1
 }
 
@@ -233,26 +233,26 @@ v_service() { v_neon_jwt "$1"; }
 v_db_url() {
   case "$1" in
     postgres://*|postgresql://*) ;;
-    *) echo "A connection string começa com postgresql:// — copie em Settings > Database > Connection string, modo URI."; return 1;;
+    *) echo "La connection string commence par postgresql:// — copiez-la dans Settings > Database > Connection string, format URI."; return 1;;
   esac
   case "$1" in
     *"[YOUR-PASSWORD]"*|*"[SUA-SENHA]"*|*"[your-password]"*)
-      echo "Você colou a string com o [YOUR-PASSWORD] no meio — troque isso pela senha do banco (a que você definiu ao criar o projeto)."; return 1;;
+      echo "Vous avez collé la chaîne avec [YOUR-PASSWORD] au milieu — remplacez-le par le mot de passe de la base (celui défini à la création du projet)."; return 1;;
   esac
   case "$1" in
     *db.*.supabase.co*)
-      echo "Essa é a 'Direct connection' do Supabase — ela só existe em IPv6 e o VPS é IPv4, então nunca conecta."
-      echo "   👉 Volte em Settings > Database e copie a do Session pooler (o host termina em .pooler.supabase.com)."
+      echo "C'est la « Direct connection » de Supabase — elle n'existe qu'en IPv6 et le VPS est en IPv4, donc elle ne se connecte jamais."
+      echo "   👉 Retournez dans Settings > Database et copiez celle du Session pooler (l'hôte se termine par .pooler.supabase.com)."
       return 1;;
   esac
-  # Mesma família de projeto? (usuário do pooler é 'postgres.<ref>')
+  # Même famille de projet ? (l'utilisateur du pooler est 'postgres.<ref>')
   local dbref="${1#*://}"; dbref="${dbref%%:*}"; dbref="${dbref#postgres.}"
-  # Só a NUVEM tem <ref> a comparar. E a decisão é pelo HOST, nunca pela string
-  # inteira: `case "$url" in *.supabase.co)` só casa quando a URL TERMINA nisso, e
-  # ela chega com barra final, caminho ou espaço colado — é o que o address bar do
-  # navegador entrega. Medido: com `https://<ref>.supabase.co/` a comparação era
-  # pulada e uma connection string de OUTRO projeto passava, o que instala o
-  # baseline.sql num banco e deixa o app falando com outro.
+  # Seul le CLOUD a un <ref> à comparer. Et la décision se fait par l'HÔTE, jamais par la chaîne
+  # entière : `case "$url" in *.supabase.co)` ne correspond que si l'URL SE TERMINE ainsi, et
+  # elle arrive avec une barre finale, un chemin ou une espace collée — c'est ce que livre la barre d'adresse
+  # du navigateur. Mesuré : avec `https://<ref>.supabase.co/` la comparaison était
+  # sautée et une connection string d'un AUTRE projet passait, ce qui installe le
+  # baseline.sql dans une base et laisse l'app parler à une autre.
   local sbhost="${NEON_DATA_API_URL:-}"
   sbhost="${sbhost#*://}"; sbhost="${sbhost%%/*}"
   sbhost="${sbhost%%[[:space:]]*}"; sbhost="${sbhost%%:*}"
@@ -260,7 +260,7 @@ v_db_url() {
     *.supabase.co)
       if [ "$dbref" != "postgres" ] \
          && [ "$dbref" != "$(sb_ref "$NEON_DATA_API_URL")" ]; then
-        echo "Essa connection string é do projeto '${dbref}', mas a URL que você deu é do projeto '$(sb_ref "$NEON_DATA_API_URL")'. Precisam ser o mesmo projeto."
+        echo "Cette connection string est celle du projet '${dbref}', mais l'URL que vous avez donnée est celle du projet '$(sb_ref "$NEON_DATA_API_URL")'. Ce doit être le même projet."
         return 1
       fi;;
   esac
@@ -268,78 +268,78 @@ v_db_url() {
   if out="$(docker run --rm postgres:17-alpine psql "$1" -tAc 'select 1' 2>&1)"; then
     return 0
   fi
-  echo "Não consegui conectar no banco. O Postgres respondeu:"
+  echo "Impossible de se connecter à la base. Postgres a répondu :"
   printf '   %s\n' "$(printf '%s' "$out" | head -2)"
   case "$out" in
     *"could not translate host name"*)
-      echo "   👉 Quase sempre é a senha com caractere especial: na URL ela precisa ser codificada."
-      echo "      Troque  @ por %40   :  por %3A   /  por %2F   ?  por %3F   #  por %23";;
+      echo "   👉 C'est presque toujours le mot de passe avec un caractère spécial : dans l'URL il doit être encodé."
+      echo "      Remplacez  @ par %40   :  par %3A   /  par %2F   ?  par %3F   #  par %23";;
     *"password authentication failed"*)
-      echo "   👉 Senha do banco errada. É a senha do PROJETO (definida ao criá-lo), não a da sua conta Supabase."
-      echo "      Dá pra redefinir em Settings > Database > Reset database password.";;
+      echo "   👉 Mauvais mot de passe de la base. C'est le mot de passe du PROJET (défini à sa création), pas celui de votre compte Supabase."
+      echo "      Vous pouvez le réinitialiser dans Settings > Database > Reset database password.";;
     *"Network is unreachable"*|*"Cannot assign requested address"*)
-      echo "   👉 Isso é o problema de IPv6: use a connection string do Session pooler, não a Direct connection.";;
+      echo "   👉 C'est le problème d'IPv6 : utilisez la connection string du Session pooler, pas la Direct connection.";;
   esac
   return 1
 }
 
 v_anthropic() {
-  case "$1" in sk-ant-*) ;; *) echo "A chave da Anthropic começa com 'sk-ant-'. Pegue em console.anthropic.com > API Keys."; return 1;; esac
+  case "$1" in sk-ant-*) ;; *) echo "La clé Anthropic commence par 'sk-ant-'. Récupérez-la sur console.anthropic.com > API Keys."; return 1;; esac
   local code
   code="$(curl -s -o /dev/null -w '%{http_code}' -m 20 https://api.anthropic.com/v1/models \
     -H "x-api-key: $1" -H "anthropic-version: 2023-06-01" 2>/dev/null)" || code=000
   case "$code" in
     2*) return 0;;
-    000) c_ylw "  ⚠ não consegui checar a chave online; sigo com ela."; return 0;;
-    401) echo "A Anthropic recusou essa chave (401). Confira se está ativa e se copiou inteira."; return 1;;
-    *)   c_ylw "  ⚠ a Anthropic respondeu ${code} ao testar a chave; sigo com ela."; return 0;;
+    000) c_ylw "  ⚠ impossible de vérifier la clé en ligne ; je continue avec elle."; return 0;;
+    401) echo "Anthropic a refusé cette clé (401). Vérifiez qu'elle est active et copiée en entier."; return 1;;
+    *)   c_ylw "  ⚠ Anthropic a répondu ${code} au test de la clé ; je continue avec elle."; return 0;;
   esac
 }
 
-# A OpenRouter entrou na lista de provedores (opção [1] da pergunta de qual IA
-# vai atender) sem que este validador existisse. `ask_one` despacha o validador
-# pelo NOME — `"$validator" "$input"` —, então um nome inexistente vira exit 127
-# e o laço repete a pergunta para sempre: a pessoa que escolhe [1] não consegue
-# terminar a instalação. E no caminho `--yes` a mesma ausência vira
-# "OPENROUTER_API_KEY inválido" seguido de "Corrija o .env e rode de novo" —
-# instrução impossível de cumprir, porque o .env está certo.
+# OpenRouter est entré dans la liste des fournisseurs (option [1] de la question sur l'IA
+# qui répondra) sans que ce validateur existe. `ask_one` appelle le validateur
+# par son NOM — `"$validator" "$input"` —, donc un nom inexistant devient exit 127
+# et la boucle répète la question à l'infini : la personne qui choisit [1] ne peut pas
+# terminer l'installation. Et sur le chemin `--yes` la même absence devient
+# « OPENROUTER_API_KEY invalide » suivi de « Corrigez le .env et relancez » —
+# instruction impossible à suivre, parce que le .env est correct.
 v_openrouter() {
-  case "$1" in sk-or-*) ;; *) echo "A chave da OpenRouter começa com 'sk-or-'. Pegue em openrouter.ai/keys."; return 1;; esac
+  case "$1" in sk-or-*) ;; *) echo "La clé OpenRouter commence par 'sk-or-'. Récupérez-la sur openrouter.ai/keys."; return 1;; esac
   local code
   code="$(curl -s -o /dev/null -w '%{http_code}' -m 20 https://openrouter.ai/api/v1/key \
     -H "Authorization: Bearer $1" 2>/dev/null)" || code=000
   case "$code" in
     2*) return 0;;
-    000) c_ylw "  ⚠ não consegui checar a chave online; sigo com ela."; return 0;;
-    401) echo "A OpenRouter recusou essa chave (401). Confira se está ativa e se copiou inteira."; return 1;;
-    *)   c_ylw "  ⚠ a OpenRouter respondeu ${code} ao testar a chave; sigo com ela."; return 0;;
+    000) c_ylw "  ⚠ impossible de vérifier la clé en ligne ; je continue avec elle."; return 0;;
+    401) echo "OpenRouter a refusé cette clé (401). Vérifiez qu'elle est active et copiée en entier."; return 1;;
+    *)   c_ylw "  ⚠ OpenRouter a répondu ${code} au test de la clé ; je continue avec elle."; return 0;;
   esac
 }
 
 v_openai() {
-  [ -z "$1" ] && return 0   # opcional
-  case "$1" in sk-*) ;; *) echo "A chave da OpenAI começa com 'sk-'. Pegue em platform.openai.com > API keys (ou deixe em branco)."; return 1;; esac
+  [ -z "$1" ] && return 0   # optionnel
+  case "$1" in sk-*) ;; *) echo "La clé OpenAI commence par 'sk-'. Récupérez-la sur platform.openai.com > API keys (ou laissez vide)."; return 1;; esac
   local code
   code="$(curl -s -o /dev/null -w '%{http_code}' -m 20 https://api.openai.com/v1/models \
     -H "Authorization: Bearer $1" 2>/dev/null)" || code=000
   case "$code" in
     2*) return 0;;
-    000) c_ylw "  ⚠ não consegui checar a chave online; sigo com ela."; return 0;;
-    401) echo "A OpenAI recusou essa chave (401). Confira se está ativa e se copiou inteira."; return 1;;
-    *)   c_ylw "  ⚠ a OpenAI respondeu ${code} ao testar a chave; sigo com ela."; return 0;;
+    000) c_ylw "  ⚠ impossible de vérifier la clé en ligne ; je continue avec elle."; return 0;;
+    401) echo "OpenAI a refusé cette clé (401). Vérifiez qu'elle est active et copiée en entier."; return 1;;
+    *)   c_ylw "  ⚠ OpenAI a répondu ${code} au test de la clé ; je continue avec elle."; return 0;;
   esac
 }
 
 v_password() {
   [ "${#1}" -ge 8 ] && return 0
-  echo "Senha muito curta (${#1} caracteres). Use pelo menos 8 — é a senha de admin do seu CRM."
+  echo "Mot de passe trop court (${#1} caractères). Utilisez-en au moins 8 — c'est le mot de passe admin de votre CRM."
   return 1
 }
 
-# ── Pergunta uma coisa, valida, e aceita 'voltar' ───────────────────────────
-# Devolve 0 quando o valor foi aceito, 2 quando a pessoa pediu para voltar.
-# Repete a pergunta enquanto o validador reprovar: o instalador não deixa mais
-# ninguém avançar carregando um dado errado.
+# ── Pose une question, valide, et accepte 'retour' ──────────────────────────
+# Renvoie 0 quand la valeur a été acceptée, 2 quand la personne a demandé à revenir en arrière.
+# Répète la question tant que le validateur refuse : l'installateur ne laisse plus
+# personne avancer avec une donnée erronée.
 ask_one() {
   local var="$1" prompt="$2" default="${3:-}" validator="${4:-}" secret="${5:-}" optional="${6:-}"
   local cur="${!var:-}"
@@ -347,110 +347,110 @@ ask_one() {
   if [ "$NONINTERACTIVE" = 1 ]; then
     if [ -n "$default" ]; then printf -v "$var" '%s' "$default"; return 0; fi
     [ -n "$optional" ] && return 0
-    die "Falta $var (modo --yes exige .env preenchido)."
+    die "$var manquant (le mode --yes exige un .env rempli)."
   fi
   local input
   while :; do
     if [ "$secret" = "secret" ]; then
       if ! read -r -s -p "$prompt${default:+ [$default]}: " input; then
-        die "A entrada terminou antes de eu receber $var. Rode o instalador num terminal interativo."
+        die "L'entrée s'est terminée avant que je reçoive $var. Lancez l'installateur dans un terminal interactif."
       fi
       echo
     else
       if ! read -r -p "$prompt${default:+ [$default]}: " input; then
-        die "A entrada terminou antes de eu receber $var. Rode o instalador num terminal interativo."
+        die "L'entrée s'est terminée avant que je reçoive $var. Lancez l'installateur dans un terminal interactif."
       fi
     fi
-    [ "$input" = "voltar" ] && return 2
+    { [ "$input" = "retour" ] || [ "$input" = "voltar" ]; } && return 2
     input="${input:-$default}"
     if [ -z "$input" ]; then
       [ -n "$optional" ] && { printf -v "$var" '%s' ""; return 0; }
-      c_red "  Esse campo é obrigatório. (digite 'voltar' para refazer a pergunta anterior)"
+      c_red "  Ce champ est obligatoire. (tapez 'retour' pour refaire la question précédente)"
       continue
     fi
-    # Campo secreto não ecoa o que foi colado — a pessoa não vê se colou, então
-    # tende a colar de novo "pra garantir", e cola duas vezes na mesma linha
-    # (sem separador, vira um valor só, dobrado). Isso gera chaves/connection
-    # strings inválidas com erro críptico lá na frente.
+    # Un champ secret n'affiche pas ce qui a été collé — la personne ne voit pas si elle a collé, donc
+    # elle a tendance à recoller « pour être sûre », et colle deux fois sur la même ligne
+    # (sans séparateur, cela devient une seule valeur, doublée). Cela produit des clés/connection
+    # strings invalides avec une erreur cryptique plus loin.
     if [ "$secret" = "secret" ]; then
       local len=${#input} half=$(( ${#input} / 2 ))
       if [ $((len % 2)) -eq 0 ] && [ "${input:0:half}" = "${input:half}" ]; then
-        c_red "  Esse valor parece ter sido colado 2x seguidas (o campo é secreto e não mostra o que você cola). Cole uma vez só."
+        c_red "  Cette valeur semble avoir été collée 2 fois de suite (le champ est secret et n'affiche pas ce que vous collez). Collez-la une seule fois."
         continue
       fi
     fi
     if [ -n "$validator" ]; then
-      printf '  … conferindo\r'
+      printf '  … vérification\r'
       local msg
       if ! msg="$("$validator" "$input" 2>&1)"; then
         printf '            \r'
         printf '\033[31m  ✖ %s\033[0m\n' "$(printf '%s' "$msg" | head -1)"
         printf '%s\n' "$(printf '%s' "$msg" | tail -n +2)" | grep -v '^$' || true
-        c_dim "  (digite 'voltar' para refazer a pergunta anterior)"
+        c_dim "  (tapez 'retour' pour refaire la question précédente)"
         continue
       fi
       [ -n "$msg" ] && printf '%s\n' "$msg"
       printf '            \r'
     fi
-    if [ "$secret" = "secret" ]; then c_grn "  ✓ recebido (${#input} caracteres)"; else c_grn "  ✓"; fi
+    if [ "$secret" = "secret" ]; then c_grn "  ✓ reçu (${#input} caractères)"; else c_grn "  ✓"; fi
     printf -v "$var" '%s' "$input"
     save_partial "$var"
     return 0
   done
 }
 
-# O limiar NÃO é 4 GB, e a diferença importa: `MemTotal` é o que sobra depois
-# do que o kernel reserva para si, sempre menos do que foi vendido. Medido num
-# kernel com 8 GiB configurados: 8025284 KB, ou 95,7% — na mesma proporção uma
-# VPS de 4 GiB reporta ~4.012.000 KB, 0,3% acima de 4.000.000. E quem vende "4
-# GB" em GB decimais entrega 3.906.250 KB, que reporta ~3.735.000. Ou seja: com
-# o corte em 4.000.000 o aviso caía em cima de quem tinha ACABADO de comprar
-# exatamente a VPS recomendada — a pior hora possível para dizer a alguém que o
-# servidor dele é pequeno demais. 3.500.000 KB (3,34 GiB) deixa 4 GB de fora em
-# qualquer convenção e ainda pega de sobra as de 2 e 3 GB, que sofrem de verdade.
+# Le seuil n'est PAS 4 Go, et la différence compte : `MemTotal` est ce qui reste après
+# ce que le noyau se réserve, toujours moins que ce qui a été vendu. Mesuré sur un
+# noyau avec 8 Gio configurés : 8025284 Ko, soit 95,7 % — dans la même proportion un
+# VPS de 4 Gio rapporte ~4 012 000 Ko, 0,3 % au-dessus de 4 000 000. Et qui vend « 4
+# Go » en Go décimaux livre 3 906 250 Ko, qui rapporte ~3 735 000. Autrement dit : avec
+# la coupure à 4 000 000 l'avertissement tombait sur qui venait d'ACHETER
+# exactement le VPS recommandé — le pire moment possible pour dire à quelqu'un que son
+# serveur est trop petit. 3 500 000 Ko (3,34 Gio) laisse 4 Go dehors dans
+# toute convention et attrape largement ceux de 2 et 3 Go, qui souffrent vraiment.
 RAM_MINIMA_KB=3500000
 ram_abaixo_do_recomendado() { [ "${1:-0}" -lt "$RAM_MINIMA_KB" ]; }
 
-# Uma linha de .env com o valor entre aspas DUPLAS e `\`, `"`, `$` e crase
-# escapados — o que faz nome de empresa e senha sobreviverem à releitura.
+# Une ligne de .env avec la valeur entre guillemets DOUBLES et `\`, `"`, `$` et accent grave
+# échappés — ce qui fait survivre nom d'entreprise et mot de passe à la relecture.
 #
-# O encoding tem de servir a TRÊS consumidores, cada um com um parser próprio, e
-# nenhum deles é o mesmo shell: o `load_env` do _common.sh (leitura manual, por
-# onde passa todo script do kit), o `env_file: .env` do docker-compose.prod.yml
-# (:34 e :71) e o `source .env && curl …` que o README ensina (:143).
+# L'encodage doit servir TROIS consommateurs, chacun avec son propre parseur, et
+# aucun d'eux n'est le même shell : le `load_env` de _common.sh (lecture manuelle, par
+# où passe tout script du kit), le `env_file: .env` de docker-compose.prod.yml
+# (:34 et :71) et le `source .env && curl …` qu'enseigne le README (:143).
 #
-# Era aspas SIMPLES, com a aspa do conteúdo escrita como `'\''` — shell válido,
-# e só. O parser de dotenv do Compose não é um shell: ele lê aquela barra como
-# começo de nome de variável e recusa o ARQUIVO INTEIRO. Medido no compose
-# v2.38.2 com `APP_NAME=Sant'Ana Odontologia`:
+# C'étaient des guillemets SIMPLES, avec le guillemet du contenu écrit `'\''` — du shell valide,
+# et c'est tout. Le parseur dotenv de Compose n'est pas un shell : il lit cette barre comme
+# début de nom de variable et refuse le FICHIER ENTIER. Mesuré avec compose
+# v2.38.2 avec `APP_NAME=Sant'Ana Odontologia` :
 #
 #   failed to read .env: line 1: unexpected character "\" in variable name
 #   "\''Ana Odontologia'"
-#   config → rc=1 ; ps → rc=1 ; pull → rc=1   (o mesmo .env sem apóstrofo: rc=0)
+#   config → rc=1 ; ps → rc=1 ; pull → rc=1   (le même .env sans apostrophe : rc=0)
 #
-# Nomes assim são comuns aqui — "Sant'Ana", "D'Ávila", "Espaço D'Or" —, APP_NAME
-# é a última pergunta da entrevista e não tem validador. O desfecho era o pior
-# tipo de quebra: Supabase provisionado, schema aplicado, admin criado, e TODO
-# comando docker do kit morto, sem nada apontando para o .env.
+# Ces noms sont courants — « L'Atelier », « Chez N'Diaye », « Boutique D'Or » —, APP_NAME
+# est la dernière question de l'entretien et n'a pas de validateur. L'issue était le pire
+# type de casse : base provisionnée, schéma appliqué, admin créé, et TOUTE
+# commande docker du kit morte, sans rien qui pointe vers le .env.
 #
-# RESIDUAL MEDIDO, e a escolha por trás dele: o Compose desfaz `\"`, `\\` e `\$`
-# dentro das aspas duplas, mas NÃO desfaz a crase escapada — um valor com crase
-# chega ao contêiner com as barras (medido: `Loja \`date\` Ltda`). Escapá-la
-# assim mesmo é deliberado: sem a barra, o `source .env` do README EXECUTA o que
-# estiver entre crases. Caractere feio no contêiner é preço menor que execução
-# de comando na máquina de quem instala. As duas outras pontas (load_env e
-# source) recebem a crase intacta.
+# RÉSIDU MESURÉ, et le choix derrière : Compose défait `\"`, `\\` et `\$`
+# dans les guillemets doubles, mais NE défait PAS l'accent grave échappé — une valeur avec accent grave
+# arrive au conteneur avec les barres (mesuré : `Boutique \`date\` SARL`). L'échapper
+# quand même est délibéré : sans la barre, le `source .env` du README EXÉCUTE ce qui
+# se trouve entre accents graves. Un caractère moche dans le conteneur coûte moins qu'une exécution
+# de commande sur la machine de qui installe. Les deux autres bouts (load_env et
+# source) reçoivent l'accent grave intact.
 #
-# Fica aqui em cima (e não junto do bloco que escreve o .env) porque o
-# save_partial abaixo grava durante a ENTREVISTA, muito antes daquele bloco.
+# Reste ici en haut (et non avec le bloc qui écrit le .env) parce que le
+# save_partial ci-dessous écrit pendant l'ENTRETIEN, bien avant ce bloc.
 envq() { printf '%s="%s"\n' "$1" "$(printf '%s' "${2-}" | sed 's/[\\"$`]/\\&/g')"; }
 
-# Guarda cada resposta no instante em que ela é aceita. Antes, as 12 respostas
-# só viravam arquivo no FIM: quem travasse na connection string — a pergunta
-# mais difícil, e a última das credenciais — perdia tudo o que já tinha digitado
-# e recomeçava do zero na tentativa seguinte. Justamente quem mais precisa de
-# uma segunda tentativa é quem tem menos paciência para redigitar 11 campos.
-# Mesma permissão do .env (600): o conteúdo é o mesmo, inclusive os segredos.
+# Garde chaque réponse à l'instant où elle est acceptée. Avant, les 12 réponses
+# ne devenaient un fichier qu'à la FIN : qui bloquait sur la connection string — la question
+# la plus difficile, et la dernière des identifiants — perdait tout ce qu'il avait déjà tapé
+# et recommençait de zéro à la tentative suivante. Justement, qui a le plus besoin
+# d'une seconde tentative est celui qui a le moins de patience pour retaper 11 champs.
+# Même permission que le .env (600) : le contenu est le même, secrets compris.
 PARTIAL_FILE="${PARTIAL_FILE:-.env.partial}"
 save_partial() {
   local var="$1" val="${!1-}" tmp="${PARTIAL_FILE}.tmp.$$"
@@ -461,21 +461,21 @@ save_partial() {
   mv "$tmp" "$PARTIAL_FILE"
 }
 
-# Quem publica 80 ou 443 NO HOST? Lê linhas "nome|projeto|imagem|portas" (o
-# formato do docker ps) e ecoa "nome|imagem" do primeiro que casar.
+# Qui publie 80 ou 443 SUR L'HÔTE ? Lit des lignes "nom|projet|image|ports" (le
+# format de docker ps) et renvoie "nom|image" du premier qui correspond.
 #
-# O lado que importa da coluna Ports é o ANTES da seta — "0.0.0.0:80->80/tcp" é
-# host 80; "0.0.0.0:8080->80/tcp" é host 8080 e NÃO disputa nada. A primeira
-# versão disto olhava `docker port` ancorado na porta INTERNA, e errava dos dois
-# lados: abortava a instalação por causa de um phpMyAdmin em `-p 8080:80` (com
-# 80/443 livres, mandando o dono derrubar o site dele), e deixava passar um proxy
-# real em `-p 80:8080`, que é como se sobe Traefik sem privilégio.
+# Le côté qui compte dans la colonne Ports est celui AVANT la flèche — "0.0.0.0:80->80/tcp" est
+# l'hôte 80 ; "0.0.0.0:8080->80/tcp" est l'hôte 8080 et NE dispute rien. La première
+# version de ceci regardait `docker port` ancré sur le port INTERNE, et se trompait des deux
+# côtés : elle interrompait l'installation à cause d'un phpMyAdmin en `-p 8080:80` (avec
+# 80/443 libres, en demandant au propriétaire de faire tomber son site), et laissait passer un vrai
+# proxy en `-p 80:8080`, qui est la façon de démarrer Traefik sans privilège.
 #
-# Separador é "|", não TAB: tab é IFS-whitespace, então dois tabs seguidos viram
-# um só e o campo vazio do meio SOME — um proxy subido com `docker run` (sem
-# label de compose) perdia a imagem, e o Traefik da hospedagem chamado
-# "coolify-proxy" era classificado como intruso.
-dono_das_portas() {  # dono_das_portas  < linhas   → ecoa "nome|projeto|imagem"
+# Le séparateur est "|", pas TAB : tab est un blanc IFS, donc deux tabs consécutifs deviennent
+# un seul et le champ vide du milieu DISPARAÎT — un proxy démarré avec `docker run` (sans
+# label compose) perdait l'image, et le Traefik de l'hébergeur appelé
+# "coolify-proxy" était classé comme intrus.
+dono_das_portas() {  # dono_das_portas  < lignes   → renvoie "nom|projet|image"
   local nome proj img ports
   while IFS='|' read -r nome proj img ports; do
     [ -n "$nome" ] || continue
@@ -486,47 +486,47 @@ dono_das_portas() {  # dono_das_portas  < linhas   → ecoa "nome|projeto|imagem
   return 1
 }
 
-# `nome_do_projeto_compose` e a checagem da rede externa do proxy vivem em
-# _common.sh: o update.sh precisa das mesmas duas coisas e duplicá-las era
-# garantir que uma das cópias envelhecesse. Este arquivo as usa depois do
-# `source` do bloco 2 (nada acima dele depende delas).
+# `nome_do_projeto_compose` et la vérification du réseau externe du proxy vivent dans
+# _common.sh : update.sh a besoin des deux mêmes choses et les dupliquer, c'était
+# garantir que l'une des copies vieillisse. Ce fichier les utilise après le
+# `source` du bloc 2 (rien au-dessus n'en dépend).
 
-# A pergunta que decide é "o Docker consegue publicar a porta?", e a resposta
-# vem de TENTAR — não de inferir. Toda heurística sobre `docker port` ou `ss`
-# erra em algum caso real (proxy sem privilégio publicando 80:8080, app em
-# 8080:80, bind só no loopback, `ss` fora do PATH, userland-proxy desligado), e
-# erra dos dois lados: ou aborta uma instalação boa, ou entrega o choque de
-# portas lá na frente. Publicar de mentirinha usa exatamente a mecânica que o
-# Caddy vai usar, então não há espaço entre o teste e a realidade.
-# O contêiner sai na hora; a imagem é a mesma que o compose do kit já usa.
-porta_publicavel() {  # porta_publicavel <porta>
+# La question qui décide est « Docker peut-il publier le port ? », et la réponse
+# vient d'ESSAYER — pas de déduire. Toute heuristique sur `docker port` ou `ss`
+# se trompe dans un cas réel (proxy sans privilège publiant 80:8080, app en
+# 8080:80, bind seulement sur loopback, `ss` hors du PATH, userland-proxy désactivé), et
+# se trompe dans les deux sens : soit elle interrompt une bonne installation, soit elle livre le conflit de
+# ports plus loin. Publier pour de faux utilise exactement le mécanisme que
+# Caddy va utiliser, donc il n'y a pas d'écart entre le test et la réalité.
+# Le conteneur sort aussitôt ; l'image est la même que celle déjà utilisée par le compose du kit.
+porta_publicavel() {  # porta_publicavel <port>
   docker run --rm -p "$1:$1" --entrypoint /bin/true alpine:3.20 >/dev/null 2>&1
 }
 
-# A decisão final, isolada para poder ser exercitada sem Docker: este é o ponto
-# que já errou duas vezes (uma tratando o próprio Caddy como intruso, outra
-# deixando passar proxy que não fosse Traefik), e nas duas o erro só apareceu
-# rodando de verdade numa VPS.
-# Ecoa: caddy | traefik | bloqueia
-decide_proxy() {  # decide_proxy <portas_ocupadas> <projeto_do_dono> <projeto_atual> <imagem> <nome> [árvore_do_dono] [árvore_atual]
+# La décision finale, isolée pour pouvoir être exercée sans Docker : c'est le point
+# qui s'est déjà trompé deux fois (une fois en traitant son propre Caddy comme intrus, une autre en
+# laissant passer un proxy qui n'était pas Traefik), et les deux fois l'erreur n'est apparue qu'en
+# tournant pour de vrai sur un VPS.
+# Renvoie : caddy | traefik | bloqueia
+decide_proxy() {  # decide_proxy <ports_occupés> <projet_du_propriétaire> <projet_actuel> <image> <nom> [arbo_du_propriétaire] [arbo_actuelle]
   local ocupadas="${1:-}" dono_proj="${2:-}" meu_proj="${3:-}" img="${4:-}" nome="${5:-}"
   local dono_dir="${6:-}" meu_dir="${7:-}"
   [ -z "$ocupadas" ] && { printf 'caddy'; return 0; }
-  # As portas estão com ESTA MESMA instalação, já no ar: é a re-execução, que o
-  # próprio kit ensina como caminho para corrigir uma resposta.
+  # Les ports sont tenus par CETTE MÊME installation, déjà en ligne : c'est la réexécution, que le
+  # kit lui-même enseigne comme chemin pour corriger une réponse.
   #
-  # Só que "mesma instalação" NÃO é o mesmo que "mesmo nome de projeto": o nome
-  # é o basename da pasta, e toda cópia do repo se chama DeskcommCRM. Duas
-  # árvores irmãs (/root/DeskcommCRM e /root/apagar7/DeskcommCRM) colidem no
-  # nome `deskcommcrm` e esta linha as declarava re-execução uma da outra —
-  # exatamente o caso que a varredura de portas foi escrita para pegar. Medido
-  # numa VPS de produção em 2026-08-24: a instalação de uma aula passou por
-  # aqui, recriou os contêineres do CRM no ar com o .env dela e trocou o banco
-  # da instalação de produção, sem um aviso. Quem separa as duas é a ÁRVORE.
+  # Sauf que « même installation » N'est PAS la même chose que « même nom de projet » : le nom
+  # est le basename du dossier, et toute copie du dépôt s'appelle DeskcommCRM. Deux
+  # arborescences sœurs (/root/DeskcommCRM et /root/apagar7/DeskcommCRM) entrent en collision sur le
+  # nom `deskcommcrm` et cette ligne les déclarait réexécution l'une de l'autre —
+  # exactement le cas que le balayage des ports a été écrit pour attraper. Mesuré
+  # sur un VPS de production le 2026-08-24 : l'installation d'un cours est passée par
+  # ici, a recréé les conteneurs du CRM en ligne avec son .env et a changé la base
+  # de l'installation de production, sans un avertissement. Ce qui sépare les deux, c'est l'ARBORESCENCE.
   #
-  # Árvore desconhecida (contêiner sem o label, ou criado fora do compose) cai
-  # no comportamento anterior de propósito: não dá para AFIRMAR cópia irmã, e
-  # fechar no escuro quebraria a re-execução legítima que o kit ensina.
+  # Une arborescence inconnue (conteneur sans le label, ou créé hors de compose) retombe
+  # sur le comportement antérieur exprès : impossible d'AFFIRMER une copie sœur, et
+  # fermer à l'aveugle casserait la réexécution légitime que le kit enseigne.
   if [ -n "$dono_proj" ] && [ "$dono_proj" = "$meu_proj" ]; then
     if [ -n "$dono_dir" ] && [ -n "$meu_dir" ] && [ "$dono_dir" != "$meu_dir" ]; then
       printf 'bloqueia'; return 0
@@ -537,32 +537,32 @@ decide_proxy() {  # decide_proxy <portas_ocupadas> <projeto_do_dono> <projeto_at
   printf 'bloqueia'
 }
 
-# É um Traefik? Compara em minúsculas o par imagem+nome. A versão anterior usava
-# `*[Tt]raefik*`, que só tem classe de equivalência no primeiro caractere:
-# um contêiner "TRAEFIK-PROXY" escapava e era tratado como intruso.
-eh_traefik() {  # eh_traefik <imagem> <nome>
+# Est-ce un Traefik ? Compare en minuscules le couple image+nom. La version précédente utilisait
+# `*[Tt]raefik*`, qui n'a de classe d'équivalence que sur le premier caractère :
+# un conteneur "TRAEFIK-PROXY" échappait et était traité comme intrus.
+eh_traefik() {  # eh_traefik <image> <nom>
   case "$(printf '%s %s' "${1:-}" "${2:-}" | tr '[:upper:]' '[:lower:]')" in
     *traefik*) return 0;;
   esac
   return 1
 }
 
-# O ÚNICO Traefik de uma lista do `docker ps` — e só quando é único.
+# L'UNIQUE Traefik d'une liste `docker ps` — et seulement quand il est unique.
 #
-# Existe porque a busca por porta publicada NÃO enxerga proxy em modo host:
-# compartilhando a stack de rede da máquina, ele ouve 80/443 sem publicar nada e
-# a coluna Ports do `docker ps` sai VAZIA. Medido no docker 28.3.2: um contêiner
-# em `--network host` sai com Ports=[] mesmo subido com `-p 80:80` (o daemon
-# avisa "Published ports are discarded when using host network mode"); controle
-# positivo, o mesmo nginx numa bridge com `-p 8080:80` sai com
-# "0.0.0.0:8080->80/tcp". É o caso da Hostinger, e sem este caminho o dono das
-# portas fica "não identificado" — a instalação morre no painel de bloqueio.
+# Existe parce que la recherche par port publié NE voit PAS un proxy en mode host :
+# en partageant la pile réseau de la machine, il écoute 80/443 sans rien publier et
+# la colonne Ports de `docker ps` sort VIDE. Mesuré avec docker 28.3.2 : un conteneur
+# en `--network host` sort avec Ports=[] même démarré avec `-p 80:80` (le daemon
+# avertit « Published ports are discarded when using host network mode ») ; contrôle
+# positif, le même nginx sur un bridge avec `-p 8080:80` sort avec
+# "0.0.0.0:8080->80/tcp". C'est le cas d'Hostinger, et sans ce chemin le propriétaire des
+# ports reste « non identifié » — l'installation meurt sur le panneau de blocage.
 #
-# Falha FECHADA no plural: com dois Traefiks não dá para saber qual está com as
-# portas, e chutar publica o CRM atrás do proxy errado — um site que "instala com
-# sucesso" e não responde. Nesse caso ninguém é eleito e o painel de bloqueio, que
-# ao menos diz o que fazer, volta a ser o desfecho.
-unico_traefik() {  # unico_traefik  < linhas "nome|projeto|imagem|portas"  → ecoa "nome|projeto|imagem"
+# Échoue FERMÉ au pluriel : avec deux Traefik impossible de savoir lequel tient les
+# ports, et deviner publie le CRM derrière le mauvais proxy — un site qui « s'installe avec
+# succès » et ne répond pas. Dans ce cas personne n'est élu et le panneau de blocage, qui
+# dit au moins quoi faire, redevient l'issue.
+unico_traefik() {  # unico_traefik  < lignes "nom|projet|image|ports"  → renvoie "nom|projet|image"
   local nome proj img ports achado="" n=0
   while IFS='|' read -r nome proj img ports; do
     [ -n "$nome" ] || continue
@@ -573,72 +573,72 @@ unico_traefik() {  # unico_traefik  < linhas "nome|projeto|imagem|portas"  → e
   printf '%s' "$achado"
 }
 
-# Qual rede gravar em TRAEFIK_NETWORK. Isolada do Docker para poder ser
-# exercitada: é aqui que moram DUAS conclusões opostas, e cada uma já foi a
-# única implementada em algum momento do kit.
+# Quel réseau écrire dans TRAEFIK_NETWORK. Isolé de Docker pour pouvoir être
+# exercé : c'est ici que vivent DEUX conclusions opposées, et chacune a déjà été la
+# seule implémentée à un moment du kit.
 #
-#   Traefik numa bridge PRÓPRIA  → a rede dele (o app é anexado a ela).
-#     Medido com Traefik v3.3 real: com o label apontando para a rede do projeto
-#     a requisição fica em HTTP 000 (timeout) mesmo com o contêiner nas duas
-#     redes; só apontando para a rede do PROXY vira HTTP 200.
+#   Traefik sur un bridge PROPRE  → son réseau (l'app y est rattachée).
+#     Mesuré avec un vrai Traefik v3.3 : avec le label pointant vers le réseau du projet
+#     la requête reste en HTTP 000 (timeout) même avec le conteneur dans les deux
+#     réseaux ; seulement en pointant vers le réseau du PROXY elle devient HTTP 200.
 #
-#   Traefik em modo HOST         → uma bridge NOSSA, que o instalador cria.
-#     Aqui o proxy não está em rede nenhuma do Docker (`.NetworkSettings.Networks`
-#     devolve a string "host", que existe no `docker network ls` mas com driver
-#     `host` e não aceita contêiner junto de uma bridge). Compartilhando a stack
-#     do host ele alcança qualquer bridge por IP — medido nesta máquina: contêiner
-#     em `--network host` faz `curl` no IP de um contêiner numa bridge separada e
-#     recebe HTTP 200. Então a rede a apontar é uma bridge onde o app esteja, e
-#     usamos uma dedicada em vez da `_internal` do projeto por dois motivos
-#     medidos: (1) o compose recusa `external` apontando para a rede que ele
-#     mesmo criaria — "network <projeto>_internal declared as external, but could
-#     not be found" numa instalação nova; (2) a `internal` tem o redis SEM SENHA,
-#     e a rede do proxy é a única que um dia pode receber contêiner de fora.
-rede_do_traefik() {  # rede_do_traefik <NetworkMode do contêiner> <redes do contêiner> <bridge do projeto>
+#   Traefik en mode HOST         → un bridge À NOUS, que l'installateur crée.
+#     Ici le proxy n'est dans aucun réseau Docker (`.NetworkSettings.Networks`
+#     renvoie la chaîne "host", qui existe dans `docker network ls` mais avec le driver
+#     `host` et n'accepte pas de conteneur à côté d'un bridge). En partageant la pile
+#     de l'hôte il atteint n'importe quel bridge par IP — mesuré sur cette machine : un conteneur
+#     en `--network host` fait un `curl` sur l'IP d'un conteneur dans un bridge séparé et
+#     reçoit HTTP 200. Donc le réseau à désigner est un bridge où se trouve l'app, et
+#     nous en utilisons un dédié au lieu du `_internal` du projet pour deux raisons
+#     mesurées : (1) compose refuse un `external` pointant vers le réseau qu'il
+#     créerait lui-même — « network <projet>_internal declared as external, but could
+#     not be found » sur une nouvelle installation ; (2) l'`internal` a le redis SANS MOT DE PASSE,
+#     et le réseau du proxy est le seul qui peut un jour recevoir un conteneur extérieur.
+rede_do_traefik() {  # rede_do_traefik <NetworkMode du conteneur> <réseaux du conteneur> <bridge du projet>
   local netmode="${1:-}" redes="${2:-}" nossa="${3:-}"
   [ "$netmode" = host ] && { printf '%s' "$nossa"; return 0; }
   printf '%s' "$redes" | awk '{print $1}'
 }
 
-# Um Traefik eleito pela varredura de MODO HOST é suspeita, não prova. A eleição
-# por porta publicada tem a evidência na mão — a coluna Ports diz `:80->`. A
-# varredura por `--network host` não tem nenhuma: em modo host a coluna sai vazia
-# para TODO mundo, então o que ela responde é "existe um único Traefik em modo
-# host nesta máquina", e não "é ele quem está com as portas". Basta um nginx ou
-# apache NATIVO segurando 80/443 e um Traefik em modo host servindo outra coisa
-# para o instalador publicar o CRM atrás de um proxy que não atende: "instalou
-# com sucesso" e o site mudo — o desfecho silencioso que este bloco inteiro
-# existe para evitar.
+# Un Traefik élu par le balayage en MODE HOST est un soupçon, pas une preuve. L'élection
+# par port publié a la preuve en main — la colonne Ports dit `:80->`. Le
+# balayage par `--network host` n'en a aucune : en mode host la colonne sort vide
+# pour TOUT le monde, donc ce qu'il répond est « il existe un unique Traefik en mode
+# host sur cette machine », et non « c'est lui qui tient les ports ». Il suffit d'un nginx ou
+# apache NATIF tenant 80/443 et d'un Traefik en mode host servant autre chose
+# pour que l'installateur publie le CRM derrière un proxy qui ne répond pas : « installé
+# avec succès » et le site muet — l'issue silencieuse que tout ce bloc
+# existe pour éviter.
 #
-# Fechado na AÇÃO, aberto na INFORMAÇÃO: quem está na frente do terminal
-# confirma (e a pergunta diz o que foi encontrado); quem rodou --yes leva uma
-# recusa que ensina a saída, que é declarar REVERSE_PROXY=traefik no .env. A
-# declaração explícita continua valendo — ali a escolha é de quem instala, não
-# um chute do instalador.
-# Ecoa: segue | pergunta | recusa
-confianca_no_dono_das_portas() {  # confianca_no_dono_das_portas <veio_da_varredura_host> <noninteractive>
+# Fermé sur l'ACTION, ouvert sur l'INFORMATION : qui est devant le terminal
+# confirme (et la question dit ce qui a été trouvé) ; qui a lancé --yes reçoit un
+# refus qui enseigne l'issue, à savoir déclarer REVERSE_PROXY=traefik dans le .env. La
+# déclaration explicite reste valable — là, le choix appartient à qui installe, ce n'est pas
+# une supposition de l'installateur.
+# Renvoie : segue | pergunta | recusa
+confianca_no_dono_das_portas() {  # confianca_no_dono_das_portas <venu_du_balayage_host> <noninteractive>
   local varredura="${1:-0}" nao_interativo="${2:-0}"
   [ "$varredura" = 1 ] || { printf 'segue'; return 0; }
   [ "$nao_interativo" = 1 ] && { printf 'recusa'; return 0; }
   printf 'pergunta'
 }
 
-# Esconde o miolo de um segredo para a tela de conferência.
+# Masque le cœur d'un secret pour l'écran de vérification.
 mask() {
   local v="$1"
-  if [ -z "$v" ]; then printf '(vazio)'; return; fi
-  if [ "${#v}" -le 12 ]; then printf '%s' "****"; else printf '%s…%s (%d caracteres)' "${v:0:8}" "${v: -4}" "${#v}"; fi
+  if [ -z "$v" ]; then printf '(vide)'; return; fi
+  if [ "${#v}" -le 12 ]; then printf '%s' "****"; else printf '%s…%s (%d caractères)' "${v:0:8}" "${v: -4}" "${#v}"; fi
 }
 
-# Lê as 4 credenciais que o supabase-provision.sh imprime (`CHAVE='valor'`) SEM
-# interpretar o conteúdo.
+# Lit les 4 identifiants que supabase-provision.sh affiche (`CLÉ='valeur'`) SANS
+# interpréter le contenu.
 #
-# Por que não `eval`: os valores saem de `printf "%s='%s'"` sem escapar a aspa
-# simples, então um valor que contenha `'` fecha o literal e o resto da linha
-# volta a ser CÓDIGO — e `NEON_REGION`, que vem do ambiente, é interpolada
-# dentro da connection string que sai de lá. Mesma postura do `load_env`
-# (_common.sh): casa a chave contra uma lista fixa e copia o valor como texto.
-# Chave fora da lista é ignorada, então a saída nunca cria variável arbitrária.
+# Pourquoi pas `eval` : les valeurs sortent de `printf "%s='%s'"` sans échapper le guillemet
+# simple, donc une valeur qui contient `'` ferme le littéral et le reste de la ligne
+# redevient du CODE — et `NEON_REGION`, qui vient de l'environnement, est interpolée
+# dans la connection string qui en sort. Même posture que `load_env`
+# (_common.sh) : compare la clé à une liste fixe et copie la valeur comme du texte.
+# Une clé hors liste est ignorée, donc la sortie ne crée jamais de variable arbitraire.
 sb_carrega_credenciais() {
   local linha val
   while IFS= read -r linha; do
@@ -652,156 +652,156 @@ sb_carrega_credenciais() {
   done <<<"$1"
 }
 
-# Carrega só as funções acima, sem instalar nada — é assim que
-# `test-validators.sh` exercita os validadores:  INSTALL_SH_LIB=1 . install.sh
+# Charge seulement les fonctions ci-dessus, sans rien installer — c'est ainsi que
+# `test-validators.sh` exerce les validateurs :  INSTALL_SH_LIB=1 . install.sh
 if [ "${INSTALL_SH_LIB:-}" = "1" ]; then trap - EXIT; return 0; fi
 
 banner
 
-# ── 1. Preflight ────────────────────────────────────────────────────────────
-fase 1 "Preparando o servidor"
-step "Verificando dependências"
+# ── 1. Vérifications préalables ─────────────────────────────────────────────
+fase 1 "Préparation du serveur"
+step "Vérification des dépendances"
 
-# VPS "cru" (Hetzner, DigitalOcean, Contabo…) não vem com Docker. Antes isto era
-# um beco sem saída: o script morria dizendo "instale antes de continuar" e a
-# pessoa — que por definição não é técnica — ficava sem saber como. Hospedagens
-# com template (Hostinger, HostGator) já trazem Docker, então o caso nunca
-# aparecia para quem escreveu o kit.
+# Un VPS « nu » (Hetzner, DigitalOcean, Contabo…) ne vient pas avec Docker. Avant c'était
+# une impasse : le script mourait en disant « installez avant de continuer » et la
+# personne — qui par définition n'est pas technique — ne savait pas comment faire. Les hébergements
+# avec modèle (Hostinger, HostGator) ont déjà Docker, donc le cas n'apparaissait jamais
+# pour qui a écrit le kit.
 #
-# O instalador oficial do Docker é o mesmo comando da documentação deles; não
-# inventamos nada. Em modo interativo PERGUNTA (instalar coisa no servidor de
-# alguém sem avisar é abuso de confiança); com --yes segue direto, que é o
-# contrato desse modo.
+# L'installateur officiel de Docker est la même commande que dans leur documentation ; nous
+# n'inventons rien. En mode interactif il DEMANDE (installer quelque chose sur le serveur de
+# quelqu'un sans prévenir est un abus de confiance) ; avec --yes il continue directement, c'est le
+# contrat de ce mode.
 if ! command -v docker >/dev/null 2>&1; then
-  c_ylw "⚠ Docker não está instalado — é o motor que roda o CRM."
+  c_ylw "⚠ Docker n'est pas installé — c'est le moteur qui fait tourner le CRM."
   instalar=1
   if [ "$NONINTERACTIVE" = 0 ]; then
-    read -r -p "  Posso instalar agora? (S/n) " r
+    read -r -p "  Puis-je l'installer maintenant ? (O/n) " r
     case "${r:-S}" in [Nn]*) instalar=0;; esac
   fi
   if [ "$instalar" = 1 ]; then
-    c_dim "  Instalando (get.docker.com — o instalador oficial). Leva 1-2 minutos…"
-    # A saída vai para um log em vez de /dev/null: silenciar o stderr também
-    # deixava a falha MUDA (disco cheio, apt travado, arquitetura sem pacote
-    # viravam todos a mesma frase genérica) — exatamente o que o trap lá em cima
-    # existe para impedir. Tela limpa no caminho feliz, causa real no caminho ruim.
+    c_dim "  Installation (get.docker.com — l'installateur officiel). Compter 1 à 2 minutes…"
+    # La sortie va dans un journal au lieu de /dev/null : faire taire stderr laissait aussi
+    # l'échec MUET (disque plein, apt bloqué, architecture sans paquet
+    # devenaient tous la même phrase générique) — exactement ce que le trap plus haut
+    # existe pour empêcher. Écran propre sur le chemin heureux, vraie cause sur le mauvais chemin.
     _docker_log="$(mktemp)"
     if ! curl -fsSL https://get.docker.com | sh >"$_docker_log" 2>&1; then
-      c_red "  Últimas linhas do instalador do Docker:"; tail -15 "$_docker_log" >&2
-      die "Não consegui instalar o Docker (log em $_docker_log). Rode 'curl -fsSL https://get.docker.com | sh' e tente de novo."
+      c_red "  Dernières lignes de l'installateur Docker :"; tail -15 "$_docker_log" >&2
+      die "Impossible d'installer Docker (journal dans $_docker_log). Lancez 'curl -fsSL https://get.docker.com | sh' et réessayez."
     fi
     rm -f "$_docker_log"; unset _docker_log
-    command -v docker >/dev/null 2>&1 || die "Docker instalou mas não ficou no PATH. Reabra o terminal e rode de novo."
-    c_grn "✓ Docker instalado"
+    command -v docker >/dev/null 2>&1 || die "Docker s'est installé mais n'est pas dans le PATH. Rouvrez le terminal et relancez."
+    c_grn "✓ Docker installé"
   else
-    die "Sem Docker não dá para seguir. Instale com: curl -fsSL https://get.docker.com | sh"
+    die "Sans Docker, impossible de continuer. Installez-le avec : curl -fsSL https://get.docker.com | sh"
   fi
 fi
 
 for bin in docker git openssl curl; do
-  command -v "$bin" >/dev/null 2>&1 || die "'$bin' não encontrado. Instale antes de continuar."
+  command -v "$bin" >/dev/null 2>&1 || die "'$bin' introuvable. Installez-le avant de continuer."
 done
-docker compose version >/dev/null 2>&1 || die "'docker compose' (v2) não encontrado."
-docker info >/dev/null 2>&1 || die "O daemon do Docker não está rodando (ou seu usuário não tem permissão)."
+docker compose version >/dev/null 2>&1 || die "'docker compose' (v2) introuvable."
+docker info >/dev/null 2>&1 || die "Le daemon Docker ne tourne pas (ou votre utilisateur n'a pas la permission)."
 c_grn "✓ docker, git, openssl, curl ok"
 
-# RAM: a imagem é pré-buildada, então a stack SOBE com 2GB. Mas o runbook de produção
-# declara 4GB como mínimo de operação: 7 contêineres, e o WAHA usa ~150MB por sessão
-# sobre ~300MB de overhead do Node. Avisar só abaixo de 1.5GB deixava o operador
-# instalar em 2GB achando que estava dentro do recomendado.
+# RAM : l'image est pré-construite, donc la stack DÉMARRE avec 2 Go. Mais le runbook de production
+# déclare 4 Go comme minimum d'exploitation : 7 conteneurs, et WAHA utilise ~150 Mo par session
+# en plus de ~300 Mo de surcoût Node. Avertir seulement sous 1,5 Go laissait l'opérateur
+# installer sur 2 Go en croyant être dans les recommandations.
 if [ -r /proc/meminfo ]; then
   mem_kb=$(awk '/MemTotal/{print $2}' /proc/meminfo)
   if ram_abaixo_do_recomendado "$mem_kb"; then
-    c_ylw "⚠ Este servidor tem ~$((mem_kb/1024))MB de RAM. O CRM sobe, mas fica no limite:"
-    c_ylw "  são 7 contêineres e o WhatsApp usa ~150MB por número conectado."
-    c_ylw "  Adicione swap antes de operar — ver docs/runbooks/waha-hostgator.md."
+    c_ylw "⚠ Ce serveur a ~$((mem_kb/1024)) Mo de RAM. Le CRM démarre, mais il est à la limite :"
+    c_ylw "  il y a 7 conteneurs et WhatsApp utilise ~150 Mo par numéro connecté."
+    c_ylw "  Ajoutez du swap avant de l'exploiter — voir docs/runbooks/waha-hostgator.md."
   fi
 fi
 
-# ── 2. Repositório ──────────────────────────────────────────────────────────
-step "Localizando o projeto"
+# ── 2. Dépôt ────────────────────────────────────────────────────────────────
+step "Localisation du projet"
 if [ -f "$COMPOSE" ]; then
-  c_grn "✓ rodando dentro do repositório"
+  c_grn "✓ exécution depuis l'intérieur du dépôt"
 elif [ -f "$REPO_DIR/$COMPOSE" ]; then
-  cd "$REPO_DIR"; c_grn "✓ repositório em ./$REPO_DIR"
+  cd "$REPO_DIR"; c_grn "✓ dépôt dans ./$REPO_DIR"
 else
-  c_ylw "Clonando $REPO_URL ..."
+  c_ylw "Clonage de $REPO_URL ..."
   git clone --depth 1 "$REPO_URL" "$REPO_DIR"
   cd "$REPO_DIR"
 fi
 PROJECT_DIR="$(pwd)"
 source "$KIT_DIR/_common.sh"
 
-# ── O invariante 8 também vale para quem INSTALA ────────────────────────────
+# ── L'invariant 8 vaut aussi pour qui INSTALLE ──────────────────────────────
 #
-# `recusar_projeto_de_outra_arvore` já protegia o `update.sh` (:33) e o
-# `agent.sh` (:45), e não protegia este arquivo — a porta por onde o incidente
-# entrou. O painel de cópia irmã, mais abaixo, cobre o caso em que a instalação
-# do ar é a DONA das portas 80/443; este guarda é o que vale sempre, porque
-# pergunta pelos CONTÊINERES do projeto, não pelo proxy:
+# `recusar_projeto_de_outra_arvore` protégeait déjà `update.sh` (:33) et
+# `agent.sh` (:45), mais pas ce fichier — la porte par laquelle l'incident
+# est entré. Le panneau de copie sœur, plus bas, couvre le cas où l'installation
+# en ligne est PROPRIÉTAIRE des ports 80/443 ; ce garde-fou est celui qui vaut toujours, parce qu'il
+# interroge les CONTENEURS du projet, pas le proxy :
 #
-#   - VPS com Traefik do painel (Coolify/Hostinger): lá `decide_proxy` sai por
-#     `traefik` antes de comparar árvore, e o painel nunca é alcançado;
-#   - pasta que já concluiu uma instalação: o próprio install.sh grava
-#     REVERSE_PROXY no .env (:1413), e na rodada seguinte o `if [ -z ... ]` que
-#     embrulha o painel é falso — o instalador desligava o próprio guarda;
-#   - portas 80/443 livres: `decide_proxy` devolve `caddy` na primeira linha.
+#   - VPS avec le Traefik du panneau (Coolify/Hostinger) : là `decide_proxy` sort par
+#     `traefik` avant de comparer l'arborescence, et le panneau n'est jamais atteint ;
+#   - dossier qui a déjà terminé une installation : install.sh lui-même écrit
+#     REVERSE_PROXY dans le .env (:1413), et au tour suivant le `if [ -z ... ]` qui
+#     enveloppe le panneau est faux — l'installateur désactivait son propre garde-fou ;
+#   - ports 80/443 libres : `decide_proxy` renvoie `caddy` dès la première ligne.
 #
-# Nos três, `docker compose ... up -d` subia sobre o parque da produção com o
-# .env desta pasta (outro banco, outras chaves) — o sintoma medido foi a senha
-# "parar de funcionar" e as conexões de WhatsApp caírem.
+# Dans les trois cas, `docker compose ... up -d` démarrait par-dessus le parc de production avec le
+# .env de ce dossier (autre base, autres clés) — le symptôme mesuré a été le mot de passe qui
+# « cesse de fonctionner » et les connexions WhatsApp qui tombent.
 #
-# AQUI e não no preflight: `projeto_pertence_a_outra_arvore` compara contra
-# `PROJECT_DIR`, que só existe a partir da linha acima. E antes da coleta de
-# config, para não pedir dado nenhum a quem vai ser recusado.
+# ICI et non dans les vérifications préalables : `projeto_pertence_a_outra_arvore` compare avec
+# `PROJECT_DIR`, qui n'existe qu'à partir de la ligne ci-dessus. Et avant la collecte de
+# configuration, pour ne demander aucune donnée à qui va être refusé.
 #
-# Instalação NOVA não é afetada: sem contêiner do projeto no ar, a função
-# devolve vazio e o guarda deixa passar. Re-executar na MESMA pasta idem — a
-# árvore é a mesma. `DESKCOMM_ASSUMIR_PROJETO=1` é a saída para quem move a
-# instalação de lugar de propósito, e é a mesma dos outros dois call sites.
-recusar_projeto_de_outra_arvore || die "Instalação interrompida para não derrubar o CRM que já está no ar nesta VPS."
+# Une NOUVELLE installation n'est pas affectée : sans conteneur du projet en ligne, la fonction
+# renvoie vide et le garde-fou laisse passer. Réexécuter dans le MÊME dossier pareil — l'
+# arborescence est la même. `DESKCOMM_ASSUMIR_PROJETO=1` est l'issue pour qui déplace
+# l'installation exprès, et c'est la même que pour les deux autres points d'appel.
+recusar_projeto_de_outra_arvore || die "Installation interrompue pour ne pas faire tomber le CRM déjà en ligne sur ce VPS."
 
-# ── 3. Coleta de config ─────────────────────────────────────────────────────
-fase 2 "Suas informações"
-step "Configuração"
-# Se já existe .env, carrega pra não repetir perguntas (idempotência).
-if [ -f .env ]; then load_env .env; c_grn "✓ .env existente carregado"; fi
-# Respostas guardadas de uma tentativa que não chegou ao fim. Carregam DEPOIS do
-# .env de propósito: se as duas fontes têm a chave, a mais recente é esta.
+# ── 3. Collecte de la configuration ─────────────────────────────────────────
+fase 2 "Vos informations"
+step "Configuration"
+# Si un .env existe déjà, le charger pour ne pas répéter les questions (idempotence).
+if [ -f .env ]; then load_env .env; c_grn "✓ .env existant chargé"; fi
+# Réponses gardées d'une tentative qui n'est pas allée au bout. Chargées APRÈS le
+# .env exprès : si les deux sources ont la clé, la plus récente est celle-ci.
 if [ -f "$PARTIAL_FILE" ]; then
   load_env "$PARTIAL_FILE"
-  c_grn "✓ retomando: $(grep -c '=' "$PARTIAL_FILE" 2>/dev/null || echo 0) resposta(s) guardadas da tentativa anterior"
-  c_dim "  (para responder tudo de novo do zero: rm $PARTIAL_FILE)"
+  c_grn "✓ reprise : $(grep -c '=' "$PARTIAL_FILE" 2>/dev/null || echo 0) réponse(s) gardée(s) de la tentative précédente"
+  c_dim "  (pour tout reprendre de zéro : rm $PARTIAL_FILE)"
 fi
 
-# ── Proxy reverso: quem está com as portas 80 e 443? ────────────────────────
-# Fica AQUI, logo depois de ler o .env e ANTES de qualquer coisa cara: era a
-# última etapa da fase 2, então quem esbarrava neste problema já tinha criado um
-# projeto Supabase, respondido tudo e esperado o clone — para só então o
-# `docker compose up` morrer com "Bind for 0.0.0.0:80 failed: port is already
-# allocated". Descobrir isso antes de cobrar qualquer trabalho é o mínimo.
+# ── Proxy inverse : qui tient les ports 80 et 443 ? ─────────────────────────
+# Reste ICI, juste après la lecture du .env et AVANT toute chose coûteuse : c'était la
+# dernière étape de la phase 2, donc qui butait sur ce problème avait déjà créé un
+# projet de base de données, tout répondu et attendu le clone — pour qu'ensuite seulement le
+# `docker compose up` meure avec « Bind for 0.0.0.0:80 failed: port is already
+# allocated ». Le découvrir avant d'exiger le moindre travail, c'est le minimum.
 #
-# A varredura NÃO procura por "traefik": procura por QUEM PUBLICA as portas, e
-# só depois pergunta o que é. A versão anterior só reconhecia Traefik, então um
-# Caddy — inclusive o de outro DeskcommCRM instalado na mesma VPS — passava
-# despercebido e a instalação escolhia `caddy`, garantindo o choque de portas.
-# Medido numa VPS com produção rodando: exatamente esse erro, na fase 4.
+# Le balayage NE cherche PAS « traefik » : il cherche QUI PUBLIE les ports, et
+# seulement ensuite demande de quoi il s'agit. La version précédente ne reconnaissait que Traefik, donc un
+# Caddy — y compris celui d'un autre DeskcommCRM installé sur le même VPS — passait
+# inaperçu et l'installation choisissait `caddy`, garantissant le conflit de ports.
+# Mesuré sur un VPS avec la production en marche : exactement cette erreur, en phase 4.
 #
-# Contêineres DESTA instalação são ignorados: numa re-execução o nosso próprio
-# Caddy está de pé publicando 80/443, e tratá-lo como "outro proxy" mataria a
-# idempotência — que é justamente o que permite rodar de novo para corrigir uma
-# resposta errada.
+# Les conteneurs de CETTE installation sont ignorés : lors d'une réexécution, notre propre
+# Caddy est debout et publie 80/443, et le traiter comme « autre proxy » tuerait
+# l'idempotence — qui est justement ce qui permet de relancer pour corriger une
+# réponse erronée.
 proj_atual="$(nome_do_projeto_atual)"
 
 portas_ocupadas=""; n_ocupadas=0
 porta_publicavel 80  || { portas_ocupadas="80"; n_ocupadas=1; }
-porta_publicavel 443 || { portas_ocupadas="${portas_ocupadas:+$portas_ocupadas e }443"; n_ocupadas=$((n_ocupadas + 1)); }
+porta_publicavel 443 || { portas_ocupadas="${portas_ocupadas:+$portas_ocupadas et }443"; n_ocupadas=$((n_ocupadas + 1)); }
 
-# Identificação do ocupante — só para a MENSAGEM. Quem decide é o teste acima,
-# então não saber quem é NUNCA vira "pode instalar": a falha é fechada.
-# O "|| true" não é decorativo: numa atribuição o status do pipeline vira o
-# status do script, e sob `set -e` + `pipefail` um docker ps que falhe (ou um
-# SIGPIPE do consumidor) mataria o instalador mudo, no meio da fase 2.
+# Identification de l'occupant — seulement pour le MESSAGE. C'est le test ci-dessus qui décide,
+# donc ne pas savoir qui c'est ne devient JAMAIS « on peut installer » : l'échec est fermé.
+# Le "|| true" n'est pas décoratif : dans une affectation, le statut du pipeline devient le
+# statut du script, et sous `set -e` + `pipefail` un docker ps qui échoue (ou un
+# SIGPIPE du consommateur) tuerait l'installateur en silence, au milieu de la phase 2.
 dono_portas=""; dono_projeto=""; dono_imagem=""; dono_arvore=""
 if [ -n "$portas_ocupadas" ]; then
   _dono="$(docker ps --format '{{.Names}}|{{.Label "com.docker.compose.project"}}|{{.Image}}|{{.Ports}}' 2>/dev/null | dono_das_portas || true)"
@@ -809,24 +809,24 @@ if [ -n "$portas_ocupadas" ]; then
     dono_portas="${_dono%%|*}"; _resto="${_dono#*|}"
     dono_projeto="${_resto%%|*}"; dono_imagem="${_resto#*|}"
     unset _resto
-    # De qual cópia do repo saiu esse contêiner. É o que separa "sou eu rodando
-    # de novo" de "é a instalação irmã que está no ar" quando as duas pastas se
-    # chamam DeskcommCRM e por isso compartilham o nome do projeto.
+    # De quelle copie du dépôt vient ce conteneur. C'est ce qui sépare « c'est moi qui
+    # relance » de « c'est l'installation sœur qui est en ligne » quand les deux dossiers
+    # s'appellent DeskcommCRM et partagent donc le nom du projet.
     dono_arvore="$(docker inspect "$dono_portas" --format '{{index .Config.Labels "com.docker.compose.project.working_dir"}}' 2>/dev/null || true)"
     dono_arvore="${dono_arvore%/}"
   fi
   unset _dono
 fi
 
-# Ninguém PUBLICA as portas, mas elas estão ocupadas: o candidato é um proxy em
-# modo host, que ouve 80/443 pela stack de rede da máquina e por isso sai com a
-# coluna Ports vazia (a medição está em `unico_traefik`). Sem este ramo o dono
-# ficava "não identificado" e a instalação parava no painel de bloqueio — que
-# manda pôr REVERSE_PROXY=traefik no .env, caminho que também morria adiante.
-# É exatamente a VPS Hostinger da issue #139.
+# Personne ne PUBLIE les ports, mais ils sont occupés : le candidat est un proxy en
+# mode host, qui écoute 80/443 par la pile réseau de la machine et sort donc avec la
+# colonne Ports vide (la mesure est dans `unico_traefik`). Sans cette branche, le propriétaire
+# restait « non identifié » et l'installation s'arrêtait sur le panneau de blocage — qui
+# demande de mettre REVERSE_PROXY=traefik dans le .env, chemin qui mourait aussi plus loin.
+# C'est exactement le VPS Hostinger de l'issue #139.
 #
-# A eleição fica MARCADA: quem veio daqui não tem a coluna Ports como prova, e o
-# `case` abaixo trata essa diferença (ver `confianca_no_dono_das_portas`).
+# L'élection reste MARQUÉE : qui vient d'ici n'a pas la colonne Ports comme preuve, et le
+# `case` ci-dessous traite cette différence (voir `confianca_no_dono_das_portas`).
 dono_por_varredura_host=0
 if [ -n "$portas_ocupadas" ] && [ -z "$dono_portas" ]; then
   _host="$(docker ps --filter network=host --format '{{.Names}}|{{.Label "com.docker.compose.project"}}|{{.Image}}|{{.Ports}}' 2>/dev/null | unico_traefik || true)"
@@ -839,119 +839,119 @@ if [ -n "$portas_ocupadas" ] && [ -z "$dono_portas" ]; then
   unset _host
 fi
 
-# Inicializado sempre: o bloco da rede do Traefik, mais abaixo, lê esta variável
-# sem default, e sob `set -u` uma instalação que já traz REVERSE_PROXY=traefik no
-# .env (portanto sem passar pela detecção) morreria com "unbound variable".
+# Toujours initialisée : le bloc du réseau Traefik, plus bas, lit cette variable
+# sans valeur par défaut, et sous `set -u` une installation qui apporte déjà REVERSE_PROXY=traefik dans le
+# .env (donc sans passer par la détection) mourrait sur « unbound variable ».
 traefik_container=""
 
 if [ -z "${REVERSE_PROXY:-}" ]; then
-  # A exclusão da própria instalação acontece AQUI, não na varredura: o teste de
-  # bind não tem como se auto-excluir, então filtrar o nosso contêiner antes só
-  # produzia um "ocupado por ninguém" — bloqueio sem um comando sequer.
+  # L'exclusion de sa propre installation se fait ICI, pas dans le balayage : le test de
+  # bind n'a aucun moyen de s'auto-exclure, donc filtrer notre conteneur avant ne
+  # produisait qu'un « occupé par personne » — un blocage sans une seule commande.
   _minha_arvore="${PROJECT_DIR:-$PWD}"; _minha_arvore="${_minha_arvore%/}"
   case "$(decide_proxy "$portas_ocupadas" "$dono_projeto" "$proj_atual" "$dono_imagem" "$dono_portas" "$dono_arvore" "$_minha_arvore")" in
   caddy)
     REVERSE_PROXY=caddy
-    [ -n "$portas_ocupadas" ] && c_dim "  (as portas 80/443 já estão com esta instalação — seguindo)"
+    [ -n "$portas_ocupadas" ] && c_dim "  (les ports 80/443 sont déjà tenus par cette installation — on continue)"
     ;;
   traefik)
-    # O porquê de a varredura por modo host não bastar sozinha está em
+    # La raison pour laquelle le balayage en mode host ne suffit pas seul est dans
     # `confianca_no_dono_das_portas`.
     case "$(confianca_no_dono_das_portas "$dono_por_varredura_host" "$NONINTERACTIVE")" in
     pergunta)
-      c_ylw "⚠ As portas ${portas_ocupadas} estão ocupadas, mas NENHUM contêiner as publica."
-      c_ylw "  O único Traefik em modo host aqui é '${dono_portas}'${dono_imagem:+ (imagem ${dono_imagem})}."
-      printf '\n%s\n'   "  Em modo host o Docker não mostra as portas, então não consigo PROVAR que é ele"
-      printf '%s\n\n'   "  quem atende o seu domínio — poderia ser um nginx/apache instalado no servidor."
-      printf '%s\n'     "  Se for ele, o CRM sai publicado por ele e tudo funciona."
-      printf '%s\n\n'   "  Se não for, o site vai subir e não responder — sem erro nenhum na tela."
-      if ! read -r -p "  É o '${dono_portas}' que atende o seu site? (s/N) " _r; then _r=""; fi
+      c_ylw "⚠ Les ports ${portas_ocupadas} sont occupés, mais AUCUN conteneur ne les publie."
+      c_ylw "  Le seul Traefik en mode host ici est '${dono_portas}'${dono_imagem:+ (image ${dono_imagem})}."
+      printf '\n%s\n'   "  En mode host, Docker n'affiche pas les ports, donc je ne peux pas PROUVER que c'est lui"
+      printf '%s\n\n'   "  qui sert votre domaine — ce pourrait être un nginx/apache installé sur le serveur."
+      printf '%s\n'     "  Si c'est lui, le CRM est publié par lui et tout fonctionne."
+      printf '%s\n\n'   "  Sinon, le site va démarrer et ne pas répondre — sans aucune erreur à l'écran."
+      if ! read -r -p "  Est-ce '${dono_portas}' qui sert votre site ? (o/N) " _r; then _r=""; fi
       if ! resposta_sim "$_r"; then
-        die "Ok, não vou arriscar. Descubra quem está com as portas 80/443 (ex.: 'ss -ltnp | grep :80')
-e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
+        die "D'accord, je ne prends pas le risque. Trouvez qui tient les ports 80/443 (ex. : 'ss -ltnp | grep :80')
+et, si c'est bien un Traefik, mettez REVERSE_PROXY=traefik dans le .env et relancez."
       fi
       unset _r
       ;;
     recusa)
-      c_red "✖ As portas ${portas_ocupadas} estão ocupadas, mas NENHUM contêiner as publica."
-      printf '\n%s\n'   "  O único Traefik em modo host aqui é '${dono_portas}'${dono_imagem:+ (imagem ${dono_imagem})},"
-      printf '%s\n\n'   "  e em modo host o Docker não mostra porta — não dá para provar que é ele quem atende."
-      printf '%s\n'     "  Publicar o CRM atrás do proxy errado instala 'com sucesso' um site que não responde,"
-      printf '%s\n\n'   "  então em modo --yes eu paro aqui em vez de chutar."
-      printf '%s\n'     "  É esse Traefik mesmo? Ponha no .env e rode de novo:"
+      c_red "✖ Les ports ${portas_ocupadas} sont occupés, mais AUCUN conteneur ne les publie."
+      printf '\n%s\n'   "  Le seul Traefik en mode host ici est '${dono_portas}'${dono_imagem:+ (image ${dono_imagem})},"
+      printf '%s\n\n'   "  et en mode host Docker n'affiche aucun port — impossible de prouver que c'est lui qui répond."
+      printf '%s\n'     "  Publier le CRM derrière le mauvais proxy installe « avec succès » un site qui ne répond pas,"
+      printf '%s\n\n'   "  donc en mode --yes je m'arrête ici au lieu de deviner."
+      printf '%s\n'     "  C'est bien ce Traefik ? Mettez ceci dans le .env et relancez :"
       printf '%s\n\n'   "       REVERSE_PROXY=traefik"
-      printf '%s\n'     "  Não é? Confira quem está com as portas: ss -ltnp | grep -E ':80|:443'"
-      die "Não consigo identificar com certeza o dono das portas ${portas_ocupadas} em modo --yes."
+      printf '%s\n'     "  Ce n'est pas lui ? Vérifiez qui tient les ports : ss -ltnp | grep -E ':80|:443'"
+      die "Impossible d'identifier avec certitude le propriétaire des ports ${portas_ocupadas} en mode --yes."
       ;;
     esac
     REVERSE_PROXY=traefik
     traefik_container="$dono_portas"
-    c_ylw "⚠ Detectei um Traefik já rodando neste VPS (contêiner '${dono_portas}', ocupando 80/443)."
-    c_ylw "  Vou publicar o CRM através dele em vez de subir um proxy próprio —"
-    c_ylw "  desligar o Traefik quebraria o que a sua hospedagem instalou."
+    c_ylw "⚠ J'ai détecté un Traefik déjà en marche sur ce VPS (conteneur '${dono_portas}', qui occupe 80/443)."
+    c_ylw "  Je vais publier le CRM à travers lui au lieu de démarrer un proxy dédié —"
+    c_ylw "  arrêter Traefik casserait ce que votre hébergeur a installé."
     ;;
   *)
-    # A preposição vem junto do trecho: "por o contêiner" sai errado se a frase
-    # fixar "por" e o pedaço variável começar com artigo. E a imagem só entra se
-    # for conhecida — "(imagem )" vazio era o sintoma de um campo perdido.
-    ocupante="${dono_portas:+pelo contêiner '${dono_portas}'${dono_imagem:+ (imagem ${dono_imagem})}}"
-    ocupante="${ocupante:-por um programa do próprio servidor}"
-    # Cópia irmã tem um diagnóstico próprio: o painel genérico abaixo fala de
-    # "porta ocupada", e quem lê isso numa pasta recém-clonada não liga o aviso
-    # à instalação que está no ar — foi assim que uma aula subiu por cima de uma
-    # produção. Aqui o nome das DUAS pastas aparece.
+    # La préposition vient avec le fragment : la phrase sort fausse si elle fixe
+    # la préposition et que le morceau variable commence par un article. Et l'image n'entre que si elle est
+    # connue — « (image ) » vide était le symptôme d'un champ perdu.
+    ocupante="${dono_portas:+par le conteneur '${dono_portas}'${dono_imagem:+ (image ${dono_imagem})}}"
+    ocupante="${ocupante:-par un programme du serveur lui-même}"
+    # Une copie sœur a son propre diagnostic : le panneau générique ci-dessous parle de
+    # « port occupé », et qui lit cela dans un dossier fraîchement cloné ne relie pas l'avertissement
+    # à l'installation qui est en ligne — c'est ainsi qu'un cours a démarré par-dessus une
+    # production. Ici le nom des DEUX dossiers apparaît.
     if [ -n "$dono_arvore" ] && [ "$dono_projeto" = "$proj_atual" ] && [ "$dono_arvore" != "$_minha_arvore" ]; then
-      c_red "✖ Já existe um DeskcommCRM NO AR nesta VPS, instalado em ${dono_arvore}."
-      printf '\n%s\n'   "  Esta pasta (${_minha_arvore}) é outra cópia do repo. As duas se chamam"
-      printf '%s\n'     "  DeskcommCRM, então o Docker dá às duas o MESMO nome de projeto"
-      printf '%s\n\n'   "  ('${proj_atual}') — e instalar aqui recriaria os contêineres daquela."
-      printf '%s\n'     "  Na prática: o CRM que está no ar passaria a rodar com o .env DESTA pasta"
-      printf '%s\n\n'   "  (outro banco, outras chaves), e as conexões de WhatsApp cairiam."
-      printf '%s\n'     "  Quer atualizar o que já existe? Use aquela pasta:"
+      c_red "✖ Un DeskcommCRM est DÉJÀ EN LIGNE sur ce VPS, installé dans ${dono_arvore}."
+      printf '\n%s\n'   "  Ce dossier (${_minha_arvore}) est une autre copie du dépôt. Les deux s'appellent"
+      printf '%s\n'     "  DeskcommCRM, donc Docker leur donne le MÊME nom de projet"
+      printf '%s\n\n'   "  ('${proj_atual}') — et installer ici recréerait les conteneurs de l'autre."
+      printf '%s\n'     "  En pratique : le CRM en ligne se mettrait à tourner avec le .env DE CE dossier"
+      printf '%s\n\n'   "  (autre base, autres clés), et les connexions WhatsApp tomberaient."
+      printf '%s\n'     "  Vous voulez mettre à jour l'existant ? Utilisez ce dossier-là :"
       printf '%s\n\n'   "       cd ${dono_arvore} && bash hostgator-setup-kit/update.sh"
-      printf '%s\n'     "  Quer mesmo uma SEGUNDA instalação nesta VPS? Ela precisa de nome de"
-      printf '%s\n'     "  projeto e domínio próprios — ponha no .env desta pasta, antes de rodar:"
+      printf '%s\n'     "  Vous voulez vraiment une SECONDE installation sur ce VPS ? Elle a besoin de son propre nom de"
+      printf '%s\n'     "  projet et de son propre domaine — mettez dans le .env de ce dossier, avant de lancer :"
       printf '%s\n\n'   "       COMPOSE_PROJECT_NAME=deskcomm-$(basename "${_minha_arvore}" | tr 'A-Z' 'a-z')-2"
-      die "Instalação interrompida para não derrubar o DeskcommCRM que está no ar em ${dono_arvore}."
+      die "Installation interrompue pour ne pas faire tomber le DeskcommCRM en ligne dans ${dono_arvore}."
     fi
-    # Concordância com o número de portas: "A porta 80 e 443 já está ocupada"
-    # saiu na prova real e denuncia texto montado sem olhar o próprio dado.
+    # Accord avec le nombre de ports : « Le port 80 et 443 est déjà occupé »
+    # est sorti en test réel et trahit un texte monté sans regarder ses propres données.
     if [ "$n_ocupadas" -gt 1 ]; then
-      c_red "✖ As portas ${portas_ocupadas} já estão ocupadas ${ocupante}."
+      c_red "✖ Les ports ${portas_ocupadas} sont déjà occupés ${ocupante}."
     else
-      c_red "✖ A porta ${portas_ocupadas} já está ocupada ${ocupante}."
+      c_red "✖ Le port ${portas_ocupadas} est déjà occupé ${ocupante}."
     fi
-    printf '\n%s\n'   "  O CRM precisa dessas duas portas para publicar o site com HTTPS. Subir um"
-    printf '%s\n\n'   "  segundo proxy nelas não funciona: o Docker recusa e a instalação para."
-    printf '%s\n'     "  Como resolver, na ordem do mais provável:"
-    printf '\n%s\n'   "  1. Já é outro DeskcommCRM neste servidor? Então use aquele — entre na"
-    printf '%s\n'     "     pasta dele e rode: bash hostgator-setup-kit/update.sh"
-    printf '\n%s\n'   "  2. Não usa mais o que está ocupando? Desligue e rode este instalador de novo:"
+    printf '\n%s\n'   "  Le CRM a besoin de ces deux ports pour publier le site en HTTPS. Démarrer un"
+    printf '%s\n\n'   "  second proxy dessus ne fonctionne pas : Docker refuse et l'installation s'arrête."
+    printf '%s\n'     "  Comment résoudre, du plus probable au moins probable :"
+    printf '\n%s\n'   "  1. C'est déjà un autre DeskcommCRM sur ce serveur ? Alors utilisez celui-là — entrez dans"
+    printf '%s\n'     "     son dossier et lancez : bash hostgator-setup-kit/update.sh"
+    printf '\n%s\n'   "  2. Vous n'utilisez plus ce qui occupe le port ? Arrêtez-le et relancez cet installateur :"
     [ -n "$dono_portas" ] && printf '%s\n' "       docker stop ${dono_portas}"
-    printf '\n%s\n'   "  3. Quer manter os dois no ar? Aí o CRM tem de sair por um proxy só, e isso"
-    printf '%s\n'     "     é configuração manual — o kit automatiza esse caminho apenas para"
-    printf '%s\n\n'   "     Traefik (ponha REVERSE_PROXY=traefik no .env)."
+    printf '\n%s\n'   "  3. Vous voulez garder les deux en ligne ? Alors le CRM doit passer par un seul proxy, et c'est"
+    printf '%s\n'     "     une configuration manuelle — le kit n'automatise ce chemin que pour"
+    printf '%s\n\n'   "     Traefik (mettez REVERSE_PROXY=traefik dans le .env)."
     if [ "$n_ocupadas" -gt 1 ]; then
-      die "Libere as portas ${portas_ocupadas} (ou use a instalação que já existe) e rode de novo."
+      die "Libérez les ports ${portas_ocupadas} (ou utilisez l'installation existante) et relancez."
     fi
-    die "Libere a porta ${portas_ocupadas} (ou use a instalação que já existe) e rode de novo."
+    die "Libérez le port ${portas_ocupadas} (ou utilisez l'installation existante) et relancez."
     ;;
   esac
 fi
 
-# Fica FORA do `case` porque quem põe REVERSE_PROXY=traefik no .env à mão — o
-# caminho que o painel de bloqueio logo acima ENSINA — pula o `case` inteiro e
-# chegava no bloco da rede com a variável vazia, para morrer em "Não consegui
-# descobrir a rede Docker do seu Traefik". O instalador mandava fazer uma coisa
-# que ele mesmo não sabia terminar.
+# Reste HORS du `case` parce que qui met REVERSE_PROXY=traefik dans le .env à la main — le
+# chemin que le panneau de blocage juste au-dessus ENSEIGNE — saute tout le `case` et
+# arrivait au bloc du réseau avec la variable vide, pour mourir sur « Impossible de
+# découvrir le réseau Docker de votre Traefik ». L'installateur demandait de faire une chose
+# qu'il ne savait pas lui-même terminer.
 if [ "${REVERSE_PROXY:-}" = "traefik" ] && [ -z "$traefik_container" ]; then
   if [ -n "$dono_portas" ] && eh_traefik "$dono_imagem" "$dono_portas"; then
     traefik_container="$dono_portas"
   else
-    # Nem dono das portas nem modo host: o Traefik pode simplesmente estar
-    # parado agora (painel reiniciando, VPS recém-ligada). Procurá-lo entre
-    # TODOS os contêineres é o que resta — e continua fechado no plural, porque
-    # apontar para o Traefik errado publica o CRM num proxy que ninguém acessa.
+    # Ni propriétaire des ports ni mode host : le Traefik est peut-être simplement
+    # arrêté en ce moment (panneau qui redémarre, VPS tout juste allumé). Le chercher parmi
+    # TOUS les conteneurs est ce qui reste — et c'est toujours fermé au pluriel, parce que
+    # pointer vers le mauvais Traefik publie le CRM sur un proxy que personne n'atteint.
     _tk="$(docker ps --format '{{.Names}}|{{.Label "com.docker.compose.project"}}|{{.Image}}|{{.Ports}}' 2>/dev/null | unico_traefik || true)"
     [ -n "$_tk" ] && traefik_container="${_tk%%|*}"
     unset _tk
@@ -968,27 +968,27 @@ if [ -z "${NEON_DATA_API_URL:-}" ] || [ -z "${NEON_DATABASE_URL:-}" ]; then
   c_ylw "⚠ Configurez d’abord NEON_DATA_API_URL et NEON_DATABASE_URL pour votre projet Neon."
 fi
 
-# Cada linha: VARIÁVEL|pergunta|padrão|validador|secret|opcional
-# A ordem importa: a URL do projeto vem antes das chaves porque os validadores
-# das chaves batem contra ela (chave de outro projeto é erro comum e mudo).
-# O bloco final (APP_NAME, SUPPORT_EMAIL, RESEND_*) fica por último de
-# propósito: é tudo opcional, e perguntar no meio das credenciais faria parecer
-# obrigatório. Todas as quatro aceitam Enter — e, quando vazias, o produto
-# degrada de forma declarada (marca padrão; tela de suspensão sem endereço;
-# convite mostrando o link de aceite na própria tela).
-# ── Qual IA vai atender ─────────────────────────────────────────────────────
+# Chaque ligne : VARIABLE|question|défaut|validateur|secret|optionnel
+# L'ordre compte : l'URL du projet vient avant les clés parce que les validateurs
+# des clés la comparent (une clé d'un autre projet est une erreur courante et muette).
+# Le bloc final (APP_NAME, SUPPORT_EMAIL, RESEND_*) reste en dernier
+# exprès : tout est optionnel, et le demander au milieu des identifiants le ferait paraître
+# obligatoire. Les quatre acceptent Entrée — et, quand elles sont vides, le produit
+# se dégrade de façon déclarée (marque par défaut ; écran de suspension sans adresse ;
+# invitation affichant le lien d'acceptation à l'écran même).
+# ── Quelle IA va répondre ───────────────────────────────────────────────────
 #
-# Antes daqui o instalador só sabia pedir a chave da Anthropic, e quem já tinha
-# conta em outro provedor descobria isso tarde: instalava, cadastrava a chave
-# "errada", e o agente não respondia. A OpenRouter mudou a conta dessa escolha —
-# uma chave só dá acesso a centenas de modelos de dezenas de fabricantes, o que
-# costuma ser o caminho mais simples para quem está começando.
+# Avant ceci, l'installateur ne savait demander que la clé Anthropic, et qui avait déjà
+# un compte chez un autre fournisseur le découvrait tard : il installait, enregistrait la « mauvaise »
+# clé, et l'agent ne répondait pas. OpenRouter a changé la donne de ce choix —
+# une seule clé donne accès à des centaines de modèles de dizaines de fabricants, ce qui
+# est souvent le chemin le plus simple pour qui débute.
 #
-# A pergunta vem ANTES das credenciais porque é ela que decide QUAL credencial
-# será pedida; perguntar depois obrigaria a voltar atrás.
+# La question vient AVANT les identifiants parce que c'est elle qui décide QUEL identifiant
+# sera demandé ; demander après obligerait à revenir en arrière.
 escolher_provedor() {
-  # Numa 2ª execução, o provedor já escolhido vira o default — quem re-roda o
-  # script para corrigir outra coisa não deve ter que reescolher isto.
+  # Lors d'une 2e exécution, le fournisseur déjà choisi devient la valeur par défaut — qui relance le
+  # script pour corriger autre chose ne doit pas avoir à refaire ce choix.
   local atual="${AI_PROVIDER:-}"
   if [ -z "$atual" ]; then
     if   [ -n "${OPENROUTER_API_KEY:-}" ]; then atual="openrouter"
@@ -1002,102 +1002,102 @@ escolher_provedor() {
     return 0
   fi
 
-  printf '\n\033[1mQual inteligência artificial vai atender seus clientes?\033[0m\n\n'
-  printf '  [1] OpenRouter  — uma chave, centenas de modelos de vários fabricantes.\n'
-  printf '                    O caminho mais simples para experimentar. (openrouter.ai/keys)\n'
-  printf '  [2] Anthropic   — o Claude. É o que melhor segue instruções longas e usa\n'
-  printf '                    as ferramentas do CRM. (console.anthropic.com)\n'
-  printf '  [3] OpenAI      — o GPT. (platform.openai.com/api-keys)\n'
+  printf '\n\033[1mQuelle intelligence artificielle va répondre à vos clients ?\033[0m\n\n'
+  printf '  [1] OpenRouter  — une clé, des centaines de modèles de plusieurs fabricants.\n'
+  printf '                    Le chemin le plus simple pour essayer. (openrouter.ai/keys)\n'
+  printf '  [2] Anthropic   — suit le mieux les longues instructions et utilise\n'
+  printf '                    les outils du CRM. (console.anthropic.com)\n'
+  printf '  [3] OpenAI      — (platform.openai.com/api-keys)\n'
   printf '\n'
-  printf '  Dá para trocar depois, e por parte do sistema, em Agente de IA → Provedores.\n\n'
+  printf '  Modifiable plus tard, et par partie du système, dans Agent IA → Fournisseurs.\n\n'
 
   local padrao_num=2
   case "$atual" in openrouter) padrao_num=1;; openai) padrao_num=3;; esac
 
   while :; do
-    if ! read -r -p "Escolha (Enter = ${padrao_num}): " escolha; then escolha=""; fi
+    if ! read -r -p "Choix (Entrée = ${padrao_num}) : " escolha; then escolha=""; fi
     [ -z "$escolha" ] && escolha="$padrao_num"
     case "$escolha" in
       1) AI_PROVIDER="openrouter"; break;;
       2) AI_PROVIDER="anthropic";  break;;
       3) AI_PROVIDER="openai";     break;;
-      *) c_ylw "Digite 1, 2 ou 3.";;
+      *) c_ylw "Tapez 1, 2 ou 3.";;
     esac
   done
 }
 escolher_provedor
 
-# O campo da chave do provedor ESCOLHIDO — e só dele. Pedir as três faria a
-# pessoa achar que precisa das três.
+# Le champ de la clé du fournisseur CHOISI — et seulement de lui. Demander les trois ferait
+# croire à la personne qu'elle a besoin des trois.
 case "$AI_PROVIDER" in
-  openrouter) CAMPO_IA="OPENROUTER_API_KEY|Chave da OpenRouter — a IA que atende (openrouter.ai/keys)||v_openrouter|secret|";;
-  openai)     CAMPO_IA="OPENAI_API_KEY|Chave da OpenAI — a IA que atende (platform.openai.com/api-keys)||v_openai|secret|";;
-  *)          CAMPO_IA="ANTHROPIC_API_KEY|Chave da Anthropic — a IA que atende (console.anthropic.com)||v_anthropic|secret|";;
+  openrouter) CAMPO_IA="OPENROUTER_API_KEY|Clé OpenRouter — l'IA qui répond (openrouter.ai/keys)||v_openrouter|secret|";;
+  openai)     CAMPO_IA="OPENAI_API_KEY|Clé OpenAI — l'IA qui répond (platform.openai.com/api-keys)||v_openai|secret|";;
+  *)          CAMPO_IA="ANTHROPIC_API_KEY|Clé Anthropic — l'IA qui répond (console.anthropic.com)||v_anthropic|secret|";;
 esac
 
-# A chave da OpenAI é pedida À PARTE quando ela NÃO é o provedor de conversa,
-# porque dois pontos do sistema dependem dela mesmo assim: ouvir áudio (o
-# Whisper é da OpenAI) e indexar a base de conhecimento. Sem esta linha, quem
-# escolhe OpenRouter instala achando que está completo e descobre semanas depois
-# que o agente nunca ouviu um áudio — que é exatamente o defeito já visto em
-# produção, com a chave certa no .env e indo para o endpoint errado.
+# La clé OpenAI est demandée À PART quand elle N'est PAS le fournisseur de conversation,
+# parce que deux points du système en dépendent quand même : écouter l'audio (la
+# transcription passe par OpenAI) et indexer la base de connaissances. Sans cette ligne, qui
+# choisit OpenRouter installe en se croyant complet et découvre des semaines plus tard
+# que l'agent n'a jamais écouté un audio — c'est exactement le défaut déjà vu en
+# production, avec la bonne clé dans le .env et qui partait vers le mauvais endpoint.
 if [ "$AI_PROVIDER" = "openai" ]; then
   CAMPO_OPENAI_EXTRA=""
 else
-  CAMPO_OPENAI_EXTRA="OPENAI_API_KEY|Chave da OpenAI — só para ouvir áudios e usar a base de conhecimento (Enter pula)||v_openai|secret|opcional"
+  CAMPO_OPENAI_EXTRA="OPENAI_API_KEY|Clé OpenAI — seulement pour écouter les audios et utiliser la base de connaissances (Entrée pour passer)||v_openai|secret|opcional"
 fi
 
-# ── A versão que esta instalação vai rodar ───────────────────────────────────
-# Uma instalação nova nascia em `:latest`, e aqui `latest` NÃO quer dizer "a
-# última release": ele segue a branch default, então ela
-# segue o topo da `main` — código ainda não lançado. Quem instalava no dia 6
-# e quem instalava no dia 20 rodavam software diferente, ambos dizendo "estou
-# no latest", e o suporte não tinha como saber o quê. A issue #184 chegou
-# descrevendo o ambiente como "latest do dia 06/08/2026", que é a admissão de
-# que a versão não era nomeável.
+# ── La version que cette installation va faire tourner ───────────────────────
+# Une nouvelle installation naissait sur `:latest`, et ici `latest` NE veut PAS dire « la
+# dernière release » : il suit la branche par défaut, donc elle
+# suit le sommet de `main` — du code pas encore publié. Qui installait le 6
+# et qui installait le 20 faisaient tourner des logiciels différents, tous deux disant « je suis
+# sur latest », et le support n'avait aucun moyen de savoir lequel. L'issue #184 est arrivée
+# en décrivant l'environnement comme « latest du 06/08/2026 », ce qui est l'aveu
+# que la version n'était pas nommable.
 #
-# Resolvido no REMOTO porque o clone é `--depth 1` e não traz tag nenhuma.
+# Résolu sur le DÉPÔT DISTANT parce que le clone est `--depth 1` et n'apporte aucune tag.
 VERSAO_ALVO="$(ultima_versao_publicada "$REPO_URL")"
 
-# A tag do git é condição NECESSÁRIA, não suficiente: ela nasce minutos antes
-# das imagens, e `deskcomm-worker`/`deskcomm-scheduler` só passaram a existir
-# depois das releases que já estão publicadas — `deskcomm-worker:1.2.1` nunca
-# vai existir, porque a v1.2.1 é passado. Sem esta conferência, o .env do
-# cliente receberia duas referências impossíveis e o kit as construiria aqui em
-# silêncio, do topo da main: app de uma release + worker de outro código.
+# La tag git est une condition NÉCESSAIRE, pas suffisante : elle naît quelques minutes avant
+# les images, et `deskcomm-worker`/`deskcomm-scheduler` n'ont commencé à exister
+# qu'après les releases déjà publiées — `deskcomm-worker:1.2.1` n'existera jamais,
+# parce que la v1.2.1 appartient au passé. Sans cette vérification, le .env du
+# client recevrait deux références impossibles et le kit les construirait ici en
+# silence, depuis le sommet de main : l'app d'une release + le worker d'un autre code.
 #
-# Cascata, do mais específico ao mais disponível. Cada nível pergunta pelas TRÊS
-# imagens juntas, porque instalar com elas desalinhadas é o defeito, não a
-# solução.
+# Cascade, du plus spécifique au plus disponible. Chaque niveau interroge les TROIS
+# images ensemble, parce qu'installer avec elles désalignées est le défaut, pas la
+# solution.
 if [ -n "$VERSAO_ALVO" ] && trio_publicado "$VERSAO_ALVO"; then
-  : # o caminho normal: as três publicadas na última versão
+  : # le chemin normal : les trois publiées dans la dernière version
 elif trio_publicado "stable"; then
-  c_ylw "⚠ A versão ${VERSAO_ALVO:-mais recente} ainda não tem as três imagens publicadas."
-  c_ylw "  Instalando pelo canal 'stable' (a última versão completa)."
+  c_ylw "⚠ La version ${VERSAO_ALVO:-la plus récente} n'a pas encore ses trois images publiées."
+  c_ylw "  Installation via le canal 'stable' (la dernière version complète)."
   VERSAO_ALVO="stable"
 elif [ -n "$VERSAO_ALVO" ]; then
-  # Nem a versão nem o `stable` têm o trio. Segue assim mesmo — o compose tem
-  # `build:` ao lado do `image:` do worker e do scheduler, então eles são
-  # construídos aqui. É lento, mas instala. O que NÃO pode é isso acontecer
-  # calado: o dono precisa saber que duas peças dele saíram do fonte local.
-  c_ylw "⚠ As imagens do worker e do agendador ainda não estão publicadas."
-  c_ylw "  Elas serão construídas neste servidor — leva alguns minutos a mais."
-  c_ylw "  Rode 'bash hostgator-setup-kit/update.sh' quando a próxima versão sair."
+  # Ni la version ni `stable` n'ont le trio. On continue quand même — le compose a
+  # `build:` à côté de l'`image:` du worker et du scheduler, donc ils sont
+  # construits ici. C'est lent, mais ça s'installe. Ce qui NE doit PAS arriver, c'est que cela se fasse
+  # en silence : le propriétaire doit savoir que deux de ses pièces sortent des sources locales.
+  c_ylw "⚠ Les images du worker et du planificateur ne sont pas encore publiées."
+  c_ylw "  Elles seront construites sur ce serveur — cela prend quelques minutes de plus."
+  c_ylw "  Lancez 'bash hostgator-setup-kit/update.sh' quand la prochaine version sortira."
 else
-  # Falha ABERTA: sem rede ou sem tag no remoto, segue como antes. Travar a
-  # instalação por não resolver um número seria trocar previsibilidade por
-  # disponibilidade — mas o aviso sai, porque o dono precisa saber que ficou
-  # num canal móvel em vez de numa versão.
+  # Échec OUVERT : sans réseau ou sans tag sur le dépôt distant, on continue comme avant. Bloquer
+  # l'installation faute de résoudre un numéro serait échanger la prévisibilité contre la
+  # disponibilité — mais l'avertissement sort, parce que le propriétaire doit savoir qu'il est resté
+  # sur un canal mobile au lieu d'une version.
   VERSAO_ALVO="latest"
-  c_ylw "⚠ Não consegui descobrir a última versão publicada (rede?)."
-  c_ylw "  Instalando pelo canal 'latest'. Depois rode: bash hostgator-setup-kit/update.sh"
+  c_ylw "⚠ Impossible de découvrir la dernière version publiée (réseau ?)."
+  c_ylw "  Installation via le canal 'latest'. Ensuite lancez : bash hostgator-setup-kit/update.sh"
 fi
 IMAGEM_APP_DEFAULT="${IMG_APP}:${VERSAO_ALVO}"
 
 FIELDS=(
-  "DOMAIN|Domínio do CRM (ex: crm.suaempresa.com.br)||v_domain||"
-  "ACME_EMAIL|Seu e-mail (avisos de SSL)||v_email||"
-  "APP_IMAGE|Imagem Docker do app|${IMAGEM_APP_DEFAULT}|||"
+  "DOMAIN|Domaine du CRM (ex. : crm.votreentreprise.com)||v_domain||"
+  "ACME_EMAIL|Votre e-mail (alertes SSL)||v_email||"
+  "APP_IMAGE|Image Docker de l'app|${IMAGEM_APP_DEFAULT}|||"
   "NEON_AUTH_BASE_URL|Neon Managed Better Auth base URL||v_url||"
   "NEON_DATA_API_URL|Neon Data API/PostgREST URL||v_url||"
   "NEON_SERVICE_ROLE_JWT|Neon service-role JWT||v_service|secret|"
@@ -1105,25 +1105,25 @@ FIELDS=(
   "NEON_DATABASE_URL|Neon pooled PostgreSQL connection string||v_db_url|secret|"
   "$CAMPO_IA"
   ${CAMPO_OPENAI_EXTRA:+"$CAMPO_OPENAI_EXTRA"}
-  "OWNER_EMAIL|E-mail do primeiro admin (dono)||v_email||"
-  "OWNER_PASSWORD|Senha do primeiro admin (mínimo 8 caracteres)||v_password|secret|"
-  "APP_NAME|Nome que aparece na interface (Enter para o padrão)|DeskcommCRM|||"
-  # Sem default, e `opcional`: em `--yes` o `ask_one` devolve 0 sem associar a
-  # variável (campo sem default e sem `opcional` morre em `die`), e o `envq` lá
-  # embaixo usa `${APP_ACCENT_HEX:-}`. Enter = a cor do produto, que é o
-  # comportamento de sempre para quem não tem marca própria.
-  "APP_ACCENT_HEX|Cor da sua marca em hex, ex.: #7a5cd6 (Enter usa a cor do sistema)||v_hex||opcional"
-  "SUPPORT_EMAIL|E-mail de suporte que SEUS clientes veem (Enter pula)||v_email||opcional"
-  "RESEND_API_KEY|Chave da Resend — envia convite e e-mail de LGPD (resend.com/api-keys, Enter pula)|||secret|opcional"
-  "RESEND_FROM_EMAIL|Remetente dos e-mails, de um domínio verificado na Resend (Enter pula)||v_email||opcional"
+  "OWNER_EMAIL|E-mail du premier admin (propriétaire)||v_email||"
+  "OWNER_PASSWORD|Mot de passe du premier admin (8 caractères minimum)||v_password|secret|"
+  "APP_NAME|Nom affiché dans l'interface (Entrée pour la valeur par défaut)|DeskcommCRM|||"
+  # Sans défaut, et `opcional` : en `--yes`, `ask_one` renvoie 0 sans affecter la
+  # variable (un champ sans défaut et sans `opcional` meurt dans `die`), et l'`envq` plus
+  # bas utilise `${APP_ACCENT_HEX:-}`. Entrée = la couleur du produit, qui est le
+  # comportement habituel pour qui n'a pas de marque propre.
+  "APP_ACCENT_HEX|Couleur de votre marque en hex, ex. : #7a5cd6 (Entrée pour la couleur du système)||v_hex||opcional"
+  "SUPPORT_EMAIL|E-mail de support que VOS clients voient (Entrée pour passer)||v_email||opcional"
+  "RESEND_API_KEY|Clé Resend — envoie les invitations et les e-mails RGPD (resend.com/api-keys, Entrée pour passer)|||secret|opcional"
+  "RESEND_FROM_EMAIL|Expéditeur des e-mails, d'un domaine vérifié chez Resend (Entrée pour passer)||v_email||opcional"
 )
 
 field_at() { IFS='|' read -r F_VAR F_PROMPT F_DEF F_VAL F_SEC F_OPT <<< "${FIELDS[$1]}"; }
 
 if [ "$NONINTERACTIVE" = 0 ]; then
-  c_dim "Dica: em qualquer pergunta, digite 'voltar' para refazer a anterior."
+  c_dim "Astuce : à n'importe quelle question, tapez 'retour' pour refaire la précédente."
   if [ "$AI_PROVIDER" != "openai" ]; then
-    c_ylw "A chave da OpenAI é opcional, mas sem ela a IA não ouve áudio nem consulta a base de conhecimento."
+    c_ylw "La clé OpenAI est optionnelle, mais sans elle l'IA n'écoute pas l'audio et ne consulte pas la base de connaissances."
   fi
 fi
 
@@ -1132,58 +1132,58 @@ while [ "$i" -lt "${#FIELDS[@]}" ]; do
   field_at "$i"
   set +e; ask_one "$F_VAR" "$F_PROMPT" "$F_DEF" "$F_VAL" "$F_SEC" "$F_OPT"; rc=$?; set -e
   if [ "$rc" = "2" ]; then
-    if [ "$i" -eq 0 ]; then c_ylw "  Essa já é a primeira pergunta."; continue; fi
-    i=$((i-1)); field_at "$i"; unset "$F_VAR"      # limpa o anterior para ele ser perguntado de novo
+    if [ "$i" -eq 0 ]; then c_ylw "  C'est déjà la première question."; continue; fi
+    i=$((i-1)); field_at "$i"; unset "$F_VAR"      # efface la précédente pour qu'elle soit redemandée
   else
     i=$((i+1))
   fi
 done
 
-# ── Conferência: a última chance de corrigir sem desfazer nada ──────────────
-# Numa 2ª execução todos os campos já vêm do .env — então esta tela é também
-# o caminho para consertar um valor digitado errado antes, que antes ficava
-# preso no .env sem nenhuma forma de trocar pelo instalador.
+# ── Vérification : la dernière chance de corriger sans rien défaire ─────────
+# Lors d'une 2e exécution tous les champs viennent déjà du .env — donc cet écran est aussi
+# le chemin pour corriger une valeur mal saisie auparavant, qui restait avant
+# coincée dans le .env sans aucun moyen de la changer via l'installateur.
 if [ "$NONINTERACTIVE" = 0 ]; then
   while :; do
-    printf '\n\033[1mConfira antes de eu escrever a configuração:\033[0m\n\n'
+    printf '\n\033[1mVérifiez avant que j’écrive la configuration :\033[0m\n\n'
     n=1
     for f in "${FIELDS[@]}"; do
       IFS='|' read -r v p _d _val sec _o <<< "$f"
       if [ "$sec" = "secret" ]; then printf '  [%2d] %-28s %s\n' "$n" "${v}" "$(mask "${!v:-}")"
-      else printf '  [%2d] %-28s %s\n' "$n" "${v}" "${!v:-(vazio)}"; fi
+      else printf '  [%2d] %-28s %s\n' "$n" "${v}" "${!v:-(vide)}"; fi
       n=$((n+1))
     done
     printf '\n'
-    if ! read -r -p "Está tudo certo? (Enter = continuar / número = corrigir): " answer; then answer=""; fi
+    if ! read -r -p "Tout est correct ? (Entrée = continuer / numéro = corriger) : " answer; then answer=""; fi
     [ -z "$answer" ] && break
     case "$answer" in
-      ''|*[!0-9]*) c_ylw "Digite o número do item que quer corrigir, ou Enter para continuar."; continue;;
+      ''|*[!0-9]*) c_ylw "Tapez le numéro de l'élément à corriger, ou Entrée pour continuer."; continue;;
     esac
     if [ "$answer" -lt 1 ] || [ "$answer" -gt "${#FIELDS[@]}" ]; then
-      c_ylw "Número fora da lista."; continue
+      c_ylw "Numéro hors de la liste."; continue
     fi
     field_at "$((answer-1))"; unset "$F_VAR"
     set +e; ask_one "$F_VAR" "$F_PROMPT" "$F_DEF" "$F_VAL" "$F_SEC" "$F_OPT"; set -e
   done
 else
-  # Sem tela para conferir: os validadores continuam sendo a rede de proteção.
+  # Pas d'écran de vérification : les validateurs restent le filet de protection.
   for f in "${FIELDS[@]}"; do
     IFS='|' read -r v _p _d val _sec opt <<< "$f"
     [ -z "$val" ] && continue
-    [ -z "${!v:-}" ] && { [ -n "$opt" ] && continue; die "Falta $v (modo --yes exige .env preenchido)."; }
+    [ -z "${!v:-}" ] && { [ -n "$opt" ] && continue; die "$v manquant (le mode --yes exige un .env rempli)."; }
     if ! msg="$("$val" "${!v}" 2>&1)"; then
-      c_red "✖ $v inválido:"; printf '%s\n' "$msg"
-      die "Corrija o .env e rode de novo."
+      c_red "✖ $v invalide :"; printf '%s\n' "$msg"
+      die "Corrigez le .env et relancez."
     fi
   done
 fi
 
-# Derivados
+# Dérivés
 NEXT_PUBLIC_APP_URL="https://${DOMAIN}"
 NEXT_PUBLIC_ADMIN_URL="https://${DOMAIN}"
 
-# ── 4. Geração de segredos (idempotente: só gera o que falta) ────────────────
-step "Gerando segredos"
+# ── 4. Génération des secrets (idempotente : ne génère que ce qui manque) ────
+step "Génération des secrets"
 gen_hex() { openssl rand -hex 32; }
 gen_b64() { openssl rand -base64 32; }
 : "${INTERNAL_SECRET:=$(gen_hex)}"
@@ -1197,125 +1197,125 @@ gen_b64() { openssl rand -base64 32; }
 : "${WAHA_HMAC_SECRET:=$(gen_hex)}"
 : "${SRH_TOKEN:=$(gen_hex)}"
 : "${WAHA_API_KEY:=$(gen_hex)}"
-# O container WAHA espera o HASH SHA512 hex; o app envia o plaintext no X-Api-Key.
+# Le conteneur WAHA attend le HASH SHA512 hex ; l'app envoie le texte clair dans X-Api-Key.
 WAHA_API_KEY_SHA512="$(printf '%s' "$WAHA_API_KEY" | openssl dgst -sha512 -hex | awk '{print $NF}')"
 UPSTASH_REDIS_REST_TOKEN="$SRH_TOKEN"
-c_grn "✓ segredos prontos"
+c_grn "✓ secrets prêts"
 
-# ── 5. Escreve .env (600) ───────────────────────────────────────────────────
-# Onde o Traefik encontra o app. Os dois cenários e as duas medições que os
-# separam estão em `rede_do_traefik`; aqui só se busca no Docker o que ela pede.
+# ── 5. Écrit le .env (600) ──────────────────────────────────────────────────
+# Où Traefik trouve l'app. Les deux scénarios et les deux mesures qui les
+# séparent sont dans `rede_do_traefik` ; ici on ne cherche dans Docker que ce qu'elle demande.
 #
-# A bridge reservada a este projeto sai de `rede_reservada_do_proxy` (_common.sh),
-# que usa o mesmo nome que o compose calcula (NormalizeProjectName: minúsculas, só
-# [a-z0-9_-], `_`/`-` iniciais aparados). Um `basename` cru diverge numa pasta com
-# maiúscula, ponto ou underscore inicial — e aí o instalador cria uma rede e o
-# compose procura outra.
+# Le bridge réservé à ce projet sort de `rede_reservada_do_proxy` (_common.sh),
+# qui utilise le même nom que celui calculé par compose (NormalizeProjectName : minuscules, seulement
+# [a-z0-9_-], `_`/`-` initiaux retirés). Un `basename` brut diverge sur un dossier avec
+# majuscule, point ou underscore initial — et alors l'installateur crée un réseau et
+# compose en cherche un autre.
 rede_do_projeto="$(rede_reservada_do_proxy)"
 if [ "$REVERSE_PROXY" = "traefik" ] && [ -z "${TRAEFIK_NETWORK:-}" ] && [ -n "$traefik_container" ]; then
-  # "|| true" nas duas: sem ele o `die` explicativo logo abaixo — que é o
-  # tratamento CERTO deste caso — é inalcançável. Numa atribuição o status do
-  # pipeline vira o status do script; se o painel da hospedagem recriou o proxy
-  # entre a detecção e aqui, o docker inspect sai 1, o 2>/dev/null engole a
-  # mensagem e o instalador cai no painel genérico de erro sem dizer o que houve.
+  # "|| true" sur les deux : sans lui, le `die` explicatif juste en dessous — qui est le
+  # BON traitement de ce cas — est inatteignable. Dans une affectation, le statut du
+  # pipeline devient le statut du script ; si le panneau de l'hébergeur a recréé le proxy
+  # entre la détection et ici, docker inspect sort 1, le 2>/dev/null avale le
+  # message et l'installateur tombe sur le panneau d'erreur générique sans dire ce qui s'est passé.
   traefik_netmode="$(docker inspect -f '{{.HostConfig.NetworkMode}}' "$traefik_container" 2>/dev/null || true)"
   traefik_redes="$(docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' "$traefik_container" 2>/dev/null || true)"
   TRAEFIK_NETWORK="$(rede_do_traefik "$traefik_netmode" "$traefik_redes" "$rede_do_projeto")"
   [ "$traefik_netmode" = "host" ] && \
-    c_dim "  (o Traefik roda em modo host, então o CRM publica numa rede própria: ${TRAEFIK_NETWORK})"
+    c_dim "  (Traefik tourne en mode host, donc le CRM publie sur un réseau dédié : ${TRAEFIK_NETWORK})"
 fi
 if [ "$REVERSE_PROXY" = "traefik" ] && [ -z "${TRAEFIK_NETWORK:-}" ]; then
-  die "Não consegui descobrir a rede Docker do seu Traefik. Rode 'docker network ls',
-identifique a rede dele e ponha TRAEFIK_NETWORK=<nome> no .env antes de tentar de novo."
+  die "Impossible de découvrir le réseau Docker de votre Traefik. Lancez 'docker network ls',
+identifiez son réseau et mettez TRAEFIK_NETWORK=<nom> dans le .env avant de réessayer."
 fi
-# Confere (e cria, quando a rede é a nossa) — em _common.sh, porque o update.sh
-# precisa da mesma garantia antes do `dc up -d` dele. Também aplica o default
-# 'traefik', então a variável está pronta para o .env logo abaixo.
+# Vérifie (et crée, quand le réseau est le nôtre) — dans _common.sh, parce qu'update.sh
+# a besoin de la même garantie avant son `dc up -d`. Applique aussi la valeur par défaut
+# 'traefik', donc la variable est prête pour le .env juste en dessous.
 garantir_rede_do_proxy
 
-# ── Telemetria: perguntar, não presumir ─────────────────────────────────────
-# Issue #100. Antes, quem não definisse SENTRY_DSN mandava relatório de erro pro
-# Sentry da comunidade sem ter decidido nada — e só ficava sabendo na mensagem
-# final, DEPOIS de instalado. Num produto que roda na infraestrutura do usuário,
-# com dados de clientes dele, o consentimento vem antes.
-# Quem já tem valor no .env manda: a pergunta não sobrescreve escolha anterior.
+# ── Télémétrie : demander, ne pas présumer ──────────────────────────────────
+# Issue #100. Avant, qui ne définissait pas SENTRY_DSN envoyait des rapports d'erreur au
+# Sentry de la communauté sans avoir rien décidé — et ne l'apprenait que dans le message
+# final, APRÈS l'installation. Dans un produit qui tourne sur l'infrastructure de l'utilisateur,
+# avec les données de ses clients, le consentement vient avant.
+# Qui a déjà une valeur dans le .env décide : la question n'écrase pas un choix antérieur.
 if [ -z "${SENTRY_DSN+x}" ]; then
   if [ "$NONINTERACTIVE" = 1 ]; then
-    # Automação não consente por ninguém. Sem valor explícito, fica desligado.
+    # L'automatisation ne consent pour personne. Sans valeur explicite, c'est désactivé.
     SENTRY_DSN="off"
   else
-    step "Telemetria de erros (opcional)"
-    printf '%s\n' "Podemos receber os relatórios de ERRO desta instalação (stack trace) para"
-    printf '%s\n' "corrigir bugs que afetam todo mundo. CPF, telefone e e-mail são substituídos,"
-    printf '%s\n' "cabeçalhos sensíveis removidos e tokens de webhook/convite redigidos da URL."
-    printf '%s\n' "NÃO enviamos rastreamento de performance nem replay de sessão."
-    printf '%s\n' "Seus dados de clientes, conversas e banco NUNCA saem daqui."
-    printf '\n%s\n' "Você pode mudar depois no .env, a qualquer momento."
-    read -r -p "  Enviar relatórios de erro anonimizados? (s/N) " _tel
+    step "Télémétrie des erreurs (optionnelle)"
+    printf '%s\n' "Nous pouvons recevoir les rapports d'ERREUR de cette installation (stack trace) pour"
+    printf '%s\n' "corriger les bugs qui touchent tout le monde. Numéros d'identité, téléphones et e-mails sont remplacés,"
+    printf '%s\n' "les en-têtes sensibles retirés et les jetons de webhook/invitation masqués dans l'URL."
+    printf '%s\n' "Nous N'envoyons ni suivi de performance ni replay de session."
+    printf '%s\n' "Les données de vos clients, conversations et base ne sortent JAMAIS d'ici."
+    printf '\n%s\n' "Vous pouvez changer cela plus tard dans le .env, à tout moment."
+    read -r -p "  Envoyer des rapports d'erreur anonymisés ? (o/N) " _tel
     if resposta_sim "${_tel:-}"; then
       SENTRY_DSN=""
-      c_grn "✓ Telemetria de erros ligada — obrigado, isso ajuda o projeto."
+      c_grn "✓ Télémétrie des erreurs activée — merci, cela aide le projet."
     else
       SENTRY_DSN="off"
-      c_grn "✓ Telemetria desligada — nada será enviado."
+      c_grn "✓ Télémétrie désactivée — rien ne sera envoyé."
     fi
   fi
 fi
 
-step "Escrevendo .env"
+step "Écriture du .env"
 umask 077
 
-# Todo valor sai pelo `envq` (definido lá em cima, junto do save_partial): entre
-# aspas DUPLAS, com `\`, `"`, `$` e crase escapados. Sem isso, um
-# `APP_NAME=Loja do João` (ou uma senha com # ou $) quebrava tudo que lê este
-# arquivo com `source` — os scripts do kit e a receita do próprio README
-# (`source .env && curl ...`) —, e a versão de aspas simples que veio antes
-# quebrava o terceiro leitor, o `env_file: .env` do Compose, em todo nome com
-# apóstrofo. O porquê de cada caractere escapado está no comentário do envq.
+# Toute valeur sort par `envq` (défini plus haut, avec save_partial) : entre
+# guillemets DOUBLES, avec `\`, `"`, `$` et accent grave échappés. Sans cela, un
+# `APP_NAME=Boutique do Kofi` (ou un mot de passe avec # ou $) cassait tout ce qui lit ce
+# fichier avec `source` — les scripts du kit et la recette du README lui-même
+# (`source .env && curl ...`) —, et la version à guillemets simples d'avant
+# cassait le troisième lecteur, le `env_file: .env` de Compose, pour tout nom avec
+# apostrophe. Le pourquoi de chaque caractère échappé est dans le commentaire d'envq.
 
-# ── Preserva o que o instalador NÃO conhece ────────────────────────────────
+# ── Préserve ce que l'installateur NE connaît PAS ───────────────────────────
 #
-# O bloco abaixo fecha com `} > .env`, que é TRUNCANTE: ele reescreve o arquivo
-# inteiro a partir de uma lista fechada de chaves. Quem acrescentou qualquer
-# variável à mão — uma chave de provedor de IA que o kit ainda não pergunta, um
-# knob de modelo, um endpoint próprio — PERDIA tudo ao re-rodar o script. E o
-# README vende o install.sh como idempotente, então re-rodar é exatamente o que
-# se espera de quem quer corrigir um dado.
+# Le bloc ci-dessous se termine par `} > .env`, qui est TRONQUANT : il réécrit le fichier
+# entier à partir d'une liste fermée de clés. Qui avait ajouté une variable à la main — une
+# clé de fournisseur d'IA que le kit ne demande pas encore, un réglage de modèle, un
+# endpoint propre — PERDAIT tout en relançant le script. Et le
+# README présente install.sh comme idempotent, donc relancer est exactement ce que
+# l'on attend de qui veut corriger une donnée.
 #
-# O sintoma é dos piores: a instalação continua subindo, sem erro nenhum, e só
-# depois alguém descobre que o agente voltou ao provedor padrão.
+# Le symptôme est des pires : l'installation continue de démarrer, sans aucune erreur, et ce n'est
+# qu'après que quelqu'un découvre que l'agent est revenu au fournisseur par défaut.
 #
-# Aqui as chaves desconhecidas são lidas do .env atual e reemitidas no fim do
-# arquivo novo. Comparação por NOME da variável, contra a lista que este script
-# escreve — assim uma chave nova que o kit passe a conhecer deixa de ser
-# "alheia" sozinha, sem ninguém precisar manter uma segunda lista.
+# Ici les clés inconnues sont lues dans le .env actuel et réémises à la fin du
+# nouveau fichier. Comparaison par NOM de variable, contre la liste que ce script
+# écrit — ainsi une nouvelle clé que le kit se met à connaître cesse d'être
+# « étrangère » toute seule, sans que personne n'ait à maintenir une seconde liste.
 PRESERVADAS=""
 if [ -f .env ]; then
-  # ── Antes de tudo: recarrega o .env atual no ambiente ────────────────────
+  # ── Avant tout : recharger le .env actuel dans l'environnement ───────────
   #
-  # Este é o furo MAIOR, e ele é invisível: várias chaves da lista fechada são
-  # escritas como `envq X "${X:-}"` — o valor da variável de SHELL. Numa
-  # re-execução o shell não tem essas variáveis (o instalador só as coleta no
-  # fluxo interativo, e chave opcional não é perguntada), então elas são
-  # reescritas VAZIAS. Ou seja: a chave da OpenRouter que a pessoa configurou à
-  # mão é APAGADA por uma linha que parecia estar só repassando o valor.
+  # C'est le trou le PLUS GRAND, et il est invisible : plusieurs clés de la liste fermée sont
+  # écrites sous la forme `envq X "${X:-}"` — la valeur de la variable de SHELL. Lors d'une
+  # réexécution le shell n'a pas ces variables (l'installateur ne les collecte que dans le
+  # flux interactif, et une clé optionnelle n'est pas demandée), donc elles sont
+  # réécrites VIDES. Autrement dit : la clé OpenRouter que la personne a configurée à la
+  # main est EFFACÉE par une ligne qui semblait seulement transmettre la valeur.
   #
-  # NÃO recarregue o .env aqui. Havia um `set -a; . ./.env; set +a` neste ponto,
-  # justificado por "carregar o .env atual primeiro faz `${X:-}` cair de volta no
-  # valor que já existia" — e essa premissa é FALSA: `install.sh:757` já faz
-  # `load_env .env` antes da entrevista, e `_common.sh:266` faz `printf -v` +
-  # `export` incondicionalmente. O arquivo já está carregado e exportado aqui.
+  # NE rechargez PAS le .env ici. Il y avait un `set -a; . ./.env; set +a` à cet endroit,
+  # justifié par « charger d'abord le .env actuel fait retomber `${X:-}` sur la
+  # valeur qui existait déjà » — et cette prémisse est FAUSSE : `install.sh:757` fait déjà
+  # `load_env .env` avant l'entretien, et `_common.sh:266` fait `printf -v` +
+  # `export` inconditionnellement. Le fichier est déjà chargé et exporté ici.
   #
-  # O que a releitura fazia de fato era DESFAZER a entrevista: a pessoa corrigia
-  # um valor errado na tela e o `.` sobrescrevia com o antigo do disco. Medido na
-  # triagem; a preservação de variável alheia (o laço abaixo) continua
-  # funcionando sem estas linhas.
+  # Ce que la relecture faisait en réalité, c'était DÉFAIRE l'entretien : la personne corrigeait
+  # une valeur erronée à l'écran et le `.` l'écrasait avec l'ancienne du disque. Mesuré lors du
+  # tri ; la préservation des variables étrangères (la boucle ci-dessous) continue de
+  # fonctionner sans ces lignes.
 
-  # `$KIT_DIR/install.sh`, não `"$0"`: este bloco roda DEPOIS do `cd` da linha
-  # 662, e com `$0` relativo (o `bash install.sh` que o README:34 documenta) o
-  # grep procura o arquivo no diretório errado e morre com "No such file or
-  # directory" — matando a 2ª execução, que o README:126/:138 documentam como
-  # suportada. `KIT_DIR` (linha 16) é absoluto e imune ao `cd`.
+  # `$KIT_DIR/install.sh`, pas `"$0"` : ce bloc tourne APRÈS le `cd` de la ligne
+  # 662, et avec un `$0` relatif (le `bash install.sh` que documente README:34) le
+  # grep cherche le fichier dans le mauvais répertoire et meurt sur « No such file or
+  # directory » — tuant la 2e exécution, que README:126/:138 documentent comme
+  # prise en charge. `KIT_DIR` (ligne 16) est absolu et insensible au `cd`.
   CONHECIDAS="$(grep -oE "^\s*envq [A-Z_][A-Z0-9_]*" "$KIT_DIR/install.sh" | awk '{print $2}' | sort -u)"
   while IFS= read -r linha; do
     case "$linha" in
@@ -1331,35 +1331,35 @@ if [ -f .env ]; then
     fi
   done < .env
   if [ -n "$PRESERVADAS" ]; then
-    c_ylw "→ preservando $(printf '%s' "$PRESERVADAS" | grep -c .) variável(is) que você acrescentou à mão"
+    c_ylw "→ préservation de $(printf '%s' "$PRESERVADAS" | grep -c .) variable(s) que vous avez ajoutée(s) à la main"
   fi
 fi
 
-# A tag que o dono escolheu (o campo APP_IMAGE é editável na entrevista) decide
-# o pull_policy das três imagens. A regra é medida, não estética: com `always` e
-# o registry sem responder para aquela referência, o `up -d` FALHA e o contêiner
-# não sobe, mesmo com a imagem já no disco. Numa tag imutável isso não protege
-# de nada — só amarra a subida do CRM à disponibilidade do GHCR. Numa tag móvel
-# é o contrário: sem `always`, a versão nova nunca chega.
-# Olha só o último segmento do caminho: `registry.local:5000/x/y` tem ':' e NÃO
-# tem tag, e um `${APP_IMAGE##*:}` ingênuo devolveria "5000/x/y" como se fosse
-# uma. Um `@sha256:...` cai aqui como tag imutável, que é o correto.
+# La tag que le propriétaire a choisie (le champ APP_IMAGE est modifiable dans l'entretien) décide
+# du pull_policy des trois images. La règle est mesurée, pas esthétique : avec `always` et
+# le registre qui ne répond pas pour cette référence, le `up -d` ÉCHOUE et le conteneur
+# ne démarre pas, même avec l'image déjà sur le disque. Sur une tag immuable cela ne protège
+# de rien — cela lie seulement le démarrage du CRM à la disponibilité de GHCR. Sur une tag mobile
+# c'est l'inverse : sans `always`, la nouvelle version n'arrive jamais.
+# Ne regarde que le dernier segment du chemin : `registry.local:5000/x/y` a un ':' et N'a PAS
+# de tag, et un `${APP_IMAGE##*:}` naïf renverrait "5000/x/y" comme si c'en était
+# une. Un `@sha256:...` tombe ici comme tag immuable, ce qui est correct.
 _ref_final="${APP_IMAGE##*/}"
 case "$_ref_final" in
   *@sha256:*)
-    # O operador pinou o app por DIGEST. Derivar a tag daí produziria
-    # `deskcomm-worker:<hash-do-app>` — uma referência que não existe em lugar
-    # nenhum, e o `pull` falharia com "manifest unknown" sem ninguém entender
-    # por quê. Worker e scheduler vão para o canal estável, e o aviso sai porque
-    # quem pinou por digest tinha um motivo e precisa saber que ele não se
-    # propagou às outras duas.
+    # L'opérateur a épinglé l'app par DIGEST. Dériver la tag de là produirait
+    # `deskcomm-worker:<hash-de-l-app>` — une référence qui n'existe nulle
+    # part, et le `pull` échouerait avec « manifest unknown » sans que personne ne comprenne
+    # pourquoi. Worker et scheduler vont sur le canal stable, et l'avertissement sort parce que
+    # qui a épinglé par digest avait une raison et doit savoir qu'elle ne s'est pas
+    # propagée aux deux autres.
     TAG_ALVO="stable"
-    c_ylw "⚠ APP_IMAGE está pinado por digest."
-    c_ylw "  O worker e o scheduler ficam em 'stable' — ajuste WORKER_IMAGE/SCHEDULER_IMAGE"
-    c_ylw "  no .env se você precisa deles num digest específico também."
+    c_ylw "⚠ APP_IMAGE est épinglée par digest."
+    c_ylw "  Le worker et le scheduler restent sur 'stable' — ajustez WORKER_IMAGE/SCHEDULER_IMAGE"
+    c_ylw "  dans le .env si vous en avez aussi besoin sur un digest précis."
     ;;
   *:*) TAG_ALVO="${_ref_final##*:}" ;;
-  *)   TAG_ALVO="latest" ;;   # imagem sem ':' é :latest por definição do Docker
+  *)   TAG_ALVO="latest" ;;   # une image sans ':' est :latest par définition de Docker
 esac
 case "$TAG_ALVO" in
   latest|main|stable) PULL_POLICY_ALVO="always" ;;
@@ -1367,30 +1367,30 @@ case "$TAG_ALVO" in
 esac
 
 {
-  printf '# Gerado por install.sh — NÃO comitar. Contém segredos.\n'
+  printf '# Généré par install.sh — NE PAS committer. Contient des secrets.\n'
   envq APP_IMAGE "$APP_IMAGE"
   envq APP_PULL_POLICY "$PULL_POLICY_ALVO"
-  # Worker e scheduler acompanham a MESMA versão do app: um em 1.2.1 e outro em
-  # `latest` é uma matriz de compatibilidade que ninguém testou. Estas duas
-  # imagens existem desde que o worker deixou de ser `build:`-only — antes disso
-  # ele era compilado aqui na VPS e nenhum update jamais o alcançava.
+  # Worker et scheduler suivent la MÊME version que l'app : l'un en 1.2.1 et l'autre en
+  # `latest`, c'est une matrice de compatibilité que personne n'a testée. Ces deux
+  # images existent depuis que le worker a cessé d'être `build:`-only — avant cela
+  # il était compilé ici sur le VPS et aucune mise à jour ne l'atteignait jamais.
   envq WORKER_IMAGE "${IMG_WORKER}:${TAG_ALVO}"
   envq WORKER_PULL_POLICY "$PULL_POLICY_ALVO"
   envq SCHEDULER_IMAGE "${IMG_SCHEDULER}:${TAG_ALVO}"
   envq SCHEDULER_PULL_POLICY "$PULL_POLICY_ALVO"
   envq DOMAIN "$DOMAIN"
   envq ACME_EMAIL "$ACME_EMAIL"
-  printf '# Proxy reverso: "caddy" (o kit sobe o dele nas portas 80/443) ou "traefik"\n'
-  printf '# (o VPS já tem um Traefik nessas portas — Hostinger, Coolify, Dokploy...).\n'
-  printf '# Em "traefik" entra o docker-compose.traefik.yml, que desliga o Caddy e\n'
-  printf '# publica o app por labels. TRAEFIK_* só é lido nesse modo.\n'
+  printf '# Proxy inverse : "caddy" (le kit démarre le sien sur les ports 80/443) ou "traefik"\n'
+  printf '# (le VPS a déjà un Traefik sur ces ports — Hostinger, Coolify, Dokploy...).\n'
+  printf '# En "traefik", docker-compose.traefik.yml entre en jeu : il désactive Caddy et\n'
+  printf '# publie l’app via des labels. TRAEFIK_* n’est lu que dans ce mode.\n'
   envq REVERSE_PROXY "$REVERSE_PROXY"
-  # O default mora aqui, junto dos irmãos TRAEFIK_* logo abaixo, e não numa
-  # atribuição solta lá atrás: em modo caddy ninguém DECIDE esta variável, e
-  # depender de uma linha distante para ela existir é o tipo de laço que um
-  # refactor do bloco de proxy corta sem perceber. Com `set -u` o preço é a VPS
-  # limpa — a instalação mais comum de todas — parar aqui e deixar o .env pela
-  # metade, com o bloco do Traefik verde em todos os testes.
+  # La valeur par défaut vit ici, avec ses frères TRAEFIK_* juste en dessous, et non dans une
+  # affectation isolée plus haut : en mode caddy personne ne DÉCIDE de cette variable, et
+  # dépendre d'une ligne lointaine pour qu'elle existe est le genre de lien qu'un
+  # refactor du bloc proxy coupe sans s'en apercevoir. Avec `set -u` le prix est le VPS
+  # propre — l'installation la plus courante de toutes — qui s'arrête ici et laisse le .env à
+  # moitié, avec le bloc Traefik vert dans tous les tests.
   envq TRAEFIK_NETWORK "${TRAEFIK_NETWORK:-traefik}"
   envq TRAEFIK_ENTRYPOINT_HTTP "${TRAEFIK_ENTRYPOINT_HTTP:-web}"
   envq TRAEFIK_ENTRYPOINT "${TRAEFIK_ENTRYPOINT:-websecure}"
@@ -1404,58 +1404,58 @@ esac
   # Il reste fourni ponctuellement à url_do_schema/update.sh par l’opérateur.
   envq NEXT_PUBLIC_APP_URL "$NEXT_PUBLIC_APP_URL"
   envq NEXT_PUBLIC_ADMIN_URL "$NEXT_PUBLIC_ADMIN_URL"
-  printf '# Marca da instalação (white-label). Preencha APP_LOGO_URL com a URL de uma\n'
-  printf '# imagem pública para trocar o texto por logo na sidebar. Ver lib/branding.ts.\n'
-  printf '# APP_ACCENT_HEX é a SEMENTE da cor: o banco (platform_branding) manda depois\n'
-  printf '# da primeira leitura, mas é daqui que sai a cor dos e-mails de acesso, que o\n'
-  printf '# marca-emails.sh empurra para o GoTrue e o banco não alcança.\n'
+  printf '# Marque de l’installation (marque blanche). Remplissez APP_LOGO_URL avec l’URL d’une\n'
+  printf '# image publique pour remplacer le texte par un logo dans la barre latérale. Voir lib/branding.ts.\n'
+  printf '# APP_ACCENT_HEX est la SEMENCE de la couleur : la base (platform_branding) prend le relais après\n'
+  printf '# la première lecture, mais c’est d’ici que vient la couleur des e-mails d’accès, que\n'
+  printf '# marca-emails.sh pousse vers GoTrue et que la base n’atteint pas.\n'
   envq APP_NAME "$APP_NAME"
   envq APP_LOGO_URL "${APP_LOGO_URL:-}"
-  # Perguntar sem gravar seria PIOR que não perguntar: este bloco fecha com
-  # `} > .env`, que TRUNCA o arquivo a partir da lista fechada de `envq` acima e
-  # abaixo — a pessoa responderia a cor e a perderia em silêncio, na mesma
-  # execução. Enquanto a chave esteve fora desta lista, ela também não entrava em
-  # `CONHECIDAS` (o grep de `envq` logo acima), então uma cor posta à mão no .env
-  # sobrevivia por acaso, pelo laço de preservação — e não é de acaso que a
-  # entrevista precisa.
+  # Demander sans enregistrer serait PIRE que ne pas demander : ce bloc se termine par
+  # `} > .env`, qui TRONQUE le fichier à partir de la liste fermée d'`envq` au-dessus et
+  # en dessous — la personne répondrait la couleur et la perdrait en silence, dans la même
+  # exécution. Tant que la clé était hors de cette liste, elle n'entrait pas non plus dans
+  # `CONHECIDAS` (le grep d'`envq` juste au-dessus), donc une couleur mise à la main dans le .env
+  # survivait par hasard, grâce à la boucle de préservation — et ce n'est pas de hasard que
+  # l'entretien a besoin.
   envq APP_ACCENT_HEX "${APP_ACCENT_HEX:-}"
-  printf '# Endereço de suporte que o CLIENTE FINAL vê (conta suspensa, cobrança).\n'
-  printf '# Vazio = a tela não mostra endereço nenhum.\n'
+  printf '# Adresse de support que voit le CLIENT FINAL (compte suspendu, facturation).\n'
+  printf '# Vide = l’écran n’affiche aucune adresse.\n'
   envq SUPPORT_EMAIL "${SUPPORT_EMAIL:-}"
-  # As três acima e as duas abaixo entram aqui pelo MESMO motivo, e não por
-  # simetria: o .env é escrito com truncamento (`} > .env`, no fecho deste
-  # bloco), então chave que este script não grava é APAGADA na execução
-  # seguinte. Quem pôs a chave da Resend à mão a perdia no primeiro update —
-  # num script que o README vende como idempotente.
-  printf '# E-mail transacional. RESEND_FROM_EMAIL tem de ser de um domínio\n'
-  printf '# VERIFICADO na SUA conta Resend. Vazio = e-mail desligado: o convite\n'
-  printf '# mostra o link de aceite na tela e o export de LGPD fica pendente.\n'
+  # Les trois ci-dessus et les deux ci-dessous entrent ici pour la MÊME raison, et non par
+  # symétrie : le .env est écrit avec troncature (`} > .env`, à la fermeture de ce
+  # bloc), donc une clé que ce script n'écrit pas est EFFACÉE à l'exécution
+  # suivante. Qui avait mis la clé Resend à la main la perdait à la première mise à jour —
+  # dans un script que le README présente comme idempotent.
+  printf '# E-mail transactionnel. RESEND_FROM_EMAIL doit appartenir à un domaine\n'
+  printf '# VÉRIFIÉ dans VOTRE compte Resend. Vide = e-mail désactivé : l’invitation\n'
+  printf '# affiche le lien d’acceptation à l’écran et l’export RGPD reste en attente.\n'
   envq RESEND_API_KEY "${RESEND_API_KEY:-}"
   envq RESEND_FROM_EMAIL "${RESEND_FROM_EMAIL:-}"
-  printf '# Qual provedor você escolheu na instalação. É o que faz a 2ª execução do\n'
-  printf '# install.sh já vir com a sua escolha como padrão, em vez de re-adivinhar\n'
-  printf '# pelas chaves presentes. A app não lê esta variável.\n'
+  printf '# Le fournisseur que vous avez choisi à l’installation. C’est ce qui fait que la 2e exécution\n'
+  printf '# d’install.sh arrive déjà avec votre choix par défaut, au lieu de le redeviner\n'
+  printf '# d’après les clés présentes. L’app ne lit pas cette variable.\n'
   envq AI_PROVIDER "${AI_PROVIDER:-anthropic}"
-  # `${ANTHROPIC_API_KEY:-}`, não `$ANTHROPIC_API_KEY`: quem escolhe OpenRouter
-  # ou OpenAI nunca passa pelo campo da Anthropic, e sob `set -u` (linha 12) a
-  # variável não associada derrubava o script AQUI — no meio da escrita do
-  # .env, deixando o arquivo pela metade e a instalação sem como continuar.
+  # `${ANTHROPIC_API_KEY:-}`, pas `$ANTHROPIC_API_KEY` : qui choisit OpenRouter
+  # ou OpenAI ne passe jamais par le champ Anthropic, et sous `set -u` (ligne 12) la
+  # variable non liée faisait tomber le script ICI — au milieu de l'écriture du
+  # .env, laissant le fichier à moitié et l'installation sans moyen de continuer.
   envq ANTHROPIC_API_KEY "${ANTHROPIC_API_KEY:-}"
   envq AI_GATEWAY_API_KEY "${AI_GATEWAY_API_KEY:-}"
-  printf '# OpenRouter: alternativa ao AI Gateway para o chat da IA. A ordem de\n'
-  printf '# resolução é AI_GATEWAY_API_KEY > OPENROUTER_API_KEY > provider direto,\n'
-  printf '# então deixar vazio NÃO muda nada — o comportamento de hoje continua.\n'
-  printf '# BASE_URL vazia = https://openrouter.ai/api/v1 (só mude se usa proxy).\n'
+  printf '# OpenRouter : alternative à l’AI Gateway pour le chat de l’IA. L’ordre de\n'
+  printf '# résolution est AI_GATEWAY_API_KEY > OPENROUTER_API_KEY > fournisseur direct,\n'
+  printf '# donc laisser vide NE change rien — le comportement actuel continue.\n'
+  printf '# BASE_URL vide = https://openrouter.ai/api/v1 (ne changez que si vous utilisez un proxy).\n'
   envq OPENROUTER_API_KEY "${OPENROUTER_API_KEY:-}"
   envq OPENROUTER_BASE_URL "${OPENROUTER_BASE_URL:-}"
-  printf '# OpenAI: transcrição dos áudios do WhatsApp (Whisper) + embeddings do RAG.\n'
-  printf '# Opcional — sem ela a IA responde sem a base e pede o áudio em texto.\n'
+  printf '# OpenAI : transcription des audios WhatsApp + embeddings du RAG.\n'
+  printf '# Optionnel — sans elle l’IA répond sans la base et demande l’audio en texte.\n'
   envq OPENAI_API_KEY "${OPENAI_API_KEY:-}"
-  printf '# Telemetria de erros (você escolheu isto durante a instalação).\n'
-  printf '#   "off"  = não envia nada.\n'
-  printf '#   vazio  = só ERRO pro Sentry da comunidade, com CPF/telefone/e-mail\n'
-  printf '#            substituídos e token de URL redigido. Sem trace, sem replay.\n'
-  printf '#   <dsn>  = manda pro SEU Sentry (aí com performance e replay).\n'
+  printf '# Télémétrie des erreurs (vous avez choisi ceci pendant l’installation).\n'
+  printf '#   "off"  = n’envoie rien.\n'
+  printf '#   vide   = seulement les ERREURS vers le Sentry de la communauté, avec identité/téléphone/e-mail\n'
+  printf '#            remplacés et jeton d’URL masqué. Sans trace, sans replay.\n'
+  printf '#   <dsn>  = envoie vers VOTRE Sentry (alors avec performance et replay).\n'
   envq SENTRY_DSN "${SENTRY_DSN:-}"
   envq INTERNAL_SECRET "$INTERNAL_SECRET"
   envq INTERNAL_CRON_SECRET "$INTERNAL_CRON_SECRET"
@@ -1470,19 +1470,19 @@ esac
   envq WAHA_API_KEY "$WAHA_API_KEY"
   envq WAHA_API_KEY_SHA512 "$WAHA_API_KEY_SHA512"
   envq WAHA_HMAC_SECRET "$WAHA_HMAC_SECRET"
-  printf '# "true" exige assinatura em todo webhook do WAHA. O WAHA Core NÃO assina,\n'
-  printf '# então ligar isto sem um WAHA Plus (ou proxy que assine) para a ingestão\n'
-  printf '# de mensagens. A rota global já não é publicada na internet (ver Caddyfile).\n'
+  printf '# "true" exige une signature sur tout webhook WAHA. WAHA Core NE signe PAS,\n'
+  printf '# donc activer ceci sans WAHA Plus (ou un proxy qui signe) arrête l’ingestion\n'
+  printf '# des messages. La route globale n’est déjà plus publiée sur Internet (voir Caddyfile).\n'
   envq WAHA_WEBHOOK_REQUIRE_SIGNATURE "${WAHA_WEBHOOK_REQUIRE_SIGNATURE:-false}"
-  printf '# Retoma as sessões já pareadas quando o contêiner do transporte reinicia.\n'
-  printf '# Sem isto o número segue pareado no volume e MUDO até alguém abrir a tela\n'
-  printf '# e clicar Reconectar — nada entra nem sai nesse meio-tempo.\n'
+  printf '# Reprend les sessions déjà appairées quand le conteneur du transport redémarre.\n'
+  printf '# Sans cela le numéro reste appairé dans le volume et MUET jusqu’à ce que quelqu’un ouvre l’écran\n'
+  printf '# et clique sur Reconnecter — rien n’entre ni ne sort entre-temps.\n'
   envq WHATSAPP_RESTART_ALL_SESSIONS "${WHATSAPP_RESTART_ALL_SESSIONS:-True}"
-  # PINADA. Sem a tag, `devlikeapro/waha` é `:latest`, e esta linha gravava isso
-  # no .env de todo cliente — por cima do default pinado do compose, que então
-  # nunca chegava a ninguém. O `dc pull` de cada update entregava qualquer versão
-  # que o upstream tivesse publicado, sem ninguém ter testado.
-  # `latest-2026.7.2` é o mesmo digest de `latest` hoje (65e593e30bb7…).
+  # ÉPINGLÉE. Sans la tag, `devlikeapro/waha` est `:latest`, et cette ligne écrivait cela
+  # dans le .env de chaque client — par-dessus la valeur par défaut épinglée du compose, qui alors
+  # n'arrivait jamais à personne. Le `dc pull` de chaque mise à jour livrait n'importe quelle version
+  # que l'amont avait publiée, sans que personne ne l'ait testée.
+  # `latest-2026.7.2` est le même digest que `latest` aujourd'hui (65e593e30bb7…).
   envq WAHA_IMAGE "${WAHA_IMAGE:-devlikeapro/waha:latest-2026.7.2}"
   envq WAHA_DEFAULT_ENGINE "${WAHA_DEFAULT_ENGINE:-NOWEB}"
   envq UPSTASH_REDIS_REST_URL "http://srh:80"
@@ -1493,131 +1493,131 @@ esac
   envq INTERNAL_AGENT_RUN_STUB "false"
   envq OWNER_EMAIL "$OWNER_EMAIL"
   envq OWNER_PASSWORD "$OWNER_PASSWORD"
-  # As variáveis que você acrescentou à mão, de volta — já no formato em que
-  # estavam, sem passar por envq (o valor original já vem com as aspas dele).
+  # Les variables que vous avez ajoutées à la main, de retour — dans le format où elles
+  # étaient, sans passer par envq (la valeur d'origine arrive déjà avec ses guillemets).
   if [ -n "$PRESERVADAS" ]; then
-    printf '\n# ── Acrescentadas manualmente (preservadas pelo install.sh) ──\n'
+    printf '\n# ── Ajoutées manuellement (préservées par install.sh) ──\n'
     printf '%s' "$PRESERVADAS"
   fi
 } > .env
 chmod 600 .env
-# O .env definitivo existe: o rascunho cumpriu o papel e some — deixá-lo no
-# disco seria uma segunda cópia dos segredos, e desatualizada na primeira
-# correção que alguém fizer no .env.
+# Le .env définitif existe : le brouillon a rempli son rôle et disparaît — le laisser sur le
+# disque serait une seconde copie des secrets, et périmée à la première
+# correction que quelqu'un fera dans le .env.
 rm -f "$PARTIAL_FILE"
-c_grn "✓ .env escrito (permissão 600)"
+c_grn "✓ .env écrit (permission 600)"
 
-# ── 6. Checagem de DNS ──────────────────────────────────────────────────────
-fase 3 "Banco de dados e domínio"
-step "Conferindo DNS de ${DOMAIN}"
+# ── 6. Vérification DNS ─────────────────────────────────────────────────────
+fase 3 "Base de données et domaine"
+step "Vérification du DNS de ${DOMAIN}"
 public_ip="$(curl -fsS --max-time 8 https://api.ipify.org 2>/dev/null || echo '')"
-# Um domínio pode ter A (IPv4) e AAAA (IPv6) ao mesmo tempo, e o resolver não
-# garante ordem entre eles. Comparar só o PRIMEIRO endereço (o antigo `hosts`
-# + `head -1`) dava falso alarme sempre que o AAAA vinha antes do A: o DNS
-# estava correto, o SSL ia ser emitido normalmente, e mesmo assim o instalador
-# dizia que o domínio não apontava pra cá — assustando quem instala bem na hora
-# em que ela mais precisa de confiança. `ahosts` lista TODOS os endereços; basta
-# que UM deles seja o IP do VPS.
+# Un domaine peut avoir A (IPv4) et AAAA (IPv6) en même temps, et le résolveur ne
+# garantit pas d'ordre entre eux. Comparer seulement la PREMIÈRE adresse (l'ancien `hosts`
+# + `head -1`) donnait une fausse alerte chaque fois que l'AAAA venait avant l'A : le DNS
+# était correct, le SSL allait être émis normalement, et l'installateur disait quand même
+# que le domaine ne pointait pas ici — effrayant la personne qui installe pile au moment
+# où elle a le plus besoin de confiance. `ahosts` liste TOUTES les adresses ; il suffit
+# que L'UNE d'elles soit l'IP du VPS.
 resolved="$(getent ahosts "$DOMAIN" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' || echo '')"
 if [ -n "$public_ip" ] && case " $resolved " in *" $public_ip "*) true;; *) false;; esac; then
-  c_grn "✓ ${DOMAIN} → ${public_ip} (aponta pra este VPS)"
+  c_grn "✓ ${DOMAIN} → ${public_ip} (pointe vers ce VPS)"
 else
-  # DNS recém-apontado leva minutos para propagar: chegar aqui é estado NORMAL,
-  # não erro. Antes havia uma única saída — responder exatamente "s" — e
-  # qualquer outra coisa matava a instalação. Agora o padrão é esperar junto com
-  # a pessoa: Enter reconsulta, e sair é uma escolha explícita dela.
+  # Un DNS fraîchement pointé met des minutes à se propager : arriver ici est un état NORMAL,
+  # pas une erreur. Avant il y avait une seule sortie — répondre exactement « s » — et
+  # toute autre chose tuait l'installation. Maintenant la valeur par défaut est d'attendre avec
+  # la personne : Entrée revérifie, et quitter est un choix explicite de sa part.
   while [ "$NONINTERACTIVE" = 0 ]; do
-    c_ylw "⚠ ${DOMAIN} resolve para '${resolved:-nada}' e o IP deste VPS é '${public_ip:-desconhecido}'."
-    c_ylw "  O SSL (Let's Encrypt) só será emitido quando o A-record apontar pra cá."
-    printf '\n%s\n'   "  No painel do seu domínio, crie um registro A apontando ${DOMAIN}"
-    printf '%s\n\n'   "  para ${public_ip:-o IP deste servidor}. Costuma valer em poucos minutos."
-    printf '%s\n'     "  Enter = conferir de novo"
-    printf '%s\n'     "  c     = continuar assim mesmo (o site sobe sem cadeado até o DNS valer)"
-    printf '%s\n'     "  s     = sair e voltar depois (o que você já respondeu fica guardado)"
+    c_ylw "⚠ ${DOMAIN} pointe vers '${resolved:-rien}' et l'IP de ce VPS est '${public_ip:-inconnue}'."
+    c_ylw "  Le SSL (Let's Encrypt) ne sera émis que lorsque l'enregistrement A pointera ici."
+    printf '\n%s\n'   "  Dans le panneau de votre domaine, créez un enregistrement A qui pointe ${DOMAIN}"
+    printf '%s\n\n'   "  vers ${public_ip:-l’IP de ce serveur}. Cela prend généralement quelques minutes."
+    printf '%s\n'     "  Entrée = vérifier de nouveau"
+    printf '%s\n'     "  c      = continuer quand même (le site démarre sans cadenas jusqu'à ce que le DNS soit valide)"
+    printf '%s\n'     "  q      = quitter et revenir plus tard (vos réponses sont gardées)"
     if ! read -r -p "  > " a; then a="s"; fi
     case "$(printf '%s' "$a" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')" in
-      c|continuar) c_ylw "  Seguindo sem o DNS pronto — lembre de apontar o A-record."; break;;
-      s|sair|n|nao) die "Ajuste o A-record de ${DOMAIN} para ${public_ip:-o IP deste servidor} e rode o instalador de novo.";;
+      c|continuer|continuar) c_ylw "  On continue sans DNS prêt — pensez à pointer l'enregistrement A."; break;;
+      q|quitter|s|sair|n|non|nao) die "Ajustez l'enregistrement A de ${DOMAIN} vers ${public_ip:-l’IP de ce serveur} et relancez l'installateur.";;
       *)
         resolved="$(getent ahosts "$DOMAIN" 2>/dev/null | awk '{print $1}' | sort -u | tr '\n' ' ' || echo '')"
         if [ -n "$public_ip" ] && case " $resolved " in *" $public_ip "*) true;; *) false;; esac; then
-          c_grn "✓ ${DOMAIN} → ${public_ip} (agora aponta pra este VPS)"; break
+          c_grn "✓ ${DOMAIN} → ${public_ip} (pointe maintenant vers ce VPS)"; break
         fi
-        c_ylw "  Ainda não propagou. Dá pra esperar e tentar de novo."
+        c_ylw "  Pas encore propagé. Vous pouvez attendre et réessayer."
         ;;
     esac
   done
 fi
 
-# ── 7. Aplica o schema (baseline) no Supabase — via container postgres ───────
-step "Aplicando o schema no Supabase (baseline.sql)"
-# Tudo daqui até o fim da etapa 8 fala com o banco por `url_do_schema`
-# (_common.sh), não pela string que vai para o `.env`: criar extensão, aplicar o
-# baseline e promover o dono exigem o DONO do banco, e num Supabase próprio a
-# string do app é — por recomendação nossa — uma role menor. Sem
-# `NEON_DATABASE_ADMIN_URL` declarada as duas são a mesma, que é o caso da nuvem.
+# ── 7. Applique le schéma (baseline) dans la base — via un conteneur postgres ─
+step "Application du schéma dans la base (baseline.sql)"
+# Tout d'ici à la fin de l'étape 8 parle à la base via `url_do_schema`
+# (_common.sh), pas via la chaîne qui va dans le `.env` : créer une extension, appliquer le
+# baseline et promouvoir le propriétaire exigent le PROPRIÉTAIRE de la base, et sur une base auto-hébergée la
+# chaîne de l'app est — sur notre recommandation — un rôle restreint. Sans
+# `NEON_DATABASE_ADMIN_URL` déclarée, les deux sont la même, ce qui est le cas du cloud.
 if [ -f neon/migrations/0001_whatsapp_os_baseline.sql ]; then
-  # O baseline é um pg_dump: referencia public.vector, public.citext e gin_trgm_ops
-  # (pg_trgm) mas NÃO cria as extensões. Supabase não as habilita no schema public por
-  # padrão — criamos aqui, senão o schema quebra no meio (ex.: "type public.vector does
-  # not exist"). Idempotente (if not exists).
+  # Le baseline est un pg_dump : il référence public.vector, public.citext et gin_trgm_ops
+  # (pg_trgm) mais NE crée PAS les extensions. Elles ne sont pas activées dans le schéma public par
+  # défaut — nous les créons ici, sinon le schéma casse au milieu (ex. : « type public.vector does
+  # not exist »). Idempotent (if not exists).
   docker run --rm postgres:17-alpine psql "$(url_do_schema)" -v ON_ERROR_STOP=1 -c \
     "create extension if not exists vector with schema public; create extension if not exists citext with schema public; create extension if not exists pg_trgm with schema public;" \
     >/dev/null 2>&1 \
-    && c_grn "✓ extensões (vector, citext, pg_trgm) habilitadas no public" \
-    || { c_ylw "⚠ não consegui habilitar as extensões — o schema pode falhar abaixo."
-         c_ylw "  Supabase próprio? Criar extensão exige o dono do banco: rode de novo com"
-         c_ylw "  NEON_DATABASE_ADMIN_URL='postgresql://<dono>:<senha>@<host>:5432/postgres'"; }
+    && c_grn "✓ extensions (vector, citext, pg_trgm) activées dans public" \
+    || { c_ylw "⚠ impossible d'activer les extensions — le schéma peut échouer ci-dessous."
+         c_ylw "  Base auto-hébergée ? Créer une extension exige le propriétaire de la base : relancez avec"
+         c_ylw "  NEON_DATABASE_ADMIN_URL='postgresql://<proprietaire>:<motdepasse>@<hote>:5432/postgres'"; }
   SCHEMA_LOG="$PROJECT_DIR/baseline-apply.log"
-  # Banco novo ou re-execução? Re-aplicar com ON_ERROR_STOP pararia no primeiro
-  # "já existe" (ex.: multiple primary keys) e PULARIA o resto do arquivo —
-  # inclusive o apêndice com as migrations novas. Banco existente = modo update
-  # (mesmo contrato do update.sh); banco novo = ON_ERROR_STOP e falha é FATAL
-  # (schema pela metade = app sem RLS).
-  # O `|| true` não é preguiça: sem ele, um psql que falha aqui sai com código 2
-  # dentro da substituição e, com `set -e` + `pipefail`, derruba o instalador sem
-  # imprimir nada (o 2>/dev/null já tinha engolido a causa). Preferimos seguir e
-  # deixar o erro aparecer no ponto em que dá para explicá-lo.
+  # Nouvelle base ou réexécution ? Réappliquer avec ON_ERROR_STOP s'arrêterait au premier
+  # « existe déjà » (ex. : multiple primary keys) et SAUTERAIT le reste du fichier —
+  # y compris l'annexe avec les nouvelles migrations. Base existante = mode update
+  # (même contrat qu'update.sh) ; nouvelle base = ON_ERROR_STOP et l'échec est FATAL
+  # (schéma à moitié = app sans RLS).
+  # Le `|| true` n'est pas de la paresse : sans lui, un psql qui échoue ici sort avec le code 2
+  # dans la substitution et, avec `set -e` + `pipefail`, fait tomber l'installateur sans
+  # rien afficher (le 2>/dev/null avait déjà avalé la cause). Nous préférons continuer et
+  # laisser l'erreur apparaître là où il est possible de l'expliquer.
   has_schema="$(docker run --rm postgres:17-alpine psql "$(url_do_schema)" -tAc \
     "select 1 from information_schema.tables where table_schema='public' and table_name='organizations' limit 1" 2>/dev/null | tr -d '[:space:]' || true)"
 
   if [ "$has_schema" = "1" ]; then
-    c_ylw "• schema já existe — re-aplicando em modo update (erros 'já existe' são esperados e ficam no log)"
+    c_ylw "• le schéma existe déjà — réapplication en mode update (les erreurs « existe déjà » sont attendues et restent dans le journal)"
     raw="$(docker run --rm -i -v "$PROJECT_DIR/neon/migrations/0001_whatsapp_os_baseline.sql:/baseline.sql:ro" \
           postgres:17-alpine psql "$(url_do_schema)" -q -f /baseline.sql 2>&1 || true)"
     printf '%s\n' "$raw" > "$SCHEMA_LOG"
     benign='already exists|multiple primary keys|multiple default values|is already a member|already a partition'
     unexpected="$(printf '%s\n' "$raw" | grep -iE 'ERROR|FATAL' | grep -viE "$benign" || true)"
     if [ -n "$unexpected" ]; then
-      c_ylw "⚠ Erros no banco que NÃO são os esperados (log completo: $SCHEMA_LOG):"
+      c_ylw "⚠ Erreurs de base qui NE sont PAS celles attendues (journal complet : $SCHEMA_LOG) :"
       printf '%s\n' "$unexpected" | head -20
     else
-      c_grn "✓ schema re-aplicado (apêndice de migrations incluído)"
+      c_grn "✓ schéma réappliqué (annexe des migrations incluse)"
     fi
   else
     if docker run --rm -i -v "$PROJECT_DIR/neon/migrations/0001_whatsapp_os_baseline.sql:/baseline.sql:ro" \
         postgres:17-alpine psql "$(url_do_schema)" -v ON_ERROR_STOP=1 -f /baseline.sql \
         > "$SCHEMA_LOG" 2>&1; then
-      c_grn "✓ schema aplicado (log: $SCHEMA_LOG)"
+      c_grn "✓ schéma appliqué (journal : $SCHEMA_LOG)"
     else
       tail -5 "$SCHEMA_LOG"
-      die "baseline falhou num banco NOVO — o schema ficaria incompleto (sem RLS). Log completo: $SCHEMA_LOG
-     Se o erro fala em permissão: o baseline exige o DONO do banco. Num Supabase próprio,
-     rode de novo com NEON_DATABASE_ADMIN_URL='postgresql://<dono>:<senha>@<host>:5432/postgres'
-     — ela roda só o schema e NÃO é gravada no .env dos contêineres."
+      die "le baseline a échoué sur une NOUVELLE base — le schéma resterait incomplet (sans RLS). Journal complet : $SCHEMA_LOG
+     Si l'erreur parle de permission : le baseline exige le PROPRIÉTAIRE de la base. Sur une base auto-hébergée,
+     relancez avec NEON_DATABASE_ADMIN_URL='postgresql://<proprietaire>:<motdepasse>@<hote>:5432/postgres'
+     — elle ne sert qu'au schéma et N'est PAS écrite dans le .env des conteneurs."
     fi
   fi
 
-  # Verificação real, não wishful thinking: o app precisa das tabelas core.
+  # Vérification réelle, pas un vœu pieux : l'app a besoin des tables principales.
   n_tables="$(docker run --rm postgres:17-alpine psql "$(url_do_schema)" -tAc \
     "select count(*) from information_schema.tables where table_schema='public'" 2>/dev/null | tr -d '[:space:]')"
   if [ "${n_tables:-0}" -ge 30 ]; then
-    c_grn "✓ verificação: ${n_tables} tabelas no schema public"
+    c_grn "✓ vérification : ${n_tables} tables dans le schéma public"
   else
-    c_ylw "⚠ verificação: só ${n_tables:-0} tabelas no schema public — confira $SCHEMA_LOG"
+    c_ylw "⚠ vérification : seulement ${n_tables:-0} tables dans le schéma public — consultez $SCHEMA_LOG"
   fi
 else
-  c_ylw "⚠ neon/migrations/0001_whatsapp_os_baseline.sql não encontrado — pulei (aplique o schema manualmente)."
+  c_ylw "⚠ neon/migrations/0001_whatsapp_os_baseline.sql introuvable — étape sautée (appliquez le schéma manuellement)."
 fi
 
 # ── 7.5 E-mails Neon Auth ────────────────────────────────────────────────────
@@ -1638,88 +1638,88 @@ if [ -z "${NEON_AUTH_BASE_URL:-}" ] || [ -z "${NEON_DATA_API_URL:-}" ] || [ -z "
 else
   c_grn "✓ Neon Auth et Data API configurés — créez le premier compte depuis l’interface après le démarrage"
 fi
-# ── 9. Sobe a stack ─────────────────────────────────────────────────────────
-fase 4 "Colocando o CRM no ar"
-step "Puxando a imagem e subindo os serviços"
-# A guarda existe porque dar `image:` a um serviço que era build-only mudou o
-# comportamento do `pull`: antes ele PULAVA o worker ("Skipped - No image to be
-# pulled"), agora FALHA a operação inteira se a referência não resolver. E há
-# três motivos reais para não resolver logo depois de um release: pacote novo no
-# GHCR nasce PRIVADO até alguém trocar a visibilidade na mão; a tag git existe
-# minutos antes das imagens; e o GHCR pode estar fora do ar.
+# ── 9. Démarre la stack ─────────────────────────────────────────────────────
+fase 4 "Mise en ligne du CRM"
+step "Téléchargement de l'image et démarrage des services"
+# Le garde-fou existe parce que donner une `image:` à un service qui était build-only a changé le
+# comportement du `pull` : avant il SAUTAIT le worker (« Skipped - No image to be
+# pulled »), maintenant il FAIT ÉCHOUER toute l'opération si la référence ne se résout pas. Et il y a
+# trois raisons réelles pour qu'elle ne se résolve pas juste après une release : un nouveau paquet sur
+# GHCR naît PRIVÉ jusqu'à ce que quelqu'un change la visibilité à la main ; la tag git existe
+# quelques minutes avant les images ; et GHCR peut être hors service.
 #
-# Sem esta guarda, uma instalação NOVA morria no passo 9 — com o banco já
-# provisionado e o .env já escrito. O `up -d` seguinte não precisa do pull: o
-# worker e o scheduler têm `build:` ao lado do `image:`, e o Compose os constrói
-# quando a imagem não existe (medido).
+# Sans ce garde-fou, une NOUVELLE installation mourait à l'étape 9 — avec la base déjà
+# provisionnée et le .env déjà écrit. Le `up -d` suivant n'a pas besoin du pull : le
+# worker et le scheduler ont `build:` à côté de l'`image:`, et Compose les construit
+# quand l'image n'existe pas (mesuré).
 if ! dc pull; then
-  c_ylw "⚠ Não consegui puxar todas as imagens do registro."
-  c_ylw "  Sigo assim mesmo: o que faltar é construído aqui (mais lento, mesmo resultado)."
+  c_ylw "⚠ Impossible de télécharger toutes les images du registre."
+  c_ylw "  Je continue quand même : ce qui manque est construit ici (plus lent, même résultat)."
 fi
 dc up -d
-c_grn "✓ containers no ar"
+c_grn "✓ conteneurs en ligne"
 
-# ── 10. Healthcheck ─────────────────────────────────────────────────────────
-step "Aguardando o app ficar saudável"
-# Antes isto abria um socket na porta 3000 e dava por bom. A porta abre assim
-# que o Node sobe, então o "✓" saía com o app ainda sem banco — e o bloco
-# "Instalação concluída!" saía logo atrás, incondicionalmente. Um falso verde
-# no exato momento em que a pessoa decide se confia no produto. Agora o critério
-# é o mesmo do update.sh: a rota /api/v1/health responder "status":"ok".
+# ── 10. Contrôle de santé ───────────────────────────────────────────────────
+step "Attente que l'app soit en bonne santé"
+# Avant, ceci ouvrait un socket sur le port 3000 et s'en contentait. Le port s'ouvre dès
+# que Node démarre, donc le « ✓ » sortait alors que l'app n'avait pas encore de base — et le bloc
+# « Installation terminée ! » sortait juste derrière, inconditionnellement. Un faux vert
+# au moment exact où la personne décide si elle fait confiance au produit. Maintenant le critère
+# est le même qu'update.sh : la route /api/v1/health doit répondre "status":"ok".
 if health_body="$(wait_app_healthy 30 3)"; then
   APP_SAUDAVEL=1
-  c_grn "✓ app no ar e saudável"
+  c_grn "✓ app en ligne et en bonne santé"
 else
   APP_SAUDAVEL=0
-  c_ylw "⚠ os contêineres subiram, mas o app não respondeu que está saudável."
-  # "|| true": mesma família do pipe que matava o supabase-provision.sh — o
-  # corpo passa de 200 bytes, o head fecha o pipe e o printf leva SIGPIPE.
-  [ -n "$health_body" ] && c_dim "  última resposta: $(printf '%s' "$health_body" | head -c 200 || true)"
+  c_ylw "⚠ les conteneurs ont démarré, mais l'app n'a pas répondu qu'elle est en bonne santé."
+  # "|| true" : même famille que le pipe qui tuait supabase-provision.sh — le
+  # corps dépasse 200 octets, head ferme le pipe et printf reçoit SIGPIPE.
+  [ -n "$health_body" ] && c_dim "  dernière réponse : $(printf '%s' "$health_body" | head -c 200 || true)"
 fi
 
-# ── 11. Automações (cron do drain de eventos) ───────────────────────────────
-step "Ativando as automações"
+# ── 11. Automatisations (cron du drain d'événements) ────────────────────────
+step "Activation des automatisations"
 ensure_encryption_key .env
 setup_event_log_drain_cron
 setup_update_agent_cron
 
-# ── Final ───────────────────────────────────────────────────────────────────
-# O app não confirmou que está de pé: dizer "Instalação concluída!" aqui seria
-# mentir na única tela que a pessoa vai ler inteira. Ela recebe o estado real e
-# o caminho de diagnóstico — e não a receita de apagar tudo do show_recovery,
-# que existe para quem parou no MEIO. Aqui nada ficou pela metade: a config
-# está salva e a stack está de pé; falta o app responder.
+# ── Fin ─────────────────────────────────────────────────────────────────────
+# L'app n'a pas confirmé qu'elle est debout : dire « Installation terminée ! » ici serait
+# mentir sur le seul écran que la personne lira en entier. Elle reçoit l'état réel et
+# le chemin de diagnostic — et non la recette d'effacement total de show_recovery,
+# qui existe pour qui s'est arrêté au MILIEU. Ici rien n'est resté à moitié : la config
+# est enregistrée et la stack est debout ; il manque la réponse de l'app.
 if [ "${APP_SAUDAVEL:-0}" != 1 ]; then
   cat <<INCOMPLETO
 
 $(c_ylw "═══════════════════════════════════════════════════════")
-$(c_ylw " Quase lá — falta o app responder")
+$(c_ylw " Presque fini — il manque la réponse de l'app")
 $(c_ylw "═══════════════════════════════════════════════════════")
 
-  A configuração está salva e os contêineres estão no ar. Você NÃO precisa
-  refazer nada — falta o app dizer que está saudável.
+  La configuration est enregistrée et les conteneurs sont en ligne. Vous n'avez PAS besoin
+  de refaire quoi que ce soit — il manque seulement que l'app dise qu'elle est en bonne santé.
 
-  O motivo mais comum é uma chave faltando ou errada no .env. O log diz qual:
+  La raison la plus courante est une clé manquante ou erronée dans le .env. Le journal dit laquelle :
 
        docker compose $(dc_files) logs --tail=50 app
 
-     procure por: [env] Falha de validação
+     cherchez : [env] Échec de validation
 
-  Diagnóstico completo dos serviços:
+  Diagnostic complet des services :
 
        bash ${KIT_DIR}/healthcheck.sh
 
-  Depois de corrigir o .env, é só subir de novo (nada é perdido):
+  Après avoir corrigé le .env, il suffit de redémarrer (rien n'est perdu) :
 
        docker compose $(dc_files) up -d
 
-  Travou? Leve o log para a comunidade — tem gente que já passou por isso:
+  Bloqué ? Apportez le journal à la communauté — des gens sont déjà passés par là :
 
        ${COMUNIDADE_URL}
 
 INCOMPLETO
-  # Sai != 0 para que automação (e o --yes) saiba que não terminou saudável,
-  # mas sem o trap: a receita de "apague tudo e recomece" não cabe aqui.
+  # Sort != 0 pour que l'automatisation (et le --yes) sache que cela ne s'est pas terminé en bonne santé,
+  # mais sans le trap : la recette « effacez tout et recommencez » n'a pas sa place ici.
   trap - EXIT
   exit 1
 fi
@@ -1727,44 +1727,44 @@ fi
 cat <<DONE
 
 $(c_grn "═══════════════════════════════════════════════════════")
-$(c_grn " Instalação concluída!")
+$(c_grn " Installation terminée !")
 $(c_grn "═══════════════════════════════════════════════════════")
 
-  1. Acesse:  https://${DOMAIN}
-     (o SSL leva ~1min pra emitir no primeiro acesso)
+  1. Accédez à :  https://${DOMAIN}
+     (le SSL prend ~1 min à être émis au premier accès)
 
-  2. Faça login com:
-       e-mail: ${OWNER_EMAIL}
-       senha:  (a que você definiu)
+  2. Connectez-vous avec :
+       e-mail :       ${OWNER_EMAIL}
+       mot de passe : (celui que vous avez défini)
 
-  3. Conecte o WhatsApp (2º passo do onboarding):
-       Deixe o WhatsApp JÁ ABERTO em Configurações → Aparelhos conectados
-       antes de abrir a tela — o QR code vale só uns minutos. Se expirar,
-       o próprio CRM tem o botão "Gerar novo QR Code".
+  3. Connectez WhatsApp (2e étape de l'onboarding) :
+       Laissez WhatsApp DÉJÀ OUVERT dans Paramètres → Appareils connectés
+       avant d'ouvrir l'écran — le QR code n'est valable que quelques minutes. S'il expire,
+       le CRM a lui-même le bouton « Générer un nouveau QR code ».
 
-  4. Ao terminar o onboarding, o CRM pede a verificação em duas etapas:
-       tenha o Google Authenticator/Authy à mão e GUARDE os códigos de
-       recuperação que aparecem. Perdeu o celular? bash hostgator-setup-kit/reset-mfa.sh ${OWNER_EMAIL}
+  4. À la fin de l'onboarding, le CRM peut demander la vérification en deux étapes :
+       ayez Google Authenticator/Authy sous la main et GARDEZ les codes de
+       récupération qui s'affichent. Téléphone perdu ? bash hostgator-setup-kit/reset-mfa.sh ${OWNER_EMAIL}
 
-$(c_grn "  ─── A comunidade ──────────────────────────────────────")
+$(c_grn "  ─── La communauté ─────────────────────────────────────")
 
-  É onde saem os avisos de versão nova, os agentes que outras pessoas já
-  configuraram e a resposta de quem roda exatamente este CRM:
+  C'est là que sortent les annonces de nouvelle version, les agents que d'autres personnes ont déjà
+  configurés et les réponses de ceux qui font tourner exactement ce CRM :
 
        ${COMUNIDADE_URL}
 
-  Telemetria: por padrão os erros desta instalação são enviados ao Sentry do
-  projeto, o que ajuda a corrigir falhas que afetam todo mundo. Para desligar,
-  ponha SENTRY_DSN='off' no .env e rode: docker compose $(dc_files) up -d
+  Télémétrie : par défaut les erreurs de cette installation sont envoyées au Sentry du
+  projet, ce qui aide à corriger des défauts qui touchent tout le monde. Pour la désactiver,
+  mettez SENTRY_DSN='off' dans le .env et lancez : docker compose $(dc_files) up -d
 
-  Comandos úteis:
-    ver logs:      docker compose $(dc_files) logs -f app
-    reiniciar:     docker compose $(dc_files) restart
-    atualizar:     bash hostgator-setup-kit/update.sh
-    backup:        bash hostgator-setup-kit/backup.sh
-    trocar config: bash hostgator-setup-kit/install.sh
-                   (mostra tudo o que você respondeu e deixa corrigir por número)
-    recomeçar:     docker compose $(dc_files) down -v && rm -f .env
-                   (derruba tudo; depois rode o install.sh de novo)
+  Commandes utiles :
+    voir les journaux : docker compose $(dc_files) logs -f app
+    redémarrer :        docker compose $(dc_files) restart
+    mettre à jour :     bash hostgator-setup-kit/update.sh
+    sauvegarde :        bash hostgator-setup-kit/backup.sh
+    changer la config : bash hostgator-setup-kit/install.sh
+                        (affiche tout ce que vous avez répondu et permet de corriger par numéro)
+    recommencer :       docker compose $(dc_files) down -v && rm -f .env
+                        (arrête tout ; ensuite relancez install.sh)
 
 DONE

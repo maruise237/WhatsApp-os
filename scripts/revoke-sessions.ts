@@ -17,6 +17,6 @@ async function main() {
   if (!user) { console.error("not found"); process.exit(1); }
   const { error } = await a.auth.admin.signOut(user.id, "global");
   if (error) { console.error("signout failed:", error.message); process.exit(1); }
-  console.log(`✓ todas as sessões do ${email} revogadas (user_id=${user.id})`);
+  console.log(`✓ toutes les sessions de ${email} révoquées (user_id=${user.id})`);
 }
 main().catch((e) => { console.error(e); process.exit(1); });

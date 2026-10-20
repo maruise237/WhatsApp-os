@@ -23,10 +23,10 @@ async function main() {
     .eq("language", IDIOMA)
     .maybeSingle();
 
-  if (error || !linha) throw new Error(`espelho sem ${TEMPLATE}: ${error?.message ?? "nenhuma linha"}`);
+  if (error || !linha) throw new Error(`miroir sans ${TEMPLATE} : ${error?.message ?? "aucune ligne"}`);
 
-  console.info(`espelho: ${linha.name} (${linha.language}) status=${linha.status}`);
-  console.info(`hash vigente: ${String(linha.contract_hash).slice(0, 16)}…`);
+  console.info(`miroir : ${linha.name} (${linha.language}) status=${linha.status}`);
+  console.info(`hash en vigueur : ${String(linha.contract_hash).slice(0, 16)}…`);
 
   const resultado = await sendTemplate({
     phoneNumberId: process.env.META_PHONE_NUMBER_ID ?? "",

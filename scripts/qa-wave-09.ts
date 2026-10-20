@@ -209,7 +209,7 @@ async function main() {
     record(
       "AC2 (FAQ card metrics)",
       pass,
-      `chunks5=${hasChunks} pronto=${hasReadyBadge} reindexBtn=${reindexBtnCount} date=${hasDate}`,
+      `chunks5=${hasChunks} pret=${hasReadyBadge} reindexBtn=${reindexBtnCount} date=${hasDate}`,
     );
   } catch (e) {
     record("AC2 (FAQ card metrics)", false, `error: ${(e as Error).message}`);

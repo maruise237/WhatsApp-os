@@ -53,7 +53,7 @@ const FROM = arg("from", "5531988887777");
  */
 async function ensureRealCredential(orgId: string): Promise<void> {
   const key = env.ANTHROPIC_API_KEY;
-  if (!key) throw new Error("ANTHROPIC_API_KEY ausente no .env.local — sem ela não há turno real");
+  if (!key) throw new Error("ANTHROPIC_API_KEY absente du .env.local — sans elle il n'y a pas de tour réel");
   const label = "Baseline Canais (chave real de plataforma)";
   const { data: existing } = await admin
     .from("ai_provider_credentials")
@@ -62,7 +62,7 @@ async function ensureRealCredential(orgId: string): Promise<void> {
     .eq("label", label)
     .maybeSingle();
   if (existing) {
-    console.log(`[provoke] credencial real já existe: ${(existing as { id: string }).id}`);
+    console.log(`[provoke] l'identifiant réel existe déjà : ${(existing as { id: string }).id}`);
     return;
   }
   const enc = encryptKey(key);
@@ -82,7 +82,7 @@ async function ensureRealCredential(orgId: string): Promise<void> {
     .select("id")
     .single();
   if (error || !data) throw new Error(`insert ai_provider_credentials: ${error?.message}`);
-  console.log(`[provoke] credencial real criada: ${(data as { id: string }).id}`);
+  console.log(`[provoke] identifiant réel créé : ${(data as { id: string }).id}`);
 }
 
 /**
@@ -103,7 +103,7 @@ async function ensureDefaultModel(orgId: string): Promise<void> {
   >;
   const llm = (settings.llm ?? {}) as Record<string, unknown>;
   if (typeof llm.default_model === "string" && llm.default_model.length > 0) {
-    console.log(`[provoke] default_model já definido: ${llm.default_model}`);
+    console.log(`[provoke] default_model déjà défini : ${llm.default_model}`);
     return;
   }
   const model = arg("model", "claude-sonnet-4-5");
@@ -122,7 +122,7 @@ async function main(): Promise<void> {
     .select("id, organization_id, waha_session_name, webhook_path_token")
     .eq("waha_session_name", SESSION_NAME)
     .maybeSingle();
-  if (error || !session) throw new Error(`channel_session '${SESSION_NAME}' não encontrada: ${error?.message}`);
+  if (error || !session) throw new Error(`channel_session '${SESSION_NAME}' introuvable : ${error?.message}`);
 
   const s = session as {
     id: string;
@@ -176,10 +176,10 @@ async function main(): Promise<void> {
     }
     await new Promise((r) => setTimeout(r, 500));
   }
-  throw new Error("ai_agent.dispatch_requested não apareceu no event_log em 10s");
+  throw new Error("ai_agent.dispatch_requested n'est pas apparu dans l'event_log en 10 s");
 }
 
 main().catch((err) => {
-  console.error("[provoke] falhou:", err);
+  console.error("[provoke] échec :", err);
   process.exit(1);
 });

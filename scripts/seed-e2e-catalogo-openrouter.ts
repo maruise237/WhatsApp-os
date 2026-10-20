@@ -90,7 +90,7 @@ async function main(): Promise<void> {
     .from("ai_models")
     .upsert(linhas, { onConflict: "provider,model_id", ignoreDuplicates: true });
   if (error) {
-    console.error("[seed-catalogo-openrouter] falhou:", error.message);
+    console.error("[seed-catalogo-openrouter] échec :", error.message);
     process.exit(1);
   }
 

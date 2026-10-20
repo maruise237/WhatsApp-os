@@ -43,10 +43,10 @@ const OWNER_PASSWORD = env.OWNER_PASSWORD;
 const ORG_NAME = env.OWNER_ORG_NAME || "Minha Empresa";
 
 if (!NEON_DATA_API_URL || !SERVICE_ROLE) {
-  throw new Error("Faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT.");
+  throw new Error("NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT manquants.");
 }
 if (!OWNER_EMAIL || !OWNER_PASSWORD) {
-  throw new Error("Faltam OWNER_EMAIL / OWNER_PASSWORD.");
+  throw new Error("OWNER_EMAIL / OWNER_PASSWORD manquants.");
 }
 
 /** slug seguro (o tipo da coluna é restrito): minúsculo, hífens, sem acento. */
@@ -69,7 +69,7 @@ async function ensureOwnerUser(): Promise<string> {
   const existing = list.users.find((u) => u.email === OWNER_EMAIL);
   if (existing) {
     await admin.auth.admin.updateUserById(existing.id, { password: OWNER_PASSWORD });
-    console.log(`[bootstrap] dono já existia, senha atualizada: ${existing.id}`);
+    console.log(`[bootstrap] le propriétaire existait déjà, mot de passe mis à jour : ${existing.id}`);
     return existing.id;
   }
   const { data, error } = await admin.auth.admin.createUser({
@@ -78,8 +78,8 @@ async function ensureOwnerUser(): Promise<string> {
     email_confirm: true,
     user_metadata: { full_name: "Dono" },
   });
-  if (error || !data?.user) throw new Error(`criar dono: ${error?.message}`);
-  console.log(`[bootstrap] dono criado: ${data.user.id}`);
+  if (error || !data?.user) throw new Error(`création du propriétaire : ${error?.message}`);
+  console.log(`[bootstrap] propriétaire créé : ${data.user.id}`);
   return data.user.id;
 }
 
@@ -91,7 +91,7 @@ async function ensureOrg(ownerId: string): Promise<string> {
     .eq("slug", slug)
     .maybeSingle();
   if (existing) {
-    console.log(`[bootstrap] org já existia: ${(existing as { id: string }).id}`);
+    console.log(`[bootstrap] l'organisation existait déjà : ${(existing as { id: string }).id}`);
     return (existing as { id: string }).id;
   }
   const { data, error } = await admin
@@ -104,9 +104,9 @@ async function ensureOrg(ownerId: string): Promise<string> {
     } as never)
     .select("id")
     .single();
-  if (error || !data) throw new Error(`criar org: ${error?.message}`);
+  if (error || !data) throw new Error(`création de l'org : ${error?.message}`);
   const orgId = (data as { id: string }).id;
-  console.log(`[bootstrap] org criada: ${orgId}`);
+  console.log(`[bootstrap] organisation créée : ${orgId}`);
   await aplicarProvedorEscolhido(orgId);
   return orgId;
 }
@@ -151,12 +151,12 @@ async function aplicarProvedorEscolhido(orgId: string): Promise<void> {
     // provedor pela tela. Mas o aviso precisa aparecer, senão ele descobre
     // pelo agente mudo.
     console.warn(
-      `[bootstrap] não consegui gravar o provedor "${escolhido}" na organização: ${error.message}. ` +
-        `Ajuste em Agente de IA → Provedores depois de entrar.`,
+      `[bootstrap] impossible d'enregistrer le fournisseur "${escolhido}" dans l'organisation : ${error.message}. ` +
+        `Ajustez dans Agent IA → Fournisseurs après la connexion.`,
     );
     return;
   }
-  console.log(`[bootstrap] provedor de IA da organização: ${escolhido}`);
+  console.log(`[bootstrap] fournisseur d'IA de l'organisation : ${escolhido}`);
 }
 
 async function ensureMembership(userId: string, orgId: string): Promise<void> {
@@ -172,7 +172,7 @@ async function ensureMembership(userId: string, orgId: string): Promise<void> {
       .update({ role: "admin", revoked_at: null } as never)
       .eq("user_id", userId)
       .eq("organization_id", orgId);
-    console.log("[bootstrap] associação admin garantida");
+    console.log("[bootstrap] rattachement admin garanti");
     return;
   }
   const { error } = await admin.from("user_organizations").insert({
@@ -181,8 +181,8 @@ async function ensureMembership(userId: string, orgId: string): Promise<void> {
     role: "admin",
     accepted_at: new Date().toISOString(),
   } as never);
-  if (error) throw new Error(`associação: ${error.message}`);
-  console.log("[bootstrap] dono associado como admin");
+  if (error) throw new Error(`rattachement : ${error.message}`);
+  console.log("[bootstrap] propriétaire rattaché comme admin");
 }
 
 async function ensurePlatformAdmin(userId: string): Promise<void> {
@@ -193,7 +193,7 @@ async function ensurePlatformAdmin(userId: string): Promise<void> {
     .is("revoked_at", null)
     .maybeSingle();
   if (existing) {
-    console.log("[bootstrap] super-admin já existia");
+    console.log("[bootstrap] le super-admin existait déjà");
     return;
   }
   // granted_by = o próprio dono (auto-concessão no bootstrap).
@@ -216,7 +216,7 @@ async function ensurePlatformAdmin(userId: string): Promise<void> {
     reason: "Bootstrap inicial do self-host (dono da instância)",
   } as never);
   if (error) throw new Error(`platform_admin: ${error.message}`);
-  console.log("[bootstrap] dono promovido a super-admin de plataforma");
+  console.log("[bootstrap] propriétaire promu super-admin de la plateforme");
 }
 
 async function main(): Promise<void> {
@@ -224,10 +224,10 @@ async function main(): Promise<void> {
   const orgId = await ensureOrg(ownerId);
   await ensureMembership(ownerId, orgId);
   await ensurePlatformAdmin(ownerId);
-  console.log(`\n✅ Bootstrap completo.\n  dono: ${OWNER_EMAIL}\n  org:  ${orgId}\n  Faça login em ${env.NEXT_PUBLIC_APP_URL || "https://<seu-dominio>"} e conclua o onboarding.`);
+  console.log(`\n✅ Bootstrap terminé.\n  propriétaire : ${OWNER_EMAIL}\n  org :          ${orgId}\n  Connectez-vous sur ${env.NEXT_PUBLIC_APP_URL || "https://<votre-domaine>"} et terminez l'onboarding.`);
 }
 
 main().catch((err) => {
-  console.error("❌ Bootstrap falhou:", err);
+  console.error("❌ Échec du bootstrap :", err);
   process.exit(1);
 });

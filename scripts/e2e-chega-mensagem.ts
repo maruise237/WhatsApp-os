@@ -28,7 +28,7 @@ const admin = createClient(credenciais.url, credenciais.serviceRole, {
 async function main(): Promise<void> {
   const [conversationId, corpo] = process.argv.slice(2);
   if (!conversationId || !corpo) {
-    throw new Error("uso: e2e-chega-mensagem.ts <conversation_id> <corpo>");
+    throw new Error("usage : e2e-chega-mensagem.ts <conversation_id> <corps>");
   }
 
   // As FKs da mensagem vêm da conversa: passá-las por argumento seria pedir ao
@@ -39,7 +39,7 @@ async function main(): Promise<void> {
     .select("id, organization_id, channel_session_id, contact_id")
     .eq("id", conversationId)
     .single();
-  if (eConv || !conv) throw new Error(`conversa: ${eConv?.message ?? "não encontrada"}`);
+  if (eConv || !conv) throw new Error(`conversation : ${eConv?.message ?? "introuvable"}`);
 
   const c = conv as {
     id: string;
@@ -59,16 +59,16 @@ async function main(): Promise<void> {
     body: corpo,
     status: "delivered",
   } as never);
-  if (eMsg) throw new Error(`mensagem: ${eMsg.message}`);
+  if (eMsg) throw new Error(`message : ${eMsg.message}`);
 
   const agora = new Date().toISOString();
   const { error: eConvUpd } = await admin
     .from("conversations")
     .update({ last_message_at: agora, last_inbound_at: agora, last_message_preview: corpo } as never)
     .eq("id", c.id);
-  if (eConvUpd) throw new Error(`carimbo: ${eConvUpd.message}`);
+  if (eConvUpd) throw new Error(`horodatage : ${eConvUpd.message}`);
 
-  console.info(`[e2e-chega-mensagem] entregue em ${c.id}: ${corpo}`);
+  console.info(`[e2e-chega-mensagem] livré dans ${c.id} : ${corpo}`);
 }
 
 main().catch((err: unknown) => {

@@ -1,37 +1,37 @@
-# DeskcommCRM — stack de produção self-host (VPS HostGator).
-# Sobe: caddy (HTTPS) → app (Next standalone) + waha + redis+srh + scheduler.
-# Só o Caddy publica portas (80/443). Todo o resto vive na rede interna.
+# DeskcommCRM — stack de production auto-hébergée (VPS HostGator).
+# Démarre : caddy (HTTPS) → app (Next standalone) + waha + redis+srh + scheduler.
+# Seul Caddy publie des ports (80/443). Tout le reste vit sur le réseau interne.
 #
 #   docker compose -f docker-compose.prod.yml --env-file .env up -d
 
 x-logging: &default-logging
   driver: json-file
   options:
-    max-size: "10m"     # rotação: evita que o log encha o disco do VPS
+    max-size: "10m"     # rotation : évite que le journal remplisse le disque du VPS
     max-file: "3"
 
 services:
   app:
-    # Teto de memória — 335 MiB de pico MEDIDO nesta VPS.
+    # Plafond de mémoire — 335 MiB de pic MESURÉ sur ce VPS.
     #
-    # Sem ele o contêiner é ilimitado, e numa VPS de 3,8 GB isso não é teoria:
-    # um contêiner ALHEIO (agente da hospedagem, fora deste compose) registrou
-    # pico de 3.068 MiB no mesmo host. Quando a RAM acaba, o OOM killer escolhe
-    # a vítima por PONTUAÇÃO — quem cresceu mais rápido —, não por importância:
-    # o que morre pode ser o CRM.
+    # Sans lui le conteneur est illimité, et sur un VPS de 3,8 Go ce n'est pas théorique :
+    # un conteneur ÉTRANGER (agent de l'hébergeur, hors de ce compose) a enregistré
+    # un pic de 3 068 MiB sur le même hôte. Quand la RAM s'épuise, l'OOM killer choisit
+    # la victime par SCORE — celui qui a grossi le plus vite —, pas par importance :
+    # celui qui meurt peut être le CRM.
     #
-    # O teto não impede o pico legítimo; impede que UM serviço leve a máquina
-    # inteira. Estourá-lo mata só quem estourou, e o `restart: unless-stopped`
-    # o traz de volta — falha isolada em vez de queda geral.
+    # Le plafond n'empêche pas le pic légitime ; il empêche qu'UN service emporte la machine
+    # entière. Le dépasser ne tue que celui qui a dépassé, et le `restart: unless-stopped`
+    # le ramène — échec isolé au lieu d'une panne générale.
     mem_limit: 768m
-    # Imagem GENÉRICA pré-buildada: o leigo só puxa (sobe em ~2min, roda em 2GB).
-    # Os NEXT_PUBLIC_* reais vêm em RUNTIME (env_file abaixo) — o browser lê via
-    # <PublicEnvScript/> e o servidor via lib/env.ts. Não precisa buildar no VPS.
-    # Build local (avançado): docker compose -f docker-compose.prod.yml -f docker-compose.build.yml build
-    # `:stable` (última release), não `:latest` (topo da `main`). Quem cai neste
-    # default é quem NÃO tem APP_IMAGE no .env — avaliação, ou um .env que
-    # perdeu a chave. Nenhum desses casos quer código não lançado; quem quiser o
-    # topo da main pede `APP_IMAGE=…:latest` explicitamente.
+    # Image GÉNÉRIQUE pré-construite : le non-initié se contente de la tirer (démarre en ~2 min, tourne avec 2 Go).
+    # Les vrais NEXT_PUBLIC_* arrivent à l'EXÉCUTION (env_file ci-dessous) — le navigateur les lit via
+    # <PublicEnvScript/> et le serveur via lib/env.ts. Pas besoin de construire sur le VPS.
+    # Build local (avancé) : docker compose -f docker-compose.prod.yml -f docker-compose.build.yml build
+    # `:stable` (dernière release), pas `:latest` (sommet de `main`). Qui tombe sur cette
+    # valeur par défaut, c'est qui N'a PAS APP_IMAGE dans le .env — une évaluation, ou un .env qui
+    # a perdu la clé. Aucun de ces cas ne veut de code non publié ; qui veut le
+    # sommet de main demande `APP_IMAGE=…:latest` explicitement.
     image: ${APP_IMAGE:-ghcr.io/melgarafael/deskcommcrm:stable}
     pull_policy: ${APP_PULL_POLICY:-always}
     restart: unless-stopped
@@ -42,9 +42,9 @@ services:
       waha:
         condition: service_started
     healthcheck:
-      # Probe TCP puro (node existe na imagem; curl/nc não). NÃO usar /api/v1/health:
-      # ele dá 503 se WAHA/Redis caem, o que deixaria o app "unhealthy" e derrubaria
-      # o Caddy junto (blackout total por uma dependência secundária).
+      # Sonde TCP pure (node existe dans l'image ; curl/nc non). NE PAS utiliser /api/v1/health :
+      # il renvoie 503 si WAHA/Redis tombent, ce qui rendrait l'app « unhealthy » et ferait tomber
+      # Caddy avec (panne totale à cause d'une dépendance secondaire).
       test: ["CMD", "node", "-e", "require('net').connect(3000,'127.0.0.1').on('connect',()=>process.exit(0)).on('error',()=>process.exit(1))"]
       interval: 30s
       timeout: 5s
@@ -54,41 +54,41 @@ services:
     networks: [internal]
 
 
-  # Worker 24/7 do agent-engine (fusão Vendaval) — cérebro do agente SDR.
+  # Worker 24/7 de l'agent-engine (fusion Vendaval) — le cerveau de l'agent commercial.
   worker:
-    # Teto de memória — 230 MiB de pico MEDIDO nesta VPS.
+    # Plafond de mémoire — 230 MiB de pic MESURÉ sur ce VPS.
     #
-    # Sem ele o contêiner é ilimitado, e numa VPS de 3,8 GB isso não é teoria:
-    # um contêiner ALHEIO (agente da hospedagem, fora deste compose) registrou
-    # pico de 3.068 MiB no mesmo host. Quando a RAM acaba, o OOM killer escolhe
-    # a vítima por PONTUAÇÃO — quem cresceu mais rápido —, não por importância:
-    # o que morre pode ser o CRM.
+    # Sans lui le conteneur est illimité, et sur un VPS de 3,8 Go ce n'est pas théorique :
+    # un conteneur ÉTRANGER (agent de l'hébergeur, hors de ce compose) a enregistré
+    # un pic de 3 068 MiB sur le même hôte. Quand la RAM s'épuise, l'OOM killer choisit
+    # la victime par SCORE — celui qui a grossi le plus vite —, pas par importance :
+    # celui qui meurt peut être le CRM.
     #
-    # O teto não impede o pico legítimo; impede que UM serviço leve a máquina
-    # inteira. Estourá-lo mata só quem estourou, e o `restart: unless-stopped`
-    # o traz de volta — falha isolada em vez de queda geral.
+    # Le plafond n'empêche pas le pic légitime ; il empêche qu'UN service emporte la machine
+    # entière. Le dépasser ne tue que celui qui a dépassé, et le `restart: unless-stopped`
+    # le ramène — échec isolé au lieu d'une panne générale.
     mem_limit: 512m
-    # Imagem publicada — e não mais `build:` sozinho. O motivo é o modo de falha
-    # que isso escondia: serviço build-only é PULADO por `docker compose pull`
-    # ("Skipped - No image to be pulled") e imune a `up -d` sem `--build`. Ele era
-    # construído na VPS de todo cliente, no install, e NENHUM update.sh jamais o
-    # reconstruía — o runtime do agente de IA congelava no código do dia da
-    # instalação e atravessava todas as atualizações seguintes.
+    # Image publiée — et non plus `build:` seul. La raison est le mode d'échec
+    # que cela cachait : un service build-only est SAUTÉ par `docker compose pull`
+    # (« Skipped - No image to be pulled ») et insensible à `up -d` sans `--build`. Il était
+    # construit sur le VPS de chaque client, à l'installation, et AUCUN update.sh ne le
+    # reconstruisait jamais — le runtime de l'agent IA restait figé sur le code du jour de
+    # l'installation et traversait toutes les mises à jour suivantes.
     #
-    # O `build:` continua abaixo de propósito: com os dois presentes, o Compose
-    # usa a imagem quando ela existe e CONSTRÓI quando não existe (medido). É o
-    # que mantém a mudança aditiva — registry fora do ar, ou versão anterior à
-    # primeira publicação, caem no comportamento antigo em vez de quebrar.
+    # Le `build:` reste en dessous exprès : avec les deux présents, Compose
+    # utilise l'image quand elle existe et la CONSTRUIT quand elle n'existe pas (mesuré). C'est
+    # ce qui garde le changement additif — registre hors service, ou version antérieure à la
+    # première publication, retombent sur l'ancien comportement au lieu de casser.
     #
-    # O default é `:stable` (a última RELEASE), não `:latest`, e a diferença é
-    # concreta para o parque instalado. Numa VPS que atualiza pela primeira vez
-    # depois desta mudança, quem executa é o `update.sh` VELHO — o que está no
-    # disco —, e ele só sabe gravar APP_IMAGE. O `git checkout` da tag já trocou
-    # ESTE arquivo, então worker e scheduler caem no default daqui. Com
-    # `:latest`, esse default seria o TOPO DA MAIN (o canal segue a branch
-    # default): o app pinado numa release e o runtime do agente de
-    # IA rodando código não lançado, sobre o banco da release. `:stable` é a
-    # última release publicada — pareia com o app em vez de correr na frente.
+    # La valeur par défaut est `:stable` (la dernière RELEASE), pas `:latest`, et la différence est
+    # concrète pour le parc installé. Sur un VPS qui se met à jour pour la première fois
+    # après ce changement, c'est l'ANCIEN `update.sh` qui s'exécute — celui qui est sur le
+    # disque —, et il ne sait écrire qu'APP_IMAGE. Le `git checkout` de la tag a déjà changé
+    # CE fichier, donc worker et scheduler retombent sur la valeur par défaut d'ici. Avec
+    # `:latest`, cette valeur par défaut serait le SOMMET DE MAIN (le canal suit la branche
+    # par défaut) : l'app épinglée sur une release et le runtime de l'agent
+    # IA faisant tourner du code non publié, sur la base de la release. `:stable` est la
+    # dernière release publiée — elle s'apparie avec l'app au lieu de courir devant.
     image: ${WORKER_IMAGE:-ghcr.io/melgarafael/deskcomm-worker:stable}
     pull_policy: ${WORKER_PULL_POLICY:-always}
     build:
@@ -97,7 +97,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      # dentro da rede do compose, o WAHA é o serviço 'waha' na porta interna 3000
+      # dans le réseau compose, WAHA est le service 'waha' sur le port interne 3000
       WAHA_API_BASE_URL: http://waha:3000
     networks:
       - internal
@@ -108,59 +108,59 @@ services:
       retries: 3
       start_period: 20s
   waha:
-    # Teto de memória — 893 MiB de pico MEDIDO nesta VPS.
+    # Plafond de mémoire — 893 MiB de pic MESURÉ sur ce VPS.
     #
-    # Sem ele o contêiner é ilimitado, e numa VPS de 3,8 GB isso não é teoria:
-    # um contêiner ALHEIO (agente da hospedagem, fora deste compose) registrou
-    # pico de 3.068 MiB no mesmo host. Quando a RAM acaba, o OOM killer escolhe
-    # a vítima por PONTUAÇÃO — quem cresceu mais rápido —, não por importância:
-    # o que morre pode ser o CRM.
+    # Sans lui le conteneur est illimité, et sur un VPS de 3,8 Go ce n'est pas théorique :
+    # un conteneur ÉTRANGER (agent de l'hébergeur, hors de ce compose) a enregistré
+    # un pic de 3 068 MiB sur le même hôte. Quand la RAM s'épuise, l'OOM killer choisit
+    # la victime par SCORE — celui qui a grossi le plus vite —, pas par importance :
+    # celui qui meurt peut être le CRM.
     #
-    # O teto não impede o pico legítimo; impede que UM serviço leve a máquina
-    # inteira. Estourá-lo mata só quem estourou, e o `restart: unless-stopped`
-    # o traz de volta — falha isolada em vez de queda geral.
+    # Le plafond n'empêche pas le pic légitime ; il empêche qu'UN service emporte la machine
+    # entière. Le dépasser ne tue que celui qui a dépassé, et le `restart: unless-stopped`
+    # le ramène — échec isolé au lieu d'une panne générale.
     mem_limit: 1280m
-    # Core grátis por padrão; troque para devlikeapro/waha-plus via WAHA_IMAGE se
-    # precisar de multi-número/retry/S3 (licença paga).
+    # Core gratuit par défaut ; passez à devlikeapro/waha-plus via WAHA_IMAGE si
+    # vous avez besoin de multi-numéro/retry/S3 (licence payante).
     #
-    # Tag PINADA: `devlikeapro/waha` sem tag é `:latest`, e o `dc pull` do
-    # update.sh entregava ao cliente qualquer versão que o upstream tivesse
-    # publicado — inclusive uma nunca testada por nós, no meio de uma
-    # atualização. `latest-2026.7.2` é o mesmo digest de `latest` hoje
-    # (65e593e30bb7…), então o pin não muda um bit; muda quem escolhe quando
-    # o WhatsApp do cliente troca de motor. Bumpar faz parte do release.
+    # Tag ÉPINGLÉE : `devlikeapro/waha` sans tag est `:latest`, et le `dc pull` d'
+    # update.sh livrait au client n'importe quelle version que l'amont avait
+    # publiée — y compris une jamais testée par nous, au milieu d'une
+    # mise à jour. `latest-2026.7.2` est le même digest que `latest` aujourd'hui
+    # (65e593e30bb7…), donc l'épinglage ne change pas un bit ; il change qui choisit quand
+    # le WhatsApp du client change de moteur. Le monter fait partie de la release.
     image: ${WAHA_IMAGE:-devlikeapro/waha:latest-2026.7.2}
     restart: unless-stopped
     environment:
-      # Prefixo sha512: faz o WAHA HASHEAR o X-Api-Key recebido e comparar com este
-      # hash. Sem o prefixo ele compara literal → o app (que manda o plaintext) toma 401.
+      # Le préfixe sha512: fait HACHER par WAHA le X-Api-Key reçu et le comparer à ce
+      # hash. Sans le préfixe il compare littéralement → l'app (qui envoie le texte clair) prend un 401.
       WAHA_API_KEY: "sha512:${WAHA_API_KEY_SHA512}"
       WHATSAPP_HOOK_URL: ${WAHA_WEBHOOK_BASE_URL}/api/v1/webhooks/waha
-      # `message` NÃO entra, e `message.any` sozinho não perde nada — medido.
+      # `message` N'entre PAS, et `message.any` seul ne perd rien — mesuré.
       #
-      # O WAHA emite os DOIS para a mesma mensagem, e `lib/waha/ingest.ts` já
-      # chama isso de corrida e deduplica. Só que o arquivo do corpo cru guarda
-      # as duas cópias: numa instalação real, 22.939 linhas de `message` ao lado
-      # de 24.582 de `message.any` — 41% da tabela que era 86% do banco.
+      # WAHA émet les DEUX pour le même message, et `lib/waha/ingest.ts` appelle déjà
+      # cela une course et déduplique. Sauf que l'archive du corps brut garde
+      # les deux copies : sur une vraie installation, 22 939 lignes de `message` à côté
+      # de 24 582 de `message.any` — 41 % de la table qui faisait 86 % de la base.
       #
-      # A prova de que dá para tirar veio do banco, não da doc: cruzando os ids
-      # de mensagem dos dois eventos em 22.815 mensagens reais, os que chegaram
-      # SÓ por `message` foram ZERO, e 1.642 chegaram só por `message.any` (os
-      # que saíram de nós, que `message` não cobre). Superconjunto estrito.
+      # La preuve qu'on peut le retirer est venue de la base, pas de la doc : en croisant les ids
+      # de message des deux événements sur 22 815 vrais messages, ceux arrivés
+      # SEULEMENT par `message` étaient ZÉRO, et 1 642 sont arrivés seulement par `message.any` (ceux
+      # sortis de chez nous, que `message` ne couvre pas). Sur-ensemble strict.
       WHATSAPP_HOOK_EVENTS: "message.any,message.ack,message.edited,message.revoked,session.status,state.change"
       WHATSAPP_HOOK_HMAC: ${WAHA_HMAC_SECRET}
-      # WAHA lê WHATSAPP_DEFAULT_ENGINE (NÃO WAHA_DEFAULT_ENGINE — o nome errado
-      # fazia cair no default WEBJS, engine com browser que trava/corrompe a sessão
-      # quando o WhatsApp Web atualiza; NOWEB é websocket direto, estável e leve).
+      # WAHA lit WHATSAPP_DEFAULT_ENGINE (PAS WAHA_DEFAULT_ENGINE — le mauvais nom
+      # faisait retomber sur la valeur par défaut WEBJS, moteur avec navigateur qui bloque/corrompt la session
+      # quand WhatsApp Web se met à jour ; NOWEB est un websocket direct, stable et léger).
       WHATSAPP_DEFAULT_ENGINE: ${WHATSAPP_DEFAULT_ENGINE:-NOWEB}
-      WAHA_DASHBOARD_ENABLED: "false"    # nunca expor o dashboard num template público
-      # Sem isto o container volta e as sessões ficam STOPPED: o número continua
-      # pareado em /app/.sessions, mas nada entra nem sai até alguém clicar
-      # Reconectar. True retoma as que já existiam — não reloga, não pede QR.
-      # Default do WAHA é False.
+      WAHA_DASHBOARD_ENABLED: "false"    # ne jamais exposer le tableau de bord dans un modèle public
+      # Sans ceci le conteneur revient et les sessions restent STOPPED : le numéro reste
+      # appairé dans /app/.sessions, mais rien n'entre ni ne sort jusqu'à ce que quelqu'un clique
+      # Reconnecter. True reprend celles qui existaient déjà — ne reconnecte pas, ne demande pas de QR.
+      # La valeur par défaut de WAHA est False.
       WHATSAPP_RESTART_ALL_SESSIONS: "${WHATSAPP_RESTART_ALL_SESSIONS:-True}"
     volumes:
-      - waha-data:/app/.sessions          # sessões pareadas (QR) — perder = re-parear
+      - waha-data:/app/.sessions          # sessions appairées (QR) — les perdre = réappairer
       - waha-media:/app/.media
     logging: *default-logging
     networks: [internal]
@@ -169,7 +169,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     mem_limit: 64m
-    # Efêmero (rate-limit/debounce) e limitado a 32 MB : nada aqui precisa durar.
+    # Éphémère (rate-limit/debounce) et limité à 32 Mo : rien ici n'a besoin de durer.
     command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "32mb", "--maxmemory-policy", "allkeys-lru"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -180,16 +180,16 @@ services:
     networks: [internal]
 
   srh:
-    # serverless-redis-http: fala o REST do Upstash sobre o redis normal, mantendo
-    # o SDK @upstash/redis sem tocar código.
+    # serverless-redis-http : parle le REST d'Upstash par-dessus le redis normal, en gardant
+    # le SDK @upstash/redis sans toucher au code.
     #
-    # Pinado por DIGEST, não por tag, e o motivo é específico: `latest` e `0.0.10`
-    # NÃO são a mesma imagem (5b0bb923… vs 65128347…), então trocar `:latest` por
-    # `:0.0.10` mudaria o binário que roda no parque — que é exatamente o risco
-    # que a pendência T6 mandava validar antes (encoding base64 do rate limit).
-    # O digest congela o que já está em produção HOJE: zero mudança de conteúdo,
-    # e o `:latest` deixa de poder mudar sozinho debaixo de todo mundo.
-    # Quando a T6 for validada, isto vira `:0.0.10` e o comentário sai.
+    # Épinglé par DIGEST, pas par tag, et la raison est précise : `latest` et `0.0.10`
+    # NE sont PAS la même image (5b0bb923… vs 65128347…), donc remplacer `:latest` par
+    # `:0.0.10` changerait le binaire qui tourne dans le parc — ce qui est exactement le risque
+    # que la tâche en attente T6 demandait de valider avant (encodage base64 du rate limit).
+    # Le digest fige ce qui est déjà en production AUJOURD'HUI : zéro changement de contenu,
+    # et le `:latest` ne peut plus changer tout seul sous les pieds de tout le monde.
+    # Quand T6 sera validée, ceci deviendra `:0.0.10` et le commentaire disparaîtra.
     image: hiett/serverless-redis-http@sha256:5b0bb9239fce53abf87b2018a7a0deb9ec7bd900c5360738fe5fbeeb426f9150
     restart: unless-stopped
     mem_limit: 160m
@@ -204,14 +204,14 @@ services:
     networks: [internal]
 
   scheduler:
-    # Cron sem docker.sock: crond interno batendo curl na rede interna.
-    # Resolução de 1 min (= paridade com os crons da Vercel).
+    # Cron sans docker.sock : crond interne qui lance curl sur le réseau interne.
+    # Résolution de 1 min (= parité avec les crons de Vercel).
     #
-    # A lista de crons mora em docker/scheduler/entrypoint.sh, não mais aqui. O
-    # `command:` inline instalava curl e tzdata (`apk add`) a CADA start — num
-    # serviço `restart: unless-stopped`, isso significa que o cron do cliente só
-    # voltava se a VPS tivesse internet e o mirror do Alpine estivesse de pé,
-    # justamente no momento em que a máquina está se recuperando de algo.
+    # La liste des crons vit dans docker/scheduler/entrypoint.sh, plus ici. La
+    # `command:` en ligne installait curl et tzdata (`apk add`) à CHAQUE démarrage — sur un
+    # service `restart: unless-stopped`, cela signifie que le cron du client ne
+    # revenait que si le VPS avait internet et que le miroir Alpine était debout,
+    # justement au moment où la machine se remet de quelque chose.
     image: ${SCHEDULER_IMAGE:-ghcr.io/melgarafael/deskcomm-scheduler:stable}
     pull_policy: ${SCHEDULER_PULL_POLICY:-always}
     mem_limit: 32m
@@ -240,7 +240,7 @@ services:
       ACME_EMAIL: ${ACME_EMAIL}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data           # certificados Let's Encrypt (persistir!)
+      - caddy-data:/data           # certificats Let's Encrypt (à conserver !)
       - caddy-config:/config
     depends_on:
       app:

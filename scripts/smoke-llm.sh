@@ -9,7 +9,7 @@ PORT="${SMOKE_DB_PORT:-54331}"
 CONTAINER="deskcomm-smoke-db-$$"
 IMAGE="pgvector/pgvector:pg17"
 
-[ -n "${ANTHROPIC_API_KEY:-}" ] || { echo "FATAL: exporte ANTHROPIC_API_KEY (o smoke usa o modelo real)" >&2; exit 1; }
+[ -n "${ANTHROPIC_API_KEY:-}" ] || { echo "FATAL : exportez ANTHROPIC_API_KEY (le smoke utilise le vrai modèle)" >&2; exit 1; }
 
 # `-v`: a imagem declara `VOLUME /var/lib/postgresql/data`, então sem ele cada
 # rodada deixa um volume anônimo para trás. Mesmo defeito de `test-db.sh`, mesma
@@ -17,7 +17,7 @@ IMAGE="pgvector/pgvector:pg17"
 cleanup() { docker rm -fv "$CONTAINER" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 
-echo "==> subindo $IMAGE como $CONTAINER (porta $PORT)"
+echo "==> démarrage de $IMAGE comme $CONTAINER (port $PORT)"
 docker run -d --rm --name "$CONTAINER" \
   -p "127.0.0.1:${PORT}:5432" \
   -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres "$IMAGE" >/dev/null
@@ -27,13 +27,13 @@ for _ in $(seq 1 60); do
   docker exec "$CONTAINER" psql -h 127.0.0.1 -U postgres -d postgres -c "select 1" >/dev/null 2>&1 && { ready=1; break; }
   sleep 1
 done
-[ "$ready" = 1 ] || { echo "FATAL: postgres não ficou pronto em 60s" >&2; exit 1; }
+[ "$ready" = 1 ] || { echo "FATAL : postgres n'a pas été prêt en 60 s" >&2; exit 1; }
 
 echo "==> prelude + baseline (install, ON_ERROR_STOP=1)"
 docker exec -i "$CONTAINER" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - < "$ROOT/scripts/selfhost-prelude.sql"
 docker exec -i "$CONTAINER" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - < "$ROOT/supabase/baseline.sql"
 
-echo "==> smoke contra o modelo real"
+echo "==> smoke contre le vrai modèle"
 # lib/env (importado transitivamente por aes_gcm) valida vars do APP que o
 # smoke não usa — placeholders bastam, nada disso é chamado no caminho do LLM.
 SMOKE_DB_URL="postgresql://postgres:postgres@127.0.0.1:${PORT}/postgres" \

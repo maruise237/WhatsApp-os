@@ -17,7 +17,7 @@ async function main() {
     .maybeSingle();
 
   if (error || !sessao?.meta_waba_id) {
-    throw new Error(`sem sessão meta_cloud no banco: ${error?.message ?? "nenhuma linha"}`);
+    throw new Error(`pas de session meta_cloud dans la base : ${error?.message ?? "aucune ligne"}`);
   }
 
   const counts = await syncTemplates({
