@@ -80,7 +80,7 @@ export async function decidirParaOSeam(
     // criada por ela. O aviso é por chamada e barato; quem o consome é o log
     // estruturado, e na frente de logs vira aviso na Central.
     binding = null;
-    deps.log?.warn('llm: não consegui ler o binding do ponto — usando o padrão', {
+    deps.log?.warn('llm : impossible de lire la liaison du point — utilisation de la valeur par défaut', {
       organization_id: entrada.organizationId,
       purpose: entrada.purpose,
       motivo: err instanceof Error ? err.message : String(err),

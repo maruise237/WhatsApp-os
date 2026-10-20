@@ -37,7 +37,7 @@ function resolveName(name: { pt: string } | string | undefined): string {
 export function formatProductForRag(product: NuvemshopProduct): string {
   const name = resolveName(product.name);
   const description = product.description ? stripHtml(product.description) : "";
-  const price = product.price ? `R$ ${product.price}` : "N/A";
+  const price = product.price ? `${product.price} FCFA` : "N/A";
   const sku = product.sku ?? "N/A";
   const permalink = product.permalink ?? "";
 
@@ -46,8 +46,8 @@ export function formatProductForRag(product: NuvemshopProduct): string {
       ? product.variants
           .map((v) => {
             const parts: string[] = [];
-            if (v.price) parts.push(`Preço: R$ ${v.price}`);
-            if (v.sku) parts.push(`SKU: ${v.sku}`);
+            if (v.price) parts.push(`Prix : ${v.price} FCFA`);
+            if (v.sku) parts.push(`SKU : ${v.sku}`);
             return parts.join(", ");
           })
           .filter((v) => v.length > 0)
@@ -60,12 +60,12 @@ export function formatProductForRag(product: NuvemshopProduct): string {
       : "N/A";
 
   const lines: string[] = [
-    `Produto: ${name}`,
-    `Descrição: ${description || "N/A"}`,
-    `Preço: ${price}`,
-    `Variantes: ${variants}`,
-    `Categorias: ${categories}`,
-    `SKU: ${sku}`,
+    `Produit : ${name}`,
+    `Description : ${description || "N/A"}`,
+    `Prix : ${price}`,
+    `Variantes : ${variants}`,
+    `Catégories : ${categories}`,
+    `SKU : ${sku}`,
   ];
 
   if (permalink) {

@@ -137,7 +137,7 @@ export async function duplicateAgentWithVersion(
     .from("ai_agents")
     .insert({
       organization_id: orgId,
-      name: `${String(src.name)} (cópia)`.slice(0, 120),
+      name: `${String(src.name)} (copie)`.slice(0, 120),
       description: src.description,
       model: src.model,
       system_prompt: src.system_prompt,

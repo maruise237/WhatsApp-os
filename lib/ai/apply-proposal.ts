@@ -13,7 +13,7 @@ import { publishAgentVersion } from "@/lib/ai/agents/publish";
 /** Bullet entra como seção datável no FIM do prompt — diff auditável, nunca rewrite. */
 export function composeAppliedPrompt(basePrompt: string, bulletContent: string): string {
   const bullet = bulletContent.trim();
-  return `${basePrompt.trimEnd()}\n\n## Aprendizado do flywheel\n- ${bullet}\n`;
+  return `${basePrompt.trimEnd()}\n\n## Apprentissage automatique\n- ${bullet}\n`;
 }
 
 export type ApplyProposalResult =

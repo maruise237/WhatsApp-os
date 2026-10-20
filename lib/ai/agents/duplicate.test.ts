@@ -139,7 +139,7 @@ describe("duplicateAgentWithVersion", () => {
     const agente = inserts.find((i) => i.table === "ai_agents")!;
     expect(agente.row.published_version_id).toBeUndefined();
     expect(agente.row.is_default).toBe(false);
-    expect(agente.row.name).toBe("Suporte (cópia)");
+    expect(agente.row.name).toBe("Suporte (copie)");
   });
 
   it("prefere a draft mais recente à published", async () => {

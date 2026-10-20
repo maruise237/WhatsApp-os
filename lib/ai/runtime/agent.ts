@@ -325,7 +325,7 @@ export async function runAgent(input: RunAgentInput): Promise<RunAgentResult> {
         return await failRun(
           run,
           "credential_invalid",
-          `sem chave para ${version.provider}: cadastre em IA › Credenciais ou configure a chave desta instalação`,
+          `l’IA de la plateforme n’est pas configurée sur cette installation : clé de plateforme absente`,
           startedAt,
         );
       }

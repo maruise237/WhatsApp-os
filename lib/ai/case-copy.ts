@@ -8,8 +8,8 @@
 import type { CaseEvent, CaseHumanAction, CaseStatus } from "@/hooks/ai/useCases";
 
 export const STATUS_LABEL: Record<CaseStatus, string> = {
-  awaiting_human: "Aguardando você",
-  awaiting_lead: "Aguardando o cliente",
+  awaiting_human: "En attente de votre intervention",
+  awaiting_lead: "En attente du client",
   resolved: "Réglé",
   escalated: "Confié à une personne",
   cancelled: "Annulé",
@@ -28,10 +28,10 @@ export const STATUS_BADGE_VARIANT: Record<CaseStatus, "warning" | "info" | "succ
  * Sem entrada para `awaiting_human` de propósito — ali o painel está ativo.
  */
 export const CASE_REPLY_DISABLED_REASON: Partial<Record<CaseStatus, string>> = {
-  awaiting_lead: "Aguardando o cliente responder — a IA avisa você quando tiver a informação.",
-  resolved: "Este caso já foi concluído.",
-  escalated: "Este caso virou atendimento humano — não precisa mais de resposta aqui.",
-  cancelled: "Este caso foi cancelado.",
+  awaiting_lead: "En attente de la réponse du client — l’IA vous prévient dès qu’elle a l’information.",
+  resolved: "Ce dossier est déjà terminé.",
+  escalated: "Ce dossier a été confié à une personne — plus besoin de répondre ici.",
+  cancelled: "Ce dossier a été annulé.",
 };
 
 export interface CaseActionOption {

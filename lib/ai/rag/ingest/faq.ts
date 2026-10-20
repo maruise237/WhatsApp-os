@@ -137,5 +137,5 @@ export function parseFaqMarkdown(md: string): FaqItem[] {
  */
 export function formatFaqChunk(item: FaqItem): string {
   const tagsStr = item.tags.length > 0 ? item.tags.join(", ") : "";
-  return `Pergunta: ${item.question}\nResposta: ${item.answer}${tagsStr ? `\nTags: ${tagsStr}` : ""}`;
+  return `Question : ${item.question}\nRéponse : ${item.answer}${tagsStr ? `\nTags : ${tagsStr}` : ""}`;
 }

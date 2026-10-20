@@ -136,7 +136,7 @@ async function gastoDoMes(
   if (error) return { cents: null, causa: error.message };
   // `numeric` pode chegar como string dependendo do serializador; coagir sempre.
   const n = Number(data ?? 0);
-  if (!Number.isFinite(n)) return { cents: null, causa: `retorno não numérico: ${String(data)}` };
+  if (!Number.isFinite(n)) return { cents: null, causa: `retour non numérique : ${String(data)}` };
   return { cents: n, causa: null };
 }
 
@@ -176,25 +176,25 @@ export async function getBudgetStatus(orgId: string): Promise<BudgetStatus> {
   // consulta falhou é indistinguível de um que diz a verdade, e é sobre ele que
   // a pessoa decide se está protegida.
   if (linhaRes.error) {
-    logger.warn("ai-budget: leitura do orçamento falhou — a tela mostra o default", {
+    logger.warn("ai-budget : la lecture du budget a échoué — l’écran affiche la valeur par défaut", {
       organization_id: orgId,
       causa: linhaRes.error.message,
     });
   }
   if (bloqueioRes.error) {
-    logger.warn("ai-budget: não deu para saber se há parada aberta — a tela dirá que não", {
+    logger.warn("ai-budget : impossible de savoir s’il y a un arrêt ouvert — l’écran dira que non", {
       organization_id: orgId,
       causa: bloqueioRes.error.message,
     });
   }
   if (gasto.causa !== null) {
-    logger.warn("ai-budget: gasto do mês veio da coluna materializada, não da régua", {
+    logger.warn("ai-budget : la dépense du mois vient de la colonne matérialisée, pas du calcul de référence", {
       organization_id: orgId,
       causa: gasto.causa,
     });
   }
   if (semPrecoRes.error) {
-    logger.warn("ai-budget: não deu para saber se há chamada sem preço conhecido no mês", {
+    logger.warn("ai-budget : impossible de savoir s’il y a un appel sans prix connu ce mois-ci", {
       organization_id: orgId,
       causa: semPrecoRes.error.message,
     });

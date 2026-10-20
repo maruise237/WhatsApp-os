@@ -50,9 +50,9 @@ export async function importSkillPackage(
         await deps.admin.storage.from(SKILL_ASSETS_BUCKET).remove(uploaded);
       }
       console.error(
-        `[install-skill] upload falhou (${objectPath}): ${error.message} — versão órfã ${version.id} fica no banco, ponteiro não move`,
+        `[install-skill] échec de l’envoi (${objectPath}) : ${error.message} — la version orpheline ${version.id} reste en base, le pointeur ne bouge pas`,
       );
-      throw new Error(`falha ao subir arquivo do pacote de skill: ${f.path}`);
+      throw new Error(`échec de l’envoi d’un fichier du paquet de compétence : ${f.path}`);
     }
     uploaded.push(objectPath);
   }
@@ -89,7 +89,7 @@ export async function installPlatformSkill(
   );
   const platform = rows[0];
   if (platform === undefined) {
-    throw new Error(`skill de plataforma '${input.name}' não encontrada no catálogo — nada para instalar`);
+    throw new Error(`compétence de plateforme '${input.name}' introuvable dans le catalogue — rien à installer`);
   }
 
   const version = await insertSkillVersion(deps.db, {

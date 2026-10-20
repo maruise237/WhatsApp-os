@@ -434,7 +434,8 @@ describe("os textos do orçamento nomeiam botões que existem", () => {
     expect(
       corpoDoBloqueio(15_000, 10_000),
       "a IA parou e o texto manda procurar um botão que não está na tela",
-    ).toContain(rotuloDoBotaoDeVolta());
+      // O aviso da Central é lido em francês: ele cita o rótulo TRADUZIDO que a tela mostra.
+    ).toContain(traduzir(rotuloDoBotaoDeVolta(), "fr-FR"));
   });
 
   it("o resumo entregue ao humano que assume também", () => {
@@ -454,6 +455,6 @@ describe("os textos do orçamento nomeiam botões que existem", () => {
       renomeado.slice(renomeado.indexOf('data-testid="devolver-ao-automatico"')),
     )?.[1];
     expect(novo).toBe("Voltar para a IA");
-    expect(corpoDoBloqueio(15_000, 10_000)).not.toContain(novo as string);
+    expect(corpoDoBloqueio(15_000, 10_000)).not.toContain(traduzir(novo as string, "fr-FR"));
   });
 });

@@ -110,7 +110,7 @@ function buildTranscript(messages: MsgRow[]): string {
   for (const m of messages) {
     const body = (m.body ?? "").trim();
     if (!body) continue;
-    const speaker = m.direction === "inbound" ? "Cliente" : "Atendente";
+    const speaker = m.direction === "inbound" ? "Client" : "Conseiller";
     lines.push(`${speaker}: ${body}`);
   }
   return lines.join("\n");

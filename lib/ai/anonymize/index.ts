@@ -45,9 +45,9 @@ export interface AnonymizeResult {
 const REPLACEMENT_BY_TYPE: Record<AnonymizeHit["type"], string> = {
   cpf: "[CPF]",
   email: "[EMAIL]",
-  phone: "[TELEFONE]",
-  cep: "[CEP]",
-  name: "[NOME]",
+  phone: "[TÉLÉPHONE]",
+  cep: "[CODE_POSTAL]",
+  name: "[NOM]",
 };
 
 export function anonymize(text: string): AnonymizeResult {
@@ -75,8 +75,8 @@ export function anonymize(text: string): AnonymizeResult {
   out = out.replace(nameRe, (match) => {
     const lower = match.toLowerCase();
     if (FIRST_NAMES_PT_BR.has(lower)) {
-      hits.push({ type: "name", original: match, replacement: "[NOME]" });
-      return "[NOME]";
+      hits.push({ type: "name", original: match, replacement: "[NOM]" });
+      return "[NOM]";
     }
     return match;
   });

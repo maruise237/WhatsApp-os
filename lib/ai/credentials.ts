@@ -68,18 +68,18 @@ export async function loadCredential(
     throw new CredentialUnavailableError("not_found", `query_error: ${error.message}`);
   }
   if (!data) {
-    throw new CredentialUnavailableError("not_found", "credential não encontrada");
+    throw new CredentialUnavailableError("not_found", "identifiant introuvable");
   }
   if (data.organization_id !== organizationId) {
-    throw new CredentialUnavailableError("wrong_org", "credential pertence a outra org");
+    throw new CredentialUnavailableError("wrong_org", "identifiant appartenant à une autre organisation");
   }
   if (!data.is_active) {
-    throw new CredentialUnavailableError("inactive", "credential desativada");
+    throw new CredentialUnavailableError("inactive", "identifiant désactivé");
   }
   if (!data.validated_at) {
     throw new CredentialUnavailableError(
       "not_validated",
-      "credential ainda não validada com o provedor",
+      "identifiant pas encore validé auprès du fournisseur",
     );
   }
 

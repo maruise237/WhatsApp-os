@@ -29,10 +29,10 @@ const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
  */
 const required = (name: string) =>
   isProd
-    ? z.string().min(1, `${name} é obrigatória em produção`)
+    ? z.string().min(1, `${name} est obligatoire en production`)
     : z.string().default("");
 
-const requiredAlways = (name: string) => z.string().min(1, `${name} é obrigatória`);
+const requiredAlways = (name: string) => z.string().min(1, `${name} est obligatoire`);
 
 /**
  * Knob de retenção em dias: NUNCA derruba o app.
@@ -54,9 +54,9 @@ const diasDeRetencao = (nome: string, padrao: number) =>
     .default(padrao)
     .catch(({ error }) => {
       console.warn(
-        `[env] ${nome} inválida (${JSON.stringify(process.env[nome])}) — usando o padrão ${padrao} dias. ` +
-          `Só número inteiro maior que zero vale aqui; "0" não desliga a poda. ` +
-          `(${error.issues[0]?.message ?? "valor recusado"})`,
+        `[env] ${nome} invalide (${JSON.stringify(process.env[nome])}) — utilisation de la valeur par défaut ${padrao} jours. ` +
+          `Seul un entier supérieur à zéro est accepté ici ; "0" ne désactive pas la purge. ` +
+          `(${error.issues[0]?.message ?? "valeur refusée"})`,
       );
       return padrao;
     });
@@ -355,10 +355,10 @@ if (!parsed.success && isBuildPhase) {
 
 if (!parsed.success) {
   // Log estruturado pra debug. Sentry capturaria via uncaught.
-  console.error("[env] Falha de validação de variáveis de ambiente:");
+  console.error("[env] Échec de validation des variables d’environnement :");
   console.error(parsed.error.flatten().fieldErrors);
   throw new Error(
-    "Variáveis de ambiente inválidas. Veja o erro acima e ajuste .env.local / Vercel.",
+    "Variables d’environnement invalides. Consultez l’erreur ci-dessus et corrigez le fichier .env.",
   );
 }
 

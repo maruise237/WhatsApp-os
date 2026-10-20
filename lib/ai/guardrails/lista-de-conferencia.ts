@@ -70,96 +70,96 @@ export interface ConferenciaDeSaida {
 export const CONFERENCIAS_DE_SAIDA: readonly ConferenciaDeSaida[] = [
   {
     nome: "stop",
-    rotulo: "Respeitar quem pediu para parar",
+    rotulo: "Respecter ceux qui ont demandé l’arrêt",
     oQueProtege:
-      "Se a pessoa respondeu STOP, SAIR ou pediu para não receber mais, nada é enviado a ela.",
+      "Si la personne a répondu STOP, ARRÊT ou a demandé à ne plus recevoir de messages, rien ne lui est envoyé.",
     escolha: null,
     porQueNaoSeDesliga:
-      "Quem pediu para parar tem o direito de ser deixado em paz — e insistir é infração, não estratégia.",
+      "Qui a demandé l’arrêt a le droit d’être laissé tranquille — insister est une infraction, pas une stratégie.",
      camada: null,
   },
   {
     nome: "lgpd",
-    rotulo: "Respeitar dados apagados e a base legal",
+    rotulo: "Respecter les données effacées et la base légale",
     oQueProtege:
-      "Contato anonimizado a pedido não recebe mensagem, e prospecção sem base legal não sai.",
+      "Un contact anonymisé à sa demande ne reçoit aucun message, et aucune prospection sans base légale ne part.",
     escolha: null,
-    porQueNaoSeDesliga: "É obrigação legal. Apagar dados é irreversível por desenho, e escrever para quem foi apagado desfaria isso.",
+    porQueNaoSeDesliga: "C’est une obligation légale. L’effacement des données est irréversible par conception, et écrire à une personne effacée reviendrait à l’annuler.",
      camada: null,
   },
   {
     nome: "pacing",
-    rotulo: "Segurar o ritmo de envio",
+    rotulo: "Maîtriser le rythme d’envoi",
     oQueProtege:
-      "Espaça as mensagens para o seu número não parecer robô e ser bloqueado pelo WhatsApp.",
+      "Espace les messages pour que votre numéro ne ressemble pas à un robot et ne soit pas bloqué par WhatsApp.",
     escolha: null,
-    porQueNaoSeDesliga: "É o que impede seu número de ser bloqueado — e o número é o seu negócio.",
+    porQueNaoSeDesliga: "C’est ce qui empêche votre numéro d’être bloqué — et ce numéro, c’est votre activité.",
      camada: null,
   },
   {
     nome: "messaging_window",
-    rotulo: "Respeitar a janela do WhatsApp",
+    rotulo: "Respecter la fenêtre WhatsApp",
     oQueProtege:
-      "Fora da janela de 24 horas, só modelo aprovado sai — é o que o próprio WhatsApp permite.",
+      "En dehors de la fenêtre de 24 heures, seul un modèle de message approuvé peut partir — c’est ce que WhatsApp lui-même autorise.",
     escolha: null,
     porQueNaoSeDesliga:
-      "Quem impõe é o WhatsApp, não nós. Desligar aqui não libera nada: a mensagem seria recusada lá, ou cobrada.",
+      "C’est WhatsApp qui l’impose, pas nous. Désactiver ici ne débloque rien : le message serait refusé là-bas, ou facturé.",
      camada: null,
   },
   {
     nome: "spinning",
-    rotulo: "Variar o texto das mensagens iguais",
+    rotulo: "Varier le texte des messages identiques",
     oQueProtege:
-      "Evita mandar a mesma frase idêntica para muita gente, que é o padrão que denuncia disparo em massa.",
+      "Évite d’envoyer exactement la même phrase à beaucoup de monde, ce qui trahit un envoi en masse.",
     escolha: null,
-    porQueNaoSeDesliga: "Texto idêntico em massa é o gatilho de spam do WhatsApp — mesmo risco do ritmo de envio.",
+    porQueNaoSeDesliga: "Un texte identique en masse déclenche l’anti-spam de WhatsApp — même risque que le rythme d’envoi.",
      camada: null,
   },
   {
     nome: "promise",
-    rotulo: "Não prometer preço ou prazo por conta própria",
+    rotulo: "Ne pas promettre de prix ou de délai de sa propre initiative",
     oQueProtege:
-      "Barra a mensagem em que o assistente inventa desconto, valor ou data de entrega.",
+      "Bloque le message où l’assistant invente une remise, un montant ou une date de livraison.",
     escolha: null,
     porQueNaoSeDesliga:
-      "Uma promessa escrita obriga o seu negócio. A conferência é uma regra fixa, não custa nada e não tem troca a oferecer.",
+      "Une promesse écrite engage votre activité. Ce contrôle est une règle fixe, il ne coûte rien et n’a aucun compromis à proposer.",
      camada: null,
   },
   {
     nome: "semantic_promise",
-    rotulo: "Conferir promessas em texto livre",
+    rotulo: "Vérifier les promesses formulées librement",
     oQueProtege:
-      "Uma segunda leitura, feita por um modelo, para pegar a promessa escrita de um jeito que a regra fixa não reconhece.",
-    escolha: { custo: "+1 consulta ao modelo por mensagem enviada" },
+      "Une seconde lecture, faite par l’IA, pour repérer une promesse formulée d’une façon que la règle fixe ne reconnaît pas.",
+    escolha: { custo: "+1 requête au modèle d’IA par message envoyé" },
     porQueNaoSeDesliga: "",
     camada: "promessa_semantica",
   },
   {
     nome: "case_promise",
-    rotulo: "Não prometer atendimento humano que não existe",
+    rotulo: "Ne pas promettre une prise en charge humaine qui n’existe pas",
     oQueProtege:
-      'Impede o "vou pedir para o responsável te ligar" quando nenhum chamado foi aberto de verdade.',
+      'Empêche le « je vais demander au responsable de vous appeler » quand aucune demande n’a réellement été ouverte.',
     escolha: null,
     porQueNaoSeDesliga:
-      "É promessa que só você pode cumprir, e o cliente fica esperando. Regra fixa, sem custo.",
+      "C’est une promesse que vous seul pouvez tenir, et le client reste à attendre. Règle fixe, sans coût.",
      camada: null,
   },
   {
     nome: "internal_vocabulary",
-    rotulo: "Não falar a nossa língua com o seu cliente",
+    rotulo: "Ne pas parler notre jargon à votre client",
     oQueProtege:
-      "Barra nome de ferramenta, nome de tabela e código de erro na mensagem que o cliente lê.",
+      "Bloque les noms d’outils, noms de tables et codes d’erreur dans le message que lit le client.",
     escolha: null,
     porQueNaoSeDesliga:
-      "É a conferência que derrubou o vazamento medido de 30% para zero. Desligar reabre exatamente o defeito que ela existe para fechar.",
+      "C’est le contrôle qui a fait passer la fuite mesurée de 30 % à zéro. Le désactiver rouvre exactement le défaut qu’il existe pour corriger.",
      camada: null,
   },
   {
     nome: "disclosure",
-    rotulo: "Dizer que é um assistente quando perguntam",
-    oQueProtege: "Se o cliente pergunta se está falando com um robô, a resposta não pode enganar.",
+    rotulo: "Dire que c’est un assistant quand on le demande",
+    oQueProtege: "Si le client demande s’il parle à un robot, la réponse ne doit pas le tromper.",
     escolha: null,
-    porQueNaoSeDesliga: "Esconder que é um assistente é enganar o cliente.",
+    porQueNaoSeDesliga: "Cacher que c’est un assistant, c’est tromper le client.",
      camada: null,
   },
 ];
@@ -173,10 +173,10 @@ export const CONFERENCIAS_DE_SAIDA: readonly ConferenciaDeSaida[] = [
  */
 export const CONFERENCIA_DE_ENTRADA: ConferenciaDeSaida = {
   nome: "jailbreak_detect",
-  rotulo: "Detectar tentativa de manipular o assistente",
+  rotulo: "Détecter les tentatives de manipulation de l’assistant",
   oQueProtege:
-    "Lê a mensagem que chega e reconhece quem está tentando fazer o assistente ignorar as suas instruções.",
-  escolha: { custo: "+1 consulta ao modelo por mensagem recebida" },
+    "Lit le message entrant et repère qui essaie de faire ignorer ses instructions à l’assistant.",
+  escolha: { custo: "+1 requête au modèle d’IA par message reçu" },
   porQueNaoSeDesliga: "",
   camada: "jailbreak",
 };

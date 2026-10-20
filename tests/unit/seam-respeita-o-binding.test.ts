@@ -232,7 +232,7 @@ describe("quando a tabela de bindings não responde", () => {
       { registry, log: log as never },
     );
     const avisos = log.warn.mock.calls.map((c) => String(c[0]));
-    expect(avisos.some((m) => m.includes("binding"))).toBe(true);
+    expect(avisos.some((m) => m.includes("liaison"))).toBe(true);
   });
 });
 

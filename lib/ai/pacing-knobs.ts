@@ -42,7 +42,7 @@ export const pacingKnobsUpdateSchema = z
     allow_sunday: z.boolean().nullable().optional(),
     timezone: z
       .string()
-      .refine(isValidTimezone, "timezone IANA inválida (ex.: America/Sao_Paulo)")
+      .refine(isValidTimezone, "fuseau horaire IANA invalide (ex. : Africa/Douala)")
       .nullable()
       .optional(),
     daily_message_limit: z
@@ -63,7 +63,7 @@ export const pacingKnobsUpdateSchema = z
     number_activated_at: z
       .string()
       .datetime({ offset: true })
-      .refine((iso) => new Date(iso).getTime() <= Date.now(), "a data não pode estar no futuro")
+      .refine((iso) => new Date(iso).getTime() <= Date.now(), "la date ne peut pas être dans le futur")
       .nullable()
       .optional(),
     /**

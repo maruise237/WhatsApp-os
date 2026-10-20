@@ -194,7 +194,7 @@ function CreateRouterDialog({
               Annuler
             </Button>
             <Button type="submit" disabled={!valid || create.isPending}>
-              {create.isPending ? "Criando…" : "Créer le routeur"}
+              {create.isPending ? "Création…" : "Créer le routeur"}
             </Button>
           </DialogFooter>
         </form>

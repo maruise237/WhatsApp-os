@@ -65,7 +65,7 @@ describe("composeAppliedPrompt — bullet vira seção aditiva, diff auditável"
   it("apende seção no fim, sem reescrever o prompt base", () => {
     const out = composeAppliedPrompt("PROMPT BASE\n", "  responda o preço junto do prazo  ");
     expect(out).toBe(
-      "PROMPT BASE\n\n## Aprendizado do flywheel\n- responda o preço junto do prazo\n",
+      "PROMPT BASE\n\n## Apprentissage automatique\n- responda o preço junto do prazo\n",
     );
     expect(out.startsWith("PROMPT BASE")).toBe(true);
   });

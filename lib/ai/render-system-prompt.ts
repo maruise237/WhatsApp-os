@@ -32,9 +32,9 @@ function lookup(path: string, scope: Record<string, unknown>): unknown {
 }
 
 function formatRecentMessages(ctx: BotContext): string {
-  if (!ctx.recent_messages.length) return "(sem histórico)";
+  if (!ctx.recent_messages.length) return "(aucun historique)";
   const lines = ctx.recent_messages.slice(-20).map((m) => {
-    const role = m.direction === "inbound" ? "Cliente" : "Atendente";
+    const role = m.direction === "inbound" ? "Client" : "Conseiller";
     const body = (m.body ?? "").trim().slice(0, 500);
     return `- [${role}] ${body}`;
   });
@@ -42,28 +42,28 @@ function formatRecentMessages(ctx: BotContext): string {
 }
 
 function formatRetrievedChunks(ctx: BotContext): string {
-  if (!ctx.retrieved_chunks.length) return "(sem trechos relevantes na base de conhecimento)";
+  if (!ctx.retrieved_chunks.length) return "(aucun extrait pertinent dans la base de connaissances)";
   return ctx.retrieved_chunks
     .map((c, i) => {
       const sim = (c.similarity * 100).toFixed(1);
       const body = c.content.trim().slice(0, 800);
-      return `### Trecho #${i + 1} (similaridade ${sim}%)\n${body}`;
+      return `### Extrait n°${i + 1} (similarité ${sim} %)\n${body}`;
     })
     .join("\n\n");
 }
 
 export function renderSystemPrompt(template: string, ctx: BotContext): string {
   const vocabulary = ((ctx.agent.config?.["vocabulary"] as Record<string, unknown> | undefined) ?? {
-    lead: "cliente",
-    deal: "pedido",
-    won: "concluído",
-    lost: "cancelado",
+    lead: "client",
+    deal: "commande",
+    won: "payé",
+    lost: "annulé",
   }) as Record<string, unknown>;
 
   const scope: Record<string, unknown> = {
     vocabulary,
-    contact_name: ctx.contact.display_name ?? "cliente",
-    contact_locale: ctx.contact.locale ?? "pt-BR",
+    contact_name: ctx.contact.display_name ?? "client",
+    contact_locale: ctx.contact.locale ?? "fr-FR",
     recent_messages: formatRecentMessages(ctx),
     retrieved_chunks: formatRetrievedChunks(ctx),
   };
@@ -76,7 +76,7 @@ export function renderSystemPrompt(template: string, ctx: BotContext): string {
 
   // Always append RAG block at the end so even un-templated prompts get context.
   if (!template.includes("{{retrieved_chunks}}") && ctx.retrieved_chunks.length) {
-    return `${rendered}\n\n## Base de conhecimento\n${formatRetrievedChunks(ctx)}`;
+    return `${rendered}\n\n## Base de connaissances\n${formatRetrievedChunks(ctx)}`;
   }
   return rendered;
 }

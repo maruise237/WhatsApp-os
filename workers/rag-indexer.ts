@@ -330,7 +330,7 @@ async function handleKnowledgeSourceUpdated(
   for (const it of items) {
     const fonte = porFonte.get(it.knowledge_source_id);
     if (!fonte) continue;
-    const texto = `Pergunta: ${it.question}\nResposta: ${it.answer}`;
+    const texto = `Question : ${it.question}\nRéponse : ${it.answer}`;
     for (const c of chunkText(texto)) {
       pedacos.push({ content: c, sourceId: fonte.id, sourceType: fonte.source_type });
     }

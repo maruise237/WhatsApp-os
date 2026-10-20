@@ -208,7 +208,7 @@ export function RouterEditorClient({
       if (JSON.stringify(currentMembers) !== JSON.stringify(baseline.members)) {
         await saveMembers.mutateAsync(currentMembers);
       }
-      toast.success("Roteador salvo.");
+      toast.success("Routeur enregistré.");
     } catch (err) {
       showApiError(err);
     }
@@ -217,7 +217,7 @@ export function RouterEditorClient({
   function handleDelete() {
     deleteRouter.mutate(routerId, {
       onSuccess: () => {
-        toast.success("Roteador removido.");
+        toast.success("Routeur supprimé.");
         nextRouter.push("/app/ai/routers");
       },
       onError: showApiError,
@@ -369,7 +369,7 @@ export function RouterEditorClient({
           {canManage && (
             <div className="flex sm:justify-end">
               <Button onClick={handleSave} disabled={!dirty || !isValid || saving} className="w-full sm:w-auto">
-                {saving ? "Salvando…" : "Enregistrer"}
+                {saving ? "Enregistrement…" : "Enregistrer"}
               </Button>
             </div>
           )}
@@ -604,7 +604,7 @@ function TestPanel({
           onClick={onTest}
           disabled={!canTest || !isActive || pending || !message.trim()}
         >
-          {pending ? "Testando…" : "Tester la classification"}
+          {pending ? "Test en cours…" : "Tester la classification"}
           {!pending && <ArrowRight />}
         </Button>
         {result && (
