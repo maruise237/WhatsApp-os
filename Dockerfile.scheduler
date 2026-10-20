@@ -1,10 +1,10 @@
-# Scheduler dos crons — busybox crond batendo nas rotas /api/v1/cron/* pela rede
-# interna do compose. Sem docker.sock: o contêiner não fala com o daemon, só HTTP.
+# Scheduler des crons — crond de busybox qui frappe les routes /api/v1/cron/* par le réseau
+# interne du compose. Sans docker.sock : le conteneur ne parle pas au daemon, seulement en HTTP.
 #
-# Existe como imagem (em vez de `alpine:3.20` + `apk add` no command do compose)
-# porque instalar pacote em todo start amarra a recuperação do cron do cliente à
-# internet da VPS e ao mirror do Alpine — dependência de rede num caminho que
-# deveria ser offline. Doutrina: docs/doctrine/packaging.md, invariante 1.
+# Existe en tant qu'image (au lieu de `alpine:3.20` + `apk add` dans la command du compose)
+# parce qu'installer un paquet à chaque démarrage lie la reprise du cron du client à
+# l'internet du VPS et au miroir Alpine — une dépendance réseau sur un chemin qui
+# devrait être hors ligne. Doctrine : docs/doctrine/packaging.md, invariant 1.
 FROM alpine:3.20
 
 LABEL org.opencontainers.image.source="https://github.com/melgarafael/DeskcommCRM" \
@@ -20,8 +20,8 @@ RUN apk add --no-cache curl tzdata
 COPY docker/scheduler/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Prova de vida: se o crond morrer, o contêiner cai e o `restart: unless-stopped`
-# o traz de volta. Sem isto, um crond morto fica indistinguível de um cron ocioso.
+# Preuve de vie : si crond meurt, le conteneur tombe et le `restart: unless-stopped`
+# le ramène. Sans cela, un crond mort est indiscernable d'un cron inactif.
 HEALTHCHECK --interval=60s --timeout=5s --start-period=10s --retries=3 \
   CMD pgrep crond >/dev/null || exit 1
 

@@ -36,7 +36,7 @@ SUPABASE="supabase"
 command -v supabase >/dev/null 2>&1 || SUPABASE="npx supabase"
 
 if ! $SUPABASE status >/dev/null 2>&1; then
-  echo "==> O Supabase local não está de pé. Rode 'npx supabase start' antes." >&2
+  echo "==> La base locale n'est pas debout. Lancez 'npx supabase start' avant." >&2
   exit 1
 fi
 
@@ -60,7 +60,7 @@ ANON="$(ler ANON_KEY)"
 SERVICE="$(ler SERVICE_ROLE_KEY)"
 
 if [ -z "$API_URL" ] || [ -z "$ANON" ] || [ -z "$SERVICE" ]; then
-  echo "==> Não consegui ler as chaves do stack local (API_URL/ANON_KEY/SERVICE_ROLE_KEY)." >&2
+  echo "==> Impossible de lire les clés de la stack locale (API_URL/ANON_KEY/SERVICE_ROLE_KEY)." >&2
   exit 1
 fi
 
@@ -71,7 +71,7 @@ fi
 case "$API_URL" in
   http://127.0.0.1:*|http://localhost:*) ;;
   *)
-    echo "==> RECUSADO: o stack local respondeu com uma URL que não é local: $API_URL" >&2
+    echo "==> REFUSÉ : la stack locale a répondu avec une URL qui n'est pas locale : $API_URL" >&2
     exit 1
     ;;
 esac
@@ -137,5 +137,5 @@ NEXT_TELEMETRY_DISABLED=1
 SENTRY_DSN=off
 EOF
 
-echo "==> .env.e2e gerado, apontando para $API_URL"
-echo "==> Próximo: pnpm e2e:build && pnpm test:e2e"
+echo "==> .env.e2e généré, pointant vers $API_URL"
+echo "==> Suivant : pnpm e2e:build && pnpm test:e2e"

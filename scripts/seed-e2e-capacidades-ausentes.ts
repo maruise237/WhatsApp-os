@@ -68,7 +68,7 @@ async function main(): Promise<void> {
     [orgId],
   );
   const conversationId = creds.escalacao?.conversation_id ?? conv[0]?.id;
-  if (!conversationId) throw new Error("nenhuma conversa na org para referenciar o aviso");
+  if (!conversationId) throw new Error("aucune conversation dans l'org pour référencer l'alerte");
 
   await avisarCapacidadesAusentes(pool, orgId, conversationId, MOTIVO_REAL, logMudo);
 
@@ -78,16 +78,16 @@ async function main(): Promise<void> {
     [orgId],
   );
   if (rows.length !== 1) {
-    throw new Error(`esperava 1 aviso aberto, achei ${rows.length}`);
+    throw new Error(`attendait 1 alerte ouverte, trouvé ${rows.length}`);
   }
   console.info(
-    `[seed-capacidades] aviso criado pelo emissor real: ${rows[0]!.kind} · ${rows[0]!.severity} · "${rows[0]!.title}"`,
+    `[seed-capacidades] alerte créée par l'émetteur réel : ${rows[0]!.kind} · ${rows[0]!.severity} · "${rows[0]!.title}"`,
   );
   await pool.end();
 }
 
 main().catch(async (err) => {
-  console.error("[seed-capacidades] falhou:", err);
+  console.error("[seed-capacidades] échec :", err);
   await pool.end().catch(() => undefined);
   process.exit(1);
 });

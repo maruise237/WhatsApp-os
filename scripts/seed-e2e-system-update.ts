@@ -79,7 +79,7 @@ async function ensurePlatformAdmin(userId: string): Promise<void> {
     .eq("user_id", userId)
     .maybeSingle();
   if (existing && (existing as { revoked_at: string | null }).revoked_at === null) {
-    console.log(`[seed] platform_admin já ativo: ${userId}`);
+    console.log(`[seed] platform_admin déjà actif : ${userId}`);
     return;
   }
   if (existing) {
@@ -96,7 +96,7 @@ async function ensurePlatformAdmin(userId: string): Promise<void> {
     reason: "seed e2e — dono do servidor para o teste de atualização self-service",
   } as never);
   if (error) throw new Error(`insert platform_admins: ${error.message}`);
-  console.log(`[seed] platform_admin criado: ${userId}`);
+  console.log(`[seed] platform_admin créé : ${userId}`);
 }
 
 /**
@@ -120,13 +120,13 @@ async function revogarPlatformAdmin(userId: string, razao: string): Promise<void
     .maybeSingle();
   if (erroLeitura) {
     throw new Error(
-      `nao deu para ler platform_admins de ${userId}: ${erroLeitura.message}. ` +
-        "A revogacao NAO aconteceu — nao trate este seed como auto-cura.",
+      `impossible de lire platform_admins de ${userId} : ${erroLeitura.message}. ` +
+        "La révocation N'a PAS eu lieu — ne traitez pas ce seed comme une auto-réparation.",
     );
   }
   if (!existing) return; // nunca foi promovido — nada a curar
   if ((existing as { revoked_at: string | null }).revoked_at !== null) {
-    console.log(`[seed] platform_admin já revogado: ${userId}`);
+    console.log(`[seed] platform_admin déjà révoqué : ${userId}`);
     return;
   }
   const { error } = await admin
@@ -168,10 +168,10 @@ async function main(): Promise<void> {
   const adminUser = creds.users.admin;
   if (!donoUser)
     throw new Error(
-      "creds.users.dono ausente — rode `pnpm exec tsx scripts/seed-e2e-credentials.ts` primeiro " +
-        "(o quinto usuário do seed base é quem vira dono do servidor)",
+      "creds.users.dono absent — lancez d'abord `pnpm exec tsx scripts/seed-e2e-credentials.ts` " +
+        "(le cinquième utilisateur du seed de base est celui qui devient propriétaire du serveur)",
     );
-  if (!adminUser) throw new Error("creds.users.admin ausente — rode seed-e2e-credentials.ts primeiro");
+  if (!adminUser) throw new Error("creds.users.admin absent — lancez d'abord seed-e2e-credentials.ts");
 
   await ensurePlatformAdmin(donoUser.id);
   await revogarPlatformAdmin(
@@ -180,10 +180,10 @@ async function main(): Promise<void> {
       "quem é dono é o e2e-dono (ver o cabeçalho deste arquivo)",
   );
   await resetSystemVersion();
-  console.log("\n✅ Seed da atualização self-service completo.");
+  console.log("\n✅ Seed de la mise à jour en libre-service terminé.");
 }
 
 main().catch((err) => {
-  console.error("❌ Seed da atualização self-service falhou:", err);
+  console.error("❌ Échec du seed de la mise à jour en libre-service :", err);
   process.exit(1);
 });

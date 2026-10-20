@@ -7,10 +7,10 @@ async function main() {
   });
   console.info("destinatario resolvido:", to);
   try {
-    const r = await a.send({ sessionRef: "ignorado", to: to!, kind: "text", body: "Teste do adapter oficial do DeskcommCRM." });
-    console.info("ENVIADO:", JSON.stringify(r));
+    const r = await a.send({ sessionRef: "ignorado", to: to!, kind: "text", body: "Test de l'adaptateur officiel de DeskcommCRM." });
+    console.info("ENVOYÉ :", JSON.stringify(r));
   } catch (e) {
-    console.info("RECUSADO:", e instanceof Error ? e.message : String(e));
+    console.info("REFUSÉ :", e instanceof Error ? e.message : String(e));
   }
 }
 void main();

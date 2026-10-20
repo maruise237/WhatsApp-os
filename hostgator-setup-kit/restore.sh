@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# Restaura o banco a partir de um dump gerado pelo backup.sh.
-# CUIDADO: sobrescreve o schema/dados atuais do banco.
+# Restaure la base à partir d'un dump généré par backup.sh.
+# ATTENTION : écrase le schéma/les données actuels de la base.
 #
 #   bash hostgator-setup-kit/restore.sh backups/db-20260702-030000.sql.gz
 source "$(dirname "$0")/_common.sh"
 enter_project
 
 DUMP="${1:-}"
-[ -n "$DUMP" ] && [ -f "$DUMP" ] || die "Uso: restore.sh <arquivo-db-*.sql.gz>"
+[ -n "$DUMP" ] && [ -f "$DUMP" ] || die "Usage : restore.sh <fichier-db-*.sql.gz>"
 
-c_ylw "⚠ Isto vai SOBRESCREVER o banco em $NEON_DATA_API_URL."
-read -r -p "Digite 'RESTAURAR' para confirmar: " a
-[ "$a" = "RESTAURAR" ] || die "Cancelado."
+c_ylw "⚠ Ceci va ÉCRASER la base de $NEON_DATA_API_URL."
+read -r -p "Tapez 'RESTAURER' pour confirmer : " a
+[ "$a" = "RESTAURER" ] || die "Annulé."
 
-step "Restaurando $DUMP"
+step "Restauration de $DUMP"
 gunzip -c "$DUMP" | docker run --rm -i postgres:17-alpine psql "$(url_do_schema)" \
-  && c_grn "✓ banco restaurado" || die "Falha na restauração — veja o log acima."
+  && c_grn "✓ base restaurée" || die "Échec de la restauration — voir le journal ci-dessus."
 
-c_ylw "Reinicie o app: docker compose $(dc_files) restart app"
+c_ylw "Redémarrez l'app : docker compose $(dc_files) restart app"

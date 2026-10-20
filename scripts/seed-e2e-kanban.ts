@@ -157,6 +157,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error("❌ Kanban seed falhou:", err);
+  console.error("❌ Échec du seed Kanban :", err);
   process.exit(1);
 });

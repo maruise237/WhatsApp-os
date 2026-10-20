@@ -18,7 +18,7 @@ const admin = createClient(env.NEON_DATA_API_URL!, env.NEON_SERVICE_ROLE_JWT!, {
 async function main() {
   const { data: list } = await admin.auth.admin.listUsers({ perPage: 200 });
   const user = list.users.find((u) => u.email === EMAIL);
-  if (!user) throw new Error(`user ${EMAIL} não encontrado`);
+  if (!user) throw new Error(`utilisateur ${EMAIL} introuvable`);
   console.log("[user]", user.id);
 
   let { data: org } = await admin
@@ -41,13 +41,13 @@ async function main() {
       .single<{ id: string; onboarded_at: string | null }>();
     if (r.error || !r.data) throw r.error ?? new Error("org insert");
     org = r.data;
-    console.log("[org] criada (sem onboarded_at):", org.id);
+    console.log("[org] créée (sans onboarded_at) :", org.id);
   } else {
     if (org.onboarded_at) {
       await admin.from("organizations").update({ onboarded_at: null } as never).eq("id", org.id);
       console.log("[org] existente — onboarded_at zerado:", org.id);
     } else {
-      console.log("[org] existente, ainda não onboarded:", org.id);
+      console.log("[org] existante, pas encore onboardée :", org.id);
     }
   }
 
@@ -68,7 +68,7 @@ async function main() {
   if (ins.error) throw ins.error;
   console.log("[membership] anexada como admin à nova org");
 
-  console.log(`\n✅ Login com ${EMAIL} agora cairá em /onboarding/welcome`);
+  console.log(`\n✅ La connexion avec ${EMAIL} arrivera maintenant sur /onboarding/welcome`);
   console.log(`   org_id: ${org.id}  slug: ${ORG_SLUG}`);
 }
 

@@ -45,7 +45,7 @@ for (const [k, v] of Object.entries(env)) process.env[k] ??= v;
 const NEON_DATA_API_URL = env.NEON_DATA_API_URL!;
 const SERVICE_ROLE = env.NEON_SERVICE_ROLE_JWT!;
 if (!NEON_DATA_API_URL || !SERVICE_ROLE) {
-  throw new Error("Faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT em .env.local");
+  throw new Error("NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT manquants dans .env.local");
 }
 
 const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
@@ -114,7 +114,7 @@ async function ensureLead(
     .order("is_default", { ascending: false })
     .limit(1)
     .maybeSingle();
-  if (!pipeline) throw new Error("org sem funil — rode scripts/seed-e2e-credentials.ts antes");
+  if (!pipeline) throw new Error("org sans entonnoir — lancez scripts/seed-e2e-credentials.ts avant");
   const pipelineId = (pipeline as { id: string }).id;
 
   const { data: stage } = await admin
@@ -127,7 +127,7 @@ async function ensureLead(
     .order("position", { ascending: true })
     .limit(1)
     .maybeSingle();
-  if (!stage) throw new Error("funil sem etapa aberta");
+  if (!stage) throw new Error("entonnoir sans étape ouverte");
 
   // Frio: cinco dias sem movimento. É o que põe o negócio no Radar.
   const cincoDiasAtras = new Date(Date.now() - 5 * 86_400_000).toISOString();
@@ -209,7 +209,7 @@ async function main(): Promise<void> {
   )) as { agendado: boolean; retorno_id?: string; quando?: string; mensagem?: string };
 
   if (!resultado.agendado) {
-    throw new Error(`a capacidade recusou o agendamento: ${JSON.stringify(resultado)}`);
+    throw new Error(`la capacité a refusé la planification : ${JSON.stringify(resultado)}`);
   }
 
   const bloco = {

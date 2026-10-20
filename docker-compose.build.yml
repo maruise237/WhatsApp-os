@@ -1,30 +1,30 @@
-# Override OPCIONAL para buildar a imagem localmente em vez de puxar do registry.
-# Uso (avançado — requer VPS >=4GB RAM ou swap; build leva ~15-25min num VPS):
+# Override OPTIONNEL pour construire l'image localement au lieu de la tirer du registre.
+# Usage (avancé — exige un VPS >=4 Go de RAM ou du swap ; le build prend ~15-25 min sur un VPS) :
 #   docker compose -f docker-compose.prod.yml -f docker-compose.build.yml build
 #   docker compose -f docker-compose.prod.yml up -d
 #
-# O caminho normal (leigo) NÃO usa este arquivo — puxa a imagem pronta do GHCR.
+# Le chemin normal (non-initié) N'utilise PAS ce fichier — il tire l'image prête depuis GHCR.
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-      # Sem args de segredo: a imagem é genérica (NEXT_PUBLIC_* viram placeholder
-      # no build e os valores reais entram em runtime via env_file). APP_VERSION
-      # não é segredo — é o que /api/v1/health responde, e sem ele a imagem
-      # local diria "desconhecido", que é a resposta certa para uma imagem que
-      # não veio de release nenhuma.
+      # Sans args de secret : l'image est générique (les NEXT_PUBLIC_* deviennent des placeholders
+      # au build et les vraies valeurs entrent à l'exécution via env_file). APP_VERSION
+      # n'est pas un secret — c'est ce que répond /api/v1/health, et sans lui l'image
+      # locale dirait « inconnue », ce qui est la bonne réponse pour une image qui
+      # ne vient d'aucune release.
       args:
         APP_VERSION: ${APP_VERSION:-local}
     image: ${APP_IMAGE:-deskcomm-app:local}
     pull_policy: never
 
-  # O worker e o scheduler já têm `build:` no compose de produção (é o escape
-  # que mantém a mudança aditiva). O que este override acrescenta é o
-  # `pull_policy: never`: sem ele, um `up -d` iria ao registry e substituiria a
-  # imagem local em silêncio — o mesmo modo de falha que o runbook descreve
-  # para o app, e que já mordeu uma vez.
+  # Le worker et le scheduler ont déjà `build:` dans le compose de production (c'est l'issue de secours
+  # qui garde le changement additif). Ce que cet override ajoute, c'est le
+  # `pull_policy: never` : sans lui, un `up -d` irait au registre et remplacerait
+  # l'image locale en silence — le même mode d'échec que le runbook décrit
+  # pour l'app, et qui a déjà mordu une fois.
   worker:
     build:
       args:

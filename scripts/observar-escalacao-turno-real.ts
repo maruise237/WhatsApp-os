@@ -105,7 +105,7 @@ async function main(): Promise<void> {
   // ser exercitado — a chave Anthropic desta máquina está sem crédito.
   // process.env vence o arquivo: dá para rodar com outra chave sem escrevê-la em disco.
   const key = process.env.OPENAI_API_KEY ?? env.OPENAI_API_KEY;
-  if (!key) throw new Error("OPENAI_API_KEY ausente — sem ela não há turno real");
+  if (!key) throw new Error("OPENAI_API_KEY absente — sans elle il n'y a pas de tour réel");
   const label = "Observacao W3 (chave real openai)";
   const { data: credExistente } = await admin
     .from("ai_provider_credentials")
@@ -252,7 +252,7 @@ async function main(): Promise<void> {
 }
 
 main().catch(async (err) => {
-  console.error("[observar] falhou:", err);
+  console.error("[observar] échec :", err);
   await pool.end().catch(() => undefined);
   process.exit(1);
 });

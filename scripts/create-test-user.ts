@@ -36,7 +36,7 @@ async function main() {
       .single<{ id: string }>();
     if (r.error || !r.data) throw r.error ?? new Error("org insert");
     org = r.data;
-    console.log("[org] criada:", org.id);
+    console.log("[org] créée :", org.id);
   } else {
     console.log("[org] existente:", org.id);
   }
@@ -45,7 +45,7 @@ async function main() {
   let user = list.users.find((u) => u.email === EMAIL);
   if (user) {
     await admin.auth.admin.updateUserById(user.id, { password: PASSWORD, email_confirm: true });
-    console.log("[user] existente — senha resetada:", user.id);
+    console.log("[user] existant — mot de passe réinitialisé :", user.id);
   } else {
     const r = await admin.auth.admin.createUser({
       email: EMAIL,
@@ -55,7 +55,7 @@ async function main() {
     });
     if (r.error || !r.data?.user) throw r.error ?? new Error("user create");
     user = r.data.user;
-    console.log("[user] criado:", user.id);
+    console.log("[user] créé :", user.id);
   }
 
   const { data: m } = await admin
@@ -82,7 +82,7 @@ async function main() {
     console.log("[membership] inserida → admin");
   }
 
-  console.log("\n✅ Pronto");
+  console.log("\n✅ Prêt");
   console.log(`   email:    ${EMAIL}`);
   console.log(`   password: ${PASSWORD}`);
   console.log(`   user_id:  ${user.id}`);
@@ -90,6 +90,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("❌ Falhou:", err);
+  console.error("❌ Échec :", err);
   process.exit(1);
 });

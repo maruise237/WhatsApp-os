@@ -32,7 +32,7 @@ async function main() {
     const body = (await res.json().catch(() => ({}))) as Record<string, unknown>;
     const errCode = (body as { error?: { code?: string } }).error?.code;
     record(
-      "TC-01 endpoint rejeita request sem segredo (403 forbidden)",
+      "TC-01 l'endpoint rejette une requête sans secret (403 forbidden)",
       res.status === 403 && errCode === "forbidden",
       `status=${res.status} code=${errCode ?? "?"}`,
     );
@@ -44,7 +44,7 @@ async function main() {
       headers: { Authorization: "Bearer wrong-secret-xxx" },
     });
     record(
-      "TC-02 endpoint rejeita Bearer invalido",
+      "TC-02 l'endpoint rejette un Bearer invalide",
       res.status === 403,
       `status=${res.status}`,
     );
@@ -64,7 +64,7 @@ async function main() {
       typeof d.outcomes === "object" &&
       Array.isArray(d.errors);
     record(
-      "TC-03 endpoint aceita Bearer INTERNAL_CRON_SECRET e retorna {batch_size, outcomes, errors}",
+      "TC-03 l'endpoint accepte Bearer INTERNAL_CRON_SECRET et renvoie {batch_size, outcomes, errors}",
       ok,
       `status=${res.status} batch_size=${d?.batch_size} outcomes=${JSON.stringify(d?.outcomes)}`,
     );
@@ -76,7 +76,7 @@ async function main() {
       headers: { "x-cron-secret": CRON_SECRET },
     });
     record(
-      "TC-04 endpoint aceita header X-Cron-Secret (alias do spec)",
+      "TC-04 l'endpoint accepte l'en-tête X-Cron-Secret (alias de la spec)",
       res.status === 200,
       `status=${res.status}`,
     );
@@ -88,13 +88,13 @@ async function main() {
       headers: { Authorization: `Bearer ${FALLBACK_SECRET}` },
     });
     record(
-      "TC-05 fallback INTERNAL_SECRET tambem aceito",
+      "TC-05 repli INTERNAL_SECRET accepté aussi",
       res.status === 200,
       `status=${res.status}`,
     );
   } else {
     record(
-      "TC-05 fallback INTERNAL_SECRET tambem aceito",
+      "TC-05 repli INTERNAL_SECRET accepté aussi",
       true,
       "skipped: secrets equal or fallback not set",
     );
@@ -107,7 +107,7 @@ async function main() {
       headers: { Authorization: `Bearer ${CRON_SECRET}` },
     });
     record(
-      "TC-06 verb POST suportado (paridade com GET)",
+      "TC-06 verbe POST pris en charge (parité avec GET)",
       res.status === 200,
       `status=${res.status}`,
     );
@@ -120,7 +120,7 @@ async function main() {
     });
     const body = (await res.json()) as { data?: { errors?: unknown[] } };
     record(
-      "TC-07 re-execucao consecutiva e idempotente (sem errors[] populado)",
+      "TC-07 réexécution consécutive idempotente (sans errors[] rempli)",
       res.status === 200 && Array.isArray(body.data?.errors) && body.data!.errors!.length === 0,
       `status=${res.status} errors=${JSON.stringify(body.data?.errors)}`,
     );
@@ -134,7 +134,7 @@ async function main() {
     const body = (await res.json()) as { meta?: { requestId?: string } };
     const rid = body.meta?.requestId;
     record(
-      "TC-08 response inclui meta.requestId (UUID) p/ correlacao com audit log",
+      "TC-08 la réponse inclut meta.requestId (UUID) pour la corrélation avec le journal d'audit",
       typeof rid === "string" && /^[0-9a-f-]{36}$/i.test(rid),
       `requestId=${rid ?? "missing"}`,
     );

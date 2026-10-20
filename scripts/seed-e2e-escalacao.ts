@@ -61,7 +61,7 @@ async function idDe<T extends { id: string }>(
   o: string,
 ): Promise<string> {
   const { data, error } = await p;
-  if (error || !data) throw new Error(`${o}: ${error?.message ?? "sem linha"}`);
+  if (error || !data) throw new Error(`${o} : ${error?.message ?? "aucune ligne"}`);
   return (data as T).id;
 }
 
@@ -278,7 +278,7 @@ async function main(): Promise<void> {
     [conversaId],
   );
   if (estado[0]?.force_human !== true || estado[0]?.bot_silenced_until === null) {
-    throw new Error("as travas da passagem não ficaram ligadas — o cenário não vale");
+    throw new Error("les verrous du passage de relais ne sont pas restés activés — le scénario ne vaut rien");
   }
 
   const proximo = {
@@ -296,13 +296,13 @@ async function main(): Promise<void> {
   fs.writeFileSync(CREDS, JSON.stringify(proximo, null, 2));
 
   console.info(
-    `[seed-escalacao] conversa=${conversaId} chamado=${chamado.caseId} negocio=${negocioId ?? "(nenhum)"} — travas ligadas`,
+    `[seed-escalacao] conversation=${conversaId} cas=${chamado.caseId} affaire=${negocioId ?? "(aucune)"} — verrous activés`,
   );
   await pool.end();
 }
 
 main().catch(async (err) => {
-  console.error("[seed-escalacao] falhou:", err);
+  console.error("[seed-escalacao] échec :", err);
   await pool.end().catch(() => undefined);
   process.exit(1);
 });

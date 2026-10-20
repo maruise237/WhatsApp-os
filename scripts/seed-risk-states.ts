@@ -38,8 +38,8 @@ async function main(): Promise<void> {
       .eq("status", "open")
       .limit(1);
     org = (data?.[0] as { organization_id: string } | undefined)?.organization_id;
-    if (!org) throw new Error("nenhum negócio aberto encontrado — passe o organization_id");
-    console.info(`[seed-risk] sem argumento: usando a org ${org.slice(0, 8)} (só faça isso em dev)`);
+    if (!org) throw new Error("aucune affaire ouverte trouvée — passez l'organization_id");
+    console.info(`[seed-risk] sans argument : utilisation de l'org ${org.slice(0, 8)} (ne faites cela qu'en dev)`);
   }
 
   const r = await semeiaEstadosDeRisco(admin, org);

@@ -25,7 +25,7 @@ anunciarDestino("seed-e2e-invite", credenciais);
 const url = credenciais.url;
 const serviceKey = credenciais.serviceRole;
 if (!url || !serviceKey) {
-  console.error("[seed-invite] faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT");
+  console.error("[seed-invite] NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT manquants");
   process.exit(1);
 }
 const admin = createClient(url, serviceKey, { auth: { persistSession: false } });
@@ -62,7 +62,7 @@ interface BaseCreds {
 async function findUserId(email: string): Promise<string | null> {
   for (let pagina = 1; pagina <= 5; pagina++) {
     const { data, error } = await admin.auth.admin.listUsers({ page: pagina, perPage: 200 });
-    if (error) throw new Error(`listUsers (página ${pagina}): ${error.message}`);
+    if (error) throw new Error(`listUsers (page ${pagina}) : ${error.message}`);
     const achado = data.users.find((u) => u.email === email);
     if (achado) return achado.id;
     if (data.users.length < 200) break;
@@ -73,12 +73,12 @@ async function findUserId(email: string): Promise<string | null> {
 async function main(): Promise<void> {
   // 1. Garante o seed base (org + admin+TOTP + agent + viewer).
   if (!fs.existsSync(CREDS_PATH)) {
-    console.log("[seed-invite] rodando seed base (seed-e2e-credentials)...");
+    console.log("[seed-invite] exécution du seed de base (seed-e2e-credentials)...");
     execFileSync("npx", ["tsx", "scripts/seed-e2e-credentials.ts"], { stdio: "inherit" });
   }
   const base = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as BaseCreds;
   const adminId = base.users.admin?.id;
-  if (!adminId) throw new Error("seed base sem admin em .e2e-creds.json");
+  if (!adminId) throw new Error("seed de base sans admin dans .e2e-creds.json");
 
   // 2. Resolve a org do admin (a org do seed base).
   const { data: membership, error: mErr } = await admin
@@ -88,29 +88,29 @@ async function main(): Promise<void> {
     .is("revoked_at", null)
     .limit(1)
     .maybeSingle();
-  if (mErr || !membership) throw new Error(`org do admin não resolvida: ${mErr?.message}`);
+  if (mErr || !membership) throw new Error(`org de l'admin non résolue : ${mErr?.message}`);
   const orgId = (membership as { organization_id: string }).organization_id;
-  console.log(`[seed-invite] org do seed base: ${orgId}`);
+  console.log(`[seed-invite] org du seed de base : ${orgId}`);
 
   // 3. Convidado: conta existe (mesma senha do base), SEM membership.
   let inviteeId = await findUserId(INVITE_EMAIL);
   if (inviteeId) {
     await admin.auth.admin.updateUserById(inviteeId, { password: base.password, email_confirm: true });
-    console.log(`[seed-invite] convidado existe: ${inviteeId}`);
+    console.log(`[seed-invite] l'invité existe : ${inviteeId}`);
   } else {
     const { data, error } = await admin.auth.admin.createUser({
       email: INVITE_EMAIL,
       password: base.password,
       email_confirm: true,
     });
-    if (error || !data.user) throw new Error(`createUser convidado: ${error?.message}`);
+    if (error || !data.user) throw new Error(`createUser invité : ${error?.message}`);
     inviteeId = data.user.id;
-    console.log(`[seed-invite] convidado criado: ${inviteeId}`);
+    console.log(`[seed-invite] invité créé : ${inviteeId}`);
   }
 
   // estado inicial: SEM membership (o aceite é quem cria)
   await admin.from("user_organizations").delete().eq("user_id", inviteeId).eq("organization_id", orgId);
-  console.log("[seed-invite] convidado sem membership (estado inicial correto)");
+  console.log("[seed-invite] invité sans membership (état initial correct)");
 
   const out = { org_id: orgId, invitee_email: INVITE_EMAIL, invitee_id: inviteeId };
   const outPath = path.join(process.cwd(), ".e2e-invite.json");
@@ -119,6 +119,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((e) => {
-  console.error("[seed-invite] falhou:", e);
+  console.error("[seed-invite] échec :", e);
   process.exit(1);
 });

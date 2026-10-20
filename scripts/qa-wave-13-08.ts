@@ -38,7 +38,7 @@ async function main() {
     const body = (await res.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
     const handlerReached = body.error?.message === "Internal secret missing or invalid.";
     record(
-      "TC-01 endpoint alcancavel sem segredo retorna 401 do HANDLER (nao do middleware)",
+      "TC-01 endpoint joignable sans secret renvoie 401 du HANDLER (pas du middleware)",
       res.status === 401 && handlerReached,
       `status=${res.status} code=${body.error?.code} message="${body.error?.message}"`,
     );
@@ -54,7 +54,7 @@ async function main() {
     const body = (await res.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
     const handlerReached = body.error?.message === "Internal secret missing or invalid.";
     record(
-      "TC-02 endpoint rejeita x-internal-secret invalido com 401 do handler",
+      "TC-02 l'endpoint rejette un x-internal-secret invalide avec 401 du handler",
       res.status === 401 && handlerReached,
       `status=${res.status} message="${body.error?.message}"`,
     );
@@ -74,7 +74,7 @@ async function main() {
     // (run row not found) — the key signal is "not 401 unauthenticated".
     const authPassed = res.status !== 401;
     record(
-      "TC-03 x-internal-secret valido bypassa auth (handler alcancado)",
+      "TC-03 un x-internal-secret valide contourne l'auth (handler atteint)",
       authPassed,
       `status=${res.status} code=${code}`,
     );
@@ -90,7 +90,7 @@ async function main() {
     const body = (await res.json().catch(() => ({}))) as { error?: { code?: string; message?: string } };
     const authPassed = res.status !== 401;
     record(
-      "TC-04 Authorization Bearer <secret> tambem aceito (legacy compat)",
+      "TC-04 Authorization Bearer <secret> accepté aussi (compat héritée)",
       authPassed,
       `status=${res.status} code=${body.error?.code}`,
     );
@@ -105,7 +105,7 @@ async function main() {
     });
     const body = (await res.json().catch(() => ({}))) as { error?: { code?: string } };
     record(
-      "TC-05 run_id invalido (nao-uuid) retorna 422 validation_failed",
+      "TC-05 run_id invalide (non-uuid) renvoie 422 validation_failed",
       res.status === 422 && body.error?.code === "validation_failed",
       `status=${res.status} code=${body.error?.code}`,
     );
@@ -120,7 +120,7 @@ async function main() {
     });
     const body = (await res.json().catch(() => ({}))) as { error?: { code?: string } };
     record(
-      "TC-06 body JSON malformado retorna 400 invalid_request",
+      "TC-06 corps JSON malformé renvoie 400 invalid_request",
       res.status === 400 && body.error?.code === "invalid_request",
       `status=${res.status} code=${body.error?.code}`,
     );
@@ -143,7 +143,7 @@ async function main() {
       body.error?.details?.meta?.requestId ??
       undefined;
     record(
-      "TC-07 response inclui meta.requestId (UUID) p/ correlacao com audit log",
+      "TC-07 la réponse inclut meta.requestId (UUID) pour la corrélation avec le journal d'audit",
       typeof rid === "string" && /^[0-9a-f-]{36}$/i.test(rid),
       `requestId=${rid ?? "missing"}`,
     );
@@ -156,7 +156,7 @@ async function main() {
       vercelTs,
     );
     record(
-      "TC-08 vercel.ts declara maxDuration=300 para o endpoint",
+      "TC-08 vercel.ts déclare maxDuration=300 pour l'endpoint",
       hasMaxDuration,
       `vercel.ts ${hasMaxDuration ? "contains" : "missing"} maxDuration:300 entry`,
     );

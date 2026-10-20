@@ -28,7 +28,7 @@ import {
 const escrever = process.argv.includes("--todas");
 const desconhecidos = process.argv.slice(2).filter((a) => a !== "--todas");
 if (desconhecidos.length > 0) {
-  console.error(`Argumento desconhecido: ${desconhecidos.join(", ")}. Use --todas ou nada.`);
+  console.error(`Argument inconnu : ${desconhecidos.join(", ")}. Utilisez --todas ou rien.`);
   process.exit(2);
 }
 
@@ -47,15 +47,15 @@ for (const par of TRADUCOES) {
   const selo = lerSelo(conteudo);
 
   if (selo && selo.original === par.original && selo.hash === esperado) {
-    console.info(`  em dia   ${par.traducao} (${par.original}@${esperado})`);
+    console.info(`  à jour   ${par.traducao} (${par.original}@${esperado})`);
     continue;
   }
 
   if (!escrever) {
     defasadas.push(
       selo === null
-        ? `${par.traducao} — sem selo na linha 1`
-        : `${par.traducao} — selo diz ${selo.original}@${selo.hash}, o original está em ${par.original}@${esperado}`,
+        ? `${par.traducao} — pas de sceau en ligne 1`
+        : `${par.traducao} — le sceau dit ${selo.original}@${selo.hash}, l'original est à ${par.original}@${esperado}`,
     );
     continue;
   }
@@ -66,13 +66,13 @@ for (const par of TRADUCOES) {
   const linhas = corpo.split("\n");
   linhas[0] = linhaDoSelo(par.original, esperado);
   writeFileSync(par.traducao, linhas.join("\n"));
-  console.info(`  selada   ${par.traducao} (${par.original}@${esperado})`);
+  console.info(`  scellée  ${par.traducao} (${par.original}@${esperado})`);
 }
 
 if (defasadas.length > 0) {
   console.error(
-    `\nTradução defasada:\n    ${defasadas.join("\n    ")}\n\n` +
-      `  Traduza a mudança do original e então rode: ${COMANDO_DE_RESELO}`,
+    `\nTraduction en retard :\n    ${defasadas.join("\n    ")}\n\n` +
+      `  Traduisez le changement de l'original puis lancez : ${COMANDO_DE_RESELO}`,
   );
   process.exit(1);
 }

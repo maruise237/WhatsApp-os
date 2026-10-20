@@ -71,7 +71,7 @@ async function main(): Promise<void> {
       case "prepare-agent-fixtures": {
         const creds = loadCreds();
         const fixtures = creds.followup_agent_fixtures;
-        if (!fixtures) throw new Error("followup_agent_fixtures ausente em .e2e-creds.json — rode seed-e2e-followup-agent.ts antes");
+        if (!fixtures) throw new Error("followup_agent_fixtures absent de .e2e-creds.json — lancez seed-e2e-followup-agent.ts avant");
         await pool.query(`update ai_provider_credentials set validated_at = now() where id = $1`, [
           fixtures.credential_id,
         ]);
@@ -89,10 +89,10 @@ async function main(): Promise<void> {
       case "seed-silent-contact": {
         const thresholdMinutes = Number(args[0]);
         const tag = args[1] ?? "journey";
-        if (!Number.isFinite(thresholdMinutes)) throw new Error("thresholdMinutes inválido");
+        if (!Number.isFinite(thresholdMinutes)) throw new Error("thresholdMinutes invalide");
         const creds = loadCreds();
         const fixtures = creds.followup_agent_fixtures;
-        if (!fixtures) throw new Error("followup_agent_fixtures ausente em .e2e-creds.json");
+        if (!fixtures) throw new Error("followup_agent_fixtures absent de .e2e-creds.json");
 
         const contactName = `Cliente Silêncio E2E ${tag} ${Date.now()}`;
         const { rows: contactRows } = await pool.query<{ id: string }>(
@@ -124,7 +124,7 @@ async function main(): Promise<void> {
       case "abrir-caso": {
         const conversationId = args[0];
         const source = args[1] ?? "agent";
-        if (!conversationId) throw new Error("conversationId obrigatório");
+        if (!conversationId) throw new Error("conversationId obligatoire");
         const creds = loadCreds();
         const { rows } = await pool.query<{ id: string }>(
           `insert into agent_cases
@@ -148,7 +148,7 @@ async function main(): Promise<void> {
       // ---- dispara `ai.case_closed`, que cancela o follow-up nascido dele.
       case "fechar-caso": {
         const caseId = args[0];
-        if (!caseId) throw new Error("caseId obrigatório");
+        if (!caseId) throw new Error("caseId obligatoire");
         const creds = loadCreds();
         const { rowCount } = await pool.query(
           `update agent_cases set status = 'resolved', closed_at = now()
@@ -164,7 +164,7 @@ async function main(): Promise<void> {
       // ---- os 5min/15min reais do wait/grace.
       case "fast-forward-enrollment": {
         const enrollmentId = args[0];
-        if (!enrollmentId) throw new Error("enrollmentId obrigatório");
+        if (!enrollmentId) throw new Error("enrollmentId obligatoire");
         const { rows } = await pool.query(
           `update followup_enrollments set next_eval_at = now() - interval '1 second', claimed_until = null
            where id = $1 returning id, current_node_id, status, next_eval_at`,
@@ -176,7 +176,7 @@ async function main(): Promise<void> {
 
       case "get-enrollment": {
         const enrollmentId = args[0];
-        if (!enrollmentId) throw new Error("enrollmentId obrigatório");
+        if (!enrollmentId) throw new Error("enrollmentId obligatoire");
         const { rows } = await pool.query(`select * from followup_enrollments where id = $1`, [enrollmentId]);
         out(rows[0] ?? null);
         break;
@@ -187,7 +187,7 @@ async function main(): Promise<void> {
       // ---- (a API de sweep não devolve id nenhum — é um cron fire-and-forget).
       case "find-enrollment": {
         const [orgId, pointerId, contactId] = args;
-        if (!orgId || !pointerId || !contactId) throw new Error("orgId, pointerId, contactId obrigatórios");
+        if (!orgId || !pointerId || !contactId) throw new Error("orgId, pointerId, contactId obligatoires");
         const { rows } = await pool.query(
           `select * from followup_enrollments
            where organization_id = $1 and pointer_id = $2 and contact_id = $3
@@ -204,7 +204,7 @@ async function main(): Promise<void> {
       // ---- não só que o enrollment avançou.
       case "find-job": {
         const [contactId, purpose] = args;
-        if (!contactId || !purpose) throw new Error("contactId, purpose obrigatórios");
+        if (!contactId || !purpose) throw new Error("contactId, purpose obligatoires");
         const { rows } = await pool.query(
           `select id, kind, status, payload from job_queue
            where contact_id = $1 and kind = 'followup_turn' and payload->>'purpose' = $2
@@ -224,7 +224,7 @@ async function main(): Promise<void> {
       case "simulate-inbound": {
         const [orgId, conversationId, contactId, channelSessionId, body] = args;
         if (!orgId || !conversationId || !contactId || !channelSessionId || !body) {
-          throw new Error("orgId, conversationId, contactId, channelSessionId, body obrigatórios");
+          throw new Error("orgId, conversationId, contactId, channelSessionId, body obligatoires");
         }
         const { rows: msgRows } = await pool.query<{ id: string }>(
           `insert into messages (organization_id, conversation_id, channel_session_id, contact_id, type, direction, status, body)
@@ -261,7 +261,7 @@ async function main(): Promise<void> {
       case "complete-turn": {
         const [orgId, enrollmentId, nodeId, resultJson] = args;
         if (!orgId || !enrollmentId || !nodeId || !resultJson) {
-          throw new Error("orgId, enrollmentId, nodeId, resultJson obrigatórios");
+          throw new Error("orgId, enrollmentId, nodeId, resultJson obligatoires");
         }
         const result = JSON.parse(resultJson) as TurnResult;
         const db = createPgAdminClient(pool);
@@ -274,7 +274,7 @@ async function main(): Promise<void> {
       // ---- passos (action_sent, ai_classified, ...) realmente aconteceram.
       case "list-events": {
         const enrollmentId = args[0];
-        if (!enrollmentId) throw new Error("enrollmentId obrigatório");
+        if (!enrollmentId) throw new Error("enrollmentId obligatoire");
         const { rows } = await pool.query<{ event_type: string }>(
           `select event_type from followup_enrollment_events where enrollment_id = $1 order by created_at`,
           [enrollmentId],
@@ -293,7 +293,7 @@ async function main(): Promise<void> {
       // ---- foram criados nos ticks intermediários).
       case "cleanup-flow-enrollments": {
         const pointerId = args[0];
-        if (!pointerId) throw new Error("pointerId obrigatório");
+        if (!pointerId) throw new Error("pointerId obligatoire");
         await pool.query(
           `delete from followup_enrollment_events where enrollment_id in (select id from followup_enrollments where pointer_id = $1)`,
           [pointerId],
@@ -309,7 +309,7 @@ async function main(): Promise<void> {
       // ---- baseline) — não deixa lixo acumulando no dev DB compartilhado.
       case "cleanup-contact": {
         const contactId = args[0];
-        if (!contactId) throw new Error("contactId obrigatório");
+        if (!contactId) throw new Error("contactId obligatoire");
         await pool.query(
           `delete from messages where conversation_id in (select id from conversations where contact_id = $1)`,
           [contactId],
@@ -326,7 +326,7 @@ async function main(): Promise<void> {
       }
 
       default:
-        throw new Error(`comando desconhecido: ${cmd ?? "(vazio)"}`);
+        throw new Error(`commande inconnue : ${cmd ?? "(vide)"}`);
     }
   } finally {
     await pool.end();
@@ -334,6 +334,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error("❌ e2e-followup-journey-helpers falhou:", err instanceof Error ? err.message : err);
+  console.error("❌ échec de e2e-followup-journey-helpers :", err instanceof Error ? err.message : err);
   process.exit(1);
 });

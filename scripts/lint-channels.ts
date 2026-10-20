@@ -201,23 +201,23 @@ const stale = [...DEBT].filter((f) => !offenders.includes(f)).sort();
 
 if (novos.length) {
   console.error(
-    "Nome de provider fora de lib/channels/ (doutrina restricao-de-canal, invariante 1):",
+    "Nom de provider hors de lib/channels/ (doctrine restricao-de-canal, invariant 1) :",
   );
   for (const f of novos.sort()) console.error(`  ${f}`);
   console.error(
-    "\nPergunte uma CAPACIDADE (`capabilitiesOf`), peça o adapter (`getAdapter`) ou o\n" +
-      "identificador da sessão (`resolveSessionRef`) — nunca nomeie o provider.",
+    "\nDemandez une CAPACITÉ (`capabilitiesOf`), demandez l'adaptateur (`getAdapter`) ou\n" +
+      "l'identifiant de la session (`resolveSessionRef`) — ne nommez jamais le provider.",
   );
 }
 
 if (stale.length) {
   console.error(
-    "\nEntradas de KNOWN_DEBT que já não vazam (ou o arquivo sumiu) — apague-as de\n" +
-      "scripts/lint-channels.ts para a catraca não afrouxar:",
+    "\nEntrées de KNOWN_DEBT qui ne fuient plus (ou dont le fichier a disparu) — supprimez-les de\n" +
+      "scripts/lint-channels.ts pour que le cliquet ne se relâche pas :",
   );
   for (const f of stale) console.error(`  ${f}`);
 }
 
 if (novos.length || stale.length) process.exit(1);
 
-console.info(`lint-channels: ok (${DEBT.size} arquivos de dívida conhecida, nenhum novo)`);
+console.info(`lint-channels : ok (${DEBT.size} fichiers de dette connue, aucun nouveau)`);

@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# Emergência: remove o MFA (TOTP) de um usuário que perdeu o autenticador.
-# No próximo login ele será obrigado a cadastrar um novo (MFA é forçado p/ admin).
+# Urgence : retire le MFA (TOTP) d'un utilisateur qui a perdu son authentificateur.
+# À la prochaine connexion, il devra en enregistrer un nouveau si la politique MFA l'exige.
 #
-#   bash hostgator-setup-kit/reset-mfa.sh dono@empresa.com
+#   bash hostgator-setup-kit/reset-mfa.sh proprietaire@entreprise.com
 source "$(dirname "$0")/_common.sh"
 enter_project
 
 EMAIL="${1:-}"
-[ -n "$EMAIL" ] || die "Uso: reset-mfa.sh <email>"
+[ -n "$EMAIL" ] || die "Usage : reset-mfa.sh <email>"
 
-c_ylw "Isto remove TODOS os fatores MFA de $EMAIL."
-read -r -p "Confirmar? (s/N) " a; resposta_sim "$a" || die "Cancelado."
+c_ylw "Ceci retire TOUS les facteurs MFA de $EMAIL."
+read -r -p "Confirmer ? (o/N) " a; resposta_sim "$a" || die "Annulé."
 
-step "Removendo fatores MFA"
+step "Suppression des facteurs MFA"
 psql_run <<SQL
 delete from auth.mfa_factors
 where user_id = (select id from auth.users where email = '${EMAIL}');
 SQL
-c_grn "✓ MFA removido. No próximo login, $EMAIL cadastra um novo autenticador."
+c_grn "✓ MFA retiré. À la prochaine connexion, $EMAIL enregistre un nouvel authentificateur."

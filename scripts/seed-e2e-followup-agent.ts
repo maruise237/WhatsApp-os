@@ -119,6 +119,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error("❌ Followup agent fixtures seed falhou:", err);
+  console.error("❌ Échec du seed des fixtures de l'agent de relance :", err);
   process.exit(1);
 });
