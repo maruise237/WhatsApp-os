@@ -29,7 +29,7 @@ export interface TriggerConfig {
 }
 
 export interface BusinessHoursConfig {
-  /** IANA tz, e.g. "America/Sao_Paulo". Defaults to UTC. */
+  /** IANA tz, e.g. "Africa/Douala". Defaults to UTC. */
   tz?: string | null;
   /** ["mon","tue",...] lowercase abbrev. Defaults to Mon-Fri. */
   days?: string[] | null;

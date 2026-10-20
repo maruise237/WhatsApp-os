@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { contactCreateSchema, type ContactCreate } from "@/lib/schemas/contacts";
 import { useCreateContact } from "@/hooks/contacts/useCreateContact";
 import { useT } from "@/hooks/i18n/useT";
+import { normaliserTelephone } from "@/lib/telephone/normaliser";
 
 interface FormShape {
   name?: string;
@@ -49,7 +50,11 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
     const payload: Record<string, unknown> = { source: "manual" };
     if (values.name?.trim()) payload.name = values.name.trim();
     if (values.email?.trim()) payload.email = values.email.trim();
-    if (values.phone_number?.trim()) payload.phone_number = values.phone_number.trim();
+    // Numéro local (`699 99 88 88`) ⇒ +237… ; illisible ⇒ envoyé tel quel, et le
+    // schéma E.164 ci-dessous explique le format attendu.
+    if (values.phone_number?.trim()) {
+      payload.phone_number = normaliserTelephone(values.phone_number) ?? values.phone_number.trim();
+    }
     if (values.cpf?.trim()) payload.cpf = values.cpf.trim();
     if (tags.length) payload.tags = tags;
 
@@ -92,7 +97,7 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
             <Label htmlFor="phone_number">{t("Telefone (E.164)")}</Label>
             <Input
               id="phone_number"
-              placeholder="+5511999998888"
+              placeholder="+237 6XX XX XX XX"
               {...form.register("phone_number")}
             />
           </div>

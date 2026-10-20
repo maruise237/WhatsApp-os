@@ -143,7 +143,7 @@ function montaHandler(doGenerate: unknown, maxSendsPerTurn?: number) {
         capabilities: () => ({ freeform: true, media: true, audio: true }),
         costPerMessage: () => ({ currency: "BRL", cents: 0 }),
       }) as never,
-    // Terça, 15h BRT: dentro da janela anti-ban (7h-22h) — sem isso o gate `pacing`
+    // Terça, 19h em Douala (fuso padrão): dentro da janela anti-ban (7h-22h) — sem isso o gate `pacing`
     // vetaria por horário, e o teste mediria o motivo errado.
     clock: () => new Date("2026-07-28T18:00:00Z"),
     sleep: async () => {},

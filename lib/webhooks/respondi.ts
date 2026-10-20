@@ -23,7 +23,7 @@
  * inalterado — é o requisito explícito de preservar o comportamento atual.
  */
 import type { MappedLead } from "@/lib/webhooks/inbound";
-import { normalizePhoneBR } from "@/lib/webhooks/inbound";
+import { normalizePhone } from "@/lib/webhooks/inbound";
 
 interface RespondiRawAnswer {
   answer: unknown;
@@ -203,7 +203,7 @@ export interface RespondiMapped extends MappedLead {
   companyName: string | null;
 }
 
-export function mapRespondiPayload(payload: RespondiPayload): RespondiMapped {
+export function mapRespondiPayload(payload: RespondiPayload, indicatif?: string): RespondiMapped {
   const { respondent, form } = payload;
   const answers = respondent.answers;
 
@@ -258,7 +258,7 @@ export function mapRespondiPayload(payload: RespondiPayload): RespondiMapped {
 
   return {
     name: pick("name"),
-    phone: normalizePhoneBR(pick("phone")),
+    phone: normalizePhone(pick("phone"), indicatif),
     email: pick("email"),
     custom_fields,
     source_metadata,

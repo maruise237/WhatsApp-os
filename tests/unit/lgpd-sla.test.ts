@@ -3,12 +3,14 @@
  *
  * Verifies that the LGPD SLA calculator correctly skips:
  *  - Weekends (Saturday + Sunday)
- *  - Brazilian national holidays (fixed and moveable 2026-2030)
+ *  - Holidays passed explicitly (the Brazilian list is no longer the default)
  */
 
 import { describe, it, expect } from "vitest";
 import { computeDueAt } from "@/lib/lgpd/sla";
 import { HOLIDAYS_BR_ISO } from "@/lib/lgpd/holidays-br";
+
+const BR = new Set(HOLIDAYS_BR_ISO);
 
 /** Parse a YYYY-MM-DD string as a UTC Date */
 function d(iso: string): Date {
@@ -24,6 +26,11 @@ describe("computeDueAt — business day SLA calculator", () => {
   // -------------------------------------------------------------------------
   // 5 simple cases — no holidays, just weekends
   // -------------------------------------------------------------------------
+
+  it("par défaut, aucun férié brésilien : le 01/05 compte comme jour ouvré", () => {
+    // 2026-04-30 (Thu) + 1 → Fri 01 May (plus sauté par défaut)
+    expect(fmt(computeDueAt(d("2026-04-30"), 1))).toBe("2026-05-01");
+  });
 
   it("simple: Mon + 5 business days = next Mon (skips weekend)", () => {
     // 2026-05-04 is Monday; +5 business days = Mon 2026-05-11
@@ -91,7 +98,7 @@ describe("computeDueAt — business day SLA calculator", () => {
     //  day13 = Tue 19
     //  day14 = Wed 20
     //  day15 = Thu 21
-    expect(fmt(computeDueAt(d("2026-04-29"), 15))).toBe("2026-05-21");
+    expect(fmt(computeDueAt(d("2026-04-29"), 15, BR))).toBe("2026-05-21");
   });
 
   it("2026-04-30 (Thu) + 15 úteis pula 01/05 feriado + fim de semana", () => {
@@ -100,7 +107,7 @@ describe("computeDueAt — business day SLA calculator", () => {
     // day1=Mon 04, day2=Tue05, day3=Wed06, day4=Thu07, day5=Fri08
     // day6=Mon11, day7=Tue12, day8=Wed13, day9=Thu14, day10=Fri15
     // day11=Mon18, day12=Tue19, day13=Wed20, day14=Thu21, day15=Fri22
-    expect(fmt(computeDueAt(d("2026-04-30"), 15))).toBe("2026-05-22");
+    expect(fmt(computeDueAt(d("2026-04-30"), 15, BR))).toBe("2026-05-22");
   });
 
   it("2026-12-23 (Wed) + 15 úteis pula Natal + Ano Novo", () => {
@@ -110,7 +117,7 @@ describe("computeDueAt — business day SLA calculator", () => {
     // skip Fri01(AnoNovo), skip Sat02, skip Sun03
     // day6=Mon04, day7=Tue05, day8=Wed06, day9=Thu07, day10=Fri08
     // day11=Mon11, day12=Tue12, day13=Wed13, day14=Thu14, day15=Fri15
-    expect(fmt(computeDueAt(d("2026-12-23"), 15))).toBe("2027-01-15");
+    expect(fmt(computeDueAt(d("2026-12-23"), 15, BR))).toBe("2027-01-15");
   });
 
   it("2026-02-13 (Fri) + 15 úteis pula Carnaval 16-17/02", () => {
@@ -122,7 +129,7 @@ describe("computeDueAt — business day SLA calculator", () => {
     // day4=Mon23, day5=Tue24, day6=Wed25, day7=Thu26, day8=Fri27
     // day9=Mon02Mar, day10=Tue03, day11=Wed04, day12=Thu05, day13=Fri06
     // day14=Mon09, day15=Tue10
-    expect(fmt(computeDueAt(d("2026-02-13"), 15))).toBe("2026-03-10");
+    expect(fmt(computeDueAt(d("2026-02-13"), 15, BR))).toBe("2026-03-10");
   });
 
   // -------------------------------------------------------------------------

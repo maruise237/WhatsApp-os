@@ -18,6 +18,7 @@ import { sendEmail } from "@/lib/email/resend";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
 import type { LgpdRequest } from "./types";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export type AlarmThreshold = "data_request_d5" | "redact_d10";
 
@@ -124,7 +125,7 @@ export async function triggerSlaAlarm(
           : "J+10 (anonymisation/suppression)";
 
       const dueFmt = new Date(request.due_at).toLocaleString("fr-FR", {
-        timeZone: "America/Sao_Paulo",
+        timeZone: FUSEAU_PAR_DEFAUT,
         day: "2-digit",
         month: "2-digit",
         year: "numeric",

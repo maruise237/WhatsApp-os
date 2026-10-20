@@ -33,15 +33,15 @@
  */
 export const IDIOMAS_DA_DEFINICAO: { codigo: string; rotulo: string }[] = [
   { codigo: "fr", rotulo: "Français" },
+  { codigo: "en", rotulo: "Anglais" },
+  { codigo: "en_US", rotulo: "Anglais (États-Unis)" },
+  { codigo: "en_GB", rotulo: "Anglais (Royaume-Uni)" },
   { codigo: "es", rotulo: "Espagnol" },
   { codigo: "es_AR", rotulo: "Espagnol (Argentine)" },
   { codigo: "es_MX", rotulo: "Espagnol (Mexique)" },
   { codigo: "es_ES", rotulo: "Espagnol (Espagne)" },
   { codigo: "pt_BR", rotulo: "Portugais (Brésil)" },
   { codigo: "pt_PT", rotulo: "Portugais (Portugal)" },
-  { codigo: "en", rotulo: "Anglais" },
-  { codigo: "en_US", rotulo: "Anglais (États-Unis)" },
-  { codigo: "en_GB", rotulo: "Anglais (Royaume-Uni)" },
 ];
 
 /** Limites da plataforma. Passar deles é recusa, e o contador evita descobrir tarde. */

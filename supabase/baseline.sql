@@ -1092,7 +1092,7 @@ CREATE TABLE IF NOT EXISTS "public"."ai_faq_items" (
     "question" "text" NOT NULL,
     "answer" "text" NOT NULL,
     "tags" "text"[] DEFAULT '{}'::"text"[] NOT NULL,
-    "locale" "text" DEFAULT 'pt-BR'::"text" NOT NULL,
+    "locale" "text" DEFAULT 'fr-FR'::"text" NOT NULL,
     "position" integer DEFAULT 0 NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL
@@ -1471,7 +1471,7 @@ CREATE TABLE IF NOT EXISTS "public"."crm_leads" (
     "lost_reason" "text",
     "position_in_stage" numeric DEFAULT 1000 NOT NULL,
     "value_cents" bigint,
-    "currency" "text" DEFAULT 'BRL'::"text",
+    "currency" "text" DEFAULT 'XAF'::"text",
     "owner_user_id" "uuid",
     "assigned_at" timestamp with time zone,
     "last_activity_at" timestamp with time zone,
@@ -1723,7 +1723,7 @@ CREATE TABLE IF NOT EXISTS "public"."orders" (
     "contact_id" "uuid",
     "status" "text" NOT NULL,
     "total_cents" bigint NOT NULL,
-    "currency" character(3) DEFAULT 'BRL'::"bpchar" NOT NULL,
+    "currency" character(3) DEFAULT 'XAF'::"bpchar" NOT NULL,
     "payment_method" "text",
     "fulfillment_status" "text",
     "tracking_code" "text",
@@ -1750,8 +1750,8 @@ CREATE TABLE IF NOT EXISTS "public"."organizations" (
     "display_name" "text" NOT NULL,
     "cnpj" "text",
     "status" "text" DEFAULT 'active'::"text" NOT NULL,
-    "timezone" "text" DEFAULT 'America/Sao_Paulo'::"text" NOT NULL,
-    "locale" "text" DEFAULT 'pt-BR'::"text" NOT NULL,
+    "timezone" "text" DEFAULT 'Africa/Douala'::"text" NOT NULL,
+    "locale" "text" DEFAULT 'fr-FR'::"text" NOT NULL,
     "rate_limit_rps" integer DEFAULT 100 NOT NULL,
     "ai_budget_cents" bigint,
     "media_retention_days" integer DEFAULT 365 NOT NULL,
@@ -14271,7 +14271,7 @@ create table if not exists public.products (
   title text not null check (length(trim(title)) between 1 and 240),
   description text,
   price_cents bigint not null check (price_cents >= 0),
-  currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
+  currency text not null default 'XAF' check (currency ~ '^[A-Z]{3}$'),
   stock integer not null default 0 check (stock >= 0),
   is_active boolean not null default true,
   metadata jsonb not null default '{}'::jsonb,
@@ -14306,7 +14306,7 @@ create table if not exists public.sales_orders (
   status text not null default 'en_cours'
     check (status in ('en_cours', 'en_attente_paiement', 'payée', 'a_livrer', 'livree', 'refusee', 'annulee')),
   total_cents bigint not null check (total_cents >= 0),
-  currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
+  currency text not null default 'XAF' check (currency ~ '^[A-Z]{3}$'),
   created_by_user_id uuid references neon_auth.user(id) on delete set null,
   paid_at timestamptz,
   paid_by_user_id uuid references neon_auth.user(id) on delete set null,
@@ -14330,7 +14330,7 @@ create table if not exists public.sales_order_items (
   product_title text not null,
   quantity integer not null check (quantity > 0),
   unit_price_cents bigint not null check (unit_price_cents >= 0),
-  currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
+  currency text not null default 'XAF' check (currency ~ '^[A-Z]{3}$'),
   created_at timestamptz not null default now(),
   foreign key (order_id, organization_id)
     references public.sales_orders(id, organization_id) on delete cascade,
@@ -14969,6 +14969,32 @@ $body$,
   end if;
 end
 $skills$;
+
+-- ---- Défauts du marché africain francophone : XAF / Africa/Douala / fr-FR (migration 0186) ----
+-- Les défauts de colonne supposaient le Brésil : devise `BRL`, fuseau
+-- `America/Sao_Paulo`, langue `pt-BR`. Le marché par défaut est désormais le
+-- Cameroun (XAF / Africa/Douala / fr-FR) ; chaque organisation garde son
+-- propre fuseau, sa langue et la devise de chaque montant.
+--
+-- On ne change QUE le défaut de colonne : aucune ligne existante n'est
+-- réécrite — une commande en BRL d'un clone brésilien reste en BRL, une
+-- organisation réglée sur São Paulo y reste. Le stockage reste en `_cents`
+-- (XAF n'a pas de décimales à l'affichage ; c'est l'affichage qui l'ignore).
+--
+-- `alter column ... set default` est idempotent ; `if exists` garde la
+-- migration applicable sur un clone partiel.
+alter table if exists public.organizations      alter column timezone set default 'Africa/Douala';
+alter table if exists public.organizations      alter column locale   set default 'fr-FR';
+alter table if exists public.ai_faq_items       alter column locale   set default 'fr-FR';
+alter table if exists public.crm_leads          alter column currency set default 'XAF';
+alter table if exists public.orders             alter column currency set default 'XAF';
+alter table if exists public.products           alter column currency set default 'XAF';
+alter table if exists public.sales_orders       alter column currency set default 'XAF';
+alter table if exists public.sales_order_items  alter column currency set default 'XAF';
+
+-- La documentation de colonne citait encore pt-BR comme exemple et repli.
+comment on column public.contacts.locale is
+  'Langue préférée du contact (ex. : fr-FR, en-US). NULL = hérite de la langue de l''organisation (repli : fr-FR).';
 
 -- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 --

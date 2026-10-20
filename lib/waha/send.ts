@@ -25,7 +25,7 @@ export interface ResolveWahaChatIdInput {
    *
    * Existe separada de `waIdentity` por uma razão que custou uma correção
    * errada: `wa_identity` é GERADA com o telefone na frente, então o contato
-   * @lid que ganha número passa a valer `phone:+55…` e o teste
+   * @lid que ganha número passa a valer `phone:+237…` e o teste
    * `waIdentity.startsWith("lid:")` fica FALSO — exatamente para quem a regra
    * precisava valer. Ler o lid daqui é o que faz a ordem abaixo significar algo.
    */

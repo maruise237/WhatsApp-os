@@ -10,6 +10,7 @@
 import { z } from "zod";
 
 import { fusoValido } from "@/lib/tempo/fusos";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -90,7 +91,7 @@ export const availabilityScheduleSchema = z.object({
     .min(1)
     .max(64)
     .refine(fusoValido, "fuseau horaire invalide (ex. : Africa/Abidjan)")
-    .default("America/Sao_Paulo"),
+    .default(FUSEAU_PAR_DEFAUT),
   windows: z.array(scheduleWindowSchema).max(50).default([]),
 });
 export type AvailabilitySchedule = z.infer<typeof availabilityScheduleSchema>;

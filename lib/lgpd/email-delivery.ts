@@ -28,6 +28,7 @@ import { createHash } from "node:crypto";
 
 import { NEUTROS_DE_SAIDA, type MarcaDeSaida } from "@/lib/branding/saida";
 import { sendEmail } from "@/lib/email/resend";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export class EmailNotConfigured extends Error {
   constructor() {
@@ -60,7 +61,7 @@ export async function sendExportEmail(args: SendArgs): Promise<{ messageId: stri
   const shortId = args.requestId.slice(0, 8);
   const orgName = escapeHtml(args.marca.nome);
   const expiresFmt = args.expiresAt.toLocaleString("fr-FR", {
-    timeZone: "America/Sao_Paulo",
+    timeZone: FUSEAU_PAR_DEFAUT,
   });
 
   const subject = `Votre demande de données personnelles #${shortId}`;

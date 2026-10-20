@@ -121,7 +121,7 @@ describe("4B — turno sem credencial NENHUMA (nem env, nem BYOK)", () => {
           noProgressBlock: 5,
         },
       },
-      // Terça, 15h BRT: dentro da janela anti-ban (7h-22h). Sem fixar o
+      // Terça, 19h em Douala (fuso padrão): dentro da janela anti-ban (7h-22h). Sem fixar o
       // relógio, este teste mede o motivo ERRADO quando a suíte roda fora da
       // janela — a guarda de horário vem ANTES da checagem de credencial no
       // fluxo, então o turno é adiado e nunca chega ao `credencial LLM` que a

@@ -1,23 +1,34 @@
 import { describe, it, expect } from "vitest";
-import { mapInboundPayload, normalizePhoneBR, verifyInboundSignature } from "@/lib/webhooks/inbound";
+import { mapInboundPayload, normalizePhone, verifyInboundSignature } from "@/lib/webhooks/inbound";
 import { createHmac } from "node:crypto";
 
-describe("normalizePhoneBR", () => {
-  it("já em E.164 passa direto", () => expect(normalizePhoneBR("+5511998765432")).toBe("+5511998765432"));
-  it("DDD+numero BR ganha +55", () => expect(normalizePhoneBR("11 99876-5432")).toBe("+5511998765432"));
-  it("com 55 na frente sem +", () => expect(normalizePhoneBR("5511998765432")).toBe("+5511998765432"));
-  it("fixo BR 10 dígitos", () => expect(normalizePhoneBR("1133334444")).toBe("+551133334444"));
-  it("lixo → null", () => expect(normalizePhoneBR("abc")).toBeNull());
+describe("normalizePhone", () => {
+  it("já em E.164 passa direto", () => expect(normalizePhone("+5511998765432")).toBe("+5511998765432"));
+  it("numéro local camerounais reçoit +237 par défaut", () =>
+    expect(normalizePhone("6 99 87 65 43")).toBe("+237699876543"));
+  it("indicatif sans + gardé", () => expect(normalizePhone("237699876543")).toBe("+237699876543"));
+  it("com 55 na frente sem +", () => expect(normalizePhone("5511998765432")).toBe("+5511998765432"));
+  it("org brésilienne (55) : DDD+numero ganha +55", () =>
+    expect(normalizePhone("11 99876-5432", "55")).toBe("+5511998765432"));
+  it("org ivoirienne (225) : le 0 initial fait partie du numéro", () =>
+    expect(normalizePhone("07 01 02 03 04", "225")).toBe("+2250701020304"));
+  it("org française (33) : le 0 interurbain est retiré", () =>
+    expect(normalizePhone("06 12 34 56 78", "33")).toBe("+33612345678"));
+  it("lixo → null", () => expect(normalizePhone("abc")).toBeNull());
   it("vazio/não-string → null", () => {
-    expect(normalizePhoneBR("")).toBeNull();
-    expect(normalizePhoneBR(42 as unknown)).toBeNull();
+    expect(normalizePhone("")).toBeNull();
+    expect(normalizePhone(42 as unknown)).toBeNull();
   });
 });
 
 describe("mapInboundPayload", () => {
   it("aliases default: nome/telefone/email", () => {
-    const m = mapInboundPayload({ nome: "Ana", telefone: "11998765432", email: "a@b.com" });
-    expect(m).toMatchObject({ name: "Ana", phone: "+5511998765432", email: "a@b.com" });
+    const m = mapInboundPayload({ nome: "Ana", telefone: "699876543", email: "a@b.com" });
+    expect(m).toMatchObject({ name: "Ana", phone: "+237699876543", email: "a@b.com" });
+  });
+  it("indicatif de l'organisation appliqué au numéro local", () => {
+    const m = mapInboundPayload({ telefone: "11998765432" }, {}, "55");
+    expect(m.phone).toBe("+5511998765432");
   });
   it("whatsapp como alias de phone; extras viram custom_fields; utm_* vira source_metadata", () => {
     const m = mapInboundPayload({ name: "Bo", whatsapp: "+5511998765432", empresa: "ACME", utm_source: "instagram" });

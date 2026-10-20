@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEditLead } from "@/hooks/kanban/useUpdateLead";
 import type { Lead } from "@/lib/types/leads";
 import { updateLeadSchema, type UpdateLeadInput } from "@/lib/schemas/leads";
-import { parseReaisToCents } from "@/lib/money";
+import { centsVersSaisie, parseMontantEnCents } from "@/lib/money";
 import { EcoDoValor } from "./EcoDoValor";
 import { useT } from "@/hooks/i18n/useT";
 
@@ -36,10 +36,6 @@ interface Props {
   pipelineId: string;
 }
 
-function centsToReais(cents: number | null | undefined): string {
-  if (cents === null || cents === undefined) return "";
-  return (cents / 100).toFixed(2).replace(".", ",");
-}
 
 export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) {
   const t = useT();
@@ -49,7 +45,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
     defaultValues: {
       title: lead.title,
       description: lead.description ?? "",
-      valueReais: centsToReais(lead.value_cents),
+      valueReais: centsVersSaisie(lead.value_cents, lead.currency),
       tagsRaw: (lead.tags ?? []).join(", "),
       expected_close_date: lead.expected_close_date ?? "",
     },
@@ -60,7 +56,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
       form.reset({
         title: lead.title,
         description: lead.description ?? "",
-        valueReais: centsToReais(lead.value_cents),
+        valueReais: centsVersSaisie(lead.value_cents, lead.currency),
         tagsRaw: (lead.tags ?? []).join(", "),
         expected_close_date: lead.expected_close_date ?? "",
       });
@@ -77,7 +73,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
     const reais = values.valueReais.trim();
     let valueCents: number | null = null;
     if (reais.length > 0) {
-      valueCents = parseReaisToCents(reais);
+      valueCents = parseMontantEnCents(reais, lead.currency);
       if (valueCents === null) {
         form.setError("valueReais", { message: t("Valor inválido") });
         return;
@@ -133,14 +129,14 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="valueReais">{t("Valor (R$)")}</Label>
+              <Label htmlFor="valueReais">{t("Montante")}</Label>
               <Input
                 id="valueReais"
                 inputMode="decimal"
-                placeholder="0,00"
+                placeholder="15 000"
                 {...form.register("valueReais")}
               />
-              <EcoDoValor control={form.control} />
+              <EcoDoValor control={form.control} devise={lead.currency} />
               {form.formState.errors.valueReais && (
                 <p className="text-xs text-error-fg">{form.formState.errors.valueReais.message}</p>
               )}
