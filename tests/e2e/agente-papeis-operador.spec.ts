@@ -27,7 +27,7 @@ import { loginComoAdmin, lerCreds, type CredsE2E } from "./helpers/login-admin";
 
 let creds: CredsE2E = lerCreds();
 
-test.use({ locale: "pt-BR" });
+test.use({ locale: "fr-FR" });
 
 // Mesmo orçamento dos vizinhos: o login pode disparar uma re-semeadura de
 // credenciais quando outra sessão rotaciona o fator TOTP deste banco.
@@ -65,7 +65,7 @@ test.describe.configure({ mode: "serial" });
 let pagina: Page;
 
 test.beforeAll(async ({ browser }: { browser: Browser }) => {
-  const contexto = await browser.newContext({ locale: "pt-BR" });
+  const contexto = await browser.newContext({ locale: "fr-FR" });
   pagina = await contexto.newPage();
   creds = await loginComoAdmin(pagina, creds);
 });

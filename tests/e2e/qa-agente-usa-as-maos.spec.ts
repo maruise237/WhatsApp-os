@@ -410,8 +410,8 @@ async function criarVersao(
   return (JSON.parse(corpo) as { data: { id: string } }).data.id;
 }
 
-test.describe("QA — o agente usa as mãos que a W4 entregou?", () => {
-  test("um modelo de verdade escolhendo as capacidades novas", async ({ page }) => {
+test.describe("QA — l’agent utilise-t-il les mains livrées par la W4 ?", () => {
+  test("un vrai modèle qui choisit les nouvelles capacités", async ({ page }) => {
     test.setTimeout(600_000);
     fs.mkdirSync(SAIDA, { recursive: true });
     fs.mkdirSync(TURNOS, { recursive: true });

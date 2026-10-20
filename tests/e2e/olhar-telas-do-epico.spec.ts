@@ -59,10 +59,10 @@ test.beforeAll(async () => {
   await afirmarAdminDeTenantPuro(creds.users.admin!.email);
 });
 
-test.describe("as telas do épico abrem para uma pessoa", () => {
+test.describe("les écrans de l’épique s’ouvrent pour une personne", () => {
   test.describe.configure({ timeout: 180_000 });
 
-  test("cada tela abre, tem conteúdo e não cospe erro no console", async ({ page }) => {
+  test("chaque écran s’ouvre, a du contenu et ne crache pas d’erreur dans la console", async ({ page }) => {
     const erros: string[] = [];
     // A URL entra no registro porque sem ela o achado é indiagnosticável: a
     // mensagem do browser para uma requisição barrada é "Failed to load resource:

@@ -28,7 +28,7 @@ const EVIDENCIA = path.join(process.cwd(), "evidence", "ia-360-w1");
 
 let creds: CredsE2E = lerCreds();
 
-test.use({ locale: "pt-BR" });
+test.use({ locale: "fr-FR" });
 
 // 240s e não 120s: o orçamento inclui UMA re-semeadura de credenciais, que o
 // login dispara sozinho quando outra sessão rotaciona o fator TOTP deste banco
@@ -70,14 +70,14 @@ test.describe("Créer un agent depuis l’écran", () => {
     page,
   }) => {
     await page.goto("/app/ai/agents/new");
-    const nome = `Recepção da Clínica ${Date.now()}`;
+    const nome = `Accueil de la clinique ${Date.now()}`;
 
     await page.locator("#name").fill(nome);
     await page
       .locator("textarea")
       .first()
       .fill(
-        "Você é a recepção de uma clínica odontológica. Atenda com educação, responda dúvidas sobre horários e ajude a marcar consulta.",
+        "Vous êtes l’accueil d’une clinique dentaire. Répondez poliment, répondez aux questions sur les horaires et aidez à prendre rendez-vous.",
       );
 
     // Os três campos que a tela exige. São comboboxes do Radix, NÃO `<select>`

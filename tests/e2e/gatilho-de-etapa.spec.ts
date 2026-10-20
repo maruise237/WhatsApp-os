@@ -112,13 +112,13 @@ async function loginComTotp(page: Page, email: string, secret: string): Promise<
 
 const GRAFO_MINIMO = {
   nodes: [
-    { id: "trigger-1", type: "trigger", label: "Início", position: { x: 0, y: 0 }, config: {} },
+    { id: "trigger-1", type: "trigger", label: "Début", position: { x: 0, y: 0 }, config: {} },
     { id: "end-1", type: "end", label: "Fim", position: { x: 0, y: 200 }, config: { outcome: "exhausted" } },
   ],
   edges: [{ id: "edge-1", source: "trigger-1", target: "end-1", priority: 0, condition: { type: "always" } }],
 };
 
-test.describe("gatilho de etapa do funil", () => {
+test.describe("déclencheur d’étape du tableau", () => {
   test.beforeAll(() => {
     if (!creds.followup_agent_fixtures) {
       execFileSync("npx", ["tsx", "scripts/seed-e2e-followup-agent.ts"], { stdio: "inherit" });
@@ -137,7 +137,7 @@ test.describe("gatilho de etapa do funil", () => {
     });
   });
 
-  test("o negócio movido no quadro para a etapa escolhida arma o follow-up sozinho", async ({ page }) => {
+  test("l’affaire déplacée sur le tableau vers l’étape choisie arme la relance toute seule", async ({ page }) => {
     test.setTimeout(180_000);
     expect(creds.admin_totp?.secret, "seed deve gravar admin_totp").toBeTruthy();
     expect(creds.followup_agent_fixtures, "seed-e2e-followup-agent.ts deve gravar as fixtures").toBeTruthy();
@@ -210,13 +210,13 @@ test.describe("gatilho de etapa do funil", () => {
       await expect(page.getByTestId("flow-builder-shell")).toBeVisible({ timeout: ESPERA });
 
       const botaoDoGatilho = page.getByTestId("trigger-config-button");
-      await expect(botaoDoGatilho).toHaveText("Gatilho: Manual", { timeout: ESPERA });
+      await expect(botaoDoGatilho).toHaveText("Déclencheur : manuel", { timeout: ESPERA });
       await botaoDoGatilho.click();
 
       const painel = page.getByTestId("trigger-config-panel");
       await expect(painel).toBeVisible({ timeout: ESPERA });
       await painel.getByRole("combobox").first().click();
-      await page.getByRole("option", { name: "Etapa do funil", exact: true }).click();
+      await page.getByRole("option", { name: "Étape du tableau", exact: true }).click();
 
       // A ETAPA É ESCOLHIDA PELO NOME. Se algum dia isto voltar a ser um campo
       // de uuid, esta linha é a que reprova.
@@ -252,7 +252,7 @@ test.describe("gatilho de etapa do funil", () => {
       // O rótulo persistente carrega o funil — é a superfície que o dono lê uma
       // semana depois, sem abrir nada, e sem o funil ela não distinguia qual das
       // homônimas estava armada.
-      await expect(botaoDoGatilho).toHaveText(`Gatilho: entrou em «${etapaDestino.name}» em ${funil.name}`, {
+      await expect(botaoDoGatilho).toHaveText(`Déclencheur : entrée dans «${etapaDestino.name}» dans ${funil.name}`, {
         timeout: ESPERA,
       });
 
@@ -270,8 +270,8 @@ test.describe("gatilho de etapa do funil", () => {
       // ---- 2. publica o fluxo pela tela ----
       // O rótulo é "Fluxo publicado." e o selo vira "Ativo" — não existe selo
       // "Publicado" nesta tela, e procurá-lo é vermelho garantido.
-      await page.getByRole("button", { name: /^Publicar$/ }).click();
-      await expect(page.getByText("Fluxo publicado.").first()).toBeVisible({ timeout: ESPERA });
+      await page.getByRole("button", { name: /^Publier$/ }).click();
+      await expect(page.getByText("Flux publié.").first()).toBeVisible({ timeout: ESPERA });
       const depoisDoPublish = await page.request.get(`/api/v1/ai/followup-flows/${flowId}`);
       expect(((await depoisDoPublish.json()) as { data: { status: string } }).data.status).toBe("active");
       await page.screenshot({
@@ -369,7 +369,7 @@ test.describe("gatilho de etapa do funil", () => {
 
       // ---- 6. e o dono vê o follow-up na fila, sem ter apertado nada ----
       await page.goto("/app/ai/followups");
-      await page.getByRole("tab", { name: "Fila" }).click();
+      await page.getByRole("tab", { name: "File" }).click();
       const linha = page.getByTestId("queue-row").filter({ hasText: contato.display_name });
       await expect(linha).toHaveCount(1, { timeout: ESPERA });
       await page.screenshot({

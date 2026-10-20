@@ -100,8 +100,8 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
   throw new Error("MFA challenge failed after 2 TOTP attempts");
 }
 
-test.describe("followup flows — lista + criação (Task 6.1)", () => {
-  test("manager cria um fluxo e ele aparece na lista com badge Rascunho", async ({ page }) => {
+test.describe("flows de relance — liste + création (Task 6.1)", () => {
+  test("le manager crée un flow et il apparaît dans la liste avec le badge Brouillon", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
@@ -129,7 +129,7 @@ test.describe("followup flows — lista + criação (Task 6.1)", () => {
     await page.screenshot({ path: "test-results/followup-6.1-04-flow-in-list.png", fullPage: true });
   });
 
-  test("viewer não vê o botão de criar fluxo (RBAC)", async ({ page }) => {
+  test("le viewer ne voit pas le bouton de création de flow (RBAC)", async ({ page }) => {
     // Achado ao rodar a suíte completa desta task: este teste ficou
     // desatualizado pela Task 7.1 (commit 6546271, já na main deste worktree
     // antes desta sessão) — o gate de PÁGINA que redirecionava viewer pra
@@ -186,13 +186,13 @@ async function nodeIdsByPrefix(page: Page, prefix: string): Promise<string[]> {
   return ids;
 }
 
-test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
+test.describe("constructeur de flow — canvas visuel (Task 6.2)", () => {
   // Canvas grande: com 4+ nós o fitView inicial pode chegar a zoom 2x (maxZoom
   // default) — um viewport pequeno deixa nós fora da área visível, e
   // coordenadas de handle fora do viewport quebram os drags de conexão.
   test.use({ viewport: { width: 1600, height: 900 } });
 
-  test("manager cria um fluxo, clica na linha e o canvas React Flow abre", async ({ page }) => {
+  test("le manager crée un flow, clique sur la ligne et le canvas React Flow s’ouvre", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
@@ -216,7 +216,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     await page.screenshot({ path: "test-results/followup-6.2-01-canvas-empty.png", fullPage: true });
   });
 
-  test("adiciona os 4 nós via paleta e conecta trigger→wait→action→end", async ({ page }) => {
+  test("ajoute les 4 nœuds via la palette et relie trigger→wait→action→end", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
@@ -263,7 +263,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     await page.screenshot({ path: "test-results/followup-6.2-02-connected.png", fullPage: true });
   });
 
-  test("clica no nó Aguardar e configura 10min; clica no nó Ação e configura o prompt_hint", async ({ page }) => {
+  test("clique sur le nœud Attendre et configure 10 min ; clique sur le nœud Action et configure le prompt_hint", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
@@ -307,7 +307,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
    * a generic banner), fix it, publish for real, reload and prove the graph
    * persisted identically, and confirm Rollback is disabled with 1 version.
    */
-  test("fluxo completo: montar, publicar incompleto (422 ancorado), corrigir, publicar, recarregar, rollback desabilitado", async ({
+  test("parcours complet : monter, publier incomplet (422 ancré), corriger, publier, recharger, rollback désactivé", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
@@ -424,7 +424,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
   });
 });
 
-test.describe("followup flow builder — editor de condição de aresta / ai_classify (Task 6.3)", () => {
+test.describe("constructeur de flow — éditeur de condition d’arête / ai_classify (Task 6.3)", () => {
   test.use({ viewport: { width: 1600, height: 900 } });
 
   /**
@@ -479,7 +479,7 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
    * used to set `class_match`/`always` per edge. That flip is the whole point
    * of this task: the editor is what unblocks ai_classify in the canvas.
    */
-  test("ai_classify só publica depois de configurar class_match/no_reply/always nas arestas de saída", async ({
+  test("ai_classify ne se publie qu’après avoir configuré class_match/no_reply/always sur les arêtes de sortie", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
@@ -626,7 +626,7 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
  * `page.tsx` deixa manager VER o formulário mas `readOnly=true` — só admin
  * salva (achado ao ler o RBAC real antes de escrever o teste).
  */
-test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
+test.describe("sélecteur de flow de relance dans l’éditeur de l’agent (Task 7.2)", () => {
   test.beforeAll(() => {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-followup-agent.ts"], { stdio: "inherit" });
   // O seed ESCREVE em .e2e-creds.json, e `creds` foi lido no carregamento do
@@ -637,7 +637,7 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
     creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
   });
 
-  test("admin vincula um fluxo publicado ao agente, salva, e a persistência é provada via API", async ({
+  test("l’admin lie un flow publié à l’agent, enregistre, et la persistance est prouvée via l’API", async ({
     page,
   }) => {
     expect(creds.admin_totp?.secret, "seed deve gravar admin_totp em .e2e-creds.json").toBeTruthy();
@@ -675,7 +675,7 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
       data: {
         name: agentName,
         version: {
-          system_prompt: "Você é um atendente de teste E2E. Responda de forma clara em pt-BR.",
+          system_prompt: "Vous êtes un agent de test E2E. Répondez clairement en français.",
           provider: "anthropic",
           model: "claude-sonnet-4-6",
           credential_id: fixtures.credential_id,
@@ -740,8 +740,8 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
   });
 });
 
-test.describe("followup flow builder — controle de gatilho na PublishBar (Task 8.5)", () => {
-  test("operador arma o gatilho de Silêncio (threshold) pela UI; oferece só os kinds com motor; PATCH round-trips", async ({
+test.describe("constructeur de flow — contrôle du déclencheur dans la PublishBar (Task 8.5)", () => {
+  test("l’opérateur arme le déclencheur Silence (seuil) via l’UI ; seuls les types avec moteur sont proposés ; PATCH aller-retour", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);

@@ -49,7 +49,7 @@ function loadCreds(): Creds {
 
 const creds = loadCreds();
 const ts = Date.now();
-const SOURCE_NAME = `E2E Captação ${ts}`;
+const SOURCE_NAME = `E2E Captation ${ts}`;
 const LEAD_NAME = `Beatriz Captada ${ts}`;
 const IP_DE_TESTE = "203.0.113.42";
 
@@ -61,11 +61,11 @@ async function login(page: Page, email: string): Promise<void> {
   await page.waitForURL(/\/app\//);
 }
 
-test.describe("histórico de leads captados", () => {
+test.describe("historique des leads captés", () => {
   test.setTimeout(180_000);
   test.use({ actionTimeout: 15_000 });
 
-  test("captação entra, aparece na tela com dados/hora/origem/IP, e a recusada também", async ({
+  test("la captation arrive, s’affiche avec données/heure/origine/IP, et la refusée aussi", async ({
     page,
     request,
   }) => {
@@ -76,7 +76,7 @@ test.describe("histórico de leads captados", () => {
       await page.goto(`${APP_URL}/app/webhooks`);
 
       // ── Uma fonte de captação, criada pela tela ──────────────────────────
-      await page.getByRole("button", { name: /Nova fonte|Criar primeira fonte/ }).click();
+      await page.getByRole("button", { name: /Nouvelle source|Créer la première source/ }).click();
       await expect(page.getByRole("dialog")).toBeVisible();
       await page.locator("#src-name").fill(SOURCE_NAME);
       const dialog = page.getByRole("dialog");
@@ -88,7 +88,7 @@ test.describe("histórico de leads captados", () => {
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/webhook-sources") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar fonte" }).click(),
+        page.getByRole("button", { name: "Créer la source" }).click(),
       ]);
       expect(criacao.ok()).toBeTruthy();
       const corpo = (await criacao.json()) as { data: { id: string; path_token: string } };
@@ -109,7 +109,7 @@ test.describe("histórico de leads captados", () => {
           nome: LEAD_NAME,
           telefone: "11955554444",
           email: `beatriz${ts}@exemplo.test`,
-          segmento: "Clínica odontológica",
+          segmento: "Clinique dentaire",
           utm_source: "instagram",
         },
       });
@@ -125,7 +125,7 @@ test.describe("histórico de leads captados", () => {
 
       // ── A TELA ───────────────────────────────────────────────────────────
       await page.goto(`${APP_URL}/app/webhooks`);
-      await page.getByRole("tab", { name: "Leads recebidos" }).click();
+      await page.getByRole("tab", { name: "Leads reçus" }).click();
 
       const linhaDoLead = page.getByRole("row", { name: new RegExp(LEAD_NAME) });
       await expect(linhaDoLead).toBeVisible({ timeout: 20_000 });
@@ -134,7 +134,7 @@ test.describe("histórico de leads captados", () => {
       // um `role="button"` na <tr> a tiraria da tabela para quem usa leitor de
       // tela — o botão é a célula, não a linha.
       await expect(linhaDoLead).toContainText(SOURCE_NAME);
-      await expect(linhaDoLead).toContainText("Virou lead");
+      await expect(linhaDoLead).toContainText("Devenu lead");
 
       // ── O painel: dados, hora, origem, IP ───────────────────────────────
       await linhaDoLead.getByRole("button", { name: new RegExp(LEAD_NAME) }).click();
@@ -142,7 +142,7 @@ test.describe("histórico de leads captados", () => {
       await expect(painel).toBeVisible();
 
       // 2. Com que dados — inclusive o campo do formulário que não é canônico.
-      await expect(painel.getByText("Clínica odontológica")).toBeVisible();
+      await expect(painel.getByText("Clinique dentaire")).toBeVisible();
       await expect(painel.getByText("11955554444")).toBeVisible();
 
       // 3. De onde — IP, página e UTM.
@@ -151,26 +151,26 @@ test.describe("histórico de leads captados", () => {
       await expect(painel.getByText("instagram")).toBeVisible();
 
       // O laço de retorno: daqui se chega ao lead.
-      await expect(painel.getByRole("link", { name: /Ver o lead no funil/ })).toBeVisible();
+      await expect(painel.getByRole("link", { name: /Voir le lead dans le tableau/ })).toBeVisible();
 
       await page.keyboard.press("Escape");
 
       // ── A RECUSADA aparece, e diz por quê ───────────────────────────────
-      await page.getByRole("row", { name: /Não entrou/ }).first().click();
+      await page.getByRole("row", { name: /Non entré/ }).first().click();
       const painelRecusa = page.getByRole("dialog");
       await expect(painelRecusa).toBeVisible();
       await expect(
-        painelRecusa.getByText(/não trazia nome, telefone nem e-mail/i),
+        painelRecusa.getByText(/ne contenait ni nom, ni téléphone, ni e-mail/i),
       ).toBeVisible();
       // Os campos crus estão lá — é o que quem depura precisa ver.
       await expect(painelRecusa.getByText("campo_estranho")).toBeVisible();
       await page.keyboard.press("Escape");
 
       // ── O filtro funciona (e é o que torna a tela usável com volume) ─────
-      await page.getByRole("combobox", { name: "Filtrar por resultado" }).click();
-      await page.getByRole("option", { name: "Não entrou" }).click();
+      await page.getByRole("combobox", { name: "Filtrer par résultat" }).click();
+      await page.getByRole("option", { name: "Non entré" }).click();
       await expect(page.getByRole("row", { name: new RegExp(LEAD_NAME) })).toHaveCount(0);
-      await expect(page.getByRole("row", { name: /Não entrou/ }).first()).toBeVisible();
+      await expect(page.getByRole("row", { name: /Non entré/ }).first()).toBeVisible();
     } finally {
       if (sourceId) {
         await request
@@ -180,7 +180,7 @@ test.describe("histórico de leads captados", () => {
     }
   });
 
-  test("o VIEWER não alcança o histórico — o formulário tem PII", async ({ page }) => {
+  test("le VIEWER n’accède pas à l’historique — le formulaire contient des données personnelles", async ({ page }) => {
     // A rota exige manager, e a RLS também. É o par que o arquivo forense
     // (`webhook_events_log`) não tem: lá a policy é org-flat.
     await login(page, creds.users.viewer!.email);

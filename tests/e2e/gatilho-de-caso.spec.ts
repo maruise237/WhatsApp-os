@@ -118,7 +118,7 @@ async function loginComTotp(page: Page, email: string, secret: string): Promise<
  *  que esta spec prova é o GATILHO; a espera é escolha de quem monta o fluxo. */
 const GRAFO_MINIMO = {
   nodes: [
-    { id: "trigger-1", type: "trigger", label: "Início", position: { x: 0, y: 0 }, config: {} },
+    { id: "trigger-1", type: "trigger", label: "Début", position: { x: 0, y: 0 }, config: {} },
     { id: "end-1", type: "end", label: "Fim", position: { x: 0, y: 200 }, config: { outcome: "exhausted" } },
   ],
   edges: [{ id: "edge-1", source: "trigger-1", target: "end-1", priority: 0, condition: { type: "always" } }],
@@ -137,7 +137,7 @@ async function drena(page: Page, secret: string): Promise<void> {
   expect(resumo.failed + resumo.dead, "nenhum handler pode ter falhado no dreno").toBe(0);
 }
 
-test.describe("gatilho de caso aberto", () => {
+test.describe("déclencheur de dossier ouvert", () => {
   test.beforeAll(() => {
     if (!creds.followup_agent_fixtures) {
       execFileSync("npx", ["tsx", "scripts/seed-e2e-followup-agent.ts"], { stdio: "inherit" });
@@ -151,7 +151,7 @@ test.describe("gatilho de caso aberto", () => {
     });
   });
 
-  test("o caso aberto pelo agente arma o follow-up, e resolvê-lo o cancela", async ({ page }) => {
+  test("le dossier ouvert par l’agent arme la relance, et le régler l’annule", async ({ page }) => {
     test.setTimeout(240_000);
     expect(creds.admin_totp?.secret, "seed deve gravar admin_totp").toBeTruthy();
 
@@ -185,23 +185,23 @@ test.describe("gatilho de caso aberto", () => {
       await expect(page.getByTestId("flow-builder-shell")).toBeVisible({ timeout: ESPERA });
 
       const botaoDoGatilho = page.getByTestId("trigger-config-button");
-      await expect(botaoDoGatilho).toHaveText("Gatilho: Manual", { timeout: ESPERA });
+      await expect(botaoDoGatilho).toHaveText("Déclencheur : manuel", { timeout: ESPERA });
       await botaoDoGatilho.click();
 
       const painel = page.getByTestId("trigger-config-panel");
       await expect(painel).toBeVisible({ timeout: ESPERA });
       await painel.getByRole("combobox").first().click();
-      await page.getByRole("option", { name: "Agente pediu ajuda", exact: true }).click({ timeout: ESPERA });
+      await page.getByRole("option", { name: "L’agent a demandé de l’aide", exact: true }).click({ timeout: ESPERA });
 
       // A tela tem que EXPLICAR o que o gatilho faz, e avisar do risco de duas
       // vozes. Se algum dia essa orientação sumir, é esta linha que reprova —
       // o aviso é a defesa principal contra o agente e o fluxo falarem juntos.
-      await expect(painel.getByText(/Comece o fluxo por uma espera/i)).toBeVisible({ timeout: ESPERA });
+      await expect(painel.getByText(/Commencez le flow par une attente/i)).toBeVisible({ timeout: ESPERA });
 
       await page.screenshot({ path: path.join(ARTIFACTS_DIR, "caso-01-gatilho-armado.png"), fullPage: true });
 
       await painel.getByTestId("trigger-config-save").click();
-      await expect(botaoDoGatilho).toHaveText("Gatilho: quando o agente pede ajuda", { timeout: ESPERA });
+      await expect(botaoDoGatilho).toHaveText("Déclencheur : lorsque l’agent demande de l’aide", { timeout: ESPERA });
 
       // O rótulo prova o que a tela mostra; o kind persistido prova o que foi
       // gravado. Se um dia divergirem, é esta linha que reprova.
@@ -211,8 +211,8 @@ test.describe("gatilho de caso aberto", () => {
       ).toBe("case_opened");
 
       // ---- 2. publica pela tela (o selo vira "Ativo"; não existe "Publicado") ----
-      await page.getByRole("button", { name: /^Publicar$/ }).click();
-      await expect(page.getByText("Fluxo publicado.").first()).toBeVisible({ timeout: ESPERA });
+      await page.getByRole("button", { name: /^Publier$/ }).click();
+      await expect(page.getByText("Flux publié.").first()).toBeVisible({ timeout: ESPERA });
       await page.screenshot({ path: path.join(ARTIFACTS_DIR, "caso-02-publicado.png"), fullPage: true });
 
       // ---- 3. cenário: o agente publicado que ARMA o fluxo (o gate) ----
@@ -259,7 +259,7 @@ test.describe("gatilho de caso aberto", () => {
         .toBe(true);
 
       await page.goto("/app/ai/followups");
-      await page.getByRole("tab", { name: "Fila" }).click();
+      await page.getByRole("tab", { name: "File" }).click();
       const linha = page.getByTestId("queue-row").filter({ hasText: cenario.contactName });
       await expect(linha).toHaveCount(1, { timeout: ESPERA });
       await page.screenshot({ path: path.join(ARTIFACTS_DIR, "caso-03-fila-com-o-followup.png"), fullPage: true });
@@ -294,18 +294,18 @@ test.describe("gatilho de caso aberto", () => {
         .toBe("cancelled");
 
       await page.reload();
-      await page.getByRole("tab", { name: "Fila" }).click();
+      await page.getByRole("tab", { name: "File" }).click();
       // ⚠️ BUSCAR, E NÃO CONFIAR NA PRIMEIRA PÁGINA. Cancelar zera o
       // `next_eval_at`, e a linha afunda na ordenação da fila — numa conta com
       // dezenas de follow-ups ela sai da primeira página. Medido: a asserção sem
       // busca reprovou com 0 linhas num banco com 52 enrollments, sendo que a
       // API devolvia a linha corretamente. É também o que o operador faria.
-      await page.getByLabel("Buscar contato").fill(cenario.contactName);
+      await page.getByLabel("Rechercher un contact").fill(cenario.contactName);
       const linhaCancelada = page.getByTestId("queue-row").filter({ hasText: cenario.contactName });
       await expect(linhaCancelada).toHaveCount(1, { timeout: ESPERA });
       // Pela TELA, e em português: o operador tem que conseguir ler que aquele
       // follow-up foi cancelado, não deduzir pela ausência.
-      await expect(linhaCancelada.getByText("Cancelado", { exact: true })).toBeVisible({ timeout: ESPERA });
+      await expect(linhaCancelada.getByText("Annulé", { exact: true })).toBeVisible({ timeout: ESPERA });
       await page.screenshot({ path: path.join(ARTIFACTS_DIR, "caso-04-cancelado-apos-resolver.png"), fullPage: true });
     } finally {
       if (flowId) await page.request.post(`/api/v1/ai/followup-flows/${flowId}/disable`, { data: {} });

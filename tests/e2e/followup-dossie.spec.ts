@@ -110,8 +110,8 @@ interface Cenario {
  */
 async function montaCenario(page: Page, tag: string): Promise<Cenario> {
   const stamp = Date.now();
-  const flowName = `E2E Dossiê ${tag} ${stamp}`;
-  const contactName = `Cliente Dossiê ${tag} ${stamp}`;
+  const flowName = `E2E Dossier ${tag} ${stamp}`;
+  const contactName = `Client Dossier ${tag} ${stamp}`;
 
   const flowRes = await page.request.post("/api/v1/ai/followup-flows", { data: { name: flowName } });
   expect(flowRes.status()).toBe(201);
@@ -321,8 +321,8 @@ test.describe("dossier de la relance — lire l’historique et intervenir", () 
 
     // Fluxo com espera ADAPTATIVA: é o único que tem plano a mostrar.
     const stamp = Date.now();
-    const flowName = `E2E Dossiê plano ${stamp}`;
-    const contactName = `Cliente Dossiê plano ${stamp}`;
+    const flowName = `E2E Dossier plano ${stamp}`;
+    const contactName = `Client Dossier plano ${stamp}`;
     const { data: flow } = (await (
       await page.request.post("/api/v1/ai/followup-flows", { data: { name: flowName } })
     ).json()) as ApiOk<{ id: string }>;

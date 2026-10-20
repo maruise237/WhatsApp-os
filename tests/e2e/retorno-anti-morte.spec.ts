@@ -72,17 +72,17 @@ function captura(page: Page, nome: string) {
   return page.screenshot({ path: path.join(EVIDENCIA, nome), fullPage: true });
 }
 
-test("o retorno marcado pelo agente aparece no Radar e na linha do tempo", async ({ page }) => {
+test("la relance planifiée par l’agent apparaît dans le Radar et dans la chronologie", async ({ page }) => {
   await login(page, creds.users.manager!.email);
 
   await page.goto("/app/radar");
-  await expect(page.getByRole("heading", { name: "Radar de risco" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Radar de risque" })).toBeVisible();
 
   const linha = page.locator('[data-testid="radar-item"]', { hasText: creds.retorno.lead_title });
   await expect(linha).toBeVisible();
   // "Em voo" é a afirmação de que a demanda NÃO está morrendo: alguém prometeu
   // voltar. Sem o retorno, este mesmo negócio apareceria como crítico.
-  await expect(linha).toContainText(/voo/i);
+  await expect(linha).toContainText(/en vol/i);
   await captura(page, "w2-retorno-no-radar.png");
 
   // A timeline do NEGÓCIO — o acontecimento tem de ser legível por quem opera,
@@ -101,44 +101,44 @@ test("o retorno marcado pelo agente aparece no Radar e na linha do tempo", async
   // começar por "Retorno agendado — " fazia o dossiê dizer a mesma frase duas
   // vezes. A asserção anterior (só `toContain` do motivo) passava com a
   // redundância dentro — foi preciso abrir o dossiê para ver.
-  expect(agendado!.reason?.toLowerCase().startsWith("retorno agendado")).toBe(false);
+  expect(agendado!.reason?.toLowerCase().startsWith("relance programmée")).toBe(false);
 });
 
-test("a linha do tempo do negócio mostra o retorno em português de gente", async ({ page }) => {
+test("la chronologie de l’affaire montre la relance en français compréhensible", async ({ page }) => {
   await login(page, creds.users.manager!.email);
   await page.goto(`/app/pipelines/${creds.retorno.pipeline_id}`);
 
   await page.getByRole("button", { name: creds.retorno.lead_title, exact: true }).click();
   const dossie = page.getByRole("dialog").first();
-  await expect(dossie.getByText("Retorno agendado", { exact: true }).first()).toBeVisible();
+  await expect(dossie.getByText("Relance programmée", { exact: true }).first()).toBeVisible();
 
   // O que o operador LÊ, não o que a API devolve: rótulo humano, sem
   // identificador técnico e sem a frase repetida.
-  const linha = (await dossie.innerText()).split("LINHA DO TEMPO")[1] ?? "";
+  const linha = (await dossie.innerText()).split("CHRONOLOGIE")[1] ?? "";
   expect(linha).not.toMatch(/followup_scheduled|followup_cancelled|demand_closed/);
-  expect(linha).not.toContain("Atividade registrada");
+  expect(linha).not.toContain("Activité enregistrée");
   await captura(page, "w2-retorno-na-linha-do-tempo.png");
 });
 
-test("uma pessoa desmarca o retorno pela fila, e o agente descobre", async ({ page }) => {
+test("une personne annule la relance depuis la file, et l’agent le découvre", async ({ page }) => {
   await login(page, creds.users.manager!.email);
 
   await page.goto("/app/ai/followups");
-  await page.getByRole("tab", { name: /fila/i }).click();
+  await page.getByRole("tab", { name: /file/i }).click();
 
   const linha = page.locator('[data-testid="queue-row"]', { hasText: creds.retorno.contact_name });
   await expect(linha).toBeVisible();
-  await expect(linha).toContainText("Agendada");
+  await expect(linha).toContainText("Programmée");
   await captura(page, "w2-retorno-na-fila-agendada.png");
 
   await linha.getByTestId("cancelar-item-da-fila").click();
-  await expect(page.getByText("Cancelar este retorno?")).toBeVisible();
+  await expect(page.getByText("Annuler cette relance ?")).toBeVisible();
   await captura(page, "w2-retorno-dialogo-de-cancelamento.png");
-  await page.getByRole("button", { name: "Cancelar retorno" }).click();
+  await page.getByRole("button", { name: "Annuler la relance" }).click();
 
   // ⚠️ "Cancelada", não "Concluída". Antes desta wave `enabled=false` era as duas
   // coisas, e a fila dizia ao operador que a mensagem tinha saído.
-  await expect(linha).toContainText("Cancelada", { timeout: 15_000 });
+  await expect(linha).toContainText("Annulée", { timeout: 15_000 });
   await captura(page, "w2-retorno-na-fila-cancelada.png");
 
   // A OUTRA PONTA: o agente, consultando pela capacidade real, vê o
@@ -153,5 +153,5 @@ test("uma pessoa desmarca o retorno pela fila, e o agente descobre", async ({ pa
   const doTeste = visto.retornos.find((r) => r.id === creds.retorno.retorno_id);
   expect(doTeste, "o agente não enxergou o retorno que ele mesmo marcou").toBeTruthy();
   expect(doTeste!.situacao).toBe("cancelado");
-  expect(doTeste!.motivo_do_cancelamento).toContain("pessoa da equipe");
+  expect(doTeste!.motivo_do_cancelamento).toContain("membre de l’équipe");
 });

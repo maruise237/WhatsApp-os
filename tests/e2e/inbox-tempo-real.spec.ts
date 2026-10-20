@@ -117,7 +117,7 @@ function chegarMensagem(conversationId: string, corpo: string): void {
   );
 }
 
-test.describe("inbox em tempo real", () => {
+test.describe("inbox en temps réel", () => {
   /**
    * O TETO DE 30s DO `playwright.config.ts` NÃO CABE NESTE TESTE.
    *
@@ -150,7 +150,7 @@ test.describe("inbox em tempo real", () => {
     fila = semearConversa();
   });
 
-  test("mensagem que chega aparece na conversa aberta, sem recarregar", async ({ page }) => {
+  test("le message qui arrive apparaît dans la conversation ouverte, sans recharger", async ({ page }) => {
 
     // `manager` e não `admin`: o admin do seed tem fator MFA cadastrado e o
     // login dele para em /login/mfa. O manager vê a aba "Todas" (leitura
@@ -227,7 +227,7 @@ test.describe("inbox em tempo real", () => {
       { timeout: 20_000 },
     );
 
-    const corpo = `chegou em tempo real ${Date.now()}`;
+    const corpo = `arrivé en temps réel ${Date.now()}`;
     chegarMensagem(conversationId, corpo);
 
     // O canal DO THREAD — que é quem traz esta mensagem. A asserção anterior

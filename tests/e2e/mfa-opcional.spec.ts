@@ -42,8 +42,8 @@ test.beforeAll(async () => {
     .from("organizations")
     .insert({
       slug: `mfa-opcional-${randomUUID().slice(0, 8)}`,
-      display_name: "Empresa Sem MFA",
-      legal_name: "Empresa Sem MFA",
+      display_name: "Entreprise sans MFA",
+      legal_name: "Entreprise sans MFA",
       status: "active",
       created_by: userId,
       // Já onboardada: o que se mede aqui é a entrada no app, não o wizard.
@@ -80,18 +80,18 @@ async function entrar(page: Page): Promise<void> {
 }
 
 /** O bloqueador de tela cheia, pelo texto que só ele mostra. */
-const BLOQUEADOR = /Configure a verificação em duas etapas/i;
+const BLOQUEADOR = /Configurez la validation en deux étapes/i;
 
 test.describe.configure({ mode: "serial", timeout: 90_000 });
 
-test.describe("a verificação em duas etapas é escolha, não imposição", () => {
-  test("admin entra no sistema sem ser parado", async ({ page }) => {
+test.describe("la validation en deux étapes est un choix, pas une obligation", () => {
+  test("l’admin entre dans le système sans être bloqué", async ({ page }) => {
     await entrar(page);
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
     await expect(page.locator("body")).not.toContainText(BLOQUEADOR);
   });
 
-  test("e a tela de Segurança oferece LIGAR — antes isso era inalcançável", async ({ page }) => {
+  test("et l’écran Sécurité propose de l’ACTIVER — c’était inaccessible avant", async ({ page }) => {
     // O único ponto de cadastro do produto era o próprio bloqueador. Sem um
     // botão aqui, tornar o cadastro opcional deixaria a verificação
     // impossível de ativar para quem quisesse usá-la — a tela dizia "Faça login
@@ -101,18 +101,18 @@ test.describe("a verificação em duas etapas é escolha, não imposição", () 
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
     await page.goto("/app/settings/security");
 
-    await expect(page.getByText("Desativada")).toBeVisible();
-    await page.getByRole("button", { name: /^ativar$/i }).click();
+    await expect(page.getByText("Désactivée")).toBeVisible();
+    await page.getByRole("button", { name: /^activer$/i }).click();
 
     await expect(page.getByRole("heading", { name: BLOQUEADOR })).toBeVisible();
     // E o texto reconhece que a pessoa está ESCOLHENDO. O mesmo modal serve ao
     // bloqueador, onde "esta empresa exige" é verdade; aqui seria mentira.
     await expect(page.locator("#mfa-title").locator("..")).toContainText(
-      /a cada login, além da senha/i,
+      /à chaque connexion, en plus du mot de passe/i,
     );
   });
 
-  test("o admin pode EXIGIR da equipe — e a exigência pega de verdade", async ({ page }) => {
+  test("l’admin peut l’EXIGER de l’équipe — et l’exigence s’applique vraiment", async ({ page }) => {
     await entrar(page);
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
     await page.goto("/app/settings/security");
@@ -137,7 +137,7 @@ test.describe("a verificação em duas etapas é escolha, não imposição", () 
     await expect(page.locator("body")).toContainText(BLOQUEADOR);
   });
 
-  test("desligar a exigência devolve o acesso", async ({ page }) => {
+  test("désactiver l’exigence rend l’accès", async ({ page }) => {
     // Sem este caminho de volta, ligar a regra seria uma porta sem maçaneta: o
     // admin fica preso no bloqueador e a tela que desliga está atrás dele.
     await svc

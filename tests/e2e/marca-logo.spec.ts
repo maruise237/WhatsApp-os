@@ -260,10 +260,10 @@ async function removerLogoSeHouver(page: Page, tela: string, escopo: Escopo): Pr
   await page.goto(tela);
   const remover = page
     .locator(`[data-campo-de-logo='${escopo}']`)
-    .getByRole("button", { name: /^remover$/i });
+    .getByRole("button", { name: /^supprimer$/i });
   if ((await remover.count()) === 0) return;
   await remover.click();
-  await expect(page.getByText(/logo removido/i)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/logo supprimé/i)).toBeVisible({ timeout: 15_000 });
 }
 
 /** O que um `<img>` do produto mostra, medido por ferramenta. */
@@ -452,7 +452,7 @@ function evidencia(nome: string): string {
 
 test.describe.configure({ mode: "serial" });
 
-test.describe("o logo subido pela tela chega à tela", () => {
+test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
   /**
    * TODO CASO QUE PRECISA DE SESSÃO FAZ O PRÓPRIO LOGIN. Não existe "um login por
    * papel no arquivo": `mode: "serial"` encadeia a ORDEM e o ESTADO DO BANCO, não
@@ -475,7 +475,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
    */
   test.setTimeout(120_000);
 
-  test("(1) o dono do servidor sobe o logo e ele aparece na barra lateral", async ({ page }) => {
+  test("(1) le propriétaire du serveur envoie le logo et il apparaît dans la barre latérale", async ({ page }) => {
     const secret = creds.dono_totp?.secret;
     expect(secret, "sem `dono_totp` no .e2e-creds.json — rode seed-e2e-credentials.ts").toBeTruthy();
     await loginComTotp(page, creds.users.dono!.email, secret!);
@@ -487,7 +487,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
       mime: "image/png",
       bytes: PNG_DA_PLATAFORMA,
     });
-    await expect(page.getByText(/logo atualizado/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/logo mis à jour/i)).toBeVisible({ timeout: 15_000 });
 
     // A prévia sobre as DUAS superfícies mostra a imagem real — é o que
     // substituiu o analisador de luminância no servidor.
@@ -533,7 +533,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
     await page.screenshot({ path: evidencia("2-sidebar-do-dono.png") });
   });
 
-  test("(2) quem NÃO entrou vê o logo do dono na tela de acesso — a P0", async ({ browser }) => {
+  test("(2) qui N’est PAS connecté voit le logo du propriétaire sur l’écran de connexion — la P0", async ({ browser }) => {
     const fachada = await logoDoLogin(browser);
     expect(fachada, "a tela de acesso não renderizou logo nenhum").not.toBeNull();
     expect(fachada!.src).toContain(`${PREFIXO_PUBLICO}platform/`);
@@ -548,7 +548,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
     await contexto.close();
   });
 
-  test("(3) o logo da EMPRESA troca a barra dela e NÃO vaza para a tela de acesso", async ({
+  test("(3) le logo de l’ENTREPRISE change sa barre et NE fuit PAS vers l’écran de connexion", async ({
     page,
     browser,
   }) => {
@@ -563,7 +563,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
       mime: "image/png",
       bytes: PNG_DA_ORGANIZACAO,
     });
-    await expect(page.getByText(/logo atualizado/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/logo mis à jour/i)).toBeVisible({ timeout: 15_000 });
 
     await page.goto("/app/inbox");
     const barra = await logoDaBarra(page);
@@ -581,7 +581,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
     expect(noLogin!.src).not.toContain(`${PREFIXO_PUBLICO}${creds.org_id}/`);
   });
 
-  test("(4) SVG renomeado para .png é recusado pelos BYTES, com a razão dita", async ({ page }) => {
+  test("(4) un SVG renommé en .png est refusé par ses OCTETS, avec la raison indiquée", async ({ page }) => {
     await loginComTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
 
     await page.goto("/app/inbox");
@@ -623,7 +623,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
     // frase que só a rota escreve (`app/api/v1/marca/logo/route.ts:396`).
     const recusa = page
       .locator("[data-sonner-toast]")
-      .filter({ hasText: /SVG não é aceito como logo/i });
+      .filter({ hasText: /SVG n’est pas accepté comme logo/i });
     await expect(recusa).toBeVisible({ timeout: 15_000 });
     await page.screenshot({ path: evidencia("5-svg-recusado.png"), fullPage: true });
 
@@ -644,7 +644,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
     expect(depois!.src, "a recusa trocou o logo por outro").toBe(antes!.src);
   });
 
-  test("(5) remover devolve o logo da camada de baixo", async ({ page }) => {
+  test("(5) supprimer rend le logo de la couche inférieure", async ({ page }) => {
     await loginComTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
 
     await page.goto("/app/settings/marca");
@@ -652,11 +652,11 @@ test.describe("o logo subido pela tela chega à tela", () => {
     // a asserção nomeia a precondição em vez de deixá-la sair como um clique que
     // esperou até o timeout.
     const remover = page.locator("[data-campo-de-logo='organizacao']").getByRole("button", {
-      name: /^remover$/i,
+      name: /^supprimer$/i,
     });
     await expect(remover, "precondição: a empresa precisa entrar neste caso COM logo próprio").toBeVisible();
     await remover.click();
-    await expect(page.getByText(/logo removido/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/logo supprimé/i)).toBeVisible({ timeout: 15_000 });
 
     await page.goto("/app/inbox");
     const barra = await logoDaBarra(page);
@@ -666,7 +666,7 @@ test.describe("o logo subido pela tela chega à tela", () => {
     await page.screenshot({ path: evidencia("6-volta-ao-da-instalacao.png") });
   });
 
-  test("(6) o dono remove o logo da instalação e a fachada volta ao que era", async ({
+  test("(6) le propriétaire supprime le logo de l’installation et la façade redevient ce qu’elle était", async ({
     page,
     browser,
   }) => {
@@ -675,14 +675,14 @@ test.describe("o logo subido pela tela chega à tela", () => {
     await loginComTotp(page, creds.users.dono!.email, creds.dono_totp!.secret);
     await page.goto("/admin/marca");
     const remover = page.locator("[data-campo-de-logo='instalacao']").getByRole("button", {
-      name: /^remover$/i,
+      name: /^supprimer$/i,
     });
     await expect(
       remover,
       "precondição: a instalação precisa entrar neste caso COM logo próprio",
     ).toBeVisible();
     await remover.click();
-    await expect(page.getByText(/logo removido/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/logo supprimé/i)).toBeVisible({ timeout: 15_000 });
 
     const noLogin = await logoDoLogin(browser);
     // `null` (nenhuma imagem) ou uma URL que não é do bucket (o `APP_LOGO_URL`

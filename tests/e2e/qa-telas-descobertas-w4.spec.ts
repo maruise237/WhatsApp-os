@@ -57,8 +57,8 @@ async function radiografia(page: Page, rotulo: string): Promise<void> {
   console.info(`[QA] ${rotulo} · primeiros 220 chars: ${corpo.replace(/\s+/g, " ").slice(0, 220)}`);
 }
 
-test.describe("QA — as telas da W4 que ninguém abria", () => {
-  test("respostas prontas: o usuário cria uma PELA TELA", async ({ page }) => {
+test.describe("QA — les écrans de la W4 que personne n’ouvrait", () => {
+  test("réponses rapides : l’utilisateur en crée une DEPUIS L’ÉCRAN", async ({ page }) => {
     test.setTimeout(180_000);
     fs.mkdirSync(SAIDA, { recursive: true });
     await login(page);
@@ -70,7 +70,7 @@ test.describe("QA — as telas da W4 que ninguém abria", () => {
 
     // O caminho do leigo: achar o botão de criar sem saber o nome dele.
     const criar = page
-      .getByRole("button", { name: /nov[ao]|criar|adicionar/i })
+      .getByRole("button", { name: /nouve(au|lle)|créer|ajouter/i })
       .first();
     const temBotao = (await criar.count()) > 0;
     console.info(`[QA] /app/templates · dá para criar pela tela? ${temBotao ? "SIM" : "NÃO"}`);
@@ -79,23 +79,23 @@ test.describe("QA — as telas da W4 que ninguém abria", () => {
     await criar.click();
     const titulo = `Resposta QA ${ts}`;
     // Os campos, pelo rótulo que o usuário lê — não por testid.
-    await page.getByLabel(/t[íi]tulo/i).first().fill(titulo);
-    await page.getByLabel(/mensagem|texto|corpo/i).first().fill(
-      "Olá {{nome}}, recebemos seu contato e retornamos em breve.",
+    await page.getByLabel(/titre/i).first().fill(titulo);
+    await page.getByLabel(/message|texte|corps/i).first().fill(
+      "Bonjour {{nome}}, nous avons bien reçu votre message et revenons vers vous rapidement.",
     );
     await page.screenshot({
       path: path.join(SAIDA, "qa-tela-templates-criando.png"),
       fullPage: true,
     });
 
-    await page.getByRole("button", { name: /salvar|criar|adicionar/i }).last().click();
+    await page.getByRole("button", { name: /enregistrer|créer|ajouter/i }).last().click();
     // A prova é a resposta aparecer na lista, não o toast sumir.
     await expect(page.getByText(titulo, { exact: false }).first()).toBeVisible({ timeout: 15_000 });
     console.info(`[QA] /app/templates · resposta criada pela interface e visível na lista`);
     await page.screenshot({ path: path.join(SAIDA, "qa-tela-templates-criada.png"), fullPage: true });
   });
 
-  test("settings/templates: o que é essa segunda porta", async ({ page }) => {
+  test("settings/templates : qu’est-ce que cette deuxième porte", async ({ page }) => {
     test.setTimeout(120_000);
     await login(page);
     await page.goto(`${APP_URL}/app/settings/templates`);
@@ -108,7 +108,7 @@ test.describe("QA — as telas da W4 que ninguém abria", () => {
     });
   });
 
-  test("histórico: o dono consegue achar o que o assistente mudou?", async ({ page }) => {
+  test("historique : le propriétaire retrouve-t-il ce que l’assistant a modifié ?", async ({ page }) => {
     test.setTimeout(240_000);
     await login(page);
 
@@ -152,7 +152,7 @@ test.describe("QA — as telas da W4 que ninguém abria", () => {
     console.info(`[QA] /app/audit · encontra a AÇÃO (pipeline.stage_created)? ${achaAcao ? "SIM" : "NÃO"}`);
     console.info(`[QA] /app/audit · encontra O QUE MUDOU (nome da etapa)? ${achaNome ? "SIM" : "NÃO"}`);
     console.info(
-      `[QA] /app/audit · a linha diz que foi o ASSISTENTE? ${/assistente|ai_agent|agente/i.test(corpo) ? "SIM" : "NÃO"}`,
+      `[QA] /app/audit · a linha diz que foi o ASSISTENTE? ${/assistant|ai_agent|agent/i.test(corpo) ? "SIM" : "NÃO"}`,
     );
   });
 });

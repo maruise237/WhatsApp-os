@@ -69,7 +69,7 @@ async function selectFirstOption(page: Page, combobox: Locator): Promise<void> {
   await page.getByRole("option").first().click();
 }
 
-test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)", () => {
+test.describe("J6.8 — anti-SSRF du call_webhook sortant (réel, de bout en bout)", () => {
   test.setTimeout(180_000);
 
   let receiver: http.Server;
@@ -93,7 +93,7 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
     await new Promise<void>((resolve) => receiver.close(() => resolve()));
   });
 
-  test("regra call_webhook para host interno → run falha e receiver recebe ZERO hits", async ({
+  test("règle call_webhook vers un hôte interne → l’exécution échoue et le récepteur reçoit ZÉRO appel", async ({
     page,
     request,
   }) => {
@@ -105,7 +105,7 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
       await login(page, creds.users.manager!.email);
       await page.getByRole("link", { name: "Webhooks" }).click();
       await page.waitForURL(/\/app\/webhooks/);
-      await page.getByRole("button", { name: /Nova fonte|Criar primeira fonte/ }).click();
+      await page.getByRole("button", { name: /Nouvelle source|Créer la première source/ }).click();
       await page.locator("#src-name").fill(SOURCE_NAME);
       const dialog = page.getByRole("dialog");
       await selectFirstOption(page, dialog.getByRole("combobox").nth(0));
@@ -114,7 +114,7 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/webhook-sources") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar fonte" }).click(),
+        page.getByRole("button", { name: "Créer la source" }).click(),
       ]);
       const created = (await createRes.json()) as { data: { id: string; path_token: string } };
       sourceId = created.data.id;
@@ -122,20 +122,20 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
       await page.keyboard.press("Escape");
 
       // --- automação: gatilho lead novo → ação "Avisar outro sistema (webhook)" ---
-      await page.getByRole("tab", { name: "Automações" }).click();
-      await page.getByRole("button", { name: /Nova automação|Criar primeira automação/ }).click();
+      await page.getByRole("tab", { name: "Automatisations" }).click();
+      await page.getByRole("button", { name: /Nouvelle automatisation/ }).click();
       const ruleSheet = page.getByRole("dialog");
       await ruleSheet.locator("#rule-name").fill(RULE_NAME);
       await ruleSheet.getByRole("combobox").first().click();
-      await page.getByRole("option", { name: "Quando entrar um contato novo (webhook)" }).click();
-      await ruleSheet.getByRole("combobox").filter({ hasText: "Adicionar ação" }).click();
-      await page.getByRole("option", { name: "Avisar outro sistema (webhook)" }).click();
-      await ruleSheet.getByPlaceholder("https://meusistema.com/webhook").fill(receiverUrl);
+      await page.getByRole("option", { name: "Lorsqu’un nouveau contact arrive (webhook)" }).click();
+      await ruleSheet.getByRole("combobox").filter({ hasText: "Ajouter une action" }).click();
+      await page.getByRole("option", { name: "Prévenir un autre système (webhook)" }).click();
+      await ruleSheet.getByPlaceholder("https://monsysteme.com/webhook").fill(receiverUrl);
       await Promise.all([
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/automation-rules") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar automação" }).click(),
+        page.getByRole("button", { name: "Créer l’automatisation" }).click(),
       ]);
       ruleCreated = true;
 
@@ -157,9 +157,9 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
             r.status() === 200,
           { timeout: 20_000 },
         ),
-        page.getByRole("switch", { name: `Ligar ${RULE_NAME}` }).click(),
+        page.getByRole("switch", { name: `Activer ${RULE_NAME}` }).click(),
       ]);
-      await expect(cardOf(page.getByText(RULE_NAME, { exact: true })).getByText("Ativa")).toBeVisible(
+      await expect(cardOf(page.getByText(RULE_NAME, { exact: true })).getByText("Active")).toBeVisible(
         { timeout: 15_000 },
       );
 
@@ -180,7 +180,7 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
       await drenar();
 
       // --- aba Atividade: a run aparece e NÃO é Sucesso (ação outbound barrada) ---
-      await page.getByRole("tab", { name: "Atividade" }).click();
+      await page.getByRole("tab", { name: "Activité" }).click();
       const runTitle = page.getByText(RULE_NAME, { exact: true }).first();
       const runCard = cardOf(runTitle);
       let appeared = false;
@@ -200,12 +200,12 @@ test.describe("J6.8 — anti-SSRF do outbound call_webhook (real, ponta a ponta)
           break;
         }
         await drenar();
-        await page.getByRole("button", { name: "Atualizar" }).click();
+        await page.getByRole("button", { name: "Actualiser" }).click();
         await page.waitForTimeout(1000);
       }
       expect(appeared, "a run da automação não apareceu na aba Atividade").toBe(true);
       // a run não pode ter dado Sucesso — a ação outbound tem que ter falhado
-      await expect(runCard.getByText(/Falhou|Parcial/)).toBeVisible({ timeout: 10_000 });
+      await expect(runCard.getByText(/Échec|Partiel/)).toBeVisible({ timeout: 10_000 });
 
       // --- a PROVA de segurança: o receiver interno nunca foi tocado ---
       expect(

@@ -48,8 +48,8 @@ async function login(page: Page): Promise<void> {
   await page.waitForURL(/\/app(\/|$)/, { timeout: 20_000 });
 }
 
-test.describe("QA — o selo de autoria com o funil já vivido", () => {
-  test("quantos selos o dono vê depois de algumas semanas de uso", async ({ page }) => {
+test.describe("QA — le badge d’auteur sur un tableau déjà utilisé", () => {
+  test("combien de badges le propriétaire voit après quelques semaines d’usage", async ({ page }) => {
     test.setTimeout(180_000);
     fs.mkdirSync(SAIDA, { recursive: true });
 

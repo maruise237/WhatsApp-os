@@ -48,8 +48,8 @@ test.beforeAll(async () => {
     .from("organizations")
     .insert({
       slug: `minha-empresa-${randomUUID().slice(0, 8)}`,
-      display_name: "Minha Empresa",
-      legal_name: "Minha Empresa",
+      display_name: "Mon entreprise",
+      legal_name: "Mon entreprise",
       status: "active",
       created_by: userId,
       settings: { llm: { provider: "anthropic" } },
@@ -90,15 +90,15 @@ async function login(page: Page): Promise<void> {
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 
-test.describe("o wizard monta um funcionário", () => {
-  test("abre mostrando o que a instalação já trouxe, e não pede o nome de novo", async ({
+test.describe("l’assistant de démarrage construit un employé", () => {
+  test("s’ouvre en montrant ce que l’installation a déjà apporté, sans redemander le nom", async ({
     page,
   }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/welcome/, { timeout: 30_000 });
 
     // O passo 1 começa pelo que já existe — em vez de um formulário em branco.
-    await expect(page.getByText(/já está de pé/i)).toBeVisible();
+    await expect(page.getByText(/déjà en place/i)).toBeVisible();
 
     // O instalador nunca pergunta o nome do negócio: a organização nasce
     // "Minha Empresa". Mandar isso como valor inicial obrigava a pessoa a
@@ -106,7 +106,7 @@ test.describe("o wizard monta um funcionário", () => {
     await expect(page.locator("#display_name")).toHaveValue("");
   });
 
-  test("o aceite de termos leva a documentos que EXISTEM", async ({ page }) => {
+  test("l’acceptation des conditions mène à des documents qui EXISTENT", async ({ page }) => {
     // O checkbox é obrigatório e linkava duas páginas que respondiam 404.
     for (const href of ["/legal/terms", "/legal/privacy"]) {
       const res = await page.request.get(href);
@@ -114,13 +114,13 @@ test.describe("o wizard monta um funcionário", () => {
     }
   });
 
-  test("o nome do negócio chega ao cabeçalho do passo seguinte", async ({ page }) => {
+  test("le nom de l’entreprise arrive dans l’en-tête de l’étape suivante", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/welcome/, { timeout: 30_000 });
 
-    await page.locator("#display_name").fill("Clínica Bem Viver");
+    await page.locator("#display_name").fill("Clinique Bien Vivre");
     await page.locator('input[type="checkbox"]').check();
-    await page.getByRole("button", { name: /^continuar$/i }).click();
+    await page.getByRole("button", { name: /^continuer$/i }).click();
     await page.waitForURL(/\/onboarding\/connect-whatsapp/, { timeout: 30_000 });
 
     // O layout do wizard é compartilhado entre os passos e não re-renderizava:
@@ -129,11 +129,11 @@ test.describe("o wizard monta um funcionário", () => {
     // `.first()`: há dois <header> na página — o do wizard (com a marca e o
     // nome do negócio) e o do passo. O do layout é o que congelava.
     const cabecalho = page.locator("header").first();
-    await expect(cabecalho).toContainText("Clínica Bem Viver");
-    await expect(cabecalho).not.toContainText("Minha Empresa");
+    await expect(cabecalho).toContainText("Clinique Bien Vivre");
+    await expect(cabecalho).not.toContainText("Mon entreprise");
   });
 
-  test("o passo do telefone pergunta COMO se conecta antes de assumir o código", async ({
+  test("l’étape du téléphone demande COMMENT se connecter avant de supposer le code", async ({
     page,
   }) => {
     await login(page);
@@ -166,23 +166,23 @@ test.describe("o wizard monta um funcionário", () => {
     // rastro — se deixasse, o passo já contaria como cumprido.
   });
 
-  test("o passo do telefone não expõe identificador interno nem enum", async ({ page }) => {
+  test("l’étape du téléphone n’expose ni identifiant interne ni enum", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/connect-whatsapp/, { timeout: 30_000 });
 
     const corpo = page.locator("body");
     // Mostrava "Sessão: org_f3d61bc0" e "Status: INIT".
-    await expect(corpo).not.toContainText(/Sessão:/i);
+    await expect(corpo).not.toContainText(/Session :/i);
     await expect(corpo).not.toContainText(/Status:\s*(INIT|STARTING|SCAN_QR_CODE|WORKING)/);
     // E nunca mais manda rodar Docker nem aponta para um menu que não existe.
     await expect(corpo).not.toContainText(/docker compose/i);
-    await expect(corpo).not.toContainText(/Configurações → Canais/i);
+    await expect(corpo).not.toContainText(/Paramètres → Canaux/i);
 
-    await page.getByRole("button", { name: /pular por enquanto/i }).click();
+    await page.getByRole("button", { name: /ignorer pour le moment/i }).click();
     await page.waitForURL(/\/onboarding\/setup-ai/, { timeout: 30_000 });
   });
 
-  test("treinar mostra o cérebro dele — e sem chave não é um beco", async ({ page }) => {
+  test("former montre son cerveau — et sans clé ce n’est pas une impasse", async ({ page }) => {
     // Vale nos dois mundos pela mesma razão do caso do quadro (ver lá): no CI
     // não há chave de provedor e o bloco vira o formulário para colar uma; na
     // máquina de quem desenvolve, `next start` carrega o `.env.local` e ele vira
@@ -213,18 +213,18 @@ test.describe("o wizard monta um funcionário", () => {
     }
   });
 
-  test("treinar: pede as regras da casa e mostra o que ele já sabe fazer", async ({ page }) => {
+  test("former : demande les règles de la maison et montre ce qu’il sait déjà faire", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/setup-ai/, { timeout: 30_000 });
 
-    await expect(page.getByRole("heading", { name: /treine seu funcionário/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /formez votre assistant/i })).toBeVisible();
     // As duas listas que não pedem configuração nenhuma.
-    await expect(page.getByText(/ele já vem sabendo/i)).toBeVisible();
-    await expect(page.getByText(/e nunca vai fazer/i)).toBeVisible();
+    await expect(page.getByText(/ce qu’il sait déjà faire/i)).toBeVisible();
+    await expect(page.getByText(/ce qu’il ne fera jamais/i)).toBeVisible();
 
     await page.locator("#name").fill("Bia");
-    await page.locator("#regras_da_casa").fill("Horário: 8h às 18h. Nunca prometa desconto.");
-    await page.getByRole("button", { name: /criar e continuar/i }).click();
+    await page.locator("#regras_da_casa").fill("Horaires : 8h à 18h. Ne promettez jamais de remise.");
+    await page.getByRole("button", { name: /créer et continuer/i }).click();
 
     // ⚠️ DOIS DESFECHOS LEGÍTIMOS, e o teste tem de aceitar os dois — foi aqui
     // que ele reprovou no CI depois de passar em toda máquina com chave.
@@ -251,13 +251,13 @@ test.describe("o wizard monta um funcionário", () => {
       // atendente ficou RASCUNHO, e oferece seguir. Amarrar a asserção a uma
       // frase de causa faria o teste reprovar quando a instalação tivesse a
       // outra — sobre uma tela igualmente correta.
-      await expect(page.getByRole("alert").first()).toContainText(/rascunho/i);
-      await page.getByRole("button", { name: /continuar sem publicar/i }).click();
+      await expect(page.getByRole("alert").first()).toContainText(/brouillon/i);
+      await page.getByRole("button", { name: /continuer sans publier/i }).click();
       await page.waitForURL(/\/onboarding\/funil/, { timeout: 30_000 });
     }
   });
 
-  test("o quadro chega montado, venha da IA ou de um modelo pronto", async ({ page }) => {
+  test("le tableau arrive monté, qu’il vienne de l’IA ou d’un modèle prêt à l’emploi", async ({ page }) => {
     // ⚠️ ESTE CASO VALE NOS DOIS MUNDOS, DE PROPÓSITO. No CI não há chave de
     // provedor nenhum e a sugestão cai no quadro pronto; na máquina de quem
     // desenvolve, `next start` carrega o `.env.local` sozinho e a chave real
@@ -274,39 +274,39 @@ test.describe("o wizard monta um funcionário", () => {
     await expect(
       corpo,
       "a tela precisa dizer se a sugestão veio da IA ou de um modelo pronto",
-    ).toContainText(/montou este quadro|não consegui pedir uma sugestão/i);
+    ).toContainText(/a construit ce tableau|impossible de demander une suggestion/i);
 
     // O quadro está lá, montado, com o destino de cada coluna visível — que é a
     // metade invisível do defeito: medido, 312 etapas no banco e 4 com destino,
     // o que deixa o assistente incapaz de mover um card.
-    const colunas = page.locator('input[aria-label^="Nome da coluna"]');
+    const colunas = page.locator('input[aria-label^="Nom de la colonne"]');
     expect(await colunas.count()).toBeGreaterThanOrEqual(4);
-    await expect(corpo).toContainText(/Ele move o cliente para cá quando fechou negócio/i);
-    await expect(corpo).toContainText(/Ele move o cliente para cá quando não fechou/i);
+    await expect(corpo).toContainText(/Le client arrive ici quand l’affaire est conclue/i);
+    await expect(corpo).toContainText(/Le client arrive ici quand l’affaire n’a pas abouti/i);
 
     // As colunas de desfecho não podem ser removidas: sem elas o banco recusa o
     // quadro inteiro, e descobrir isso no clique de salvar seria pior.
-    await expect(page.getByText("obrigatória").first()).toBeVisible();
+    await expect(page.getByText("obligatoire").first()).toBeVisible();
 
     // E o que a instalação trouxe fica à vista, para a troca não parecer mágica.
-    await expect(corpo).toContainText(/Carrinho abandonado/);
+    await expect(corpo).toContainText(/Panier abandonné/);
   });
 
-  test("dá para trocar por um modelo pronto sem depender de IA nenhuma", async ({ page }) => {
+  test("on peut passer à un modèle prêt à l’emploi sans dépendre d’aucune IA", async ({ page }) => {
     // O caminho determinístico do plano B, que não depende de haver chave: é o
     // que sobra para quem instalou e ainda não configurou provedor — e para
     // quem simplesmente não gostou da sugestão.
     await login(page);
     await page.waitForURL(/\/onboarding\/funil/, { timeout: 30_000 });
 
-    await page.getByRole("button", { name: /modelo pronto/i }).click();
-    await page.getByRole("button", { name: /clínica, consultório ou salão/i }).click();
+    await page.getByRole("button", { name: /modèle prêt à l’emploi/i }).click();
+    await page.getByRole("button", { name: /clinique, cabinet ou salon/i }).click();
 
-    await expect(page.locator("#nome_do_quadro")).toHaveValue("Agendamentos");
-    await expect(page.locator('input[aria-label="Nome da coluna 1"]')).toHaveValue("Novo contato");
+    await expect(page.locator("#nome_do_quadro")).toHaveValue("Rendez-vous");
+    await expect(page.locator('input[aria-label="Nom de la colonne 1"]')).toHaveValue("Nouveau contact");
   });
 
-  test("coluna sem nome barra o salvar, em vez de sumir calada", async ({ page }) => {
+  test("une colonne sans nom bloque l’enregistrement, au lieu de disparaître en silence", async ({ page }) => {
     // `normalizarProposta` DESCARTA nome vazio. Sem esta trava, a pessoa
     // acrescenta uma coluna, esquece de nomeá-la, salva, avança — e a coluna
     // simplesmente não existe.
@@ -318,19 +318,19 @@ test.describe("o wizard monta um funcionário", () => {
     // assumisse espaço livre vermelharia conforme a resposta do modelo. Remover
     // antes de acrescentar também é o que o dono faz — tira o que não serve e
     // põe o que falta.
-    await page.getByRole("button", { name: /^remover$/i }).last().click();
-    await page.getByRole("button", { name: /adicionar coluna/i }).click();
-    await expect(page.getByText(/dê um nome à coluna em branco/i)).toBeVisible();
-    await expect(page.getByRole("button", { name: /usar este quadro/i })).toBeDisabled();
+    await page.getByRole("button", { name: /^supprimer la colonne/i }).last().click();
+    await page.getByRole("button", { name: /ajouter une colonne/i }).click();
+    await expect(page.getByText(/donnez un nom à la colonne vide/i)).toBeVisible();
+    await expect(page.getByRole("button", { name: /utiliser ce tableau/i })).toBeDisabled();
 
     // Nomeada, o caminho destrava.
-    await page.locator('input[aria-label^="Nome da coluna"]').last().fill("Confirmação da véspera");
+    await page.locator('input[aria-label^="Nom de la colonne"]').last().fill("Confirmation de la veille");
   });
 
-  test("salvar troca o funil de e-commerce e ENSINA o destino de cada coluna", async ({ page }) => {
+  test("enregistrer remplace le tableau e-commerce et ENSEIGNE la destination de chaque colonne", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/funil/, { timeout: 30_000 });
-    await page.getByRole("button", { name: /usar este quadro/i }).click();
+    await page.getByRole("button", { name: /utiliser ce tableau/i }).click();
     await page.waitForURL(/\/onboarding\/testar/, { timeout: 30_000 });
 
     const { data: funil } = await svc
@@ -349,9 +349,9 @@ test.describe("o wizard monta um funcionário", () => {
     const nomes = (etapas ?? []).map((e) => String(e.name));
     // O quadro que o gatilho semeia em TODA organização, num produto que se
     // vende como multi-nicho: a clínica abria o quadro dela e lia isto.
-    expect(nomes).not.toContain("Carrinho abandonado");
-    expect(nomes).not.toContain("Em separação");
-    expect(String(funil!.name)).not.toBe("Pedidos");
+    expect(nomes).not.toContain("Panier abandonné");
+    expect(nomes).not.toContain("En préparation");
+    expect(String(funil!.name)).not.toBe("Commandes");
 
     // A metade invisível: sem destino, o funcionário tem o funil no escopo e
     // não sabe o que significa nenhuma coluna.
@@ -367,7 +367,7 @@ test.describe("o wizard monta um funcionário", () => {
     }
   });
 
-  test("as regras da casa viraram memória da organização, não prompt do agente", async () => {
+  test("les règles de la maison deviennent la mémoire de l’organisation, pas le prompt de l’agent", async () => {
     const { data: mem } = await svc
       .from("org_memory_versions")
       .select("content")
@@ -378,7 +378,7 @@ test.describe("o wizard monta um funcionário", () => {
     // para a organização, não para este agente, então nasce mesmo quando a
     // publicação não acontece. Se dependesse da chave, quem instalou sem
     // provedor perderia o que escreveu.
-    expect(mem?.content).toContain("Nunca prometa desconto");
+    expect(mem?.content).toContain("Ne promettez jamais de remise");
 
     // O agente EXISTE sempre; o que depende da chave é a VERSÃO publicada.
     const { data: agente } = await svc
@@ -389,7 +389,7 @@ test.describe("o wizard monta um funcionário", () => {
       .maybeSingle();
     expect(agente?.kind, "nasce no formato atual, não no rag_bot legado").toBe("mcp_agent");
     // As regras não entram no prompt DELE: a segunda contratação nasceria sem elas.
-    expect(agente?.system_prompt).not.toContain("Nunca prometa desconto");
+    expect(agente?.system_prompt).not.toContain("Ne promettez jamais de remise");
 
     const { data: versao } = await svc
       .from("ai_agent_versions")
@@ -406,33 +406,33 @@ test.describe("o wizard monta um funcionário", () => {
       return;
     }
 
-    expect(versao.system_prompt).not.toContain("Nunca prometa desconto");
+    expect(versao.system_prompt).not.toContain("Ne promettez jamais de remise");
     // Publicou: então nasceu podendo mexer no CRM, com o provedor da instalação.
     expect(versao.provider).toBe("anthropic");
     expect((versao.tool_ids as string[])?.length ?? 0).toBeGreaterThan(0);
   });
 
-  test("o wizard termina apresentando o sistema, e o resumo não acusa passo inexistente", async ({
+  test("l’assistant de démarrage se termine en présentant le système, et le résumé ne signale pas d’étape inexistante", async ({
     page,
   }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/testar/, { timeout: 30_000 });
-    await page.getByRole("button", { name: /^continuar$/i }).click();
+    await page.getByRole("button", { name: /^continuer$/i }).click();
 
     await page.waitForURL(/\/onboarding\/invite-team/, { timeout: 30_000 });
-    await page.getByRole("button", { name: /pular por enquanto/i }).click();
+    await page.getByRole("button", { name: /ignorer pour le moment/i }).click();
     await page.waitForURL(/\/onboarding\/done/, { timeout: 30_000 });
 
     // O tour: as peças apresentadas pelo que fazem.
-    await expect(page.getByText(/o que mais tem aqui/i)).toBeVisible();
-    await expect(page.getByText(/voltar a falar com quem sumiu/i)).toBeVisible();
+    await expect(page.getByText(/que trouve-t-on d’autre ici/i)).toBeVisible();
+    await expect(page.getByText(/relancer ceux qui ont disparu/i)).toBeVisible();
 
     // A integração de loja vem desligada: o passo não existe nesta instalação,
     // e o resumo listava "Loja Nuvemshop (pulado)" — acusando a pessoa de não
     // fazer o que ninguém lhe ofereceu.
     await expect(page.locator("body")).not.toContainText(/Nuvemshop/i);
 
-    await page.getByRole("button", { name: /começar a usar/i }).click();
+    await page.getByRole("button", { name: /commencer à utiliser/i }).click();
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 
     const { data: org } = await svc
@@ -441,6 +441,6 @@ test.describe("o wizard monta um funcionário", () => {
       .eq("id", orgId)
       .maybeSingle();
     expect(org?.onboarded_at).toBeTruthy();
-    expect(org?.display_name).toBe("Clínica Bem Viver");
+    expect(org?.display_name).toBe("Clinique Bien Vivre");
   });
 });

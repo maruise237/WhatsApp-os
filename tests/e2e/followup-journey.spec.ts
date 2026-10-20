@@ -363,7 +363,7 @@ test.describe("relance — parcours complet (Task 8.3)", () => {
         data: {
           name: agentName,
           version: {
-            system_prompt: "Você é um atendente de teste E2E. Responda de forma clara em pt-BR.",
+            system_prompt: "Vous êtes un agent de test E2E. Répondez clairement en français.",
             provider: "anthropic",
             model: "claude-sonnet-4-6",
             credential_id: fixtures.credential_id,
