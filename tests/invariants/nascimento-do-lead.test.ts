@@ -253,7 +253,7 @@ describe("o lead NASCE", () => {
     const { rows } = await pool.query<{ title: string }>("select title from crm_leads where id = $1", [
       r.leadId,
     ]);
-    expect(rows[0]!.title).toBe("Novo contato pelo WhatsApp");
+    expect(rows[0]!.title).toBe("Nouveau contact WhatsApp");
   });
 });
 

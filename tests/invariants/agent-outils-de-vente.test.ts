@@ -159,4 +159,18 @@ describe("vente conduite par l'agent, sur le schéma réel", () => {
       pool.query(`update sales_orders set status = 'payée', paid_by_user_id = null where id = $1`, [id]),
     ).rejects.toThrow(/sales_orders_payee_a_un_auteur/);
     await expect(
-      pool.query(`update sales_orders set status = '
+      pool.query(`update sales_orders set status = 'en_attente_paiement' where id = $1`, [id]),
+    ).rejects.toThrow(/sales_orders_paiement_seulement_si_payee/);
+  });
+
+  it("une autre organisation ne touche pas cette conversation", async () => {
+    const intrus = { tenantId: OTHER_ORG, conversationId: CONV, jobId: "job-intrus" };
+    expect(await applyCreateOrderDraft(pool, intrus, { items: [{ product_id: OTHER_PRODUCT, quantity: 1 }] })).toMatchObject({
+      ok: false,
+    });
+    expect(await applyRequestPaymentProof(pool, intrus, {})).toMatchObject({ ok: false, error: { code: "order_not_found" } });
+    expect(await applyRegisterPaymentProof(pool, intrus, {})).toMatchObject({ ok: false, error: { code: "order_not_found" } });
+    const { rows } = await pool.query("select count(*)::int as n from sales_orders where organization_id = $1", [OTHER_ORG]);
+    expect(rows[0].n).toBe(0);
+  });
+});
