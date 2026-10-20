@@ -89,7 +89,7 @@ export function UsageCharts({ series }: UsageChartsProps) {
                 width={45}
               />
               <Tooltip
-                formatter={(value) => [formatNumber(Number(value)), "Mensagens"]}
+                formatter={(value) => [formatNumber(Number(value)), "Messages"]}
                 labelFormatter={(label) => formatDateTick(String(label))}
                 contentStyle={{
                   borderRadius: "8px",

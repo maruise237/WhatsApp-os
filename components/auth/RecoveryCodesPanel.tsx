@@ -68,7 +68,7 @@ export function RecoveryCodesPanel({ codes, onAcknowledge }: RecoveryCodesPanelP
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast.success("Arquivo baixado.");
+    toast.success("Fichier téléchargé.");
   };
 
   return (

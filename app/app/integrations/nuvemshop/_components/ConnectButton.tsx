@@ -7,18 +7,18 @@ import { connectNuvemshop } from "@/app/actions/integrations/connectNuvemshop";
 import { disconnectNuvemshop } from "@/app/actions/integrations/disconnectNuvemshop";
 
 const CONNECT_ERRORS: Record<string, string> = {
-  auth_required: "Faça login para conectar.",
-  no_active_org: "Nenhuma organização ativa.",
-  forbidden: "Apenas admins podem conectar integrações.",
-  not_configured: "Integração não configurada — configure as credenciais em .env.local.",
+  auth_required: "Connectez-vous pour relier la boutique.",
+  no_active_org: "Aucune organisation active.",
+  forbidden: "Seuls les administrateurs peuvent connecter des intégrations.",
+  not_configured: "Intégration non configurée — renseignez les identifiants dans .env.local.",
 };
 
 const DISCONNECT_ERRORS: Record<string, string> = {
   auth_required: "Faça login para desconectar.",
-  no_active_org: "Nenhuma organização ativa.",
+  no_active_org: "Aucune organisation active.",
   forbidden: "Apenas admins podem desconectar.",
-  not_connected: "Integração não está conectada.",
-  db_error: "Falha de banco ao desconectar.",
+  not_connected: "L’intégration n’est pas connectée.",
+  db_error: "Erreur de base de données lors de la déconnexion.",
 };
 
 export function ConnectButton({ disabled }: { disabled?: boolean }) {
@@ -30,13 +30,13 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
           const res = await connectNuvemshop();
           // Server Action redirects on success — we only get a result on failure.
           if (res && !res.ok) {
-            toast.error(CONNECT_ERRORS[res.error] ?? `Erro: ${res.error}`);
+            toast.error(CONNECT_ERRORS[res.error] ?? `Erreur : ${res.error}`);
           }
         })
       }
       disabled={disabled || pending}
     >
-      {pending ? "Redirecionando…" : "Se connecter à Nuvemshop"}
+      {pending ? "Redirection…" : "Se connecter à Nuvemshop"}
     </Button>
   );
 }
@@ -50,15 +50,15 @@ export function DisconnectButton() {
         startTransition(async () => {
           const res = await disconnectNuvemshop();
           if (res.ok) {
-            toast.success("Nuvemshop desconectada.");
+            toast.success("Nuvemshop déconnectée.");
           } else {
-            toast.error(DISCONNECT_ERRORS[res.error] ?? `Erro: ${res.error}`);
+            toast.error(DISCONNECT_ERRORS[res.error] ?? `Erreur : ${res.error}`);
           }
         })
       }
       disabled={pending}
     >
-      {pending ? "Desconectando…" : "Déconnecter"}
+      {pending ? "Déconnexion…" : "Déconnecter"}
     </Button>
   );
 }

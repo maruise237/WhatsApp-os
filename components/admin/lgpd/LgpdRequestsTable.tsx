@@ -50,17 +50,17 @@ function countdownLabel(dueAt: string | null, status: AdminLgpdStatus): string {
 }
 
 const TYPE_LABELS: Record<AdminLgpdRequestType, string> = {
-  redact: "Anonimização cliente",
-  data_request: "Solicitação de dados",
-  store_redact: "Anonimização tenant",
+  redact: "Anonymisation client",
+  data_request: "Demande de données",
+  store_redact: "Anonymisation organisation",
 };
 
 const STATUS_LABELS: Record<AdminLgpdStatus, string> = {
-  received: "Recebido",
-  processing: "Processando",
-  completed: "Concluído",
-  failed: "Falhou",
-  pending_review: "Revisão",
+  received: "Reçue",
+  processing: "En cours",
+  completed: "Terminé",
+  failed: "Échec",
+  pending_review: "Revue",
 };
 
 const STATUS_VARIANT: Record<
@@ -85,8 +85,8 @@ const RISK_VARIANT: Record<
 };
 
 const RISK_LABELS: Record<AdminLgpdRiskLevel, string> = {
-  expired: "Vencido",
-  at_risk: "Crítico",
+  expired: "Échue",
+  at_risk: "Critique",
   warning: "Alerta",
   ok: "OK",
 };
@@ -101,7 +101,7 @@ export function LgpdRequestsTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["ID", "Tipo", "Tenant", "Recebido em", "Vence em", "Risco", "Status", ""].map(
+            {["ID", "Type", "Organisation", "Reçue le", "Échéance", "Risque", "Statut", ""].map(
               (h) => (
                 <TableHead key={h}>{h}</TableHead>
               ),
@@ -230,7 +230,7 @@ export function LgpdRequestsTable({
             disabled={isFetchingNextPage}
             onClick={onLoadMore}
           >
-            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+            {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
           </Button>
         </div>
       )}

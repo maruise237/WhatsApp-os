@@ -21,7 +21,7 @@ import {
 
 const STATUS_OPTIONS: { value: IncidentStatus; label: string }[] = [
   { value: "open", label: "Ouverts" },
-  { value: "acknowledged", label: "Reconhecidos" },
+  { value: "acknowledged", label: "Pris en compte" },
   { value: "resolved", label: "Résolus" },
 ];
 
@@ -50,7 +50,7 @@ export function IncidentsClient() {
           <h1 className="text-2xl font-semibold tracking-tight">Incidents</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {isLoading
-              ? "Carregando..."
+              ? "Chargement…"
               : `${total} incidente${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
           </p>
         </div>

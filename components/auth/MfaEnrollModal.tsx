@@ -180,7 +180,7 @@ export function MfaEnrollModal({ motivo = "obrigatorio" }: { motivo?: "obrigator
                     disabled={isPending || code.length !== 6}
                     onClick={() => submitCode()}
                   >
-                    {isPending ? "Verificando..." : "Confirmer"}
+                    {isPending ? "Vérification…" : "Confirmer"}
                   </Button>
                 </div>
               </>

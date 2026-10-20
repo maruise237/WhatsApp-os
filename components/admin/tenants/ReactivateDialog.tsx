@@ -19,7 +19,7 @@ import { useReactivateTenant } from "@/hooks/useReactivateTenant";
 // Schema
 // ---------------------------------------------------------------------------
 
-const reasonSchema = z.string().min(10, "Mínimo 10 caracteres").max(500, "Máximo 500 caracteres");
+const reasonSchema = z.string().min(10, "10 caractères minimum").max(500, "500 caractères maximum");
 
 // ---------------------------------------------------------------------------
 // Props
@@ -110,7 +110,7 @@ export function ReactivateDialog({ open, onClose, organizationId }: ReactivateDi
             onClick={handleConfirm}
             disabled={!isValid || reactivate.isPending}
           >
-            {reactivate.isPending ? "Reativando..." : "Confirmer la réactivation"}
+            {reactivate.isPending ? "Réactivation…" : "Confirmer la réactivation"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

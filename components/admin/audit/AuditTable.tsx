@@ -52,7 +52,7 @@ export function AuditTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["Quando", "Action", "Tenant", "Actor", "Recurso", ""].map((h) => (
+            {["Quand", "Action", "Organisation", "Auteur", "Ressource", ""].map((h) => (
               <TableHead key={h}>{h}</TableHead>
             ))}
           </TableRow>
@@ -173,7 +173,7 @@ export function AuditTable({
             disabled={isFetchingNextPage}
             onClick={onLoadMore}
           >
-            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+            {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
           </Button>
         </div>
       )}

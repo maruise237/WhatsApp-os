@@ -58,7 +58,7 @@ function paraRetorno(row: LinhaDeCron): RetornoAgendado {
     quando: row.next_run_at,
     prometidoPara: texto(payload.promised_at),
     situacao: situacaoDoRetorno({ enabled: row.enabled, cancelled_at: row.cancelled_at }),
-    motivo: texto(payload.reason) ?? "Retorno agendado",
+    motivo: texto(payload.reason) ?? "Relance planifiée",
     promessa: texto(payload.promise),
     canceladoEm: row.cancelled_at,
     motivoDoCancelamento: row.cancel_reason,

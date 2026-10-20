@@ -24,16 +24,16 @@ import { ApiError } from "@/lib/api/types";
 // ---------------------------------------------------------------------------
 
 const formSchema = z.object({
-  display_name: z.string().min(2, "Mínimo 2 caracteres").max(120, "Máximo 120 caracteres"),
+  display_name: z.string().min(2, "2 caractères minimum").max(120, "120 caractères maximum"),
   slug: z
     .string()
-    .min(2, "Mínimo 2 caracteres")
-    .max(40, "Máximo 40 caracteres")
-    .regex(/^[a-z0-9-]+$/, "Apenas letras minúsculas, números e hífens"),
+    .min(2, "2 caractères minimum")
+    .max(40, "40 caractères maximum")
+    .regex(/^[a-z0-9-]+$/, "Uniquement des lettres minuscules, des chiffres et des tirets"),
   legal_name: z.string().min(2).max(255).optional().or(z.literal("")),
   cnpj: z.string().optional().or(z.literal("")),
   plan: z.enum(["standard", "pro", "enterprise"]),
-  owner_email: z.string().email("E-mail inválido"),
+  owner_email: z.string().email("E-mail invalide"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -270,7 +270,7 @@ export function NewTenantForm() {
             {/* Actions */}
             <div className="flex items-center gap-3 pt-2">
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Criando..." : "Créer l’organisation"}
+                {isSubmitting ? "Création…" : "Créer l’organisation"}
               </Button>
               <Button
                 type="button"

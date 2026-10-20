@@ -104,7 +104,7 @@ function ReguaAbandono({ horas, padrao, podeEditar }: { horas: number; padrao: n
           disabled={!valido || salvar.isPending}
           onClick={() => salvar.mutate(n)}
         >
-          {salvar.isPending ? "Salvando…" : "Enregistrer"}
+          {salvar.isPending ? "Enregistrement…" : "Enregistrer"}
         </Button>
       ) : null}
       {sujo && !valido ? (
@@ -148,7 +148,7 @@ export function AtritoPanel({ podeEditarRegua }: { podeEditarRegua: boolean }) {
           ) : (
             <>
               Base: {escopo.demandas}{" "}
-              {escopo.demandas === 1 ? "demanda encerrada" : "demandas encerradas"} sur les 30 derniers jours, et {escopo.demandas_abertas} encore ouvertes.
+              {escopo.demandas === 1 ? "demande clôturée" : "demandes clôturées"} sur les 30 derniers jours, et {escopo.demandas_abertas} encore ouvertes.
             </>
           )}
         </p>

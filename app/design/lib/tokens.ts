@@ -41,7 +41,7 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
   sage: {
     id: "sage",
     name: "Sage",
-    description: "Verde-erva desaturado. Calmo, confiável, vegetal.",
+    description: "Vert herbe désaturé. Calme, fiable, végétal.",
     accent: {
       50: "#f3f6f1", 100: "#e4ebe0", 200: "#c8d6c1", 300: "#a4ba9a",
       400: "#82a077", 500: "#67885d", 600: "#506d48", 700: "#41573b",
@@ -97,7 +97,7 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
   mist: {
     id: "mist",
     name: "Mist",
-    description: "Azul-poeira frio. Discreto, focado, marítimo.",
+    description: "Bleu poussière froid. Discret, concentré, maritime.",
     accent: {
       50: "#f1f4f7", 100: "#dde5ec", 200: "#b8c8d6", 300: "#8da7bd",
       400: "#6789a3", 500: "#4f6f88", 600: "#3f586d", 700: "#344758",
@@ -125,7 +125,7 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
   plum: {
     id: "plum",
     name: "Plum",
-    description: "Ameixa suave. Sofisticado, noturno, contido.",
+    description: "Prune douce. Sophistiqué, nocturne, retenu.",
     accent: {
       50: "#f6f1f4", 100: "#ebdce5", 200: "#d4b2c4", 300: "#b885a0",
       400: "#9e637f", 500: "#854b66", 600: "#6c3d54", 700: "#583244",
@@ -183,8 +183,8 @@ export const PALETTES: Record<PaletteId, PaletteDef> = {
 // ─── Density ───────────────────────────────────────────────────────────────
 
 export const DENSITIES: Record<DensityId, { label: string; rowH: string; gap: string; padX: string; padY: string }> = {
-  aerada:      { label: "Aerada",      rowH: "56px", gap: "24px", padX: "20px", padY: "16px" },
-  equilibrada: { label: "Equilibrada", rowH: "44px", gap: "16px", padX: "16px", padY: "10px" },
+  aerada:      { label: "Aérée",      rowH: "56px", gap: "24px", padX: "20px", padY: "16px" },
+  equilibrada: { label: "Équilibrée", rowH: "44px", gap: "16px", padX: "16px", padY: "10px" },
   compacta:    { label: "Compacta",    rowH: "32px", gap: "8px",  padX: "10px", padY: "6px"  },
 };
 
@@ -212,7 +212,7 @@ export const TYPOS: Record<TypoId, { name: string; display: string; body: string
     display: '"Atkinson Hyperlegible", system-ui, sans-serif',
     body: '"Atkinson Hyperlegible", system-ui, sans-serif',
     mono: '"JetBrains Mono", ui-monospace, monospace',
-    description: "Acessibilidade-first. Glifos diferenciados, mesma família display+body.",
+    description: "Accessibilité d’abord. Glyphes différenciés, même famille display+body.",
     scale: 1.2,
   },
   "source-plex": {
@@ -237,8 +237,8 @@ export const SPACING = [
 ];
 
 export const RADII = [
-  { token: "none", value: "0px",   use: "Tabelas densas, áreas de dados, cabeçalhos de coluna." },
-  { token: "xs",   value: "4px",   use: "Botões, inputs, badges. Padrão para controles." },
+  { token: "none", value: "0px",   use: "Tableaux denses, zones de données, en-têtes de colonne." },
+  { token: "xs",   value: "4px",   use: "Boutons, champs, badges. Par défaut pour les contrôles." },
   { token: "sm",   value: "8px",   use: "Cards de lista, item de inbox, kanban card." },
   { token: "md",   value: "12px",  use: "Containers maiores, modais menores, panels." },
   { token: "lg",   value: "16px",  use: "Modais, popovers grandes, surfaces premium." },
@@ -256,11 +256,11 @@ export const SHADOWS = [
   { token: "sm",    value: "0 1px 2px 0 rgba(20,18,14,0.04)",                   use: "Hover discreto em cards interativos." },
   { token: "md",    value: "0 4px 12px -2px rgba(20,18,14,0.06), 0 2px 4px -1px rgba(20,18,14,0.04)", use: "Popover, dropdown, toast." },
   { token: "lg",    value: "0 12px 32px -6px rgba(20,18,14,0.10), 0 4px 12px -2px rgba(20,18,14,0.06)", use: "Modal, sheet." },
-  { token: "inset", value: "inset 0 1px 0 0 rgba(255,255,255,0.04)",            use: "Highlight superior em superfícies dark." },
+  { token: "inset", value: "inset 0 1px 0 0 rgba(255,255,255,0.04)",            use: "Reflet supérieur sur les surfaces sombres." },
 ];
 
 export const Z_INDEX = [
-  { token: "base",     value: "0",   use: "Conteúdo." },
+  { token: "base",     value: "0",   use: "Contenu." },
   { token: "raised",   value: "10",  use: "Sticky headers, badges flutuantes." },
   { token: "dropdown", value: "20",  use: "Select, popover, menu." },
   { token: "overlay",  value: "30",  use: "Tooltip." },

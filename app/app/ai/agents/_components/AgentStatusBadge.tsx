@@ -30,11 +30,11 @@ export function deriveAgentStatus(agent: AgentRow): AgentStatus {
 }
 
 const LABEL: Record<AgentStatus, string> = {
-  published: "Publicado",
-  draft: "Rascunho",
-  paused: "Pausado",
-  archived: "Arquivado",
-  invalid: "Inválido",
+  published: "Publié",
+  draft: "Brouillon",
+  paused: "En pause",
+  archived: "Archivé",
+  invalid: "Invalide",
 };
 
 const VARIANT: Record<AgentStatus, "default" | "secondary" | "outline" | "destructive"> = {

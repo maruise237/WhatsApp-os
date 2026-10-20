@@ -116,7 +116,7 @@ export async function unpauseAgentAction(id: string): Promise<ActionResult> {
 
   // mcp_agent não pode ser despausado por aqui — precisa ir em /publish escolhendo versão.
   if (existing.kind === "mcp_agent") {
-    return { ok: false, error: "publish_required", message: "Publique uma versão para reativar." };
+    return { ok: false, error: "publish_required", message: "Publiez une version pour réactiver." };
   }
 
   const { error } = await admin

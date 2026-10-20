@@ -119,7 +119,7 @@ export function CanalParceiroClient() {
     }
   };
 
-  const rotulo = estado?.label ?? "provedor parceiro";
+  const rotulo = estado?.label ?? "fournisseur partenaire";
   const conectado = estado?.connected ?? false;
 
   return (

@@ -82,7 +82,7 @@ export function ResolveIncidentDialog({ incidentId }: ResolveIncidentDialogProps
             onClick={handleResolve}
             disabled={!isValid || isPending}
           >
-            {isPending ? "Resolvendo..." : "Confirmer la résolution"}
+            {isPending ? "Résolution…" : "Confirmer la résolution"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

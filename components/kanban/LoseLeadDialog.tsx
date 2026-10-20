@@ -17,13 +17,13 @@ import { useT } from "@/hooks/i18n/useT";
 
 const REASON_LABELS: Record<(typeof CANONICAL_LOST_REASONS)[number], string> = {
   requested_by_customer: "Cliente solicitou cancelamento",
-  price: "Preço",
-  no_response: "Sem resposta do cliente",
-  product_unavailable: "Produto indisponível",
-  cancelled_by_store: "Cancelado pela loja",
-  cancelled_by_customer: "Cancelado pelo cliente",
-  payment_failed: "Falha no pagamento",
-  other: "Outro motivo",
+  price: "Prix",
+  no_response: "Aucune réponse du client",
+  product_unavailable: "Produit indisponible",
+  cancelled_by_store: "Annulé par le magasin",
+  cancelled_by_customer: "Annulé par le client",
+  payment_failed: "Échec du paiement",
+  other: "Autre motif",
 };
 
 interface LoseLeadDialogProps {

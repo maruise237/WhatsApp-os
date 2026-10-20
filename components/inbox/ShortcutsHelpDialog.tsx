@@ -10,7 +10,7 @@ interface Props {
 const BINDINGS: { keys: string; description: string }[] = [
   { keys: "j", description: "Conversation suivante" },
   { keys: "k", description: "Conversation précédente" },
-  { keys: "r", description: "Focar resposta" },
+  { keys: "r", description: "Placer le curseur dans la réponse" },
   // O atalho mais usado do inbox não estava aqui — vivia só no placeholder do
   // composer, que some no instante em que você começa a escrever, ou seja,
   // exatamente quando ia precisar dele para quebrar linha.

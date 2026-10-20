@@ -31,15 +31,15 @@ const STATUS_LABEL: Record<string, string> = {
   // conversa escalada mostrava `pending` cru no rosto do atendente. O
   // `conversationStatusSchema` não lista 'pending' porque valida ENTRADA da API;
   // quem escreve este estado é o motor, e a tela precisa saber lê-lo.
-  pending: "Aguardando atendente",
-  claimed: "Em atendimento",
+  pending: "En attente d'un agent",
+  claimed: "Prise en charge en cours",
   // "Automático", não "IA": com o selo de comando ao lado dizendo quem manda, o
   // header mostrava DUAS palavras para o MESMO ator na mesma linha ("IA
   // atendendo" + "Automático"). A palavra do estado já é contrato em quatro
   // arquivos e no dicionário; a que sobrava era esta.
-  ai_handling: "Automático atendendo",
+  ai_handling: "Automatique en cours",
   closed: "Fechada",
-  archived: "Arquivada",
+  archived: "Archivée",
 };
 
 export function ConversationHeader({ conversation }: Props) {
@@ -166,7 +166,7 @@ export function ConversationHeader({ conversation }: Props) {
             mesma tela. Cor não sobrevive ao daltonismo nem ao teste do metro. */}
         <div className="mt-1 flex items-center gap-2" data-testid="comando-da-conversa">
           {comando.quem === "humano" ? (
-            <OwnerBadge ownerKind="user" ownerName={comando.nome ?? "Atendente"} />
+            <OwnerBadge ownerKind="user" ownerName={comando.nome ?? "Agent"} />
           ) : comando.quem === "automatico" ? (
             <OwnerBadge ownerKind="ai" ownerName="Automatique" />
           ) : (
@@ -247,7 +247,7 @@ export function ConversationHeader({ conversation }: Props) {
             }
             onClick={() => retomar.mutate({ conversation_id: conversation.id })}
           >
-            {retomar.isPending ? "Devolvendo..." : t("Devolver ao automático")}
+            {retomar.isPending ? "Restitution…" : t("Devolver ao automático")}
           </Button>
         )}
         {podePausar && (
@@ -262,7 +262,7 @@ export function ConversationHeader({ conversation }: Props) {
             title="La réponse automatique s’arrête dans cette conversation. Le responsable ne change pas."
             onClick={() => pausar.mutate({ conversation_id: conversation.id })}
           >
-            {pausar.isPending ? "Pausando..." : t("Pausar o automático")}
+            {pausar.isPending ? "Mise en pause…" : t("Pausar o automático")}
           </Button>
         )}
         {status !== "closed" && status !== "archived" && (

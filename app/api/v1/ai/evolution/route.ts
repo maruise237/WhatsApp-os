@@ -123,7 +123,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     // o canal de aviso em vez de calar — número truncado sem sinal é pior que
     // bloco zerado, porque parece completo.
     if (rows.length === ROW_CAP) {
-      fonteFalhou(tabela, { message: `row cap de ${ROW_CAP} atingido — período truncado` });
+      fonteFalhou(tabela, { message: `row cap de ${ROW_CAP} atteint — période tronquée` });
     }
     return rows;
   }

@@ -15,12 +15,12 @@ export type EdgeConditionOption = {
   condition: FlowEdge["condition"];
 };
 
-const ALWAYS_OPTION: EdgeConditionOption = { key: "always", label: "Sempre", condition: { type: "always" } };
+const ALWAYS_OPTION: EdgeConditionOption = { key: "always", label: "Toujours", condition: { type: "always" } };
 
 function classMatchOption(value: string): EdgeConditionOption {
   return {
     key: `class_match:${value}`,
-    label: value === "no_reply" ? "Sem resposta" : value,
+    label: value === "no_reply" ? "Sans réponse" : value,
     condition: { type: "class_match", value },
   };
 }
@@ -28,7 +28,7 @@ function classMatchOption(value: string): EdgeConditionOption {
 function condResultOption(value: boolean): EdgeConditionOption {
   return {
     key: `cond_result:${value}`,
-    label: value ? "Sim" : "Não",
+    label: value ? "Oui" : "Non",
     condition: { type: "cond_result", value },
   };
 }
@@ -65,11 +65,11 @@ export function conditionKey(condition: FlowEdge["condition"]): string {
 export function conditionLabel(condition: FlowEdge["condition"]): string {
   switch (condition.type) {
     case "always":
-      return "Sempre";
+      return "Toujours";
     case "class_match":
-      return condition.value === "no_reply" ? "Sem resposta" : condition.value;
+      return condition.value === "no_reply" ? "Sans réponse" : condition.value;
     case "cond_result":
-      return condition.value ? "Sim" : "Não";
+      return condition.value ? "Oui" : "Non";
     case "branch":
       // Only the source node knows a branch's label. This file has no node in
       // scope, and nothing emits `branch` conditions until the builder switches

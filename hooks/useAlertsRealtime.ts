@@ -7,9 +7,9 @@ import type { AlertKind } from "@/app/api/v1/admin/dashboard/kpis/route";
 
 const KIND_LABELS: Record<AlertKind, string> = {
   waha_ban: "Alerta WAHA",
-  lgpd_at_risk: "Prazo LGPD",
+  lgpd_at_risk: "Échéance RGPD",
   ai_budget: "Budget IA",
-  tenant_pending_overflow: "Overflow de conversas",
+  tenant_pending_overflow: "Débordement de conversations",
 };
 
 interface AlertBroadcast {
@@ -25,7 +25,7 @@ export function useAlertsRealtime() {
       const data = (payload as { payload?: AlertBroadcast } | null)?.payload;
       const kind = data?.kind;
       const label = kind ? (KIND_LABELS[kind] ?? kind) : "alerta";
-      toast.warning(`Novo ${label}`, { description: data?.message });
+      toast.warning(`Nouveau ${label}`, { description: data?.message });
       qc.invalidateQueries({ queryKey: ["admin", "dashboard", "kpis"] });
     },
     [qc],

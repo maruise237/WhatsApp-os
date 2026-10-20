@@ -48,7 +48,7 @@ export function NextActionSlot({
           onClick={(e) => decide(e, "approve")}
           // O rótulo curto cabe no card; o acessível diz DE QUE proposta se
           // trata — "Aprovar" sozinho, lido fora de contexto, não decide nada.
-          aria-label={`Aprovar: ${label}`}
+          aria-label={`Approuver : ${label}`}
           className={cn(
             "rounded px-1.5 py-0.5 text-[11px] font-medium transition-colors",
             "bg-accent/10 text-accent hover:bg-accent/20",

@@ -69,10 +69,10 @@ interface Variaveis {
 }
 
 const AVISO: Record<Intervencao, string> = {
-  pause: "Follow-up pausado.",
-  resume: "Follow-up retomado.",
-  snooze: "Follow-up adiado.",
-  skip: "Passo pulado.",
+  pause: "Relance mise en pause.",
+  resume: "Relance reprise.",
+  snooze: "Relance reportée.",
+  skip: "Étape ignorée.",
 };
 
 /**

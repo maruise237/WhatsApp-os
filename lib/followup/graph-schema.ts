@@ -392,9 +392,9 @@ export type FlowBranch = {
   condition: FlowEdgeCondition;
 };
 
-const FALLBACK_ALWAYS_LABEL = 'Sempre';
+const FALLBACK_ALWAYS_LABEL = 'Toujours';
 const FALLBACK_NONE_LABEL = 'Nenhuma delas';
-const NO_REPLY_LABEL = 'Sem resposta';
+const NO_REPLY_LABEL = 'Sans réponse';
 
 function fallbackBranch(label: string): FlowBranch {
   return {
@@ -434,14 +434,14 @@ export function nodeBranches(node: BranchableNode): FlowBranch[] {
       return [
         {
           id: CONDITION_TRUE_BRANCH_ID,
-          label: 'Sim',
+          label: 'Oui',
           check: null,
           kind: 'match',
           condition: { type: 'cond_result', value: true },
         },
         {
           id: CONDITION_FALSE_BRANCH_ID,
-          label: 'Não',
+          label: 'Non',
           check: null,
           kind: 'match',
           condition: { type: 'cond_result', value: false },

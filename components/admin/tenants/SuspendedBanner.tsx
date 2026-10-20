@@ -12,11 +12,11 @@ function formatRelativePtBr(isoDate: string): string {
   const diffMs = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) return "hoje";
-  if (diffDays === 1) return "ontem";
+  if (diffDays === 0) return "aujourd’hui";
+  if (diffDays === 1) return "hier";
   if (diffDays < 7) return `il y a ${diffDays} jours`;
   if (diffDays < 30) return `il y a ${Math.floor(diffDays / 7)} semaine${Math.floor(diffDays / 7) > 1 ? "s" : ""}`;
-  if (diffDays < 365) return `há ${Math.floor(diffDays / 30)} mês${Math.floor(diffDays / 30) > 1 ? "es" : ""}`;
+  if (diffDays < 365) return `il y a ${Math.floor(diffDays / 30)} mois`;
   return `il y a ${Math.floor(diffDays / 365)} an${Math.floor(diffDays / 365) > 1 ? "s" : ""}`;
 }
 

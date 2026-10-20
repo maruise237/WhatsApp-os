@@ -10,7 +10,7 @@ export function PlatformModeBanner() {
   return (
     <div
       role="region"
-      aria-label="Modo Plataforma"
+      aria-label="Mode plateforme"
       className="sticky top-0 z-40 flex h-10 w-full items-center justify-between border-b border-amber-300 bg-amber-100 px-4 text-amber-900"
     >
       <div className="flex items-center gap-2 text-sm">

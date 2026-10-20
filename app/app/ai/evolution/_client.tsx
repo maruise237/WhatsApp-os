@@ -417,7 +417,7 @@ function Conteudo({ payload }: { payload: NonNullable<ReturnType<typeof useEvolu
             significa="Suggestions que le système a tirées de ses propres échanges et que vous avez relues et acceptées."
           />
           <StatCard
-            rotulo="Habilidades instaladas"
+            rotulo="Compétences installées"
             valor={num(learned.skills_installed)}
             significa="Compétences que l’agent charge quand la conversation le demande — par exemple, confirmer un rendez-vous."
           />
@@ -455,7 +455,7 @@ function Conteudo({ payload }: { payload: NonNullable<ReturnType<typeof useEvolu
       >
         <div className="grid gap-3 lg:grid-cols-3">
           <GraficoDiario
-            titulo="Habilidades usadas"
+            titulo="Compétences utilisées"
             significa="Nombre de fois où l’agent a fait appel à une compétence spécialisée pour mener la conversation."
             dados={activity.series.skill_activations}
             cor="hsl(262 83% 58%)"

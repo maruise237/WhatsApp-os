@@ -20,17 +20,17 @@ interface Props {
 }
 
 const TYPE_LABELS: Record<LgpdRequestType, string> = {
-  redact: "Anonimização cliente",
-  data_request: "Solicitação de dados",
-  store_redact: "Anonimização tenant",
+  redact: "Anonymisation client",
+  data_request: "Demande de données",
+  store_redact: "Anonymisation organisation",
 };
 
 const STATUS_LABELS: Record<LgpdRequestStatus, string> = {
-  received: "Recebido",
-  processing: "Processando",
-  completed: "Concluído",
-  failed: "Falhou",
-  pending_review: "Revisão pendente",
+  received: "Reçue",
+  processing: "En cours",
+  completed: "Terminé",
+  failed: "Échec",
+  pending_review: "Revue en attente",
 };
 
 const STATUS_VARIANT: Record<

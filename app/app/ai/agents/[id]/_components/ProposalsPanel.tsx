@@ -24,8 +24,8 @@ import { useIdioma, useT } from "@/hooks/i18n/useT";
 const TYPE_LABEL: Record<ProposalRow["type"], string> = {
   playbook_bullet: "Regra de playbook",
   golden_case: "Caso exemplar",
-  reentry_trigger: "Gatilho de reengajamento",
-  org_memory_entry: "Memória da organização",
+  reentry_trigger: "Déclencheur de réengagement",
+  org_memory_entry: "Mémoire de l’organisation",
 };
 
 export function ProposalsPanel({

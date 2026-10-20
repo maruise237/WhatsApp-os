@@ -28,7 +28,7 @@ export function JaEstaPronto({ retrato }: { retrato: RetratoDaInstalacao }) {
       pronto: retrato.inteligencia.origemDaChave !== "nenhuma",
       texto:
         retrato.inteligencia.origemDaChave !== "nenhuma"
-          ? `Inteligência contratada: ${retrato.inteligencia.rotulo}`
+          ? `Intelligence souscrite : ${retrato.inteligencia.rotulo}`
           : retrato.inteligencia.chaveEmVerificacao
             ? "Clé enregistrée — vérification auprès du fournisseur d’IA"
             : "Il manque la clé de l’intelligence artificielle",

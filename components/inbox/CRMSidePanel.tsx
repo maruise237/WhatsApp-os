@@ -84,8 +84,8 @@ interface DemandaRow {
 /** Vocabulário de quem atende, não o do banco. */
 const ESTADO_LEGIVEL: Record<string, string> = {
   aberta: "Aberta",
-  em_atendimento: "Em atendimento",
-  aguardando_cliente: "Aguardando o cliente",
+  em_atendimento: "Prise en charge en cours",
+  aguardando_cliente: "En attente du client",
 };
 
 function horasDesde(iso: string): number {

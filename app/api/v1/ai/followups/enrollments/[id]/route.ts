@@ -218,7 +218,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     steps_taken: row.steps_taken,
     contact: {
       id: row.contact_id,
-      name: contato ? rotuloDoContato(contato) : "Contato removido",
+      name: contato ? rotuloDoContato(contato) : "Contact supprimé",
     },
     flow: { pointer_id: row.pointer_id, name: pointer?.name ?? null, version_id: row.version_id },
     agent_name: agente?.name ?? null,

@@ -87,11 +87,11 @@ interface Props {
 
 /** Mensagem por código de recusa da rota. */
 const ERRO_EM_PORTUGUES: Record<string, string> = {
-  unauthenticated: "Sua sessão expirou. Entre de novo para trocar o logo.",
-  forbidden_role: "Você não tem permissão para trocar este logo.",
-  forbidden_tenant: "Nenhuma empresa ativa nesta sessão.",
-  mfa_required: "Confirme o segundo fator nesta sessão e tente de novo.",
-  rate_limited: "Muitas trocas seguidas. Tente de novo em alguns minutos.",
+  unauthenticated: "Votre session a expiré. Reconnectez-vous pour changer le logo.",
+  forbidden_role: "Vous n’avez pas l’autorisation de changer ce logo.",
+  forbidden_tenant: "Aucune entreprise active dans cette session.",
+  mfa_required: "Confirmez le second facteur dans cette session, puis réessayez.",
+  rate_limited: "Trop de changements successifs. Réessayez dans quelques minutes.",
 };
 
 export function CampoDeLogo({
@@ -221,7 +221,7 @@ export function CampoDeLogo({
         toast.error(await razaoDaFalha(resposta));
         return;
       }
-      toast.success("Logo atualizado.");
+      toast.success("Logo mis à jour.");
       const gravado = await logoDaResposta(resposta);
       if (gravado !== undefined) setLogoGravado(gravado);
       startTransition(() => router.refresh());
@@ -241,7 +241,7 @@ export function CampoDeLogo({
         toast.error(await razaoDaFalha(resposta));
         return;
       }
-      toast.success("Logo removido.");
+      toast.success("Logo supprimé.");
       // A rota devolve `logo_url: null` — "esta camada ficou sem logo próprio" —,
       // e é isso que faz a prévia cair no herdado sem esperar o refresh.
       const gravado = await logoDaResposta(resposta);

@@ -8,43 +8,43 @@ type Variant = "error" | "warning" | "info";
 const COPY: Record<string, { variant: Variant; msg: string }> = {
   body_malformed: {
     variant: "error",
-    msg: "Requisição inválida. Recarregue e tente de novo.",
+    msg: "Requête invalide. Rechargez la page et réessayez.",
   },
   cursor_malformed: {
     variant: "error",
-    msg: "Falha ao paginar. Volte ao início.",
+    msg: "Échec de la pagination. Revenez au début.",
   },
   validation_error: {
     variant: "error",
-    msg: "Dados inválidos. Confira os campos destacados.",
+    msg: "Données invalides. Vérifiez les champs signalés.",
   },
   auth_required: {
     variant: "warning",
-    msg: "Sessão expirada. Faça login novamente.",
+    msg: "Session expirée. Reconnectez-vous.",
   },
   forbidden_role: {
     variant: "warning",
-    msg: "Você não tem permissão para esta ação.",
+    msg: "Vous n’avez pas l’autorisation d’effectuer cette action.",
   },
   resource_not_found: {
     variant: "error",
-    msg: "Recurso não encontrado ou já removido.",
+    msg: "Ressource introuvable ou déjà supprimée.",
   },
   tenant_not_found: {
     variant: "error",
-    msg: "Organização não encontrada.",
+    msg: "Organisation introuvable.",
   },
   idempotency_conflict: {
     variant: "warning",
-    msg: "Operação já processada.",
+    msg: "Opération déjà traitée.",
   },
   conversation_already_claimed: {
     variant: "warning",
-    msg: "Outro atendente já assumiu.",
+    msg: "Un autre agent a déjà pris en charge.",
   },
   invalid_state: {
     variant: "warning",
-    msg: "Este caso já foi respondido ou fechado.",
+    msg: "Ce dossier a déjà reçu une réponse ou a été clôturé.",
   },
   rate_limited: {
     variant: "warning",
@@ -52,11 +52,11 @@ const COPY: Record<string, { variant: Variant; msg: string }> = {
   },
   lgpd_anonymization_irreversible: {
     variant: "error",
-    msg: "Esta ação não pode ser desfeita: o contato já foi anonimizado.",
+    msg: "Cette action est irréversible : le contact a déjà été anonymisé.",
   },
   internal_error: {
     variant: "error",
-    msg: "Erro interno. Tente de novo em instantes.",
+    msg: "Erreur interne. Réessayez dans quelques instants.",
   },
 };
 

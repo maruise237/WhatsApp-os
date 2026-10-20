@@ -35,7 +35,7 @@ interface Resposta {
 
 const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
   so_falha: {
-    rotulo: "falhando sempre",
+    rotulo: "échoue systématiquement",
     classe: "border-destructive/50 bg-destructive/10 text-destructive",
   },
   falhando: {
@@ -47,7 +47,7 @@ const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
     classe: "border-amber-500/40 text-amber-700 dark:text-amber-400",
   },
   nunca_usada: {
-    rotulo: "nunca usada",
+    rotulo: "jamais utilisée",
     classe: "border-amber-500/40 text-amber-700 dark:text-amber-400",
   },
   recem_ligada: {
@@ -66,8 +66,8 @@ const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
 
 /** `draft`/`published` são palavras do banco, não do dono da clínica. */
 const NOME_DA_VERSAO: Record<string, string> = {
-  draft: "que você está editando",
-  published: "que está no ar",
+  draft: "que vous modifiez",
+  published: "actuellement en ligne",
   superseded: "antiga",
 };
 

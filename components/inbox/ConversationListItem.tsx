@@ -206,7 +206,7 @@ export function ConversationListItem({
             <span className="text-[10px] text-muted-foreground">+{overflow}</span>
           )}
           {mostrarAtendente && comando.quem === "humano" && (
-            <OwnerBadge ownerKind="user" ownerName={comando.nome ?? "Atendente"} compacto />
+            <OwnerBadge ownerKind="user" ownerName={comando.nome ?? "Agent"} compacto />
           )}
           {mostrarCanal && rotuloCanal && (
             <Badge

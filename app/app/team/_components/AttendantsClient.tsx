@@ -44,11 +44,11 @@ import {
 import { Clock, Plus, Trash } from "@/lib/ui/icons";
 import { useT } from "@/hooks/i18n/useT";
 
-const DOW_LABELS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const DOW_LABELS = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 
 const MODE_LABELS: Record<(typeof ROUTING_MODES)[number], string> = {
-  manual: "Manual (atendente puxa da fila)",
-  round_robin: "Rodízio (distribui automático)",
+  manual: "Manuel (l’agent prend dans la file)",
+  round_robin: "Rotation (distribution automatique)",
 };
 
 interface Attendant {

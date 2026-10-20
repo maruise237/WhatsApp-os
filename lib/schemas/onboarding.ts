@@ -33,7 +33,7 @@ export const PROMPT_TEMPLATES = [
 export type PromptTemplate = (typeof PROMPT_TEMPLATES)[number];
 
 export const aiAgentDefaultSchema = z.object({
-  name: z.string().min(2).max(80).default("Atendente IA"),
+  name: z.string().min(2).max(80).default("Assistant IA"),
   prompt_template: z.enum(PROMPT_TEMPLATES).default("ecommerce_friendly"),
   /**
    * As regras da casa — o que vale para QUALQUER agente desta organização

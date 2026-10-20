@@ -1,10 +1,10 @@
 "use client";
 
 const inboxList = [
-  { name: "Maria Silva",  preview: "Confirma o endereço…", ts: "14h32", initial: "MS", active: true },
-  { name: "Jean Mbarga", preview: "Comprovante anexo",     ts: "14h28", initial: "JP" },
-  { name: "Ana Beatriz",  preview: "Trocar tamanho?",       ts: "13h51", initial: "AB" },
-  { name: "Carlos Lima",  preview: "Produto chegou…",       ts: "12h17", initial: "CL" },
+  { name: "Aïcha Ndiaye", preview: "Je confirme l’adresse…", ts: "14h32", initial: "AN", active: true },
+  { name: "Jean Mbarga", preview: "Preuve jointe",     ts: "14h28", initial: "JP" },
+  { name: "Fatou Diallo", preview: "Changer de taille ?",       ts: "13h51", initial: "FD" },
+  { name: "Paul Essomba", preview: "Produit arrivé…",       ts: "12h17", initial: "PE" },
 ];
 
 export function SectionPatterns() {
@@ -16,7 +16,7 @@ export function SectionPatterns() {
       </p>
 
       {/* Inbox 3 colunas */}
-      <h3>Inbox · 3 colunas</h3>
+      <h3>Inbox · 3 colonnes</h3>
       <div
         className="ds-card"
         style={{
@@ -112,12 +112,12 @@ export function SectionPatterns() {
       <h3>Settings · layout sidebar + form</h3>
       <div className="ds-card" style={{ padding: 0, display: "grid", gridTemplateColumns: "200px 1fr" }}>
         <nav style={{ borderRight: "1px solid var(--ds-border)", padding: 16, display: "flex", flexDirection: "column", gap: 2 }}>
-          {["Conta", "Time", "Canais", "WhatsApp", "Faturamento", "API & Webhooks"].map((n, i) => (
+          {["Compte", "Équipe", "Canaux", "WhatsApp", "Facturation", "API et webhooks"].map((n, i) => (
             <button key={n} className="ds-nav-link" data-active={i === 2}>{n}</button>
           ))}
         </nav>
         <div style={{ padding: 24 }}>
-          <h3 style={{ marginTop: 0 }}>Canais conectados</h3>
+          <h3 style={{ marginTop: 0 }}>Canaux connectés</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, border: "1px solid var(--ds-border)", borderRadius: 8 }}>
               <div>

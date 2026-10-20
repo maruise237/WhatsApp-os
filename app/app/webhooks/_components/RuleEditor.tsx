@@ -86,7 +86,7 @@ const CURATED_FIELDS: Record<TriggerEvent, CuratedField[]> = {
   "contact.tag_added": [TAG_ADDED_FIELD],
 };
 
-const OP_LABELS: Record<Op, string> = { eq: "é", neq: "não é", contains: "contém" };
+const OP_LABELS: Record<Op, string> = { eq: "est égal à", neq: "n’est pas égal à", contains: "contient" };
 
 function emptyCondition(): ConditionRow {
   return { field: "", op: "eq", value: "" };
@@ -251,7 +251,7 @@ export function RuleEditor({ open, onOpenChange, rule }: Props) {
                         className="flex-1 basis-40"
                         value={cond.field}
                         onChange={(e) => updateCondition(idx, { field: e.target.value })}
-                        placeholder="ex: lead.custom_fields.minha_chave"
+                        placeholder="ex. : lead.custom_fields.ma_cle"
                       />
                     ) : (
                       <Select

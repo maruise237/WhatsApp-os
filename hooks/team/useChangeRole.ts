@@ -36,7 +36,7 @@ export function useChangeRole() {
       showApiError(err);
     },
     onSuccess: () => {
-      toast.success("Papel atualizado.");
+      toast.success("Rôle mis à jour.");
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: ["team"] });

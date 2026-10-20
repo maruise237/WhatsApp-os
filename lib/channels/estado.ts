@@ -55,7 +55,7 @@ export interface LeituraDoEstado {
 }
 
 const LEITURA: Record<EstadoDoCanal, LeituraDoEstado> = {
-  WORKING: { rotulo: "Conectado", tom: "success", utilizavel: true },
+  WORKING: { rotulo: "Connecté", tom: "success", utilizavel: true },
   SCAN_QR_CODE: { rotulo: "Escaneie o QR", tom: "warning", utilizavel: false },
   STARTING: { rotulo: "Conectando…", tom: "warning", utilizavel: false },
   STOPPED: { rotulo: "Parado", tom: "error", utilizavel: false },
@@ -69,7 +69,7 @@ const LEITURA: Record<EstadoDoCanal, LeituraDoEstado> = {
  * a informação crua pertence ao log, não à tela de quem vende.
  */
 const DESCONHECIDO: LeituraDoEstado = {
-  rotulo: "Situação desconhecida",
+  rotulo: "Situation inconnue",
   tom: "neutral",
   utilizavel: false,
 };
@@ -104,5 +104,5 @@ export function nomeDoCanal(c: {
   if (apelido) return apelido;
   const telefone = (c.phone_number ?? "").trim();
   if (telefone) return telefone;
-  return "Número sem nome";
+  return "Numéro sans nom";
 }

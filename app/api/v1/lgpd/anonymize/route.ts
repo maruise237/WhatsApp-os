@@ -91,7 +91,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .from("contacts")
     .update({
       name: null,
-      display_name: `Contato Anonimizado #${shortId}`,
+      display_name: `Client Anonymisé #${shortId}`,
       email: null,
       // `email_normalized` sai daqui pelo mesmo motivo do handler de contatos:
       // é coluna GERADA e a atribuição abortava o UPDATE. O efeito aqui era pior

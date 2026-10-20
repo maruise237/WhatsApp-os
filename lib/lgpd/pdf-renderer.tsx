@@ -202,7 +202,7 @@ export function LgpdExportPdf({ data, unsignedWarning }: Props): React.ReactElem
             </View>
             <View style={styles.row}>
               <Text style={styles.label}>Anonimizado:</Text>
-              <Text style={styles.value}>{data.contact.is_anonymized ? "Sim" : "Não"}</Text>
+              <Text style={styles.value}>{data.contact.is_anonymized ? "Oui" : "Non"}</Text>
             </View>
           </View>
         ) : null}

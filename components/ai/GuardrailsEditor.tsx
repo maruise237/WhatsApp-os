@@ -28,7 +28,7 @@ const KIND_LABELS: Record<GuardrailKind, string> = {
   regex_output_block: "Regex output block",
   rag_must_hit: "RAG must hit",
   regex_input_block: "Regex input block",
-  window_check: "Janela horária",
+  window_check: "Fenêtre horaire",
   contact_flag: "Contact flag",
 };
 

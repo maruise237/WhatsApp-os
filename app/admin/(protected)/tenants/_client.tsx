@@ -26,7 +26,7 @@ export function TenantsClient() {
         <div className="min-w-0">
           <h1 className="text-2xl font-semibold tracking-tight">Organisations</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {isLoading ? "Carregando..." : `${total} tenant${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
+            {isLoading ? "Chargement…" : `${total} tenant${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
           </p>
         </div>
         <Button asChild size="sm" className="shrink-0">

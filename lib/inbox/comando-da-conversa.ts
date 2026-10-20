@@ -232,15 +232,15 @@ export function comandoDaConversa(fatos: FatosDoComando, agora: Date = new Date(
  */
 export const ROTULO_DO_COMANDO: Record<Comando["quem"], string> = {
   humano: "Em atendimento",
-  automatico: "Automático atendendo",
+  automatico: "Automatique en cours",
   ninguem: "Sem atendente",
-  aguardando: "Aguardando atendente",
+  aguardando: "En attente d'un agent",
   encerrada: "Encerrada",
 };
 
 export const ROTULO_DO_MOTIVO: Record<MotivoDoSilencio, string> = {
-  atendente_no_comando: "Automático pausado — alguém assumiu",
-  contato_travado: "Automático pausado para este cliente",
-  pausado: "Automático pausado",
-  resposta_humana_recente: "Automático volta em instantes",
+  atendente_no_comando: "Automatique en pause — quelqu'un a pris le relais",
+  contato_travado: "Automatique en pause pour ce client",
+  pausado: "Automatique en pause",
+  resposta_humana_recente: "Automatique revient dans un instant",
 };

@@ -203,7 +203,7 @@ export function DossieDoFollowup({ id, canWrite }: Props) {
           </Badge>
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <Campo rotulo="Fluxo">{data.flow.name ?? "Fluxo removido"}</Campo>
+          <Campo rotulo="Flux">{data.flow.name ?? "Flux supprimé"}</Campo>
           <Campo rotulo="Agent">{data.agent_name ?? "Aucun agent assigné"}</Campo>
           <Campo rotulo="Début">{absoluta(data.started_at)}</Campo>
           <Campo rotulo="Passos dados">{data.steps_taken}</Campo>

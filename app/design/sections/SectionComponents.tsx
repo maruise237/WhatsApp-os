@@ -28,13 +28,13 @@ export function SectionComponents() {
       <h3>Buttons</h3>
       <div className="ds-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <Stack label="Variants">
-          <button className="ds-btn ds-btn--primary">Confirmar envio</button>
+          <button className="ds-btn ds-btn--primary">Confirmer l’envoi</button>
           <button className="ds-btn ds-btn--secondary">Annuler</button>
           <button className="ds-btn ds-btn--ghost">Reporter</button>
           <button className="ds-btn ds-btn--destructive">Supprimer la conversation</button>
           <button className="ds-btn ds-btn--link">voir les détails</button>
         </Stack>
-        <Stack label="Estados">
+        <Stack label="États">
           <button className="ds-btn ds-btn--primary">Default</button>
           <button className="ds-btn ds-btn--primary" disabled>Disabled</button>
           <button
@@ -76,10 +76,10 @@ export function SectionComponents() {
         </div>
         <div>
           <label className="ds-label">Disabled</label>
-          <input className="ds-input" defaultValue="bloqueado" disabled />
+          <input className="ds-input" defaultValue="bloqué" disabled />
         </div>
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="ds-label">Resposta</label>
+          <label className="ds-label">Réponse</label>
           <textarea className="ds-input" rows={4} placeholder="Saisissez votre réponse…" style={{ height: "auto", padding: 12, resize: "vertical" }} />
         </div>
       </div>
@@ -192,7 +192,7 @@ export function SectionComponents() {
       <h3>Tabs</h3>
       <div className="ds-card">
         <div className="ds-tabs">
-          {([["inbox", "Inbox"], ["pedidos", "Pedidos"], ["clientes", "Clientes"], ["relatorios", "Relatórios"]] as const).map(([id, label]) => (
+          {([["inbox", "Inbox"], ["pedidos", "Commandes"], ["clientes", "Clients"], ["relatorios", "Rapports"]] as const).map(([id, label]) => (
             <button key={id} className="ds-tab" data-active={tab === id} onClick={() => setTab(id)}>
               {label}
             </button>

@@ -59,7 +59,7 @@ export function useSaveFollowupFlowDraft(id: string) {
       qc.setQueryData<FollowupFlowDetailRow>(followupFlowQueryKey(id), (prev) =>
         prev ? { ...prev, ...updated } : prev,
       );
-      toast.success("Rascunho salvo.");
+      toast.success("Brouillon enregistré.");
     },
     onError: (err) => showApiError(err),
   });
@@ -80,7 +80,7 @@ export function usePublishFollowupFlow(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: followupFlowQueryKey(id) });
       qc.invalidateQueries({ queryKey: followupFlowsListQueryKey });
-      toast.success("Fluxo publicado.");
+      toast.success("Flux publié.");
     },
   });
 }
@@ -98,7 +98,7 @@ export function useDisableFollowupFlow(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: followupFlowQueryKey(id) });
       qc.invalidateQueries({ queryKey: followupFlowsListQueryKey });
-      toast.success("Fluxo desativado.");
+      toast.success("Flux désactivé.");
     },
     onError: (err) => showApiError(err),
   });
@@ -135,7 +135,7 @@ export function useUpdateTriggerConfig(id: string) {
       qc.setQueryData<FollowupFlowDetailRow>(followupFlowQueryKey(id), (prev) =>
         prev ? { ...prev, ...updated } : prev,
       );
-      toast.success("Gatilho atualizado.");
+      toast.success("Déclencheur mis à jour.");
     },
     onError: (err) => showApiError(err),
   });

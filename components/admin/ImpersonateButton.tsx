@@ -106,7 +106,7 @@ export function ImpersonateButton({
         <AlertDialogFooter>
           <AlertDialogCancel disabled={busy}>Annuler</AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm} disabled={busy}>
-            {busy ? "Entrando…" : "Confirmer et entrer"}
+            {busy ? "Connexion…" : "Confirmer et entrer"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -30,34 +30,34 @@ const MODO_COPY: Record<RoutingMode, { titulo: string; corpo: string }> = {
   manual: {
     titulo: "Chacun prend ce qu’il veut",
     corpo:
-      "Todo cliente novo cai numa fila aberta e o primeiro atendente que clicar assume. " +
-      "Simples, e é onde nasce a discussão de quem furou a fila.",
+      "Chaque nouveau client arrive dans une file ouverte et le premier agent qui clique le prend en charge. " +
+      "C’est simple, mais c’est là que naissent les disputes sur qui a doublé la file.",
   },
   round_robin: {
     titulo: "Rotation automatique entre les conseillers",
     corpo:
-      "Cliente 1 vai para o atendente A, cliente 2 para o B, e ao acabar a lista volta ao " +
-      "primeiro. Quem recebe é sempre quem está há mais tempo sem receber — entre os que " +
-      "estão disponíveis e dentro do horário. Ninguém escolhe, então não há fila furada.",
+      "Le client 1 va à l’agent A, le client 2 à l’agent B, et en fin de liste on revient au " +
+      "premier. Celui qui reçoit est toujours celui qui attend depuis le plus longtemps — parmi ceux qui " +
+      "sont disponibles et dans leurs horaires. Personne ne choisit, donc personne ne double la file.",
   },
 };
 
 const VISIBILIDADE_COPY: Record<VisibilityMode, { titulo: string; corpo: string }> = {
   all: {
     titulo: "Tout le monde voit tout",
-    corpo: "Qualquer atendente abre a conversa e o negócio de qualquer colega.",
+    corpo: "Chaque agent peut ouvrir la conversation et l’affaire de n’importe quel collègue.",
   },
   own_and_unassigned: {
     titulo: "Les vôtres, plus ceux qui n’ont pas encore de responsable",
     corpo:
-      "O atendente vê a própria carteira e a fila de quem chegou agora. Não vê o que já é " +
-      "de um colega.",
+      "L’agent voit son propre portefeuille et la file des nouveaux arrivants. Il ne voit pas ce qui est déjà " +
+      "à un collègue.",
   },
   own: {
     titulo: "Uniquement les vôtres",
     corpo:
-      "O atendente vê apenas o que foi direcionado a ele — nem a fila. Combine com o " +
-      "rodízio: sem alguém distribuindo, ninguém recebe nada e as telas ficam vazias.",
+      "L’agent ne voit que ce qui lui a été attribué — pas même la file. À combiner avec la " +
+      "rotation : sans distribution, personne ne reçoit rien et les écrans restent vides.",
   },
 };
 

@@ -226,7 +226,7 @@ export function AuditFiltersAdmin({
         value={actorInput}
         onChange={(e) => handleActorChange(e.target.value)}
         className="h-9 w-60 text-sm"
-        aria-label="Filtrar por actor user ID"
+        aria-label="Filtrer par ID d’utilisateur auteur"
       />
       <div className="flex items-center gap-1">
         <label className="text-xs text-muted-foreground sr-only" htmlFor="audit-from">

@@ -18,12 +18,12 @@ interface PreviewPanelProps {
 }
 
 const COUNT_LABELS: Record<keyof LgpdPreviewCounts, string> = {
-  conversations: "Conversas",
-  messages_total: "Mensagens (total)",
+  conversations: "Conversations",
+  messages_total: "Messages (total)",
   leads: "Leads",
-  orders: "Pedidos",
+  orders: "Commandes",
   activities: "Atividades",
-  audit_entries: "Entradas de auditoria",
+  audit_entries: "Entrées du journal d’audit",
   consents: "Consentimentos",
 };
 

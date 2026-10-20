@@ -8,10 +8,10 @@ import { NOTIFICATION_CATEGORIES, NOTIFICATION_CHANNELS } from "@/lib/schemas/se
 export const dynamic = "force-dynamic";
 
 const CATEGORY_LABELS: Record<(typeof NOTIFICATION_CATEGORIES)[number], string> = {
-  lead_assigned: "Lead atribuído a você",
-  lead_won: "Lead ganho",
-  lead_lost: "Lead perdido",
-  mention: "Você foi mencionado",
+  lead_assigned: "Affaire qui vous est attribuée",
+  lead_won: "Affaire gagnée",
+  lead_lost: "Affaire perdue",
+  mention: "Vous avez été mentionné",
 };
 
 const CHANNEL_LABELS: Record<(typeof NOTIFICATION_CHANNELS)[number], string> = {

@@ -71,7 +71,7 @@ export function UsersClient() {
         <h1 className="text-2xl font-semibold tracking-tight">Utilisateurs</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {isLoading
-            ? "Carregando..."
+            ? "Chargement…"
             : `${total} utilisateur${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
         </p>
       </div>
@@ -90,7 +90,7 @@ export function UsersClient() {
           value={filters.tenant_id ?? "all"}
           onValueChange={handleTenant}
         >
-          <SelectTrigger className="sm:w-52" aria-label="Filtrar por tenant">
+          <SelectTrigger className="sm:w-52" aria-label="Filtrer par organisation">
             <SelectValue placeholder="Organisation" />
           </SelectTrigger>
           <SelectContent>
@@ -104,7 +104,7 @@ export function UsersClient() {
         </Select>
 
         <Select value={filters.role ?? "all"} onValueChange={handleRole}>
-          <SelectTrigger className="sm:w-40" aria-label="Filtrar por role">
+          <SelectTrigger className="sm:w-40" aria-label="Filtrer par rôle">
             <SelectValue placeholder="Rôle" />
           </SelectTrigger>
           <SelectContent>

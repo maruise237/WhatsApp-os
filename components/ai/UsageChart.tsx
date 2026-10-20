@@ -81,7 +81,7 @@ export function UsageChart({ payload }: Props) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      <ChartCard title="Quanto gastou por dia (R$)">
+      <ChartCard title="Dépense par jour">
         {!hasCost ? (
           <EmptyChart />
         ) : (
@@ -217,7 +217,7 @@ export function UsageChart({ payload }: Props) {
               <Line
                 type="monotone"
                 dataKey="p95"
-                name="pior caso comum"
+                name="pire cas courant"
                 stroke="hsl(0 84% 60%)"
                 strokeWidth={2}
                 dot={false}

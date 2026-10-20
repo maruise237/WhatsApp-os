@@ -22,7 +22,7 @@ export function ImageMedia({ messageId, alt }: Props) {
   if (state === "error")
     return (
       <div className="w-64 max-w-full aspect-[4/3]">
-        <MediaUnavailable kind="Imagem" className="h-full w-full" />
+        <MediaUnavailable kind="Image" className="h-full w-full" />
       </div>
     );
 
@@ -30,7 +30,7 @@ export function ImageMedia({ messageId, alt }: Props) {
     <>
       <button
         type="button"
-        aria-label="Ampliar imagem"
+        aria-label="Agrandir l’image"
         onClick={() => setOpen(true)}
         disabled={state !== "ready"}
         aria-disabled={state !== "ready"}
