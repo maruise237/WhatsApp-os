@@ -35,7 +35,7 @@ export interface LoadedPromiseTable {
 /** Valida o shape do jsonb antes de publicar: só números finitos ≥ 0 nos campos conhecidos. */
 export function validatePromiseTable(values: unknown): PromiseTable {
   if (typeof values !== 'object' || values === null || Array.isArray(values)) {
-    throw new Error('tabela de promessa inválida: esperado objeto de valores permitidos');
+    throw new Error('tableau de promesses invalide : un objet de valeurs autorisées était attendu');
   }
   const o = values as Record<string, unknown>;
   const table: PromiseTable = {};
@@ -43,7 +43,7 @@ export function validatePromiseTable(values: unknown): PromiseTable {
     const v = o[key];
     if (v === undefined) continue;
     if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) {
-      throw new Error(`tabela de promessa inválida: '${key}' deve ser número finito ≥ 0`);
+      throw new Error(`tableau de promesses invalide : '${key}' doit être un nombre fini ≥ 0`);
     }
     table[key] = v;
   }
@@ -61,7 +61,7 @@ export async function insertPromiseTableVersion(
     [input.tenantId, JSON.stringify(table)],
   );
   const row = rows[0];
-  if (row === undefined) throw new Error('insert em promise_table_versions não devolveu linha');
+  if (row === undefined) throw new Error('l’insertion dans promise_table_versions n’a renvoyé aucune ligne');
   return row;
 }
 
@@ -84,7 +84,7 @@ export async function setPromiseTablePointer(
     [input.versionId, input.tenantId],
   );
   if (rowCount === 0) {
-    throw new Error('versão de tabela de promessa não encontrada para a org — ponteiro não movido');
+    throw new Error('version du tableau de promesses introuvable pour l’org — pointeur non déplacé');
   }
 }
 

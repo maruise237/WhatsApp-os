@@ -32,12 +32,12 @@ function formatDate(iso: string | null): string {
 // migration acrescente ao banco sem entrar nestes mapas volta a vazar cru para
 // a tela, e é isso que o teste reprova.
 export const NUVEMSHOP_LABEL: Record<string, string> = {
-  connecting: "Conectando",
-  healthy: "Conectado",
-  token_expired: "Token expirado",
-  scope_missing: "Permissão faltando",
-  disconnected: "Desconectado",
-  rate_limited: "Limitado (rate limit)",
+  connecting: "Connexion en cours",
+  healthy: "Connecté",
+  token_expired: "Jeton expiré",
+  scope_missing: "Autorisation manquante",
+  disconnected: "Déconnecté",
+  rate_limited: "Limité (rate limit)",
   error: "En erreur",
 };
 

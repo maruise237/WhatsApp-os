@@ -40,10 +40,10 @@ export async function loadOrgMemory(db: pg.Pool, tenantId: string): Promise<Load
 /** Bloco do prefixo estável — '' quando a org não tem memória (zero custo). */
 export function renderOrgMemory(mem: LoadedOrgMemory): string {
   if (mem.content === null && mem.entries.length === 0) return '';
-  const parts: string[] = ['=== memória da organização (regras e aprendizados — valem para TODO atendimento) ==='];
+  const parts: string[] = ['=== mémoire de l’organisation (règles et apprentissages — valables pour TOUT échange) ==='];
   if (mem.content !== null) parts.push(mem.content.trim());
   if (mem.entries.length > 0) {
-    parts.push('--- aprendizados ---');
+    parts.push('--- apprentissages ---');
     for (const e of mem.entries) parts.push(`- ${e.title}: ${e.body}`);
   }
   return parts.join('\n');
@@ -59,7 +59,7 @@ export function composeSystemPrompt(input: {
   if (input.orgMemoryBlock !== '') blocks.push(input.orgMemoryBlock);
   if (input.skillIndex !== '') {
     blocks.push(
-      `=== skills (índice — o corpo carrega no turno quando a situação dispara) ===\n${input.skillIndex}`,
+      `=== compétences (index — le corps se charge au tour quand la situation le déclenche) ===\n${input.skillIndex}`,
     );
   }
   return blocks.join('\n\n');

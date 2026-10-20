@@ -28,8 +28,8 @@ export function explainSendResult(r: SendTemplateResult): ToolOutcome {
       // "Não escreva mais nada" é explícito: sem isso o modelo tende a emendar um
       // texto livre depois do template — que a janela fechada recusaria.
       message:
-        "template enviado ao contato. Não escreva mais nada neste turno: fora da " +
-        "janela de 24 horas só template é aceito, e a mensagem já saiu.",
+        "modèle envoyé au contact. N’écrivez plus rien à ce tour : hors de la " +
+        "fenêtre de 24 heures seul un modèle est accepté, et le message est déjà parti.",
       retriable: false,
     };
   }
@@ -39,33 +39,33 @@ export function explainSendResult(r: SendTemplateResult): ToolOutcome {
       return {
         ok: false,
         message:
-          `faltou valor para o(s) parâmetro(s): ${r.missing.join(", ")}. ` +
-          "Preencha todos e chame a ferramenta de novo.",
+          `valeur manquante pour le(s) paramètre(s) : ${r.missing.join(", ")}. ` +
+          "Remplissez-les tous et rappelez l’outil.",
         retriable: true,
       };
     case "stale":
       return {
         ok: false,
         message:
-          "este template mudou na Meta desde que foi configurado e os parâmetros " +
-          "salvos não valem mais. Não tente outro valor — encerre o turno; um humano " +
-          "precisa reconfigurar.",
+          "ce modèle a changé chez Meta depuis sa configuration et les paramètres " +
+          "enregistrés ne sont plus valables. N’essayez pas une autre valeur — terminez le tour ; un humain " +
+          "doit le reconfigurer.",
         retriable: false,
       };
     case "missing":
       return {
         ok: false,
         message:
-          "este template não existe mais na conta do WhatsApp. Encerre o turno sem " +
-          "enviar; um humano precisa escolher outro.",
+          "ce modèle n’existe plus sur le compte WhatsApp. Terminez le tour sans " +
+          "envoyer ; un humain doit en choisir un autre.",
         retriable: false,
       };
     case "not_approved":
       return {
         ok: false,
         message:
-          "este template não está aprovado na Meta e não pode ser enviado. Encerre o " +
-          "turno; um humano precisa resolver a aprovação.",
+          "ce modèle n’est pas approuvé chez Meta et ne peut pas être envoyé. Terminez le " +
+          "tour ; un humain doit régler l’approbation.",
         retriable: false,
       };
     case "api_error":
@@ -74,8 +74,8 @@ export function explainSendResult(r: SendTemplateResult): ToolOutcome {
         // O código e o detalhe da Meta entram porque são o que um humano lendo o log
         // precisa para agir — mas a CONDUTA do modelo é a mesma: parar.
         message:
-          `o canal recusou o envio (${r.code ?? "sem código"}): ${r.message}. ` +
-          "Encerre o turno sem tentar de novo.",
+          `le canal a refusé l’envoi (${r.code ?? "sans code"}): ${r.message}. ` +
+          "Terminez le tour sans réessayer.",
         retriable: false,
       };
   }

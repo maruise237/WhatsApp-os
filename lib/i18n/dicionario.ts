@@ -861,7 +861,7 @@ export const DICIONARIO: Traducoes = {
   "Contato atualizado": { "fr-FR": "Contact mis à jour" },
   "Editar contato": { "fr-FR": "Modifier le contact" },
   "Valor inválido": { "fr-FR": "Valeur invalide" },
-  "Valor (R$)": { "fr-FR": "Montant (R$)" },
+  "Valor (R$)": { "fr-FR": "Montant" },
   "Lead criado": { "fr-FR": "Lead créé" },
   "Novo Lead": { "fr-FR": "Nouveau lead" },
   "Crie um lead manualmente neste pipeline.": {
@@ -2641,7 +2641,7 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "Vocabulaire de l’organisation pour « lost » (ex. : annulé)",
   },
   "Nome do contato em atendimento": { "fr-FR": "Nom du contact pris en charge" },
-  "Locale do contato (ex: pt-BR)": { "fr-FR": "Locale du contact (ex. : pt-BR)" },
+  "Locale do contato (ex: pt-BR)": { "fr-FR": "Locale du contact (ex. : fr-FR)" },
   "Últimas N mensagens da conversa": { "fr-FR": "N derniers messages de la conversation" },
   "Trechos da base de conhecimento (RAG)": {
     "fr-FR": "Extraits de la base de connaissances (RAG)",
@@ -3288,7 +3288,7 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "La révision exige un exemple pour chaque valeur. Sans eux, le modèle est refusé.",
   },
   "Exemplo do valor": { "fr-FR": "Exemple de la valeur" },
-  "ex.: María": { "fr-FR": "ex. : María" },
+  "ex.: María": { "fr-FR": "ex. : Marie" },
   "A plataforma revisa antes de aprovar — o modelo nasce pendente e some da lista de envio até ela decidir.":
     {
       "fr-FR":

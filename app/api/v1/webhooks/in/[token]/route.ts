@@ -440,7 +440,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       ? respondiLeadTitle(respondiMapped)
       : (mapped.name ?? mapped.phone ?? mapped.email ?? "Client sans nom"),
     contact_id: contactId,
-    currency: "BRL",
+    currency: "XAF",
     tags: [],
     source: "webhook",
     custom_fields: mapped.custom_fields,

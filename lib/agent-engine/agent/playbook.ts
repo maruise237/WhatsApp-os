@@ -48,11 +48,11 @@ export function validatePlaybookLayerContent(content: string): void {
   const lines = countLines(content);
   if (lines > MAX_PLAYBOOK_LAYER_LINES) {
     throw new Error(
-      `camada de playbook com ${lines} linhas excede o teto de ${MAX_PLAYBOOK_LAYER_LINES} (blueprint linha 176) — quebre em skill situacional`,
+      `couche de playbook de ${lines} lignes dépasse le plafond de ${MAX_PLAYBOOK_LAYER_LINES} (blueprint ligne 176) — découpez-la en compétence situationnelle`,
     );
   }
   if (!/^## /m.test(content)) {
-    throw new Error('camada de playbook sem seção nomeada (## ...) — cada camada é diffável por seção');
+    throw new Error('couche de playbook sans section nommée (## ...) — chaque couche se compare section par section');
   }
 }
 
@@ -73,7 +73,7 @@ export async function insertPlaybookVersion(
   );
   const row = rows[0];
   if (row === undefined) {
-    throw new Error('insert em playbook_versions não devolveu linha');
+    throw new Error('l’insertion dans playbook_versions n’a renvoyé aucune ligne');
   }
   return row;
 }
@@ -103,7 +103,7 @@ export async function setPlaybookPointer(
     [input.versionId, input.layer, input.tenantId],
   );
   if (rowCount === 0) {
-    throw new Error('versão de playbook não encontrada para o escopo (tenant/camada) — ponteiro não movido');
+    throw new Error('version de playbook introuvable pour le périmètre (tenant/couche) — pointeur non déplacé');
   }
 }
 
@@ -136,7 +136,7 @@ export async function loadPlaybook(
   );
   const byLayer = new Map(rows.map((r) => [r.layer, r]));
   if (!byLayer.has('platform')) {
-    throw new Error('ponteiro da camada plataforma ausente — publique uma versão platform e aponte antes do primeiro run');
+    throw new Error('pointeur de la couche plateforme absent — publiez une version platform et pointez-la avant le premier run');
   }
   const versionIds: LoadedPlaybook['versionIds'] = {};
   for (const layer of LAYER_ORDER) {

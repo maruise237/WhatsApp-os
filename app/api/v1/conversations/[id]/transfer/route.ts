@@ -132,7 +132,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     tipo: "conversation_transferred",
     actor: { type: "user", id: user.id, role: authz.org.role },
     motivo: input.reason?.trim()
-      ? `Transferiu a conversa: ${input.reason.trim()}`
+      ? `A transféré la conversation : ${input.reason.trim()}`
       : "A transféré la conversation à un autre agent",
     payload: { to_user_id: input.to_user_id },
   });

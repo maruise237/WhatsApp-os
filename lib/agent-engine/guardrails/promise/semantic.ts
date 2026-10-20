@@ -37,22 +37,22 @@ export interface PromiseClassification {
  * de promessa vs. inocente (incl. as armadilhas de slogan) e força saída JSON.
  */
 export const PROMISE_SEMANTIC_INSTRUCTION =
-  'Você é um classificador auxiliar de compliance de vendas (NÃO responde ao lead). ' +
-  'Analise a MENSAGEM que o vendedor quer enviar e decida se ela contém uma PROMESSA ou ' +
-  'COMPROMISSO concreto em texto livre — algo que obriga a empresa a algo específico e que ' +
-  'um validador de valores estruturados (preço/desconto/parcelas em número) NÃO pegaria.\n' +
-  'É PROMESSA (isPromise=true): oferecer algo de graça/cortesia/por conta da casa, isentar ' +
-  'taxa, dar brinde, garantir devolução de dinheiro, garantir um prazo de entrega concreto ' +
-  '("entrego amanhã", "fica pronto até sexta") ou assumir que resolve pessoalmente até um prazo.\n' +
-  'NÃO é promessa (isPromise=false): perguntas, saudações, agradecimentos, descrições de ' +
-  'horário/empresa, próximos passos vagos SEM compromisso concreto e slogans genéricos de ' +
-  'marketing ("garantimos qualidade", "nossa entrega é rápida", "10x mais rápido que a concorrência").\n' +
-  'Responda SOMENTE com JSON, sem explicação: ' +
-  '{"isPromise": true|false, "suspectPhrase": "<trecho literal da promessa na mensagem>"|null}. ' +
-  'suspectPhrase é null quando isPromise=false.';
+  'Vous êtes un classificateur auxiliaire de conformité commerciale (vous NE répondez PAS au lead). ' +
+  'Analysez le MESSAGE que le vendeur veut envoyer et décidez s’il contient une PROMESSE ou un ' +
+  'ENGAGEMENT concret en texte libre — quelque chose qui oblige l’entreprise à une chose précise et qu’ ' +
+  'un validateur de valeurs structurées (prix/remise/échéances en chiffres) NE détecterait PAS.\n' +
+  'C’est une PROMESSE (isPromise=true) : offrir quelque chose gratuitement/en geste commercial/aux frais de la maison, exonérer ' +
+  'des frais, offrir un cadeau, garantir un remboursement, garantir un délai de livraison concret ' +
+  '(« je livre demain », « ce sera prêt d’ici vendredi ») ou s’engager à régler personnellement avant une échéance.\n' +
+  'Ce N’est PAS une promesse (isPromise=false) : questions, salutations, remerciements, descriptions ' +
+  'd’horaires/de l’entreprise, prochaines étapes vagues SANS engagement concret et slogans génériques de ' +
+  'marketing (« nous garantissons la qualité », « notre livraison est rapide », « 10x plus rapide que la concurrence »).\n' +
+  'Répondez UNIQUEMENT en JSON, sans explication : ' +
+  '{"isPromise": true|false, "suspectPhrase": "<passage littéral de la promesse dans le message>"|null}. ' +
+  'suspectPhrase vaut null quand isPromise=false.';
 
 function buildPromiseMessage(candidate: string): string {
-  return ['## Mensagem candidata (que o vendedor quer enviar ao lead)', candidate, '', PROMISE_SEMANTIC_INSTRUCTION].join(
+  return ['## Message candidat (que le vendeur veut envoyer au lead)', candidate, '', PROMISE_SEMANTIC_INSTRUCTION].join(
     '\n',
   );
 }
@@ -68,7 +68,7 @@ export function parsePromiseClassification(text: string, log?: Logger): PromiseC
     // degrade OBSERVÁVEL (F4-08 ressalva 2): sem o warn, um classificador sistematicamente
     // quebrado ficaria invisível (todo envio "sem promessa"). Loga só o FATO do parse-fail —
     // nunca o texto do modelo (poderia carregar trecho da candidata, PII fora de log).
-    log?.warn('classificador semântico de promessa: saída sem JSON — fail-open p/ "sem promessa"', {
+    log?.warn('classificateur sémantique de promesse : sortie sans JSON — fail-open vers « pas de promesse »', {
       event: 'promise_semantic_parse_fail',
       reason: 'no_json',
     });
@@ -80,7 +80,7 @@ export function parsePromiseClassification(text: string, log?: Logger): PromiseC
   } catch {
     // saída do auxiliar não é JSON válido → degrada para "sem promessa" (não bloqueia envio
     // por falha de parse; a camada determinística já cobriu o valor estruturado).
-    log?.warn('classificador semântico de promessa: JSON inválido — fail-open p/ "sem promessa"', {
+    log?.warn('classificateur sémantique de promesse : JSON invalide — fail-open vers « pas de promesse »', {
       event: 'promise_semantic_parse_fail',
       reason: 'invalid_json',
     });
@@ -126,10 +126,10 @@ export async function classifyPromise(
  * aparece — vai ao modelo, jamais a log.
  */
 export function renderSemanticPromiseVeto(suspectPhrase: string | null): string {
-  const highlight = suspectPhrase !== null ? `frase suspeita: "${suspectPhrase}" — ` : '';
+  const highlight = suspectPhrase !== null ? `phrase suspecte : "${suspectPhrase}" — ` : '';
   return (
-    `${highlight}isso é uma promessa/compromisso fora do playbook que a validação de valores ` +
-    'estruturados não pega; reformule sem prometer prazo, cortesia, gratuidade, brinde ou garantia ' +
-    'não autorizada antes de reenviar.'
+    `${highlight}il s’agit d’une promesse/d’un engagement hors playbook que la validation des valeurs ` +
+    'structurées ne détecte pas ; reformulez sans promettre de délai, de geste commercial, de gratuité, de cadeau ou de garantie ' +
+    'non autorisée avant de renvoyer.'
   );
 }

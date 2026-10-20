@@ -19,7 +19,7 @@ export function SectionComponents() {
 
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Componentes</h2>
+      <h2 className="ds-display">Composants</h2>
       <p className="ds-lede">
         États complets : default, hover, focus, active, disabled, loading, error. Les composants réagissent à l’exécution à la palette, à la typographie et à la densité sélectionnées.
       </p>
@@ -28,13 +28,13 @@ export function SectionComponents() {
       <h3>Buttons</h3>
       <div className="ds-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <Stack label="Variants">
-          <button className="ds-btn ds-btn--primary">Confirmar envio</button>
+          <button className="ds-btn ds-btn--primary">Confirmer l’envoi</button>
           <button className="ds-btn ds-btn--secondary">Annuler</button>
           <button className="ds-btn ds-btn--ghost">Reporter</button>
           <button className="ds-btn ds-btn--destructive">Supprimer la conversation</button>
           <button className="ds-btn ds-btn--link">voir les détails</button>
         </Stack>
-        <Stack label="Estados">
+        <Stack label="États">
           <button className="ds-btn ds-btn--primary">Default</button>
           <button className="ds-btn ds-btn--primary" disabled>Disabled</button>
           <button
@@ -76,10 +76,10 @@ export function SectionComponents() {
         </div>
         <div>
           <label className="ds-label">Disabled</label>
-          <input className="ds-input" defaultValue="bloqueado" disabled />
+          <input className="ds-input" defaultValue="bloqué" disabled />
         </div>
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="ds-label">Resposta</label>
+          <label className="ds-label">Réponse</label>
           <textarea className="ds-input" rows={4} placeholder="Saisissez votre réponse…" style={{ height: "auto", padding: 12, resize: "vertical" }} />
         </div>
       </div>
@@ -113,7 +113,7 @@ export function SectionComponents() {
       <div className="ds-grid-3">
         <div className="ds-card">
           <div className="ds-key">Chiffre d’affaires du jour</div>
-          <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>R$ 12.443,00</div>
+          <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>12 443 FCFA</div>
           <div style={{ fontSize: 12, color: "var(--ds-success)", marginTop: 4 }}>+8,4 % vs hier</div>
         </div>
         <div className="ds-card ds-card--interactive">
@@ -162,7 +162,7 @@ export function SectionComponents() {
           <div className="ds-kanban-card" style={{ background: "var(--ds-surface)" }}>
             <div className="row">
               <span className="title">Commande n° 12 443</span>
-              <span className="value">R$ 1.234,56</span>
+              <span className="value">1 234 FCFA</span>
             </div>
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Marie Ngo · cliente fidèle</div>
             <div className="row">
@@ -192,7 +192,7 @@ export function SectionComponents() {
       <h3>Tabs</h3>
       <div className="ds-card">
         <div className="ds-tabs">
-          {([["inbox", "Inbox"], ["pedidos", "Pedidos"], ["clientes", "Clientes"], ["relatorios", "Relatórios"]] as const).map(([id, label]) => (
+          {([["inbox", "Inbox"], ["pedidos", "Commandes"], ["clientes", "Clients"], ["relatorios", "Rapports"]] as const).map(([id, label]) => (
             <button key={id} className="ds-tab" data-active={tab === id} onClick={() => setTab(id)}>
               {label}
             </button>

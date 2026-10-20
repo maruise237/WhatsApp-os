@@ -83,7 +83,7 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
           body,
           shortcut: shortcut.trim() || null,
         });
-        toast.success("Template atualizado.");
+        toast.success("Modèle mis à jour.");
       } else {
         await create.mutateAsync({
           title,
@@ -91,7 +91,7 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
           shortcut: shortcut.trim() || undefined,
           shared: canShare ? shared : false,
         });
-        toast.success("Template criado.");
+        toast.success("Modèle créé.");
       }
       onOpenChange(false);
     } catch {
@@ -103,7 +103,7 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Editar template" : "Novo template"}</DialogTitle>
+          <DialogTitle>{isEdit ? "Modifier le modèle" : "Nouveau modèle"}</DialogTitle>
           <DialogDescription>
             Scripts enregistrés pour répondre plus vite pendant les échanges.
           </DialogDescription>
@@ -127,7 +127,7 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template }: P
               id="tpl-body"
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder="Oi {{primeiro_nome}}, tudo bem?"
+              placeholder="Bonjour {{primeiro_nome}}, comment allez-vous ?"
               minLength={1}
               maxLength={4096}
               required

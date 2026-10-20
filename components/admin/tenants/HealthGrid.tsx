@@ -46,8 +46,8 @@ function formatCents(cents: number): string {
 /** O teto vincula esta organização? É o que separa "100%" de "100% e parou". */
 const MODO_LABEL: Record<TenantHealthResponse["ai"]["enforcement_mode"], string> = {
   off: "Non appliqué",
-  avisar: "Só avisa",
-  bloquear: "Para a IA no limite",
+  avisar: "Avertit seulement",
+  bloquear: "Arrête l’IA au plafond",
 };
 
 // ---------------------------------------------------------------------------
@@ -80,25 +80,25 @@ export function HealthGrid({ health }: HealthGridProps) {
   }));
 
   // Nuvemshop card
-  const nuPrimary = nuvemshop.connected ? "Conectado" : "Non connecté";
+  const nuPrimary = nuvemshop.connected ? "Connecté" : "Non connecté";
   const nuDetails = [
     { label: "Dernière synchro", value: formatDate(nuvemshop.last_synced_at) },
     ...(nuvemshop.days_until_expiry !== null
       ? [{ label: "Expire le", value: `${nuvemshop.days_until_expiry}d` }]
       : []),
     ...(nuvemshop.expires_at
-      ? [{ label: "Token expira", value: formatDate(nuvemshop.expires_at) }]
+      ? [{ label: "Le jeton expire", value: formatDate(nuvemshop.expires_at) }]
       : []),
   ];
 
   // AI budget card
   const aiPrimary =
-    ai.percent_used !== null ? `${ai.percent_used}% usado` : "Sans budget";
+    ai.percent_used !== null ? `${ai.percent_used}% utilisés` : "Sans budget";
   const aiDetails = [
-    { label: "Consumido", value: formatCents(ai.consumed_cents) },
+    { label: "Consommé", value: formatCents(ai.consumed_cents) },
     {
       label: "Budget",
-      value: ai.budget_cents ? formatCents(ai.budget_cents) : "Ilimitado",
+      value: ai.budget_cents ? formatCents(ai.budget_cents) : "Illimité",
     },
     { label: "Limite", value: MODO_LABEL[ai.enforcement_mode] },
   ];

@@ -94,7 +94,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
       pipeline_id: pipelineId,
       stage_id: values.stage_id,
       title: values.title.trim(),
-      currency: "BRL",
+      currency: "XAF",
       source: "manual",
       tags,
     };
@@ -200,7 +200,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
 
           <div className="space-y-2">
             <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
-            <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
+            <Input id="tagsRaw" placeholder="vip, réachat" {...form.register("tagsRaw")} />
           </div>
 
           <DialogFooter>

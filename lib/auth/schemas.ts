@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  email: z.string().email("Email inválido"),
-  password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+  email: z.string().email("E-mail invalide"),
+  password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères"),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -11,15 +11,15 @@ export const signupSchema = z
   .object({
     org_name: z
       .string()
-      .min(2, "Nome da empresa deve ter pelo menos 2 caracteres")
-      .max(120, "Nome da empresa deve ter no máximo 120 caracteres"),
-    email: z.string().email("Email inválido"),
-    password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+      .min(2, "Le nom de l’entreprise doit comporter au moins 2 caractères")
+      .max(120, "Le nom de l’entreprise doit comporter au maximum 120 caractères"),
+    email: z.string().email("E-mail invalide"),
+    password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères"),
     password_confirm: z.string(),
   })
   .refine((v) => v.password === v.password_confirm, {
     path: ["password_confirm"],
-    message: "As senhas não coincidem",
+    message: "Les mots de passe ne correspondent pas",
   });
 
 export type SignupInput = z.infer<typeof signupSchema>;
@@ -34,26 +34,26 @@ export type SignupInput = z.infer<typeof signupSchema>;
  */
 export const signupComConviteSchema = z
   .object({
-    email: z.string().email("Email inválido"),
-    password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+    email: z.string().email("E-mail invalide"),
+    password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères"),
     password_confirm: z.string(),
   })
   .refine((v) => v.password === v.password_confirm, {
     path: ["password_confirm"],
-    message: "As senhas não coincidem",
+    message: "Les mots de passe ne correspondent pas",
   });
 
 export type SignupComConviteInput = z.infer<typeof signupComConviteSchema>;
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().email("Email inválido"),
+  email: z.string().email("E-mail invalide"),
 });
 
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 
 export const resetPasswordSchema = z
   .object({
-    password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres"),
+    password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères"),
     password_confirm: z.string(),
     // Código TOTP: só exigido quando a conta tem MFA (a sessão de recovery é
     // AAL1 e o GoTrue pede AAL2 para trocar a senha). Opcional no schema; a
@@ -62,7 +62,7 @@ export const resetPasswordSchema = z
   })
   .refine((v) => v.password === v.password_confirm, {
     path: ["password_confirm"],
-    message: "As senhas não coincidem",
+    message: "Les mots de passe ne correspondent pas",
   });
 
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;

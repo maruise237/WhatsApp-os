@@ -65,9 +65,9 @@ export interface ContinuidadeHumana {
 const LIMITE_POR_SUPERFICIE = 10;
 
 const ACAO_LEGIVEL: Record<string, string> = {
-  resolved: "resolveu",
-  need_lead_info: "pediu uma informação ao cliente",
-  escalate: "escalou para outra pessoa",
+  resolved: "a résolu",
+  need_lead_info: "a demandé une information au client",
+  escalate: "a escaladé vers une autre personne",
 };
 
 export const CONTINUIDADE_VAZIA: ContinuidadeHumana = {
@@ -149,8 +149,8 @@ export async function lerContinuidadeHumana(
 
   const decisoes: DecisaoHumana[] = eventos.map((e) => ({
     chamadoId: e.case_id,
-    chamadoTitulo: tituloPorChamado.get(e.case_id) ?? "chamado",
-    acao: e.human_action ?? "respondeu",
+    chamadoTitulo: tituloPorChamado.get(e.case_id) ?? "dossier",
+    acao: e.human_action ?? "a répondu",
     texto: (e.body ?? "").trim(),
     quando: e.created_at,
   }));
@@ -194,27 +194,27 @@ export function montarResumo(input: {
   pendenciaComOCliente: string | null;
 }): string {
   const linhas: string[] = [
-    "Uma pessoa da equipe assumiu esta conversa e devolveu o atendimento para você.",
-    "O que ela fez, e que o cliente já considera combinado:",
+    "Une personne de l’équipe a pris en charge cette conversation puis vous a rendu l’échange.",
+    "Ce qu’elle a fait, et que le client considère déjà comme convenu :",
   ];
 
   for (const d of input.decisoes) {
     const acao = ACAO_LEGIVEL[d.acao] ?? d.acao;
-    const texto = d.texto === "" ? "sem texto registrado" : d.texto;
-    linhas.push(`- No chamado "${d.chamadoTitulo}", ${acao}: ${texto}`);
+    const texto = d.texto === "" ? "aucun texte enregistré" : d.texto;
+    linhas.push(`- Dans le dossier "${d.chamadoTitulo}", ${acao}: ${texto}`);
   }
 
   for (const n of input.notas) {
-    const autor = n.autor ?? "a equipe";
-    linhas.push(`- ${autor} anotou internamente: ${n.texto}`);
+    const autor = n.autor ?? "l’équipe";
+    linhas.push(`- ${autor} a noté en interne : ${n.texto}`);
   }
 
   if (input.pendenciaComOCliente !== null) {
-    linhas.push(`Ficou pendente com o cliente: ${input.pendenciaComOCliente}`);
+    linhas.push(`Reste en attente avec le client : ${input.pendenciaComOCliente}`);
   }
 
   linhas.push(
-    "Retome daqui: não peça de novo o que já foi combinado nem contradiga a decisão da pessoa.",
+    "Reprenez à partir d’ici : ne redemandez pas ce qui a déjà été convenu et ne contredisez pas la décision de la personne.",
   );
   return linhas.join("\n");
 }

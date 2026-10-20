@@ -6,34 +6,34 @@ import { StickerMedia } from "@/components/inbox/media/StickerMedia";
 
 describe("ImageMedia", () => {
   it("renderiza a imagem apontando pro endpoint de mídia", () => {
-    render(<ImageMedia messageId="m1" alt="Imagem recebida" />);
-    const img = screen.getByAltText("Imagem recebida");
+    render(<ImageMedia messageId="m1" alt="Image reçue" />);
+    const img = screen.getByAltText("Image reçue");
     expect(img).toHaveAttribute("src", "/api/v1/messages/m1/media");
   });
 
   it("desabilita o botão até a imagem carregar", () => {
-    render(<ImageMedia messageId="m1" alt="Imagem recebida" />);
-    const btn = screen.getByRole("button", { name: /ampliar imagem/i });
+    render(<ImageMedia messageId="m1" alt="Image reçue" />);
+    const btn = screen.getByRole("button", { name: /agrandir l’image/i });
     expect(btn).toBeDisabled();
   });
 
   it("habilita o botão após a imagem carregar", () => {
-    render(<ImageMedia messageId="m1" alt="Imagem recebida" />);
-    const btn = screen.getByRole("button", { name: /ampliar imagem/i });
-    fireEvent.load(screen.getByAltText("Imagem recebida"));
+    render(<ImageMedia messageId="m1" alt="Image reçue" />);
+    const btn = screen.getByRole("button", { name: /agrandir l’image/i });
+    fireEvent.load(screen.getByAltText("Image reçue"));
     expect(btn).not.toBeDisabled();
   });
 
   it("abre o lightbox ao clicar depois que carrega", () => {
-    render(<ImageMedia messageId="m1" alt="Imagem recebida" />);
-    fireEvent.load(screen.getByAltText("Imagem recebida"));
-    fireEvent.click(screen.getByRole("button", { name: /ampliar imagem/i }));
+    render(<ImageMedia messageId="m1" alt="Image reçue" />);
+    fireEvent.load(screen.getByAltText("Image reçue"));
+    fireEvent.click(screen.getByRole("button", { name: /agrandir l’image/i }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
   it("mostra fallback quando a imagem falha", () => {
-    render(<ImageMedia messageId="m1" alt="Imagem recebida" />);
-    fireEvent.error(screen.getByAltText("Imagem recebida"));
+    render(<ImageMedia messageId="m1" alt="Image reçue" />);
+    fireEvent.error(screen.getByAltText("Image reçue"));
     expect(screen.getByText("Média indisponible")).toBeInTheDocument();
   });
 });
@@ -47,13 +47,13 @@ describe("StickerMedia", () => {
 
   it("renderiza a figurinha sem moldura de bolha", () => {
     render(<StickerMedia messageId="m2" />);
-    const img = screen.getByAltText("Figurinha");
+    const img = screen.getByAltText("Autocollant");
     expect(img).toHaveAttribute("src", "/api/v1/messages/m2/media");
   });
 
   it("remove skeleton após carregar", () => {
     render(<StickerMedia messageId="m2" />);
-    const img = screen.getByAltText("Figurinha");
+    const img = screen.getByAltText("Autocollant");
     fireEvent.load(img);
     const skeleton = document.querySelector(".animate-pulse");
     expect(skeleton).not.toBeInTheDocument();
@@ -61,7 +61,7 @@ describe("StickerMedia", () => {
 
   it("mostra caixa estável no erro (h-40 w-40)", () => {
     render(<StickerMedia messageId="m2" />);
-    const img = screen.getByAltText("Figurinha");
+    const img = screen.getByAltText("Autocollant");
     fireEvent.error(img);
     const stableBox = document.querySelector(".h-40.w-40");
     expect(stableBox).toBeInTheDocument();

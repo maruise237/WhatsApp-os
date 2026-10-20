@@ -241,7 +241,7 @@ export function mapLinha(
   const email = get("email");
   if (email !== "") {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return { contato: {}, motivo: `e-mail inválido: "${email}"` };
+      return { contato: {}, motivo: `e-mail invalide : "${email}"` };
     }
     contato.email = email;
   }
@@ -252,7 +252,7 @@ export function mapLinha(
     if (phone === null) {
       return {
         contato: {},
-        motivo: `telefone inválido: "${phoneRaw}" (use DDI+DDD+número, ex.: +5511999998888)`,
+        motivo: `téléphone invalide : "${phoneRaw}" (utilisez indicatif pays + numéro, ex. : +237699998888)`,
       };
     }
     contato.phone_number = phone;
@@ -271,7 +271,7 @@ export function mapLinha(
     if (birthdate === null) {
       return {
         contato: {},
-        motivo: `data de nascimento inválida: "${birthdateRaw}" (use AAAA-MM-DD ou DD/MM/AAAA)`,
+        motivo: `date de naissance invalide : "${birthdateRaw}" (use AAAA-MM-DD ou DD/MM/AAAA)`,
       };
     }
     contato.birthdate = birthdate;

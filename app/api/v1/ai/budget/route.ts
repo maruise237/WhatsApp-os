@@ -54,10 +54,10 @@ const CARENCIA_HORAS = 72;
  * em `run-model-call.ts`: dólar porque `cost_cents` é USD, vírgula porque a
  * frase é pt-BR.
  */
-const PISO_LEGIVEL = `US$ ${(PISO_DE_TETO_CENTS / 100).toLocaleString("pt-BR", {
+const PISO_LEGIVEL = `${(PISO_DE_TETO_CENTS / 100).toLocaleString("fr-FR", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
-})}`;
+})} $ US`;
 
 /** A escada. Comparação por posição — nunca por igualdade de string espalhada. */
 const DEGRAU: Record<ModoDeOrcamento, number> = { off: 0, avisar: 1, bloquear: 2 };

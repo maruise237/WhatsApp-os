@@ -174,7 +174,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     meta_waba_id: waba_id,
     meta_token_encrypted: cifrado,
     phone_number: validacao.displayPhoneNumber ? `+${validacao.displayPhoneNumber.replace(/\D/g, "")}` : null,
-    display_name: validacao.verifiedName ?? "Canal oficial",
+    display_name: validacao.verifiedName ?? "Canal officiel",
     status: "WORKING",
   };
 

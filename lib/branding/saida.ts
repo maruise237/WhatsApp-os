@@ -150,7 +150,7 @@ async function settingsDaOrganizacao(organizationId: string): Promise<unknown> {
   if (error) {
     avisarUmaVez(
       `organizacao|${error.code ?? "?"}`,
-      "marca de saída: não deu para ler a marca da organização; vale a da instalação",
+      "marque de sortie : impossible de lire la marque de l’organisation ; celle de l’installation s’applique",
       { codigo: error.code, detalhe: error.message },
     );
     return null;
@@ -213,7 +213,7 @@ export async function marcaDaSaida(organizationId: string | null): Promise<Marca
       },
     };
   } catch (erro) {
-    avisarUmaVez("resolucao|excecao", "marca de saída: resolução falhou; vale o padrão do produto", {
+    avisarUmaVez("resolucao|excecao", "marque de sortie : la résolution a échoué ; celle du produit s’applique par défaut", {
       detalhe: erro instanceof Error ? erro.message : String(erro),
     });
     return padraoDoProduto();

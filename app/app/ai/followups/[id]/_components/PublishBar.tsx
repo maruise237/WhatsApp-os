@@ -39,7 +39,7 @@ interface Props {
 
 const HANDOFF_LABEL: Record<FollowupFlowDetailRow["handoff_policy"], string> = {
   pause: "Pausar durante handoff",
-  cancel: "Cancelar durante handoff",
+  cancel: "Annuler pendant le relais humain",
   allow: "Permitir durante handoff",
 };
 

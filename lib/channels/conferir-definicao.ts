@@ -69,7 +69,7 @@ export async function conferirDefinicao(
   pedido: PedidoDeDefinicao,
 ): Promise<void> {
   if (!pedido.name || !pedido.language) {
-    throw new Error("template_incompleto: nome e idioma são obrigatórios em type=template");
+    throw new Error("template_incompleto : le nom et la langue sont obligatoires pour type=template");
   }
 
   let q = db
@@ -116,8 +116,8 @@ export async function conferirDefinicao(
 
   if (estado === "not_approved") {
     throw new Error(
-      `template_not_approved: "${pedido.name}" (${pedido.language}) está ${linha.status} — ` +
-        `a plataforma só entrega definição APROVADA.`,
+      `template_not_approved: "${pedido.name}" (${pedido.language}) est ${linha.status} — ` +
+        `la plateforme ne fournit que des définitions APPROUVÉES.`,
     );
   }
 
@@ -134,7 +134,7 @@ export async function conferirDefinicao(
     // preencher, e essa é a diferença entre a frase servir e não servir.
     const nomes = faltando.map((s) => s.key).join(", ");
     throw new Error(
-      `template_missing_values: "${pedido.name}" espera ${faltando.length} valor(es) — falta: ${nomes}`,
+      `template_missing_values: "${pedido.name}" attend ${faltando.length} valeur(s) — manquant : ${nomes}`,
     );
   }
 }

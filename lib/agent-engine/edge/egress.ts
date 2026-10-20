@@ -23,7 +23,7 @@ export class EgressBlockedError extends Error {
   override readonly name = 'egress_blocked';
   readonly host: string;
   constructor(host: string) {
-    super(`egress bloqueado: destino '${host}' fora da allowlist — fail closed (F4-03)`);
+    super(`egress bloqué : destination '${host}' hors de l’allowlist — fail closed (F4-03)`);
     this.host = host;
   }
 }
@@ -86,7 +86,7 @@ export async function allowlistedFetch(
   if (host === null || !deps.allowlist.has(host)) {
     // Evento de segurança: SÓ o host (a URL completa pode carregar querystring com
     // dados exfiltrados / token — nunca logada). Regra dura 8.
-    deps.log?.warn('egress bloqueado: tentativa de saída fora da allowlist', {
+    deps.log?.warn('egress bloqué : tentative de sortie hors de l’allowlist', {
       event: 'egress_blocked',
       host: host ?? 'unparseable',
     });
@@ -100,7 +100,7 @@ export async function allowlistedFetch(
     const location = res.headers.get('location');
     const redirectHost = location !== null ? hostOf(new URL(location, input).toString()) : null;
     if (redirectHost === null || !deps.allowlist.has(redirectHost)) {
-      deps.log?.warn('egress bloqueado: redirect para fora da allowlist', {
+      deps.log?.warn('egress bloqué : redirection hors de l’allowlist', {
         event: 'egress_blocked',
         host: redirectHost ?? 'unparseable',
       });

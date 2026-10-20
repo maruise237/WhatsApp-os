@@ -39,7 +39,7 @@ export async function sendTemplateForSession(
   input: SendTemplateForSessionInput,
 ): Promise<string | null> {
   if (!input.name || !input.language) {
-    throw new Error("template_incompleto: nome e idioma são obrigatórios em type=template");
+    throw new Error("template_incompleto : le nom et la langue sont obligatoires pour type=template");
   }
 
   const { data: linha, error } = await db
@@ -80,11 +80,11 @@ export async function sendTemplateForSession(
 
   switch (resultado.reason) {
     case "missing":
-      throw new Error(`template_missing: ${input.name} (${input.language}) não está no espelho`);
+      throw new Error(`template_missing: ${input.name} (${input.language}) n’est pas dans le miroir`);
     case "not_approved":
       throw new Error(`template_not_approved: ${input.name} (${input.language})`);
     case "stale":
-      throw new Error(`template_stale: ${input.name} mudou na Meta desde a configuração`);
+      throw new Error(`template_stale: ${input.name} a changé chez Meta depuis la configuration`);
     case "missing_values":
       throw new Error(`template_missing_values: ${resultado.missing.join(", ")}`);
     case "api_error":

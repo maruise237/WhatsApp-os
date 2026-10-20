@@ -104,8 +104,8 @@ function assertMesmaOrg(candidates: LeadCandidate[]): void {
   const orgs = new Set(candidates.map((c) => c.organization_id));
   if (orgs.size > 1) {
     throw new Error(
-      `resolveActiveLeadForContact: candidatos de ${orgs.size} organizações diferentes ` +
-        `(${[...orgs].join(", ")}). A lista tem de vir filtrada por organization_id.`,
+      `resolveActiveLeadForContact: candidatos de ${orgs.size} organisations différentes ` +
+        `(${[...orgs].join(", ")}). La liste doit être filtrée par organization_id.`,
     );
   }
 }

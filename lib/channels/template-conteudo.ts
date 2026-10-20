@@ -171,7 +171,7 @@ export function montarComponents(input: {
     const nCab = contarVariaveis(tituloTexto);
     // O cabeçalho tem exemplo PRÓPRIO (`header_text`), separado do corpo. Usar
     // o do corpo aqui manda a amostra errada e a revisão recusa.
-    if (nCab > 0) cab.example = { header_text: Array.from({ length: nCab }, () => "exemplo") };
+    if (nCab > 0) cab.example = { header_text: Array.from({ length: nCab }, () => "exemple") };
     components.push(cab);
   }
 
@@ -180,7 +180,7 @@ export function montarComponents(input: {
     // Preenche o que faltar com um marcador: o exemplo VAZIO é recusado pela
     // revisão, e um campo em branco esquecido no formulário não pode virar uma
     // recusa que só aparece horas depois.
-    const amostras = Array.from({ length: n }, (_, i) => input.exemplos[i]?.trim() || "exemplo");
+    const amostras = Array.from({ length: n }, (_, i) => input.exemplos[i]?.trim() || "exemple");
     corpo.example = { body_text: [amostras] };
   }
   components.push(corpo);

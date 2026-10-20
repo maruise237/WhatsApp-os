@@ -5,14 +5,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 const ERROR_MESSAGES: Record<string, string> = {
-  not_configured: "Integração não configurada — configure as credenciais em .env.local.",
-  invalid_state: "Sessão de autorização expirou. Tente novamente.",
-  missing_code: "Resposta da Nuvemshop incompleta — code ausente.",
-  token_exchange_failed: "Não foi possível trocar o code pelo access token.",
-  invalid_token_response: "Resposta inesperada da Nuvemshop.",
-  network_error: "Falha de rede ao contatar a Nuvemshop.",
-  encrypt_failed: "Falha ao criptografar o token. Verifique NUVEMSHOP_OAUTH_ENCRYPTION_KEY.",
-  db_upsert_failed: "Falha ao gravar a integração no banco.",
+  not_configured: "Intégration non configurée — renseignez les identifiants dans .env.local.",
+  invalid_state: "La session d’autorisation a expiré. Réessayez.",
+  missing_code: "Réponse de Nuvemshop incomplète — code absent.",
+  token_exchange_failed: "Impossible d’échanger le code contre le jeton d’accès.",
+  invalid_token_response: "Réponse inattendue de Nuvemshop.",
+  network_error: "Erreur réseau lors du contact avec Nuvemshop.",
+  encrypt_failed: "Échec du chiffrement du jeton. Vérifiez NUVEMSHOP_OAUTH_ENCRYPTION_KEY.",
+  db_upsert_failed: "Échec de l’enregistrement de l’intégration en base de données.",
 };
 
 export function StatusToast() {

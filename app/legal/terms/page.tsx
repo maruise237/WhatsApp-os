@@ -106,7 +106,7 @@ export default async function TermsPage() {
               </a>
             </>
           ) : (
-            " pelos canais de atendimento da própria organização"
+            " par les canaux d’assistance de l’organisation elle-même"
           )}
           .
         </p>

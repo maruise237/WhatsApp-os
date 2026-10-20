@@ -23,5 +23,5 @@ export function mediaFileLabel(mime: string | null, storagePath: string | null):
   if (ext && ext !== "bin") return ext.toUpperCase();
   const sub = mime?.split(";")[0]?.split("/")[1]?.toLowerCase();
   if (sub && !["octet-stream", "bin"].includes(sub)) return sub.toUpperCase();
-  return "Arquivo";
+  return "Fichier";
 }

@@ -28,7 +28,7 @@ const KIND_LABELS: Record<GuardrailKind, string> = {
   regex_output_block: "Regex output block",
   rag_must_hit: "RAG must hit",
   regex_input_block: "Regex input block",
-  window_check: "Janela horária",
+  window_check: "Fenêtre horaire",
   contact_flag: "Contact flag",
 };
 
@@ -56,7 +56,7 @@ function defaultForKind(kind: GuardrailKind): GuardrailItem {
         start_hour: 7,
         end_hour: 22,
         timezone: "America/Sao_Paulo",
-        reason: "Janela operacional 7h-22h",
+        reason: "Plage d’activité 7h-22h",
       };
     case "contact_flag":
       return {

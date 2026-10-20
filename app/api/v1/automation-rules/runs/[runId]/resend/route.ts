@@ -110,7 +110,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
       admin: adminForActions,
       organizationId: activeOrg.orgId,
       ruleId: rule.id,
-      ruleName: (rule.name as string) ?? "Automação",
+      ruleName: (rule.name as string) ?? "Automatisation",
       event: typedEvent,
       context,
       requestId,

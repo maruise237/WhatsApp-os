@@ -25,7 +25,7 @@ export interface IntentVerdict {
 
 /** Instrução final fixa — pede JSON estrito, marcador estável pros testes/prompt. */
 const JSON_INSTRUCTION =
-  'Responda SOMENTE JSON: {"intent": "<nome exato de uma intenção da lista ou none>", "confidence": <0 a 1>}';
+  'Répondez UNIQUEMENT en JSON : {"intent": "<nom exact d’une intention de la liste ou none>", "confidence": <0 à 1>}';
 
 export function buildClassifierPrompt(members: RouterMember[], signal: string): string {
   const list = members
@@ -35,12 +35,12 @@ export function buildClassifierPrompt(members: RouterMember[], signal: string): 
     })
     .join('\n');
   return [
-    'Você é um classificador auxiliar de intenção (NÃO responde ao lead).',
-    'Intenções possíveis:',
+    'Vous êtes un classificateur auxiliaire d’intention (vous NE répondez PAS au lead).',
+    'Intentions possibles :',
     list,
-    '- none: nenhuma das intenções acima se aplica.',
+    '- none : aucune des intentions ci-dessus ne s’applique.',
     '',
-    'Mensagem do lead a classificar:',
+    'Message du lead à classer :',
     signal,
     '',
     JSON_INSTRUCTION,
@@ -125,7 +125,7 @@ export async function classifyIntent(
     return parseIntentVerdict(result.text, input.router.members);
   } catch (err) {
     // Falha do classificador NUNCA derruba o turno — chamador cai no fallback do router.
-    deps.log.warn('intent-classifier: falha ao classificar intenção — turno cai no fallback', {
+    deps.log.warn('intent-classifier : échec de la classification d’intention — le tour bascule sur le fallback', {
       error: err instanceof Error ? err.message : String(err),
     });
     return null;

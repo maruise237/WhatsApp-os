@@ -94,7 +94,7 @@ describe("interpretarRetencao — o knob nunca derruba o produto", () => {
   it("valor abaixo do piso é ELEVADO, com aviso", () => {
     const r = interpretarRetencao("2", { chave: "K", padrao: 90, piso: 7 });
     expect(r.dias).toBe(7);
-    expect(r.aviso).toContain("piso");
+    expect(r.aviso).toContain("plancher");
   });
 
   it("valor válido passa inteiro, sem aviso", () => {

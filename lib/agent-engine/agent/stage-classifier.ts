@@ -45,24 +45,24 @@ export interface StageClassifierKnobs {
 
 /** Instrução FIXA do classificador — marcador estável (como CHECKPOINT_INSTRUCTION) p/ os testes. */
 export const STAGE_CLASSIFIER_INSTRUCTION =
-  'Você é um classificador auxiliar de estágio de funil de vendas (NÃO responde ao lead). ' +
-  'Com base na conversa acima e no estágio atual, indique em que estágio a conversa está AGORA. ' +
-  'Definições dos estágios:\n' +
-  '- new: lead recém-chegado, ainda sem diálogo real (só um primeiro "oi"/pergunta genérica, sem contexto).\n' +
-  '- contacted: já houve troca inicial e rapport, mas o lead ainda não revelou necessidade ou dor concreta.\n' +
-  '- qualifying: o lead está revelando necessidade, contexto, dores ou tamanho da operação (descoberta em curso).\n' +
-  '- qualified: orçamento, autoridade de decisão, necessidade e prazo (BANT) já confirmados — pronto para proposta.\n' +
-  '- negotiating: há proposta/preço/condições na mesa e o lead está discutindo valor, desconto, parcelamento.\n' +
-  '- won: o lead fechou/aceitou explicitamente (vai assinar, pagar, emitir nota).\n' +
-  '- lost: o lead recusou, desistiu ou pediu para parar de ser contatado.\n' +
-  'Responda SOMENTE com uma palavra — o nome exato do estágio, em inglês. Sem explicação, sem pontuação.';
+  'Vous êtes un classificateur auxiliaire d’étape de tunnel de vente (vous NE répondez PAS au lead). ' +
+  'À partir de la conversation ci-dessus et de l’étape actuelle, indiquez à quelle étape se trouve la conversation MAINTENANT. ' +
+  'Définitions des étapes :\n' +
+  '- new : lead tout juste arrivé, encore sans vrai dialogue (seulement un premier « bonjour »/question générique, sans contexte).\n' +
+  '- contacted : il y a déjà eu un premier échange et un début de relation, mais le lead n’a pas encore révélé de besoin ou de problème concret.\n' +
+  '- qualifying : le lead révèle son besoin, son contexte, ses difficultés ou la taille de son activité (découverte en cours).\n' +
+  '- qualified : budget, pouvoir de décision, besoin et délai (BANT) déjà confirmés — prêt pour une proposition.\n' +
+  '- negotiating : une proposition/un prix/des conditions sont sur la table et le lead discute du montant, d’une remise, d’un paiement échelonné.\n' +
+  '- won : le lead a conclu/accepté explicitement (il va signer, payer, demander une facture).\n' +
+  '- lost : le lead a refusé, renoncé ou demandé à ne plus être contacté.\n' +
+  'Répondez UNIQUEMENT par un mot — le nom exact de l’étape, en anglais. Sans explication, sans ponctuation.';
 
 function buildClassifierMessage(context: LeadContext, currentStage: LeadStage): string {
   return [
-    '## Estágio atual do funil (registro)',
+    '## Étape actuelle du tunnel (enregistrement)',
     currentStage,
     '',
-    '## Conversa a classificar (transcript)',
+    '## Conversation à classer (transcript)',
     JSON.stringify(context),
     '',
     STAGE_CLASSIFIER_INSTRUCTION,
@@ -113,7 +113,7 @@ export async function classifyStage(
   const suggestion = parseStageSuggestion(call.result.text);
   if (suggestion === null) {
     // aux batch sem estágio reconhecível NÃO é incidente do turno: sem PII, só o aviso.
-    deps.log.warn('stage-classifier: saída do modelo auxiliar sem estágio reconhecível — turno segue sem hint');
+    deps.log.warn('stage-classifier : sortie du modèle auxiliaire sans étape reconnaissable — le tour continue sans indication');
   }
   return suggestion;
 }
@@ -125,11 +125,11 @@ export async function classifyStage(
  */
 export function renderStageHint(suggestion: LeadStage, currentStage: LeadStage): string {
   return [
-    '## Sugestão automática de estágio (classificador auxiliar — apenas uma DICA)',
-    `Um classificador barato estima que a conversa está no estágio "${suggestion}" ` +
-      `(o registro atual do funil é "${currentStage}"). Isso é só uma sugestão: VOCÊ decide. ` +
-      'Se concordar que houve avanço REAL, confirme com a tool update_lead_state (só o próximo ' +
-      'estágio válido, com evidência). Se não houve avanço, ignore a sugestão.',
+    '## Suggestion automatique d’étape (classificateur auxiliaire — simple INDICATION)',
+    `Un classificateur économique estime que la conversation est à l’étape "${suggestion}" ` +
+      `(l’enregistrement actuel du tunnel est "${currentStage}"). Ce n’est qu’une suggestion : c’est VOUS qui décidez. ` +
+      'Si vous êtes d’accord qu’il y a eu une avancée RÉELLE, confirmez-la avec l’outil update_lead_state (uniquement l’étape ' +
+      'suivante valide, avec une preuve). S’il n’y a pas eu d’avancée, ignorez la suggestion.',
   ].join('\n');
 }
 
@@ -158,8 +158,8 @@ export async function recordStageDivergenceCandidate(
     recorded_at: new Date().toISOString(),
     source: 'stage_classifier_divergence',
     note:
-      `divergência classificador×modelo: o classificador sugeriu "${suggested}" e o modelo confirmou ` +
-      `"${confirmed}" via update_lead_state — candidato ao golden set para curadoria humana (SalesGPT).`,
+      `divergence classificateur×modèle : le classificateur a suggéré "${suggested}" et le modèle a confirmé ` +
+      `"${confirmed}" via update_lead_state — candidat au golden set pour curation humaine (SalesGPT).`,
     tenant_id: trace.tenantId,
     lead_id: trace.leadId,
     job_id: trace.jobId,
@@ -171,7 +171,7 @@ export async function recordStageDivergenceCandidate(
   const file = path.join(dir, `stage-divergence_${trace.jobId}.json`);
   await writeFile(file, `${JSON.stringify(record, null, 2)}\n`, 'utf8');
   // PII fora do log: só os nomes dos estágios (não o sinal).
-  log.info('candidato ao golden set registrado (divergência de estágio classificador×modelo)', {
+  log.info('candidat au golden set enregistré (divergence d’étape classificateur×modèle)', {
     suggested,
     confirmed,
   });

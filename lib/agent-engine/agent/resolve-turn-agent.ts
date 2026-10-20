@@ -121,7 +121,7 @@ export async function resolveTurnAgent(
         // (nenhum publicado) segue caindo no genérico, como sempre.
         const daSessao = await _loadAgentBySession(db, input.tenantId, input.channelSessionId);
         if (daSessao === null) {
-          deps.log.warn('resolve-turn-agent: router sem fallback e sessão sem agente publicado — turno cai no genérico', {
+          deps.log.warn('resolve-turn-agent : routeur sans fallback et session sans agent publié — le tour bascule sur le générique', {
             routerId: router.id,
             outcome,
           });
@@ -134,7 +134,7 @@ export async function resolveTurnAgent(
         // linha, mas o outcome que já explicava a causa (classifier_failed)
         // não vira 'no_match' por engano; só rebaixa quando o motivo era
         // genuinamente "sem match", pra não mentir sobre o que aconteceu.
-        deps.log.warn('resolve-turn-agent: fallbackAgentId sem versão publicada — turno cai no genérico', {
+        deps.log.warn('resolve-turn-agent : fallbackAgentId sans version publiée — le tour bascule sur le générique', {
           routerId: router.id,
           fallbackAgentId: router.fallbackAgentId,
         });
@@ -160,7 +160,7 @@ export async function resolveTurnAgent(
     ): Promise<TurnAgentResolution> => {
       const config = await _loadAgentById(db, input.tenantId, agentId);
       if (config === null) {
-        deps.log.warn('resolve-turn-agent: agente casado sem versão publicada — tentando fallback do router', {
+        deps.log.warn('resolve-turn-agent : agent correspondant sans version publiée — tentative de fallback du routeur', {
           routerId: router.id,
           matchedOutcome: outcome,
           agentId,
@@ -221,7 +221,7 @@ export async function resolveTurnAgent(
 
     return resolveFallback('no_match', verdict.confidence);
   } catch (err) {
-    deps.log.warn('resolve-turn-agent: erro inesperado no router — turno cai no fluxo sem router', {
+    deps.log.warn('resolve-turn-agent : erreur inattendue dans le routeur — le tour continue sans routeur', {
       error: err instanceof Error ? err.message : String(err),
     });
     return {

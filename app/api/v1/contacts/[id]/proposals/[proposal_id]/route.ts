@@ -184,7 +184,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
       // mudado no meio do caminho.
       old_value: p.valor_anterior,
       new_value: p.valor_proposto,
-      legal_basis: "L-05 transactional (dado informado pelo titular em atendimento iniciado por ele)",
+      legal_basis: "L-05 transactional (donnée fournie par la personne concernée lors d’un échange qu’elle a initié)",
     },
   });
 

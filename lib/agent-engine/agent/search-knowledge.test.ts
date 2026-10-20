@@ -51,7 +51,7 @@ describe('searchKnowledge', () => {
     expect(out.ok).toBe(false);
     if (!out.ok) {
       expect(out.error.code).toBe('knowledge_unavailable');
-      expect(out.error.message).toContain('indisponível');
+      expect(out.error.message).toContain('indisponible');
     }
   });
 

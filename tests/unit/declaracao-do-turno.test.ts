@@ -143,13 +143,13 @@ describe("declaração do turno — o contrato", () => {
         rolling_summary: "",
         declaracao,
       });
-      expect(resumo).toContain("confirmar o novo horário (até 2026-08-07T14:00:00Z)");
+      expect(resumo).toContain("confirmar o novo horário (au plus tard 2026-08-07T14:00:00Z)");
       // A sem prazo aparece inteira e SEM parêntese órfão — "(até null)" na tela
       // de quem assume é pior que não mostrar prazo nenhum.
       expect(resumo).toContain("verificar se o convênio cobre");
-      expect(resumo).not.toContain("(até null)");
+      expect(resumo).not.toContain("(au plus tard null)");
       // Exatamente uma das duas promessas tem prazo: o marcador não vaza para a outra.
-      expect(resumo.match(/\(até /g)).toHaveLength(1);
+      expect(resumo.match(/\(au plus tard /g)).toHaveLength(1);
     });
 
     it("a declaração vem ANTES de compromissos/objeções — é o que decide a próxima frase", () => {
@@ -160,7 +160,7 @@ describe("declaração do turno — o contrato", () => {
         rolling_summary: "",
         declaracao,
       });
-      expect(resumo.indexOf("quer remarcar")).toBeLessThan(resumo.indexOf("Compromissos:"));
+      expect(resumo.indexOf("quer remarcar")).toBeLessThan(resumo.indexOf("Engagements :"));
     });
 
     it("sem declaração, o handoff degrada para o resumo de hoje — nunca quebra", () => {
@@ -172,7 +172,7 @@ describe("declaração do turno — o contrato", () => {
         rolling_summary: "conversa em andamento",
       });
       expect(resumo).toContain("conversa em andamento");
-      expect(resumo).toContain("Compromissos: enviar orçamento");
+      expect(resumo).toContain("Engagements : enviar orçamento");
     });
 
     it("declaração vazia não imprime cabeçalho órfão", () => {

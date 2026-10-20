@@ -53,7 +53,7 @@ export async function seedPlatformPlaybook(
     );
     const versionId = rows[0]?.id;
     if (versionId === undefined) {
-      throw new Error('seed: insert em playbook_versions não devolveu linha');
+      throw new Error('seed : l’insertion dans playbook_versions n’a renvoyé aucune ligne');
     }
     await client.query(
       `insert into playbook_pointers (organization_id, layer, version_id)

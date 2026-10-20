@@ -109,7 +109,7 @@ describe("InboxFilters render — 3 visões + escopo", () => {
     setOrg("agent", "own_and_unassigned");
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
     expect(screen.getByRole("tab", { name: /Minhas/ })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: /Fila/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /File/ })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: /Toutes/ })).not.toBeInTheDocument();
   });
 
@@ -122,7 +122,7 @@ describe("InboxFilters render — 3 visões + escopo", () => {
   it("contagens por visão são renderizadas (Fila=3, Minhas=2)", () => {
     setOrg("manager", "all");
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
-    expect(screen.getByRole("tab", { name: /Fila/ })).toHaveTextContent("3");
+    expect(screen.getByRole("tab", { name: /File/ })).toHaveTextContent("3");
     expect(screen.getByRole("tab", { name: /Minhas/ })).toHaveTextContent("2");
     expect(screen.getByRole("tab", { name: /Toutes/ })).toHaveTextContent("5");
   });

@@ -29,10 +29,10 @@ const STATUS_VARIANTS: Record<
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  active: "Ativo",
+  active: "Actif",
   onboarding: "Onboarding",
-  suspended: "Suspenso",
-  redacted: "Redigido",
+  suspended: "Suspendue",
+  redacted: "Anonymisée",
 };
 
 function StatusBadge({
@@ -89,7 +89,7 @@ export function TenantsTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["Slug", "Nome", "CNPJ", "Status", "Users", "Conversas", "Criado em", ""].map(
+            {["Slug", "Nom", "CNPJ", "Statut", "Utilisateurs", "Conversations", "Créé le", ""].map(
               (h) => (
                 <TableHead key={h}>{h}</TableHead>
               ),
@@ -199,7 +199,7 @@ export function TenantsTable({
             onClick={onLoadMore}
             disabled={isFetchingNextPage}
           >
-            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+            {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
           </Button>
         </div>
       )}

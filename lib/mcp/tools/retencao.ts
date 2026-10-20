@@ -71,11 +71,11 @@ function actorAudit(ctx: McpContext): {
 /** Texto de ENSINO para os alvos que não existem — o modelo corrige e segue. */
 const ENSINO_DE_ALVO: Record<string, string> = {
   negocio_nao_encontrado:
-    "não existe oportunidade com esse identificador nesta organização — confira com a capacidade de listar oportunidades antes de tentar de novo.",
+    "il n’existe pas d’opportunité avec cet identifiant dans cette organisation — vérifiez avec la capacité de liste des opportunités avant de réessayer.",
   negocio_sem_contato:
-    "esta oportunidade não tem cliente vinculado, então não há para quem voltar a falar. Vincule um cliente antes de marcar um retorno.",
+    "cette opportunité n’a pas de client associé, il n’y a donc personne à recontacter. Associez un client avant de planifier un retour.",
   cliente_nao_encontrado:
-    "informe o identificador da oportunidade (lead_id) ou do cliente (contact_id) — um dos dois é obrigatório e precisa existir nesta organização.",
+    "indiquez l’identifiant de l’opportunité (lead_id) ou du client (contact_id) — l’un des deux est obligatoire et doit exister dans cette organisation.",
 };
 
 // ---------------------------------------------------------------------------
@@ -111,12 +111,12 @@ const agendarShape = {
 export const crmScheduleFollowup: McpToolDefinition<typeof agendarShape> = {
   name: "crm_schedule_followup",
   description:
-    "Agenda o retorno ao cliente num momento futuro. Informe lead_id OU contact_id. " +
-    "QUANDO: informe `in_hours` (prazo a partir de agora — ex.: 72 para 'daqui a três dias') " +
-    "OU `promised_at` (instante ISO 8601 absoluto). SE VOCÊ NÃO SABE QUE DIA É HOJE, USE " +
-    "`in_hours` — é o caminho certo e não exige adivinhar a data. " +
-    "Um retorno vivo por cliente: se já houver, a chamada devolve agendado=false com o motivo, " +
-    "e não é erro — é para você seguir sem duplicar.",
+    "Planifie le retour vers le client à un moment futur. Indiquez lead_id OU contact_id. " +
+    "QUAND : indiquez `in_hours` (délai à partir de maintenant — ex. : 72 pour « dans trois jours ») " +
+    "OU `promised_at` (instant ISO 8601 absolu). SI VOUS NE SAVEZ PAS QUEL JOUR NOUS SOMMES, UTILISEZ " +
+    "`in_hours` — c’est la bonne voie et cela n’oblige pas à deviner la date. " +
+    "Un seul retour actif par client : s’il en existe déjà un, l’appel renvoie agendado=false avec le motif, " +
+    "et ce n’est pas une erreur — c’est pour que vous continuiez sans doublon.",
   inputSchema: agendarShape,
   category: "write",
   requiresRole: "ai_operator",
@@ -148,8 +148,8 @@ export const crmScheduleFollowup: McpToolDefinition<typeof agendarShape> = {
         agendado: false,
         motivo: "quando_ausente",
         mensagem:
-          "diga QUANDO: `in_hours` (prazo a partir de agora, ex.: 72 para daqui a três dias) " +
-          "ou `promised_at` (instante ISO 8601 absoluto). Se você não sabe que dia é hoje, use `in_hours`.",
+          "dites QUAND : `in_hours` (délai à partir de maintenant, ex. : 72 pour dans trois jours) " +
+          "ou `promised_at` (instant ISO 8601 absolu). Si vous ne savez pas quel jour nous sommes, utilisez `in_hours`.",
       };
     }
 
@@ -178,22 +178,22 @@ export const crmScheduleFollowup: McpToolDefinition<typeof agendarShape> = {
         const tardeDemais = new Date(agora.getTime() + maxAheadMs).toISOString();
         const ensino: Record<string, string> = {
           instante_invalido:
-            `promised_at não é uma data ISO 8601 válida. AGORA é ${agoraIso} — some o prazo pedido ` +
-            `a este instante e mande o resultado absoluto (ex.: '${cedoDemais}').`,
+            `promised_at n’est pas une date ISO 8601 valide. MAINTENANT, il est ${agoraIso} — ajoutez le délai demandé ` +
+            `à cet instant et envoyez le résultat absolu (ex. : '${cedoDemais}').`,
           instante_no_passado:
-            `a data informada já passou: AGORA é ${agoraIso}. Some o prazo combinado a este ` +
-            `instante e mande a data absoluta resultante — não repita a mesma data.`,
+            `la date indiquée est déjà passée : MAINTENANT, il est ${agoraIso}. Ajoutez le délai convenu à cet ` +
+            `instant et envoyez la date absolue obtenue — ne répétez pas la même date.`,
           instante_fora_da_janela:
-            `horário fora da janela aceitável. AGORA é ${agoraIso}; o retorno tem de cair entre ` +
-            `${cedoDemais} e ${tardeDemais} (${duracaoLegivel(minAheadMs)} a ${duracaoLegivel(maxAheadMs)} a partir de agora).`,
+            `horaire hors de la plage acceptable. MAINTENANT, il est ${agoraIso}; le retour doit tomber entre ` +
+            `${cedoDemais} et ${tardeDemais} (${duracaoLegivel(minAheadMs)} à ${duracaoLegivel(maxAheadMs)} à partir de maintenant).`,
           ja_existe_retorno:
-            "este cliente JÁ tem um retorno marcado — não marque outro (evita insistir com a mesma pessoa " +
-            "várias vezes). Se precisa mudar o horário, cancele o existente antes.",
+            "ce client a DÉJÀ un retour planifié — n’en planifiez pas un autre (évite d’insister auprès de la même personne " +
+            "plusieurs fois). Si l’horaire doit changer, annulez d’abord celui qui existe.",
         };
         return {
           agendado: false,
           motivo: resultado.codigo,
-          mensagem: ensino[resultado.codigo] ?? "não foi possível marcar o retorno.",
+          mensagem: ensino[resultado.codigo] ?? "impossible de planifier le retour.",
           ...(resultado.existente
             ? {
                 retorno_existente: {
@@ -208,7 +208,7 @@ export const crmScheduleFollowup: McpToolDefinition<typeof agendarShape> = {
       return {
         agendado: false,
         motivo: resultado.codigo,
-        mensagem: ENSINO_DE_ALVO[resultado.codigo] ?? "alvo não encontrado.",
+        mensagem: ENSINO_DE_ALVO[resultado.codigo] ?? "cible introuvable.",
       };
     }
 
@@ -237,7 +237,7 @@ export const crmScheduleFollowup: McpToolDefinition<typeof agendarShape> = {
       lead_id: resultado.alvo?.leadId ?? null,
       contact_id: resultado.retorno.contactId,
       mensagem:
-        "retorno marcado. Encerre o turno agora; o sistema volta a falar com o cliente no horário combinado.",
+        "retour planifié. Terminez le tour maintenant ; le système recontactera le client à l’horaire convenu.",
     };
   },
 };
@@ -254,9 +254,9 @@ const cancelarShape = {
 export const crmCancelFollowup: McpToolDefinition<typeof cancelarShape> = {
   name: "crm_cancel_followup",
   description:
-    "Cancela um retorno agendado que ainda não disparou. Use quando o cliente já respondeu ou o " +
-    "motivo do retorno deixou de existir — insistir com quem já respondeu é dano. " +
-    "Retorno já disparado ou já cancelado devolve cancelado=false, e isso não é erro.",
+    "Annule un retour planifié qui n’a pas encore été déclenché. À utiliser quand le client a déjà répondu ou que le " +
+    "motif du retour n’existe plus — insister auprès de quelqu’un qui a déjà répondu est nuisible. " +
+    "Un retour déjà déclenché ou déjà annulé renvoie cancelado=false, et ce n’est pas une erreur.",
   inputSchema: cancelarShape,
   category: "write",
   requiresRole: "ai_operator",
@@ -279,8 +279,8 @@ export const crmCancelFollowup: McpToolDefinition<typeof cancelarShape> = {
         motivo: resultado.codigo,
         mensagem:
           resultado.codigo === "nao_encontrado"
-            ? "não existe retorno com esse identificador nesta organização."
-            : "este retorno já aconteceu ou já tinha sido cancelado — não há o que desmarcar.",
+            ? "il n’existe pas de retour avec cet identifiant dans cette organisation."
+            : "ce retour a déjà eu lieu ou avait déjà été annulé — il n’y a rien à annuler.",
         ...(resultado.existente ? { situacao: resultado.existente.situacao } : {}),
       };
     }
@@ -324,10 +324,10 @@ const listarShape = {
 export const crmListFollowups: McpToolDefinition<typeof listarShape> = {
   name: "crm_list_followups",
   description:
-    "Lista os retornos de um cliente (informe lead_id OU contact_id), do mais próximo para o mais " +
-    "antigo. Cada item traz situacao: 'agendado' (ainda vai acontecer), 'disparado' (já aconteceu) " +
-    "ou 'cancelado' (alguém desmarcou, com motivo_do_cancelamento). É por aqui que você descobre " +
-    "que um humano desmarcou o retorno — se descobrir, NÃO reagende o mesmo retorno.",
+    "Liste les retours d’un client (indiquez lead_id OU contact_id), du plus proche au plus " +
+    "ancien. Chaque élément contient situacao : 'agendado' (va encore avoir lieu), 'disparado' (a déjà eu lieu) " +
+    "ou 'cancelado' (quelqu’un l’a annulé, avec motivo_do_cancelamento). C’est ici que vous découvrez " +
+    "qu’un humain a annulé le retour — si c’est le cas, NE replanifiez PAS ce même retour.",
   inputSchema: listarShape,
   category: "read",
   requiresRole: "agent",
@@ -343,7 +343,7 @@ export const crmListFollowups: McpToolDefinition<typeof listarShape> = {
       return {
         retornos: [],
         motivo: resultado.codigo,
-        mensagem: ENSINO_DE_ALVO[resultado.codigo] ?? "alvo não encontrado.",
+        mensagem: ENSINO_DE_ALVO[resultado.codigo] ?? "cible introuvable.",
       };
     }
 
@@ -381,14 +381,14 @@ const radarShape = {
 export const crmListAtRiskLeads: McpToolDefinition<typeof radarShape> = {
   name: "crm_list_at_risk_leads",
   description:
-    "Radar de risco: as oportunidades ABERTAS que passaram da janela de esfriamento do próprio " +
-    "estágio. Cada item traz risk='critico'|'em_risco'|'em_voo' (em_voo = já há retorno agendado, " +
-    "o sistema mantém viva), horas sem movimento, dono e a conversa. Ordenado por urgência. " +
-    "Traz TAMBÉM `sem_proximo_passo`: demandas abertas para as quais nada está marcado para " +
-    "acontecer — cada uma é alguém esperando sem previsão. Campos: contact_id, contact_name, " +
-    "horas_aberta e origem. Essas NÃO saem sozinhas: resolva cada uma agendando um retorno " +
-    "(crm_schedule_followup com contact_id) ou registrando o desfecho (crm_close_demand), " +
-    "conforme o caso. `total_sem_proximo_passo` cabe zerar; é o único número aqui cujo alvo é 0.",
+    "Radar de risque : les opportunités OUVERTES qui ont dépassé la fenêtre de refroidissement de leur " +
+    "étape. Chaque élément contient risk='critico'|'em_risco'|'em_voo' (em_voo = un retour est déjà planifié, " +
+    "le système la maintient en vie), les heures sans mouvement, le responsable et la conversation. Trié par urgence. " +
+    "Contient AUSSI `sem_proximo_passo` : les demandes ouvertes pour lesquelles rien n’est prévu " +
+    "— chacune est quelqu’un qui attend sans perspective. Champs : contact_id, contact_name, " +
+    "horas_aberta et origem. Celles-ci NE disparaissent PAS toutes seules : traitez chacune en planifiant un retour " +
+    "(crm_schedule_followup avec contact_id) ou en enregistrant l’issue (crm_close_demand), " +
+    "selon le cas. `total_sem_proximo_passo` doit être ramené à zéro ; c’est le seul chiffre ici dont la cible est 0.",
   inputSchema: radarShape,
   category: "read",
   requiresRole: "agent",
@@ -417,10 +417,10 @@ const encerrarShape = {
 export const crmCloseDemand: McpToolDefinition<typeof encerrarShape> = {
   name: "crm_close_demand",
   description:
-    "Encerra a demanda: move a oportunidade para o estágio terminal do funil como ganha " +
-    "(outcome='won') ou perdida (outcome='lost', com reason obrigatório). É o outro lado do " +
-    "acompanhamento: demanda aberta precisa de próximo passo OU de desfecho registrado. " +
-    "Idempotente — encerrar de novo devolve o estado atual sem alterar nada.",
+    "Clôture la demande : déplace l’opportunité vers l’étape terminale du tunnel comme gagnée " +
+    "(outcome='won') ou perdue (outcome='lost', avec reason obligatoire). C’est l’autre face du " +
+    "suivi : une demande ouverte a besoin d’une prochaine étape OU d’une issue enregistrée. " +
+    "Idempotent — clôturer à nouveau renvoie l’état actuel sans rien modifier.",
   inputSchema: encerrarShape,
   category: "write",
   requiresRole: "agent",
@@ -465,10 +465,10 @@ const reativacaoShape = {
 export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> = {
   name: "crm_propose_reactivation",
   description:
-    "Cria uma proposta de retomada de contato para uma oportunidade que esfriou. A proposta aparece " +
-    "no cartão do negócio para um humano aprovar; NADA é enviado ao cliente por conta dela, e ela " +
-    "vence sozinha se ninguém decidir. Recusa se já houver proposta viva ou se o negócio não tiver " +
-    "cliente vinculado.",
+    "Crée une proposition de reprise de contact pour une opportunité qui s’est refroidie. La proposition apparaît " +
+    "sur la carte de l’affaire pour qu’un humain l’approuve ; RIEN n’est envoyé au client à cause d’elle, et elle " +
+    "expire toute seule si personne ne décide. Refusé s’il existe déjà une proposition active ou si l’affaire n’a pas " +
+    "de client associé.",
   inputSchema: reativacaoShape,
   category: "write",
   requiresRole: "agent",
@@ -493,7 +493,7 @@ export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> =
       return {
         proposta_criada: false,
         motivo: "negocio_encerrado",
-        mensagem: "este negócio já foi encerrado — não há contato a retomar.",
+        mensagem: "cette affaire est déjà clôturée — il n’y a pas de contact à reprendre.",
       };
     }
     if (!alvo.contact_id) {
@@ -530,7 +530,7 @@ export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> =
         proposta_criada: false,
         motivo: "ja_existe_proposta",
         mensagem:
-          "este negócio já tem uma sugestão de retomada aguardando decisão de uma pessoa — não crie outra.",
+          "cette affaire a déjà une suggestion de reprise en attente de la décision d’une personne — n’en créez pas une autre.",
       };
     }
 
@@ -552,7 +552,7 @@ export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> =
       lead_id: input.lead_id,
       vence_em: proposta.expiresAt.toISOString(),
       mensagem:
-        "sugestão registrada. Uma pessoa precisa aprovar antes de qualquer mensagem sair para o cliente.",
+        "suggestion enregistrée. Une personne doit l’approuver avant que le moindre message parte vers le client.",
     };
   },
 };

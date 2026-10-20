@@ -63,7 +63,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     const form = await req.formData();
     const f = form.get("file");
-    if (!(f instanceof File)) throw new Error("sem arquivo");
+    if (!(f instanceof File)) throw new Error("aucun fichier");
     file = f;
   } catch {
     return fail("validation_failed", "Envoyez le fichier en multipart/form-data dans le champ « file ».", 422, {

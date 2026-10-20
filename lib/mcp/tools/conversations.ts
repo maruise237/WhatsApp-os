@@ -46,8 +46,8 @@ const listInputShape = {
 export const crmListConversations: McpToolDefinition<typeof listInputShape> = {
   name: "crm_list_conversations",
   description:
-    "Lista conversas do CRM com filtros opcionais por contato e status. Retorna preview da ultima mensagem. " +
-    "Campos de governança por conversa: assignee_kind ('user'|'ai'|null), assigned_to_user_id + assigned_to_user_name (só o nome do atendente, sem email/telefone), tags[], e queue_position (posição 1-based na fila do inbox — só quando na fila, senão null).",
+    "Liste les conversations du CRM avec des filtres optionnels par contact et statut. Renvoie un aperçu du dernier message. " +
+    "Champs de gouvernance par conversation : assignee_kind ('user'|'ai'|null), assigned_to_user_id + assigned_to_user_name (uniquement le nom du conseiller, sans e-mail/téléphone), tags[], et queue_position (position 1-based dans la file de l’inbox — uniquement en file, sinon null).",
   inputSchema: listInputShape,
   category: "read",
   requiresRole: "agent",
@@ -110,8 +110,8 @@ const getInputShape = {
 export const crmGetConversation: McpToolDefinition<typeof getInputShape> = {
   name: "crm_get_conversation",
   description:
-    "Retorna detalhes de uma conversa pelo UUID. Inclui status, atribuicao, contato, ultima atividade. " +
-    "Governança: assignee_kind ('user'|'ai'|null), assigned_to_user_id + assigned_to_user_name (só o nome, sem email/telefone), tags[], e queue_position (1-based na fila do inbox — null quando não está na fila).",
+    "Renvoie les détails d’une conversation par son UUID. Inclut statut, attribution, contact, dernière activité. " +
+    "Gouvernance : assignee_kind ('user'|'ai'|null), assigned_to_user_id + assigned_to_user_name (uniquement le nom, sans e-mail/téléphone), tags[], et queue_position (1-based dans la file de l’inbox — null hors file).",
   inputSchema: getInputShape,
   category: "read",
   requiresRole: "agent",
@@ -164,7 +164,7 @@ const historyInputShape = {
 export const crmGetConversationHistory: McpToolDefinition<typeof historyInputShape> = {
   name: "crm_get_conversation_history",
   description:
-    "Carrega historico de mensagens de uma conversa. Use para dar contexto ao agente sem inflar o system prompt.",
+    "Charge l’historique des messages d’une conversation. À utiliser pour donner du contexte à l’agent sans alourdir le prompt système.",
   inputSchema: historyInputShape,
   category: "read",
   requiresRole: "agent",

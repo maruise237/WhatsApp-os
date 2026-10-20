@@ -143,10 +143,10 @@ function avisoDaChave(status: BudgetStatus, t: (text: string) => string): string
  * promete uma parada que nunca dispara. Prometer é pior que não oferecer.
  */
 const AVISO_DE_MEDICAO =
-  "Parte do que a IA gastou este mês não entra nesta conta: o produto ainda não sabe " +
-  "o preço do modelo que está em uso, então o número abaixo é MENOR que o real e a " +
-  "parada no limite pode não acontecer. Enquanto isso, acompanhe o gasto direto no " +
-  "painel do seu provedor de IA.";
+  "Une partie de ce que l’IA a dépensé ce mois-ci n’est pas comptée ici : le produit ne connaît pas encore " +
+  "le prix du modèle utilisé ; le chiffre ci-dessous est donc INFÉRIEUR au montant réel et " +
+  "l’arrêt au plafond peut ne pas se produire. En attendant, suivez la dépense directement dans " +
+  "le tableau de bord de votre fournisseur d’IA.";
 
 export function BudgetCard({ initialData, isAdmin }: Props) {
   const t = useT();

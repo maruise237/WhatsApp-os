@@ -19,7 +19,7 @@ import { useSuspendTenant } from "@/hooks/useSuspendTenant";
 // Schema
 // ---------------------------------------------------------------------------
 
-const reasonSchema = z.string().min(10, "Mínimo 10 caracteres").max(500, "Máximo 500 caracteres");
+const reasonSchema = z.string().min(10, "10 caractères minimum").max(500, "500 caractères maximum");
 
 // ---------------------------------------------------------------------------
 // Props
@@ -110,7 +110,7 @@ export function SuspendDialog({ open, onClose, organizationId }: SuspendDialogPr
             onClick={handleConfirm}
             disabled={!isValid || suspend.isPending}
           >
-            {suspend.isPending ? "Suspendendo..." : "Confirmer la suspension"}
+            {suspend.isPending ? "Suspension…" : "Confirmer la suspension"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

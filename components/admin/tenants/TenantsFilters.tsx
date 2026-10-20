@@ -61,7 +61,7 @@ export function TenantsFilters({ filters, onChange }: TenantsFiltersProps) {
         value={filters.status ?? "all"}
         onValueChange={handleStatus}
       >
-        <SelectTrigger className="sm:w-44" aria-label="Filtrar por status">
+        <SelectTrigger className="sm:w-44" aria-label="Filtrer par statut">
           <SelectValue placeholder="Statut" />
         </SelectTrigger>
         <SelectContent>

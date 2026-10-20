@@ -11,17 +11,17 @@ export function Switcher() {
       <select
         className="ds-pill-select"
         value={v.palette}
-        aria-label="Paleta"
+        aria-label="Palette"
         onChange={(e) => v.setPalette(e.target.value as PaletteId)}
       >
         {Object.values(PALETTES).map((p) => (
-          <option key={p.id} value={p.id}>Paleta · {p.name}</option>
+          <option key={p.id} value={p.id}>Palette · {p.name}</option>
         ))}
       </select>
       <select
         className="ds-pill-select"
         value={v.typo}
-        aria-label="Tipografia"
+        aria-label="Typographie"
         onChange={(e) => v.setTypo(e.target.value as TypoId)}
       >
         {Object.entries(TYPOS).map(([id, t]) => (
@@ -31,17 +31,17 @@ export function Switcher() {
       <select
         className="ds-pill-select"
         value={v.density}
-        aria-label="Densidade"
+        aria-label="Densité"
         onChange={(e) => v.setDensity(e.target.value as DensityId)}
       >
         {Object.entries(DENSITIES).map(([id, d]) => (
-          <option key={id} value={id}>Densidade · {d.label}</option>
+          <option key={id} value={id}>Densité · {d.label}</option>
         ))}
       </select>
       <button
         type="button"
         className="ds-icon-btn"
-        aria-label="Alternar tema"
+        aria-label="Changer de thème"
         onClick={() => v.setTheme(v.theme === "light" ? "dark" : "light")}
         title={v.theme === "light" ? "Passer en mode sombre" : "Passer en mode clair"}
       >

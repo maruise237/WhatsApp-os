@@ -40,7 +40,7 @@ const STATUS_BADGE_BG: Record<HealthStatus, string> = {
 const STATUS_LABEL: Record<HealthStatus, string> = {
   ok: "OK",
   warning: "Attention",
-  critical: "Crítico",
+  critical: "Critique",
 };
 
 const STATUS_DOT: Record<HealthStatus, string> = {

@@ -55,9 +55,9 @@ interface Props {
 
 /** Mensagem por código de recusa da server action. */
 const ERRO_EM_PORTUGUES: Record<string, string> = {
-  validation_failed: "Algum campo não está no formato esperado.",
-  unauthenticated: "Sua sessão expirou. Entre de novo para salvar.",
-  forbidden_role: "Só quem administra a instalação pode mudar a marca.",
+  validation_failed: "Un champ n’est pas dans le format attendu.",
+  unauthenticated: "Votre session a expiré. Reconnectez-vous pour enregistrer.",
+  forbidden_role: "Seul l’administrateur de l’installation peut modifier la marque.",
 };
 
 /** Cinza médio para o seletor visual quando o campo ainda não tem cor válida. */
@@ -192,7 +192,7 @@ export function FormularioDaMarca({
     startTransition(async () => {
       const resultado = await updateBranding(lido.data);
       if (resultado.ok) {
-        toast.success("Marca salva.");
+        toast.success("Marque enregistrée.");
         // A origem e o alarme deste bloco vêm do servidor: sem o refresh eles
         // continuariam descrevendo o estado de antes de salvar.
         router.refresh();
@@ -353,7 +353,7 @@ export function FormularioDaMarca({
           <span className="font-mono text-xs text-text-muted">{erroTecnico}</span>
         ) : null}
         <Button type="submit" disabled={isPending || !hexValido}>
-          {isPending ? "Salvando…" : "Enregistrer"}
+          {isPending ? "Enregistrement…" : "Enregistrer"}
         </Button>
       </div>
     </form>

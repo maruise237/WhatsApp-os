@@ -28,19 +28,19 @@ interface ApproveButtonProps {
 
 const VARIANT_LABELS: Record<LgpdRequestType, { button: string; title: string; description: string }> = {
   data_request: {
-    button: "Aprovar export",
+    button: "Approuver l’export",
     title: "Approuver l’export des données",
     description:
       "En confirmant, cette demande sera mise en file pour l’export des données de la personne concernée. Cette action est irréversible.",
   },
   redact: {
-    button: "Aprovar anonimização",
+    button: "Approuver l’anonymisation",
     title: "Approuver l’anonymisation du contact",
     description:
       "En confirmant, toutes les données personnelles de la personne concernée seront anonymisées (irréversible). L’historique des horodatages est conservé.",
   },
   store_redact: {
-    button: "Aprovar anonimização (tenant)",
+    button: "Approuver l’anonymisation (organisation)",
     title: "Approuver l’anonymisation de l’organisation",
     description:
       "En confirmant, toutes les données personnelles de l’organisation seront anonymisées (irréversible). Cette action concerne tous les contacts de l’organisation.",
@@ -119,7 +119,7 @@ export function ApproveButton({ requestId, requestType, status }: ApproveButtonP
             }}
             disabled={!isValid || isPending}
           >
-            {isPending ? "Aprovando…" : "Confirmer l’approbation"}
+            {isPending ? "Approbation…" : "Confirmer l’approbation"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

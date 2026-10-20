@@ -60,7 +60,7 @@ describe('parsePlanoDeEsperas', () => {
   it('mantém a espera quando falta o motivo — o instante é o essencial, a frase é acessória', () => {
     const text = '{"esperas": [{"node_id": "w1", "aguardar_ms": 900000}]}';
     expect(parsePlanoDeEsperas(text, doFluxo)).toEqual([
-      { node_id: 'w1', aguardar_ms: 900_000, motivo: 'o modelo não explicou a escolha' },
+      { node_id: 'w1', aguardar_ms: 900_000, motivo: 'le modèle n’a pas expliqué son choix' },
     ]);
   });
 

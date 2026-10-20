@@ -119,12 +119,12 @@ export function entraPorPacote(risco: ToolRisk): boolean {
 
 export function pacoteMeta(id: ToolBundle): PacoteMeta {
   const found = PACOTES.find((p) => p.id === id);
-  if (!found) throw new Error(`pacote desconhecido: ${id}`);
+  if (!found) throw new Error(`paquet inconnu : ${id}`);
   return found;
 }
 
 export function riscoMeta(id: ToolRisk): RiscoMeta {
   const found = RISCOS.find((r) => r.id === id);
-  if (!found) throw new Error(`risco desconhecido: ${id}`);
+  if (!found) throw new Error(`risque inconnu : ${id}`);
   return found;
 }

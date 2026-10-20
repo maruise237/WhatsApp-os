@@ -220,7 +220,7 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   const parsed = envSchema.safeParse(cleaned);
   if (!parsed.success) {
     const names = [...new Set(parsed.error.issues.map((issue) => issue.path.join('.')))];
-    throw new Error(`env inválido — verifique no .env: ${names.join(', ')}`);
+    throw new Error(`env invalide — vérifiez dans le .env : ${names.join(', ')}`);
   }
   return parsed.data;
 }

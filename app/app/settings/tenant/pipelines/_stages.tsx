@@ -68,9 +68,9 @@ export type Papel = "nenhum" | "won" | "lost";
  * perguntar "das duas o quê?". Se o cabeçalho sair, estes textos saem junto.
  */
 const ROTULO_DO_PAPEL: Readonly<Record<Papel, string>> = {
-  nenhum: "Nada especial",
-  won: "Aqui o cliente fecha",
-  lost: "Aqui o cliente desiste",
+  nenhum: "Rien de particulier",
+  won: "Ici, le client conclut",
+  lost: "Ici, le client renonce",
 };
 
 export function papelDaEtapa(etapa: EtapaDoFunil): Papel {
@@ -189,8 +189,8 @@ const LARGURA = { ordem: "sm:w-[76px]", papel: "sm:w-56", arquivar: "sm:w-[104px
  */
 export const ROTULO = {
   nome: "Nom de la colonne (cliquez pour renommer)",
-  ordem: "Ordem",
-  papel: "O que acontece nesta coluna",
+  ordem: "Ordre",
+  papel: "Ce qui se passe dans cette colonne",
 } as const;
 
 export function StagesSection({

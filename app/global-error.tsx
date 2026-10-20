@@ -87,7 +87,7 @@ export default function GlobalError({
                 cursor: "pointer",
               }}
             >
-              {copied ? "Copiado!" : "Copiar ID"}
+              {copied ? "Copié !" : "Copier l’ID"}
             </button>
             <button
               type="button"

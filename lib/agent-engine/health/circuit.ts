@@ -174,25 +174,25 @@ function pct(fraction: number): string {
 function diagnosisBody(reason: HoldReason, rates: SessionRates, k: HealthKnobs): string {
   if (reason === 'go_live') {
     return (
-      'Número novo aguardando liberação (go-live). Os disparos que o sistema começa — follow-up ' +
-      'e cadência de prospecção — nascem em espera por segurança: a fila retém, nada é perdido. ' +
-      'RESPONDER quem te escreveu continua funcionando normalmente. Resolva este item quando o ' +
-      'número estiver pronto para disparar.'
+      'Nouveau numéro en attente de validation (go-live). Les envois que le système initie — relance ' +
+      'et cadence de prospection — démarrent en attente par sécurité : la file les retient, rien n’est perdu. ' +
+      'RÉPONDRE aux personnes qui vous ont écrit continue de fonctionner normalement. Résolvez cet élément quand le ' +
+      'numéro sera prêt pour les envois.'
     );
   }
   if (reason === 'block_rate') {
     const rate = rates.totalSends > 0 ? rates.blockedSends / rates.totalSends : 0;
     return (
-      `Bloqueios em ${pct(rate)} dos ${rates.totalSends} últimos envios do número ` +
-      `(limiar ${pct(k.blockRateThreshold)}). Outbound em espera automática — a fila retém, nada é perdido. ` +
-      'Verifique o número (possível queima do WhatsApp) e resolva este item para retomar.'
+      `Blocages sur ${pct(rate)} des ${rates.totalSends} derniers envois du numéro ` +
+      `(seuil ${pct(k.blockRateThreshold)}). Outbound en attente automatique — la file les retient, rien n’est perdu. ` +
+      'Vérifiez le numéro (blocage possible par WhatsApp) et résolvez cet élément pour reprendre.'
     );
   }
   const rate = rates.sentLeads > 0 ? rates.respondedLeads / rates.sentLeads : 0;
   return (
-    `Taxa de resposta em ${pct(rate)} (${rates.respondedLeads} de ${rates.sentLeads} leads contatados ` +
-    `responderam; piso ${pct(k.responseRateFloor)}). Outbound em espera automática — a fila retém. ` +
-    'Verifique a abordagem/o número e resolva este item para retomar.'
+    `Taux de réponse de ${pct(rate)} (${rates.respondedLeads} sur ${rates.sentLeads} leads contactés ` +
+    `ont répondu ; plancher ${pct(k.responseRateFloor)}). Outbound en attente automatique — la file les retient. ` +
+    'Vérifiez l’approche/le numéro et résolvez cet élément pour reprendre.'
   );
 }
 
@@ -288,8 +288,8 @@ async function evaluateSession(
           tenantId,
           reason === 'go_live' ? 'info' : 'warn',
           reason === 'go_live'
-            ? 'Número novo aguardando liberação (go-live)'
-            : 'Saúde do número degradada — outbound em espera automática',
+            ? 'Nouveau numéro en attente de validation (go-live)'
+            : 'Santé du numéro dégradée — outbound en attente automatique',
           diagnosisBody(reason, rates, k),
           HEALTH_HOLD_REF_KIND,
           channelSessionId,
@@ -346,7 +346,7 @@ async function evaluateSession(
     try {
       await client.query('rollback');
     } catch (rollbackErr) {
-      throw new AggregateError([err, rollbackErr], 'rollback falhou na avaliação de saúde do número');
+      throw new AggregateError([err, rollbackErr], 'rollback échoué lors de l’évaluation de la santé du numéro');
     }
     throw err;
   } finally {
@@ -389,7 +389,7 @@ export async function channelHealthTick(harness: pg.Pool, log?: Logger): Promise
       result.released += delta.released;
       result.alerts += delta.alerts;
     } catch (err) {
-      log?.error('health: avaliação de sessão falhou — segue as demais', {
+      log?.error('health : l’évaluation de la session a échoué — on continue avec les autres', {
         channel_session_id: s.channel_session_id,
         error: errMsg(err),
       });

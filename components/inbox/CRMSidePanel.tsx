@@ -83,9 +83,9 @@ interface DemandaRow {
 
 /** Vocabulário de quem atende, não o do banco. */
 const ESTADO_LEGIVEL: Record<string, string> = {
-  aberta: "Aberta",
-  em_atendimento: "Em atendimento",
-  aguardando_cliente: "Aguardando o cliente",
+  aberta: "Ouverte",
+  em_atendimento: "Prise en charge en cours",
+  aguardando_cliente: "En attente du client",
 };
 
 function horasDesde(iso: string): number {
@@ -178,7 +178,7 @@ function MarcarProximoPasso({ demandaId, onPronto }: { demandaId: string; onPron
 
 function formatMoney(cents: number | null, currency: string | null): string {
   if (cents == null) return "—";
-  const cur = currency ?? "BRL";
+  const cur = currency ?? "XAF";
   try {
     return new Intl.NumberFormat("fr-FR", { style: "currency", currency: cur }).format(cents / 100);
   } catch {

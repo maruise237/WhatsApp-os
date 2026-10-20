@@ -55,13 +55,13 @@ export const ancoraDoMapeamento = (pipelineId: string) => `mapeamento-${pipeline
  * adivinhar o vocabulário de CRM.
  */
 const QUANDO_ACONTECE: Readonly<Record<LeadStage, string>> = {
-  new: "a pessoa acabou de chamar e ninguém respondeu ainda",
-  contacted: "o agente já respondeu pela primeira vez",
-  qualifying: "o agente está entendendo o que a pessoa precisa",
-  qualified: "o agente já entendeu a necessidade",
-  negotiating: "conversa de preço, proposta ou agendamento",
-  won: "a pessoa fechou",
-  lost: "a pessoa desistiu ou parou de responder",
+  new: "la personne vient de contacter l’entreprise et personne n’a encore répondu",
+  contacted: "l’agent a déjà répondu pour la première fois",
+  qualifying: "l’agent cherche à comprendre le besoin de la personne",
+  qualified: "l’agent a déjà compris le besoin",
+  negotiating: "discussion de prix, de proposition ou de rendez-vous",
+  won: "la personne a conclu l’achat",
+  lost: "la personne a renoncé ou a cessé de répondre",
 };
 
 /**

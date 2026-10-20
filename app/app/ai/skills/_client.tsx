@@ -60,7 +60,7 @@ export function SkillsClient({ initialState }: Props) {
     setPendingName(name);
     uninstall.mutate(name, {
       onSuccess: () => {
-        toast.success(`Skill "${name}" desinstalada.`);
+        toast.success(`Skill "${name}" désinstallée.`);
         setPendingName(null);
       },
       onError: (err) => {
@@ -108,7 +108,7 @@ export function SkillsClient({ initialState }: Props) {
                   disabled={importSkill.isPending}
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <UploadSimple /> {importSkill.isPending ? "Enviando…" : "Envoyer une compétence (.zip)"}
+                  <UploadSimple /> {importSkill.isPending ? "Envoi…" : "Envoyer une compétence (.zip)"}
                 </Button>
               </>
             )}
@@ -197,7 +197,7 @@ export function SkillsClient({ initialState }: Props) {
                         className="w-full sm:w-auto"
                       >
                         <DownloadSimple />
-                        {install.isPending && pendingName === skill.name ? "Instalando…" : "Instalar"}
+                        {install.isPending && pendingName === skill.name ? "Installation…" : "Instalar"}
                       </Button>
                     </div>
                   )}

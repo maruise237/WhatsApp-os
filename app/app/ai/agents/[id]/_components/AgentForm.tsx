@@ -535,12 +535,12 @@ export function AgentForm(props: Props) {
       >
         {(
           [
-            ["conversa", "Conversa com o cliente"],
+            ["conversa", "Échange avec le client"],
             ["operacao", "Organiza o sistema"],
             // O TERCEIRO PAPEL. O rótulo diz o que ele FAZ, como os outros dois:
             // "Segurança" é o nosso nome; quem configura quer saber o que é
             // conferido antes de a mensagem chegar ao cliente dele.
-            ["seguranca", "Confere antes de enviar"],
+            ["seguranca", "Vérifications avant envoi"],
           ] as const
         ).map(([id, rotulo]) => (
           <button

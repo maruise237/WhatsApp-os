@@ -61,7 +61,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
     const next = encodeURIComponent(`/team/accept-invite/${token}`);
     return (
       <Shell>
-        <h1 className="text-xl font-semibold">Você foi convidado</h1>
+        <h1 className="text-xl font-semibold">Vous avez été invité</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Pour accepter l’invitation en tant que <strong>{payload.role}</strong>, connectez-vous avec l’e-mail{" "}
           <strong>{payload.email}</strong>.
@@ -97,7 +97,7 @@ export default async function AcceptInvitePage({ params }: PageProps) {
       <Shell>
         <h1 className="text-xl font-semibold">L’e-mail ne correspond pas</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Você está logado como <strong>{user.email}</strong>, mais l’invitation a été envoyée à{" "}
+          Vous êtes connecté en tant que <strong>{user.email}</strong>, mais l’invitation a été envoyée à{" "}
           <strong>{payload.email}</strong>. Déconnectez-vous et connectez-vous avec le bon e-mail.
         </p>
         <form action="/api/auth/signout" method="post" className="mt-4">

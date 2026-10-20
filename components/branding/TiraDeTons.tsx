@@ -61,7 +61,7 @@ export function TiraDeTons({ tons, legenda }: Props) {
         role="img"
         aria-label={
           `Échelle de ${tons.length} teintes générée à partir de votre couleur, de la plus claire à la plus ` +
-          `escuro. Os tons em uso estão descritos na lista abaixo.`
+          `foncée. Les teintes utilisées sont décrites dans la liste ci-dessous.`
         }
         className="flex overflow-hidden rounded-md border border-border"
       >

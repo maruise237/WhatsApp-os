@@ -33,7 +33,7 @@ interface KanbanCardProps {
 
 function formatBRL(cents: number | null, currency: string | null): string | null {
   if (cents == null) return null;
-  const code = currency ?? "BRL";
+  const code = currency ?? "XAF";
   try {
     return new Intl.NumberFormat("fr-FR", {
       style: "currency",

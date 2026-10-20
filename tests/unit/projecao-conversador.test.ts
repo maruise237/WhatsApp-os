@@ -117,9 +117,9 @@ describe("projeção — o que o Conversador pode ver", () => {
       });
     });
 
-    it("'inbound'/'outbound' viram 'cliente'/'nós' — quem fala com gente não pensa em direção", () => {
+    it("'inbound'/'outbound' viram 'cliente'/'nous' — quem fala com gente não pensa em direção", () => {
       const p = projetarContexto(cru);
-      expect(p.mensagens.map((m) => m.de)).toEqual(["cliente", "nós"]);
+      expect(p.mensagens.map((m) => m.de)).toEqual(["client", "nous"]);
       expect(JSON.stringify(p)).not.toContain("inbound");
     });
 
@@ -162,11 +162,11 @@ describe("projeção — o que o Conversador pode ver", () => {
   describe("tradução de erro cru", () => {
     it("o erro MEDIDO em produção vira consequência que a pessoa entende", () => {
       const traduzido = traduzirErroCru("unsafe_url:https_required");
-      expect(traduzido).toContain("não usa conexão segura");
+      expect(traduzido).toContain("n’utilise pas de connexion sécurisée");
       expect(traduzido).not.toContain("unsafe_url");
     });
 
-    it("erro desconhecido COM vocabulário interno falha fechado", () => {
+    it("erreur inconnue COM vocabulário interno falha fechado", () => {
       // O pior momento para deixar passar é justamente aquele em que não se
       // sabe o que o texto revela.
       const t = traduzirErroCru("pg_error: relation crm_lead_activities does not exist");
@@ -209,7 +209,7 @@ describe("projeção — o que o Conversador pode ver", () => {
       const p = projetarRetornoDeTool({ execucoes: [{ erro: "unsafe_url:https_required" }] }) as {
         execucoes: Array<{ erro: string }>;
       };
-      expect(p.execucoes[0]!.erro).toContain("não usa conexão segura");
+      expect(p.execucoes[0]!.erro).toContain("n’utilise pas de connexion sécurisée");
     });
 
     it("a estrutura ok/error sobrevive — é por ela que o runtime ensina o modelo", () => {
@@ -234,7 +234,7 @@ describe("projeção — o que o Conversador pode ver", () => {
       const projetadoJson = JSON.stringify(projetarRetornoDeTool(resultadosDeFerramenta(turno)));
       expect(projetadoJson).not.toContain("unsafe_url");
       expect(projetadoJson).not.toContain("https_required");
-      expect(projetadoJson).toContain("não usa conexão segura");
+      expect(projetadoJson).toContain("n’utilise pas de connexion sécurisée");
     });
 
     it("os UUIDs que o mesmo turno trazia não sobrevivem", () => {

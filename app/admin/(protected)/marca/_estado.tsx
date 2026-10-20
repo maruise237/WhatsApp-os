@@ -80,7 +80,7 @@ function origemEmPortugues(origem: string, definidoNestaTela: boolean): string {
   // arquivo de instalação copiado para a tabela na primeira leitura. Chamar isso
   // de "definido nesta tela" faria a origem mentir logo na instalação nova.
   if (origem === "banco") {
-    return definidoNestaTela ? "definido nesta tela" : "provient du fichier d’installation du serveur";
+    return definidoNestaTela ? "défini sur cet écran" : "provient du fichier d’installation du serveur";
   }
   if (origem === "env") return "provient du fichier d’installation du serveur";
   return "valeur par défaut du système";
@@ -153,7 +153,7 @@ export function EstadoDaMarca({
             valor={origemEmPortugues(origens.logoUrl, definidoNestaTela)}
           />
           <LinhaDeOrigem
-            campo="Cor"
+            campo="Couleur"
             valor={origemEmPortugues(origens.cor, definidoNestaTela)}
           />
         </div>

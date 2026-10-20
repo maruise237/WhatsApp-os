@@ -196,7 +196,7 @@ export async function openCase(
       ok: false,
       error: {
         code: 'case_already_open',
-        message: 'já existe um caso humano aberto para esta conversa; aguarde a resposta do atendente antes de abrir outro.',
+        message: 'un dossier humain est déjà ouvert pour cette conversation ; attendez la réponse du conseiller avant d’en ouvrir un autre.',
       },
     };
   }
@@ -235,7 +235,7 @@ export async function provideCaseUpdate(
       ok: false,
       error: {
         code: 'invalid_case_state',
-        message: 'o caso não está aguardando informação do lead (awaiting_lead); nada foi alterado.',
+        message: 'le dossier n’attend pas d’information du lead (awaiting_lead) ; rien n’a été modifié.',
       },
     };
   }
@@ -426,5 +426,5 @@ export async function encerrarChamadoPeloAgente(
 
 /** Resumo curto do caso para o inbox de escalação (mesmo espírito de buildHandoffSummary). */
 export function buildCaseSummary(caseRow: { title: string; summary: string; blocker: string }): string {
-  return `${caseRow.title}\n${caseRow.summary}\nBloqueio: ${caseRow.blocker}`;
+  return `${caseRow.title}\n${caseRow.summary}\nBlocage : ${caseRow.blocker}`;
 }

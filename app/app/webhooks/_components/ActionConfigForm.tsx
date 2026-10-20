@@ -147,7 +147,7 @@ function SendWhatsappForm({
           <SelectContent>
             {(sessions ?? []).map((s) => (
               <SelectItem key={s.id} value={s.id} disabled={s.status !== "WORKING"}>
-                {channelLabel(s) + (s.status !== "WORKING" ? " — desconectado" : "")}
+                {channelLabel(s) + (s.status !== "WORKING" ? " — déconnecté" : "")}
               </SelectItem>
             ))}
           </SelectContent>
@@ -251,7 +251,7 @@ function SendAiMessageForm({
           <SelectContent>
             {(sessions ?? []).map((s) => (
               <SelectItem key={s.id} value={s.id} disabled={s.status !== "WORKING"}>
-                {channelLabel(s) + (s.status !== "WORKING" ? " — desconectado" : "")}
+                {channelLabel(s) + (s.status !== "WORKING" ? " — déconnecté" : "")}
               </SelectItem>
             ))}
           </SelectContent>
@@ -267,8 +267,8 @@ function SendAiMessageForm({
           value={config.instruction}
           onChange={(e) => onChange({ ...config, instruction: e.target.value })}
           placeholder={
-            "Ex.: Agradeça o interesse citando o segmento que a pessoa informou, mostre em uma frase " +
-            "como a gente resolve a dificuldade que ela descreveu, e pergunte qual o melhor horário para conversar."
+            "Ex. : Remerciez la personne pour son intérêt en citant le secteur qu’elle a indiqué, montrez en une phrase " +
+            "comment nous résolvons la difficulté qu’elle a décrite, et demandez-lui le meilleur moment pour échanger."
           }
         />
         <p className="text-xs text-muted-foreground">

@@ -389,14 +389,14 @@ async function lerLinha(): Promise<LinhaDaMarca | null | "erro"> {
     if (error) {
       avisarUmaVez(
         `leitura|${error.code ?? "?"}`,
-        "marca da instalação: não deu para ler do banco; vale o .env",
+        "marque de l’installation : lecture impossible depuis la base ; le .env s’applique",
         { codigo: error.code, detalhe: error.message },
       );
       return "erro";
     }
     return (data as LinhaDaMarca | null) ?? null;
   } catch (erro) {
-    avisarUmaVez("leitura|excecao", "marca da instalação: leitura falhou; vale o .env", {
+    avisarUmaVez("leitura|excecao", "marque de l’installation : la lecture a échoué ; le .env s’applique", {
       detalhe: erro instanceof Error ? erro.message : String(erro),
     });
     return "erro";
@@ -432,7 +432,7 @@ async function semear(
       if (error.code !== "23505") {
         avisarUmaVez(
           `semeadura|${error.code ?? "?"}`,
-          "marca da instalação: não deu para semear do .env; vale o .env em runtime",
+          "marque de l’installation : impossible d’initialiser depuis le .env ; le .env s’applique à l’exécution",
           { acao, codigo: error.code, detalhe: error.message },
         );
       }
@@ -440,7 +440,7 @@ async function semear(
     }
     return (data as LinhaDaMarca | null) ?? null;
   } catch (erro) {
-    avisarUmaVez("semeadura|excecao", "marca da instalação: semeadura falhou", {
+    avisarUmaVez("semeadura|excecao", "marque de l’installation : l’initialisation a échoué", {
       acao,
       detalhe: erro instanceof Error ? erro.message : String(erro),
     });
@@ -492,7 +492,7 @@ export async function registrarEstadoDaMarca(
       })
       .eq("id", 1);
     if (error) {
-      avisarUmaVez(`estado|${error.code ?? "?"}`, "marca da instalação: estado não gravado", {
+      avisarUmaVez(`estado|${error.code ?? "?"}`, "marque de l’installation : état non enregistré", {
         codigo: error.code,
         detalhe: error.message,
       });
@@ -504,7 +504,7 @@ export async function registrarEstadoDaMarca(
     // acabamos de gravar faria o render seguinte tentar gravar de novo.
     invalidarMarcaDaInstalacao();
   } catch (erro) {
-    avisarUmaVez("estado|excecao", "marca da instalação: estado não gravado", {
+    avisarUmaVez("estado|excecao", "marque de l’installation : état non enregistré", {
       detalhe: erro instanceof Error ? erro.message : String(erro),
     });
   }

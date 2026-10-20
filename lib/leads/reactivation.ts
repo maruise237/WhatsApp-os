@@ -135,7 +135,7 @@ export async function venceReativacoes(
     .eq("organization_id", organizationId)
     .eq("status", "pending")
     .lt("expires_at", now.toISOString());
-  if (error) throw new Error(`vencimento de reativação: ${error.message}`);
+  if (error) throw new Error(`échéance de réactivation : ${error.message}`);
 
   const vencidas = (data ?? []) as unknown as PropostaVencida[];
   const r: ResultadoDoVencimento = { vencidas: 0, itensDeCaixa: 0, falhasDeAtividade: 0 };

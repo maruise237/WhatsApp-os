@@ -46,7 +46,7 @@ export function SegmentError({ error, reset, segment }: SegmentErrorProps) {
         </div>
         <div className="mt-4 flex justify-center gap-2">
           <Button type="button" variant="outline" onClick={copyId}>
-            {copied ? "Copiado!" : "Copiar ID"}
+            {copied ? "Copié !" : "Copier l’ID"}
           </Button>
           <Button type="button" onClick={() => reset()}>
             Réessayer

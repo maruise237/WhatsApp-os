@@ -27,7 +27,7 @@ const SEVERITY_VARIANTS: Record<IncidentSeverity, "error" | "warning" | "info"> 
 };
 
 const SEVERITY_LABELS: Record<IncidentSeverity, string> = {
-  critical: "Crítico",
+  critical: "Critique",
   warning: "Attention",
   info: "Info",
 };
@@ -39,9 +39,9 @@ const STATUS_VARIANTS: Record<IncidentStatus, "neutral" | "info" | "success"> = 
 };
 
 const STATUS_LABELS: Record<IncidentStatus, string> = {
-  open: "Aberto",
-  acknowledged: "Reconhecido",
-  resolved: "Resolvido",
+  open: "Ouvert",
+  acknowledged: "Pris en compte",
+  resolved: "Résolu",
 };
 
 function SeverityBadge({ severity }: { severity: IncidentSeverity }) {
@@ -188,7 +188,7 @@ export function IncidentsTable({
             onClick={onLoadMore}
             disabled={isFetchingNextPage}
           >
-            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+            {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
           </Button>
         </div>
       )}

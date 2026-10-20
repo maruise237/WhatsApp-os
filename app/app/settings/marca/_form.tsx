@@ -75,18 +75,18 @@ interface Props {
 
 /** Mensagem por código de recusa da server action. */
 const ERRO_EM_PORTUGUES: Record<string, string> = {
-  validation_failed: "Algum campo não está no formato esperado.",
-  unauthenticated: "Sua sessão expirou. Entre de novo para salvar.",
-  forbidden_tenant: "Não consegui identificar sua empresa. Recarregue a página.",
-  forbidden_role: "Só quem administra esta empresa pode mudar a marca.",
+  validation_failed: "Un champ n’est pas dans le format attendu.",
+  unauthenticated: "Votre session a expiré. Reconnectez-vous pour enregistrer.",
+  forbidden_tenant: "Impossible d’identifier votre entreprise. Rechargez la page.",
+  forbidden_role: "Seul l’administrateur de cette entreprise peut modifier la marque.",
   // A sessão está com um fator cadastrado mas não confirmado AGORA. Sem esta
   // linha o toast mostraria o código cru — a action passou a cobrar o segundo
   // fator, e o gate de MFA das telas não alcança Server Action.
-  mfa_required: "Confirme o código do seu aplicativo de duas etapas e tente de novo.",
+  mfa_required: "Confirmez le code de votre application d’authentification à deux facteurs, puis réessayez.",
   // NUNCA "salvo com uma ressalva": este código existe justamente porque a
   // gravação não casou nenhuma linha, e a tela dizer "salvo" quando nada foi
   // gravado é a forma exata do defeito que a função SQL veio fechar.
-  nao_gravou: "A alteração não chegou ao banco — nada foi mudado. Tente de novo.",
+  nao_gravou: "La modification n’a pas atteint la base de données — rien n’a changé. Réessayez.",
 };
 
 const CLASSE_DO_TOM: Record<Tom, string> = {

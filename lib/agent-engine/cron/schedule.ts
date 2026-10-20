@@ -54,7 +54,7 @@ function parseField(raw: string, [min, max]: readonly [number, number], name: st
     const [rangeStr, stepStr] = part.split('/');
     const step = stepStr === undefined ? 1 : Number.parseInt(stepStr, 10);
     if (!Number.isInteger(step) || step < 1) {
-      throw new Error(`campo cron ${name} inválido: passo "${stepStr}"`);
+      throw new Error(`champ cron ${name} invalide : pas "${stepStr}"`);
     }
     let lo: number;
     let hi: number;
@@ -71,7 +71,7 @@ function parseField(raw: string, [min, max]: readonly [number, number], name: st
       hi = stepStr === undefined ? lo : max;
     }
     if (!Number.isInteger(lo) || !Number.isInteger(hi) || lo < min || hi > max || lo > hi) {
-      throw new Error(`campo cron ${name} inválido: "${part}" (faixa ${min}-${max})`);
+      throw new Error(`champ cron ${name} invalide : "${part}" (plage ${min}-${max})`);
     }
     for (let v = lo; v <= hi; v += step) values.add(v);
   }
@@ -82,7 +82,7 @@ function parseField(raw: string, [min, max]: readonly [number, number], name: st
 export function parseCronExpr(expr: string): ParsedCron {
   const fields = expr.trim().split(/\s+/);
   if (fields.length !== 5) {
-    throw new Error(`expressão cron precisa de 5 campos, veio ${fields.length}: "${expr}"`);
+    throw new Error(`une expression cron doit avoir 5 champs, reçu ${fields.length}: "${expr}"`);
   }
   const dowRaw = fields[4]!.replace(/7/g, '0'); // domingo é 0 ou 7
   return {
@@ -147,7 +147,7 @@ export function nextCronTime(expr: string, tz: string, afterMs: number): number 
     if (matches(cron, wallClockAt(fmt, candidate))) return candidate;
     candidate += MINUTE_MS;
   }
-  throw new Error(`expressão cron sem próxima ocorrência em ${CRON_SCAN_HORIZON_MIN / 1440} dias: "${expr}" (${tz})`);
+  throw new Error(`expression cron sans prochaine occurrence dans les ${CRON_SCAN_HORIZON_MIN / 1440} jours : "${expr}" (${tz})`);
 }
 
 /**

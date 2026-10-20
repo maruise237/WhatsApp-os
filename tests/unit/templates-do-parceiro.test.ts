@@ -71,7 +71,7 @@ describe("os elos que somem sem barulho", () => {
 
   it("o cache é POR FONTE — senão a lista de uma conta vaza para a outra", () => {
     // Trocar de conversa entre canais com a mesma chave serviria o cache do
-    // anterior, e o operador mandaria um modelo que não existe nesta conta.
+    // anterior, e o operador mandaria um modelo que não existe sur ce compte.
     const fonte = readFileSync("components/inbox/JanelaFechadaAviso.tsx", "utf8");
     expect(fonte).toMatch(/queryKey: \["templates-da-conversa", fonte\]/);
   });
@@ -171,7 +171,7 @@ describe("o conteúdo da definição, e o campo que causava as recusas", () => {
     const comps = montarComponents({ body: "Olá {{1}}", exemplos: ["  "] }) as {
       example?: { body_text: string[][] };
     }[];
-    expect(comps[0]?.example?.body_text?.[0]?.[0]).toBe("exemplo");
+    expect(comps[0]?.example?.body_text?.[0]?.[0]).toBe("exemple");
   });
 
   it("sem variável NÃO manda example — campo vazio à toa também é recusa", () => {

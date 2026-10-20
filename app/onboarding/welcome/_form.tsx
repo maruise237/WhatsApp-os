@@ -31,7 +31,7 @@ const FUSOS: { id: string; cidade: string }[] = [
   { id: "Indian/Antananarivo", cidade: "Antananarivo, Nairobi, Djibouti" },
   { id: "Europe/Paris", cidade: "Paris, Bruxelles, Genève" },
   { id: "America/Montreal", cidade: "Montréal, Québec" },
-  { id: "America/Sao_Paulo", cidade: "São Paulo, Rio, Brasília" },
+  { id: "America/Sao_Paulo", cidade: "Douala, Yaoundé, Abidjan" },
   { id: "UTC", cidade: "Autre (temps universel)" },
 ];
 

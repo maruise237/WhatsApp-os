@@ -90,10 +90,10 @@ export function SlaTimeline({ received_at, due_at, request_type }: SlaTimelinePr
           <span>D+{daysElapsed} (aujourd’hui)</span>
           <span>
             {daysRemaining > 0
-              ? `${daysRemaining}d restantes`
+              ? `${daysRemaining} j restants`
               : daysRemaining === 0
-                ? "vence hoje"
-                : `${Math.abs(daysRemaining)}d em atraso`}
+                ? "échéance aujourd’hui"
+                : `${Math.abs(daysRemaining)} j de retard`}
           </span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-muted">

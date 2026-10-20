@@ -67,7 +67,7 @@ export function SectionMotion() {
         {modal && (
           <div className="ds-modal-backdrop" onClick={() => setModal(false)}>
             <div className="ds-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="ds-display" style={{ fontSize: 18, fontWeight: 600 }}>Confirma envio?</div>
+              <div className="ds-display" style={{ fontSize: 18, fontWeight: 600 }}>Confirmer l’envoi ?</div>
               <p style={{ fontSize: 13, color: "var(--ds-text-muted)", margin: "8px 0 16px" }}>
                 Backdrop · 200ms fade. Modal · 320ms slide-up + scale 0.985→1.
               </p>
@@ -79,14 +79,14 @@ export function SectionMotion() {
 
       <h3>Toast · slide-in</h3>
       <div className="ds-card">
-        <button className="ds-btn ds-btn--secondary" onClick={() => setToast(true)}>Disparar toast</button>
+        <button className="ds-btn ds-btn--secondary" onClick={() => setToast(true)}>Déclencher un toast</button>
         {toast && (
           <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 60 }}>
             <div className="ds-toast">
               <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--ds-info)", marginTop: 6 }} />
               <div>
                 <div style={{ fontWeight: 500, fontSize: 13.5 }}>Commande marquée comme payée</div>
-                <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>#12.443 · sincronizando…</div>
+                <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>n° 12 443 · synchronisation…</div>
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ export function SectionMotion() {
         >
           <div className="row">
             <span className="title">Commande n° 12 443</span>
-            <span className="value">R$ 1.234,56</span>
+            <span className="value">1 234 FCFA</span>
           </div>
           <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · pix</div>
         </div>
@@ -148,7 +148,7 @@ export function SectionMotion() {
       <div className="ds-card">
         <button className="ds-btn ds-btn--secondary" onClick={() => setStaggerKey((k) => k + 1)}>Replay stagger</button>
         <div className="ds-stagger" key={staggerKey} style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-          {["Maria Silva", "João Pereira", "Ana Beatriz", "Carlos Lima", "Fernanda Reis"].map((n) => (
+          {["Aïcha Ndiaye", "Jean Mbarga", "Fatou Diallo", "Paul Essomba", "Grace Fotso"].map((n) => (
             <div key={n} className="ds-list-item">
               <div className="ds-avatar ds-avatar--sm">{n.split(" ").map((p) => p[0]).join("")}</div>
               <div className="body">

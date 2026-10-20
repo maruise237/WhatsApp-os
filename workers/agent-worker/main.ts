@@ -120,7 +120,7 @@ async function assertHarnessSchema(pool: pg.Pool): Promise<void> {
   );
   if (rows.length > 0) {
     throw new Error(
-      `schema do harness ausente no banco (tabelas: ${rows.map((r) => r.missing).join(', ')}) — aplique a migration 0050_agent_harness antes de subir o worker`,
+      `schéma du harness absent de la base (tables : ${rows.map((r) => r.missing).join(', ')}) — appliquez la migration 0050_agent_harness avant de démarrer le worker`,
     );
   }
 }
@@ -321,7 +321,7 @@ export async function startWorker(
     try {
       const handler = handlers.get(job.kind);
       if (!handler) {
-        throw new Error(`nenhum handler registrado para kind=${job.kind}`);
+        throw new Error(`aucun handler enregistré pour kind=${job.kind}`);
       }
       await handler(job, pool, { workerId });
       await completeJob(pool, job.id, workerId);

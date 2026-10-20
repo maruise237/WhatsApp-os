@@ -247,7 +247,7 @@ describe("sondas de mecanismo — pares mínimos por correção", () => {
     expect(detectarVazamentoInterno("status 403 forbidden").termos).toContain("403");
   });
 
-  it("arquivo de código: precisa de caminho ou de erro por perto", () => {
+  it("fichier de code: precisa de caminho ou de erro por perto", () => {
     expect(detectarVazamentoInterno("Seu arquivo gravacao.ts nao abriu").termos).toEqual([]);
     expect(detectarVazamentoInterno("baixa o script banco.sql").termos).toEqual([]);
     expect(detectarVazamentoInterno("falhou em lib/guardrails/before-send.ts").achou).toBe(true);
@@ -302,7 +302,7 @@ describe("detectarVazamentoInterno — os vazamentos medidos", () => {
     expect(detectarVazamentoInterno("recebi erro 403 ao tentar").termos).toContain("403");
   });
 
-  it("erro cru e nome de arquivo de código", () => {
+  it("erro cru e nome de fichier de code", () => {
     expect(detectarVazamentoInterno("Error: duplicate key value viola a unicidade").achou).toBe(true);
     expect(detectarVazamentoInterno("falhou em lib/guardrails/before-send.ts").achou).toBe(true);
     expect(detectarVazamentoInterno("null value in column organization_id").achou).toBe(true);
@@ -370,8 +370,8 @@ describe("renderVetoDeVazamento — o veto ensina a SAÍDA, não só o problema"
 
   it("manda REESCREVER — um veto que só nega faz o modelo tentar de novo igual", () => {
     const texto = renderVetoDeVazamento(["webhook"]);
-    expect(texto).toMatch(/REESCREVA/);
-    expect(texto).toMatch(/em português de gente/);
+    expect(texto).toMatch(/RÉÉCRIVEZ/);
+    expect(texto).toMatch(/dans un français simple/);
   });
 
   it("NÃO empurra para 'a equipe verifica' — isso cairia no casePromiseGate", () => {

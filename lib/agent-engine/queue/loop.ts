@@ -75,7 +75,7 @@ export async function rodarLoopDaFila<J>(deps: DepsDoLoopDaFila<J>): Promise<voi
         // trabalho". Sem o claim a seguir, um blip de rede adormeceria a fila
         // pelo teto inteiro — e o erro de verdade aparece no claim logo abaixo,
         // que é quem tem o tratamento e o log de sempre.
-        deps.log.error('relógio da fila indisponível — claim segue no ritmo curto', {
+        deps.log.error('horloge de la file indisponible — le claim continue au rythme court', {
           error: (err instanceof Error ? err.message : String(err)).slice(0, 300),
         });
         faltaMs = 0;

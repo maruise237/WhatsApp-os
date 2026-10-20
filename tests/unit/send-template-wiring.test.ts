@@ -139,7 +139,7 @@ describe("send_template — o execute não pode virar rota de fuga dos guardrail
     // palpite errado do LLM, com o lead do outro lado esperando.
     const corpo = corpoDoExecute();
     expect(corpo).toMatch(/template_desconhecido/);
-    expect(corpo).toMatch(/um humano precisa configurá-lo/);
+    expect(corpo).toMatch(/un humain doit le configurer/);
   });
 });
 
@@ -169,7 +169,7 @@ describe("send_template — a definição que o modelo lê", () => {
     // dinheiro e é pior UX) ou nunca manda fora dela.
     const d = AGENT_TOOL_DEFS.send_template.description;
     expect(d).toMatch(/send_message/);
-    expect(d).toMatch(/24 horas/);
+    expect(d).toMatch(/24 heures/);
   });
 });
 

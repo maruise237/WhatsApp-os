@@ -51,6 +51,6 @@ export async function validateMetaCredentials(input: {
   } catch (err) {
     // Rede caída não é credencial ruim — o motivo precisa dizer isso, senão o
     // operador troca um token que estava certo.
-    return { ok: false, motivo: `rede indisponível: ${err instanceof Error ? err.message : "erro"}` };
+    return { ok: false, motivo: `réseau indisponible : ${err instanceof Error ? err.message : "erro"}` };
   }
 }

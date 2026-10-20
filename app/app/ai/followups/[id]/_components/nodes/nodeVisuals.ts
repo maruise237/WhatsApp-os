@@ -25,10 +25,10 @@ export interface NodeVisual {
 export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
   trigger: {
     type: "trigger",
-    paletteLabel: "Gatilho",
+    paletteLabel: "Déclencheur",
     icon: Play,
     chipClassName: "bg-accent-soft text-accent",
-    defaultLabel: "Início do fluxo",
+    defaultLabel: "Début du flux",
     defaultConfig: () => ({}),
   },
   wait: {
@@ -41,10 +41,10 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
   },
   condition: {
     type: "condition",
-    paletteLabel: "Condição",
+    paletteLabel: "Condition",
     icon: GitBranch,
     chipClassName: "bg-warning-bg text-warning-fg",
-    defaultLabel: "Verificar condição",
+    defaultLabel: "Vérifier une condition",
     defaultConfig: () => ({
       combinator: "and",
       checks: [{ field: "steps_taken", op: "gte", value: 0 }],
@@ -55,7 +55,7 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
     paletteLabel: "Classificar (IA)",
     icon: Brain,
     chipClassName: "bg-accent text-accent-foreground",
-    defaultLabel: "Classificar resposta",
+    defaultLabel: "Classer la réponse",
     defaultConfig: () => ({
       classes: ["hot", "cold"],
       grace_timeout_ms: 900_000,
@@ -64,18 +64,18 @@ export const NODE_VISUALS: Record<NodeType, NodeVisual> = {
   },
   action: {
     type: "action",
-    paletteLabel: "Ação",
+    paletteLabel: "Action",
     icon: PaperPlaneTilt,
     chipClassName: "bg-success-bg text-success-fg",
-    defaultLabel: "Enviar mensagem",
-    defaultConfig: () => ({ mode: "ai_message", prompt_hint: "Configure esta etapa." }),
+    defaultLabel: "Envoyer un message",
+    defaultConfig: () => ({ mode: "ai_message", prompt_hint: "Configurez cette étape." }),
   },
   end: {
     type: "end",
     paletteLabel: "Fim",
     icon: Flag,
     chipClassName: "bg-error-bg text-error-fg",
-    defaultLabel: "Fim do fluxo",
+    defaultLabel: "Fin du flux",
     defaultConfig: () => ({ outcome: "exhausted" }),
   },
 };
@@ -92,7 +92,7 @@ type ConfigOf<T extends NodeType> = Extract<FlowNode, { type: T }>["config"];
 export function describeNodeConfig(type: NodeType, config: FlowNode["config"]): string {
   switch (type) {
     case "trigger":
-      return "Início do fluxo";
+      return "Début du flux";
     case "wait": {
       const c = config as ConfigOf<"wait">;
       return c.mode === "fixed"
@@ -104,8 +104,8 @@ export function describeNodeConfig(type: NodeType, config: FlowNode["config"]): 
       // No modo uma-saída-por-regra o combinador NÃO é consultado (a regra não
       // vota, ela roteia). Continuar anunciando "E"/"OU" ali seria o card
       // afirmando uma coisa que o motor ignora — e o usuário acredita no card.
-      if (c.branching === "per_check") return `${c.checks.length} regras · uma saída por regra`;
-      return `${c.checks.length} condição(ões) · ${c.combinator === "and" ? "E" : "OU"}`;
+      if (c.branching === "per_check") return `${c.checks.length} règles · une sortie par règle`;
+      return `${c.checks.length} condition(s) · ${c.combinator === "and" ? "E" : "OU"}`;
     }
     case "ai_classify": {
       const c = config as ConfigOf<"ai_classify">;

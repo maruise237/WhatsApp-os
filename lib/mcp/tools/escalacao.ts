@@ -61,10 +61,10 @@ const atendentesInputShape = {
 export const crmListAvailableAttendants: McpToolDefinition<typeof atendentesInputShape> = {
   name: "crm_list_available_attendants",
   description:
-    "Atendentes da org com is_available, capacity, current_load e can_take_now (disponível ∧ " +
-    "com folga ∧ dentro do horário — mesmo predicado do worker de roteamento). Use ANTES de " +
-    "escalar: com zero elegíveis a conversa vai para a fila e pode não ser puxada. Sem e-mail " +
-    "nem telefone.",
+    "Conseillers de l’org avec is_available, capacity, current_load et can_take_now (disponible ∧ " +
+    "avec de la marge ∧ dans ses horaires — même prédicat que le worker de distribution). À utiliser AVANT " +
+    "d’escalader : sans aucun conseiller éligible, la conversation part en file et risque de ne pas être prise. Sans e-mail " +
+    "ni téléphone.",
   inputSchema: atendentesInputShape,
   category: "read",
   requiresRole: "agent",
@@ -90,8 +90,8 @@ export const crmListAvailableAttendants: McpToolDefinition<typeof atendentesInpu
       total_count: linhas.length,
       next_action:
         elegiveis.length === 0
-          ? "Ninguém pode assumir agora. Avise o cliente do prazo real em vez de prometer atendimento imediato."
-          : "Há gente disponível: pode passar o atendimento.",
+          ? "Personne ne peut prendre en charge maintenant. Informez le client du délai réel au lieu de promettre une prise en charge immédiate."
+          : "Quelqu’un est disponible : vous pouvez transférer l’échange.",
     };
   },
 };
@@ -108,9 +108,9 @@ const listaChamadosInputShape = {
 export const crmListHumanCases: McpToolDefinition<typeof listaChamadosInputShape> = {
   name: "crm_list_human_cases",
   description:
-    "Casos humanos da org por estado. 'abertos' = awaiting_human|awaiting_lead; 'fechados' = " +
-    "resolved|escalated|cancelled. Devolve title, blocker, status, conversation_id e o nome do " +
-    "contato. open_count é sempre o total de abertos, independente do filtro.",
+    "Dossiers humains de l’org par état. 'abertos' = awaiting_human|awaiting_lead ; 'fechados' = " +
+    "resolved|escalated|cancelled. Renvoie title, blocker, status, conversation_id et le nom du " +
+    "contact. open_count est toujours le total des dossiers ouverts, quel que soit le filtre.",
   inputSchema: listaChamadosInputShape,
   category: "read",
   requiresRole: "agent",
@@ -135,9 +135,9 @@ const chamadoInputShape = {
 export const crmGetHumanCase: McpToolDefinition<typeof chamadoInputShape> = {
   name: "crm_get_human_case",
   description:
-    "Detalhe de um caso humano + timeline completa (eventos com actor_kind, human_action e o " +
-    "texto escrito). Inclui `human_continuity`: o resumo pronto do que a pessoa decidiu nesta " +
-    "conversa — use ele para retomar sem pedir de novo o que já foi combinado.",
+    "Détail d’un dossier humain + chronologie complète (événements avec actor_kind, human_action et le " +
+    "texte écrit). Inclut `human_continuity` : le résumé prêt de ce que la personne a décidé dans cette " +
+    "conversation — utilisez-le pour reprendre sans redemander ce qui a déjà été convenu.",
   inputSchema: chamadoInputShape,
   category: "read",
   requiresRole: "agent",
@@ -175,9 +175,9 @@ const notaInputShape = {
 export const crmAddCaseNote: McpToolDefinition<typeof notaInputShape> = {
   name: "crm_add_case_note",
   description:
-    "Registra no caso ABERTO o que aconteceu depois da abertura (kind='agent_noted', " +
-    "actor_kind='agent'). Recusa caso já fechado ou de outra org. Escreva o FATO novo, não a " +
-    "repetição do bloqueio — quem lê é o próximo atendente.",
+    "Enregistre dans le dossier OUVERT ce qui s’est passé après l’ouverture (kind='agent_noted', " +
+    "actor_kind='agent'). Refusé pour un dossier déjà clôturé ou d’une autre org. Écrivez le FAIT nouveau, pas la " +
+    "répétition du blocage — c’est le prochain conseiller qui lit.",
   inputSchema: notaInputShape,
   category: "write",
   requiresRole: "agent",
@@ -206,7 +206,7 @@ export const crmAddCaseNote: McpToolDefinition<typeof notaInputShape> = {
     return {
       case_id: input.case_id,
       recorded: true,
-      next_action: "Registro salvo no chamado; o próximo atendente vai ler isto.",
+      next_action: "Note enregistrée dans le dossier ; le prochain conseiller la lira.",
     };
   },
 };
@@ -225,9 +225,9 @@ const encerrarInputShape = {
 export const crmCloseHumanCase: McpToolDefinition<typeof encerrarInputShape> = {
   name: "crm_close_human_case",
   description:
-    "Encerra um caso ABERTO com o desfecho registrado: 'resolvido' (status resolved) ou " +
-    "'sem_necessidade' (status cancelled). Grava actor_kind='agent' — nunca se passa por " +
-    "decisão de pessoa. Recusa caso já fechado. Não há reabertura por esta capacidade.",
+    "Clôture un dossier OUVERT avec l’issue enregistrée : 'resolvido' (status resolved) ou " +
+    "'sem_necessidade' (status cancelled). Enregistre actor_kind='agent' — ne se fait jamais passer pour une " +
+    "décision humaine. Refusé pour un dossier déjà clôturé. Aucune réouverture via cette capacité.",
   inputSchema: encerrarInputShape,
   category: "write",
   requiresRole: "agent",
@@ -273,11 +273,11 @@ const retomarInputShape = {
 export const crmResumeAiAttendance: McpToolDefinition<typeof retomarInputShape> = {
   name: "crm_resume_ai_attendance",
   description:
-    "Devolve o atendimento da conversa ao agente: solta o dono humano, limpa " +
-    "contacts.force_human e bot_silenced_until, e grava no checkpoint do lead o que a pessoa " +
-    "decidiu — o próximo turno abre já sabendo. Devolve `human_continuity` com o resumo. " +
-    "Idempotente. SÓ uma pessoa pode chamar: um agente de IA recebe " +
-    "`resume_requires_person`. Erros: conversation_not_found, assignment_conflict.",
+    "Rend l’échange de la conversation à l’agent : libère le responsable humain, efface " +
+    "contacts.force_human et bot_silenced_until, et enregistre dans le checkpoint du lead ce que la personne " +
+    "a décidé — le prochain tour démarre en le sachant. Renvoie `human_continuity` avec le résumé. " +
+    "Idempotent. SEULE une personne peut l’appeler : un agent IA reçoit " +
+    "`resume_requires_person`. Erreurs : conversation_not_found, assignment_conflict.",
   inputSchema: retomarInputShape,
   category: "write",
   /**
@@ -299,8 +299,8 @@ export const crmResumeAiAttendance: McpToolDefinition<typeof retomarInputShape> 
     // seria devolvê-lo à automação contra o que ele pediu.
     if (ctx.actor.type === "ai_agent") {
       throw new Error(
-        "resume_requires_person: devolver o atendimento é decisão de uma pessoa. " +
-          "Você não desfaz a própria passagem — use crm_get_human_case para ler o que foi decidido.",
+        "resume_requires_person : rendre l’échange est une décision humaine. " +
+          "Vous n’annulez pas votre propre transfert — utilisez crm_get_human_case pour lire ce qui a été décidé.",
       );
     }
 
@@ -328,8 +328,8 @@ export const crmResumeAiAttendance: McpToolDefinition<typeof retomarInputShape> 
         notes: resultado.continuidade.notas,
       },
       next_action: resultado.continuidade.houveAtendimentoHumano
-        ? "Retome citando o que a pessoa combinou com o cliente — o resumo já está no contexto do próximo turno."
-        : "Atendimento devolvido; não houve registro humano nesta conversa.",
+        ? "Reprenez en citant ce que la personne a convenu avec le client — le résumé est déjà dans le contexte du prochain tour."
+        : "Échange rendu ; aucune note humaine n’a été enregistrée dans cette conversation.",
     };
   },
 };

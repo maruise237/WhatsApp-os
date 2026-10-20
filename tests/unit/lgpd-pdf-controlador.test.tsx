@@ -41,7 +41,7 @@ function rodape(elemento: ReactElement): string {
   // então o `join` produz espaço duplo em volta de todo `{...}`. Prender o teste
   // a essa espaçagem seria prender o gate a um detalhe do parser.
   const tudo = textos(elemento).join(" ").replace(/\s+/g, " ");
-  const inicio = tudo.indexOf("Controlador:");
+  const inicio = tudo.indexOf("Responsable du traitement :");
   expect(inicio, "o rodapé sumiu — o gate não tem o que medir").toBeGreaterThanOrEqual(0);
   return tudo.slice(inicio);
 }
@@ -89,7 +89,7 @@ describe("rodapé do relatório LGPD", () => {
       }),
     );
     const nomeDoControlador = texto
-      .slice("Controlador:".length, texto.indexOf("· Relatório LGPD"))
+      .slice("Responsable du traitement :".length, texto.indexOf("· Rapport de droit"))
       .trim();
 
     expect(nomeDoControlador).toBe("Bem Viver Serviços Médicos LTDA");
@@ -102,7 +102,7 @@ describe("rodapé do relatório LGPD", () => {
   it("nomeia o Encarregado da organização", () => {
     const tudo = rodape(LgpdExportPdf({ data: payload() }));
 
-    expect(tudo).toContain("Encarregado (DPO):");
+    expect(tudo).toContain("Délégué à la protection des données (DPO) :");
     expect(tudo).toContain("encarregado@bemviver.com.br");
     // O texto anterior era "DPO: contato via canal oficial do controlador" — um
     // não-resposta num campo cuja função é dizer a quem o titular reclama.
@@ -115,13 +115,13 @@ describe("rodapé do relatório LGPD", () => {
     // `env.LGPD_DPO_EMAIL` está vazia na suíte, então este caso exercita a ponta
     // da cadeia. Um campo em branco pareceria defeito de renderização; a frase
     // diz de quem é a pendência.
-    expect(tudo).toContain("não informado pelo controlador");
+    expect(tudo).toContain("non renseigné par le responsable du traitement");
   });
 
   it("a organização aparece pelo NOME, e o uuid vira 'ID interno'", () => {
     const tudo = textos(LgpdExportPdf({ data: payload() })).join(" ");
 
-    expect(tudo).toContain("ID interno:");
+    expect(tudo).toContain("ID interne :");
     // O uuid continua no documento (o suporte pede por ele), mas deixou de ser
     // a resposta à pergunta "de quem são estes dados?".
     expect(tudo).toContain("8c1d4e20-0000-4000-8000-000000000002");
@@ -134,7 +134,7 @@ describe("rodapé do relatório LGPD", () => {
     // jurídico; abortar o export estouraria o SLA legal de D+7.
     const tudo = rodape(LgpdExportPdf({ data: payload({ organization_legal_name: "" }) }));
 
-    expect(tudo).toContain("Controlador: —");
+    expect(tudo).toContain("Responsable du traitement : —");
     expect(tudo).not.toMatch(/deskcomm/i);
   });
 });
