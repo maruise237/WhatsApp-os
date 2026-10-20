@@ -76,6 +76,25 @@ describe("mapHeader", () => {
     expect(indices.birthdate).toBe(3);
   });
 
+  it("mapeia cabeçalhos em francês, inclusive o n° de identificação (CNI)", () => {
+    const { indices, motivo } = mapHeader([
+      "Nom",
+      "Téléphone",
+      "Courriel",
+      "Numéro d'identification",
+      "Date de naissance",
+      "Étiquettes",
+    ]);
+    expect(motivo).toBeNull();
+    expect(indices.name).toBe(0);
+    expect(indices.phone_number).toBe(1);
+    expect(indices.email).toBe(2);
+    expect(indices.cpf).toBe(3);
+    expect(indices.birthdate).toBe(4);
+    expect(indices.tags).toBe(5);
+    expect(mapHeader(["Nom", "Tel", "CNI"]).indices.cpf).toBe(2);
+  });
+
   it("sem identificador (telefone/e-mail) falha aberto com motivo", () => {
     const { motivo } = mapHeader(["Nome", "Idade"]);
     expect(motivo).toMatch(/sans colonne téléphone ni e-mail/);
@@ -130,6 +149,13 @@ describe("mapLinha", () => {
     expect(contato.phone_number).toBe("+5511999998888");
     expect(contato.email).toBe("ana@exemplo.com");
     expect(contato.tags).toEqual(["vip", "newsletter"]);
+  });
+
+  it("n° de identificação é texto livre — sem validação de formato brasileira", () => {
+    const comCni = mapHeader(["Nom", "Téléphone", "CNI"]).indices;
+    const { contato, motivo } = mapLinha(["Aïcha", "+237699998888", "  M0123 45678X "], comCni);
+    expect(motivo).toBeNull();
+    expect(contato.cpf).toBe("M0123 45678X");
   });
 
   it("linha sem telefone e sem e-mail é pulada com motivo", () => {

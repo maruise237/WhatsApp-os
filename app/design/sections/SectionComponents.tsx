@@ -57,7 +57,7 @@ export function SectionComponents() {
         </div>
         <div>
           <label className="ds-label">Nom</label>
-          <input className="ds-input" defaultValue="Maria Silva" />
+          <input className="ds-input" defaultValue="Aïcha Ndiaye" />
         </div>
         <div>
           <label className="ds-label">Rechercher une conversation</label>
@@ -70,9 +70,9 @@ export function SectionComponents() {
           </div>
         </div>
         <div>
-          <label className="ds-label">CPF (avec erreur)</label>
+          <label className="ds-label">N° d’identification (avec erreur)</label>
           <input className="ds-input" defaultValue="000.000.000-00" aria-invalid="true" />
-          <span style={{ color: "var(--ds-error)", fontSize: 11.5, marginTop: 4, display: "block" }}>CPF invalide — vérifiez les chiffres.</span>
+          <span style={{ color: "var(--ds-error)", fontSize: 11.5, marginTop: 4, display: "block" }}>Numéro invalide — vérifiez la saisie.</span>
         </div>
         <div>
           <label className="ds-label">Disabled</label>
@@ -137,7 +137,7 @@ export function SectionComponents() {
             <div className="ds-list-item">
               <div className="ds-avatar">MS<span className="ds-avatar-status" /></div>
               <div className="body">
-                <div className="title">Maria Silva</div>
+                <div className="title">Aïcha Ndiaye</div>
                 <div className="preview">Confirmation de l’adresse de livraison…</div>
               </div>
               <div className="meta">
@@ -267,7 +267,7 @@ export function SectionComponents() {
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--ds-success)", marginTop: 6 }} />
             <div>
               <div style={{ fontWeight: 500, fontSize: 13.5 }}>Message envoyé</div>
-              <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · WhatsApp</div>
+              <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Aïcha Ndiaye · WhatsApp</div>
             </div>
           </div>
         </div>

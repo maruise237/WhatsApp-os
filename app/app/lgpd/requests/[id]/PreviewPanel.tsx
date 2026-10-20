@@ -93,7 +93,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
                     <p className="text-muted-foreground">{preview.contact.phone_number}</p>
                   )}
                   {preview.contact.cpf_present && (
-                    <p className="text-xs text-muted-foreground">CPF : présent (valeur masquée)</p>
+                    <p className="text-xs text-muted-foreground">N° d’identification : présent (valeur masquée)</p>
                   )}
                 </div>
               )}
@@ -144,7 +144,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
               )}
 
               <p className="text-center text-xs text-muted-foreground">
-                Généré le {new Date(preview.generated_at).toLocaleString("fr-FR")} · Données personnelles masquées · CPF non affiché
+                Généré le {new Date(preview.generated_at).toLocaleString("fr-FR")} · Données personnelles masquées · n° d’identification non affiché
               </p>
             </div>
           )}

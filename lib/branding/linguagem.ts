@@ -152,7 +152,7 @@ const NOME_DA_COR_DE_ALERTA: Record<string, string> = {
   success: "succès",
   warning: "attention",
   error: "erreur",
-  info: "informação",
+  info: "information",
 };
 
 function ehCodigoConhecido(codigo: string): codigo is CodigoDaMarca {

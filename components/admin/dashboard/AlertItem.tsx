@@ -14,7 +14,7 @@ const KIND_ICONS: Record<AlertKind, ElementType> = {
 
 const KIND_LABELS: Record<AlertKind, string> = {
   waha_ban: "WAHA",
-  lgpd_at_risk: "LGPD",
+  lgpd_at_risk: "Protection des données",
   ai_budget: "IA Budget",
   tenant_pending_overflow: "Overflow",
 };

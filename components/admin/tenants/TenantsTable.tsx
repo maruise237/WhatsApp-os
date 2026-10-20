@@ -73,10 +73,9 @@ function extractCount(
 
 function shortCnpj(cnpj: string | null): string {
   if (!cnpj) return "—";
-  // Show first 8 digits (company root) + ...
-  const digits = cnpj.replace(/\D/g, "");
-  if (digits.length < 8) return cnpj;
-  return `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5, 8)}/...`;
+  // Identifiant fiscal en texte libre : on tronque pour tenir dans la colonne.
+  const v = cnpj.trim();
+  return v.length > 14 ? `${v.slice(0, 12)}…` : v;
 }
 
 // ---------------------------------------------------------------------------
@@ -89,7 +88,7 @@ export function TenantsTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["Slug", "Nom", "CNPJ", "Statut", "Utilisateurs", "Conversations", "Créé le", ""].map(
+            {["Slug", "Nom", "Identifiant fiscal", "Statut", "Utilisateurs", "Conversations", "Créé le", ""].map(
               (h) => (
                 <TableHead key={h}>{h}</TableHead>
               ),
@@ -149,7 +148,7 @@ export function TenantsTable({
             <TableRow>
               <TableHead className="w-[140px]">Slug</TableHead>
               <TableHead>Nom</TableHead>
-              <TableHead className="w-[130px]">CNPJ</TableHead>
+              <TableHead className="w-[130px]">Identifiant fiscal</TableHead>
               <TableHead className="w-[110px]">Statut</TableHead>
               <TableHead className="w-[70px] text-right">Utilisateurs</TableHead>
               <TableHead className="w-[90px] text-right">Conversations</TableHead>

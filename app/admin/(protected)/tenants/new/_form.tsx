@@ -53,8 +53,6 @@ function slugify(value: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// CNPJ mask
-// ---------------------------------------------------------------------------
 
 function maskCnpj(value: string): string {
   const digits = value.replace(/\D/g, "").slice(0, 14);
@@ -108,10 +106,6 @@ export function NewTenantForm() {
     const clean = value.toLowerCase().replace(/[^a-z0-9-]/g, "");
     setValue("slug", clean, { shouldValidate: true });
     setSlugLocked(clean.length > 0);
-  };
-
-  const handleCnpjChange = (value: string) => {
-    setValue("cnpj", maskCnpj(value));
   };
 
   const onSubmit = handleSubmit(async (values) => {
@@ -209,16 +203,14 @@ export function NewTenantForm() {
               )}
             </div>
 
-            {/* cnpj */}
+            {/* identifiant fiscal (colonne `cnpj`) */}
             <div className="space-y-1.5">
-              <Label htmlFor="cnpj">CNPJ</Label>
+              <Label htmlFor="cnpj">Identifiant fiscal (NIU) — facultatif</Label>
               <Input
                 id="cnpj"
-                placeholder="00.000.000/0000-00"
+                placeholder="Ex. : M012345678901X"
                 {...register("cnpj")}
-                onChange={(e) => handleCnpjChange(e.target.value)}
-                inputMode="numeric"
-                maxLength={18}
+                maxLength={20}
                 aria-invalid={!!errors.cnpj}
                 className="font-mono"
               />

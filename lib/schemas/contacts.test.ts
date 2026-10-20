@@ -4,7 +4,7 @@
  * Covers:
  *  - E.164 phone validator (accept/reject)
  *  - Email parsing
- *  - CPF check-digit (valid, invalid, repeated digits)
+ *  - Numéro d'identification: free text, no national format check
  *  - lgpdAnonymizeSchema requires justification ≥ 10 chars
  *  - contactListQuerySchema coerces `limit` and clamps boundaries
  */
@@ -13,38 +13,8 @@ import {
   contactCreateSchema,
   contactListQuerySchema,
   contactPatchSchema,
-  isValidCpf,
   lgpdAnonymizeSchema,
 } from "./contacts";
-
-describe("isValidCpf", () => {
-  it("accepts a known-valid CPF", () => {
-    // Generated valid CPFs (algorithm verified).
-    expect(isValidCpf("52998224725")).toBe(true);
-    expect(isValidCpf("11144477735")).toBe(true);
-  });
-
-  it("rejects repeated-digit CPFs", () => {
-    expect(isValidCpf("00000000000")).toBe(false);
-    expect(isValidCpf("11111111111")).toBe(false);
-    expect(isValidCpf("99999999999")).toBe(false);
-  });
-
-  it("rejects invalid check digits", () => {
-    expect(isValidCpf("52998224726")).toBe(false);
-    expect(isValidCpf("12345678900")).toBe(false);
-  });
-
-  it("rejects wrong length / non-digits", () => {
-    expect(isValidCpf("123")).toBe(false);
-    expect(isValidCpf("abcdefghijk")).toBe(false);
-    expect(isValidCpf("")).toBe(false);
-  });
-
-  it("normalizes formatting (dots/dashes)", () => {
-    expect(isValidCpf("529.982.247-25")).toBe(true);
-  });
-});
 
 describe("contactCreateSchema", () => {
   it("accepts minimal valid payload (defaults source=manual)", () => {
@@ -58,7 +28,7 @@ describe("contactCreateSchema", () => {
   });
 
   it("accepts E.164 phones", () => {
-    const r = contactCreateSchema.safeParse({ phone_number: "+5511999998888" });
+    const r = contactCreateSchema.safeParse({ phone_number: "+237699998888" });
     expect(r.success).toBe(true);
   });
 
@@ -67,14 +37,22 @@ describe("contactCreateSchema", () => {
     expect(r.success).toBe(false);
   });
 
-  it("rejects invalid CPF", () => {
-    const r = contactCreateSchema.safeParse({ cpf: "12345678900" });
-    expect(r.success).toBe(false);
+  it("accepts African ID numbers as free text (CNI, NIU, passport)", () => {
+    for (const cpf of ["123456789", "M012345678901X", "CM-AB 1234567", "P0123456"]) {
+      const r = contactCreateSchema.safeParse({ cpf });
+      expect(r.success, cpf).toBe(true);
+    }
   });
 
-  it("accepts valid CPF", () => {
-    const r = contactCreateSchema.safeParse({ cpf: "52998224725" });
+  it("does not apply the Brazilian CPF check digits anymore", () => {
+    // Was rejected by the old check-digit validator; an ID is not a CPF.
+    const r = contactCreateSchema.safeParse({ cpf: "12345678900" });
     expect(r.success).toBe(true);
+  });
+
+  it("rejects an empty or oversized ID number", () => {
+    expect(contactCreateSchema.safeParse({ cpf: "   " }).success).toBe(false);
+    expect(contactCreateSchema.safeParse({ cpf: "9".repeat(65) }).success).toBe(false);
   });
 
   it("rejects malformed birthdate", () => {

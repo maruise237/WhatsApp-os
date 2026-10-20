@@ -9,8 +9,14 @@
 import { createHash } from "node:crypto";
 import type { SupabaseClient } from "@/lib/neon/script-client";
 
+/**
+ * Normalise un numéro d'identification pour le hash : garde lettres et chiffres,
+ * en majuscules. Une CNI ou un passeport peut contenir des lettres ; un ancien
+ * CPF (11 chiffres avec points et tiret) donne exactement le même résultat
+ * qu'avant, donc les `cpf_hash` déjà stockés restent valables.
+ */
 export function normalizeCpf(raw: string): string {
-  return raw.replace(/\D/g, "");
+  return raw.replace(/[^0-9A-Za-z]/g, "").toUpperCase();
 }
 
 /**

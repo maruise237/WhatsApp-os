@@ -281,7 +281,7 @@ export function cssDaMarca(
         motivos.push({
           codigo: "nome_de_token_invalido",
           alvo: paraDiagnostico(nome),
-          detalhe: "nome de custom property fora da forma --nome-assim",
+          detalhe: "nom de propriété personnalisée hors de la forme --nom-ainsi",
         });
         return { css: null, motivos };
       }

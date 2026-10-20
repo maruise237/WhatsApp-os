@@ -70,13 +70,13 @@ export async function sendExportEmail(args: SendArgs): Promise<{ messageId: stri
 <body style="font-family:-apple-system,Helvetica,Arial,sans-serif;color:${NEUTROS_DE_SAIDA.texto};line-height:1.5;max-width:560px;margin:0 auto;padding:24px;">
   <h2 style="margin:0 0 12px;font-size:18px;">Demande de données personnelles #${shortId} traitée</h2>
   <p>Bonjour,</p>
-  <p>Votre demande d’accès à vos données personnelles (LGPD art. 18, II) a été traitée par <strong>${orgName}</strong>.</p>
+  <p>Votre demande d’accès à vos données personnelles (droit d’accès de la personne concernée) a été traitée par <strong>${orgName}</strong>.</p>
   <p>Le rapport complet peut être téléchargé via le lien ci-dessous. Pour des raisons de sécurité, le lien expire le <strong>${expiresFmt}</strong>.</p>
   <p style="margin:24px 0;">
     <a href="${args.signedUrl}" style="background:${args.marca.accent};color:${args.marca.accentFg};padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Télécharger le rapport</a>
   </p>
   <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Si vous n’avez pas demandé ce rapport, ignorez cet e-mail — aucune autre donnée n’est partagée.</p>
-  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base légale : LGPD, loi nº 13.709/2018, art. 18, II.</p>
+  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base légale : réglementation applicable à la protection des données personnelles (droit d’accès).</p>
 </body>
 </html>`;
 
@@ -90,7 +90,7 @@ ${args.signedUrl}
 Le lien expire le ${expiresFmt}.
 
 Si vous n’avez pas demandé ce rapport, ignorez cet e-mail.
-Base légale : LGPD, loi nº 13.709/2018, art. 18, II.`;
+Base légale : réglementation applicable à la protection des données personnelles (droit d’accès).`;
 
   const result = await sendEmail({
     to: args.to,

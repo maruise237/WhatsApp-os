@@ -72,7 +72,7 @@ export function HealthGrid({ health }: HealthGridProps) {
   const wahaPrimary =
     waha.sessions.length === 0
       ? "Aucune session"
-      : `${wahaConnected}/${waha.sessions.length} conectada${waha.sessions.length !== 1 ? "s" : ""}`;
+      : `${wahaConnected}/${waha.sessions.length} connectée${wahaConnected !== 1 ? "s" : ""}`;
 
   const wahaDetails = waha.sessions.slice(0, 4).map((s) => ({
     label: s.waha_session_name ?? s.id.slice(0, 8),
@@ -123,13 +123,18 @@ export function HealthGrid({ health }: HealthGridProps) {
         details={wahaDetails}
       />
 
-      <HealthCard
-        title="Nuvemshop"
-        status={nuvemshop.status}
-        icon={<Storefront size={18} aria-hidden />}
-        primaryValue={nuPrimary}
-        details={nuDetails}
-      />
+      {/* Intégration Nuvemshop (brésilienne) masquée pour le marché africain :
+          la carte n'apparaît, sous un nom neutre, que pour un clone qui l'a
+          déjà branchée. */}
+      {nuvemshop.connected && (
+        <HealthCard
+          title="Boutique en ligne"
+          status={nuvemshop.status}
+          icon={<Storefront size={18} aria-hidden />}
+          primaryValue={nuPrimary}
+          details={nuDetails}
+        />
+      )}
 
       <HealthCard
         title="Budget IA"

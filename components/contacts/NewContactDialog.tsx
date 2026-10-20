@@ -92,13 +92,13 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
             <Label htmlFor="phone_number">{t("Telefone (E.164)")}</Label>
             <Input
               id="phone_number"
-              placeholder="+5511999998888"
+              placeholder="+237699998888"
               {...form.register("phone_number")}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="cpf">{t("CPF (opcional)")}</Label>
-            <Input id="cpf" placeholder="00000000000" {...form.register("cpf")} />
+            <Input id="cpf" placeholder="Ex. : 112345678" {...form.register("cpf")} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>

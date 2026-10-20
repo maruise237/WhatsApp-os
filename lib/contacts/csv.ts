@@ -113,13 +113,42 @@ function detectDelimiter(text: string): string {
  * normalizados ("Data de Nascimento" → data_de_nascimento).
  */
 const HEADER_ALIASES: Record<string, readonly string[]> = {
-  name: ["name", "nome", "cliente"],
-  display_name: ["display_name", "apelido", "nome_de_exibicao"],
-  email: ["email", "e_mail"],
-  phone_number: ["phone_number", "telefone", "whatsapp", "celular", "fone"],
-  cpf: ["cpf"],
-  birthdate: ["birthdate", "nascimento", "data_de_nascimento", "aniversario"],
-  tags: ["tags", "etiquetas", "grupos"],
+  name: ["name", "nome", "cliente", "nom", "client", "nom_complet"],
+  display_name: ["display_name", "apelido", "nome_de_exibicao", "surnom", "nom_affiche"],
+  email: ["email", "e_mail", "courriel", "mail"],
+  phone_number: [
+    "phone_number",
+    "telefone",
+    "whatsapp",
+    "celular",
+    "fone",
+    "telephone",
+    "tel",
+    "portable",
+    "mobile",
+  ],
+  // Numéro d'identification (CNI, NIU, passeport). `cpf` reste accepté pour les
+  // fichiers déjà exportés par une version précédente.
+  cpf: [
+    "cpf",
+    "cni",
+    "niu",
+    "identifiant",
+    "numero_identification",
+    "numero_d_identification",
+    "piece_d_identite",
+    "passeport",
+  ],
+  birthdate: [
+    "birthdate",
+    "nascimento",
+    "data_de_nascimento",
+    "aniversario",
+    "date_de_naissance",
+    "naissance",
+    "anniversaire",
+  ],
+  tags: ["tags", "etiquetas", "grupos", "etiquettes", "groupes"],
 };
 
 function normalizaHeader(h: string): string {
@@ -128,7 +157,7 @@ function normalizaHeader(h: string): string {
     .replace(/\p{Diacritic}/gu, "")
     .trim()
     .toLowerCase()
-    .replace(/[\s-]+/g, "_");
+    .replace(/[\s'’-]+/g, "_");
 }
 
 /**
@@ -262,7 +291,10 @@ export function mapLinha(
     return { contato: {}, motivo: "ligne sans téléphone ni e-mail" };
   }
 
-  const cpf = get("cpf").replace(/\D/g, "");
+  // Texte libre : une CNI ou un passeport peut contenir des lettres. Seuls les
+  // espaces superflus sont retirés ; la normalisation pour le hash vit dans
+  // `lib/contacts/cpf.ts`.
+  const cpf = get("cpf").replace(/\s+/g, " ").trim().slice(0, 64);
   if (cpf !== "") contato.cpf = cpf;
 
   const birthdateRaw = get("birthdate");

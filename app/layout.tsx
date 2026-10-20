@@ -91,10 +91,10 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name }],
     keywords: [
       "CRM",
-      "atendimento",
+      "service client",
       "WhatsApp",
-      "IA conversacional",
-      "LGPD",
+      "IA conversationnelle",
+      "protection des données",
       "multi-tenant",
     ],
     robots: { index: false, follow: false },

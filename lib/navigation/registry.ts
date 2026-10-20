@@ -341,18 +341,10 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     sidebar: true,
     healthDot: true,
   },
-  {
-    // Não tinha link nenhum no app inteiro: só se chegava digitando a URL.
-    href: "/app/integrations/nuvemshop",
-    label: "Nuvemshop",
-    description: "Conecte a loja para trazer pedidos e clientes para dentro do CRM.",
-    icon: Storefront,
-    group: "canais",
-    // A página não filtra por papel, mas as Server Actions de conectar e
-    // desconectar exigem admin — mostrar a um viewer seria oferecer botão morto.
-    minRole: "admin",
-    sidebar: true,
-  },
+  // `/app/integrations/nuvemshop` saiu da navegação : intégration brésilienne
+  // masquée pour le marché africain. La page, les Server Actions et les routes
+  // API restent (clones existants) — voir NAV_ALLOWLIST dans
+  // tests/unit/navegacao-completude.test.ts.
   {
     href: "/app/webhooks",
     label: "Webhooks",

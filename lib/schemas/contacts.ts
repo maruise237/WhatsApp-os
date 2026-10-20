@@ -10,26 +10,15 @@
 import { z } from "zod";
 
 const PHONE_REGEX = /^\+\d{8,15}$/;
-const CPF_DIGITS = /^\d{11}$/;
-
 /**
- * CPF check-digit validator (algoritmo oficial Receita Federal).
- * Rejeita repetidos (00000000000, 11111111111, ...) e dígitos verificadores inválidos.
+ * Numéro d'identification (CNI, NIU, passeport…) — texte libre, facultatif.
+ *
+ * La colonne s'appelle encore `cpf` (contrat d'API et de schéma), mais aucune
+ * validation de format nationale n'est appliquée : les pièces d'identité des
+ * pays d'Afrique francophone n'ont ni longueur ni chiffre de contrôle communs.
+ * On borne seulement la taille et on refuse le vide.
  */
-export function isValidCpf(raw: string): boolean {
-  const s = raw.replace(/\D/g, "");
-  if (!CPF_DIGITS.test(s) || /^(\d)\1{10}$/.test(s)) return false;
-  let sum = 0;
-  for (let i = 0; i < 9; i++) sum += parseInt(s[i]!, 10) * (10 - i);
-  let d1 = (sum * 10) % 11;
-  if (d1 === 10) d1 = 0;
-  if (d1 !== parseInt(s[9]!, 10)) return false;
-  sum = 0;
-  for (let i = 0; i < 10; i++) sum += parseInt(s[i]!, 10) * (11 - i);
-  let d2 = (sum * 10) % 11;
-  if (d2 === 10) d2 = 0;
-  return d2 === parseInt(s[10]!, 10);
-}
+export const NUMERO_IDENTIFICATION_MAX = 64;
 
 export const contactCreateSchema = z.object({
   name: z.string().min(1).max(200).optional(),
@@ -39,7 +28,7 @@ export const contactCreateSchema = z.object({
     .string()
     .regex(PHONE_REGEX, "Le téléphone doit être au format E.164 (+237699998888)")
     .optional(),
-  cpf: z.string().refine(isValidCpf, "CPF invalide").optional(),
+  cpf: z.string().trim().min(1).max(NUMERO_IDENTIFICATION_MAX).optional(),
   birthdate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)

@@ -196,7 +196,7 @@ export const TYPOS: Record<TypoId, { name: string; display: string; body: string
     display: '"Bricolage Grotesque", system-ui, sans-serif',
     body: '"Plus Jakarta Sans", system-ui, sans-serif',
     mono: '"JetBrains Mono", ui-monospace, monospace',
-    description: "Display gestual com width axis. Body neutro humanista.",
+    description: "Titres expressifs à axe de largeur. Texte neutre humaniste.",
     scale: 1.25,
   },
   "fraunces-manrope": {

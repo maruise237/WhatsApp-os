@@ -86,9 +86,11 @@ export function TenantForm({ initial }: Props) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cnpj">CNPJ</Label>
+            <Label htmlFor="cnpj">{t("Identificador fiscal (NIU)")}</Label>
             <Input
               id="cnpj"
+              placeholder="Ex. : M012345678901X"
+              maxLength={20}
               value={form.cnpj ?? ""}
               onChange={(e) => set("cnpj", e.target.value || null)}
             />

@@ -31,7 +31,7 @@ import {
   mapLinha,
   parseCsv,
 } from "@/lib/contacts/csv";
-import { contactCreateSchema, isValidCpf } from "@/lib/schemas";
+import { contactCreateSchema } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -125,10 +125,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     const { contato, motivo } = mapLinha(dataRows[i]!, indices);
     if (motivo !== null) {
       errors.push({ linha, motivo });
-      continue;
-    }
-    if (contato.cpf && !isValidCpf(contato.cpf)) {
-      errors.push({ linha, motivo: `Numéro d’identification invalide : « ${contato.cpf} »` });
       continue;
     }
     const chave = contato.phone_number ?? `email:${(contato.email as string).toLowerCase()}`;

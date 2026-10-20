@@ -107,7 +107,7 @@ export function SectionMotion() {
           <div className="ds-key">List item hover</div>
           <div className="ds-list-item" style={{ marginTop: 8 }}>
             <div className="ds-avatar ds-avatar--sm">MS</div>
-            <div className="body"><div className="title">Maria Silva</div><div className="preview">Survoler pour mettre en évidence…</div></div>
+            <div className="body"><div className="title">Aïcha Ndiaye</div><div className="preview">Survoler pour mettre en évidence…</div></div>
             <div className="meta"><span className="ts">14h32</span></div>
           </div>
         </div>
@@ -133,7 +133,7 @@ export function SectionMotion() {
             <span className="title">Commande n° 12 443</span>
             <span className="value">1 234 FCFA</span>
           </div>
-          <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · pix</div>
+          <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Aïcha Ndiaye · Mobile Money</div>
         </div>
       </div>
 

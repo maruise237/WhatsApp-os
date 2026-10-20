@@ -855,7 +855,8 @@ export const DICIONARIO: Traducoes = {
     "fr-FR": "Renseignez au moins un identifiant (e-mail ou téléphone).",
   },
   "Telefone (E.164)": { "fr-FR": "Téléphone (E.164)" },
-  "CPF (opcional)": { "fr-FR": "CPF (facultatif)" },
+  "Identificador fiscal (NIU)": { "fr-FR": "Identifiant fiscal (NIU)" },
+  "CPF (opcional)": { "fr-FR": "Numéro d’identification (CNI) — facultatif" },
   "Criando…": { "fr-FR": "Création…" },
   "Criar contato": { "fr-FR": "Créer le contact" },
   "Contato atualizado": { "fr-FR": "Contact mis à jour" },
@@ -867,7 +868,7 @@ export const DICIONARIO: Traducoes = {
   "Crie um lead manualmente neste pipeline.": {
     "fr-FR": "Créez un lead manuellement dans ce pipeline.",
   },
-  "Ex: Pedido Maria — combo presente": { "fr-FR": "Ex. : Commande de Marie — coffret cadeau" },
+  "Ex: Pedido Maria — combo presente": { "fr-FR": "Ex. : Commande d’Aïcha — coffret cadeau" },
   "Contexto, observações, links…": { "fr-FR": "Contexte, remarques, liens…" },
   Etapa: { "fr-FR": "Étape" },
   "Selecione a etapa": { "fr-FR": "Sélectionnez l’étape" },
@@ -902,7 +903,7 @@ export const DICIONARIO: Traducoes = {
   "Envie um arquivo .csv com cabeçalho — colunas reconhecidas: nome, telefone, email, cpf, nascimento, tags. Excel: use “Salvar como” → “CSV UTF-8”. Máximo de 500 linhas por arquivo.":
     {
       "fr-FR":
-        "Envoyez un fichier .csv avec en-têtes — colonnes reconnues : nom, téléphone, e-mail, CPF, date de naissance, étiquettes. Excel : utilisez « Enregistrer sous » → « CSV UTF-8 ». Maximum 500 lignes par fichier.",
+        "Envoyez un fichier .csv avec en-têtes — colonnes reconnues : nom, téléphone, e-mail, cni (numéro d’identification), date de naissance, étiquettes. Excel : utilisez « Enregistrer sous » → « CSV UTF-8 ». Maximum 500 lignes par fichier.",
     },
   "Arquivo CSV": { "fr-FR": "Fichier CSV" },
   Importar: { "fr-FR": "Importer" },
@@ -1232,12 +1233,12 @@ export const DICIONARIO: Traducoes = {
 
   // ─── Détail contact ───
   "Erro ao carregar contato.": { "fr-FR": "Erreur lors du chargement du contact." },
-  "Contato anonimizado (LGPD)": { "fr-FR": "Contact anonymisé (LGPD)" },
+  "Contato anonimizado (LGPD)": { "fr-FR": "Contact anonymisé (protection des données)" },
   Anonimizado: { "fr-FR": "Anonymisé" },
   "edição bloqueada.": { "fr-FR": "modification bloquée." },
   "Visão geral": { "fr-FR": "Vue d’ensemble" },
   Timeline: { "fr-FR": "Chronologie" },
-  LGPD: { "fr-FR": "LGPD" },
+  LGPD: { "fr-FR": "Protection des données" },
   "Display name": { "fr-FR": "Nom d’affichage" },
   Origem: { "fr-FR": "Origine" },
   "Última atividade": { "fr-FR": "Dernière activité" },
@@ -1313,7 +1314,7 @@ export const DICIONARIO: Traducoes = {
   "Acesso revogado.": { "fr-FR": "Accès révoqué." },
   Revogar: { "fr-FR": "Révoquer" },
   "Criado em": { "fr-FR": "Créé le" },
-  "Direito ao esquecimento (LGPD)": { "fr-FR": "Droit à l’effacement (LGPD)" },
+  "Direito ao esquecimento (LGPD)": { "fr-FR": "Droit à l’effacement (données personnelles)" },
   "A anonimização é irreversível. Use somente após confirmação formal do titular ou ordem judicial.":
     {
       "fr-FR":
@@ -1323,11 +1324,11 @@ export const DICIONARIO: Traducoes = {
   "Anonimizar contato": { "fr-FR": "Anonymiser le contact" },
   "Contato já estava anonimizado.": { "fr-FR": "Le contact était déjà anonymisé." },
   "Contato anonimizado.": { "fr-FR": "Contact anonymisé." },
-  "Anonimizar contato (LGPD)": { "fr-FR": "Anonymiser le contact (LGPD)" },
+  "Anonimizar contato (LGPD)": { "fr-FR": "Anonymiser le contact (données personnelles)" },
   'Esta ação é irreversível. O nome será substituído por "Contato Anonimizado #N", email/telefone/CPF serão limpos, e atividades terão conteúdo redigido.':
     {
       "fr-FR":
-        "Cette action est irréversible. Le nom sera remplacé par « Contact anonymisé #N », l’e-mail, le téléphone et le CPF seront supprimés, et le contenu des activités sera anonymisé.",
+        "Cette action est irréversible. Le nom sera remplacé par « Contact anonymisé #N », l’e-mail, le téléphone et le numéro d’identification seront supprimés, et le contenu des activités sera anonymisé.",
     },
   "Justificativa (mínimo 10 caracteres)": { "fr-FR": "Justification (10 caractères minimum)" },
   "Ex.: Solicitação formal do titular via email em DD/MM/YYYY": {
@@ -1417,7 +1418,7 @@ export const DICIONARIO: Traducoes = {
     },
   "Nenhum contato ainda": { "fr-FR": "Aucun contact pour le moment" },
   "Contatos chegam automaticamente via WhatsApp ou Nuvemshop.": {
-    "fr-FR": "Les contacts arrivent automatiquement via WhatsApp ou Nuvemshop.",
+    "fr-FR": "Les contacts arrivent automatiquement via WhatsApp ou vos formulaires.",
   },
   "Sem eventos no período": { "fr-FR": "Aucun événement sur la période" },
   "Ajuste o filtro de datas ou a busca pra ver eventos.": {
@@ -2255,12 +2256,12 @@ export const DICIONARIO: Traducoes = {
   "Os e-mails que este sistema envia (convite de time, pedidos de LGPD) já saem com o nome da sua empresa.":
     {
       "fr-FR":
-        "Les e-mails envoyés par ce système (invitations d’équipe, demandes LGPD) utilisent déjà le nom de votre entreprise.",
+        "Les e-mails envoyés par ce système (invitations d’équipe, demandes liées aux données personnelles) utilisent déjà le nom de votre entreprise.",
     },
   'O relatório de LGPD entregue ao cliente traz a RAZÃO SOCIAL da sua empresa, e não o nome aqui de cima — é ela que responde legalmente pelos dados. Confira o campo "Razão social" em Configurações → Organização.':
     {
       "fr-FR":
-        "Le rapport LGPD remis au client contient la RAISON SOCIALE de votre entreprise, et non le nom affiché ci-dessus — c’est elle qui assume la responsabilité légale des données. Vérifiez le champ « Raison sociale » dans Paramètres → Organisation.",
+        "Le rapport de données personnelles remis au client contient la RAISON SOCIALE de votre entreprise, et non le nom affiché ci-dessus — c’est elle qui assume la responsabilité légale des données. Vérifiez le champ « Raison sociale » dans Paramètres → Organisation.",
     },
   "O aplicativo de verificação em duas etapas continua registrando o nome do sistema: o cadastro acontece antes de saber de qual empresa a pessoa é.":
     {

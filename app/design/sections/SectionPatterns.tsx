@@ -51,7 +51,7 @@ export function SectionPatterns() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--ds-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <div style={{ fontWeight: 600, fontSize: 14 }}>Maria Silva</div>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Aïcha Ndiaye</div>
               <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>+237 6 99 43 11 02 · Commande n° 12 443</div>
             </div>
             <span className="ds-badge ds-badge--success">resolvendo</span>
@@ -70,7 +70,7 @@ export function SectionPatterns() {
         <div style={{ borderLeft: "1px solid var(--ds-border)", padding: 18, display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
             <div className="ds-avatar ds-avatar--lg">MS<span className="ds-avatar-status" /></div>
-            <div style={{ fontWeight: 600 }}>Maria Silva</div>
+            <div style={{ fontWeight: 600 }}>Aïcha Ndiaye</div>
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Cliente depuis mars 2024</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>

@@ -432,7 +432,7 @@ function montarTema(
   const hover = lerFonte(decls.find((d) => d.prop === "--color-accent-hover")?.valor ?? "");
   const soft = tingidas.find((t) => t.chave === "--color-accent-soft")?.fonte;
   if (accent?.tipo !== "grau" || hover?.tipo !== "grau" || !soft) {
-    throw new Error(`régua: tokens de papel do accent ausentes em ${nome}`);
+    throw new Error(`règle : jetons de rôle de l’accent absents dans ${nome}`);
   }
 
   return {
@@ -777,7 +777,7 @@ function derivarTema(tema: TemaDaRegua, rampa: Rampa): { tokens: TokensDoTema; m
       codigo: "accent_deslocado",
       tema: tema.nome,
       alvo: "--color-accent",
-      detalhe: `rampa andou ${d > 0 ? "+" : ""}${d} grau(s) até o ${escolha.grauDoAccent} para todo papel caber no piso`,
+      detalhe: `la rampe s’est décalée de ${d > 0 ? "+" : ""}${d} degré(s) jusqu’au ${escolha.grauDoAccent} pour que chaque rôle atteigne le plancher`,
     });
   }
 
@@ -797,7 +797,7 @@ function derivarTema(tema: TemaDaRegua, rampa: Rampa): { tokens: TokensDoTema; m
       tema: tema.nome,
       alvo: m.nome,
       detalhe:
-        `girada ${m.rotacao}° para folgar do accent sob dicromacia ` +
+        `pivotée de ${m.rotacao}° pour s’écarter de l’accent en dichromatie ` +
         `(ΔE ${m.separacaoAntes.toFixed(4)} → ${m.separacaoDepois.toFixed(4)})`,
     });
   }
@@ -807,7 +807,7 @@ function derivarTema(tema: TemaDaRegua, rampa: Rampa): { tokens: TokensDoTema; m
       tema: tema.nome,
       alvo: s.nome,
       detalhe:
-        `sans rotation jusqu’à ${ROTACAO_MAXIMA}° que separe do accent (ΔE ${s.separacao.toFixed(4)} ` +
+        `aucune rotation jusqu’à ${ROTACAO_MAXIMA}° ne l’écarte de l’accent (ΔE ${s.separacao.toFixed(4)} ` +
         `< ${PISO_DE_SEPARACAO_SIMULADA}) ; associer une icône/un libellé dans ce rôle`,
     });
   }
@@ -852,7 +852,7 @@ export function derivarMarca(semente: string, regua: Regua): Marca {
       tema: null,
       alvo: "--color-brand",
       detalhe:
-        `croma ${C.toFixed(4)} sous le seuil ${LIMIAR_ACROMATICO}: a rampa do produto ` +
+        `croma ${C.toFixed(4)} sous le seuil ${LIMIAR_ACROMATICO} : la rampe du produit ` +
         `reste l’accent et la couleur de la marque ne vit que dans --color-brand`,
     });
   }

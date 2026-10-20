@@ -521,7 +521,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       sourceModule: "webhook",
       sourceId: source.id,
       actor: { type: "webhook_source", id: source.id },
-      reason: "La personne n’a pas donné son consentement pour être contactée dans le formulaire Respondi.",
+      reason: "La personne n’a pas donné son consentement pour être contactée dans le formulaire.",
       payload: {
         webhook_source_id: source.id,
         detected_via: respondiMapped.consent.detectedVia,

@@ -35,7 +35,7 @@ function getKey(): Buffer {
   }
   if (buf.length !== KEY_LENGTH_BYTES) {
     throw new Error(
-      `AI_CRED_AES_KEY doit faire exactement 32 octets (lu : ${buf.length}). Gere com: openssl rand -base64 32`,
+      `AI_CRED_AES_KEY doit faire exactement 32 octets (lu : ${buf.length}). Générez-la avec : openssl rand -base64 32`,
     );
   }
   cachedKey = buf;
