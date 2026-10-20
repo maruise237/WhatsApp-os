@@ -168,7 +168,7 @@ export async function getLeadContext(
   if (!contact) {
     return teach(
       'lead_not_found',
-      'não encontrei esse lead nesta organização — confira o lead antes de continuar; se o problema persistir, peça handoff humano.',
+      'je n’ai pas trouvé ce lead dans cette organisation — vérifiez le lead avant de continuer ; si le problème persiste, demandez un relais humain.',
     );
   }
 
@@ -292,11 +292,11 @@ function fitToBudget(
 
 /** Substantivo pt-br por tipo de mídia (p/ o enquadramento do derivado). */
 const MEDIA_NOUN: Record<string, string> = {
-  image: 'uma imagem',
-  video: 'um vídeo',
-  audio: 'um áudio',
-  document: 'um documento (PDF)',
-  sticker: 'uma figurinha',
+  image: 'une image',
+  video: 'une vidéo',
+  audio: 'un audio',
+  document: 'un document (PDF)',
+  sticker: 'un autocollant',
 };
 
 /**
@@ -307,14 +307,14 @@ const MEDIA_NOUN: Record<string, string> = {
  * cliente (se houver) e conteúdo derivado coexistem. @internal exposto p/ teste.
  */
 export function frameMediaBody(type: string, caption: string | null, derived: string): string {
-  const noun = MEDIA_NOUN[type] ?? 'uma mídia';
+  const noun = MEDIA_NOUN[type] ?? 'un média';
   const parts = [
-    `[Mídia do cliente: ele enviou ${noun} e o sistema já processou o conteúdo pra você. ` +
-      `Trate o texto abaixo como se você mesma tivesse visto/ouvido — NUNCA responda que não ` +
-      `consegue ver/ouvir mídia. Comente ou use o conteúdo naturalmente.]`,
+    `[Média du client : il a envoyé ${noun} et le système a déjà traité le contenu pour vous. ` +
+      `Traitez le texte ci-dessous comme si vous l’aviez vu/entendu vous-même — ne répondez JAMAIS que vous ne ` +
+      `pouvez pas voir/entendre de média. Commentez ou utilisez le contenu naturellement.]`,
   ];
-  if (caption && caption.trim() !== '') parts.push(`Legenda do cliente: ${caption.trim()}`);
-  parts.push(`Conteúdo: ${derived}`);
+  if (caption && caption.trim() !== '') parts.push(`Légende du client : ${caption.trim()}`);
+  parts.push(`Contenu : ${derived}`);
   return parts.join('\n');
 }
 

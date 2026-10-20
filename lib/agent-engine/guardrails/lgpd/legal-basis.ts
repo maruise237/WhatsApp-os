@@ -118,14 +118,14 @@ export async function escalateLgpdVeto(
 ): Promise<void> {
   const isAnon = input.code === 'lgpd_anonymized';
   const title = isAnon
-    ? 'Contato anonimizado — envio bloqueado por LGPD'
-    : 'Base legal ausente/inválida — 1º toque bloqueado por LGPD';
+    ? 'Contact anonymisé — envoi bloqué par le RGPD'
+    : 'Base légale absente/invalide — 1er contact bloqué par le RGPD';
   const body = isAnon
-    ? 'O contato deste lead está anonimizado no CRM (anonimização é irreversível): nenhum envio ' +
-      'pode ir a ele. Confira o cadastro no CRM — se for engano, reverta a anonimização lá.'
-    : 'O 1º toque de prospecção a este lead foi bloqueado por falta de base legal válida ' +
-      '(consent concedido, ou legitimate_interest com LIA; origem "import" exige prova). ' +
-      'Registre a base legal no CRM antes de prospectar este contato.';
+    ? 'Le contact de ce lead est anonymisé dans le CRM (l’anonymisation est irréversible) : aucun envoi ' +
+      'ne peut lui parvenir. Vérifiez la fiche dans le CRM — en cas d’erreur, annulez l’anonymisation là-bas.'
+    : 'Le 1er contact de prospection de ce lead a été bloqué faute de base légale valide ' +
+      '(consent accordé, ou legitimate_interest avec LIA ; l’origine "import" exige une preuve). ' +
+      'Enregistrez la base légale dans le CRM avant de prospecter ce contact.';
   try {
     await db.query(
       `insert into agent_inbox_items (organization_id, kind, severity, title, body, ref_kind, ref_id)

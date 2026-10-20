@@ -143,8 +143,8 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
         });
         return blocked(
           'circuit_breaker_same_tool',
-          `a tool ${toolName} foi DESATIVADA pelo circuit breaker neste turno: acumulou ${n} falhas com argumentos variados. ` +
-            'Não a chame de novo neste turno — siga com o que você já tem ou encerre o turno explicando o impasse.',
+          `l’outil ${toolName} a été DÉSACTIVÉ par le disjoncteur à ce tour : il a accumulé ${n} échecs avec des arguments variés. ` +
+            'Ne l’appelez plus à ce tour — continuez avec ce que vous avez déjà ou terminez le tour en expliquant l’impasse.',
         );
       }
       const exactCount = exactFailures.get(exactKey) ?? 0;
@@ -157,8 +157,8 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
         });
         return blocked(
           'circuit_breaker_exact_failure',
-          `chamada BLOQUEADA pelo circuit breaker: ${toolName} já falhou ${exactCount}x com exatamente estes mesmos argumentos neste turno — repetir não vai funcionar. ` +
-            'Mude a abordagem (argumentos diferentes ou outra tool) ou encerre o turno explicando o impasse.',
+          `appel BLOQUÉ par le disjoncteur : ${toolName} a déjà échoué ${exactCount} fois avec exactement ces mêmes arguments à ce tour — répéter ne fonctionnera pas. ` +
+            'Changez d’approche (autres arguments ou autre outil) ou terminez le tour en expliquant l’impasse.',
         );
       }
       const prog = readOnly.has(toolName) ? progress.get(exactKey) : undefined;
@@ -171,8 +171,8 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
         });
         return blocked(
           'circuit_breaker_no_progress',
-          `chamada BLOQUEADA pelo circuit breaker: ${toolName} já devolveu o MESMO resultado ${prog.repeats}x seguidas — reler não traz informação nova. ` +
-            'Use a informação que você já tem ou encerre o turno.',
+          `appel BLOQUÉ par le disjoncteur : ${toolName} a déjà renvoyé le MÊME résultat ${prog.repeats} fois de suite — relire n’apporte aucune information nouvelle. ` +
+            'Utilisez l’information que vous avez déjà ou terminez le tour.',
         );
       }
 
@@ -196,8 +196,8 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
         }
         if (exact >= t.exactFailureWarn) {
           warnings.push(
-            `${toolName} já falhou ${exact}x com estes mesmos argumentos neste turno; ` +
-              `a partir de ${t.exactFailureBlock} falhas iguais a chamada será bloqueada — mude a abordagem.`,
+            `${toolName} a déjà échoué ${exact} fois avec ces mêmes arguments à ce tour ; ` +
+              `à partir de ${t.exactFailureBlock} échecs identiques, l’appel sera bloqué — changez d’approche.`,
           );
           logWarn('breaker: warn (exact_failure)', {
             tool: toolName,
@@ -208,7 +208,7 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
         }
         if (perTool >= t.sameToolFailureWarn && !halted.has(toolName)) {
           warnings.push(
-            `${toolName} acumulou ${perTool} falhas neste turno; com ${t.sameToolFailureHalt} falhas a tool será desativada.`,
+            `${toolName} a accumulé ${perTool} échecs à ce tour ; à ${t.sameToolFailureHalt} échecs, l’outil sera désactivé.`,
           );
           logWarn('breaker: warn (same_tool_failure)', {
             tool: toolName,
@@ -223,7 +223,7 @@ export function wrapToolsWithBreaker(tools: ToolSet, opts: ToolBreakerOptions): 
         progress.set(exactKey, { lastResultHash: resultHash, repeats });
         if (repeats >= t.noProgressWarn) {
           warnings.push(
-            `${toolName} devolveu o mesmo resultado ${repeats}x seguidas — você não está progredindo; não repita esta leitura sem necessidade.`,
+            `${toolName} a renvoyé le même résultat ${repeats} fois de suite — vous ne progressez pas ; ne répétez pas cette lecture sans nécessité.`,
           );
           logWarn('breaker: warn (idempotent_no_progress)', {
             tool: toolName,

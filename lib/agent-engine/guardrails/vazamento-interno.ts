@@ -235,7 +235,7 @@ const REGRAS: ReadonlyArray<RegraTexto> = [
     rotulo: 'role',
     re: comContextoDePapel('roles?', CTX_PAPEL_ROLE, '\\broles?\\b\\s*[\'"«]'),
   },
-  { categoria: 'papel', rotulo: 'permissão insuficiente', re: /\bpermissao\w*\s+insuficiente\w*\b/g },
+  { categoria: 'papel', rotulo: 'autorisation insuffisante', re: /\bpermissao\w*\s+insuficiente\w*\b/g },
   // (C-ter) HTTP 403 só em contexto de status. `\b403\b` sozinho barraria "R$ 403,00" —
   // um preço vira mensagem calada, e preço é justamente o que este produto conversa.
   //
@@ -274,10 +274,10 @@ const REGRAS: ReadonlyArray<RegraTexto> = [
   // frase que o cliente mais precisa ouvir.
   {
     categoria: 'erro_cru',
-    rotulo: 'código de erro do banco',
+    rotulo: 'code d’erreur de la base de données',
     re: /\b(?:erro|error|falh\w+|code|código|codigo)\b[^.!?\n]{0,20}?\b\d{5}\b|\b\d{5}\b[^.!?\n]{0,12}?\b(?:erro|error)\b/gi,
   },
-  { categoria: 'erro_cru', rotulo: 'código PostgREST', re: /\bPGRST\d{3}\b/gi },
+  { categoria: 'erro_cru', rotulo: 'code PostgREST', re: /\bPGRST\d{3}\b/gi },
   // (E) ERRO CRU — o texto que a máquina escreveu para a máquina.
   { categoria: 'erro_cru', rotulo: 'Error:', re: /\berror\s*:/g },
   { categoria: 'erro_cru', re: /\b(?:typeerror|referenceerror|syntaxerror|rangeerror)\b/g },
@@ -295,7 +295,7 @@ const REGRAS: ReadonlyArray<RegraTexto> = [
   // duas frases são de tenants deste produto, não do sistema. O que denuncia o arquivo
   // NOSSO é a barra do caminho (`lib/guardrails/before-send.ts`) ou o erro ao lado —
   // porque o vazamento que interessa é o stack/log cru, não a menção a um arquivo.
-  { categoria: 'erro_cru', rotulo: 'arquivo de código', re: RE_ARQUIVO_DE_CODIGO },
+  { categoria: 'erro_cru', rotulo: 'fichier de code', re: RE_ARQUIVO_DE_CODIGO },
 ];
 
 /**
@@ -461,15 +461,15 @@ export function detectarVazamentoInterno(body: string): VazamentoInterno {
 export function renderVetoDeVazamento(termos: readonly string[]): string {
   const partes = termos.slice(0, 3).map((t) => {
     const entrada = catalogEntry(t);
-    return entrada === undefined ? `"${t}"` : `"${t}" (é o nome interno de «${entrada.rotulo.toLowerCase()}»)`;
+    return entrada === undefined ? `"${t}"` : `"${t}" (c’est le nom interne de « ${entrada.rotulo.toLowerCase()} »)`;
   });
   return (
-    `Sua mensagem leva vocabulário INTERNO do sistema ao cliente: ${partes.join(', ')}. ` +
-    'Quem lê é o cliente da empresa: ele não tem acesso ao sistema e não conhece ferramenta, ' +
-    'tabela, campo, papel de acesso nem código de erro — ler isso quebra a confiança dele. ' +
-    'REESCREVA a MESMA mensagem trocando o termo técnico pelo EFEITO na vida dele: diga o que ' +
-    'você conseguiu ou não conseguiu fazer, em português de gente, ou simplesmente omita o ' +
-    'detalhe interno. Se o termo era a razão de você não conseguir algo, diga apenas que não ' +
-    'conseguiu — sem nomear o motivo interno.'
+    `Votre message transmet au client du vocabulaire INTERNE du système : ${partes.join(', ')}. ` +
+    'Celui qui lit est le client de l’entreprise : il n’a pas accès au système et ne connaît ni outil, ' +
+    'ni table, ni champ, ni rôle d’accès, ni code d’erreur — lire cela entame sa confiance. ' +
+    'RÉÉCRIVEZ le MÊME message en remplaçant le terme technique par son EFFET pour lui : dites ce que ' +
+    'vous avez pu faire ou non, dans un français simple, ou omettez tout simplement le ' +
+    'détail interne. Si le terme expliquait pourquoi vous n’avez pas pu faire quelque chose, dites seulement que vous n’avez pas ' +
+    'pu — sans nommer la raison interne.'
   );
 }

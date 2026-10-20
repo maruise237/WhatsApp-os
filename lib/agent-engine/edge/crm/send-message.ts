@@ -139,18 +139,18 @@ export async function sendTurnMessage(
     );
   } catch (err) {
     if (err instanceof ApiError && err.status === 403) {
-      await updateLedger(db, idempotencyKey, 'vetoed', null, 'handler 403: contato bloqueado (is_blocked)');
+      await updateLedger(db, idempotencyKey, 'vetoed', null, 'handler 403 : contact bloqué (is_blocked)');
       return { kind: 'blocked', idempotencyKey };
     }
     if (err instanceof ApiError && err.status === 404) {
-      await touchLedgerError(db, idempotencyKey, 'conversa não encontrada');
-      throw new SendToolError('envio recusado: conversa não encontrada');
+      await touchLedgerError(db, idempotencyKey, 'conversation introuvable');
+      throw new SendToolError('envoi refusé : conversation introuvable');
     }
     // Qualquer outra falha (Supabase fora, erro interno do handler): transiente —
     // o ledger fica 'requested' e o replay reconcilia pela key.
     const msg = err instanceof Error ? err.message : String(err);
     await touchLedgerError(db, idempotencyKey, msg);
-    throw new CrmTransportError(`handler de envio indisponível: ${msg.slice(0, 120)}`);
+    throw new CrmTransportError(`handler d’envoi indisponible : ${msg.slice(0, 120)}`);
   }
 
   return reconcile(db, idempotencyKey, message.id, message.status);
@@ -171,7 +171,7 @@ async function reconcile(
       await updateLedger(db, idempotencyKey, 'queued', messageId, null);
       return { kind: 'queued', idempotencyKey, crmMessageId: messageId };
     case 'failed':
-      await updateLedger(db, idempotencyKey, 'failed', messageId, 'handler marcou a mensagem como failed');
+      await updateLedger(db, idempotencyKey, 'failed', messageId, 'le handler a marqué le message comme failed');
       return { kind: 'failed', idempotencyKey, crmMessageId: messageId };
     default:
       // status desconhecido (ex.: delivered em replay tardio = já saiu) — trate
@@ -199,7 +199,7 @@ async function claimLedgerRow(
       [input.tenantId, input.leadId, input.jobId, input.seq, bodyHash],
     );
     const id = rows[0]?.id;
-    if (!id) throw new Error('insert em send_ledger não devolveu linha');
+    if (!id) throw new Error('l’insertion dans send_ledger n’a renvoyé aucune ligne');
     return { key: id };
   } catch (err) {
     if (!isUniqueViolation(err)) throw err;
@@ -210,7 +210,7 @@ async function claimLedgerRow(
     [input.jobId, input.seq],
   );
   const existing = rows[0];
-  if (!existing) throw new Error('linha do send_ledger sumiu entre o 23505 e o select');
+  if (!existing) throw new Error('la ligne du send_ledger a disparu entre le 23505 et le select');
 
   switch (existing.status) {
     case 'accepted':
@@ -239,7 +239,7 @@ async function claimLedgerRow(
         [input.jobId, input.seq, bodyHash],
       );
       const id = rotated.rows[0]?.id;
-      if (!id) throw new Error('rotação de key no send_ledger não devolveu linha');
+      if (!id) throw new Error('la rotation de clé dans send_ledger n’a renvoyé aucune ligne');
       return { key: id };
     }
     default: // 'requested': crash entre insert e resposta — reconciliar pela key
@@ -299,7 +299,7 @@ export async function applySendOutcome(
         db,
         job.jobId,
         job.workerId,
-        'envio vetado pelo sink: contato bloqueado (is_blocked) — opt-out irrevogável',
+        'envoi refusé par le sink : contact bloqué (is_blocked) — désinscription irrévocable',
       );
       if (job.leadId) {
         await cancelPendingCronsForLead(db, job.tenantId, job.leadId);
@@ -309,7 +309,7 @@ export async function applySendOutcome(
     case 'queued': {
       const requeued = await rescheduleJob(db, job.jobId, job.workerId, {
         delayMs: knobs.queuedRetryDelayMs,
-        reason: 'sessão do canal fora (resposta queued) — reagendado sem consumir attempts',
+        reason: 'session du canal tombée (réponse queued) — replanifié sans consommer de tentatives',
       });
       return { action: 'requeued', job: requeued };
     }

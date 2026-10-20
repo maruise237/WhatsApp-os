@@ -196,7 +196,7 @@ export async function openCase(
       ok: false,
       error: {
         code: 'case_already_open',
-        message: 'já existe um caso humano aberto para esta conversa; aguarde a resposta do atendente antes de abrir outro.',
+        message: 'un dossier humain est déjà ouvert pour cette conversation ; attendez la réponse du conseiller avant d’en ouvrir un autre.',
       },
     };
   }
@@ -235,7 +235,7 @@ export async function provideCaseUpdate(
       ok: false,
       error: {
         code: 'invalid_case_state',
-        message: 'o caso não está aguardando informação do lead (awaiting_lead); nada foi alterado.',
+        message: 'le dossier n’attend pas d’information du lead (awaiting_lead) ; rien n’a été modifié.',
       },
     };
   }

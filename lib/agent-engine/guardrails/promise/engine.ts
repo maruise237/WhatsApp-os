@@ -98,8 +98,8 @@ export function decidePromise(args: { candidate: string; table: import('./table'
         allow: false,
         code: 'promise_out_of_table',
         reason:
-          `o preço ${brl(p.value)} está fora da tabela do playbook (mínimo permitido: ` +
-          `${brl(table.minPriceCents)}); corrija para um valor da tabela antes de reenviar.`,
+          `le prix ${brl(p.value)} est hors du tableau du playbook (minimum autorisé : ` +
+          `${brl(table.minPriceCents)}) ; corrigez avec une valeur du tableau avant de renvoyer.`,
         detail: { promise_kind: 'price', detected_cents: p.value, allowed_min_cents: table.minPriceCents },
       };
     }
@@ -108,8 +108,8 @@ export function decidePromise(args: { candidate: string; table: import('./table'
         allow: false,
         code: 'promise_out_of_table',
         reason:
-          `o desconto de ${p.value}% está fora da tabela do playbook (máximo permitido: ` +
-          `${table.maxDiscountPercent}%); corrija antes de reenviar.`,
+          `la remise de ${p.value}% est hors du tableau du playbook (maximum autorisé : ` +
+          `${table.maxDiscountPercent}%) ; corrigez avant de renvoyer.`,
         detail: { promise_kind: 'discount', detected_percent: p.value, allowed_max_percent: table.maxDiscountPercent },
       };
     }
@@ -118,8 +118,8 @@ export function decidePromise(args: { candidate: string; table: import('./table'
         allow: false,
         code: 'promise_out_of_table',
         reason:
-          `o parcelamento em ${p.value}x está fora da tabela do playbook (máximo permitido: ` +
-          `${table.maxInstallments}x); corrija antes de reenviar.`,
+          `le paiement en ${p.value} fois est hors du tableau du playbook (maximum autorisé : ` +
+          `${table.maxInstallments} fois) ; corrigez avant de renvoyer.`,
         detail: { promise_kind: 'installments', detected: p.value, allowed_max: table.maxInstallments },
       };
     }

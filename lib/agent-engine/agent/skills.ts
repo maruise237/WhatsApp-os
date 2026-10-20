@@ -86,7 +86,7 @@ export function validateSkillBody(body: string): void {
   const lines = countLines(body);
   if (lines > MAX_SKILL_BODY_LINES) {
     throw new Error(
-      `corpo de skill com ${lines} linhas excede o teto de ${MAX_SKILL_BODY_LINES} (regra 9) — quebre em skills menores`,
+      `corps de compétence de ${lines} lignes dépasse le plafond de ${MAX_SKILL_BODY_LINES} (règle 9) — découpez en compétences plus petites`,
     );
   }
 }
@@ -111,10 +111,10 @@ export async function insertSkillVersion(
   },
 ): Promise<SkillVersionRow> {
   if (input.name.trim() === '') {
-    throw new Error('skill sem name — o índice precisa de um nome estável');
+    throw new Error('compétence sans name — l’index a besoin d’un nom stable');
   }
   if (input.description.trim() === '') {
-    throw new Error('skill sem description — o índice residente precisa da descrição');
+    throw new Error('compétence sans description — l’index résident a besoin de la description');
   }
   validateSkillBody(input.body);
   const matcher = skillMatcherSchema.parse(input.matcher);
@@ -134,7 +134,7 @@ export async function insertSkillVersion(
   );
   const row = rows[0];
   if (row === undefined) {
-    throw new Error('insert em skill_versions não devolveu linha');
+    throw new Error('l’insertion dans skill_versions n’a renvoyé aucune ligne');
   }
   return row;
 }
@@ -163,7 +163,7 @@ export async function setSkillPointer(
     [input.versionId, input.name, input.tenantId],
   );
   if (rowCount === 0) {
-    throw new Error('versão de skill não encontrada para o escopo (tenant/name) — ponteiro não movido');
+    throw new Error('version de compétence introuvable pour le périmètre (tenant/name) — pointeur non déplacé');
   }
 }
 
@@ -273,7 +273,7 @@ export function renderMatchedSkillBodies(matched: readonly LoadedSkill[]): strin
     return '';
   }
   return [
-    '## Skills situacionais ativas neste turno (siga o playbook abaixo)',
+    '## Compétences situationnelles actives à ce tour (suivez le playbook ci-dessous)',
     ...matched.map((s) => `### ${s.name}\n${s.body}`),
   ].join('\n\n');
 }
@@ -315,8 +315,8 @@ export async function recordSkillMissCandidates(
       recorded_at: new Date().toISOString(),
       source: 'skill_match_miss',
       note:
-        `devia ter usado a skill '${c.skill}' e não usou (near-miss de matching: ${c.reason}) — ` +
-        'candidato ao golden set para curadoria humana (blueprint 3.3).',
+        `aurait dû utiliser la compétence '${c.skill}' et ne l’a pas utilisée (quasi-correspondance : ${c.reason}) — ` +
+        'candidat au golden set pour curation humaine (blueprint 3.3).',
       tenant_id: trace.tenantId,
       lead_id: trace.leadId,
       job_id: trace.jobId,

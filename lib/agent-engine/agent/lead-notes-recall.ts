@@ -133,7 +133,7 @@ export async function recallLeadNotes(
   const texts = [query, ...missing.map((r) => noteText(r.headline, r.body))];
   const embedded = await embed(texts);
   if (embedded.length !== texts.length) {
-    throw new Error('embed retornou um número de vetores diferente do solicitado');
+    throw new Error('embed a renvoyé un nombre de vecteurs différent de celui demandé');
   }
   const queryVec = embedded[0]!;
   const freshByNoteId = new Map<string, number[]>();

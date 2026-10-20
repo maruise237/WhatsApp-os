@@ -49,20 +49,20 @@ export interface CompactionKnobs {
 
 /** Instrução FIXA do flush — marcador estável (como CHECKPOINT_INSTRUCTION) para os testes. */
 export const FLUSH_INSTRUCTION =
-  'Turno interno de memória (NÃO é resposta ao lead). A conversa acima vai ser compactada e o ' +
-  'histórico detalhado será descartado. ANTES disso, extraia os fatos DURÁVEIS que valem lembrar ' +
-  'em conversas futuras: preferências, contexto pessoal, restrições, o que já foi oferecido ou ' +
-  'combinado. Responda SOMENTE com um JSON no formato ' +
-  '{"notes": [{"headline": string, "body": string}]} — headline é uma linha curta para o índice; ' +
-  'body é o detalhe. Sem fatos duráveis? Responda {"notes": []}. Nada fora do JSON.';
+  'Tour interne de mémoire (ce n’est PAS une réponse au lead). La conversation ci-dessus va être compactée et ' +
+  'l’historique détaillé sera supprimé. AVANT cela, extrayez les faits DURABLES qui méritent d’être retenus ' +
+  'pour les conversations futures : préférences, contexte personnel, contraintes, ce qui a déjà été proposé ou ' +
+  'convenu. Répondez UNIQUEMENT avec un JSON au format ' +
+  '{"notes": [{"headline": string, "body": string}]} — headline est une ligne courte pour l’index ; ' +
+  'body est le détail. Aucun fait durable ? Répondez {"notes": []}. Rien en dehors du JSON.';
 
 /** Instrução FIXA da compaction — marcador estável para os testes. */
 export const COMPACTION_INSTRUCTION =
-  'Compacte a conversa acima num resumo estruturado que PRESERVE explicitamente: compromissos ' +
-  'assumidos, objeções do lead, dados pessoais citados e o estágio do funil. Responda SOMENTE com ' +
-  'um JSON no formato {"commitments": string[], "objections": string[], "personal_data": string[], ' +
-  '"stage": string|null, "rolling_summary": string} — rolling_summary acumula o fio da conversa ' +
-  '(inclua o que o resumo anterior já dizia). Sem texto fora do JSON.';
+  'Compactez la conversation ci-dessus en un résumé structuré qui PRÉSERVE explicitement : les engagements ' +
+  'pris, les objections du lead, les données personnelles citées et l’étape du tunnel. Répondez UNIQUEMENT avec ' +
+  'un JSON au format {"commitments": string[], "objections": string[], "personal_data": string[], ' +
+  '"stage": string|null, "rolling_summary": string} — rolling_summary cumule le fil de la conversation ' +
+  '(incluez ce que disait déjà le résumé précédent). Aucun texte hors du JSON.';
 
 export const compactionOutputSchema = z.object({
   commitments: z.array(z.string()).default([]),
@@ -84,7 +84,7 @@ function extractJson(text: string): unknown {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
   if (start === -1 || end <= start) {
-    throw new Error('resposta do modelo auxiliar sem JSON');
+    throw new Error('réponse du modèle auxiliaire sans JSON');
   }
   return JSON.parse(text.slice(start, end + 1));
 }
@@ -98,10 +98,10 @@ export function renderCompactedSummary(c: CompactionOutput): string {
   const parts: string[] = [];
   const summary = c.rolling_summary.trim();
   if (summary) parts.push(summary);
-  if (c.stage) parts.push(`Estágio do funil: ${c.stage}.`);
-  if (c.commitments.length > 0) parts.push(`Compromissos: ${c.commitments.join('; ')}.`);
-  if (c.objections.length > 0) parts.push(`Objeções do lead: ${c.objections.join('; ')}.`);
-  if (c.personal_data.length > 0) parts.push(`Dados pessoais citados: ${c.personal_data.join('; ')}.`);
+  if (c.stage) parts.push(`Étape du tunnel : ${c.stage}.`);
+  if (c.commitments.length > 0) parts.push(`Engagements : ${c.commitments.join('; ')}.`);
+  if (c.objections.length > 0) parts.push(`Objections du lead : ${c.objections.join('; ')}.`);
+  if (c.personal_data.length > 0) parts.push(`Données personnelles citées : ${c.personal_data.join('; ')}.`);
   return parts.length > 0 ? parts.join('\n') : '—';
 }
 
@@ -120,10 +120,10 @@ export function trimTranscriptToBudget(messages: LeadContextMessage[], maxTokens
 
 function buildTranscriptMessage(context: LeadContext, previousSummary: string, instruction: string): string {
   return [
-    '## Resumo acumulado até aqui',
+    '## Résumé cumulé jusqu’ici',
     previousSummary.trim() || '—',
     '',
-    '## Conversa a processar (transcript)',
+    '## Conversation à traiter (transcript)',
     JSON.stringify(context),
     '',
     instruction,

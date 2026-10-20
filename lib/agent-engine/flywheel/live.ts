@@ -59,60 +59,60 @@ async function buildMaterial(pool: pg.Pool, turn: TurnRow): Promise<TraceMateria
     `select headline from lead_notes where organization_id = $1 and contact_id = $2 order by created_at`,
     [turn.organization_id, turn.contact_id],
   );
-  const notesNow = notes.length > 0 ? notes.map((n) => `- ${n.headline}`).join('\n') : '(nenhuma nota durável)';
+  const notesNow = notes.length > 0 ? notes.map((n) => `- ${n.headline}`).join('\n') : '(aucune note durable)';
 
   const { rows: cp } = await pool.query<{ rolling_summary: string }>(
     `select rolling_summary from lead_checkpoints
      where organization_id = $1 and contact_id = $2 order by seq desc limit 1`,
     [turn.organization_id, turn.contact_id],
   );
-  return { transcript, notesNow, rollingSummary: cp[0]?.rolling_summary ?? '(sem checkpoint)' };
+  return { transcript, notesNow, rollingSummary: cp[0]?.rolling_summary ?? '(aucun checkpoint)' };
 }
 
 /** yes = higiene ok; no = fato durável perdido/mal consolidado; unknown = indecidível. */
 function judgePrompt(m: TraceMaterial, optionOrder: 'yes_first' | 'no_first'): string {
   const options =
     optionOrder === 'yes_first'
-      ? '"yes" (higiene de memória OK) | "no" (fato durável perdido) | "unknown"'
-      : '"no" (fato durável perdido) | "yes" (higiene de memória OK) | "unknown"';
+      ? '"yes" (hygiène de mémoire OK) | "no" (fait durable perdu) | "unknown"'
+      : '"no" (fait durable perdu) | "yes" (hygiène de mémoire OK) | "unknown"';
   return [
-    'Você é um JUIZ de qualidade de memória de um agente SDR de WhatsApp. Avalie APENAS a dimensão',
-    `"${DIMENSION}": o agente preservou nas NOTAS DURÁVEIS os fatos duráveis do lead que a conversa`,
-    'revelou? Fatos duráveis = identidade/negócio/necessidade/canal (ex.: nome, tipo de loja, produto).',
-    'Regra: se um fato durável aparece no TRANSCRIPT ou no RESUMO mas NÃO está nas notas duráveis',
-    '(porque nunca foi salvo ou porque uma consolidação o apagou), o veredito é "no".',
+    'Vous êtes un JUGE de la qualité de mémoire d’un agent SDR WhatsApp. Évaluez UNIQUEMENT la dimension',
+    `"${DIMENSION}" : l’agent a-t-il conservé dans les NOTES DURABLES les faits durables du lead que la conversation`,
+    'a révélés ? Faits durables = identité/activité/besoin/canal (ex. : nom, type de boutique, produit).',
+    'Règle : si un fait durable apparaît dans le TRANSCRIPT ou dans le RÉSUMÉ mais N’est PAS dans les notes durables',
+    '(parce qu’il n’a jamais été enregistré ou qu’une consolidation l’a effacé), le verdict est "no".',
     '',
-    '=== TRANSCRIPT (recente) ===',
+    '=== TRANSCRIPT (récent) ===',
     m.transcript,
     '',
-    '=== RESUMO ACUMULADO (checkpoint) ===',
+    '=== RÉSUMÉ CUMULÉ (checkpoint) ===',
     m.rollingSummary,
     '',
-    '=== NOTAS DURÁVEIS (estado atual) ===',
+    '=== NOTES DURABLES (état actuel) ===',
     m.notesNow,
     '',
-    `Responda SOMENTE JSON: {"verdict": ${options}, "missing_facts": string[] (curtos, sem dados pessoais completos)}`,
+    `Répondez UNIQUEMENT en JSON : {"verdict": ${options}, "missing_facts": string[] (courts, sans données personnelles complètes)}`,
   ].join('\n');
 }
 
 function distillerPrompt(missingFacts: string[]): string {
   return [
-    'Você melhora PLAYBOOKS de agentes SDR por DELTAS mínimos. Um juiz constatou falha de higiene de',
-    `memória em conversa real: fatos duráveis fora das notas do lead (${missingFacts.join('; ')}).`,
-    'Causa raiz típica: o agente consolida notas com "supersedes" apagando fatos de OUTRO assunto.',
-    'Proponha UM único bullet de playbook, em pt-BR, imperativo, ≤3 linhas, que previna essa classe',
-    'de falha sem proibir consolidação legítima. NÃO cite dados do lead.',
-    'Decida também o ESCOPO do aprendizado: "org" quando vale para TODO atendimento da organização',
-    '(política, tom de voz, fato do negócio — ex.: "a loja não vende aos domingos"); "agent" quando é',
-    'específico do comportamento deste agente.',
-    'Responda SOMENTE JSON: {"content": string, "scope": "agent" | "org"}',
+    'Vous améliorez les PLAYBOOKS d’agents SDR par DELTAS minimaux. Un juge a constaté un défaut d’hygiène de',
+    `mémoire dans une conversation réelle : des faits durables absents des notes du lead (${missingFacts.join('; ')}).`,
+    'Cause racine typique : l’agent consolide les notes avec "supersedes" en effaçant des faits d’un AUTRE sujet.',
+    'Proposez UNE seule puce de playbook, en français, à l’impératif, ≤3 lignes, qui prévienne cette classe',
+    'de défaut sans interdire la consolidation légitime. NE citez PAS les données du lead.',
+    'Décidez aussi la PORTÉE de l’apprentissage : "org" quand il vaut pour TOUT échange de l’organisation',
+    '(politique, ton, fait de l’activité — ex. : "la boutique ne vend pas le dimanche") ; "agent" quand il est',
+    'propre au comportement de cet agent.',
+    'Répondez UNIQUEMENT en JSON : {"content": string, "scope": "agent" | "org"}',
   ].join('\n');
 }
 
 function parseJson<T>(text: string): T {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
-  if (start === -1 || end <= start) throw new Error('saída do modelo sem JSON');
+  if (start === -1 || end <= start) throw new Error('sortie du modèle sans JSON');
   return JSON.parse(text.slice(start, end + 1)) as T;
 }
 

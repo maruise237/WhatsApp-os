@@ -157,8 +157,8 @@ export async function performHumanHandoff(
      )`,
     [
       ids.tenantId,
-      opts.inboxTitle ?? 'Handoff humano solicitado — assumir a conversa',
-      `Motivo: ${opts.reason}. Resumo da conversa até aqui:\n${opts.conversationSummary}`,
+      opts.inboxTitle ?? 'Relais humain demandé — prendre la conversation en charge',
+      `Motif : ${opts.reason}. Résumé de la conversation jusqu’ici :\n${opts.conversationSummary}`,
       ids.leadId,
     ],
   );
@@ -182,7 +182,7 @@ export async function performHumanHandoff(
       type: 'handoff_triggered',
       sourceModule: 'human-handoff',
       sourceId: ids.conversationId,
-      reason: 'Atendimento passado para uma pessoa',
+      reason: 'Échange transmis à une personne',
       payload: { conversation_id: ids.conversationId },
     });
     if (!roteou.routed) {
@@ -190,7 +190,7 @@ export async function performHumanHandoff(
     }
   } catch (err) {
     opts.log.warn('handoff: atividade da passagem não foi gravada', {
-      error: err instanceof Error ? err.message.slice(0, 200) : 'erro desconhecido',
+      error: err instanceof Error ? err.message.slice(0, 200) : 'erreur inconnue',
     });
   }
 
@@ -206,8 +206,8 @@ export const requestHumanHandoffInputSchema = z.strictObject({
 });
 
 const PAYLOAD_TEACHING =
-  'Campo aceito: reason (por que passar ao humano) — opcional, nada além. Lead, organização e ' +
-  'conversa vêm do runtime, nunca do payload da tool.';
+  'Champ accepté : reason (pourquoi passer la main à un humain) — facultatif, rien d’autre. Le lead, l’organisation et ' +
+  'la conversation viennent du runtime, jamais du payload de l’outil.';
 
 export type RequestHumanHandoffResult =
   | { ok: true; status: 'handoff_solicitado'; message: string }
@@ -226,11 +226,11 @@ export async function applyRequestHumanHandoff(
 ): Promise<RequestHumanHandoffResult> {
   const forbidden = findForbiddenKey(rawInput);
   if (forbidden !== null) {
-    return { ok: false, error: { code: 'invalid_payload', message: `campos não reconhecidos: ${forbidden}. ${PAYLOAD_TEACHING}` } };
+    return { ok: false, error: { code: 'invalid_payload', message: `champs non reconnus : ${forbidden}. ${PAYLOAD_TEACHING}` } };
   }
   const parsed = requestHumanHandoffInputSchema.safeParse(rawInput);
   if (!parsed.success) {
-    return { ok: false, error: { code: 'invalid_payload', message: `payload inválido em request_human_handoff (${zodIssuesSummary(parsed.error)}). ${PAYLOAD_TEACHING}` } };
+    return { ok: false, error: { code: 'invalid_payload', message: `payload invalide dans request_human_handoff (${zodIssuesSummary(parsed.error)}). ${PAYLOAD_TEACHING}` } };
   }
 
   await performHumanHandoff(db, ids, {
@@ -249,8 +249,8 @@ export async function applyRequestHumanHandoff(
     ok: true,
     status: 'handoff_solicitado',
     message:
-      `Handoff humano acionado; a conversa saiu do atendimento automático. ${frase} ` +
-      'Encerre o turno AGORA, sem enviar mais mensagens ao lead além do aviso.',
+      `Relais humain déclenché ; la conversation a quitté l’assistance automatique. ${frase} ` +
+      'Terminez le tour MAINTENANT, sans envoyer d’autres messages au lead en dehors de l’avertissement.',
   };
 }
 
@@ -273,7 +273,7 @@ export function buildHandoffSummary(
   } | null,
 ): string {
   if (previous === null) {
-    return 'Sem resumo acumulado ainda (conversa recente) — abra a conversa no CRM para o contexto completo.';
+    return 'Pas encore de résumé cumulé (conversation récente) — ouvrez la conversation dans le CRM pour le contexte complet.';
   }
   const parts: string[] = [];
   if (previous.rolling_summary.trim() !== '') parts.push(previous.rolling_summary.trim());
@@ -283,10 +283,10 @@ export function buildHandoffSummary(
   // Compromissos e objeções acumulados são contexto, não ação imediata.
   const declarado = renderDeclaracaoParaHumano(previous.declaracao ?? null);
   if (declarado !== '') parts.push(declarado);
-  if (previous.commitments.length > 0) parts.push(`Compromissos: ${previous.commitments.join('; ')}`);
-  if (previous.objections.length > 0) parts.push(`Objeções: ${previous.objections.join('; ')}`);
-  if (previous.next_action) parts.push(`Próxima ação: ${previous.next_action}`);
+  if (previous.commitments.length > 0) parts.push(`Engagements : ${previous.commitments.join('; ')}`);
+  if (previous.objections.length > 0) parts.push(`Objections : ${previous.objections.join('; ')}`);
+  if (previous.next_action) parts.push(`Prochaine action : ${previous.next_action}`);
   return parts.length === 0
-    ? 'Sem resumo acumulado ainda (conversa recente) — abra a conversa no CRM para o contexto completo.'
+    ? 'Pas encore de résumé cumulé (conversation récente) — ouvrez la conversation dans le CRM pour le contexte complet.'
     : parts.join('\n');
 }

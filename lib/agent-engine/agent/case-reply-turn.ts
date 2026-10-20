@@ -118,21 +118,21 @@ export function buildCaseReplyOpeningMessage(
   const note = body?.trim() ?? '';
   const instructionBlock =
     action === 'resolved'
-      ? `O responsável concluiu o caso #${caseIdShort} com a nota: "${note}". Repasse essa conclusão ao lead de forma natural e encerre o assunto.`
-      : `Para avançar no caso #${caseIdShort}, o responsável interno precisa que você obtenha do cliente: "${note}". ` +
-        `Pergunte ao lead de forma natural. Assim que tiver a resposta, chame a tool provide_case_update com case_id "${caseId}".`;
+      ? `Le responsable a clôturé le dossier n°${caseIdShort} avec la note : "${note}". Transmettez cette conclusion au lead de façon naturelle et clôturez le sujet.`
+      : `Pour faire avancer le dossier n°${caseIdShort}, le responsable interne a besoin que vous obteniez du client : "${note}". ` +
+        `Posez la question au lead de façon naturelle. Dès que vous avez la réponse, appelez l’outil provide_case_update avec le case_id "${caseId}".`;
   return [
-    'Resposta do responsável interno sobre um caso que você abriu.',
+    'Réponse du responsable interne à propos d’un dossier que vous avez ouvert.',
     '',
-    '## Instrução do responsável sobre o caso',
+    '## Instruction du responsable sur le dossier',
     instructionBlock,
     '',
     ...ritualBlocks(previous, leadState, context, notesIndexBlock, projeta),
     '',
-    'Repasse ao lead usando a tool send_message — NUNCA escreva a resposta como texto direto',
-    '(texto fora de tool é descartado pelo runtime). Use get_lead_context se precisar reler o contexto.',
-    'Houve avanço REAL no funil neste turno? Marque-o com update_lead_state (só o próximo estágio válido).',
-    'Aprendeu algo durável sobre o lead? Salve com save_lead_note (a headline entra no índice de memória).',
+    'Transmettez au lead avec l’outil send_message — n’écrivez JAMAIS la réponse en texte direct',
+    '(un texte hors outil est ignoré par le runtime). Utilisez get_lead_context si vous devez relire le contexte.',
+    'Y a-t-il eu une avancée RÉELLE dans le tunnel à ce tour ? Marquez-la avec update_lead_state (uniquement l’étape suivante valide).',
+    'Avez-vous appris quelque chose de durable sur le lead ? Enregistrez-le avec save_lead_note (la headline entre dans l’index de mémoire).',
   ].join('\n');
 }
 
@@ -147,20 +147,20 @@ export function createCaseReplyTurnHandler(deps: InboundTurnDeps) {
     const tenantId = job.organization_id;
     const leadId = job.contact_id;
     if (leadId === null) {
-      throw new Error('job case_reply_turn sem contact_id — o CHECK da fila deveria impedir');
+      throw new Error('job case_reply_turn sans contact_id — le CHECK de la file aurait dû l’empêcher');
     }
     const payload = caseReplyTurnPayloadSchema.parse(job.payload);
     const runLog = withFields(deps.log, { job_id: job.id, tenant_id: tenantId, lead_id: leadId, case_id: payload.case_id });
 
     if (!isReentryAction(payload.action)) {
-      runLog.info('case_reply_turn no-op — action fora do escopo de re-entrada do agente', { action: payload.action });
+      runLog.info('case_reply_turn sans effet — action hors du périmètre de réentrée de l’agent', { action: payload.action });
       return;
     }
     const action: ReentryAction = payload.action;
 
     const caseConversation = await resolveCaseConversation(pool, tenantId, payload.case_id, action);
     if (caseConversation === null) {
-      runLog.info('case_reply_turn no-op — caso inexistente, terminal ou sem número associado', {
+      runLog.info('case_reply_turn sans effet — dossier inexistant, terminé ou sans numéro associé', {
         action: payload.action,
       });
       return;

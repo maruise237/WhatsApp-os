@@ -143,148 +143,148 @@ import { camadaLigada, lerCamadasDaOrg } from '../guardrails/camadas-da-org';
 export const AGENT_TOOL_DEFS = {
   get_lead_context: {
     description:
-      'Relê o contexto curado do lead nesta organização: dados do contato e as últimas mensagens da conversa.',
+      'Relit le contexte du lead dans cette organisation : les données du contact et les derniers messages de la conversation.',
     inputSchema: z.object({}),
   },
   send_message: {
     description:
-      'Envia UMA mensagem de WhatsApp ao lead desta conversa. É o ÚNICO jeito de falar com o lead; texto fora desta tool nunca é enviado.',
+      'Envoie UN message WhatsApp au lead de cette conversation. C’est le SEUL moyen de parler au lead ; un texte hors de cet outil n’est jamais envoyé.',
     inputSchema: z.object({
-      body: z.string().min(1).describe('corpo da mensagem, na língua do cliente, pronto para envio'),
+      body: z.string().min(1).describe('corps du message, dans la langue du client, prêt à être envoyé'),
     }),
   },
   update_lead_state: {
     description:
-      'Marca um avanço REAL no funil deste lead: stage (new → contacted → qualifying → qualified → ' +
-      'negotiating → won | lost; só o PRÓXIMO estágio válido — regressão é rejeitada), qualification ' +
-      '(budget/authority/need/timeline), next_action e reason (evidência curta do avanço). ' +
-      'Nunca invente avanço sem evidência na conversa.',
+      'Marque une avancée RÉELLE dans le tunnel de ce lead : stage (new → contacted → qualifying → qualified → ' +
+      'negotiating → won | lost ; uniquement l’étape SUIVANTE valide — tout retour en arrière est rejeté), qualification ' +
+      '(budget/authority/need/timeline), next_action et reason (preuve courte de l’avancée). ' +
+      'N’inventez jamais d’avancée sans preuve dans la conversation.',
     // Schema LARGO só para o SDK (o modelo vê os campos); a validação REAL é a
     // whitelist .strict() dentro de applyLeadStateUpdate — campo extra/forjado
     // vira erro de ENSINO ao modelo, nunca exceção do SDK nem strip silencioso.
     inputSchema: z.object({
-      stage: z.string().optional().describe('novo estágio do funil (só o próximo válido)'),
-      qualification: z.object({}).passthrough().optional().describe('qualificação: budget, authority, need, timeline'),
-      next_action: z.string().nullable().optional().describe('próxima ação concreta combinada com o lead'),
-      reason: z.string().optional().describe('evidência curta do avanço (vai ao audit do CRM)'),
+      stage: z.string().optional().describe('nouvelle étape du tunnel (uniquement la suivante valide)'),
+      qualification: z.object({}).passthrough().optional().describe('qualification : budget, authority, need, timeline'),
+      next_action: z.string().nullable().optional().describe('prochaine action concrète convenue avec le lead'),
+      reason: z.string().optional().describe('preuve courte de l’avancée (va dans l’audit du CRM)'),
     }).passthrough(),
   },
   schedule_followup: {
     description:
-      'Agenda o SEU próprio retorno a este lead num momento futuro (follow-up). Use sempre que ' +
-      'prometer voltar a falar depois (ex.: "te retorno amanhã de manhã", "confirmo na segunda"). ' +
-      'Um agendamento por promessa; o sistema fará o follow-up sozinho no horário combinado — ' +
-      'depois de agendar, encerre o turno.',
+      'Planifie VOTRE propre retour vers ce lead à un moment futur (relance). Utilisez-le chaque fois que vous ' +
+      'promettez de reprendre contact plus tard (ex. : « je reviens vers vous demain matin », « je confirme lundi »). ' +
+      'Une planification par promesse ; le système fera la relance tout seul à l’horaire convenu — ' +
+      'après la planification, terminez le tour.',
     // Schema LARGO para o SDK (o modelo vê os campos); a validação REAL é a whitelist
     // .strict() + guard de prototype pollution dentro de applyScheduleFollowup — campo
     // extra/forjado e data inválida viram erro de ENSINO ao modelo, nunca exceção do SDK.
     inputSchema: z.object({
-      reason: z.string().describe('por que agendar o retorno'),
-      promised_at: z.string().describe('data/hora ISO 8601 do retorno (no futuro), ex.: "2026-07-15T14:00:00Z"'),
-      promise: z.string().describe('o que você prometeu ao lead'),
-      context_snapshot: z.string().nullable().optional().describe('contexto curto para o seu run futuro'),
+      reason: z.string().describe('pourquoi planifier le retour'),
+      promised_at: z.string().describe('date/heure ISO 8601 du retour (dans le futur), ex. : "2026-07-15T14:00:00Z"'),
+      promise: z.string().describe('ce que vous avez promis au lead'),
+      context_snapshot: z.string().nullable().optional().describe('contexte court pour votre futur run'),
     }).passthrough(),
   },
   save_lead_note: {
     description:
-      'Salva uma nota DURÁVEL na memória deste lead (persiste entre conversas). Use para fatos que ' +
-      'você vai querer lembrar depois: preferências, contexto pessoal, restrições, o que já foi ' +
-      'oferecido. A headline (linha curta) entra sempre no índice de memória do lead; o corpo completo ' +
-      'fica guardado e você o relê sob demanda com get_lead_note. Para CONSOLIDAR notas antigas, ' +
-      'liste os ids delas em "supersedes" (você os vê no índice) — elas são removidas ao salvar a nova.',
+      'Enregistre une note DURABLE dans la mémoire de ce lead (conservée d’une conversation à l’autre). Utilisez-la pour les faits que ' +
+      'vous voudrez retrouver plus tard : préférences, contexte personnel, contraintes, ce qui a déjà été ' +
+      'proposé. La headline (ligne courte) figure toujours dans l’index de mémoire du lead ; le corps complet ' +
+      'reste stocké et vous le relisez à la demande avec get_lead_note. Pour CONSOLIDER d’anciennes notes, ' +
+      'listez leurs ids dans "supersedes" (vous les voyez dans l’index) — elles sont supprimées à l’enregistrement de la nouvelle.',
     // Schema LARGO para o SDK (o modelo vê os campos); a validação REAL é a whitelist
     // .strict() + guard de prototype pollution dentro de applySaveLeadNote — campo
     // extra/forjado vira erro de ENSINO ao modelo, nunca exceção do SDK nem strip silencioso.
     inputSchema: z.object({
-      headline: z.string().describe('linha curta do índice (sempre visível no prompt)'),
-      body: z.string().describe('corpo completo da nota (lido sob demanda por get_lead_note)'),
+      headline: z.string().describe('ligne courte de l’index (toujours visible dans le prompt)'),
+      body: z.string().describe('corps complet de la note (lu à la demande par get_lead_note)'),
       supersedes: z
         .array(z.string())
         .optional()
-        .describe('ids de notas que esta substitui/consolida (vistos no índice de memória)'),
+        .describe('ids des notes que celle-ci remplace/consolide (visibles dans l’index de mémoire)'),
     }).passthrough(),
   },
   get_lead_note: {
     description:
-      'Lê o CORPO completo de UMA nota da memória deste lead pelo id (o id aparece no índice de memória, ' +
-      'entre colchetes). Use quando a headline no índice não bastar e você precisar do detalhe.',
+      'Lit le CORPS complet d’UNE note de la mémoire de ce lead par son id (l’id apparaît dans l’index de mémoire, ' +
+      'entre crochets). Utilisez-le quand la headline de l’index ne suffit pas et que vous avez besoin du détail.',
     inputSchema: z.object({
-      note_id: z.string().describe('id da nota (como aparece no índice, entre colchetes)'),
+      note_id: z.string().describe('id de la note (tel qu’il apparaît dans l’index, entre crochets)'),
     }).passthrough(),
   },
   search_knowledge: {
     description:
-      'Busca na BASE DE CONHECIMENTO da organização (FAQ, políticas, catálogo) os trechos mais ' +
-      'relevantes para uma pergunta. Use ANTES de responder qualquer dúvida factual sobre produto, ' +
-      'preço, prazo, política ou funcionamento — responda com base nos trechos retornados e não ' +
-      'invente o que não encontrar. Sem resultados = diga que vai confirmar, nunca chute.',
+      'Recherche dans la BASE DE CONNAISSANCES de l’organisation (FAQ, politiques, catalogue) les passages les plus ' +
+      'pertinents pour une question. Utilisez-la AVANT de répondre à toute question factuelle sur un produit, ' +
+      'un prix, un délai, une politique ou un fonctionnement — répondez à partir des passages renvoyés et ' +
+      'n’inventez pas ce que vous ne trouvez pas. Aucun résultat = dites que vous allez vérifier, ne devinez jamais.',
     inputSchema: z.object({
-      query: z.string().min(2).describe('a pergunta ou termos a buscar, na língua da base'),
+      query: z.string().min(2).describe('la question ou les termes à rechercher, dans la langue de la base'),
     }).passthrough(),
   },
   request_human_handoff: {
     description:
-      'Passa a conversa para um ATENDENTE HUMANO imediatamente. Use quando o lead pedir para falar com ' +
-      'uma pessoa, quando a situação exigir alguém humano (reclamação séria, questão jurídica/financeira ' +
-      'sensível) ou quando você atingir o limite do que pode resolver. Depois de acionar, o bot silencia ' +
-      'para este lead — encerre o turno sem enviar mais mensagens.',
+      'Transfère immédiatement la conversation à un CONSEILLER HUMAIN. Utilisez-le quand le lead demande à parler à ' +
+      'une personne, quand la situation exige un humain (réclamation sérieuse, question juridique/financière ' +
+      'sensible) ou quand vous atteignez la limite de ce que vous pouvez résoudre. Une fois déclenché, le bot se tait ' +
+      'pour ce lead — terminez le tour sans envoyer d’autres messages.',
     // Schema LARGO para o SDK (o modelo vê o campo); a validação REAL é a whitelist .strict()
     // + guard de prototype pollution dentro de applyRequestHumanHandoff — campo extra/forjado
     // vira erro de ENSINO ao modelo, nunca exceção do SDK nem strip silencioso.
     inputSchema: z.object({
-      reason: z.string().optional().describe('por que passar ao humano (curto)'),
+      reason: z.string().optional().describe('pourquoi passer la main à un humain (court)'),
     }).passthrough(),
   },
   read_skill_reference: {
     description:
-      'Lê o conteúdo de UMA reference (arquivo de apoio) do pacote de uma skill situacional que já ' +
-      'CASOU neste turno. Use quando o corpo da skill ativa mencionar uma reference e você precisar do ' +
-      'detalhe completo dela. Só funciona para skills ativas AGORA — pedir skill não ativa ou caminho ' +
-      'fora do manifesto dela volta erro.',
+      'Lit le contenu d’UNE reference (fichier d’appui) du paquet d’une compétence situationnelle qui a déjà ' +
+      'CORRESPONDU à ce tour. Utilisez-le quand le corps de la compétence active mentionne une reference et que vous avez besoin de ' +
+      'son détail complet. Ne fonctionne que pour les compétences actives MAINTENANT — demander une compétence inactive ou un chemin ' +
+      'hors de son manifeste renvoie une erreur.',
     inputSchema: z.object({
-      skill_name: z.string().min(1).describe('nome da skill ativa neste turno (como aparece no bloco de skills)'),
-      ref_path: z.string().min(1).describe('caminho da reference dentro do pacote da skill'),
+      skill_name: z.string().min(1).describe('nom de la compétence active à ce tour (tel qu’il apparaît dans le bloc des compétences)'),
+      ref_path: z.string().min(1).describe('chemin de la reference dans le paquet de la compétence'),
     }).passthrough(),
   },
   open_human_case: {
     description:
-      'Abra um caso para um humano de retaguarda quando você NÃO conseguir resolver o pedido do lead ' +
-      'sozinho (liberar acesso, corrigir algo num sistema, uma decisão que exige uma pessoa). Você CONTINUA ' +
-      'conversando com o lead normalmente — não silencia. Use SEMPRE que for prometer ao lead que alguém vai ' +
-      'verificar/resolver: prometer sem abrir o caso é proibido.',
+      'Ouvrez un dossier pour un humain en coulisses quand vous NE parvenez PAS à résoudre seul la demande du lead ' +
+      '(débloquer un accès, corriger quelque chose dans un système, une décision qui exige une personne). Vous CONTINUEZ ' +
+      'à échanger normalement avec le lead — vous ne vous taisez pas. Utilisez-le CHAQUE FOIS que vous allez promettre au lead que quelqu’un va ' +
+      'vérifier/résoudre : promettre sans ouvrir le dossier est interdit.',
     // Schema LARGO para o SDK (o modelo vê os campos); a validação REAL é a whitelist
     // .strict() openHumanCaseInputSchema (human-cases.ts) — campo extra/forjado vira
     // erro de ENSINO ao modelo, nunca exceção do SDK nem strip silencioso.
     inputSchema: z.object({
-      title: z.string().describe('título curto, ex.: "Liberar acesso ao painel"'),
-      summary: z.string().describe('o que o lead precisa, em pt-br'),
-      blocker: z.string().describe('por que você não consegue resolver sozinho'),
+      title: z.string().describe('titre court, ex. : "Débloquer l’accès au tableau de bord"'),
+      summary: z.string().describe('ce dont le lead a besoin, en français'),
+      blocker: z.string().describe('pourquoi vous ne pouvez pas le résoudre seul'),
     }).passthrough(),
   },
   provide_case_update: {
     description:
-      'Quando um caso está esperando informação do cliente e você já colheu essa informação na conversa, ' +
-      'use esta tool para devolver a informação ao humano responsável. Não invente — só o que o lead disse.',
+      'Quand un dossier attend une information du client et que vous avez déjà recueilli cette information dans la conversation, ' +
+      'utilisez cet outil pour transmettre l’information à l’humain responsable. N’inventez rien — uniquement ce que le lead a dit.',
     // Schema LARGO para o SDK; a validação REAL é a whitelist .strict()
     // provideCaseUpdateInputSchema (human-cases.ts).
     inputSchema: z.object({
-      case_id: z.string().describe('id do caso aberto'),
-      info: z.string().describe('a informação colhida do lead'),
+      case_id: z.string().describe('id du dossier ouvert'),
+      info: z.string().describe('l’information recueillie auprès du lead'),
     }).passthrough(),
   },
   send_template: {
     description:
-      'Envia um TEMPLATE aprovado do WhatsApp. Use SOMENTE quando o send_message for recusado ' +
-      'porque a janela de 24 horas com o contato fechou — a mensagem de erro diz quando é o caso. ' +
-      'Você precisa do nome exato do template, do idioma e de um valor para CADA parâmetro. ' +
-      'Se faltar valor, a resposta diz quais e você pode chamar de novo; qualquer outro erro ' +
-      'significa que um humano precisa agir — encerre o turno sem insistir.',
+      'Envoie un MODÈLE WhatsApp approuvé. Utilisez-le UNIQUEMENT quand send_message est refusé ' +
+      'parce que la fenêtre de 24 heures avec le contact est fermée — le message d’erreur l’indique le cas échéant. ' +
+      'Il vous faut le nom exact du modèle, la langue et une valeur pour CHAQUE paramètre. ' +
+      'S’il manque une valeur, la réponse indique lesquelles et vous pouvez rappeler l’outil ; toute autre erreur ' +
+      'signifie qu’un humain doit intervenir — terminez le tour sans insister.',
     inputSchema: z.object({
-      template_name: z.string().min(1).describe('nome exato do template, como aprovado na Meta'),
-      language: z.string().min(2).describe('código do idioma, ex.: pt_BR'),
+      template_name: z.string().min(1).describe('nom exact du modèle, tel qu’approuvé chez Meta'),
+      language: z.string().min(2).describe('code de langue, ex. : fr'),
       values: z
         .record(z.string(), z.string())
-        .describe('valor de cada parâmetro, na chave que a tela de templates mostra (ex.: "1", "2")'),
+        .describe('valeur de chaque paramètre, sous la clé affichée par l’écran des modèles (ex. : "1", "2")'),
     }).passthrough(),
   },
   // Sales OS (E-003) : catalogue → commande → demande de preuve → preuve en
@@ -384,12 +384,12 @@ export interface LeadCheckpointRow extends Omit<CheckpointContent, 'declaracao'>
  * é a mesma chamada de modelo.
  */
 export const CHECKPOINT_INSTRUCTION =
-  'Feche o turno AGORA. Responda SOMENTE com um JSON válido no formato ' +
+  'Clôturez le tour MAINTENANT. Répondez UNIQUEMENT avec un JSON valide au format ' +
   '{"commitments": string[], "objections": string[], "next_action": string|null, "rolling_summary": string} ' +
-  '— compromissos assumidos, objeções do lead, próxima ação e o resumo acumulado ' +
-  'da conversa até aqui (inclua o que o resumo anterior já dizia). ' +
+  '— engagements pris, objections du lead, prochaine action et résumé cumulé ' +
+  'de la conversation jusqu’ici (incluez ce que disait déjà le résumé précédent). ' +
   DECLARACAO_INSTRUCTION +
-  ' Sem texto fora do JSON.';
+  ' Aucun texte hors du JSON.';
 
 /**
  * Reexportado do módulo puro, onde ele PRECISA morar: o caminho legado
@@ -406,13 +406,13 @@ export { HANDOFF_REASON_ORCAMENTO };
  * durável (`buildHandoffSummary`), que também não custa token nenhum.
  */
 export const RESUMO_DO_HANDOFF_POR_ORCAMENTO =
-  'A IA parou de responder porque o teto de gasto mensal com IA desta organização foi ' +
-  'atingido — o lead NÃO pediu atendimento humano. Assuma a conversa; para devolvê-la ao ' +
-  'atendimento automático, ajuste o teto em Uso de IA › Orçamento e use "Devolver ao ' +
-  'automático" no cabeçalho da conversa.';
+  'L’IA a cessé de répondre parce que le plafond mensuel de dépenses IA de cette organisation a été ' +
+  'atteint — le lead n’a PAS demandé d’assistance humaine. Prenez la conversation en charge ; pour la rendre à ' +
+  'l’assistance automatique, ajustez le plafond dans Utilisation de l’IA › Budget puis utilisez « Rendre à ' +
+  'l’automatique » dans l’en-tête de la conversation.';
 
 /** Título do item da Central que este handoff abre — rótulo visível, logo constante. */
-export const TITULO_DO_HANDOFF_POR_ORCAMENTO = 'Teto de gasto com IA atingido — assumir a conversa';
+export const TITULO_DO_HANDOFF_POR_ORCAMENTO = 'Plafond de dépenses IA atteint — prendre la conversation en charge';
 
 /**
  * ORÇAMENTO ESGOTADO NÃO PODE VIRAR SILÊNCIO PARA O LEAD.
@@ -528,12 +528,12 @@ async function resumoDoCheckpointDuravel(
  * conversa longa (ao contrário do índice de skills, este bloco não some).
  */
 const CASES_SYSTEM_BLOCK =
-  '## Casos para um humano de retaguarda\n' +
-  'Quando você NÃO conseguir resolver o pedido do lead sozinho (liberar acesso, corrigir algo num ' +
-  'sistema, uma decisão que exige uma pessoa), use a tool open_human_case — você CONTINUA conversando ' +
-  'com o lead, não silencia. NUNCA prometa ao lead que um humano vai verificar/resolver sem antes chamar ' +
-  'open_human_case. Quando um caso estiver esperando informação do cliente e você já a obteve na ' +
-  'conversa, use provide_case_update para devolver ao responsável.';
+  '## Dossiers pour un humain en coulisses\n' +
+  'Quand vous NE parvenez PAS à résoudre seul la demande du lead (débloquer un accès, corriger quelque chose dans un ' +
+  'système, une décision qui exige une personne), utilisez l’outil open_human_case — vous CONTINUEZ à échanger ' +
+  'avec le lead, vous ne vous taisez pas. Ne promettez JAMAIS au lead qu’un humain va vérifier/résoudre sans avoir d’abord appelé ' +
+  'open_human_case. Quand un dossier attend une information du client et que vous l’avez déjà obtenue dans la ' +
+  'conversation, utilisez provide_case_update pour la transmettre au responsable.';
 
 export interface InboundTurnKnobs {
   /** últimas N mensagens no contexto de abertura (LEAD_CONTEXT_HISTORY_LIMIT) */
@@ -754,18 +754,18 @@ export function parseCheckpointText(text: string): CheckpointContent {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
   if (start === -1 || end <= start) {
-    throw new Error('fechamento do turno sem JSON de checkpoint — run re-tentado pela fila');
+    throw new Error('clôture du tour sans JSON de checkpoint — run relancé par la file');
   }
   let raw: unknown;
   try {
     raw = JSON.parse(text.slice(start, end + 1));
   } catch {
-    throw new Error('JSON de checkpoint inválido no fechamento do turno — run re-tentado pela fila');
+    throw new Error('JSON de checkpoint invalide à la clôture du tour — run relancé par la file');
   }
   const parsed = checkpointContentSchema.safeParse(raw);
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => `${i.path.join('.') || '(raiz)'}: ${i.code}`).join('; ');
-    throw new Error(`checkpoint do fechamento com shape inválido (${issues}) — run re-tentado pela fila`);
+    throw new Error(`checkpoint de clôture de forme invalide (${issues}) — run relancé par la file`);
   }
   return parsed.data;
 }
@@ -794,7 +794,7 @@ export function ritualBlocks(
         objections: previous.objections,
         next_action: previous.next_action,
       })
-    : 'primeiro turno — sem checkpoint anterior';
+    : 'premier tour — aucun checkpoint précédent';
   const summaryBlock = previous?.rolling_summary ? previous.rolling_summary : '—';
   // slot previsto na F2-09, preenchido pela F2-10: estado do funil no ritual de
   // abertura — sem registro ainda, o lead está em "new" (default da 0008).
@@ -804,12 +804,12 @@ export function ritualBlocks(
         qualification: leadState.qualification,
         next_action: leadState.next_action,
       })
-    : 'sem registro — o lead está em "new"';
+    : 'aucun enregistrement — le lead est en "new"';
   return [
-    '## Checkpoint anterior (compromissos, objeções, próxima ação)',
+    '## Checkpoint précédent (engagements, objections, prochaine action)',
     checkpointBlock,
     '',
-    '## Resumo acumulado da conversa',
+    '## Résumé cumulé de la conversation',
     summaryBlock,
     '',
     // Era "## Estado do funil (lead_state)". O nome da tabela no cabeçalho era
@@ -818,16 +818,16 @@ export function ritualBlocks(
     // bloco (stage: 'qualifying') continua sendo vocabulário interno e continua
     // aqui: `update_lead_state` precisa dele para marcar o próximo estágio.
     // Sai no passo 6 da spec 16, junto com a ferramenta. Dívida declarada.
-    '## Estado do funil',
+    '## État du tunnel',
     stateBlock,
     '',
     // Índice da memória durável do lead (F3-05): headlines + id, orçamento fixo. O
     // corpo vem sob demanda (get_lead_note). Injetado AQUI, no SUFIXO — depois do
     // prefixo cacheável (F2-17), como o bloco temporal da F3-03.
-    '## Memória do lead (índice de notas — corpo sob demanda via get_lead_note)',
+    '## Mémoire du lead (index des notes — corps à la demande via get_lead_note)',
     notesIndexBlock,
     '',
-    '## Contexto do lead (contato + últimas mensagens)',
+    '## Contexte du lead (contact + derniers messages)',
     // A projeção (spec 16 §4) fecha a terceira porta: sem ela, `lead_id`,
     // `conversation_id` e `media_storage_path` chegam crus ao prompt — e UUID
     // cru na tela do cliente foi MEDIDO. Ela só arma quando o turno não tem
@@ -857,21 +857,21 @@ export function buildOpeningMessage(
 ): string {
   const entregue = (nome: string): boolean => entregues.includes(nome);
   return [
-    'Novo turno de atendimento: o lead enviou uma mensagem (a última inbound do histórico abaixo).',
+    'Nouveau tour de conversation : le lead a envoyé un message (le dernier inbound de l’historique ci-dessous).',
     '',
     ...ritualBlocks(previous, leadState, context, notesIndexBlock, projeta),
     '',
-    'Responda ao lead usando a tool send_message — NUNCA escreva a resposta como texto direto',
-    '(texto fora de tool é descartado pelo runtime). Use get_lead_context se precisar reler o contexto.',
+    'Répondez au lead avec l’outil send_message — n’écrivez JAMAIS la réponse en texte direct',
+    '(un texte hors outil est ignoré par le runtime). Utilisez get_lead_context si vous devez relire le contexte.',
     // Quando o avanço do funil vira trabalho do Operador, o Conversador não
     // precisa saber que existe um funil. É a diferença entre "não fale disso" e
     // "não há disso no seu contexto" — a segunda não depende de obediência.
     ...(entregue('update_lead_state')
       ? []
-      : ['Houve avanço REAL no funil neste turno? Marque-o com update_lead_state (só o próximo estágio válido).']),
+      : ['Y a-t-il eu une avancée RÉELLE dans le tunnel à ce tour ? Marquez-la avec update_lead_state (uniquement l’étape suivante valide).']),
     ...(entregue('save_lead_note')
       ? []
-      : ['Aprendeu algo durável sobre o lead? Salve com save_lead_note (a headline entra no índice de memória).']),
+      : ['Avez-vous appris quelque chose de durable sur le lead ? Enregistrez-le avec save_lead_note (la headline entre dans l’index de mémoire).']),
   ].join('\n');
 }
 
@@ -951,9 +951,9 @@ export async function avisarCapacidadesAusentes(
         )`,
       [
         tenantId,
-        'O agente atendeu sem as capacidades que você ligou',
-        'As ferramentas configuradas na tela do agente não puderam ser carregadas neste ' +
-          'atendimento, e ele respondeu ao cliente sem elas. A conversa não foi interrompida. ' +
+        'L’agent a répondu sans les capacités que vous avez activées',
+        'Les outils configurés sur l’écran de l’agent n’ont pas pu être chargés pour cet ' +
+          'échange, et il a répondu au client sans eux. La conversation n’a pas été interrompue. ' +
           `Motivo técnico: ${detalhe}`,
         conversationId,
       ],
@@ -989,7 +989,7 @@ export async function runAgentTurn(
 ): Promise<void> {
   const leadIdDoJob = job.contact_id;
   if (leadIdDoJob === null) {
-    throw new Error('job de turno sem contact_id — o CHECK da fila deveria impedir');
+    throw new Error('job de tour sans contact_id — le CHECK de la file aurait dû l’empêcher');
   }
   const logDaEscolta = withFields(deps.log, {
     job_id: job.id,
@@ -1038,7 +1038,7 @@ async function executarTurnoDoAgente(
   const tenantId = job.organization_id;
   const leadId = job.contact_id;
   if (leadId === null) {
-    throw new Error('job de turno sem contact_id — o CHECK da fila deveria impedir');
+    throw new Error('job de tour sans contact_id — le CHECK de la file aurait dû l’empêcher');
   }
   // O RELÓGIO, declarado antes de qualquer guarda de janela.
   //
@@ -1071,7 +1071,7 @@ async function executarTurnoDoAgente(
   // qualquer chamada de modelo/CRM. O bot silenciou (bot_silenced_until='infinity', cache
   // do force_human do CRM) e só o humano/CRM libera — o agente nunca reassume (regra dura 2).
   if (await isLeadInHandoff(pool, tenantId, leadId)) {
-    runLog.info('turno pulado — lead em handoff humano (bot silenciado)', { kind: job.kind });
+    runLog.info('tour ignoré — lead en relais humain (bot silencieux)', { kind: job.kind });
     return;
   }
 
@@ -1100,14 +1100,14 @@ async function executarTurnoDoAgente(
       const abertura = proximaAberturaDaJanela(agora, knobs);
       await rescheduleJob(pool, job.id, ctx.workerId, {
         delayMs: Math.max(abertura.getTime() - agora.getTime(), 1_000),
-        reason: 'fora da janela anti-ban de envio — turno adiado para a abertura',
+        reason: 'hors de la plage anti-blocage d’envoi — tour reporté à l’ouverture',
       });
-      runLog.info('turno adiado — fora da janela anti-ban de envio', {
+      runLog.info('tour reporté — hors de la plage anti-blocage d’envoi', {
         janela: `${knobs.windowStartHour}h-${knobs.windowEndHour}h`,
         timezone: knobs.timezone,
         abertura: abertura.toISOString(),
       });
-      throw new JobSettledError('fora da janela anti-ban — job reagendado para a abertura da janela');
+      throw new JobSettledError('hors de la plage anti-blocage — job replanifié à l’ouverture de la plage');
     }
   }
 
@@ -1143,7 +1143,7 @@ async function executarTurnoDoAgente(
       routingSignal = sigRows[0]?.body ?? null;
     }
   } catch (err) {
-    runLog.warn('leitura de sticky/sinal do router falhou — turno segue sem router', {
+    runLog.warn('lecture du sticky/signal du routeur échouée — le tour continue sans routeur', {
       error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
     });
   }
@@ -1169,7 +1169,7 @@ async function executarTurnoDoAgente(
   );
   const agentConfig = routed.config;
   if (agentConfig !== null) {
-    runLog.info('config do agente publicada em uso', {
+    runLog.info('config publiée de l’agent utilisée', {
       agent_id: agentConfig.agentId,
       agent_version_id: agentConfig.versionId,
       model: agentConfig.model,
@@ -1191,15 +1191,15 @@ async function executarTurnoDoAgente(
     if (esperaMs !== null) {
       await rescheduleJob(pool, job.id, ctx.workerId, {
         delayMs: esperaMs,
-        reason: 'fora do horário de funcionamento do agente — turno adiado para a abertura da janela',
+        reason: 'hors des horaires de fonctionnement de l’agent — tour reporté à l’ouverture de la plage',
       });
-      runLog.info('turno adiado — fora do horário de funcionamento configurado na versão publicada', {
+      runLog.info('tour reporté — hors des horaires de fonctionnement configurés dans la version publiée', {
         agent_id: agentConfig.agentId,
         espera_ms: esperaMs,
         janela: `${agentConfig.janelaDeAtendimento.start}-${agentConfig.janelaDeAtendimento.end}`,
       });
       throw new JobSettledError(
-        'fora do horário de funcionamento — job reagendado para a abertura da janela',
+        'hors des horaires de fonctionnement — job replanifié à l’ouverture de la plage',
       );
     }
   }
@@ -1223,7 +1223,7 @@ async function executarTurnoDoAgente(
         [tenantId, routed.routerId, input.conversationId, routed.intentName, routed.confidence, agentConfig?.agentId ?? null, routed.outcome, job.id],
       );
     } catch (err) {
-      runLog.warn('decisão do router não gravada', { error: (err instanceof Error ? err.message : String(err)).slice(0, 120) });
+      runLog.warn('décision du routeur non enregistrée', { error: (err instanceof Error ? err.message : String(err)).slice(0, 120) });
     }
   }
   // Knobs por-turno: a versão publicada vence o env; sem ela, env (main.ts).
@@ -1301,7 +1301,7 @@ async function executarTurnoDoAgente(
   if (!openingContext.ok) {
     // Sem contexto não há turno: transiente (CRM fora) OU permanente (lead
     // sumiu) — ambos re-tentam pela fila e morrem em 'dead' se persistirem.
-    throw new Error(`abertura do turno falhou em get_lead_context (${openingContext.error.code})`);
+    throw new Error(`ouverture du tour échouée dans get_lead_context (${openingContext.error.code})`);
   }
 
   // F4-06 (acceptance 1): detecção DETERMINÍSTICA (regex PT-BR, sem LLM) de pedido explícito
@@ -1318,7 +1318,7 @@ async function executarTurnoDoAgente(
       { tenantId, leadId, conversationId: input.conversationId },
       { reason: 'requested_human', conversationSummary: buildHandoffSummary(previous), log: runLog },
     );
-    runLog.info('handoff humano acionado por pedido explícito do lead (detecção determinística)', {
+    runLog.info('relais humain déclenché sur demande explicite du lead (détection déterministe)', {
       kind: job.kind,
     });
     return; // bot silencia: sem modelo, sem envio neste turno
@@ -1337,11 +1337,11 @@ async function executarTurnoDoAgente(
       {
         reason: 'suspected_optout',
         conversationSummary: buildHandoffSummary(previous),
-        inboxTitle: 'Suspeita de opt-out — confirmar bloqueio do contato no CRM',
+        inboxTitle: 'Suspicion de désinscription — confirmer le blocage du contact dans le CRM',
         log: runLog,
       },
     );
-    runLog.info('possível opt-out detectado no inbound — bot silenciado e escalado ao humano', {
+    runLog.info('possible désinscription détectée dans l’inbound — bot silencieux et escaladé à un humain', {
       kind: job.kind,
     });
     return; // bot silencia: sem modelo, sem envio neste turno
@@ -1414,7 +1414,7 @@ async function executarTurnoDoAgente(
       'select id from lead_notes where organization_id = $1 and contact_id = $2 order by created_at',
       [tenantId, leadId],
     );
-    runLog.info('memória do lead injetada no turno', {
+    runLog.info('mémoire du lead injectée dans le tour', {
       checkpoint_seq: effectivePrevious?.seq ?? null,
       notes_count: noteIdRows.length,
       note_ids: noteIdRows.map((r) => r.id),
@@ -1444,7 +1444,7 @@ async function executarTurnoDoAgente(
   if (optedOutThisTurn) {
     const canceled = await cancelPendingCronsForLead(pool, tenantId, leadId);
     if (canceled > 0) {
-      runLog.info('opt-out detectado no turno — follow-ups agendados cancelados', { canceled });
+      runLog.info('désinscription détectée dans le tour — relances planifiées annulées', { canceled });
     }
   }
 
@@ -1538,7 +1538,7 @@ async function executarTurnoDoAgente(
       );
     }
   } catch (err) {
-    runLog.warn('skill_activations não gravadas', { error: (err instanceof Error ? err.message : String(err)).slice(0, 120) });
+    runLog.warn('skill_activations non enregistrées', { error: (err instanceof Error ? err.message : String(err)).slice(0, 120) });
   }
 
   /**
@@ -1595,7 +1595,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao ler o contexto — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne à la lecture du contexte — terminez le tour maintenant.' },
           };
         }
       },
@@ -1609,8 +1609,8 @@ async function executarTurnoDoAgente(
             error: {
               code: 'max_sends_per_turn',
               message:
-                `você já enviou ${seq} mensagens neste turno (teto: ${maxSendsPerTurn}). ` +
-                'NÃO envie mais nada agora — encerre o turno e espere a resposta do lead.',
+                `vous avez déjà envoyé ${seq} messages à ce tour (plafond : ${maxSendsPerTurn}). ` +
+                'N’envoyez plus rien maintenant — terminez le tour et attendez la réponse du lead.',
             },
           };
         }
@@ -1633,8 +1633,8 @@ async function executarTurnoDoAgente(
             error: {
               code: 'template_desconhecido',
               message:
-                `não existe template "${template_name}" em ${language} nesta conta. ` +
-                'Encerre o turno; um humano precisa configurá-lo.',
+                `il n’existe pas de modèle "${template_name}" en ${language} sur ce compte. ` +
+                'Terminez le tour ; un humain doit le configurer.',
             },
           };
         }
@@ -1653,9 +1653,9 @@ async function executarTurnoDoAgente(
             error: {
               code: 'template_nao_aprovado',
               message:
-                `o template "${template_name}" existe mas está ${linha.status} na Meta — ` +
-                'só um template APPROVED pode ser disparado. Encerre o turno; ' +
-                'um humano precisa resolver a aprovação.',
+                `le modèle "${template_name}" existe mais est ${linha.status} chez Meta — ` +
+                'seul un modèle APPROVED peut être envoyé. Terminez le tour ; ' +
+                'un humain doit régler l’approbation.',
             },
           };
         }
@@ -1707,7 +1707,7 @@ async function executarTurnoDoAgente(
             message_id: outcome.messageId,
             // Explícito: sem isso o modelo tende a emendar texto livre depois do
             // template — que a janela fechada recusaria.
-            message: 'template enviado. Não escreva mais nada neste turno.',
+            message: 'modèle envoyé. N’écrivez plus rien à ce tour.',
           };
         }
         return { ok: true, status: 'aceita_aguardando_canal' };
@@ -1719,7 +1719,7 @@ async function executarTurnoDoAgente(
         if (agentConfig?.activeKbVersionId == null) {
           return {
             ok: false,
-            error: { code: 'no_knowledge_base', message: 'este agente não tem base de conhecimento ativa — siga sem ela.' },
+            error: { code: 'no_knowledge_base', message: 'cet agent n’a pas de base de connaissances active — continuez sans elle.' },
           };
         }
         const out = await searchKnowledge(pool, {
@@ -1752,8 +1752,8 @@ async function executarTurnoDoAgente(
             error: {
               code: 'max_sends_per_turn',
               message:
-                `você já enviou ${seq} mensagens neste turno (teto: ${maxSendsPerTurn}). ` +
-                'NÃO envie mais nada agora — encerre o turno e espere a resposta do lead.',
+                `vous avez déjà envoyé ${seq} messages à ce tour (plafond : ${maxSendsPerTurn}). ` +
+                'N’envoyez plus rien maintenant — terminez le tour et attendez la réponse du lead.',
             },
           };
         }
@@ -1845,10 +1845,10 @@ async function executarTurnoDoAgente(
               pool,
               { tenantId, conversationId: input.conversationId, agentId: agentConfig?.agentId ?? null },
               {
-                title: 'Atendimento que precisa de um humano',
+                title: 'Échange qui nécessite un humain',
                 summary: body, // a mensagem-promessa que a IA tentou enviar
                 blocker:
-                  'Aberto automaticamente: a IA prometeu envolver um humano e não abriu o caso (fail-safe do guardrail).',
+                  'Ouvert automatiquement : l’IA a promis d’impliquer un humain sans ouvrir le dossier (filet de sécurité du garde-fou).',
                 source: 'guardrail_autofallback',
                 contextSnapshot: buildCaseContextSnapshot(),
               },
@@ -1884,7 +1884,7 @@ async function executarTurnoDoAgente(
             if (internalVocabularyVetoCount < MAX_VETOS_DE_VOCABULARIO_INTERNO) {
               return { ok: false, error: { code: chain.code, message: chain.message } };
             }
-            runLog.warn('fail-safe do gate de vocabulário interno: envio liberado após vetos seguidos', {
+            runLog.warn('filet de sécurité du filtre de vocabulaire interne : envoi autorisé après plusieurs refus consécutifs', {
               vetos: internalVocabularyVetoCount,
             });
             // `openedCaseThisTurn` vai pelo valor VIVO (o fail-safe de casos acima pode
@@ -1914,7 +1914,7 @@ async function executarTurnoDoAgente(
               );
             } catch (err) {
               // citação é enriquecimento, não invariante — falha só loga.
-              runLog.warn('citações não anexadas à outbound', {
+              runLog.warn('citations non attachées à l’outbound', {
                 message_id: outcome.messageId,
                 error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
               });
@@ -1930,7 +1930,7 @@ async function executarTurnoDoAgente(
                 ok: true,
                 status: 'aceita_aguardando_canal',
                 message:
-                  'o canal aceitou a mensagem e vai enviá-la quando a sessão voltar — não reenvie.',
+                  'le canal a accepté le message et l’enverra au retour de la session — ne le renvoyez pas.',
               };
             case 'blocked':
               return {
@@ -1938,7 +1938,7 @@ async function executarTurnoDoAgente(
                 error: {
                   code: 'contato_bloqueado',
                   message:
-                    'o contato optou por não receber mensagens (bloqueio irrevogável) — não envie mais nada e encerre o turno.',
+                    'le contact a choisi de ne plus recevoir de messages (blocage irrévocable) — n’envoyez plus rien et terminez le tour.',
                 },
               };
             case 'failed':
@@ -1946,18 +1946,18 @@ async function executarTurnoDoAgente(
                 ok: false,
                 error: {
                   code: 'envio_falhou',
-                  message: 'o canal falhou ao enviar — não tente de novo neste turno; o sistema fará retry.',
+                  message: 'l’envoi a échoué sur le canal — ne réessayez pas à ce tour ; le système fera une nouvelle tentative.',
                 },
               };
             case 'unavailable':
               // transiente (transporte/tool do canal): ensina o modelo a parar; o
               // job re-tenta com a MESMA idempotency_key (ledger ficou 'requested').
-              noteRunError(new Error(`canal indisponível no envio (${outcome.reason}) — job re-tentado pela fila`));
+              noteRunError(new Error(`canal indisponible à l’envoi (${outcome.reason}) — job relancé par la file`));
               return {
                 ok: false,
                 error: {
                   code: 'envio_indisponivel',
-                  message: 'não consegui enviar agora (canal indisponível) — encerre o turno; o sistema re-tentará.',
+                  message: 'impossible d’envoyer maintenant (canal indisponible) — terminez le tour ; le système réessaiera.',
                 },
               };
           }
@@ -1966,7 +1966,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno no envio — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne à l’envoi — terminez le tour maintenant.' },
           };
         }
       },
@@ -1991,7 +1991,7 @@ async function executarTurnoDoAgente(
               ...(update.transition.reason !== undefined ? { reason: update.transition.reason } : {}),
             });
             if (!mirror.ok) {
-              runLog.warn('espelho de stage no CRM falhou — harness mantido', {
+              runLog.warn('copie de l’étape dans le CRM échouée — harness conservé', {
                 to_stage: update.transition.to,
                 reason: mirror.reason,
               });
@@ -2003,20 +2003,20 @@ async function executarTurnoDoAgente(
                 // libera o funil para este assistente.
                 await insertInboxItem(pool, tenantId, {
                   kind: 'other',
-                  title: 'O assistente quis organizar um negócio de um funil que não é dele',
+                  title: 'L’assistant a voulu organiser une affaire d’un tableau qui n’est pas le sien',
                   body:
-                    `O assistente concluiu que este negócio deveria ir para "${update.transition.to}", ` +
-                    `mas ele não cuida do funil onde o negócio está (${mirror.detail}). ` +
-                    `Ninguém mexeu no card. Se ele deveria cuidar desse funil, marque isso na ` +
-                    `configuração do assistente; se não, não há nada a fazer.`,
+                    `L’assistant a conclu que cette affaire devrait passer à "${update.transition.to}", ` +
+                    `mais il ne gère pas le tableau où se trouve l’affaire (${mirror.detail}). ` +
+                    `Personne n’a touché à la carte. S’il devrait gérer ce tableau, indiquez-le dans la ` +
+                    `configuration de l’assistant ; sinon, il n’y a rien à faire.`,
                   refKind: 'lead',
                   refId: leadId,
                 });
               } else if (!MIRROR_WARN_ONLY.has(mirror.reason)) {
                 await insertInboxItem(pool, tenantId, {
                   kind: 'other',
-                  title: 'Espelho de stage no CRM falhou — funil possivelmente inconsistente',
-                  body: `lead_state avançou para "${update.transition.to}" no harness, mas crm_move_lead_stage falhou (${mirror.reason}: ${mirror.detail}). Reconcilie o stage no CRM manualmente.`,
+                  title: 'Copie de l’étape dans le CRM échouée — tableau peut-être incohérent',
+                  body: `lead_state est passé à "${update.transition.to}" dans le harness, mais crm_move_lead_stage a échoué (${mirror.reason}: ${mirror.detail}). Réconciliez l’étape dans le CRM manuellement.`,
                   refKind: 'lead',
                   refId: leadId,
                 });
@@ -2033,7 +2033,7 @@ async function executarTurnoDoAgente(
             ok: false,
             error: {
               code: 'internal_error',
-              message: 'erro interno ao atualizar o estado do lead — encerre o turno agora.',
+              message: 'erreur interne à la mise à jour de l’état du lead — terminez le tour maintenant.',
             },
           };
         }
@@ -2061,7 +2061,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao salvar a nota — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne à l’enregistrement de la note — terminez le tour maintenant.' },
           };
         }
       },
@@ -2079,7 +2079,7 @@ async function executarTurnoDoAgente(
               ok: false,
               error: {
                 code: 'note_not_found',
-                message: 'não há nota com esse id na memória deste lead — confira o id no índice de memória.',
+                message: 'aucune note avec cet id dans la mémoire de ce lead — vérifiez l’id dans l’index de mémoire.',
               },
             };
           }
@@ -2088,7 +2088,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao ler a nota — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne à la lecture de la note — terminez le tour maintenant.' },
           };
         }
       },
@@ -2112,7 +2112,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao acionar o handoff humano — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne au déclenchement du relais humain — terminez le tour maintenant.' },
           };
         }
       },
@@ -2172,7 +2172,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao agendar o retorno — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne à la planification du retour — terminez le tour maintenant.' },
           };
         }
       },
@@ -2196,7 +2196,7 @@ async function executarTurnoDoAgente(
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao ler a reference da skill — encerre o turno agora.' },
+            error: { code: 'internal_error', message: 'erreur interne à la lecture de la reference de la compétence — terminez le tour maintenant.' },
           };
         }
       },
@@ -2231,7 +2231,7 @@ async function executarTurnoDoAgente(
             ok: false,
             error: {
               code: 'invalid_payload',
-              message: 'campos do caso inválidos — informe title, summary e blocker (texto).',
+              message: 'champs du dossier invalides — fournissez title, summary et blocker (texte).',
             },
           };
         }
@@ -2253,13 +2253,13 @@ async function executarTurnoDoAgente(
           return {
             ok: true,
             case_id: res.caseId,
-            message: `caso aberto; continue a conversa com o lead normalmente. ${frase}`,
+            message: `dossier ouvert ; poursuivez normalement la conversation avec le lead. ${frase}`,
           };
         } catch (err) {
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao abrir o caso — encerre o turno.' },
+            error: { code: 'internal_error', message: 'erreur interne à l’ouverture du dossier — terminez le tour.' },
           };
         }
       },
@@ -2271,7 +2271,7 @@ async function executarTurnoDoAgente(
         if (!parsed.success) {
           return {
             ok: false,
-            error: { code: 'invalid_payload', message: 'informe case_id e info (texto).' },
+            error: { code: 'invalid_payload', message: 'fournissez case_id et info (texte).' },
           };
         }
         try {
@@ -2281,12 +2281,12 @@ async function executarTurnoDoAgente(
             { caseId: parsed.data.case_id, info: parsed.data.info },
           );
           if (!res.ok) return res;
-          return { ok: true, message: 'informação enviada ao responsável; aguarde o retorno pelo caso.' };
+          return { ok: true, message: 'information transmise au responsable ; attendez son retour via le dossier.' };
         } catch (err) {
           noteRunError(err instanceof Error ? err : new Error(String(err)));
           return {
             ok: false,
-            error: { code: 'internal_error', message: 'erro interno ao atualizar o caso — encerre o turno.' },
+            error: { code: 'internal_error', message: 'erreur interne à la mise à jour du dossier — terminez le tour.' },
           };
         }
       },
@@ -2328,7 +2328,7 @@ async function executarTurnoDoAgente(
           ? agentConfig
           : { ...agentConfig, toolIds: agentConfig.toolIds.filter((t) => !catalogoEntregue.includes(t)) };
       if (catalogoEntregue.length > 0) {
-        runLog.info('capacidades de catálogo entregues ao operador', { entregues: catalogoEntregue });
+        runLog.info('capacités de catalogue fournies à l’opérateur', { entregues: catalogoEntregue });
       }
       const mcp = await buildMcpTurnTools(deps.crmCfg, { organizationId: tenantId, jobId: job.id }, configDoTurno, runLog);
       if (mcp !== null) {
@@ -2337,7 +2337,7 @@ async function executarTurnoDoAgente(
           if (!(name in rawTools)) rawTools[name] = mcpTool;
         }
         mcpToolIdsDoTurno.push(...mcp.toolIds);
-        runLog.info('tools MCP da tela montadas no turno', { mcp_tool_ids: mcp.toolIds });
+        runLog.info('outils MCP de l’écran montés pour le tour', { mcp_tool_ids: mcp.toolIds });
       }
     } catch (err) {
       // Tool extra é privilégio, não invariante: falha no mint/montagem NÃO
@@ -2351,7 +2351,7 @@ async function executarTurnoDoAgente(
       // ligado na tela, e a única pista existia num log que ninguém lê. É
       // falha-em-verde: anunciada na tela, ausente na execução, nada contando.
       const detalhe = (err instanceof Error ? err.message : String(err)).slice(0, 200);
-      runLog.error('tools MCP da tela não montadas — turno segue sem elas', { error: detalhe });
+      runLog.error('outils MCP de l’écran non montés — le tour continue sans eux', { error: detalhe });
       await avisarCapacidadesAusentes(pool, tenantId, input.conversationId, detalhe, runLog);
     }
   }
@@ -2371,7 +2371,7 @@ async function executarTurnoDoAgente(
   });
   for (const nome of entregues) delete rawTools[nome];
   if (entregues.length > 0) {
-    runLog.info('capacidades entregues ao operador — fora do turno do conversador', {
+    runLog.info('capacités fournies à l’opérateur — hors du tour du conversateur', {
       entregues,
     });
   }
@@ -2429,7 +2429,7 @@ async function executarTurnoDoAgente(
     jailbreakLevel = verdict.level;
     if (verdict.flag) {
       // trace do turno: só flag/level (não PII) — a mensagem e o reason nunca são logados.
-      runLog.warn('jailbreak: sinal detectado na mensagem do lead', {
+      runLog.warn('jailbreak : signal détecté dans le message du lead', {
         jailbreak_flag: true,
         jailbreak_level: verdict.level,
       });
@@ -2441,7 +2441,7 @@ async function executarTurnoDoAgente(
   // único em que removê-los não custa nada. Logado porque "por que o prompt
   // deste turno é diferente do daquele?" precisa ter resposta no trace.
   const projetaContexto = turnoProjeta(mcpToolIdsDoTurno);
-  runLog.info('projeção do contexto do turno', {
+  runLog.info('projection du contexte du tour', {
     projeta: projetaContexto,
     mcp_tools_no_turno: mcpToolIdsDoTurno.length,
   });
@@ -2457,7 +2457,7 @@ async function executarTurnoDoAgente(
   // skill casadas (F3-09) + hint do classificador (F3-11) + instrução de split (F4-xx, quando
   // split_messages está on — Onda 4). Vazios são omitidos.
   const splitHint = (agentConfig?.splitMessages ?? false)
-    ? 'Responda em mensagens curtas e naturais, uma ideia por mensagem — como uma pessoa digitando no WhatsApp. Prefira várias mensagens curtas a um texto único e longo.'
+    ? 'Répondez en messages courts et naturels, une idée par message — comme une personne qui écrit sur WhatsApp. Préférez plusieurs messages courts à un seul texte long.'
     : '';
   // Spec 15: o `case_id` real do caso 'awaiting_lead' desta conversa, se houver — sem
   // isso o modelo nunca consegue chamar provide_case_update quando o lead simplesmente
@@ -2469,10 +2469,10 @@ async function executarTurnoDoAgente(
       : null;
   const caseAwaitingLeadBlock =
     caseAwaitingLead !== null
-      ? `## Caso aguardando resposta deste cliente\n` +
-        `Há um caso aberto (case_id: ${caseAwaitingLead.id}) esperando uma informação dele: "${caseAwaitingLead.ask}". ` +
-        `Se a mensagem dele responde a isso, chame provide_case_update com este case_id e a informação recebida — ` +
-        `NÃO diga que já repassou/avisou o responsável sem chamar a tool.`
+      ? `## Dossier en attente de réponse de ce client\n` +
+        `Un dossier est ouvert (case_id : ${caseAwaitingLead.id}) et attend une information de sa part : "${caseAwaitingLead.ask}". ` +
+        `Si son message y répond, appelez provide_case_update avec ce case_id et l’information reçue — ` +
+        `NE dites PAS que vous avez déjà transmis/prévenu le responsable sans avoir appelé l’outil.`
       : '';
   const openingSuffixes = [matchedSkillsBlock, stageHintBlock, splitHint, caseAwaitingLeadBlock].filter(
     (b) => b !== '',
@@ -2532,7 +2532,7 @@ async function executarTurnoDoAgente(
   if (jailbreakLevel === JAILBREAK_ESCALATION_LEVEL && outOfTablePromiseAttempted) {
     const created = await escalateJailbreakPromise(pool, { tenantId, leadId, level: jailbreakLevel });
     if (created > 0) {
-      runLog.warn('jailbreak: escalação humana criada (flag alta + promessa fora de tabela no turno)', {
+      runLog.warn('jailbreak : escalade humaine créée (signal élevé + promesse hors tableau dans le tour)', {
         jailbreak_level: jailbreakLevel,
       });
     }
@@ -2544,7 +2544,7 @@ async function executarTurnoDoAgente(
   if (outcomes.some((o) => o.kind === 'failed')) {
     // ponytail: retry re-roda o run inteiro (LLM incluso); seq N re-encontra a
     // linha do ledger — 'accepted' pula, 'failed' rotaciona a key (F2-06).
-    throw new Error('envio marcado como failed pelo CRM — run re-tentado pela fila');
+    throw new Error('envoi marqué failed par le CRM — run relancé par la file');
   }
 
   // F3-10: poda os tool results antigos da fita do run ANTES de reenviá-los no fechamento
@@ -2616,7 +2616,7 @@ async function executarTurnoDoAgente(
     papelLigado: agentConfig?.operatorEnabled ?? false,
   });
   if (!disparo.enfileira) {
-    runLog.info('turno do operador não enfileirado', { porque: disparo.porque });
+    runLog.info('tour de l’opérateur non mis en file', { porque: disparo.porque });
   } else {
     try {
       const { deduped } = await enqueueJob(pool, tenantId, {
@@ -2629,9 +2629,9 @@ async function executarTurnoDoAgente(
           agent_id: agentConfig?.agentId ?? null,
         },
       });
-      runLog.info('turno do operador enfileirado', { deduped });
+      runLog.info('tour de l’opérateur mis en file', { deduped });
     } catch (err) {
-      runLog.error('turno do operador NÃO foi enfileirado (o turno segue)', {
+      runLog.error('le tour de l’opérateur n’a PAS été mis en file (le tour continue)', {
         error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
       });
       // O CATCH TINHA A DOUTRINA CERTA E A CONCLUSÃO ERRADA.
@@ -2656,18 +2656,18 @@ async function executarTurnoDoAgente(
             {
               kind: 'promise_unfulfilled',
               severity: 'warn',
-              title: 'Um retorno prometido a um cliente ficou sem dono',
+              title: 'Un retour promis à un client est resté sans responsable',
               body:
-                'O assistente prometeu algo a esta pessoa nesta conversa e o passo que registra ' +
-                'o cumprimento não chegou a ser agendado. Abra a conversa, veja o que foi ' +
-                'combinado e cumpra você mesmo.',
+                'L’assistant a promis quelque chose à cette personne dans cette conversation et l’étape qui enregistre ' +
+                'son exécution n’a pas été planifiée. Ouvrez la conversation, voyez ce qui a été ' +
+                'convenu et tenez l’engagement vous-même.',
               refKind: 'conversation',
               refId: input.conversationId,
             },
             'kind_e_ref',
           );
         } catch (erroDoAviso) {
-          runLog.error('aviso de promessa sem dono não foi gravado', {
+          runLog.error('l’alerte de promesse sans responsable n’a pas été enregistrée', {
             error: (erroDoAviso instanceof Error ? erroDoAviso.message : String(erroDoAviso)).slice(0, 120),
           });
         }
@@ -2709,13 +2709,13 @@ async function executarTurnoDoAgente(
         },
       });
       if (!r.routed) {
-        runLog.info('checkpoint sem negócio para pendurar: registrado no event_log', {
+        runLog.info('checkpoint sans affaire à laquelle se rattacher : enregistré dans l’event_log', {
           reason: r.reason,
         });
       }
     } catch (err) {
       // A timeline do turno não pode derrubar o turno.
-      runLog.error('falha ao registrar atividade de checkpoint (segue)', {
+      runLog.error('échec de l’enregistrement de l’activité de checkpoint (on continue)', {
         error: err instanceof Error ? err.name : 'unknown',
       });
     }
@@ -2755,14 +2755,14 @@ async function executarTurnoDoAgente(
     );
     if (alvo.routed) {
       const r = await recalculaScoreDoLead(pool, tenantId, alvo.leadId);
-      runLog.info('score do negócio recalculado', {
+      runLog.info('score de l’affaire recalculé', {
         lead_id: alvo.leadId,
         gravou: r.gravou,
         ...(r.motivo !== undefined ? { motivo: r.motivo } : {}),
       });
     }
   } catch (err) {
-    runLog.error('falha ao recalcular score (segue)', {
+    runLog.error('échec du recalcul du score (on continue)', {
       error: err instanceof Error ? err.name : 'unknown',
     });
   }
@@ -2801,13 +2801,13 @@ async function executarTurnoDoAgente(
       { queuedRetryDelayMs: deps.knobs.queuedRetryDelayMs },
     );
     throw new JobSettledError(
-      'turno encerrado com veto do sink (is_blocked) — job cancelado em definitivo, checkpoint gravado',
+      'tour terminé avec veto du sink (is_blocked) — job annulé définitivement, checkpoint enregistré',
     );
   }
 
   await mcpCleanup?.();
 
-  runLog.info('turno do agente concluído', {
+  runLog.info('tour de l’agent terminé', {
     kind: job.kind,
     messages_sent: outcomes.length,
     model: turn.model,

@@ -77,30 +77,30 @@ export async function mirrorLeadStageToCrm(
     const traduz: Record<string, { reason: MirrorReason; detail: string }> = {
       sem_mapeamento: {
         reason: 'not_configured',
-        detail: `nenhum estágio do pipeline declara agent_stage_hint = "${input.toStage}"`,
+        detail: `aucune étape du pipeline ne déclare agent_stage_hint = "${input.toStage}"`,
       },
-      sem_negocio: { reason: 'not_configured', detail: 'o contato não tem negócio aberto para mover' },
+      sem_negocio: { reason: 'not_configured', detail: 'le contact n’a pas d’affaire ouverte à déplacer' },
       // O detalhe vem do sync (distingue "nenhum funil liberado" de "funil de
       // outro time") e é o que o aviso na Central mostra ao dono.
       fora_do_escopo: {
         reason: 'fora_do_escopo',
-        detail: 'este assistente não cuida do funil onde o negócio está',
+        detail: 'cet assistant ne gère pas le tableau où se trouve l’affaire',
       },
       ambiguo: {
         reason: 'not_configured',
-        detail: 'o contato tem mais de um negócio aberto — nenhum foi movido',
+        detail: 'le contact a plus d’une affaire ouverte — aucune n’a été déplacée',
       },
       conflito_humano: {
         reason: 'human_conflict',
-        detail: 'um humano moveu o card durante a operação — a decisão dele prevalece',
+        detail: 'un humain a déplacé la carte pendant l’opération — sa décision l’emporte',
       },
       falha_de_escrita: {
         reason: 'crm_error',
-        detail: `o UPDATE do card falhou: ${r.detalhe ?? 'sem detalhe'}`,
+        detail: `l’UPDATE de la carte a échoué : ${r.detalhe ?? 'sans détail'}`,
       },
       indisponivel: {
         reason: 'crm_unavailable',
-        detail: `o banco do CRM não respondeu: ${r.detalhe ?? 'sem detalhe'}`,
+        detail: `la base du CRM n’a pas répondu : ${r.detalhe ?? 'sans détail'}`,
       },
     };
     const t = traduz[r.motivo];
@@ -110,7 +110,7 @@ export async function mirrorLeadStageToCrm(
     if (t && r.detalhe) return { ok: false, reason: t.reason, detail: r.detalhe };
     // Motivo desconhecido NÃO pode virar warn-only silencioso: rótulo novo sem
     // tradução aqui é bug de programação, e o inbox é onde ele aparece.
-    if (!t) return { ok: false, reason: 'crm_error', detail: `motivo não traduzido: ${r.motivo}` };
+    if (!t) return { ok: false, reason: 'crm_error', detail: `motif non traduit : ${r.motivo}` };
     return { ok: false, ...t };
   } catch (err) {
     return {

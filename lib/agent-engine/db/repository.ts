@@ -73,7 +73,7 @@ export interface InboxItemRow {
 function one<T>(rows: T[], what: string): T {
   const row = rows[0];
   if (row === undefined) {
-    throw new Error(`esperava uma linha de ${what}, veio nenhuma`);
+    throw new Error(`une ligne de ${what}était attendue, aucune reçue`);
   }
   return row;
 }

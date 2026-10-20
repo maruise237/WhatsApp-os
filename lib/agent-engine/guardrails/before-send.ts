@@ -228,8 +228,8 @@ const stopGate: Gate = {
           pass: false,
           code: 'contato_bloqueado',
           reason:
-            'o lead optou por sair do atendimento (bloqueio/opt-out irrevogável) — não é ' +
-            'possível enviar nada a ele; encerre o turno sem tentar de novo.',
+            'le lead a choisi de quitter l’échange (blocage/désinscription irrévocable) — il n’est pas ' +
+            'possible de lui envoyer quoi que ce soit ; terminez le tour sans réessayer.',
         }
       : { pass: true },
 };
@@ -254,8 +254,8 @@ export const lgpdGate: Gate = {
         pass: false,
         code: 'lgpd_anonymized',
         reason:
-          'este contato está anonimizado no CRM (LGPD) — é proibido enviar qualquer mensagem a ' +
-          'ele; encerre o turno sem tentar de novo.',
+          'ce contact est anonymisé dans le CRM (RGPD) — il est interdit de lui envoyer le moindre message ' +
+          '; terminez le tour sans réessayer.',
       };
     }
     if (lgpd.isProspecting && lgpd.isFirstOutbound && !isLegalBasisValid(lgpd.legalBasis)) {
@@ -263,9 +263,9 @@ export const lgpdGate: Gate = {
         pass: false,
         code: 'lgpd_missing_legal_basis',
         reason:
-          'não há base legal válida (LGPD) para o 1º contato de prospecção com este lead ' +
-          '(consentimento, ou legítimo interesse com LIA registrada); não é possível iniciar a ' +
-          'abordagem — encerre o turno, o time comercial vai regularizar a base legal no CRM.',
+          'il n’existe pas de base légale valide (RGPD) pour le 1er contact de prospection avec ce lead ' +
+          '(consentement, ou intérêt légitime avec LIA enregistrée) ; impossible d’initier ' +
+          'la prise de contact — terminez le tour, l’équipe commerciale régularisera la base légale dans le CRM.',
       };
     }
     return { pass: true };
@@ -338,8 +338,8 @@ export const casePromiseGate: Gate = {
       pass: false,
       code: 'case_promise_without_case',
       reason:
-        'Você prometeu envolver um humano mas não abriu um caso. Chame a tool ' +
-        'open_human_case (descrevendo o que precisa) OU reformule a mensagem sem prometer humano.',
+        'Vous avez promis d’impliquer un humain mais vous n’avez pas ouvert de dossier. Appelez l’outil ' +
+        'open_human_case (en décrivant ce qu’il faut) OU reformulez le message sans promettre d’humain.',
     };
   },
 };
@@ -402,8 +402,8 @@ export const disclosureGate: Gate = {
       pass: false,
       code: 'disclosure_required',
       reason:
-        'a 1ª mensagem a um lead novo precisa se apresentar como assistente virtual antes de ' +
-        `qualquer outra coisa; inclua no início: "${template.trim()}"`,
+        'le 1er message à un nouveau lead doit se présenter comme assistant virtuel avant ' +
+        `toute autre chose ; incluez au début : "${template.trim()}"`,
     };
   },
 };
@@ -474,8 +474,8 @@ export const messagingWindowGate: Gate = {
       pass: false,
       code: 'messaging_window_closed',
       reason:
-        'a janela de 24 horas com este contato fechou; o canal vai recusar texto livre. ' +
-        'Use um template aprovado (ferramenta send_template) ou encerre o turno sem enviar.',
+        'la fenêtre de 24 heures avec ce contact est fermée ; le canal refusera le texte libre. ' +
+        'Utilisez un modèle approuvé (outil send_template) ou terminez le tour sans envoyer.',
     };
   },
 };
@@ -954,6 +954,6 @@ async function rollback(client: pg.PoolClient, cause: unknown): Promise<void> {
   try {
     await client.query('rollback');
   } catch (rollbackErr) {
-    throw new AggregateError([cause, rollbackErr], 'rollback falhou após erro na cadeia before_send');
+    throw new AggregateError([cause, rollbackErr], 'rollback échoué après une erreur dans la chaîne before_send');
   }
 }

@@ -110,7 +110,7 @@ export async function scheduleCronJob(
     ],
   );
   const row = rows[0];
-  if (row === undefined) throw new Error('cron_jobs insert não devolveu linha');
+  if (row === undefined) throw new Error('l’insertion dans cron_jobs n’a renvoyé aucune ligne');
   return row;
 }
 
@@ -175,7 +175,7 @@ async function applyFailure(
     );
     await client.query(
       `insert into agent_inbox_items (organization_id, kind, severity, title, body, ref_kind, ref_id)
-       values ($1, 'job_dead', 'critical', 'Cron desabilitado após falha de disparo', $2, 'cron_jobs', $3)`,
+       values ($1, 'job_dead', 'critical', 'Cron désactivé après un échec de déclenchement', $2, 'cron_jobs', $3)`,
       [cron.organization_id, `kind=${cron.kind}; job_kind=${cron.job_kind}; motivo=${classification}; attempts=${attempts}`, cron.id],
     );
     return { outcome: 'disabled', classification, attempts };
@@ -259,7 +259,7 @@ async function fireOneDue(
     try {
       await client.query('rollback');
     } catch (rollbackErr) {
-      throw new AggregateError([err, rollbackErr], 'rollback falhou no disparo do cron');
+      throw new AggregateError([err, rollbackErr], 'rollback échoué lors du déclenchement du cron');
     }
     throw err;
   } finally {

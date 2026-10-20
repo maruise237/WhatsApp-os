@@ -78,12 +78,12 @@ export const operatorTurnPayloadSchema = z
  * vazamento medido); aqui, é o vocabulário de trabalho.
  */
 export const SYSTEM_DO_OPERADOR =
-  'Você é o operador do sistema. Seu trabalho é deixar o CRM refletindo o que aconteceu na ' +
-  'conversa que acabou de ocorrer — mover o lead, registrar, abrir o que precisa ser aberto.\n\n' +
-  'VOCÊ NÃO FALA COM O CLIENTE. Você não tem como enviar mensagem, e não deve tentar: quem ' +
-  'conversa é outro. Se algo exigir falar com a pessoa, registre e siga.\n\n' +
-  'Use apenas o que a conversa sustenta. Não invente avanço, não registre o que ninguém disse. ' +
-  'Se não houver nada a fazer, não faça nada — um turno sem ação é uma resposta válida.';
+  'Vous êtes l’opérateur du système. Votre travail consiste à faire refléter dans le CRM ce qui s’est passé dans la ' +
+  'conversation qui vient d’avoir lieu — déplacer le lead, enregistrer, ouvrir ce qui doit être ouvert.\n\n' +
+  'VOUS NE PARLEZ PAS AU CLIENT. Vous n’avez aucun moyen d’envoyer un message, et ne devez pas essayer : c’est ' +
+  'quelqu’un d’autre qui converse. Si quelque chose exige de parler à la personne, enregistrez-le et continuez.\n\n' +
+  'Utilisez uniquement ce que la conversation justifie. N’inventez pas d’avancée, n’enregistrez pas ce que personne n’a dit. ' +
+  'S’il n’y a rien à faire, ne faites rien — un tour sans action est une réponse valide.';
 
 /** O briefing do turno: o que o Conversador declarou, em linguagem de negócio. */
 export function renderBriefingDoOperador(
@@ -95,23 +95,23 @@ export function renderBriefingDoOperador(
     // modelo "não houve declaração" e pedir que ele olhe o estado é diferente de
     // deixá-lo achar que o turno foi vazio.
     return [
-      'O turno anterior NÃO deixou declaração do que aconteceu (fechamento incompleto).',
-      'Verifique o estado do lead e registre o que estiver claramente pendente.',
-      'Na dúvida, não faça nada.',
+      'Le tour précédent N’a PAS laissé de déclaration de ce qui s’est passé (clôture incomplète).',
+      'Vérifiez l’état du lead et enregistrez ce qui est clairement en attente.',
+      'Dans le doute, ne faites rien.',
     ].join('\n');
   }
-  const linhas = ['Foi isto que aconteceu na conversa que acabou:'];
+  const linhas = ['Voici ce qui s’est passé dans la conversation qui vient de se terminer :'];
   if (declaracao.intencoes.length > 0) {
-    linhas.push('', 'O que a pessoa quer:');
-    for (const i of declaracao.intencoes) linhas.push(`- ${i.o_que} (na conversa: "${i.evidencia}")`);
+    linhas.push('', 'Ce que veut la personne :');
+    for (const i of declaracao.intencoes) linhas.push(`- ${i.o_que} (dans la conversation : "${i.evidencia}")`);
   }
   if (promessas.length > 0) {
-    linhas.push('', 'O que foi prometido a ela (precisa existir no sistema):');
+    linhas.push('', 'Ce qui lui a été promis (doit exister dans le système) :');
     for (const p of promessas) {
-      linhas.push(`- ${p.o_que}${p.prazo === null ? '' : ` — até ${p.prazo}`}`);
+      linhas.push(`- ${p.o_que}${p.prazo === null ? '' : ` — au plus tard ${p.prazo}`}`);
     }
   }
-  linhas.push('', 'Deixe o sistema refletindo isso. O que já estiver registrado, não repita.');
+  linhas.push('', 'Faites en sorte que le système reflète cela. Ce qui est déjà enregistré, ne le répétez pas.');
   return linhas.join('\n');
 }
 
@@ -245,7 +245,7 @@ export function createOperatorTurnHandler(deps: InboundTurnDeps) {
     const tenantId = job.organization_id;
     const leadId = job.contact_id;
     if (leadId === null) {
-      throw new Error('operator_turn sem contact_id — o CHECK da fila deveria impedir');
+      throw new Error('operator_turn sans contact_id — le CHECK de la file aurait dû l’empêcher');
     }
     const payload = operatorTurnPayloadSchema.parse(job.payload);
     const log = withFields(deps.log, {

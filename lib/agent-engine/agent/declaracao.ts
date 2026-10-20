@@ -42,8 +42,8 @@ import { z } from 'zod';
  * ("nunca invente avanço sem evidência na conversa").
  */
 export const intencaoSchema = z.object({
-  o_que: z.string().min(1).describe('em linguagem de negócio: "quer remarcar", "desistiu por preço"'),
-  evidencia: z.string().min(1).describe('o trecho da conversa que sustenta'),
+  o_que: z.string().min(1).describe('en langage métier : "veut reprogrammer", "a renoncé à cause du prix"'),
+  evidencia: z.string().min(1).describe('le passage de la conversation qui le justifie'),
 });
 
 /**
@@ -55,8 +55,8 @@ export const intencaoSchema = z.object({
  * sem data, e forçar uma data faria o modelo inventar uma.
  */
 export const promessaSchema = z.object({
-  o_que: z.string().min(1).describe('o que foi prometido, como o lead entendeu'),
-  prazo: z.string().nullable().default(null).describe('data/hora ISO 8601 quando houver, senão null'),
+  o_que: z.string().min(1).describe('ce qui a été promis, tel que le lead l’a compris'),
+  prazo: z.string().nullable().default(null).describe('date/heure ISO 8601 le cas échéant, sinon null'),
 });
 
 /**
@@ -71,7 +71,7 @@ export const declaracaoDoTurnoSchema = z
     nada_a_declarar: z
       .boolean()
       .default(false)
-      .describe('true = avaliei o turno e não havia intenção nem promessa'),
+      .describe('true = j’ai évalué le tour et il n’y avait ni intention ni promesse'),
   })
   .strict();
 
@@ -91,14 +91,14 @@ export type DeclaracaoDoTurno = z.infer<typeof declaracaoDoTurnoSchema>;
  * a PESSOA quer e o que foi prometido a ela — vocabulário de quem atende.
  */
 export const DECLARACAO_INSTRUCTION =
-  'Inclua também o campo "declaracao", com o que você entendeu deste turno: ' +
+  'Incluez aussi le champ "declaracao", avec ce que vous avez compris de ce tour : ' +
   '{"intencoes": [{"o_que": "…", "evidencia": "…"}], "promessas": [{"o_que": "…", "prazo": "…"|null}], ' +
   '"nada_a_declarar": false}. ' +
-  'Em "intencoes", o que a pessoa quer, em linguagem simples ("quer remarcar", "desistiu por causa do preço"), ' +
-  'com o trecho da conversa que mostra isso. Em "promessas", tudo que você prometeu a ela — ' +
-  'inclusive "vou verificar e te aviso" — com o prazo quando houver combinado um. ' +
-  'Se o turno não teve nem intenção nem promessa, mande "nada_a_declarar": true e as duas listas vazias. ' +
-  'Nunca invente: sem trecho que sustente, não declare.';
+  'Dans "intencoes", ce que veut la personne, en langage simple ("veut reprogrammer", "a renoncé à cause du prix"), ' +
+  'avec le passage de la conversation qui le montre. Dans "promessas", tout ce que vous lui avez promis — ' +
+  'y compris "je vérifie et je vous préviens" — avec le délai lorsqu’un délai a été convenu. ' +
+  'Si le tour n’a eu ni intention ni promesse, envoyez "nada_a_declarar": true et les deux listes vides. ' +
+  'N’inventez jamais : sans passage qui le justifie, ne déclarez rien.';
 
 /**
  * A declaração vista por um HUMANO que vai assumir a conversa.
@@ -115,14 +115,14 @@ export function renderDeclaracaoParaHumano(declaracao: DeclaracaoDoTurno | null)
   if (declaracao === null) return '';
   const linhas: string[] = [];
   if (declaracao.intencoes.length > 0) {
-    linhas.push(`O que a pessoa quer: ${declaracao.intencoes.map((i) => i.o_que).join('; ')}`);
+    linhas.push(`Ce que veut la personne : ${declaracao.intencoes.map((i) => i.o_que).join('; ')}`);
   }
   if (declaracao.promessas.length > 0) {
     // O prazo entra colado na promessa, não numa lista à parte: quem assume
     // precisa ver "o quê" e "até quando" na mesma linha para agir.
     linhas.push(
-      `Prometido a ela: ${declaracao.promessas
-        .map((p) => (p.prazo === null ? p.o_que : `${p.o_que} (até ${p.prazo})`))
+      `Promis à la personne : ${declaracao.promessas
+        .map((p) => (p.prazo === null ? p.o_que : `${p.o_que} (au plus tard ${p.prazo})`))
         .join('; ')}`,
     );
   }

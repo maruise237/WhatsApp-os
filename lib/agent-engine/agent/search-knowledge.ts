@@ -94,7 +94,7 @@ export async function searchKnowledge(
       // causa de uma linha de telemetria. Mas NÃO mudo (molde do irmão
       // `ai_router_decisions` em inbound-turn): se o insert falhar sempre, o
       // painel mostra zero buscas, que é indistinguível de "ninguém buscou".
-      deps?.log?.warn('busca de conhecimento não registrada', {
+      deps?.log?.warn('recherche de connaissances non enregistrée', {
         error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
       });
     }
@@ -105,7 +105,7 @@ export async function searchKnowledge(
       ok: false,
       error: {
         code: 'knowledge_unavailable',
-        message: 'a base de conhecimento está indisponível agora — responda com o que você já sabe e não invente fatos.',
+        message: 'la base de connaissances est indisponible pour le moment — répondez avec ce que vous savez déjà et n’inventez pas de faits.',
       },
     };
   }

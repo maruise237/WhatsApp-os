@@ -49,7 +49,7 @@ function truncateOneLine(s: string, max: number): string {
 
 function buildStub(toolName: string, args: unknown, resultText: string): string {
   const argsSummary = args === undefined ? '—' : truncateOneLine(JSON.stringify(args), STUB_ARGS_MAX_CHARS);
-  return `[resultado podado — tool=${toolName} args=${argsSummary} → ${truncateOneLine(resultText, STUB_RESULT_MAX_CHARS)}]`;
+  return `[résultat élagué — tool=${toolName} args=${argsSummary} → ${truncateOneLine(resultText, STUB_RESULT_MAX_CHARS)}]`;
 }
 
 /**

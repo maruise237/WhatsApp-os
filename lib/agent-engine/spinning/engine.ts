@@ -80,10 +80,10 @@ export function decideSpinning(input: SpinningInput): SpinningDecision {
       code: 'mass_identical',
       matchCount,
       reason:
-        `copy repetida em massa: ${matchCount} envio(s) idêntico(s) ou quase-idêntico(s) ` +
-        `nas últimas ${window.length} mensagens deste número. Template idêntico em massa é ` +
-        `gatilho de ban — varie o texto (personalize com o contexto do lead, reordene, troque ` +
-        `a abertura) antes de reenviar.`,
+        `texte répété en masse : ${matchCount} envoi(s) identique(s) ou quasi identique(s) ` +
+        `dans les ${window.length} derniers messages de ce numéro. Un modèle identique en masse est un ` +
+        `déclencheur de blocage — variez le texte (personnalisez avec le contexte du lead, réordonnez, changez ` +
+        `l’ouverture) avant de renvoyer.`,
     };
   }
   return { allow: true };
