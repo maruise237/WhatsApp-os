@@ -41,7 +41,7 @@ describe("parseReaisToCents", () => {
 
 describe("formatCentsBRL", () => {
   it("mostra em reais o que está guardado em centavos", () => {
-    expect(formatCentsBRL(24990).replace(/ /g, " ")).toBe("R$ 249,90");
-    expect(formatCentsBRL(0).replace(/ /g, " ")).toBe("R$ 0,00");
+    expect(formatCentsBRL(24990).replace(/ /g, " ")).toBe("249,90");
+    expect(formatCentsBRL(0).replace(/ /g, " ")).toBe("0,00");
   });
 });

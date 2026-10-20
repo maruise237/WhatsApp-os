@@ -98,7 +98,7 @@ interface Props {
 function fmtDate(s: string | null | undefined): string {
   if (!s) return "—";
   try {
-    return new Date(s).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    return new Date(s).toLocaleString("fr-FR", { timeZone: "Africa/Douala" });
   } catch {
     return s;
   }
@@ -107,7 +107,7 @@ function fmtDate(s: string | null | undefined): string {
 function fmtMoney(cents: number | null | undefined, currency: string | null | undefined): string {
   if (cents == null) return "—";
   const v = cents / 100;
-  return `${currency ?? "BRL"} ${v.toFixed(2)}`;
+  return `${v.toFixed(2)} ${currency ?? "XAF"}`;
 }
 
 /**
@@ -322,7 +322,7 @@ export function LgpdExportPdf({ data, unsignedWarning }: Props): React.ReactElem
         {/* CONTROLADOR, nunca marca — ver o cabeçalho deste arquivo. */}
         <View style={styles.footer} fixed>
           <Text>
-            Controlador: {data.organization_legal_name || "—"} · Rapport de droit d’accès aux données · Délégué à la protection des données (DPO) : {encarregado(data)} · Validité du lien de téléchargement selon l’e-mail reçu
+            Responsable du traitement : {data.organization_legal_name || "—"} · Rapport de droit d’accès aux données · Délégué à la protection des données (DPO) : {encarregado(data)} · Validité du lien de téléchargement selon l’e-mail reçu
           </Text>
         </View>
       </Page>

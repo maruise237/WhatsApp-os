@@ -74,7 +74,7 @@ export function SectionPatterns() {
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Cliente depuis mars 2024</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <span className="ds-key">LTV</span><span className="ds-display" style={{ fontSize: 22, fontWeight: 600 }}>R$ 4.882,40</span>
+            <span className="ds-key">LTV</span><span className="ds-display" style={{ fontSize: 22, fontWeight: 600 }}>4 882 FCFA</span>
             <span className="ds-key">Commandes</span><span style={{ fontSize: 14 }}>12 (3 sur les 90 derniers jours)</span>
           </div>
         </div>
@@ -95,7 +95,7 @@ export function SectionPatterns() {
               <div className="ds-kanban-card" key={i}>
                 <div className="row">
                   <span className="title">Commande n°{(12440 + i + col.n).toString()}</span>
-                  <span className="value">R$ {(150 + i * 88).toFixed(2).replace(".", ",")}</span>
+                  <span className="value">{150 + i * 88} FCFA</span>
                 </div>
                 <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Client {i + 1} · pix</div>
                 <div className="row">

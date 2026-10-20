@@ -83,7 +83,7 @@ export function extractPromises(body: string): DetectedPromise[] {
 }
 
 const brl = (cents: number): string =>
-  `R$ ${(cents / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `${(cents / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
 
 /**
  * Vete quando um valor detectado CONTRADIZ claramente a tabela versionada da org

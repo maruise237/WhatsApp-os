@@ -144,7 +144,7 @@ function avisoDaChave(status: BudgetStatus, t: (text: string) => string): string
  */
 const AVISO_DE_MEDICAO =
   "Une partie de ce que l’IA a dépensé ce mois-ci n’est pas comptée ici : le produit ne connaît pas encore " +
-  "le prix du modèle utilisé ; le chiffre ci-dessous est donc INFÉRIEUR à la réalité et " +
+  "le prix du modèle utilisé ; le chiffre ci-dessous est donc INFÉRIEUR au montant réel et " +
   "l’arrêt au plafond peut ne pas se produire. En attendant, suivez la dépense directement dans " +
   "le tableau de bord de votre fournisseur d’IA.";
 

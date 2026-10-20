@@ -19,7 +19,7 @@ describe("explainSendResult — o que o modelo lê", () => {
     const o = explainSendResult({ sent: true, externalId: "wamid.X" });
     expect(o.ok).toBe(true);
     expect(o.retriable).toBe(false);
-    expect(o.message).toMatch(/Não escreva mais nada/i);
+    expect(o.message).toMatch(/N’écrivez plus rien/i);
   });
 
   it("valor faltando é o ÚNICO caso em que vale tentar de novo", () => {
@@ -40,7 +40,7 @@ describe("explainSendResult — o que o modelo lê", () => {
   it("todo desfecho diz a CONDUTA, não só o problema", () => {
     for (const r of TODOS) {
       const { message } = explainSendResult(r);
-      expect(message, JSON.stringify(r)).toMatch(/Encerre o turno|chame a ferramenta|Não escreva/i);
+      expect(message, JSON.stringify(r)).toMatch(/Terminez le tour|rappelez l’outil|N’écrivez plus rien/i);
     }
   });
 

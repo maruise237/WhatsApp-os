@@ -25,11 +25,11 @@ function formatBRL(cents: number | null, currency: string | null): string {
   try {
     return new Intl.NumberFormat("fr-FR", {
       style: "currency",
-      currency: currency ?? "BRL",
+      currency: currency ?? "XAF",
       maximumFractionDigits: 0,
     }).format(cents / 100);
   } catch {
-    return `R$ ${(cents / 100).toFixed(0)}`;
+    return `${(cents / 100).toFixed(0)} ${currency ?? "XAF"}`;
   }
 }
 

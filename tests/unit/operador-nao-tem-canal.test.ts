@@ -41,7 +41,7 @@ describe("o Operador não tem canal", () => {
   });
 
   it("o system do Operador é explícito sobre não falar — cinto, além da ausência", () => {
-    expect(SYSTEM_DO_OPERADOR).toContain("NÃO FALA COM O CLIENTE");
+    expect(SYSTEM_DO_OPERADOR).toContain("VOUS NE PARLEZ PAS AU CLIENT");
   });
 
   it("o system do Operador PODE usar vocabulário de sistema — é o inverso do Conversador", () => {
@@ -57,8 +57,8 @@ describe("briefing do Operador", () => {
     // De novo a distinção do passo 2, agora virando texto: dizer "não houve
     // declaração" é diferente de deixar o modelo achar que o turno foi vazio.
     const ausente = renderBriefingDoOperador(null, []);
-    expect(ausente).toContain("NÃO deixou declaração");
-    expect(ausente).toContain("Na dúvida, não faça nada");
+    expect(ausente).toContain("N’a PAS laissé de déclaration");
+    expect(ausente).toContain("Dans le doute, ne faites rien");
   });
 
   it("promessa com prazo chega com o prazo — é o que decide a ação", () => {
@@ -69,7 +69,7 @@ describe("briefing do Operador", () => {
     };
     const texto = renderBriefingDoOperador(d, d.promessas);
     expect(texto).toContain("quer remarcar");
-    expect(texto).toContain("confirmar o horário — até 2026-08-08T12:00:00Z");
+    expect(texto).toContain("confirmar o horário — au plus tard 2026-08-08T12:00:00Z");
   });
 
   it("a evidência viaja junto da intenção — sem ela o Operador agiria sobre afirmação sem lastro", () => {
@@ -85,6 +85,6 @@ describe("briefing do Operador", () => {
     // Enquanto os dois papéis convivem (spec 16, passo 4 roda em paralelo), esta
     // linha é o que evita ação em dobro.
     const d: DeclaracaoDoTurno = { intencoes: [], promessas: [], nada_a_declarar: false };
-    expect(renderBriefingDoOperador(d, [])).toContain("não repita");
+    expect(renderBriefingDoOperador(d, [])).toContain("ne le répétez pas");
   });
 });

@@ -64,7 +64,7 @@ function members(): TeamMember[] {
       revoked_at: null,
       created_at: "2026-01-02T00:00:00Z",
       email: "agente@example.com",
-      full_name: "Agente",
+      full_name: "Agent",
       last_sign_in_at: null,
     },
   ];
@@ -103,7 +103,7 @@ describe("TeamMembersClient — seletor de papel (G2-02)", () => {
     const user = userEvent.setup();
     renderClient();
 
-    const trigger = await screen.findByRole("combobox", { name: /Rôle de Agente/i });
+    const trigger = await screen.findByRole("combobox", { name: /Rôle de Agent/i });
     expect(trigger).toHaveTextContent("agent");
     await user.click(trigger);
     await user.click(await screen.findByRole("option", { name: "manager" }));
@@ -115,7 +115,7 @@ describe("TeamMembersClient — seletor de papel (G2-02)", () => {
     });
 
     resolvePatch({ data: { user_id: AGENT_ID, role: "manager" } });
-    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Papel atualizado."));
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Rôle mis à jour."));
   });
 
   it("erro no PATCH → rollback do papel e toast de erro", async () => {
@@ -132,7 +132,7 @@ describe("TeamMembersClient — seletor de papel (G2-02)", () => {
     const user = userEvent.setup();
     renderClient();
 
-    const trigger = await screen.findByRole("combobox", { name: /Rôle de Agente/i });
+    const trigger = await screen.findByRole("combobox", { name: /Rôle de Agent/i });
     await user.click(trigger);
     await user.click(await screen.findByRole("option", { name: "viewer" }));
 

@@ -139,12 +139,12 @@ describe("mapLinha", () => {
 
   it("telefone malformado gera erro nominal da linha", () => {
     const { motivo } = mapLinha(["Ana", "123", "", ""], indices);
-    expect(motivo).toMatch(/telefone inválido/);
+    expect(motivo).toMatch(/téléphone invalide/);
   });
 
   it("e-mail malformado gera erro nominal da linha", () => {
     const { motivo } = mapLinha(["Ana", "", "nao-e-email", ""], indices);
-    expect(motivo).toMatch(/e-mail inválido/);
+    expect(motivo).toMatch(/e-mail invalide/);
   });
 
   it("células faltando no fim da linha não derrubam o mapeamento", () => {

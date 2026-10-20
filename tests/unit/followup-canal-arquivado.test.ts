@@ -134,7 +134,7 @@ describe("followup_turn — canal arquivado", () => {
     const { pool } = fakePool({ archivedAt: "2026-08-01T10:00:00.000Z" });
     const run = handler();
 
-    await expect(run(job(), pool, ctx)).rejects.toThrow(/canal arquivado/i);
+    await expect(run(job(), pool, ctx)).rejects.toThrow(/canal archivé/i);
     expect(runAgentTurn).not.toHaveBeenCalled();
   });
 
@@ -169,7 +169,7 @@ describe("followup_turn — canal arquivado", () => {
     query.mockResolvedValueOnce({ rows: [] });
     const run = handler();
 
-    await expect(run(job(), pool, ctx)).rejects.toThrow(/impossível retomar o contato/i);
+    await expect(run(job(), pool, ctx)).rejects.toThrow(/impossible de reprendre contact/i);
     expect(runAgentTurn).not.toHaveBeenCalled();
   });
 });

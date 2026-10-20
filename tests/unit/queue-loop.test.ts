@@ -119,7 +119,7 @@ describe("rodarLoopDaFila", () => {
     // Rodada 1 claima sem relógio (boot); rodada 2 consulta, o relógio lança, e
     // o claim acontece assim mesmo — 2 claims, não 1.
     expect(claimar).toHaveBeenCalledTimes(2);
-    expect(log.erros.map((e) => e.msg)).toContain("relógio da fila indisponível — claim segue no ritmo curto");
+    expect(log.erros.map((e) => e.msg)).toContain("horloge de la file indisponible — le claim continue au rythme court");
   });
 
   it("espera abortada pelo desligamento ENCERRA o laço em vez de rejeitar", async () => {

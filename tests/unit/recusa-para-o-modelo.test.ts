@@ -43,11 +43,11 @@ describe("recusa de capacidade — o texto que vai ao modelo", () => {
   it("capacidade operada por pessoa diz que É por pessoa, e oferece caminho", () => {
     const humana = TOOL_CATALOG.find((t) => t.apenasHumano)!;
     const texto = recusaDeCapacidadeParaOModelo(humana.name);
-    expect(texto).toMatch(/PESSOA do time/i);
+    expect(texto).toMatch(/PERSONNE de l’équipe/i);
     // "não conseguiu" sem próximo passo é beco — o invariante 5 pede a saída.
-    expect(texto).toMatch(/ofereça que alguém do time faça/i);
+    expect(texto).toMatch(/proposez que quelqu’un de l’équipe s’en charge/i);
     // E a instrução tem que dizer que a culpa não é de quem está falando.
-    expect(texto).toMatch(/não é falha sua/i);
+    expect(texto).toMatch(/ni votre faute/i);
   });
 
   it("capacidade inalcançável por ACIDENTE não promete que um gestor resolve", () => {
@@ -55,9 +55,9 @@ describe("recusa de capacidade — o texto que vai ao modelo", () => {
     // ninguém deveria ter restringido manda a pessoa bater numa porta que não
     // abre — é o BUG-02 transformado em promessa falsa ao cliente.
     const acidental = recusaDeCapacidadeParaOModelo("crm_capacidade_inexistente");
-    expect(acidental).toMatch(/limitação da configuração/i);
-    expect(acidental).not.toMatch(/ofereça que alguém do time faça/i);
-    expect(acidental).toMatch(/quem cuida do sistema/i);
+    expect(acidental).toMatch(/limite de la configuration/i);
+    expect(acidental).not.toMatch(/proposez que quelqu’un de l’équipe s’en charge/i);
+    expect(acidental).toMatch(/celui qui gère le système/i);
   });
 
   it("usa o rótulo em português da capacidade, não o identificador técnico", () => {

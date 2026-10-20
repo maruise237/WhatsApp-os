@@ -60,15 +60,15 @@ describe("mostra o número da empresa quando há mais de um canal", () => {
 
   it("explica o rótulo no title — o número solto não diz o que é", () => {
     pintar(comCanal({ phone_number: "+19392301037", display_name: null }), true);
-    expect(screen.getByTitle("Entrou por +19392301037")).toBeInTheDocument();
+    expect(screen.getByTitle("Arrivé par +19392301037")).toBeInTheDocument();
   });
 
   it("não confunde com o número do CLIENTE", () => {
     // O contato tem +595999; o canal tem +1939. O que aparece no badge é o da
     // EMPRESA — trocar os dois faria o atendente ligar para si mesmo.
     pintar(comCanal({ phone_number: "+19392301037", display_name: null }), true);
-    expect(screen.getByTitle("Entrou por +19392301037")).toBeInTheDocument();
-    expect(screen.queryByTitle("Entrou por +595999")).not.toBeInTheDocument();
+    expect(screen.getByTitle("Arrivé par +19392301037")).toBeInTheDocument();
+    expect(screen.queryByTitle("Arrivé par +595999")).not.toBeInTheDocument();
   });
 });
 

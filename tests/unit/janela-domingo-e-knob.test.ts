@@ -55,7 +55,7 @@ describe("W-07 — domingo não veta por default", () => {
     expect(d.allow).toBe(false);
     if (d.allow) return;
     expect(d.code).toBe("outside_window");
-    expect(d.reason).not.toContain("sem domingo");
+    expect(d.reason).not.toContain("sans le dimanche");
   });
 });
 
@@ -65,7 +65,7 @@ describe("o knob continua existindo — quem faz prospecção desliga", () => {
     expect(d.allow).toBe(false);
     if (d.allow) return;
     expect(d.code).toBe("outside_window");
-    expect(d.reason).toContain("sem domingo");
+    expect(d.reason).toContain("sans le dimanche");
   });
 
   it("e o próximo horário permitido cai FORA do domingo", () => {

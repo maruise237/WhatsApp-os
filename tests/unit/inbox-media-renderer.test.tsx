@@ -40,11 +40,11 @@ function msg(over: Partial<Message>): Message {
 describe("MediaRenderer", () => {
   it("image → ImageMedia", () => {
     render(<MediaRenderer message={msg({ type: "image" })} />);
-    expect(screen.getByAltText("Imagem recebida")).toBeInTheDocument();
+    expect(screen.getByAltText("Image reçue")).toBeInTheDocument();
   });
   it("sticker → StickerMedia", () => {
     render(<MediaRenderer message={msg({ type: "sticker" })} />);
-    expect(screen.getByAltText("Figurinha")).toBeInTheDocument();
+    expect(screen.getByAltText("Autocollant")).toBeInTheDocument();
   });
   it("audio → AudioPlayer", () => {
     render(<MediaRenderer message={msg({ type: "audio" })} />);
@@ -63,11 +63,11 @@ describe("MediaRenderer", () => {
 describe("MessageBubble com mídia", () => {
   it("renderiza mídia E caption juntos", () => {
     render(<MessageBubble message={msg({ type: "image", body: "olha isso" })} />);
-    expect(screen.getByAltText("Imagem recebida")).toBeInTheDocument();
+    expect(screen.getByAltText("Image reçue")).toBeInTheDocument();
     expect(screen.getByText("olha isso")).toBeInTheDocument();
   });
   it("mensagem só-texto não renderiza mídia", () => {
     render(<MessageBubble message={msg({ type: "text", body: "oi", media_url: null })} />);
-    expect(screen.queryByAltText("Imagem recebida")).not.toBeInTheDocument();
+    expect(screen.queryByAltText("Image reçue")).not.toBeInTheDocument();
   });
 });

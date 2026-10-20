@@ -94,16 +94,16 @@ function classeDaVariante(
 }
 
 describe("TenantOverview — status da Nuvemshop", () => {
-  it("integração saudável lê 'Conectado', não a string do banco", () => {
+  it("integração saudável lê 'Connecté', não a string do banco", () => {
     const badge = badgeNuvemshop("healthy");
-    expect(badge).toHaveTextContent("Conectado");
+    expect(badge).toHaveTextContent("Connecté");
     expect(badge.textContent).not.toContain("healthy");
     expect(badge.className).toBe(classeDaVariante("success"));
   });
 
   it("token vencido é erro visível, o ramo que era inalcançável", () => {
     const badge = badgeNuvemshop("token_expired");
-    expect(badge).toHaveTextContent("Token expirado");
+    expect(badge).toHaveTextContent("Jeton expiré");
     expect(badge.className).toBe(classeDaVariante("error"));
     // Antes do conserto, TODO status conhecido caía no ramo final e saía com
     // cara de alerta genérico.

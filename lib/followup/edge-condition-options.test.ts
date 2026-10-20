@@ -25,7 +25,7 @@ describe("edgeConditionOptions", () => {
       "class_match:objecao",
       "class_match:no_reply",
     ]);
-    expect(options.map((o) => o.label)).toEqual(["Sempre", "positivo", "objecao", "Sem resposta"]);
+    expect(options.map((o) => o.label)).toEqual(["Toujours", "positivo", "objecao", "Sans réponse"]);
     expect(options[1]!.condition).toEqual({ type: "class_match", value: "positivo" });
     expect(options[3]!.condition).toEqual({ type: "class_match", value: "no_reply" });
   });
@@ -57,7 +57,7 @@ describe("edgeConditionOptions", () => {
     const options = edgeConditionOptions(source);
 
     expect(options.map((o) => o.key)).toEqual(["always", "cond_result:true", "cond_result:false"]);
-    expect(options.map((o) => o.label)).toEqual(["Sempre", "Sim", "Não"]);
+    expect(options.map((o) => o.label)).toEqual(["Toujours", "Oui", "Non"]);
     expect(options[1]!.condition).toEqual({ type: "cond_result", value: true });
     expect(options[2]!.condition).toEqual({ type: "cond_result", value: false });
   });
@@ -77,22 +77,22 @@ describe("edgeConditionOptions", () => {
       ...bases[type],
     } as FlowNode);
 
-    expect(edgeConditionOptions(source)).toEqual([{ key: "always", label: "Sempre", condition: { type: "always" } }]);
+    expect(edgeConditionOptions(source)).toEqual([{ key: "always", label: "Toujours", condition: { type: "always" } }]);
   });
 
   it("undefined source (dangling edge) falls back to always-only", () => {
-    expect(edgeConditionOptions(undefined)).toEqual([{ key: "always", label: "Sempre", condition: { type: "always" } }]);
+    expect(edgeConditionOptions(undefined)).toEqual([{ key: "always", label: "Toujours", condition: { type: "always" } }]);
   });
 });
 
 describe("conditionKey / conditionLabel", () => {
   it("round-trip for every condition variant", () => {
     const cases: Array<[Parameters<typeof conditionKey>[0], string, string]> = [
-      [{ type: "always" }, "always", "Sempre"],
+      [{ type: "always" }, "always", "Toujours"],
       [{ type: "class_match", value: "hot" }, "class_match:hot", "hot"],
-      [{ type: "class_match", value: "no_reply" }, "class_match:no_reply", "Sem resposta"],
-      [{ type: "cond_result", value: true }, "cond_result:true", "Sim"],
-      [{ type: "cond_result", value: false }, "cond_result:false", "Não"],
+      [{ type: "class_match", value: "no_reply" }, "class_match:no_reply", "Sans réponse"],
+      [{ type: "cond_result", value: true }, "cond_result:true", "Oui"],
+      [{ type: "cond_result", value: false }, "cond_result:false", "Non"],
     ];
     for (const [condition, key, label] of cases) {
       expect(conditionKey(condition)).toBe(key);

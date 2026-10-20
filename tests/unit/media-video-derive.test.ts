@@ -40,9 +40,9 @@ afterEach(() => {
 describe("deriveVideoText", () => {
   it("combina transcrição do áudio + descrição dos frames", async () => {
     const out = await deriveVideoText(Buffer.from([9]), deps());
-    expect(out).toContain("Transcrição do áudio do vídeo: olá quero comprar o produto");
-    expect(out).toContain("Cenas do vídeo:");
-    expect(out).toContain("Quadro 1: pessoa segurando um tênis vermelho");
+    expect(out).toContain("Transcription de l’audio de la vidéo : olá quero comprar o produto");
+    expect(out).toContain("Scènes de la vidéo :");
+    expect(out).toContain("Image 1: pessoa segurando um tênis vermelho");
   });
 
   it("vídeo SEM áudio → só as cenas (transcrição vazia não quebra)", async () => {
@@ -54,14 +54,14 @@ describe("deriveVideoText", () => {
     });
     const out = await deriveVideoText(Buffer.from([9]), d);
     expect(out).not.toContain("Transcrição");
-    expect(out).toContain("Cenas do vídeo:");
+    expect(out).toContain("Scènes de la vidéo :");
   });
 
   it("limpa o diretório temporário mesmo se a visão falhar", async () => {
     const d = deps({ describeImage: vi.fn(async () => { throw new Error("vision down"); }) });
     const out = await deriveVideoText(Buffer.from([9]), d);
     // frames falharam → só transcrição sobra; e o rm foi chamado (cleanup).
-    expect(out).toContain("Transcrição do áudio");
+    expect(out).toContain("Transcription de l’audio");
     expect(fsMock.rm).toHaveBeenCalled();
   });
 });

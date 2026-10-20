@@ -82,7 +82,7 @@ describe("o nome do canal", () => {
     // `waha_session_name` era o segundo degrau da cadeia em `selectable.ts`, e
     // por isso um canal sem apelido virava a opção `org_2dd5e6ea`.
     const semNome = nomeDoCanal({ display_name: null, phone_number: null });
-    expect(semNome).toBe("Número sem nome");
+    expect(semNome).toBe("Numéro sans nom");
     expect(semNome).not.toMatch(/^org_/);
   });
 

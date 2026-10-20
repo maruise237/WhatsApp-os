@@ -62,13 +62,13 @@ const ORG = "11111111-1111-4111-8111-111111111111";
 function tabelas(credenciais: Linha[]): Record<string, Linha[]> {
   return {
     organizations: [
-      { id: ORG, display_name: "Minha Empresa", settings: { llm: { provider: "anthropic" } } },
+      { id: ORG, display_name: "Mon entreprise", settings: { llm: { provider: "anthropic" } } },
     ],
     ai_provider_credentials: credenciais,
     ai_models: [
       { provider: "anthropic", model_id: "claude-sonnet-5", is_default_for_provider: true, deprecated_at: null },
     ],
-    crm_pipelines: [{ organization_id: ORG, id: "f1", name: "Pedidos", is_default: true, is_archived: false }],
+    crm_pipelines: [{ organization_id: ORG, id: "f1", name: "Commandes", is_default: true, is_archived: false }],
   };
 }
 

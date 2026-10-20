@@ -408,8 +408,8 @@ export { HANDOFF_REASON_ORCAMENTO };
 export const RESUMO_DO_HANDOFF_POR_ORCAMENTO =
   'L’IA a cessé de répondre parce que le plafond mensuel de dépenses IA de cette organisation a été ' +
   'atteint — le lead n’a PAS demandé d’assistance humaine. Prenez la conversation en charge ; pour la rendre à ' +
-  'l’assistance automatique, ajustez le plafond dans Utilisation de l’IA › Budget puis utilisez « Rendre à ' +
-  'l’automatique » dans l’en-tête de la conversation.';
+  'l’assistance automatique, ajustez le plafond dans Utilisation de l’IA › Budget puis utilisez « Remettre à ' +
+  "l'automatique » dans l’en-tête de la conversation.";
 
 /** Título do item da Central que este handoff abre — rótulo visível, logo constante. */
 export const TITULO_DO_HANDOFF_POR_ORCAMENTO = 'Plafond de dépenses IA atteint — prendre la conversation en charge';

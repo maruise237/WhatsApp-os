@@ -447,7 +447,7 @@ describe("crm_schedule_followup", () => {
     expect(res.motivo).toBe("instante_no_passado");
     // O ano corrente na mensagem é o que permite ao modelo somar o prazo.
     expect(res.mensagem).toContain(String(new Date().getUTCFullYear()));
-    expect(res.mensagem.toUpperCase()).toContain("AGORA");
+    expect(res.mensagem.toUpperCase()).toContain("MAINTENANT");
   });
 
   it("negócio sem cliente vinculado é recusado — não há para quem voltar a falar", async () => {
@@ -605,7 +605,7 @@ describe("crm_close_demand", () => {
     const resolver: Resolver = (c) => {
       if (c.table === "crm_leads" && c.terminal === "maybeSingle") return { data: leadAberto, error: null };
       if (c.table === "crm_stages" && c.terminal === "maybeSingle") {
-        return { data: { id: STAGE_PERDA, name: "Perdido" }, error: null };
+        return { data: { id: STAGE_PERDA, name: "Perdu" }, error: null };
       }
       return { data: c.terminal === "list" ? [] : null, error: null };
     };
@@ -710,7 +710,7 @@ describe("crm_propose_reactivation", () => {
  *
  * ⚠️ ESTE BLOCO NASCEU DE UM DEFEITO QUE NENHUM TESTE PEGOU. A timeline mostra o
  * rótulo do tipo e, embaixo, o reason. Com o reason começando pela mesma frase, o
- * dossiê exibia "Retorno agendado / Retorno agendado — reconfirmar a proposta".
+ * dossiê exibia "Relance planifiée / Retour planifié — reconfirmar a proposta".
  * Tudo verde, e a leitura burra.
  *
  * O motivo de nenhum teste pegar é instrutivo: as asserções eram sobre
@@ -721,7 +721,7 @@ describe("o texto que aparece na linha do tempo", () => {
   const semRedundancia = (rotulo: string, reason: string) =>
     !reason.toLowerCase().startsWith(rotulo.toLowerCase());
 
-  it("agendar: o reason conta o PORQUÊ, não repete 'Retorno agendado'", async () => {
+  it("agendar: o reason conta o PORQUÊ, não repete 'Relance planifiée'", async () => {
     const cap = novasCapturas();
     await crmScheduleFollowup.handler(
       {
@@ -799,7 +799,7 @@ describe("o texto que aparece na linha do tempo", () => {
         };
       }
       if (c.table === "crm_stages" && c.terminal === "maybeSingle") {
-        return { data: { id: STAGE_PERDA, name: "Perdido" }, error: null };
+        return { data: { id: STAGE_PERDA, name: "Perdu" }, error: null };
       }
       return { data: c.terminal === "list" ? [] : null, error: null };
     };

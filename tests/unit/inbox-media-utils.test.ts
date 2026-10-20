@@ -34,7 +34,7 @@ describe("mediaFileLabel", () => {
     expect(mediaFileLabel("application/pdf", null)).toBe("PDF");
   });
   it("fallback genérico", () => {
-    expect(mediaFileLabel(null, null)).toBe("Arquivo");
-    expect(mediaFileLabel("application/octet-stream", "org/conv/msg.bin")).toBe("Arquivo");
+    expect(mediaFileLabel(null, null)).toBe("Fichier");
+    expect(mediaFileLabel("application/octet-stream", "org/conv/msg.bin")).toBe("Fichier");
   });
 });

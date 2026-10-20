@@ -332,7 +332,7 @@ describe("reconciliação — quem se move são as NOSSAS semânticas", () => {
     );
     expect(sinais).toHaveLength(1);
     expect(sinais[0]).toMatchObject({ tema: "escuro", alvo: "success" });
-    expect(sinais[0]!.detalhe).toMatch(/ícone|rótulo/);
+    expect(sinais[0]!.detalhe).toMatch(/icône|libellé/);
   });
 
   it("não inventa rotação impossível numa semântica sem croma", () => {

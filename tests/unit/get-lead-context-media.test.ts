@@ -12,8 +12,8 @@ describe("fitToBudget — mídia no contexto", () => {
     ], 100000);
     const body = ctx.messages[0]!.body;
     expect(body).toContain("quero o tênis 42"); // conteúdo derivado presente
-    expect(body).toContain("um áudio"); // enquadrado pelo tipo
-    expect(body).toMatch(/não.*ver\/ouvir mídia/i); // instrução anti-reflexo de negação
+    expect(body).toContain("un audio"); // enquadrado pelo tipo
+    expect(body).toMatch(/ne.*pouvez pas voir\/entendre de média/i); // instrução anti-reflexo de negação
     expect(ctx.messages[0]!.type).toBe("audio");
     expect(ctx.messages[0]!.media_storage_path).toBe("p");
   });

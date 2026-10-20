@@ -25,22 +25,22 @@ import {
 describe("a frase que o agente recebe ao escalar", () => {
   it("com gente disponível, autoriza dizer que alguém continua em seguida", () => {
     const f = fraseDeExpectativa({ disponiveis: 2, total: 4 });
-    expect(f).toContain("2 pessoas");
-    expect(f).toMatch(/pode dizer ao cliente/i);
-    expect(f).not.toMatch(/NÃO prometa/);
+    expect(f).toContain("2 personnes");
+    expect(f).toMatch(/pouvez dire au client/i);
+    expect(f).not.toMatch(/NE promettez PAS/);
   });
 
   it("uma pessoa só não vira '1 pessoas'", () => {
-    expect(fraseDeExpectativa({ disponiveis: 1, total: 3 })).toContain("1 pessoa da equipe");
+    expect(fraseDeExpectativa({ disponiveis: 1, total: 3 })).toContain("1 personne de l’équipe");
   });
 
   it("equipe existe mas ninguém online: proíbe prometer contato imediato", () => {
     const f = fraseDeExpectativa({ disponiveis: 0, total: 4 });
-    expect(f).toMatch(/NÃO prometa contato/i);
-    expect(f).toMatch(/registrado/i);
+    expect(f).toMatch(/NE promettez PAS de contact/i);
+    expect(f).toMatch(/enregistrée/i);
     // A diferença entre "ninguém agora" e "ninguém nunca" importa para o texto
     // que o cliente lê — a primeira ainda promete retorno.
-    expect(f).toMatch(/retorna assim que possível/i);
+    expect(f).toMatch(/reviendra vers le client dès que possible/i);
   });
 
   it("conta sem ninguém configurado: o caso da VPS recém-instalada", () => {
@@ -48,8 +48,8 @@ describe("a frase que o agente recebe ao escalar", () => {
     // ramo, a primeira conversa de um cliente real terminaria com o agente
     // prometendo contato para o vazio.
     const f = fraseDeExpectativa({ disponiveis: 0, total: 0 });
-    expect(f).toMatch(/ninguém configurado/i);
-    expect(f).toMatch(/NÃO prometa/i);
+    expect(f).toMatch(/personne configuré/i);
+    expect(f).toMatch(/NE promettez PAS/i);
   });
 
   it("as três situações produzem frases DIFERENTES", () => {
@@ -119,6 +119,6 @@ describe("quem pode assumir agora", () => {
       AGORA,
     );
     expect(r.quem).toBeNull();
-    expect(r.frase).toMatch(/NÃO prometa contato/i);
+    expect(r.frase).toMatch(/NE promettez PAS de contact/i);
   });
 });

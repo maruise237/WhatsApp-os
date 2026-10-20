@@ -237,9 +237,9 @@ describe("o rascunho conhece a decisão do vendedor", () => {
       decision: "dismissed",
       at: "2026-07-25T10:00:00Z",
     });
-    expect(system).toContain("DESCARTOU");
+    expect(system).toContain("ÉCARTÉ");
     expect(system).toContain("ligar para o Carlos amanhã");
-    expect(system).toMatch(/NÃO sugira/i);
+    expect(system).toMatch(/NE suggérez PAS/i);
   });
 
   it("proposta APROVADA entra como instrução de APOIAR, não de substituir", async () => {
@@ -248,7 +248,7 @@ describe("o rascunho conhece a decisão do vendedor", () => {
       decision: "approved",
       at: "2026-07-25T10:00:00Z",
     });
-    expect(system).toContain("APROVOU");
+    expect(system).toContain("APPROUVÉ");
     expect(system).toContain("enviar a proposta revisada");
   });
 
@@ -256,7 +256,7 @@ describe("o rascunho conhece a decisão do vendedor", () => {
     // Um "[DECISÃO DO VENDEDOR]" sem conteúdo gastaria contexto e ensinaria o
     // modelo a preencher lacuna — pior que não dizer nada.
     const system = await systemGerado(null);
-    expect(system).not.toContain("DECISÃO DO VENDEDOR");
-    expect(system).toContain("[MODO RASCUNHO]");
+    expect(system).not.toContain("DÉCISION DU VENDEUR");
+    expect(system).toContain("[MODE BROUILLON]");
   });
 });

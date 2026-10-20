@@ -55,9 +55,9 @@ export function parseReaisToCents(input: string): number | null {
   return Math.round(n * 100);
 }
 
-/** Centavos → "R$ 249,90". Para eco na tela do que foi entendido. */
+/** Centavos → "249,90". Para eco na tela do que foi entendido (sem símbolo: a moeda vem do negócio). */
 export function formatCentsBRL(cents: number): string {
-  return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  return (cents / 100).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 /**
@@ -77,5 +77,5 @@ export function formatCentsBRL(cents: number): string {
  * mas ali ela não pode importar daqui (o módulo é do engine e roda no worker).
  */
 export function formatCentsUSD(cents: number): string {
-  return ((cents ?? 0) / 100).toLocaleString("pt-BR", { style: "currency", currency: "USD" });
+  return ((cents ?? 0) / 100).toLocaleString("fr-FR", { style: "currency", currency: "USD" });
 }

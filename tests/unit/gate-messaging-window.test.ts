@@ -85,7 +85,7 @@ describe("gate messaging_window", () => {
     );
     if (v.pass) throw new Error("inalcançável");
     expect(v.reason).toMatch(/send_template/);
-    expect(v.reason).toMatch(/template aprovado/);
+    expect(v.reason).toMatch(/modèle approuvé/);
   });
 
   it("a borda de 24h fecha — não é 'quase aberta'", () => {

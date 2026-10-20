@@ -113,7 +113,7 @@ export function SectionComponents() {
       <div className="ds-grid-3">
         <div className="ds-card">
           <div className="ds-key">Chiffre d’affaires du jour</div>
-          <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>R$ 12.443,00</div>
+          <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>12 443 FCFA</div>
           <div style={{ fontSize: 12, color: "var(--ds-success)", marginTop: 4 }}>+8,4 % vs hier</div>
         </div>
         <div className="ds-card ds-card--interactive">
@@ -162,7 +162,7 @@ export function SectionComponents() {
           <div className="ds-kanban-card" style={{ background: "var(--ds-surface)" }}>
             <div className="row">
               <span className="title">Commande n° 12 443</span>
-              <span className="value">R$ 1.234,56</span>
+              <span className="value">1 234 FCFA</span>
             </div>
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Marie Ngo · cliente fidèle</div>
             <div className="row">

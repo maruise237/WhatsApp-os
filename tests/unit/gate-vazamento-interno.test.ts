@@ -92,7 +92,7 @@ describe("internalVocabularyGate — arma só onde há modelo para ensinar", () 
     );
     if (v.pass) throw new Error("inalcançável");
     expect(v.reason).toContain("crm_list_webhook_sources");
-    expect(v.reason).toMatch(/REESCREVA/);
+    expect(v.reason).toMatch(/RÉÉCRIVEZ/);
   });
 
   it("o detail vai ao trace SEM o termo — só contagem e categoria", () => {

@@ -178,7 +178,7 @@ function MarcarProximoPasso({ demandaId, onPronto }: { demandaId: string; onPron
 
 function formatMoney(cents: number | null, currency: string | null): string {
   if (cents == null) return "—";
-  const cur = currency ?? "BRL";
+  const cur = currency ?? "XAF";
   try {
     return new Intl.NumberFormat("fr-FR", { style: "currency", currency: cur }).format(cents / 100);
   } catch {

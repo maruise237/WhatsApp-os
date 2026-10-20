@@ -31,8 +31,8 @@ describe("describeNodeConfig — nó de condição", () => {
   ];
 
   it("no modo combinado anuncia o combinador, que é o que decide", () => {
-    expect(describeNodeConfig("condition", { combinator: "and", checks: regras })).toBe("2 condição(ões) · E");
-    expect(describeNodeConfig("condition", { combinator: "or", checks: regras })).toBe("2 condição(ões) · OU");
+    expect(describeNodeConfig("condition", { combinator: "and", checks: regras })).toBe("2 condition(s) · E");
+    expect(describeNodeConfig("condition", { combinator: "or", checks: regras })).toBe("2 condition(s) · OU");
   });
 
   it("no modo uma-saída-por-regra NÃO anuncia combinador nenhum", () => {
@@ -41,7 +41,7 @@ describe("describeNodeConfig — nó de condição", () => {
       branching: "per_check",
       checks: regras,
     });
-    expect(texto).toBe("2 regras · uma saída por regra");
+    expect(texto).toBe("2 règles · une sortie par règle");
     expect(texto).not.toMatch(/\bE\b|\bOU\b/);
   });
 });

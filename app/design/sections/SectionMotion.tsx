@@ -131,7 +131,7 @@ export function SectionMotion() {
         >
           <div className="row">
             <span className="title">Commande n° 12 443</span>
-            <span className="value">R$ 1.234,56</span>
+            <span className="value">1 234 FCFA</span>
           </div>
           <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · pix</div>
         </div>

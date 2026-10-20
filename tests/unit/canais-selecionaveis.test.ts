@@ -148,7 +148,7 @@ describe("listSelectableChannels", () => {
     const canais = await listSelectableChannels(db, "org-1");
 
     expect(canais[0]?.display_name).not.toContain("org_");
-    expect(canais[0]?.display_name).toBe("Número sem nome");
+    expect(canais[0]?.display_name).toBe("Numéro sans nom");
   });
 
   it("o apelido continua vencendo tudo", async () => {

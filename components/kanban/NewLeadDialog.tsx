@@ -94,7 +94,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
       pipeline_id: pipelineId,
       stage_id: values.stage_id,
       title: values.title.trim(),
-      currency: "BRL",
+      currency: "XAF",
       source: "manual",
       tags,
     };
