@@ -10,8 +10,7 @@
  * `organization_id` from the trusted event row, never from user input.
  */
 
-import { isEmbeddingProviderConfigured } from "@/lib/ai/gateway";
-import { embedText } from "@/lib/ai/embed";
+import { vecteurDExtrait } from "@/lib/ai/embed";
 import { acquireDebounce } from "@/lib/ai/rag/debounce";
 import { chunkText, computeContentHash } from "@/lib/ai/rag/chunker";
 import { estimateTokens } from "@/lib/ai/runtime/history";
@@ -199,10 +198,9 @@ async function handleProductSynced(
     if (!content) continue;
     const contentHash = computeContentHash(content);
 
-    let embedding: number[];
+    let embedding: string | null;
     try {
-      const result = await embedText(content, { organizationId: row.organization_id });
-      embedding = result.embedding;
+      embedding = await vecteurDExtrait(content, row.organization_id);
     } catch (err) {
       // If embedding fails mid-way, abort and fail the version.
       const detail = err instanceof Error ? err.message : String(err);
@@ -223,7 +221,7 @@ async function handleProductSynced(
           // NOT NULL no banco. Nenhum dos dois caminhos preenchia, e todo
           // insert morria com "null value in column token_count".
           token_count: estimateTokens(content),
-          embedding: embedding as unknown as string,
+          embedding,
           metadata: {
             source_type: "nuvemshop_product",
             product_id: productId,
@@ -354,10 +352,9 @@ async function handleKnowledgeSourceUpdated(
   for (let i = 0; i < pedacos.length; i++) {
     const p = pedacos[i]!;
     const contentHash = computeContentHash(p.content);
-    let embedding: number[];
+    let embedding: string | null;
     try {
-      const r = await embedText(p.content, { organizationId: row.organization_id });
-      embedding = r.embedding;
+      embedding = await vecteurDExtrait(p.content, row.organization_id);
     } catch (err) {
       const detail = err instanceof Error ? err.message : String(err);
       await markVersionFailed(versionId, row.organization_id, `embed_failed@${i}: ${detail}`);
@@ -372,7 +369,7 @@ async function handleKnowledgeSourceUpdated(
         content: p.content,
         content_hash: contentHash,
         token_count: estimateTokens(p.content),
-        embedding: embedding as unknown as string,
+        embedding,
         metadata: { source_type: p.sourceType },
       },
       // Ver comentario no caminho de produto: esta e a constraint que existe.
@@ -434,10 +431,9 @@ export async function processRagIndexer(row: EventRow): Promise<HandlerResult> {
     );
   }
 
-  // Guard: embedding provider must be configured.
-  if (!isEmbeddingProviderConfigured()) {
-    return { consumer_key: consumerKey, status: "skipped", detail: "openai_key_missing" };
-  }
+  // Plus de garde « clé OpenAI absente » : sans fournisseur d'embeddings, la
+  // base s'indexe en plein texte (`connaissancesEnTexte`, migration 0184).
+  // Sauter ici rendait la FAQ de la vendeuse invisible, sans un mot.
 
   // Resolve the active agent for this org.
   let agentId: string;

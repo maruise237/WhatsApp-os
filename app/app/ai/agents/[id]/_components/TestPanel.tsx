@@ -195,15 +195,12 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
           </p>
           <div className="flex items-center gap-2 text-sm">
             <Badge variant="outline">{versionLabel}</Badge>
-            <span className="font-mono text-xs">
-              {target.provider} / {target.model}
-            </span>
           </div>
         </div>
 
         <div className="rounded-md border border-amber-500/40 bg-amber-500/5 p-3 text-xs">
           <p className="font-medium text-amber-700 dark:text-amber-400">
-            ⚠ {t("Modo teste consome créditos do provider.")}
+            ⚠ Les essais comptent dans la consommation IA de votre boutique.
           </p>
           <p className="mt-1 text-muted-foreground">
             {t("Nenhuma mensagem é enviada via WhatsApp. O run é registrado como dry-run.")}

@@ -2,7 +2,6 @@ import { notFound, redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { listClassifierModels } from "@/lib/ai/classifier-models";
 import { listSelectableChannels } from "@/lib/channels/selectable";
 import { createClient } from "@/lib/supabase/server";
 import type { RouterDetailState } from "@/hooks/ai/useRouters";
@@ -50,13 +49,6 @@ export default async function RouterEditorPage({ params }: { params: Promise<{ i
 
   if (!routerRow) notFound();
 
-  // Só os modelos que esta organização consegue usar de fato — ver a razão em
-  // lib/ai/classifier-models.
-  const classifierModels = await listClassifierModels(supabase, activeOrg.orgId, {
-    anthropic: Boolean(process.env.ANTHROPIC_API_KEY),
-    openai: Boolean(process.env.OPENAI_API_KEY),
-  });
-
   const initialState: RouterDetailState = {
     router: routerRow as RouterDetailState["router"],
     members: (memberRows ?? []) as RouterDetailState["members"],
@@ -71,7 +63,6 @@ export default async function RouterEditorPage({ params }: { params: Promise<{ i
         initialState={initialState}
         agents={agents}
         channelSessions={channelSessions}
-        classifierModels={classifierModels}
       />
     </div>
   );

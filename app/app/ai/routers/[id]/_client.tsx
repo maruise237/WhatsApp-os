@@ -41,7 +41,6 @@ import {
   type RouterDetailState,
   type RouterMemberInput,
 } from "@/hooks/ai/useRouters";
-import type { ClassifierModelOption } from "@/lib/ai/classifier-models";
 import type { ChannelSessionLite } from "../../agents/[id]/_components/AgentForm";
 
 interface AgentLite {
@@ -54,8 +53,6 @@ interface Props {
   initialState: RouterDetailState;
   agents: AgentLite[];
   channelSessions: ChannelSessionLite[];
-  /** Só os modelos que esta organização consegue usar — ver lib/ai/classifier-models. */
-  classifierModels: ClassifierModelOption[];
 }
 
 interface DraftMember extends RouterMemberInput {
@@ -86,7 +83,6 @@ export function RouterEditorClient({
   initialState,
   agents,
   channelSessions,
-  classifierModels,
 }: Props) {
   const nextRouter = useNextRouter();
   const canManage = usePermission("ai.routers.manage");
@@ -102,7 +98,7 @@ export function RouterEditorClient({
   const [fallbackAgentId, setFallbackAgentId] = React.useState(router.fallback_agent_id ?? "");
   // Uma chave só para os dois campos: escolher modelo sem levar o provedor junto
   // manda o id para o provedor da ORG, e a classificação falha sempre.
-  const [classifier, setClassifier] = React.useState(() => classifierKeyFrom(router.config));
+  const [classifier] = React.useState(() => classifierKeyFrom(router.config));
   const [draftMembers, setDraftMembers] = React.useState<DraftMember[]>(() =>
     members.map((m) => ({ ...m, key: m.id })),
   );
@@ -292,36 +288,7 @@ export function RouterEditorClient({
             </div>
           </Card>
 
-          <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">Modèle qui identifie l’intention</h3>
-            <div className="space-y-1">
-              <Label htmlFor="router-classifier">Modèle du classificateur</Label>
-              <Select
-                value={classifier}
-                onValueChange={setClassifier}
-                disabled={!canManage || classifierModels.length === 0}
-              >
-                <SelectTrigger id="router-classifier">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={AUTO}>Automatique — utilise le fournisseur de l’organisation</SelectItem>
-                  {classifierModels.map((m) => (
-                    <SelectItem key={`${m.provider}::${m.model_id}`} value={`${m.provider}::${m.model_id}`}>
-                      {m.display_name} · {m.provider}
-                      {m.origem === "plataforma" ? "(clé de cette installation)" : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                {classifierModels.length === 0
-                  ? "Aucune clé d’IA utilisable dans cette organisation — enregistrez-en une dans Agents IA › Identifiants pour pouvoir choisir le modèle."
-                  : "Seuls les modèles des fournisseurs ayant une clé enregistrée ici apparaissent. Si le compte du fournisseur n’a plus de crédit, l’identification échoue et tout bascule vers l’agent de secours."}
-              </p>
-            </div>
-          </Card>
-
+          {/* Plus de choix de modèle : l’intention est lue par l’IA de la plateforme. */}
           <Card className="space-y-3 p-4">
             <h3 className="text-sm font-medium">Si aucune intention ne correspond</h3>
             <div className="space-y-1">

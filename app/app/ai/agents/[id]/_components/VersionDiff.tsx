@@ -78,8 +78,6 @@ interface FieldChange {
 
 function buildFieldChanges(a: AgentVersionRow, b: AgentVersionRow): FieldChange[] {
   const fields: Array<[keyof AgentVersionRow, string]> = [
-    ["provider", "Provider"],
-    ["model", "Model"],
     ["channel_session_id", "Canal"],
     ["max_steps", "max_steps"],
     ["token_budget", "token_budget"],

@@ -20,7 +20,7 @@ describe('searchKnowledge', () => {
     const out = await searchKnowledge(
       { query } as unknown as pg.Pool,
       { organizationId: 'org1', kbVersionId: 'kb1', query: 'frete', topK: 5, threshold: 0.72 },
-      { embed },
+      { embed, enTexte: false },
     );
     expect(out).toEqual({ ok: true, results: [hit] });
     expect(embed).toHaveBeenCalledWith('frete', { organizationId: 'org1' });
@@ -34,7 +34,7 @@ describe('searchKnowledge', () => {
     const out = await searchKnowledge(
       { query: vi.fn() } as unknown as pg.Pool,
       { organizationId: 'org1', kbVersionId: 'kb1', query: 'frete', topK: 5, threshold: 0.72 },
-      { embed },
+      { embed, enTexte: false },
     );
     expect(out.ok).toBe(false);
     if (!out.ok) expect(out.error.code).toBe('knowledge_unavailable');
@@ -46,7 +46,7 @@ describe('searchKnowledge', () => {
     const out = await searchKnowledge(
       { query } as unknown as pg.Pool,
       { organizationId: 'org1', kbVersionId: 'kb1', query: 'frete', topK: 5, threshold: 0.72 },
-      { embed },
+      { embed, enTexte: false },
     );
     expect(out.ok).toBe(false);
     if (!out.ok) {
@@ -73,7 +73,7 @@ describe('searchKnowledge', () => {
     const r = await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'oi', topK: 5, threshold: 0.72 },
-      { embed: async () => ({ embedding: [0.1, 0.2] }) } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1, 0.2] }) } as never,
     );
 
     expect(r.ok).toBe(true);
@@ -100,7 +100,7 @@ describe('searchKnowledge', () => {
     await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'entregam sábado?', topK: 5, threshold: 0.72, jobId: 'job-9' },
-      { embed: async () => ({ embedding: [0.1, 0.2] }) } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1, 0.2] }) } as never,
     );
 
     const registro = queries.find((q) => q.sql.includes('knowledge_searches'));
@@ -130,7 +130,7 @@ describe('searchKnowledge', () => {
     await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'oi', topK: 5, threshold: 0.72 },
-      { embed: async () => ({ embedding: [0.1] }) } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1] }) } as never,
     );
 
     expect(paramsRpc[4]).toBe(-1);
@@ -150,7 +150,7 @@ describe('searchKnowledge', () => {
     const r = await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'oi', topK: 5, threshold: 0.72 },
-      { embed: async () => ({ embedding: [0.1] }), log: { info: vi.fn(), warn, error: vi.fn() } } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1] }), log: { info: vi.fn(), warn, error: vi.fn() } } as never,
     );
 
     expect(r.ok).toBe(true);
@@ -178,7 +178,7 @@ describe('searchKnowledge', () => {
     const r = await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'oi', topK: 5, threshold: 0.72 },
-      { embed: async () => ({ embedding: [0.1] }) } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1] }) } as never,
     );
 
     expect(r.ok && r.results).toHaveLength(0);
@@ -210,7 +210,7 @@ describe('searchKnowledge', () => {
     await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'oi', topK: 5, threshold: 0.72 },
-      { embed: async () => ({ embedding: [0.1] }) } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1] }) } as never,
     );
 
     const registro = queries.find((q) => q.sql.includes('knowledge_searches'));
@@ -237,7 +237,7 @@ describe('searchKnowledge', () => {
     await searchKnowledge(
       pool as never,
       { organizationId: 'org-1', kbVersionId: 'kb-1', query: 'oi', topK: 5, threshold: 0.72 },
-      { embed: async () => ({ embedding: [0.1] }) } as never,
+      { enTexte: false, embed: async () => ({ embedding: [0.1] }) } as never,
     );
 
     const registro = queries.find((q) => q.sql.includes('knowledge_searches'));
@@ -252,5 +252,41 @@ describe('citationsFromHits', () => {
     const c = citations[0]!;
     expect(c).toMatchObject({ chunk_id: 'c1', knowledge_source_id: 's1', score: 0.91 });
     expect((c.snippet ?? '').length).toBeLessThanOrEqual(240);
+  });
+});
+
+describe('searchKnowledge en plein texte (IA de la plateforme, 0184)', () => {
+  const extrait = (i: number, content: string) => ({
+    chunk_id: `c${i}`, knowledge_source_id: 's1', content, similarity: 0.1, metadata: null,
+  });
+
+  it('interroge rechercher_chunks_texte sans embedding, top-K plafonné à 4', async () => {
+    const query = vi.fn().mockResolvedValue({ rows: [extrait(1, 'Livraison à Douala en 24 h.')] });
+    const embed = vi.fn();
+    const out = await searchKnowledge(
+      { query } as unknown as pg.Pool,
+      { organizationId: 'org1', kbVersionId: 'kb1', query: 'livraison douala', topK: 10, threshold: 0.72 },
+      { embed, enTexte: true },
+    );
+    expect(embed).not.toHaveBeenCalled();
+    expect(String(query.mock.calls[0]?.[0])).toContain('rechercher_chunks_texte');
+    expect(query.mock.calls[0]?.[1]).toEqual(['org1', 'kb1', 'livraison douala', 4]);
+    // Le seuil de cosinus (0.72) ne s'applique pas à un rang plein texte.
+    expect(out).toMatchObject({ ok: true, results: [{ chunk_id: 'c1' }] });
+  });
+
+  it('le contexte rendu au modèle ne dépasse jamais les plafonds', async () => {
+    const long = 'x'.repeat(5000);
+    const query = vi.fn().mockResolvedValue({ rows: [1, 2, 3, 4, 5, 6].map((i) => extrait(i, long)) });
+    const out = await searchKnowledge(
+      { query } as unknown as pg.Pool,
+      { organizationId: 'org1', kbVersionId: 'kb1', query: 'x', topK: 8, threshold: 0 },
+      { enTexte: true },
+    );
+    if (!out.ok) throw new Error('attendu ok');
+    const total = out.results.reduce((n, r) => n + r.content.length, 0);
+    expect(out.results.length).toBeLessThanOrEqual(4);
+    expect(out.results.every((r) => r.content.length <= 1001)).toBe(true);
+    expect(total).toBeLessThanOrEqual(3004);
   });
 });

@@ -43,6 +43,7 @@ const envSchema = z.object({
   DEEPSEEK_API_KEY: z.string().min(1).optional(),
   DEEPSEEK_BASE_URL: z.string().url().optional(),
   DEEPSEEK_MODEL: z.string().min(1).optional(),
+  DEEPSEEK_REFLEXION: z.enum(['off', 'low', 'high', 'max']).optional(),
   // Modelo default do agente quando a org não define o dela (knob, nunca constante).
   AGENT_DEFAULT_MODEL: z.string().min(1).default('claude-sonnet-4-5'),
   // Teto de conexões por pool do pg. Sem valor = pg decide (default 10).

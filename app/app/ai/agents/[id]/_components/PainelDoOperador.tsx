@@ -22,21 +22,13 @@ import { Switch } from "@/components/ui/switch";
 
 import { useOperatorMetrics } from "@/hooks/ai/useOperatorMetrics";
 
-import { ModelPicker } from "./ModelPicker";
 import { ToolPicker } from "./ToolPicker";
-import type { Provider } from "@/hooks/ai/useCredentials";
 
 interface Props {
   enabled: boolean;
   onEnabledChange: (v: boolean) => void;
-  /** "" = herda o modelo do Conversador. */
-  model: string;
-  onModelChange: (v: string) => void;
-  provider: Provider;
   toolIds: string[];
   onToolIdsChange: (ids: string[]) => void;
-  /** o modelo do Conversador, para dizer o que "herdar" significa na prática. */
-  modeloDoConversador: string;
   disabled?: boolean;
 }
 
@@ -158,47 +150,8 @@ export function PainelDoOperador(props: Props) {
 
       {props.enabled ? (
         <>
-          <Card className="space-y-2 p-4">
-            <h3 className="text-sm font-medium">
-              {t("A inteligência que ele usa para organizar")}
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              {t(
-                "Pode ser diferente da que conversa. Organizar o sistema é uma tarefa mais mecânica que atender uma pessoa — costuma sair bem com um modelo mais barato.",
-              )}
-            </p>
-            <ModelPicker
-              provider={props.provider}
-              value={props.model}
-              onChange={props.onModelChange}
-              disabled={desabilitado}
-              // O estado vazio é legítimo aqui e precisa ter NOME: chamá-lo de
-              // "Selecione um modelo" faria parecer pendência o que é escolha.
-              placeholder={
-                props.modeloDoConversador === ""
-                  ? t("A mesma que conversa")
-                  : `${t("A mesma que conversa")} (${props.modeloDoConversador})`
-              }
-            />
-            {/*
-              O caminho de VOLTA. Um Select não consegue oferecer "nenhum" como
-              item (valor vazio não é selecionável), então sem este botão a
-              escolha seria de mão única: bastaria clicar uma vez para nunca mais
-              conseguir voltar a herdar — e o usuário não teria como saber por quê.
-            */}
-            {props.model !== "" ? (
-              <button
-                type="button"
-                data-testid="operador-modelo-herdar"
-                className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                onClick={() => props.onModelChange("")}
-                disabled={desabilitado}
-              >
-                {t("Usar a mesma que conversa")}
-              </button>
-            ) : null}
-          </Card>
-
+          {/* Plus de choix de modèle ici : l'IA est fournie par la plateforme
+              (lib/ai/plateforme.ts), le même modèle organise et converse. */}
           <Card className="space-y-2 p-4">
             <h3 className="text-sm font-medium">{t("O que ele pode mexer no sistema")}</h3>
             <p className="text-xs text-muted-foreground">

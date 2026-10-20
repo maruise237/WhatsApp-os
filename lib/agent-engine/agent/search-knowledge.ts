@@ -9,6 +9,7 @@
 import type pg from 'pg';
 
 import { embedText } from '@/lib/ai/embed';
+import { connaissancesEnTexte, PLAFONDS_CONNAISSANCES, plafonnerExtraits } from '@/lib/ai/plateforme';
 import type { Citation } from '@/lib/ai/citations/types';
 import type { Logger } from '../obs/logger';
 
@@ -38,35 +39,50 @@ export async function searchKnowledge(
     /** Só para telemetria — opcional, os chamadores de hoje seguem válidos. */
     jobId?: string | null;
   },
-  deps?: { embed?: typeof embedText; log?: Logger },
+  deps?: { embed?: typeof embedText; log?: Logger; enTexte?: boolean },
 ): Promise<SearchKnowledgeResult> {
   const embed = deps?.embed ?? embedText;
   try {
-    const { embedding } = await embed(args.query, { organizationId: args.organizationId });
-    const vec = `[${embedding.join(',')}]`;
+    // Plein texte (IA de la plateforme, migration 0184) : pas de vecteur, pas
+    // de limiar de cosinus — tout extrait qui partage une racine avec la
+    // question compte, et ce sont les plafonds qui tiennent le contexte.
+    const enTexte = deps?.enTexte ?? connaissancesEnTexte();
+    let rows: KnowledgeHit[];
+    let seuil = args.threshold;
+    if (enTexte) {
+      seuil = 0;
+      ({ rows } = await pool.query<KnowledgeHit>(
+        `select chunk_id, knowledge_source_id, content, similarity, metadata
+         from rechercher_chunks_texte($1, $2, $3, $4)`,
+        [args.organizationId, args.kbVersionId, args.query, Math.min(args.topK, PLAFONDS_CONNAISSANCES.extraits)],
+      ));
+    } else {
+      const { embedding } = await embed(args.query, { organizationId: args.organizationId });
+      const vec = `[${embedding.join(',')}]`;
 
-    // Pedimos ao banco SEM limiar (piso da similaridade) e cortamos aqui. O
-    // conjunto entregue ao modelo é o mesmo de antes — `order by` é por
-    // distância e o `limit` vem depois do `where`, então os K melhores globais
-    // já são os K melhores acima do limiar sempre que existirem K deles.
-    // (Não é teorema: o corte antigo comparava o float8 cru contra o limiar e
-    // este compara o float4 já arredondado da RPC. Na janela de ~3e-8 entre os
-    // dois os caminhos divergem, e a direção depende de para que lado o limiar
-    // arredonda ao virar `real` — `p_threshold` é real, e 0.72 arredonda para
-    // cima enquanto 0.7 e 0.9 arredondam para baixo. Não é "mais permissivo":
-    // é divergência nas duas direções, conforme o limiar configurado.)
-    //
-    // O que ganhamos é o `top_score`: a similaridade do melhor candidato mesmo
-    // quando ela não passa. Sem isso, "a base não tem essa informação" e "a base
-    // tem e o corte está apertado demais" são indistinguíveis — e são problemas
-    // com consertos opostos.
-    const { rows } = await pool.query<KnowledgeHit>(
-      `select chunk_id, knowledge_source_id, content, similarity, metadata
-       from retrieve_top_k_chunks($1, $2, $3::vector, $4, $5)`,
-      [args.organizationId, args.kbVersionId, vec, args.topK, PISO_SIMILARIDADE],
-    );
+      // Pedimos ao banco SEM limiar (piso da similaridade) e cortamos aqui. O
+      // conjunto entregue ao modelo é o mesmo de antes — `order by` é por
+      // distância e o `limit` vem depois do `where`, então os K melhores globais
+      // já são os K melhores acima do limiar sempre que existirem K deles.
+      // (Não é teorema: o corte antigo comparava o float8 cru contra o limiar e
+      // este compara o float4 já arredondado da RPC. Na janela de ~3e-8 entre os
+      // dois os caminhos divergem, e a direção depende de para que lado o limiar
+      // arredonda ao virar `real` — `p_threshold` é real, e 0.72 arredonda para
+      // cima enquanto 0.7 e 0.9 arredondam para baixo. Não é "mais permissivo":
+      // é divergência nas duas direções, conforme o limiar configurado.)
+      //
+      // O que ganhamos é o `top_score`: a similaridade do melhor candidato mesmo
+      // quando ela não passa. Sem isso, "a base não tem essa informação" e "a base
+      // tem e o corte está apertado demais" são indistinguíveis — e são problemas
+      // com consertos opostos.
+      ({ rows } = await pool.query<KnowledgeHit>(
+        `select chunk_id, knowledge_source_id, content, similarity, metadata
+         from retrieve_top_k_chunks($1, $2, $3::vector, $4, $5)`,
+        [args.organizationId, args.kbVersionId, vec, args.topK, PISO_SIMILARIDADE],
+      ));
+    }
 
-    const results = rows.filter((r) => r.similarity >= args.threshold);
+    const results = plafonnerExtraits(rows.filter((r) => r.similarity >= seuil));
     // Sem depender da ordem das linhas. O `filter` descarta o NaN que o pgvector
     // devolve para chunk de embedding zerado — ele contaminaria o `Math.max` e
     // anularia o top_score de linhas BOAS na mesma busca (numa KB com poucos
@@ -86,7 +102,7 @@ export async function searchKnowledge(
         `insert into knowledge_searches
            (organization_id, job_id, kb_version_id, hits, top_score, threshold)
          values ($1, $2, $3, $4, $5, $6)`,
-        [args.organizationId, args.jobId ?? null, args.kbVersionId, results.length, topScore, args.threshold],
+        [args.organizationId, args.jobId ?? null, args.kbVersionId, results.length, topScore, seuil],
       );
     } catch (err) {
       // Engolido de propósito — o `catch` externo transformaria isto em

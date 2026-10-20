@@ -162,9 +162,8 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
                 {t("Motivo:")} <code className="break-all">{desfecho.mensagem}</code>
               </p>
               <p className="text-sm">
-                {t(
-                  "As causas mais comuns são a chave da empresa de IA sem saldo ou o modelo indisponível. Dá para conferir em IA › Credenciais e seguir daqui mesmo — o que você montou está salvo.",
-                )}
+                Réessayez dans un instant. Si cela se répète, contactez le support — et vous pouvez
+                continuer d’ici : ce que vous avez préparé est enregistré.
               </p>
             </div>
           )}

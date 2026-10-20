@@ -140,9 +140,9 @@ export function montaLacunas(gaps: EvolutionPayload["gaps"]): Lacuna[] {
       texto:
         `Dans ${gaps.router_failed} ${plural(gaps.router_failed, "conversation, la lecture a échoué", "conversations, la lecture a échoué")} ` +
         `pour un problème technique, et elle est passée au service par défaut. Ce n’est pas un problème de configuration : c’est l’IA qui n’a pas répondu à temps. ` +
-        `Si le nombre est élevé, vérifiez la connexion avec le fournisseur d’IA.`,
-      href: "/app/ai/credentials",
-      cta: "Vérifier la connexion à l’IA",
+        `Si le nombre reste élevé, consultez l’historique des exécutions de l’IA.`,
+      href: "/app/ai/runs",
+      cta: "Voir les exécutions",
     });
   }
 

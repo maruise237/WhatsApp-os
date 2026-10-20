@@ -15,6 +15,7 @@ import { coberturaDoFunil, type EtapaDoMapa } from "@/lib/leads/agent-mapping";
 import type { CoberturaPorFunil } from "./_components/FunisDoAgente";
 import { lerAmbiente } from "@/lib/instalacao/ambiente";
 import { escolherVersoesDaTela } from "@/lib/ai/agents/versoes-da-tela";
+import { iaDeLaPlateformeDepuisProcessEnv } from "@/lib/ai/plateforme";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,12 @@ const VERSION_COLUMNS =
 
 const CREDENTIAL_COLUMNS =
   "id, organization_id, provider, label, api_key_last4, validated_at, validation_error, models_available, is_active, created_by, created_at, updated_at";
+
+/** L'IA de la plateforme, sans la clé : le formulaire n'a besoin que du modèle. */
+function iaPourLeFormulaire(): { model: string } | null {
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  return ia ? { model: ia.model } : null;
+}
 
 /**
  * Os provedores cuja chave veio na INSTALAÇÃO (`.env`), não da tela de
@@ -154,6 +161,7 @@ export default async function AgentEditorPage({
         versions={versions}
         credentials={credentials}
         provedoresDaInstalacao={provedoresDaInstalacao()}
+        iaPlateforme={iaPourLeFormulaire()}
         channelSessions={channelSessions}
         funis={funis}
         cobertura={cobertura}

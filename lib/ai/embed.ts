@@ -10,6 +10,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { embed } from "ai";
 
 import { env } from "@/lib/env";
+import { connaissancesEnTexte } from "@/lib/ai/plateforme";
 import {
   DEFAULT_EMBEDDING_MODEL,
   gatewayConfig,
@@ -27,6 +28,17 @@ export interface EmbedResult {
   embedding: number[];
   promptTokens: number;
   model: string;
+}
+
+/**
+ * Le vecteur à ranger avec un extrait, ou `null` quand la base se cherche en
+ * plein texte (`connaissancesEnTexte`) : la colonne `ai_chunks.embedding` est
+ * facultative depuis la 0184, et la recherche lit `contenu_recherche`.
+ */
+export async function vecteurDExtrait(content: string, organizationId: string): Promise<string | null> {
+  if (connaissancesEnTexte()) return null;
+  const { embedding } = await embedText(content, { organizationId });
+  return embedding as unknown as string;
 }
 
 export async function embedText(

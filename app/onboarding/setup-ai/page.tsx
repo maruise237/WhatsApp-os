@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
-import { createClient } from "@/lib/supabase/server";
-import { lerRetratoDaInstalacao } from "@/lib/instalacao/retrato";
 import { SetupAiForm } from "./_form";
-import { InteligenciaDele } from "./_inteligencia";
 import { capacidadesPadraoDoOnboarding } from "@/lib/ai/agents/capacidades-padrao";
 import { TOOL_CATALOG } from "@/lib/mcp/tools/catalog";
 import { CONFERENCIAS_DE_SAIDA } from "@/lib/ai/guardrails/lista-de-conferencia";
@@ -30,9 +27,6 @@ export default async function SetupAiPage() {
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) redirect("/login");
 
-  const supabase = await createClient();
-  const retrato = await lerRetratoDaInstalacao({ supabase, orgId: activeOrg.orgId });
-
   const porNome = new Map(TOOL_CATALOG.map((c) => [c.name, c]));
   const capacidades = capacidadesPadraoDoOnboarding()
     .map((id) => porNome.get(id)?.rotulo)
@@ -49,20 +43,6 @@ export default async function SetupAiPage() {
           modifié plus tard.
         </p>
       </header>
-      {/*
-        O cérebro vem ANTES do resto do formulário: sem chave, nada do que a
-        pessoa preencher abaixo produz um funcionário que responde. E é aqui que
-        a chave passa a importar — um clique antes de ele ser criado com ela.
-      */}
-      <InteligenciaDele
-        inicial={{
-          origem: retrato.inteligencia.origemDaChave,
-          provedor: retrato.inteligencia.provedor,
-          rotulo: retrato.inteligencia.rotulo,
-          final: retrato.inteligencia.chaveDaOrg?.final ?? null,
-        }}
-      />
-
       <SetupAiForm capacidades={capacidades} conferencias={conferencias} />
     </div>
   );

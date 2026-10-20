@@ -112,8 +112,10 @@ describe("setup de IA: o que a tela diz quando o agente fica rascunho", () => {
 
     const aviso = await screen.findByRole("alert");
     expect(aviso).toHaveTextContent(/brouillon/i);
-    // A causa certa, nomeando o provedor que a pessoa escolheu no instalador.
-    expect(aviso).toHaveTextContent(/openrouter/i);
+    // La bonne cause, sans jamais nommer de fournisseur : l'IA est celle de la
+    // plateforme, et la vendeuse n'a aucun fournisseur à connaître.
+    expect(aviso).toHaveTextContent(/intelligence de l’assistant/i);
+    expect(aviso).not.toHaveTextContent(/openrouter|anthropic|openai|deepseek/i);
     // E NUNCA a causa errada: o número de WhatsApp não tem nada a ver com isto.
     expect(aviso).not.toHaveTextContent(/números de WhatsApp/i);
     expect(screen.getByRole("button", { name: /continuer sans publier/i })).toBeInTheDocument();

@@ -9,11 +9,18 @@ import type { CredentialRow } from "@/hooks/ai/useCredentials";
 import { lerAmbiente } from "@/lib/instalacao/ambiente";
 
 import { AgentForm } from "../[id]/_components/AgentForm";
+import { iaDeLaPlateformeDepuisProcessEnv } from "@/lib/ai/plateforme";
 
 export const dynamic = "force-dynamic";
 
 const CREDENTIAL_COLUMNS =
   "id, organization_id, provider, label, api_key_last4, validated_at, validation_error, models_available, is_active, created_by, created_at, updated_at";
+
+/** L'IA de la plateforme, sans la clé : le formulaire n'a besoin que du modèle. */
+function iaPourLeFormulaire(): { model: string } | null {
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  return ia ? { model: ia.model } : null;
+}
 
 /**
  * Os provedores cuja chave veio na INSTALAÇÃO (`.env`), não da tela de
@@ -55,6 +62,7 @@ export default async function NewAgentPage() {
         mode="create"
         credentials={credentials}
         provedoresDaInstalacao={provedoresDaInstalacao()}
+        iaPlateforme={iaPourLeFormulaire()}
         channelSessions={channelSessions}
       />
     </div>

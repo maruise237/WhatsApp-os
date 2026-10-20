@@ -134,7 +134,7 @@ describe("lista de provedores × os pontos de ESCRITA", () => {
   it("o schema de versão de agente aceita a lista inteira", async () => {
     const { PROVIDERS } = await import("@/lib/ai/agents/validation");
     expect(
-      [...PROVIDERS].sort(),
+      [...PROVIDERS].filter((p) => p !== FOURNISSEUR_PLATEFORME).sort(),
       "um provedor fora daqui não pode ser publicado num agente — os dois pontos que respondem o cliente ficam fora do alcance dele",
     ).toEqual(ids);
   });
@@ -284,6 +284,8 @@ describe("a corrente inteira: lista × execução × tela", () => {
       literais,
       "o seletor voltou a listar provedores à mão — o próximo provedor da lista nasce invisível na tela",
     ).toEqual([]);
-    expect(fonte).toMatch(/from "@\/lib\/ai\/pontos\/provedores"/);
+    // L'IA est fournie par la plateforme : l'écran ne propose plus AUCUN
+    // fournisseur, ni dérivé ni à la main.
+    expect(fonte).not.toMatch(/PROVEDORES\.map/);
   });
 });

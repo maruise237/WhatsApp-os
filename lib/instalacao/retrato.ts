@@ -7,6 +7,7 @@
  * rede por nada — e, pior, cria uma segunda montagem do mesmo retrato, que é
  * como as respostas do produto começaram a divergir em primeiro lugar.
  */
+import { FOURNISSEUR_PLATEFORME, iaDeLaPlateforme } from "@/lib/ai/plateforme";
 import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { PROVEDOR_POR_ID } from "@/lib/ai/pontos/provedores";
@@ -122,28 +123,42 @@ export async function lerRetratoDaInstalacao(
 
   const modeloCurado = (modelo?.model_id as string | undefined) ?? null;
 
+  // IA de la plateforme : elle est là, prête, et n'a pas de nom à montrer.
+  const ia = iaDeLaPlateforme(deps.ambiente ?? process.env);
+  const inteligencia: RetratoDaInstalacao["inteligencia"] = ia
+    ? {
+        provedor: FOURNISSEUR_PLATEFORME,
+        rotulo: "IA de la plateforme",
+        origemDaChave: "instalacao",
+        chaveEmVerificacao: false,
+        chaveDaOrg: null,
+        modeloCurado: ia.model,
+        prontaParaPublicar: true,
+      }
+    : {
+        provedor: provider,
+        rotulo: PROVEDOR_POR_ID.get(provider)?.rotulo ?? provider,
+        origemDaChave,
+        chaveEmVerificacao: emVerificacao,
+        chaveDaOrg: credencial
+          ? {
+              id: credencial.id as string,
+              label: credencial.label as string,
+              final: credencial.api_key_last4 as string,
+            }
+          : null,
+        modeloCurado,
+        // Chave sem modelo no catálogo não publica agente — é o estado de uma
+        // instalação nova em OpenRouter, cujo catálogo só chega no cron diário.
+        prontaParaPublicar: origemDaChave !== "nenhuma" && Boolean(modeloCurado),
+      };
+
   return {
     empresa: {
       nome: (orgRow?.display_name as string | null) ?? null,
       aindaSemNomeProprio: nomeAindaEhPlaceholder(orgRow ?? {}),
     },
-    inteligencia: {
-      provedor: provider,
-      rotulo: PROVEDOR_POR_ID.get(provider)?.rotulo ?? provider,
-      origemDaChave,
-      chaveEmVerificacao: emVerificacao,
-      chaveDaOrg: credencial
-        ? {
-            id: credencial.id as string,
-            label: credencial.label as string,
-            final: credencial.api_key_last4 as string,
-          }
-        : null,
-      modeloCurado,
-      // Chave sem modelo no catálogo não publica agente — é o estado de uma
-      // instalação nova em OpenRouter, cujo catálogo só chega no cron diário.
-      prontaParaPublicar: origemDaChave !== "nenhuma" && Boolean(modeloCurado),
-    },
+    inteligencia,
     whatsapp: {
       transporteApontado: ambiente.transporteDeWhatsapp.apontado && ambiente.transporteDeWhatsapp.comChave,
       canais: deps.contarCanais ? await deps.contarCanais() : null,

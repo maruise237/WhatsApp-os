@@ -93,6 +93,7 @@ export function llmEdgeConfigFromEnv(env: {
   DEEPSEEK_API_KEY?: string;
   DEEPSEEK_BASE_URL?: string;
   DEEPSEEK_MODEL?: string;
+  DEEPSEEK_REFLEXION?: string;
   LLM_CACHE_TTL?: string;
   AI_BUDGET_ENFORCEMENT?: string;
 }): LlmEdgeConfig {

@@ -63,16 +63,10 @@ export function AgentCard({ agent, canWrite }: Props) {
           <h3 className="truncate font-medium" title={agent.name}>
             {agent.name}
           </h3>
-          <p
-            className="truncate text-xs text-muted-foreground"
-            title={
-              origemDoModelo(agent) === "versao_publicada"
-                ? t("Modelo da versão publicada — é o que atende o cliente.")
-                : t("Modelo do cadastro; nenhuma versão publicada ainda.")
-            }
-          >
-            {modeloEmVigor(agent)}
-          </p>
+          {/* Le modèle n'est plus affiché : l'IA est fournie par la plateforme. */}
+          {agent.description ? (
+            <p className="truncate text-xs text-muted-foreground">{agent.description}</p>
+          ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-1">
           {agent.is_default && (

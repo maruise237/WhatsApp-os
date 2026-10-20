@@ -187,6 +187,7 @@ const schema = z.object({
   DEEPSEEK_API_KEY: z.string().optional().default(""),
   DEEPSEEK_BASE_URL: z.string().optional().default(""),
   DEEPSEEK_MODEL: z.string().optional().default(""),
+  DEEPSEEK_REFLEXION: z.string().optional().default(""),
 
   // Fusão (Fase 4): DONO ÚNICO dos eventos ai_agent.dispatch_requested.
   // 'engine' (default) = o worker agent-engine é o único consumidor (o cron

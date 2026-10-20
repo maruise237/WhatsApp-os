@@ -10,7 +10,12 @@ import { createOpenAI } from '@ai-sdk/openai';
 import type { LanguageModel } from 'ai';
 import { MockLanguageModelV3 } from 'ai/test';
 
-import { FOURNISSEUR_PLATEFORME, URL_PLATEFORME_PAR_DEFAUT } from '@/lib/ai/plateforme';
+import {
+  avecReflexion,
+  FOURNISSEUR_PLATEFORME,
+  iaDeLaPlateformeDepuisProcessEnv,
+  URL_PLATEFORME_PAR_DEFAUT,
+} from '@/lib/ai/plateforme';
 
 import { allowlistedFetch, buildAllowlist } from '../egress';
 
@@ -114,7 +119,11 @@ export function createDefaultRegistry(opts?: { allowedHosts?: string[] }): Provi
      */
     [FOURNISSEUR_PLATEFORME]: (apiKey, modelId, baseUrl) => {
       const endpoint = baseUrl ?? URL_PLATEFORME_PAR_DEFAUT;
-      return createDeepSeek({ apiKey, baseURL: endpoint, fetch: contain(endpoint) })(modelId);
+      const reflexion = iaDeLaPlateformeDepuisProcessEnv()?.reflexion ?? 'low';
+      return avecReflexion(
+        createDeepSeek({ apiKey, baseURL: endpoint, fetch: contain(endpoint) })(modelId),
+        reflexion,
+      );
     },
     openrouter: (apiKey, modelId, baseUrl) => {
       const endpoint = baseUrl ?? OPENROUTER_ENDPOINT;
