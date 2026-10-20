@@ -47,6 +47,12 @@ const RE_PRICE_CFA = new RegExp(
 // "100% satisfação" não é desconto).
 const RE_DISCOUNT_PREFIX = /desconto\s+(?:de\s+)?(\d{1,3})\s*(?:%|por\s*cento)/gi;
 const RE_DISCOUNT_SUFFIX = /(\d{1,3})\s*(?:%|por\s*cento)\s*(?:de\s+)?(?:desconto|off)/gi;
+// Même prudence en français : le pourcentage doit toucher « remise », « réduction »
+// ou « rabais » (« 100 % satisfait » n'est pas une remise).
+const RE_REMISE_PREFIX =
+  /(?:remise|r[ée]duction|rabais)\s+(?:de\s+)?(\d{1,3})\s*(?:%|pour\s*cent)/gi;
+const RE_REMISE_SUFFIX =
+  /(\d{1,3})\s*(?:%|pour\s*cent)\s*(?:de\s+)?(?:remise|r[ée]duction|rabais)/gi;
 // Parcelamento REAL: exige contexto de PAGAMENTO adjacente ao "Nx"/"N vezes" — mesmo
 // rigor do desconto (que exige "desconto"/"off"). Sem o contexto, "10x mais rápido" /
 // "3x crescimento" são copy de marketing, NÃO parcela (evita falso-positivo). Dois lados:
@@ -54,6 +60,13 @@ const RE_DISCOUNT_SUFFIX = /(\d{1,3})\s*(?:%|por\s*cento)\s*(?:de\s+)?(?:descont
 //   SUFFIX  — "12x sem juros", "12x de R$ 50", "12x no cartão/boleto", "12x iguais".
 const RE_INSTALLMENTS_PREFIX =
   /\b(?:parcel\w*|dividid\w*\s+em|em(?:\s+at[ée])?)\s+(\d{1,3})\s*(?:x\b|vezes\b)/gi;
+// Paiement fractionné en français : « payable en 3 fois », « en 4 versements »,
+// « 3 fois sans frais », « 6 mensualités de 10 000 FCFA ». « 2 fois plus rapide »
+// n'a pas de contexte de paiement et ne compte pas.
+const RE_FRACTIONNE_PREFIX =
+  /\b(?:payable|payer|r[ée]gler|r[ée]glable)?\s*en\s+(\d{1,3})\s+(?:fois\b(?!\s+plus)|versements?\b|mensualit[ée]s?\b|tranches?\b)/gi;
+const RE_FRACTIONNE_SUFFIX =
+  /(\d{1,3})\s+(?:fois\s+sans\s+frais|(?:versements?|mensualit[ée]s?|tranches?)\s+de\b)/gi;
 const RE_INSTALLMENTS_SUFFIX =
   /(\d{1,3})\s*(?:x\b|vezes\b)\s+(?:sem\s+juros|de\s*R\$|no\s+(?:cart[ãa]o|boleto)|iguais)/gi;
 
@@ -89,11 +102,17 @@ export function extractPromises(body: string): DetectedPromise[] {
     out.push({ kind: 'discount', value: pct });
   for (const pct of collect(RE_DISCOUNT_SUFFIX, body, (m) => Number(m[1])))
     out.push({ kind: 'discount', value: pct });
+  for (const pct of collect(RE_REMISE_PREFIX, body, (m) => Number(m[1])))
+    out.push({ kind: 'discount', value: pct });
+  for (const pct of collect(RE_REMISE_SUFFIX, body, (m) => Number(m[1])))
+    out.push({ kind: 'discount', value: pct });
   // Dedup por valor: "em 12x sem juros" casa prefix E suffix — a mesma parcela não vira
   // duas detecções (o veto só compara o valor contra o teto da tabela).
   const installments = new Set<number>();
   for (const n of collect(RE_INSTALLMENTS_PREFIX, body, (m) => Number(m[1]))) installments.add(n);
   for (const n of collect(RE_INSTALLMENTS_SUFFIX, body, (m) => Number(m[1]))) installments.add(n);
+  for (const n of collect(RE_FRACTIONNE_PREFIX, body, (m) => Number(m[1]))) installments.add(n);
+  for (const n of collect(RE_FRACTIONNE_SUFFIX, body, (m) => Number(m[1]))) installments.add(n);
   for (const n of installments) out.push({ kind: 'installments', value: n });
   return out;
 }

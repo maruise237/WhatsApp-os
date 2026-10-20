@@ -34,3 +34,29 @@ describe("prix en franc CFA", () => {
     expect(extractPromises("por R$ 1.497,00")).toEqual([{ kind: "price", value: 149_700 }]);
   });
 });
+
+describe("remises et paiement fractionné en français", () => {
+  it.each([
+    ["Je vous fais une remise de 20 % aujourd'hui", 20],
+    ["Profitez de 15% de réduction", 15],
+    ["un rabais de 10 pour cent", 10],
+  ])("remise : %s", (texte, pct) => {
+    expect(extractPromises(texte)).toEqual([{ kind: "discount", value: pct }]);
+  });
+
+  it.each([
+    ["C'est payable en 3 fois", 3],
+    ["Vous pouvez régler en 4 versements", 4],
+    ["3 fois sans frais", 3],
+    ["6 mensualités de 10 000 FCFA", 6],
+  ])("paiement fractionné : %s", (texte, n) => {
+    expect(extractPromises(texte).filter((p) => p.kind === "installments")).toEqual([
+      { kind: "installments", value: n },
+    ]);
+  });
+
+  it("n'invente ni remise ni paiement fractionné", () => {
+    expect(extractPromises("Satisfait à 100 %, livré en 2 fois plus vite")).toEqual([]);
+    expect(extractPromises("Je vous ai déjà écrit 3 fois")).toEqual([]);
+  });
+});
