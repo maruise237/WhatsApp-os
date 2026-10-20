@@ -34,6 +34,15 @@ export interface PromiseDecision {
 const MONEY = '(\\d{1,3}(?:\\.\\d{3})+(?:,\\d{2})?|\\d+(?:,\\d{2})?)';
 const RE_PRICE_RS = new RegExp(`R\\$\\s*${MONEY}`, 'gi');
 const RE_PRICE_REAIS = new RegExp(`${MONEY}\\s*(?:reais|real)\\b`, 'gi');
+// Franc CFA (XAF/XOF), le marché par défaut : « 500 FCFA », « 15 000 F CFA »,
+// « 15.000 XAF », « 2500 francs ». Pas de décimales (le CFA n'en a pas) ; milliers
+// groupés par espace (y compris insécable), point, ou rien. Exige l'unité CFA
+// juste après le nombre — « 500 clients » ne devient jamais un prix.
+const MONEY_CFA = '(\\d{1,3}(?:[ \\u00a0\\u202f.]\\d{3})+|\\d+)';
+const RE_PRICE_CFA = new RegExp(
+  `${MONEY_CFA}\\s*(?:F\\s?CFA|FCFA|XAF|XOF|francs?(?:\\s+CFA)?)(?![\\p{L}\\d])`,
+  'giu',
+);
 // Desconto: exige a palavra "desconto"/"off" adjacente ao percentual (conservador —
 // "100% satisfação" não é desconto).
 const RE_DISCOUNT_PREFIX = /desconto\s+(?:de\s+)?(\d{1,3})\s*(?:%|por\s*cento)/gi;
@@ -47,6 +56,11 @@ const RE_INSTALLMENTS_PREFIX =
   /\b(?:parcel\w*|dividid\w*\s+em|em(?:\s+at[ée])?)\s+(\d{1,3})\s*(?:x\b|vezes\b)/gi;
 const RE_INSTALLMENTS_SUFFIX =
   /(\d{1,3})\s*(?:x\b|vezes\b)\s+(?:sem\s+juros|de\s*R\$|no\s+(?:cart[ãa]o|boleto)|iguais)/gi;
+
+/** "15 000" / "15.000" / "15000" (CFA, sans décimales) → 1500000 centimes. */
+function cfaToCents(raw: string): number {
+  return Number(raw.replace(/[\s.]/g, '')) * 100;
+}
 
 /** "1.497,00" → 149700 centavos; "1" → 100; "500" → 50000. */
 function moneyToCents(raw: string): number {
@@ -68,6 +82,8 @@ export function extractPromises(body: string): DetectedPromise[] {
   for (const cents of collect(RE_PRICE_RS, body, (m) => moneyToCents(m[1] ?? '0')))
     out.push({ kind: 'price', value: cents });
   for (const cents of collect(RE_PRICE_REAIS, body, (m) => moneyToCents(m[1] ?? '0')))
+    out.push({ kind: 'price', value: cents });
+  for (const cents of collect(RE_PRICE_CFA, body, (m) => cfaToCents(m[1] ?? '0')))
     out.push({ kind: 'price', value: cents });
   for (const pct of collect(RE_DISCOUNT_PREFIX, body, (m) => Number(m[1])))
     out.push({ kind: 'discount', value: pct });

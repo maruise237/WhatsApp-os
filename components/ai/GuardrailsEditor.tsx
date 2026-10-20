@@ -17,6 +17,7 @@ import {
   type GuardrailKind,
 } from "@/lib/ai/guardrails-schema";
 import { useT } from "@/hooks/i18n/useT";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 interface Props {
   value: GuardrailItem[];
@@ -55,7 +56,7 @@ function defaultForKind(kind: GuardrailKind): GuardrailItem {
         kind: "window_check",
         start_hour: 7,
         end_hour: 22,
-        timezone: "America/Sao_Paulo",
+        timezone: FUSEAU_PAR_DEFAUT,
         reason: "Plage d’activité 7h-22h",
       };
     case "contact_flag":
@@ -257,7 +258,7 @@ function GuardrailFields({
         <div className="space-y-1 md:col-span-2">
           <Label className="text-xs">{t("Timezone")}</Label>
           <Input
-            value={item.timezone ?? "America/Sao_Paulo"}
+            value={item.timezone ?? FUSEAU_PAR_DEFAUT}
             onChange={(e) => onPatch({ timezone: e.target.value } as Partial<GuardrailItem>)}
             disabled={disabled}
           />

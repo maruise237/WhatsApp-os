@@ -33,7 +33,7 @@
  */
 
 export interface JanelaDeAtendimento {
-  /** IANA (`America/Sao_Paulo`). Inválido ⇒ a janela inteira é descartada. */
+  /** IANA (`Africa/Douala`). Inválido ⇒ a janela inteira é descartada. */
   timezone: string;
   /** `HH:MM` local. */
   start: string;

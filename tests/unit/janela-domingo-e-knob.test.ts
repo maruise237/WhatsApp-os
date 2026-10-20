@@ -21,8 +21,8 @@ import { decidePacing } from "@/lib/agent-engine/pacing/engine";
 
 /** 2026-08-23 é DOMINGO. 13h UTC = 10h BRT, dentro da janela 7h-22h. */
 const DOMINGO_COMERCIAL = new Date("2026-08-23T13:00:00Z");
-/** Mesmo domingo, 06h UTC = 03h BRT — fora da janela por HORA, não por dia. */
-const DOMINGO_MADRUGADA = new Date("2026-08-23T06:00:00Z");
+/** Mesmo domingo, 02h UTC = 03h em Douala (fuso padrão) — fora da janela por HORA, não por dia. */
+const DOMINGO_MADRUGADA = new Date("2026-08-23T02:00:00Z");
 /** Terça, 10h BRT — controle. */
 const TERCA_COMERCIAL = new Date("2026-07-28T13:00:00Z");
 

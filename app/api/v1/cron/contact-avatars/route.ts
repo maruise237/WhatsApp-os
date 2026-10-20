@@ -45,7 +45,7 @@ interface ContactRow {
   avatar_storage_path: string | null;
 }
 
-/** `lid:123…` / `phone:+55…` → o chatId que o adapter espera. */
+/** `lid:123…` / `phone:+237…` → o chatId que o adapter espera. */
 function chatIdFromIdentity(identity: string): string | null {
   if (identity.startsWith("lid:")) return `${identity.slice(4)}@lid`;
   if (identity.startsWith("phone:")) return `${identity.slice(6).replace(/\D/g, "")}@c.us`;

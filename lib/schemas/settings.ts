@@ -10,6 +10,7 @@ import { z } from "zod";
 
 import { ehHexValido } from "@/lib/branding/rampa";
 import { IDIOMAS } from "@/lib/i18n/idiomas";
+import { INDICATIF_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 import { conversationTagSchema } from "./messaging";
 
@@ -86,6 +87,16 @@ export const tenantSchema = z.object({
     .optional()
     .or(z.literal("").transform(() => null)),
   lost_reasons_extra: z.array(z.string().min(1).max(80)).max(50).default([]),
+  /**
+   * Indicatif ajouté aux numéros saisis sans indicatif (import CSV, webhooks de
+   * captation). Gravé dans `organizations.settings.phone_country_code`, sans `+`.
+   */
+  phone_country_code: z
+    .string()
+    .trim()
+    .regex(/^\+?[1-9]\d{0,2}$/, "indicatif invalide (ex. : 237)")
+    .transform((v) => v.replace(/^\+/, ""))
+    .default(INDICATIF_PAR_DEFAUT),
 });
 export type TenantInput = z.infer<typeof tenantSchema>;
 

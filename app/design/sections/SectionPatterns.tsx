@@ -97,7 +97,7 @@ export function SectionPatterns() {
                   <span className="title">Commande n°{(12440 + i + col.n).toString()}</span>
                   <span className="value">{150 + i * 88} FCFA</span>
                 </div>
-                <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Client {i + 1} · pix</div>
+                <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Client {i + 1} · mobile money</div>
                 <div className="row">
                   <span className="ds-badge ds-badge--neutral">2 articles</span>
                   <span className="ds-avatar ds-avatar--sm">RM</span>

@@ -167,7 +167,7 @@ export function SectionComponents() {
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Marie Ngo · cliente fidèle</div>
             <div className="row">
               <div className="tags">
-                <span className="ds-badge ds-badge--info">pix</span>
+                <span className="ds-badge ds-badge--info">mobile money</span>
                 <span className="ds-badge ds-badge--warning">sla&lt;1h</span>
               </div>
               <span className="ds-avatar ds-avatar--sm">RM</span>

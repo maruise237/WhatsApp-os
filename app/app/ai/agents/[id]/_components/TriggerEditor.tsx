@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export interface BusinessHoursValue {
   timezone: string;
@@ -60,7 +61,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
     patchFilters({
       business_hours: enabled
         ? (bh ?? {
-            timezone: "America/Sao_Paulo",
+            timezone: FUSEAU_PAR_DEFAUT,
             start: "08:00",
             end: "20:00",
             weekdays: [1, 2, 3, 4, 5],

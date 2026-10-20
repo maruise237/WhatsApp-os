@@ -1,4 +1,4 @@
-import { normalizePhoneBR } from "@/lib/webhooks/inbound";
+import { normaliserTelephone } from "@/lib/telephone/normaliser";
 /**
  * Parser de CSV para importação de contatos — RFC 4180, zero dependências.
  *
@@ -199,24 +199,19 @@ export interface LinhaNormalizada {
 }
 
 /**
- * Telephone → E.164 **assumindo Brasil quando não há DDI**.
+ * Téléphone → E.164 avec l'indicatif par défaut de l'organisation (237 si absent).
  *
- * A regra NÃO mora aqui: é `normalizePhoneBR` (`lib/webhooks/inbound.ts`), a
- * mesma que a ingestão de webhook usa desde sempre. Reusar em vez de reescrever
- * é o ponto — a versão anterior deste arquivo tinha uma TERCEIRA regra, e ela
- * produzia número quebrado: `"(11) 99999-8888"` virava `+11999998888`, em que o
- * `11` (que é DDD) ocupava o lugar do DDI. Um `+11` é os Estados Unidos, e o
- * resto do número não existe lá — mensagem para pessoa errada, ou para ninguém.
+ * La règle NE vit PAS ici : c'est `normaliserTelephone`
+ * (`lib/telephone/normaliser.ts`), la même que l'ingestion des webhooks de
+ * captation. Un numéro local (`699 99 88 88`) reçoit l'indicatif par défaut ;
+ * un numéro avec `+`, `00` ou indicatif (`237699998888`) est gardé.
  *
- * O que a regra da casa faz: 10 ou 11 dígitos sem `+` são DDD + número e ganham
- * `+55`; 12 ou 13 dígitos precisam começar com `55`; quem já vem com `+` é
- * respeitado como está (internacional continua possível, é só escrever o DDI).
- *
- * Decisão do dono do produto, 2026-08-24: o público é brasileiro, então assumir
- * `+55` é a leitura certa de uma planilha sem DDI — e é o que a ingestão já fazia.
+ * Historique : la toute première version de ce fichier avait une TROISIÈME règle
+ * qui transformait `"(11) 99999-8888"` en `+11999998888` (DDD brésilien pris
+ * pour un indicatif). Réutiliser plutôt que réécrire évite ce genre de dérive.
  */
-export function normalizaTelefone(raw: string): string | null {
-  return normalizePhoneBR(raw);
+export function normalizaTelefone(raw: string, indicatif?: string): string | null {
+  return normaliserTelephone(raw, indicatif);
 }
 
 /**
@@ -254,6 +249,8 @@ export function normalizaData(raw: string): string | null {
 export function mapLinha(
   cells: string[],
   indices: Record<string, number>,
+  /** Indicatif par défaut de l'organisation (sans `+`) ; absent ⇒ 237. */
+  indicatif?: string,
 ): { contato: LinhaNormalizada; motivo: string | null } {
   const get = (campo: string): string => {
     const idx = indices[campo];
@@ -277,7 +274,7 @@ export function mapLinha(
 
   const phoneRaw = get("phone_number");
   if (phoneRaw !== "") {
-    const phone = normalizaTelefone(phoneRaw);
+    const phone = normalizaTelefone(phoneRaw, indicatif);
     if (phone === null) {
       return {
         contato: {},

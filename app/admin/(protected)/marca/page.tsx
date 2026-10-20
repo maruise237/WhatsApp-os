@@ -7,6 +7,7 @@ import { camadaDaInstalacao, camadaDoAmbiente, resolverMarca } from "@/lib/brand
 import { env } from "@/lib/env";
 
 import { FormularioDaMarca } from "./_form";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export const metadata = { title: "Marque de l’installation" };
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export const dynamic = "force-dynamic";
 function instanteLegivel(iso: string | null): string | null {
   if (!iso) return null;
   return new Date(iso).toLocaleString("fr-FR", {
-    timeZone: "America/Sao_Paulo",
+    timeZone: FUSEAU_PAR_DEFAUT,
     dateStyle: "short",
     timeStyle: "short",
   });

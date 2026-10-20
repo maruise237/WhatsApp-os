@@ -5,6 +5,7 @@ import { ROLE_RANK } from "@/lib/auth/types";
 import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { createClient } from "@/lib/supabase/server";
+import { indicatifDeLOrganisation } from "@/lib/telephone/normaliser";
 import { TenantForm } from "./_form";
 
 export const dynamic = "force-dynamic";
@@ -68,6 +69,7 @@ export default async function TenantSettingsPage() {
             dpo_email: row.dpo_email,
             privacy_policy_url: row.privacy_policy_url,
             lost_reasons_extra: lostReasonsExtra,
+            phone_country_code: indicatifDeLOrganisation(row.settings),
           }}
         />
       )}

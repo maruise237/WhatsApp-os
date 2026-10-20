@@ -862,7 +862,7 @@ export const DICIONARIO: Traducoes = {
   "Contato atualizado": { "fr-FR": "Contact mis à jour" },
   "Editar contato": { "fr-FR": "Modifier le contact" },
   "Valor inválido": { "fr-FR": "Valeur invalide" },
-  "Valor (R$)": { "fr-FR": "Montant" },
+  "Montante": { "fr-FR": "Montant" },
   "Lead criado": { "fr-FR": "Lead créé" },
   "Novo Lead": { "fr-FR": "Nouveau lead" },
   "Crie um lead manualmente neste pipeline.": {
@@ -3375,9 +3375,13 @@ export const DICIONARIO: Traducoes = {
         "Nombre maximal de messages envoyés par ce numéro chaque jour. Les nouveaux numéros respectent également le réchauffement automatique ci-dessous ; la limite la plus basse s’applique.",
     },
   "Fuso horário IANA": { "fr-FR": "Fuseau horaire IANA" },
+  "Indicativo telefônico padrão": { "fr-FR": "Indicatif téléphonique par défaut" },
+  "Adicionado aos números digitados sem indicativo (ex.: 6XX XX XX XX → +237 6XX XX XX XX).": {
+    "fr-FR": "Ajouté aux numéros saisis sans indicatif (ex. : 6XX XX XX XX → +237 6XX XX XX XX).",
+  },
   "Usar o padrão": { "fr-FR": "Utiliser la valeur par défaut" },
-  "A janela de envio é avaliada neste fuso (ex.: America/Sao_Paulo).": {
-    "fr-FR": "La fenêtre d’envoi est évaluée dans ce fuseau (ex. : America/Sao_Paulo).",
+  "A janela de envio é avaliada neste fuso (ex.: Africa/Douala).": {
+    "fr-FR": "La fenêtre d’envoi est évaluée dans ce fuseau (ex. : Africa/Douala).",
   },
   "Aquecimento automático de número novo": {
     "fr-FR": "Réchauffement automatique d’un nouveau numéro",

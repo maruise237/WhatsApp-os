@@ -50,7 +50,7 @@ interface LinhaDeKnobs {
 /**
  * Os knobs em vigor para este número. Sem linha em `channel_knobs` — o caso de
  * quem nunca abriu a tela — devolve os defaults do pacing, que já são
- * 7h–22h em `America/Sao_Paulo`: o comportamento pretendido desde sempre, agora
+ * 7h–22h em `Africa/Douala`: o comportamento pretendido desde sempre, agora
  * no fuso certo.
  */
 export async function knobsDoCanal(

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useLeadTimeline } from "@/hooks/leads/useLeadTimeline";
 import type { Lead } from "@/lib/types/leads";
+import { formatMontant } from "@/lib/money";
 import { ConversaNoDossie } from "./ConversaNoDossie";
 import { LeadFieldsForm } from "./LeadFieldsForm";
 import { ScoreSlot } from "./ScoreSlot";
@@ -20,17 +21,9 @@ interface Props {
   ownerNames?: Map<string, string | null>;
 }
 
-function formatBRL(cents: number | null, currency: string | null): string {
+function formatValor(cents: number | null, currency: string | null): string {
   if (cents === null) return "—";
-  try {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: currency ?? "XAF",
-      maximumFractionDigits: 0,
-    }).format(cents / 100);
-  } catch {
-    return `${(cents / 100).toFixed(0)} ${currency ?? "XAF"}`;
-  }
+  return formatMontant(cents, currency);
 }
 
 /**
@@ -79,7 +72,7 @@ export function LeadDossier({
         {/* ① cabeçalho vivo */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-border pb-3 text-xs">
           <span className="font-medium tabular-nums text-text">
-            {formatBRL(lead.value_cents, lead.currency)}
+            {formatValor(lead.value_cents, lead.currency)}
           </span>
           <span className="text-text-muted">{stageName}</span>
           <OwnerBadge

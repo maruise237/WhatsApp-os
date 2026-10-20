@@ -226,7 +226,7 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
               id="test-name"
               value={contactName}
               onChange={(e) => setContactName(e.target.value)}
-              placeholder="Aïcha"
+              placeholder="Maria"
               disabled={pending || readOnly}
             />
           </div>
@@ -236,7 +236,7 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
               id="test-phone"
               value={contactPhone}
               onChange={(e) => setContactPhone(e.target.value)}
-              placeholder="+237..."
+              placeholder="+237 6XX XX XX XX"
               disabled={pending || readOnly}
             />
           </div>

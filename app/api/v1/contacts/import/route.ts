@@ -33,6 +33,7 @@ import {
 } from "@/lib/contacts/csv";
 import { contactCreateSchema } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
+import { indicatifDeLOrganisation } from "@/lib/telephone/normaliser";
 
 export const dynamic = "force-dynamic";
 
@@ -116,13 +117,22 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
+  // Numéro sans indicatif ⇒ indicatif par défaut de l'organisation
+  // (`settings.phone_country_code`, 237 si absent). Lecture qui échoue ⇒ défaut.
+  const { data: orgDoImport } = await supabase
+    .from("organizations")
+    .select("settings")
+    .eq("id", orgId)
+    .maybeSingle();
+  const indicatif = indicatifDeLOrganisation(orgDoImport?.settings);
+
   const candidatos: Array<{ linha: number; contato: Record<string, unknown> }> = [];
   const errors: LinhaErro[] = [];
   const vistosNoArquivo = new Set<string>();
 
   for (let i = 0; i < dataRows.length; i++) {
     const linha = i + 2; // 1-based contando o cabeçalho — bate com o editor de planilhas.
-    const { contato, motivo } = mapLinha(dataRows[i]!, indices);
+    const { contato, motivo } = mapLinha(dataRows[i]!, indices, indicatif);
     if (motivo !== null) {
       errors.push({ linha, motivo });
       continue;

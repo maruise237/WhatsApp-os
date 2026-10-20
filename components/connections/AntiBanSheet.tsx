@@ -6,7 +6,7 @@
  * mostra o valor); preenchido = override desta conexão.
  */
 import { useEffect, useMemo, useState } from "react";
-import { FUSOS_OFERECIDOS } from "@/lib/tempo/fusos";
+import { fusosComAtual } from "@/lib/tempo/fusos";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -301,14 +301,14 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
               <option value="">
                 {t("Usar o padrão")} ({eff.timezone})
               </option>
-              {FUSOS_OFERECIDOS.map((f) => (
+              {fusosComAtual(form.timezone).map((f) => (
                 <option key={f.codigo} value={f.codigo}>
                   {f.rotulo} — {f.codigo}
                 </option>
               ))}
             </select>
             <p className="text-xs text-muted-foreground">
-              {t("A janela de envio é avaliada neste fuso (ex.: America/Sao_Paulo).")}
+              {t("A janela de envio é avaliada neste fuso (ex.: Africa/Douala).")}
             </p>
           </fieldset>
 
