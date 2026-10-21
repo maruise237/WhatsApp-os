@@ -29,7 +29,7 @@ import type { LeadContext } from "@/lib/agent-engine/edge/crm/get-lead-context";
  */
 const DIR_TURNOS = path.join(
   process.cwd(),
-  "evidence/ia-360-w4/medicao-vazamento/turnos",
+  "tests/fixtures/turnos-vazados",
 );
 
 interface TurnoMedido {

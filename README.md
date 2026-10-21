@@ -49,7 +49,7 @@ Open source (MIT), auto-hébergé : vos données restent chez vous.
 - **SeaweedFS** : photos, audios, preuves de paiement (bucket privé).
 
 Mesuré à vide : 7 conteneurs, ~310 Mo de RAM au total ; chaque service a un
-plafond mémoire. Détails : [`docs/runbooks/stack-legere.md`](docs/runbooks/stack-legere.md).
+plafond mémoire. Détails : [`docs/stack-dokploy.md`](docs/stack-dokploy.md).
 
 ---
 

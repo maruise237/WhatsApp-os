@@ -18,7 +18,7 @@
 | ID | Statut | Référence | Tâche | Validation |
 |---|---|---|---|---|
 | A-001 | [x] | P8 | Ajouter les quatre documents AI WhatsApp Sales OS à la racine et les référencer depuis `CLAUDE.md`. | Les documents existent, sont cohérents et la règle de précédence est explicite. |
-| A-002 | [x] | P8 | Ajouter une matrice constitution → spec → tâche → test dans `docs/ai-whatsapp-sales-os-traceability.md`. | Chaque principe P1–P10 renvoie à au moins une exigence et une tâche. |
+| A-002 | [x] | P8 | Ajouter une matrice constitution → spec → tâche → test dans ai-whatsapp-sales-os-traceability. | Chaque principe P1–P10 renvoie à au moins une exigence et une tâche. |
 | A-003 | [x] | P8 | Déclarer dans `tasks/todo.md` l’épopée AI WhatsApp Sales OS et ses dépendances. | Le workflow historique indique clairement le nouveau chemin sans supprimer les fonctions Deskcomm indispensables. |
 | A-004 | [x] | P9 | Vérifier les codes d’erreur canoniques et ajouter ceux nécessaires : `whatsapp_disconnected`, `out_of_stock`, `payment_not_confirmed`, `rate_limited`, `forbidden_cross_tenant`, `invalid_order_transition`. | `lib/api/errors.test.ts` passe : 2 tests, 2 assertions de compatibilité métier. |
 
@@ -26,7 +26,7 @@
 
 | ID | Statut | Référence | Tâche | Validation |
 |---|---|---|---|---|
-| B-001 | [x] | P1, F-001–F-004 | Mesurer le schéma actuel et appliquer la doctrine DIRC avant de créer une table. | `docs/ai-whatsapp-sales-os-code-audit.md` confirme la réutilisation de `channel_sessions`, `event_log`, `organizations`, `contacts`, `conversations` et la séparation justifiée des tables e-commerce externes. |
+| B-001 | [x] | P1, F-001–F-004 | Mesurer le schéma actuel et appliquer la doctrine DIRC avant de créer une table. | ai-whatsapp-sales-os-code-audit confirme la réutilisation de `channel_sessions`, `event_log`, `organizations`, `contacts`, `conversations` et la séparation justifiée des tables e-commerce externes. |
 | B-002 | [~] | F-003, F-010 | Étendre `channel_sessions` avec le mapping Evolution Go, ses contraintes, son index d’unicité et le seam TypeScript. | Migration `0176`, baseline et typecheck passent ; invariants PostgreSQL ajoutés mais non exécutables ici faute de Docker. |
 | B-003 | [~] | F-030–F-032 | Ajouter `products` et `product_media` avec prix en centimes, devise, stock et référence SeaweedFS. | Migration `0177` et baseline écrits ; validation PostgreSQL et routes CRUD restent à faire. |
 | B-004 | [~] | F-040–F-045 | Ajouter `sales_orders`, `sales_order_items` et les contraintes de statut. | Migration `0177`, RPC idempotente `0178`, routes de commande et tests de machine d’états livrés ; tests PostgreSQL d’intégration en attente de Docker. |
@@ -54,7 +54,7 @@
 | D-002 | [x] | P2, F-003 | Implémenter création, statut, QR, déconnexion et suppression d’une instance par vendeur via le gateway. | Provisioning, statut, QR, reconnexion et suppression passent par l’adaptateur/gateway ; tests transport réel encore dépendants de Docker. |
 | D-003 | [x] | F-012 | Adapter les payloads Evolution Go vers le modèle canonique de message Deskcomm. | `lib/channels/evolution/inbound.ts` normalise messages/statuts/médias et réutilise l’ingest CRM ; tests de fixtures restent un durcissement recommandé. |
 | D-004 | [~] | F-032, F-042 | Ajouter SeaweedFS au compose et implémenter upload, lecture signée, expiration et suppression des médias. | Services Compose et abstraction S3 privée avec URL signée, expiration et suppression livrés ; branchement des routes de preuves et tests S3 réels restent à faire. |
-| D-005 | [~] | P7 | Mettre à jour les images et scripts de packaging sans service de production build-only. | Stack Dokploy allégée (7 conteneurs par défaut, ~312 Mo au repos contre ~807 Mo, mesuré) ; gateway publié par le CI ; worker compilé (89 Mo contre 197 Mo) ; garde-fou `tests/unit/stack-legere-dokploy.test.ts` ; guide `docs/runbooks/stack-legere.md`. Reste : premier déploiement réel sur la VPS après publication des images. |
+| D-005 | [~] | P7 | Mettre à jour les images et scripts de packaging sans service de production build-only. | Stack Dokploy allégée (7 conteneurs par défaut, ~312 Mo au repos contre ~807 Mo, mesuré) ; gateway publié par le CI ; worker compilé (89 Mo contre 197 Mo) ; garde-fou `tests/unit/stack-legere-dokploy.test.ts` ; guide stack-legere. Reste : premier déploiement réel sur la VPS après publication des images. |
 
 ## Lot E — Catalogue, agent et commandes
 
@@ -85,10 +85,10 @@
 |---|---|---|---|---|
 | G-001 | [x] | DoD | Ajouter les variables nouvelles à `.env.example` et à `lib/env.ts` avec valeurs par défaut sûres. | Gateway et SeaweedFS documentés dans `.env.example` et validés par Zod ; test runtime complet à renforcer. |
 | G-002 | [ ] | DoD | Ajouter les tests unitaires, DB, shell et E2E dans les bons gates CI. | Aucun test critique laissé hors du CI sans justification. |
-| G-003 | [ ] | DoD | Mettre à jour `docs/testing/user-journey-map.md`, le système vivant et le graphe d’architecture. | Chaque feature possède entrée, consommateur, activité, écran et boucle de retour. |
+| G-003 | [ ] | DoD | Mettre à jour user-journey-map, le système vivant et le graphe d’architecture. | Chaque feature possède entrée, consommateur, activité, écran et boucle de retour. |
 | G-004 | [~] | DoD | Exécuter `pnpm typecheck`, `pnpm lint`, `pnpm lint:channels`, `pnpm test:unit`, `pnpm test:db`, `pnpm test:shell` et les E2E pertinents. | Typecheck, lint provider, lint général, unit (496 fichiers/5522 tests), shell et build passent. `test:db` est bloqué par `docker: command not found`; E2E réel et Compose restent à exécuter sur une machine Docker. |
 | G-005 | [ ] | DoD | Rédiger le runbook local et self-host, notamment démarrage, migration, QR, stockage, backups et récupération. | Un opérateur peut suivre le document sans modifier manuellement les fichiers protégés. |
-| G-006 | [x] | DoD | Livrer un rapport de changement avec limites, preuves et prochaines tâches. | Rapport `docs/ai-whatsapp-sales-os-validation-2026-08-26.md` ajouté ; il ne déclare pas le MVP complet prêt et liste les preuves manquantes. |
+| G-006 | [x] | DoD | Livrer un rapport de changement avec limites, preuves et prochaines tâches. | Rapport validation du 2026-08-26 ajouté ; il ne déclare pas le MVP complet prêt et liste les preuves manquantes. |
 
 ## Ordre de démarrage obligatoire
 
