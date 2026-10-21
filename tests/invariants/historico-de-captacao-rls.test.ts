@@ -71,7 +71,7 @@ const MANAGER_B = "cccccccc-1111-4000-8000-00000000000b";
 
 beforeAll(() => {
   sql(`
-    insert into auth.users (id, email) values
+    insert into neon_auth."user" (id, email) values
       ('${MANAGER_A}', 'captacao-mgr-a@invariant.test'),
       ('${VIEWER_A}',  'captacao-viewer-a@invariant.test'),
       ('${MANAGER_B}', 'captacao-mgr-b@invariant.test')

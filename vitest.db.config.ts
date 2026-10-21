@@ -26,17 +26,26 @@ export default defineConfig({
     // fixture, não por defeito do produto. Guardado por
     // tests/invariants/harness-isola-por-arquivo.test.ts.
     setupFiles: ["./tests/db/banco-limpo-por-arquivo.ts"],
+    // Comme vitest.config.ts : @neondatabase/auth importe `next/headers` sans
+    // exports map ; inline + alias pour que Vite le résolve.
+    server: { deps: { inline: [/@neondatabase\/auth/] } },
     // webhooks-trigger-events.test.ts chama os handlers REST diretamente (não
     // só SQL cru), e eles importam lib/env transitivamente (via lib/audit) —
     // sem isso o import falha (env obrigatória ausente) e derruba a suíte
     // inteira. audit()/emit_event reais nunca são alcançados (fetch falha
     // rápido contra porta fechada, engolido pelo try/catch de audit()).
     env: {
-      NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:1",
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: "test-anon-key",
-      SUPABASE_SERVICE_ROLE_KEY:
-        "test-service-role-key-not-a-placeholder-1234567890-1234567890",
+      NEON_AUTH_BASE_URL: "http://127.0.0.1:1/api/auth",
+      NEON_DATA_API_URL: "http://127.0.0.1:1",
+      NEON_DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:1/postgres",
+      NEON_AUTH_COOKIE_SECRET: "test-cookie-secret-0123456789abcdef0123",
     },
   },
-  resolve: { alias: { "@": path.resolve(__dirname, ".") } },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "."),
+      "next/headers": path.resolve(__dirname, "node_modules/next/headers.js"),
+      "next/server": path.resolve(__dirname, "node_modules/next/server.js"),
+    },
+  },
 });

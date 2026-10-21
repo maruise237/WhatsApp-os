@@ -35,9 +35,9 @@ if (!container || !template) {
   throw new Error("TEST_DB_CONTAINER/TEST_DB_TEMPLATE ausentes — rode via `pnpm test:db`.");
 }
 
-/** `tabela=linhas` de toda tabela NÃO VAZIA de public, mais auth.users. */
+/** `tabela=linhas` de toda tabela NÃO VAZIA de public, mais neon_auth."user". */
 const CENSO = `
-select 'auth.users=' || count(*) from auth.users;
+select 'neon_auth."user"=' || count(*) from neon_auth."user";
 select coalesce(string_agg(t || '=' || c, ' ' order by t), '(public vazio)') from (
   select c.relname as t,
          (xpath('/row/cnt/text()',

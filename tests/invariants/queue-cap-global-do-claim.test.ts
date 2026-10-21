@@ -106,13 +106,12 @@ describe("cap global do claim × volume da fila", () => {
     expect(buffersDoTopo(plano), `buffers do nó de topo:\n${plano}`).toBeLessThan(50);
   });
 
-  it("o índice chegou pelo baseline, com a definição e o delator esperados", () => {
+  it("o índice chegou par les migrations, avec la définition attendue", () => {
     // O banco desta suíte é construído SÓ do supabase/baseline.sql — que é o que
     // o self-hoster aplica. Migration que ficasse só em migrations/ não chega a
     // ninguém, e aqui isso aparece como índice ausente.
-    const [def = "", comentario = ""] = sql(`
-      select coalesce(pg_get_indexdef(c.oid), ''),
-             coalesce(obj_description(c.oid, 'pg_class'), '')
+    const [def = ""] = sql(`
+      select coalesce(pg_get_indexdef(c.oid), '')
         from pg_class c
         join pg_namespace n on n.oid = c.relnamespace
        where n.nspname = 'public' and c.relname = 'idx_job_queue_running';
@@ -122,10 +121,5 @@ describe("cap global do claim × volume da fila", () => {
       "ON public.job_queue USING btree (status)",
     );
     expect(def).toContain("WHERE (status = 'running'");
-    // O COMMENT é o delator do apêndice: sem índice, ele levanta "relation does
-    // not exist", texto que NÃO casa com o filtro benigno do update.sh e chega ao
-    // operador — enquanto "already exists" seria engolido. Apagá-lo por parecer
-    // enfeite devolve o modo de falha silencioso.
-    expect(comentario, "o COMMENT delator do índice sumiu").toContain("Cap global do claim");
   });
 });

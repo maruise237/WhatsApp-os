@@ -96,7 +96,7 @@ beforeAll(async () => {
   await seedTenant(ORG_A, CONTACT_A, SESSION_A, CONV_A);
   await seedTenant(ORG_B, CONTACT_B, SESSION_B, CONV_B);
   await pool.query(
-    `insert into auth.users (id, email) values ($1, 'atendente@prova.test') on conflict (id) do nothing`,
+    `insert into neon_auth."user" (id, email) values ($1, 'atendente@prova.test') on conflict (id) do nothing`,
     [ACTOR_A],
   );
 });

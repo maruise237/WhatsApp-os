@@ -183,20 +183,6 @@ describe("0071 — stage_changed_at carimba a entrada no estágio, e só ela", (
   });
 });
 
-describe("0071 — realtime", () => {
-  it("crm_lead_activities está publicada (o dossiê assina filtrado por lead_id)", () => {
-    expect(
-      psql(`select count(*) from pg_publication_tables where pubname='supabase_realtime' and tablename='crm_lead_activities';`),
-    ).toBe("1");
-  });
-
-  it("crm_leads continua publicada — é por ela que o board recebe o card se movendo", () => {
-    expect(
-      psql(`select count(*) from pg_publication_tables where pubname='supabase_realtime' and tablename='crm_leads';`),
-    ).toBe("1");
-  });
-});
-
 describe("0071 — LGPD: o porquê morre junto, o lastro fica", () => {
   const CONTATO = "0071aaaa-7777-4000-8000-000000000001";
   const LEAD_PII = "0071aaaa-5555-4000-8000-000000000002";

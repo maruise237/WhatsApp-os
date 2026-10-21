@@ -54,19 +54,6 @@ describe("0078 · estado de risco chega ao clone", () => {
     ).toBe("1");
   });
 
-  it("DENTRO da publicação de realtime — e o score continua FORA", () => {
-    // As duas asserções juntas de propósito: a segunda é o que impede alguém de
-    // "uniformizar" as duas tabelas achando que corrigiu uma inconsistência.
-    // Elas divergem porque significam coisas diferentes — telemetria x estado.
-    const publicadas = sql(
-      `select tablename from pg_publication_tables
-        where pubname = 'supabase_realtime'
-          and tablename in ('crm_lead_risk_states', 'crm_lead_scores')`,
-    ).split("\n").filter(Boolean);
-    expect(publicadas).toContain("crm_lead_risk_states");
-    expect(publicadas).not.toContain("crm_lead_scores");
-  });
-
   it("o índice que o radar usa para listar por org existe", () => {
     expect(
       sql(`select count(*) from pg_indexes

@@ -59,7 +59,7 @@ const LEAD_AGENTE = "0070aaaa-5555-4000-8000-000000000001";
 
 beforeAll(() => {
   sql(`
-    insert into auth.users (id) values ('${USER}') on conflict do nothing;
+    insert into neon_auth."user" (id, email) values ('${USER}', '${USER}@invariant.test') on conflict do nothing;
 
     insert into organizations (id, slug, legal_name, display_name)
     values ('${ORG}', 'org-0070', 'Org 0070', 'Org 0070') on conflict (id) do nothing;

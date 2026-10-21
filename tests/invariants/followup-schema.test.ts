@@ -62,7 +62,7 @@ function seedRlsOrg(
 ): string {
   // No real PII: dados sintéticos apenas (LGPD).
   return `
-    insert into auth.users (id, email) values ('${user}', 'followup-rls-${tag}@invariant.test')
+    insert into neon_auth."user" (id, email) values ('${user}', 'followup-rls-${tag}@invariant.test')
       on conflict (id) do nothing;
     insert into public.organizations (id, slug, legal_name, display_name)
       values ('${org}', 'followup-rls-${tag}', 'Followup RLS ${tag}', 'Followup RLS ${tag}')

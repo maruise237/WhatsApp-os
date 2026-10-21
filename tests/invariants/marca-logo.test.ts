@@ -125,7 +125,7 @@ beforeAll(() => {
     [LOGO_ESTRANHO, "logo-estranho"],
     [LOGO_PLATFORM, "logo-platform"],
   ]
-    .map(([id, tag]) => `insert into auth.users (id, email) values ('${id}', '${tag}@invariant.test') on conflict do nothing;`)
+    .map(([id, tag]) => `insert into neon_auth."user" (id, email) values ('${id}', '${tag}@invariant.test') on conflict do nothing;`)
     .join("\n");
 
   sql(`
@@ -194,43 +194,6 @@ describe("guarda de vacuidade — o que todo caso abaixo supõe", () => {
         `${nome}: mais de uma função com este nome — sobrecarga muda quem os casos chamam`,
       ).toBe("1");
     }
-  });
-});
-
-describe("o bucket público é UM, e é o dos logos", () => {
-  it("`brand-logos` existe com o teto, o tipo e a visibilidade que o produto supõe", () => {
-    const linha = lastLine(
-      sql(`select public::text || '|' || file_size_limit::text || '|' ||
-                  coalesce(array_to_string(allowed_mime_types, ','), 'NULO')
-             from storage.buckets where id = 'brand-logos';`),
-    );
-    // 524288 é o MESMO número de `TAMANHO_MAXIMO_DO_LOGO` (lib/branding/logo.ts).
-    // Dois tetos diferentes fariam a rota aceitar o que o Storage recusa, e o
-    // erro que chegaria à tela seria "erro ao subir o logo".
-    expect(linha).toBe("true|524288|image/png,image/jpeg");
-  });
-
-  it("NENHUM outro bucket é público — a exceção continua sendo exceção", () => {
-    // Sem este caso, "o bucket público é só o de logos" é prosa. Com ele, tornar
-    // `whatsapp-media` público (que exporia o histórico de todos os clientes)
-    // reprova o CI.
-    const publicos = lastLine(
-      sql(`select coalesce(string_agg(id, ',' order by id), 'NENHUM') from storage.buckets where public;`),
-    );
-    expect(publicos).toBe("brand-logos");
-  });
-
-  it("NENHUMA policy de `storage.objects` nomeia o bucket — escrita só por service_role", () => {
-    // `public = true` abre a LEITURA pelo endpoint `/object/public/...`; INSERT e
-    // DELETE continuam exigindo privilégio. Uma policy que citasse `brand-logos`
-    // devolveria a escrita ao `authenticated` sem que nada mais mudasse.
-    const policies = lastLine(
-      sql(`select coalesce(string_agg(policyname, ',' order by policyname), 'NENHUMA')
-             from pg_policies
-            where schemaname = 'storage' and tablename = 'objects'
-              and (coalesce(qual, '') || coalesce(with_check, '')) like '%brand-logos%';`),
-    );
-    expect(policies).toBe("NENHUMA");
   });
 });
 

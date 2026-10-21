@@ -185,7 +185,7 @@ describe("definer nova em public nasce exposta a anon, e a varredura cura", () =
     const ORG = "dddddddd-0000-4000-8000-000000000189";
     const USER = "dddddddd-1111-4000-8000-000000000189";
     sql(`
-      insert into auth.users (id, email) values ('${USER}', 'p189@invariant.test')
+      insert into neon_auth."user" (id, email) values ('${USER}', 'p189@invariant.test')
         on conflict do nothing;
       insert into public.organizations (id, slug, legal_name, display_name)
         values ('${ORG}', 'p189-inv', 'P189 Invariant', 'P189') on conflict do nothing;

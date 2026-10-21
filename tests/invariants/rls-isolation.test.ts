@@ -73,7 +73,7 @@ function countAs(userId: string, countQuery: string): number {
 function seedOrg(org: string, user: string, sess: string, tag: string): string {
   // No real PII: synthetic emails/names only (LGPD).
   return `
-    insert into auth.users (id, email) values ('${user}', 'rls-${tag}@invariant.test')
+    insert into neon_auth."user" (id, email) values ('${user}', 'rls-${tag}@invariant.test')
       on conflict (id) do nothing;
     insert into public.organizations (id, slug, legal_name, display_name)
       values ('${org}', 'rls-inv-${tag}', 'RLS Invariant ${tag}', 'RLS ${tag}')

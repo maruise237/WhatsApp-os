@@ -86,6 +86,19 @@ const AUTHENTICATED_PERMITIDO: readonly Excecao[] = [
       "declarado pela migration 0034 e não há call site de RPC para removê-lo " +
       "com segurança sem medir o disparo de cada trigger.",
   },
+  {
+    fn: "fn_approve_sales_payment(uuid,uuid,uuid,uuid)",
+    razao:
+      "La route de revue des preuves l'appelle avec la session " +
+      "(app/api/v1/orders/[id]/payment-proofs/[proofId]/review). La fonction " +
+      "exige auth.uid() = p_reviewer_id et un rôle agent+ dans l'organisation.",
+  },
+  {
+    fn: "fn_create_sales_order(uuid,uuid,uuid,jsonb,text,uuid,text)",
+    razao:
+      "POST /api/v1/orders l'appelle avec la session. La fonction exige " +
+      "auth.uid() = p_created_by et un rôle agent+ dans l'organisation visée.",
+  },
 ];
 
 interface Definer {

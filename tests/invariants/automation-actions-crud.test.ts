@@ -246,7 +246,7 @@ beforeAll(() => {
     insert into public.organizations (id, slug, legal_name, display_name)
       values ('${OTHER_ORG}', 'gov-inv-t9', 'Gov Invariant Org (Task 9)', 'Gov Inv T9')
       on conflict do nothing;
-    insert into auth.users (id, email) values ('${OTHER_ORG_USER}', 'gov-t9-other@invariant.test') on conflict do nothing;
+    insert into neon_auth."user" (id, email) values ('${OTHER_ORG_USER}', 'gov-t9-other@invariant.test') on conflict do nothing;
     insert into public.user_organizations (user_id, organization_id, role, accepted_at)
       values ('${OTHER_ORG_USER}', '${OTHER_ORG}', 'agent', now())
       on conflict do nothing;

@@ -142,7 +142,7 @@ describe("vente conduite par l'agent, sur le schéma réel", () => {
 
   it("après validation humaine, la commande va jusqu'à « livrée » sans perdre la trace du paiement (0182)", async () => {
     const { rows: u } = await pool.query(
-      `insert into auth.users (email) values ('vendeuse-0182@test.local') returning id`,
+      `insert into neon_auth."user" (id, email) values (gen_random_uuid(), 'vendeuse-0182@test.local') returning id`,
     );
     const userId = u[0].id as string;
     await pool.query(`insert into neon_auth."user" (id, email) values ($1, 'vendeuse-0182@test.local') on conflict do nothing`, [userId]);

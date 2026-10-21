@@ -64,7 +64,7 @@ function convState(): string {
 beforeAll(() => {
   seedGov();
   sql(`
-    insert into auth.users (id, email)
+    insert into neon_auth."user" (id, email)
       values ('${AK_USER_ORG_B}', 'gov-agent-org-b@invariant.test')
       on conflict do nothing;
     insert into public.organizations (id, slug, legal_name, display_name)

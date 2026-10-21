@@ -21,7 +21,7 @@ beforeAll(() => {
 });
 
 describe("eixo 2 — atribuição", () => {
-  it("conversations tem assigned_to_user_id + assigned_at, com FK para auth.users", () => {
+  it("conversations tem assigned_to_user_id + assigned_at, com FK vers neon_auth.user", () => {
     expect(columnExists("conversations", "assigned_to_user_id")).toBe(true);
     expect(columnExists("conversations", "assigned_at")).toBe(true);
     const fk = sql(

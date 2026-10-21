@@ -26,7 +26,7 @@ const ORG_B_AGENT = "dddddddd-1111-4000-8000-000000000002";
 
 function seedOrgB(): void {
   sql(`
-    insert into auth.users (id, email) values
+    insert into neon_auth."user" (id, email) values
       ('${ORG_B_MANAGER}', 'gov-b-manager@invariant.test'),
       ('${ORG_B_AGENT}', 'gov-b-agent@invariant.test')
       on conflict do nothing;

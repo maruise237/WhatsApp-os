@@ -19,7 +19,7 @@ seus containers existentes.
    `deskcomm-test-db-<pid>`, porta local `54329`, override via `TEST_DB_PORT`).
 2. Aplica um **prelude** com os stubs mínimos do Supabase que um Postgres cru não
    tem: roles `anon`/`authenticated`/`service_role`, schemas `auth`/`extensions`,
-   `auth.users`, `auth.uid()` (lê o claim `sub` de `request.jwt.claims`),
+   `neon_auth."user"`, `auth.uid()` (lê o claim `sub` de `request.jwt.claims`),
    `storage.buckets`/`storage.objects` e as extensões `uuid-ossp`, `pgcrypto`,
    `vector`, `citext`, `pg_trgm`.
 3. **Modo install**: aplica `supabase/baseline.sql` com `ON_ERROR_STOP=1` —

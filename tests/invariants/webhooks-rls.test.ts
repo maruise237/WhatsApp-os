@@ -34,7 +34,7 @@ const WH_RUN = "ffffffff-5555-4000-8000-000000000004";
 beforeAll(() => {
   seedGov();
   sql(`
-    insert into auth.users (id, email)
+    insert into neon_auth."user" (id, email)
       values ('${WH_MANAGER_B}', 'gov-manager-org-b@invariant.test')
       on conflict do nothing;
     insert into public.organizations (id, slug, legal_name, display_name)

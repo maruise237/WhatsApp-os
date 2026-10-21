@@ -35,13 +35,13 @@ function semear(): void {
     delete from public.ai_purpose_bindings where organization_id in ('${ORG_A}','${ORG_B}');
     delete from public.ai_provider_credentials where id = '${CRED_A}';
     delete from public.user_organizations where user_id in ('${USER_A}','${USER_B}');
-    delete from auth.users where id in ('${USER_A}','${USER_B}');
+    delete from neon_auth."user" where id in ('${USER_A}','${USER_B}');
     delete from public.organizations where id in ('${ORG_A}','${ORG_B}');
 
     insert into public.organizations (id, slug, legal_name, display_name) values
       ('${ORG_A}', 'inv-bind-a', 'Invariante A LTDA', 'Invariante A'),
       ('${ORG_B}', 'inv-bind-b', 'Invariante B LTDA', 'Invariante B');
-    insert into auth.users (id, email) values
+    insert into neon_auth."user" (id, email) values
       ('${USER_A}', 'bind-a@invariant.test'),
       ('${USER_B}', 'bind-b@invariant.test');
     insert into public.user_organizations (user_id, organization_id, role) values

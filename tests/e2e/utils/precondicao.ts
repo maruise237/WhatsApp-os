@@ -80,7 +80,7 @@ function servico(): SupabaseClient {
 }
 
 /**
- * `auth.users` não é alcançável pelo PostgREST — a resolução email → id passa
+ * `neon_auth."user"` não é alcançável pelo PostgREST — a resolução email → id passa
  * pela Admin API, que só pagina. O teto de 5 páginas existe para o erro ser
  * "não achei o usuário" e não um laço infinito num banco grande.
  */

@@ -41,7 +41,7 @@ const OLD = "2026-05-01T12:00:00+00"; // fora da janela
 
 beforeAll(() => {
   sql(`
-    insert into auth.users (id, email) values
+    insert into neon_auth."user" (id, email) values
       ('${AGENT_A}', 'm4-agent-a@invariant.test'),
       ('${AGENT_B}', 'm4-agent-b@invariant.test'),
       ('${MANAGER}', 'm4-manager@invariant.test')

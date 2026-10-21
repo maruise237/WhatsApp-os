@@ -39,7 +39,7 @@ const mineFor = (uid: string) => `select count(*) from public.conversations
 
 beforeAll(() => {
   sql(`
-    insert into auth.users (id, email) values
+    insert into neon_auth."user" (id, email) values
       ('${AGENT}', 'gov5b-agent@invariant.test'),
       ('${OTHER_AGENT}', 'gov5b-other@invariant.test'),
       ('${MANAGER}', 'gov5b-manager@invariant.test')

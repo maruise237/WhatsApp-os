@@ -47,7 +47,7 @@ const WABA = "waba-inv-0088";
 
 function seed(): void {
   sql(`
-    insert into auth.users (id, email) values
+    insert into neon_auth."user" (id, email) values
       ('${MT_MEMBER_A}', 'mt-member-a@invariant.test'),
       ('${MT_MEMBER_B}', 'mt-member-b@invariant.test')
       on conflict do nothing;

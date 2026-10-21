@@ -62,10 +62,4 @@ describe("0082 · proposta de reativação chega ao clone", () => {
     ).toBe("1");
   });
 
-  it("DENTRO da publicação de realtime — proposta é estado, não telemetria", () => {
-    expect(
-      sql(`select count(*) from pg_publication_tables
-            where pubname='supabase_realtime' and tablename='crm_lead_reactivations'`),
-    ).toBe("1");
-  });
 });

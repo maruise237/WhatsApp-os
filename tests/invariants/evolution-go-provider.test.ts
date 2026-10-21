@@ -17,7 +17,9 @@ function insertSession(org: string, columns: Record<string, string>): string {
     insert into public.channel_sessions (${names.join(", ")})
     values (${values.join(", ")});
     select 'ok';
-  `);
+  `)
+    .split("\n")
+    .pop() as string;
 }
 
 function erroDe(fn: () => unknown): string {

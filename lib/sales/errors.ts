@@ -30,6 +30,9 @@ export function mapSalesError(rawMessage: string): {
   if (message.includes("invalid_order_items") || message.includes("invalid_order_quantity")) {
     return { code: "validation_failed", status: 422, message: "Les lignes de commande sont invalides." };
   }
+  if (message.includes("sales_order_not_authorized") || message.includes("sales_order_creator_mismatch")) {
+    return { code: "forbidden_role", status: 403, message: "Vous n’êtes pas autorisé à créer une commande pour cette boutique." };
+  }
   if (message.includes("payment_reviewer_not_authorized")) {
     return { code: "forbidden_role", status: 403, message: "Seul un vendeur autorisé peut traiter cette preuve." };
   }

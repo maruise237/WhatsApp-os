@@ -151,7 +151,7 @@ const ROLE_USERS: ReadonlyArray<readonly [string, string, string]> = [
 export function seedGov(): void {
   const users = ROLE_USERS.map(
     ([id, , tag]) =>
-      `insert into auth.users (id, email) values ('${id}', '${tag}@invariant.test') on conflict do nothing;`,
+      `insert into neon_auth."user" (id, email) values ('${id}', '${tag}@invariant.test') on conflict do nothing;`,
   ).join("\n");
   const memberships = ROLE_USERS.map(
     ([id, role]) =>
