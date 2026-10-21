@@ -18,16 +18,19 @@ ressources, tout fusionné sur `main`.
 ## Phases
 
 ### A. Stabiliser et fusionner l'existant
-- [ ] PR branche → main, fusion
+- [x] PR branche → main, fusion (#14)
 
 ### B. Neon seulement (zéro Supabase)
-- [ ] Inventaire : ce que fait encore Supabase au runtime (realtime, storage, auth, types)
-- [ ] Remplacer les types `@supabase/*` par des types maison, retirer les dépendances
-- [ ] `lib/supabase/*` → `lib/db/*` (codemod des imports), suppression
-- [ ] Dossier `supabase/` → `db/` (baseline, migrations, MANIFEST), chemins des scripts/CI/Docker
+- [x] Inventaire : runtime déjà sur Neon (SSE, SeaweedFS, Neon Auth) ; restaient noms, types, schéma, tests
+- [x] Types `@supabase/*` remplacés par `DbClient` (lib/db/client.ts)
+- [ ] Retirer `@supabase/ssr` et `@supabase/supabase-js` du package.json (reste : harnais e2e + seeds scripts/)
+- [x] `lib/supabase/*` → `lib/db/*`
+- [x] `db/migrations/0001_schema_initial.sql` (schéma complet régénéré) + `scripts/db-migrate.mjs` + `db/local/emulation-neon.sql`
+- [ ] Supprimer le dossier `supabase/` (après CI/e2e/kit)
 - [ ] Supprimer `supabase/config.toml`, `supabase/templates`, variables d'env `SUPABASE_*`
 - [ ] Noms de variables `supabase` → `db` dans le code
-- [ ] `test:db` et CI sur la pile locale Neon (Postgres + PostgREST + auth locale)
+- [x] `test:db` sur le schéma Neon : 908/908
+- [ ] CI (ci.yml / e2e.yml) sur le schéma Neon
 
 ### C. Ménage
 - [ ] Supprimer : `evidence/`, `loop/`, `triagem/`, `plan/`, `tasks/`, `.codex/`, `.agents/`, agents/skills `.claude` obsolètes, `vercel.ts`, kit HostGator si remplacé par Dokploy
@@ -55,5 +58,14 @@ ressources, tout fusionné sur `main`.
 - [ ] typecheck, lint, unit, test:db, build, image Docker
 - [ ] Fusion finale sur main, suppression de ce fichier et de la tâche planifiée
 
+## Décisions en attente du propriétaire
+
+- **MFA (vérification en deux étapes)** : Neon Auth ne le gère pas pour les
+  utilisateurs de l'app ; les écrans MFA ne peuvent pas marcher (et activer la
+  politique « MFA obligatoire » bloquerait les admins). Proposition : retirer la
+  fonctionnalité. Le classifieur de sécurité refuse de le faire sans accord
+  explicite → NE PAS retirer tant que le propriétaire n'a pas dit oui.
+
 ## Journal
 - 2026-10-21 : plan posé ; tests e2e agent/onboarding réécrits (94e2d52).
+- 2026-10-21 : schéma Neon unique et complet (faille grant-all-to-anon et commande inter-boutiques corrigées), test:db 908/908, DbClient typé, typecheck/lint/unit verts (74c1e01).
