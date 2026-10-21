@@ -263,7 +263,7 @@ export async function GET(
   const aiRows = (aiRes.data ?? []) as AiBudgetRow[];
   const gastoDaRegua = gastoRes.error ? null : Number(gastoRes.data ?? 0);
   if (gastoRes.error) {
-    logger.warn("admin-health: gasto de IA veio da coluna materializada, não da régua", {
+    logger.warn("admin-health : dépense IA lue dans la colonne matérialisée, pas dans le registre", {
       organization_id: id,
       request_id: requestId,
       causa: gastoRes.error.message,

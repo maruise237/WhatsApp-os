@@ -48,7 +48,7 @@ type ColunasPedidas = (typeof TIMELINE_COL_LIST)[number];
 type Faltando = Exclude<keyof TimelineItem, ColunasPedidas>;
 const _todoCampoDoTipoEstaNoSelect: Faltando extends never
   ? true
-  : ["TIMELINE_COL_LIST não pede estes campos de TimelineItem:", Faltando] = true;
+  : ["TIMELINE_COL_LIST ne demande pas ces champs de TimelineItem :", Faltando] = true;
 void _todoCampoDoTipoEstaNoSelect;
 
 export const TIMELINE_COLS = TIMELINE_COL_LIST.join(", ");

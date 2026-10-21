@@ -80,7 +80,7 @@ async function carregarDeps(log: Logger): Promise<Deps | null> {
     return { drainEventLog, admin: createAdminClient() };
   } catch (err) {
     log.warn(
-      'event-log drain OFF — não consegui montar o admin client; os handlers seguem só pelo cron event-log-drain',
+      'event-log drain OFF — impossible de créer le client admin ; les handlers passent uniquement par le cron event-log-drain',
       { error: (err instanceof Error ? err.message : String(err)).slice(0, 300) },
     );
     return null;

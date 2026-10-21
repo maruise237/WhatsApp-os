@@ -90,7 +90,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (erroSilencio) {
     // Não derruba o fechamento — ele já aconteceu. Mas também não fica calado: sem
     // esta linha o automático seguiria mudo naquele cliente e ninguém saberia por quê.
-    logger.warn("[conversation.close] silêncio do episódio não foi solto", {
+    logger.warn("[conversation.close] le silence de l'épisode n'a pas été levé", {
       conversation_id: id,
       erro: erroSilencio.message,
     });

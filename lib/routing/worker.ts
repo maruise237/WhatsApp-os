@@ -201,7 +201,7 @@ async function processEvent(event: EventRow, now: Date): Promise<RoutingOutcome>
             ? "skipped_already_assigned"
             : "skipped_unsupported_mode";
       if (action.reason.startsWith("unsupported_mode")) {
-        logger.warn("[routing-worker] modo não suportado (post-MVP) — no-op", {
+        logger.warn("[routing-worker] mode non pris en charge (post-MVP) — no-op", {
           organization_id: orgId,
           mode: config.mode,
         });
@@ -355,7 +355,7 @@ export async function adotarLeadsDoContato(
       .is("owner_agent_id", null)
       .select("id");
     if (error) {
-      logger.warn("[routing-worker] não consegui dar dono ao lead do contato", {
+      logger.warn("[routing-worker] impossible d'attribuer un responsable au prospect du contact", {
         organization_id: orgId,
         contact_id: contactId,
         error: error.message,
@@ -364,7 +364,7 @@ export async function adotarLeadsDoContato(
     }
     return (data ?? []).length;
   } catch (err) {
-    logger.warn("[routing-worker] adoção de lead lançou", {
+    logger.warn("[routing-worker] l'adoption du prospect a levé une erreur", {
       organization_id: orgId,
       contact_id: contactId,
       error: err instanceof Error ? err.message : String(err),

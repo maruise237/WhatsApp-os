@@ -146,7 +146,7 @@ async function handler(req: NextRequest): Promise<Response> {
       // Não é erro do servidor: a origem respondeu, e nós recusamos. 200 com o
       // motivo, para o agendador não tratar como incidente e ficar retentando
       // contra uma origem que está tendo problema.
-      logger.warn("[sync-model-catalog] rodada recusada pelo piso de sanidade", {
+      logger.warn("[sync-model-catalog] passage refusé par le seuil de cohérence", {
         recebidos: err.recebidos,
         conhecidos: err.conhecidos,
         request_id: requestId,

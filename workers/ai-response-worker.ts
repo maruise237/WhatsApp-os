@@ -185,7 +185,7 @@ export async function processMessageReceived(row: EventRow): Promise<ProcessResu
   );
   const model = resolvido?.model ?? null;
   if (!model || !resolvido) {
-    logger.warn("[ai-response-worker] modelo do agente sem provider configurado", {
+    logger.warn("[ai-response-worker] modèle de l'assistant sans fournisseur configuré", {
       organization_id: ctx.organization_id,
       agent_id: ctx.agent.id,
       model: ctx.agent.model,
@@ -365,7 +365,7 @@ async function vetoPorTetoDeGasto(alvo: {
     // env faltando de uma FEATURE seria o erro caro.
     status = await getBudgetStatus(orgId);
   } catch (err) {
-    logger.warn("[ai-response] orçamento não pôde ser lido — a resposta SEGUE sem teto", {
+    logger.warn("[ai-response] budget illisible — la réponse PART sans plafond", {
       organization_id: orgId,
       causa: err instanceof Error ? err.message : String(err),
     });
@@ -396,7 +396,7 @@ async function vetoPorTetoDeGasto(alvo: {
   if (erroDoAviso) {
     // Sem saber se houve aviso, a condição 6 resolve para "não avisou" — o lado
     // que no máximo avisa de novo, nunca o que bloqueia sem aviso.
-    logger.warn("[ai-response] não deu para saber se já houve aviso de orçamento neste mês", {
+    logger.warn("[ai-response] impossible de savoir si une alerte budget a déjà été émise ce mois-ci", {
       organization_id: orgId,
       causa: erroDoAviso.message,
     });
@@ -477,7 +477,7 @@ async function vetoPorTetoDeGasto(alvo: {
     },
   });
 
-  logger.warn("[ai-response] resposta recusada pelo teto de gasto — conversa na fila humana", {
+  logger.warn("[ai-response] réponse refusée par le plafond de dépense — conversation dans la file humaine", {
     organization_id: orgId,
     conversation_id: alvo.conversationId,
     gasto_cents: status.current_month_consumed_cents,
@@ -508,7 +508,7 @@ async function abrirItemDeOrcamento(
     .eq("kind", item.kind)
     .eq("status", "open");
   if (erroDaBusca) {
-    logger.warn("[ai-response] dedupe do item de orçamento falhou — item não aberto", {
+    logger.warn("[ai-response] échec du dédoublonnage de l'alerte budget — alerte non ouverte", {
       organization_id: orgId,
       kind: item.kind,
       causa: erroDaBusca.message,
@@ -527,7 +527,7 @@ async function abrirItemDeOrcamento(
     ref_id: orgId,
   });
   if (error) {
-    logger.warn("[ai-response] item de orçamento não pôde ser aberto na Central", {
+    logger.warn("[ai-response] l'alerte budget n'a pas pu être ouverte dans la Centrale", {
       organization_id: orgId,
       kind: item.kind,
       causa: error.message,

@@ -123,7 +123,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       if (r.status === "failed" || r.status === "no_session") {
         // 2xx continua (a Meta re-entregaria em loop), mas a falha NÃO fica muda:
         // vai ao log estruturado e ao corpo da resposta.
-        console.error("[meta.ingest] inbound não ingerido", {
+        console.error("[meta.ingest] message entrant non ingéré", {
           status: r.status,
           reason: r.status === "failed" ? r.reason : undefined,
           external_id: e.externalId,

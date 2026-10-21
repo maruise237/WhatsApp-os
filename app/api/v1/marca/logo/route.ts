@@ -224,7 +224,7 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
       .from("platform_branding")
       .upsert({ id: 1, logo_path: caminho, seeded_from_env: false }, { onConflict: "id" });
     if (error) {
-      logger.error("[marca/logo] gravação da instalação falhou", {
+      logger.error("[marca/logo] échec de l'enregistrement de l'installation", {
         codigo: error.code,
         detalhe: error.message,
       });
@@ -259,14 +259,14 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
       };
     }
     if (error.code === "22023") {
-      logger.error("[marca/logo] caminho recusado pelo banco", { detalhe: error.message });
+      logger.error("[marca/logo] chemin refusé par la base", { detalhe: error.message });
       return {
         codigo: "validation_failed",
         mensagem: "Le chemin du logo n’appartient pas à cette entreprise.",
         status: 422,
       };
     }
-    logger.error("[marca/logo] gravação da organização falhou", {
+    logger.error("[marca/logo] échec de l'enregistrement de l'organisation", {
       codigo: error.code,
       detalhe: error.message,
     });
@@ -291,7 +291,7 @@ async function gravarCaminho(ctx: Contexto, caminho: string | null): Promise<Rec
 async function apagarAnterior(ctx: Contexto, anterior: string | null): Promise<void> {
   if (!anterior) return;
   if (!podeApagar(anterior, ctx.prefixo)) {
-    logger.error("[marca/logo] recusei apagar arquivo fora do escopo de quem pediu", {
+    logger.error("[marca/logo] suppression refusée : fichier hors du périmètre du demandeur", {
       escopo: ctx.escopo,
       prefixo_esperado: ctx.prefixo,
       // O caminho INTEIRO, e não só o prefixo: sem ele o registro guarda a
@@ -304,7 +304,7 @@ async function apagarAnterior(ctx: Contexto, anterior: string | null): Promise<v
   }
   const { error } = await createAdminClient().storage.from(BUCKET_DE_LOGOS).remove([anterior]);
   if (error) {
-    logger.warn("[marca/logo] arquivo anterior ficou órfão", {
+    logger.warn("[marca/logo] l'ancien fichier est resté orphelin", {
       detalhe: error.message,
       caminho: anterior,
     });

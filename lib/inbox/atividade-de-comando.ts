@@ -123,7 +123,7 @@ export async function registrarTrocaDeComando(entrada: Entrada): Promise<void> {
     if (!alvo.routed) {
       // Não é erro: é a conversa que ainda não virou negócio. Fica no log para a
       // ausência na timeline ter explicação quando alguém a procurar.
-      logger.info("[inbox.comando] troca de comando sem negócio para pendurar", {
+      logger.info("[inbox.comando] changement de main sans affaire à laquelle le rattacher", {
         conversation_id: conversationId,
         tipo,
         motivo_sem_rota: alvo.reason,
@@ -143,7 +143,7 @@ export async function registrarTrocaDeComando(entrada: Entrada): Promise<void> {
       payload: { conversation_id: conversationId, ...(entrada.payload ?? {}) },
     });
     if (!resultado.ok) {
-      logger.warn("[inbox.comando] atividade da troca de comando não foi gravada", {
+      logger.warn("[inbox.comando] l'activité du changement de main n'a pas été enregistrée", {
         conversation_id: conversationId,
         tipo,
       });

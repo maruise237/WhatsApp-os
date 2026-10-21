@@ -82,7 +82,7 @@ export function criaRetornoDbPg(db: pg.Pool): RetornoDb {
         [orgId, input.contactId, input.payload, input.quando],
       );
       const row = rows[0];
-      if (row === undefined) throw new Error("retorno_insert_failed: sem linha");
+      if (row === undefined) throw new Error("retorno_insert_failed: aucune ligne");
       return paraRetorno(row, input.contactId);
     },
 

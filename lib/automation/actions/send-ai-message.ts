@@ -90,7 +90,7 @@ async function execute(ctx: ActionCtx, config: Record<string, unknown>): Promise
     // inteira para o registro do run — é o que a tela mostra a quem pergunta
     // "por que a IA não escreveu?".
     const causa = err instanceof Error ? err.message : String(err);
-    logger.error("[automation.send_ai_message] a IA não conseguiu escrever", {
+    logger.error("[automation.send_ai_message] l'IA n'a pas réussi à rédiger", {
       organizationId: ctx.organizationId,
       ruleId: ctx.ruleId,
       agentId,

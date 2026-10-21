@@ -78,7 +78,7 @@ export async function loadChannelKnobs(
     } else {
       // Falha FECHADO sem derrubar o worker: knob inválido é descartado em favor
       // dos defaults conservadores; o alerta é log (ids não são PII).
-      logger?.warn('warmup_daily_caps inválido em channel_knobs — usando defaults conservadores', {
+      logger?.warn('warmup_daily_caps invalide dans channel_knobs — valeurs par défaut prudentes utilisées', {
         tenantId,
         channelSessionId,
       });

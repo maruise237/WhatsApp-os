@@ -88,7 +88,7 @@ export async function podarArquivoDeWebhooks(
     .limit(lote);
 
   if (erroBusca) {
-    logger.warn("[retencao-webhook] não consegui escolher as linhas", {
+    logger.warn("[retencao-webhook] impossible de sélectionner les lignes", {
       detail: erroBusca.message.slice(0, 160),
     });
     return { esvaziadas: 0, apagadas: 0, temMais: false };
@@ -112,7 +112,7 @@ export async function podarArquivoDeWebhooks(
       .in("id", ids);
 
     if (erroUpdate) {
-      logger.warn("[retencao-webhook] não consegui esvaziar o lote", {
+      logger.warn("[retencao-webhook] impossible de vider le lot", {
         detail: erroUpdate.message.slice(0, 160),
       });
     } else {
@@ -134,7 +134,7 @@ export async function podarArquivoDeWebhooks(
     .limit(lote);
 
   if (erroDelete) {
-    logger.warn("[retencao-webhook] não consegui apagar as velhas", {
+    logger.warn("[retencao-webhook] impossible de supprimer les anciennes lignes", {
       detail: erroDelete.message.slice(0, 160),
     });
   }

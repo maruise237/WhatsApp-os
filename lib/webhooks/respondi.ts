@@ -271,7 +271,7 @@ export function mapRespondiPayload(payload: RespondiPayload, indicatif?: string)
 /** Título do card: empresa + contato — nunca um rótulo genérico fixo. */
 export function respondiLeadTitle(mapped: RespondiMapped): string {
   if (mapped.companyName && mapped.name) return `${mapped.companyName} — ${mapped.name}`;
-  return mapped.companyName ?? mapped.name ?? mapped.phone ?? mapped.email ?? "Lead sem nome";
+  return mapped.companyName ?? mapped.name ?? mapped.phone ?? mapped.email ?? "Prospect sans nom";
 }
 
 /**

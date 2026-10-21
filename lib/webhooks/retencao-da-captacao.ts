@@ -72,7 +72,7 @@ export async function podarHistoricoDeCaptacao(
   // O aviso é a metade que quase se perde: sem ele, quem escreveu um número que
   // não valeu descobre pela ausência de efeito, meses depois.
   if (politica.aviso !== null) {
-    logger.warn("[retencao-captacao] o valor configurado não foi usado como escrito", {
+    logger.warn("[retencao-captacao] la valeur configurée n'a pas été utilisée telle quelle", {
       detail: politica.aviso,
     });
   }
@@ -94,7 +94,7 @@ export async function podarHistoricoDeCaptacao(
     // Falha ABERTA na ação (o banco cresce um pouco mais) e ABERTA na
     // informação: uma poda que falha em silêncio vira "o disco encheu e
     // ninguém sabe por quê" seis meses depois.
-    logger.warn("[retencao-captacao] não consegui apagar o lote", {
+    logger.warn("[retencao-captacao] impossible de supprimer le lot", {
       detail: error.message.slice(0, 160),
       dias_aplicados: dias,
     });

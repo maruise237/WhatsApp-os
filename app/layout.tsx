@@ -200,7 +200,7 @@ async function EstiloDaMarca() {
     const chave = `${aviso.codigo}|${aviso.tema ?? ""}|${aviso.alvo ?? ""}`;
     if (motivosRegistrados.has(chave)) continue;
     motivosRegistrados.add(chave);
-    logger.warn("marca da instalação: a cor configurada não foi aplicada como está", aviso);
+    logger.warn("marque de l'installation : la couleur configurée n'a pas été appliquée telle quelle", aviso);
   }
 
   // `null` sem motivo é o caso de fábrica (nenhuma cor configurada): não há o

@@ -142,9 +142,9 @@ async function handle(req: NextRequest): Promise<Response> {
     } catch (err) {
       // Uma sessão problemática não derruba o lote — as outras ainda precisam
       // ser vigiadas, e é justamente numa rodada assim que alguma pode ter caído.
-      logger.warn("[channel-health] falhou numa sessão", {
+      logger.warn("[channel-health] échec sur une session", {
         sessionId: s.id,
-        detail: err instanceof Error ? err.message : "erro",
+        detail: err instanceof Error ? err.message : "erreur",
         requestId,
       });
     }
