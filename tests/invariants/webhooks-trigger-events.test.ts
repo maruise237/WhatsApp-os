@@ -226,7 +226,7 @@ describe("webhooks trigger events — emissões faltantes (Task 3)", () => {
     expect(atividade[0]!.organization_id).toBe(GOV_ORG);
     expect(atividade[0]!.actor_kind).toBe("user");
     expect(atividade[0]!.source_module).toBe("crm");
-    expect(String(atividade[0]!.reason)).toMatch(/^Movido de .+ para .+$/);
+    expect(String(atividade[0]!.reason)).toMatch(/^Déplacé de .+ vers .+$/);
   });
 
   it("updateLeadHandler emite lead.tag_added só quando há tag NOVA", async () => {

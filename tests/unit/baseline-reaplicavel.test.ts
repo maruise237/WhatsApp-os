@@ -50,7 +50,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-const SQL = readFileSync(join(process.cwd(), "supabase/baseline.sql"), "utf8");
+const SQL = readFileSync(join(process.cwd(), "db/migrations/0001_schema_initial.sql"), "utf8");
 const LINHAS = SQL.split("\n");
 
 /**

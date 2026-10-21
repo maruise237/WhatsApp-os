@@ -1,5 +1,5 @@
 /**
- * Vocabulário de uma coluna lido do CHECK do `supabase/baseline.sql` — o arquivo
+ * Vocabulário de uma coluna lido do CHECK do `db/migrations/0001_schema_initial.sql` — o arquivo
  * que o self-hoster realmente aplica.
  *
  * Existe como função compartilhada de propósito: a guarda que ela serve é
@@ -19,7 +19,7 @@ import { resolve } from "node:path";
  * @param constraint nome da constraint, ex.: `tenant_integrations_status_check`
  */
 export function valoresDoCheckNoBaseline(constraint: string): string[] {
-  const caminho = resolve(process.cwd(), "supabase/baseline.sql");
+  const caminho = resolve(process.cwd(), "db/migrations/0001_schema_initial.sql");
   const sql = readFileSync(caminho, "utf8");
 
   // Âncora na DEFINIÇÃO (`CONSTRAINT "<nome>" CHECK`), não no nome solto: o

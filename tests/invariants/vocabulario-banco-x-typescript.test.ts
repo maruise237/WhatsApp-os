@@ -151,7 +151,7 @@ const PARES: Array<{
     // lib/channels/types.ts → ChannelProvider
     //
     // ⚠️ O `comment on column public.channel_sessions.provider` do
-    // `supabase/baseline.sql` já AFIRMA, desde a 0087, que este par é "cobrado
+    // `db/migrations/0001_schema_initial.sql` já AFIRMA, desde a 0087, que este par é "cobrado
     // por tests/invariants/vocabulario-banco-x-typescript.test.ts". Era falso: o
     // par nunca estava nesta lista. Comentário não é gate, e um comentário que
     // promete cobertura inexistente é pior que silêncio — ele desliga a busca.

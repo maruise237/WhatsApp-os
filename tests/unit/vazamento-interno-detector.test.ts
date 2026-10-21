@@ -115,7 +115,7 @@ const VAZAMENTO_MEDIDO: readonly string[] = [
  *     custam caro demais:
  *       - exigir 2+ underscores solta 28 das 65 tabelas (`crm_leads`, `event_log`,
  *         `agent_cases`…) e 4 das 12 tools nativas (`send_message`, `search_knowledge`,
- *         `send_template`, `schedule_followup`) — contado sobre `supabase/baseline.sql` +
+ *         `send_template`, `schedule_followup`) — contado sobre `db/migrations/0001_schema_initial.sql` +
  *         `supabase/migrations/` e sobre `AGENT_TOOL_DEFS`, não estimado;
  *       - exigir prefixo conhecido exige copiar a lista de 65 tabelas + 343 colunas,
  *         exatamente a "lista copiada que envelhece no dia seguinte" que o cabeçalho do
@@ -150,7 +150,7 @@ describe("detectarVazamentoInterno — calibração contra fala legítima", () =
   });
 
   it("vocabulário de NEGÓCIO nunca barra — nome de etapa é dado do tenant, não do sistema", () => {
-    // `fn_seed_default_pipeline_for_org` (supabase/baseline.sql) semeia estes nomes; o
+    // `fn_seed_default_pipeline_for_org` (db/migrations/0001_schema_initial.sql) semeia estes nomes; o
     // tenant renomeia à vontade. Consultar `crm_stages` para montar blocklist seria
     // transformar dado de cliente em censura.
     const negocio = [

@@ -97,7 +97,7 @@ describe("o backfill é idempotente", () => {
     // self-hoster. Sem a marca + `on conflict`, cada execução re-inseriria as
     // mesmas linhas e o custo do mês passado cresceria sozinho — aparecendo
     // como "a conta subiu" sem nenhuma chamada nova.
-    const baseline = readFileSync("supabase/baseline.sql", "utf8");
+    const baseline = readFileSync("db/migrations/0001_schema_initial.sql", "utf8");
     const bloco = baseline.slice(baseline.indexOf("insert into public.llm_calls ("));
     expect(bloco).toContain("legacy_invocation_id");
     expect(bloco.slice(0, 3000)).toContain("on conflict do nothing");

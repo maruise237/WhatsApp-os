@@ -130,7 +130,7 @@ touch "$BACKUP_MARK"
 STUB
 # shellcheck disable=SC2016  # o ${APP_IMAGE} é literal DENTRO do compose
 printf 'services:\n  app:\n    image: \${APP_IMAGE:-x}\n' > "$PROJ/docker-compose.prod.yml"
-printf 'select 1;\n' > "$PROJ/supabase/baseline.sql"
+printf 'select 1;\n' > "$PROJ/db/migrations/0001_schema_initial.sql"
 cat > "$PROJ/.env" <<ENV
 APP_IMAGE=ghcr.io/melgarafael/deskcommcrm:latest
 APP_PULL_POLICY=always
@@ -234,7 +234,7 @@ check "nenhuma das chaves novas duplicou" \
 SRC="$WORK/src"
 mkdir -p "$SRC"
 cp -R "$PROJ/hostgator-setup-kit" "$SRC/"
-mkdir -p "$SRC/supabase"; printf 'select 1;\n' > "$SRC/supabase/baseline.sql"
+mkdir -p "$SRC/supabase"; printf 'select 1;\n' > "$SRC/db/migrations/0001_schema_initial.sql"
 # shellcheck disable=SC2016  # o ${APP_IMAGE} é literal DENTRO do compose
 printf 'services:\n  app:\n    image: \${APP_IMAGE:-x}\n' > "$SRC/docker-compose.prod.yml"
 printf '.env\n' > "$SRC/.gitignore"

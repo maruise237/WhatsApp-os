@@ -179,7 +179,7 @@ describe("case_reply_turn — re-entrada do agente pela resposta do humano", () 
 
     const opening = input.buildOpening({ previous: null, leadState: null, context: fakeLeadContext(), notesIndexBlock: "—" });
     expect(opening).toContain("cliente liberado no sistema X");
-    expect(opening).toContain("Repasse essa conclusão ao lead");
+    expect(opening).toContain("Transmettez cette conclusion au lead");
     expect(opening).toContain("send_message");
   });
 

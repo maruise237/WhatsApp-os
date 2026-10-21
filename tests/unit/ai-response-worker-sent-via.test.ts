@@ -22,7 +22,7 @@
  * inteiro (`sent_to_dispatch` só existe depois que `persistAndDispatch`
  * retorna) e ainda assim passava com o valor inválido — o mock não tinha a
  * constraint. Aqui o stub valida contra o vocabulário **lido do
- * `supabase/baseline.sql`**, que é o schema que o self-hoster realmente aplica.
+ * `db/migrations/0001_schema_initial.sql`**, que é o schema que o self-hoster realmente aplica.
  * Ler do schema em vez de repetir a lista no teste é o que impede o teste de
  * concordar com o worker e os dois estarem errados juntos.
  */
@@ -69,19 +69,19 @@ const OUTBOUND_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const INBOUND_BODY = "bom dia, qual o prazo de entrega?";
 
 /**
- * Vocabulário de `sent_via` extraído do `supabase/baseline.sql` — o mesmo
+ * Vocabulário de `sent_via` extraído do `db/migrations/0001_schema_initial.sql` — o mesmo
  * arquivo que o `install.sh`/`update.sh` aplicam na VPS do cliente.
  */
 function vocabularioDoSchema(): string[] {
   const baseline = readFileSync(
-    path.resolve(process.cwd(), "supabase/baseline.sql"),
+    path.resolve(process.cwd(), "db/migrations/0001_schema_initial.sql"),
     "utf8",
   );
   const check = /CONSTRAINT "messages_sent_via_check" CHECK \(\("sent_via" = ANY \(ARRAY\[([^\]]+)\]/
     .exec(baseline);
   if (!check?.[1]) {
     throw new Error(
-      "não achei messages_sent_via_check no supabase/baseline.sql — " +
+      "não achei messages_sent_via_check no db/migrations/0001_schema_initial.sql — " +
         "se a constraint mudou de forma, conserte esta extração em vez de apagar o teste",
     );
   }

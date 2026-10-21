@@ -7,7 +7,7 @@ import { sql } from "./gov-helpers";
 /**
  * O que a migration 0087 promete, cobrado no banco que o CLONE recebe.
  *
- * Este arquivo lê o Postgres descartável que nasce do `supabase/baseline.sql`
+ * Este arquivo lê o Postgres descartável que nasce do `db/migrations/0001_schema_initial.sql`
  * (`TEST_DB_CONTAINER`, via `scripts/test-db.sh`), nunca o banco de dev — e essa
  * escolha É o teste. A migration é o caminho de quem já tem banco; o baseline é
  * o destino de quem clona. Uma mudança que existe só na primeira não chega ao

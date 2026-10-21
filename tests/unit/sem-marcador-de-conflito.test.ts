@@ -24,7 +24,7 @@ import { describe, expect, it } from "vitest";
  * ─── Por que NADA pegou ────────────────────────────────────────────────────
  *
  * `typecheck`, `lint`, `test:unit`, `build` e até `test:db` passaram verdes.
- * O `test:db` aplica o `supabase/baseline.sql`, não os arquivos de
+ * O `test:db` aplica o `db/migrations/0001_schema_initial.sql`, não os arquivos de
  * `migrations/` — então SQL quebrado ali dentro é invisível para todos os
  * gates. Quem pagaria é o clone que atualiza pela cadeia de migrations: erro de
  * sintaxe no meio de um `update.sh`, num banco que já começou a mudar.

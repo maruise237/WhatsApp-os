@@ -3,7 +3,7 @@
  *
  * ## O que se pagaria
  *
- * O `supabase/baseline.sql` traz `ALTER DEFAULT PRIVILEGES ... GRANT ALL ON
+ * O `db/migrations/0001_schema_initial.sql` traz `ALTER DEFAULT PRIVILEGES ... GRANT ALL ON
  * TABLES TO anon` (linha ~3972) e `... TO authenticated` (~3973), e eles valem
  * para toda tabela criada DEPOIS deles — isto é, para todo apêndice novo, e para
  * toda migration aplicada num projeto Supabase de verdade, onde a entrada em

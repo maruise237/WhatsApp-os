@@ -22,7 +22,7 @@ seus containers existentes.
    `neon_auth."user"`, `auth.uid()` (lê o claim `sub` de `request.jwt.claims`),
    `storage.buckets`/`storage.objects` e as extensões `uuid-ossp`, `pgcrypto`,
    `vector`, `citext`, `pg_trgm`.
-3. **Modo install**: aplica `supabase/baseline.sql` com `ON_ERROR_STOP=1` —
+3. **Modo install**: aplica `db/migrations/0001_schema_initial.sql` com `ON_ERROR_STOP=1` —
    qualquer statement falhando derruba o run com exit ≠ 0 (é o que o
    `install.sh` do kit self-host faz num banco novo).
 4. **Modo update**: re-aplica o baseline **sem** `ON_ERROR_STOP` — prova a

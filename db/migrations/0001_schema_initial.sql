@@ -3841,6 +3841,11 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA "public" GRANT ALL ON TABLES TO "authenticate
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA "public" GRANT ALL ON TABLES TO "service_role";
 
+-- ---- storage: bucket ai-policy + policies (migration 0014) ----
+-- ---- storage: bucket lgpd-exports + policy (migration 0017) ----
+-- ---- bucket de assets de skills (migration 0068) ----
+-- ---- realtime: inbox (messages/conversations), kanban (crm_leads) e IA ----
+-- ---- ai_models: catálogo curado global (migration 0023, §Seed Spec 10 §2.2) ----
 insert into public.ai_models (provider, model_id, display_name, description, context_window, input_price_per_million_cents, output_price_per_million_cents, supports_tools, is_default_for_provider)
 values
   ('anthropic', 'claude-opus-4-7',    'Claude Opus 4.7',    'Flagship Anthropic — raciocínio complexo',                  200000,  1500, 7500, true, false),
@@ -3853,6 +3858,7 @@ values
   ('google',    'gemini-2.5-flash',   'Gemini 2.5 Flash',   'Cheap/fast Google',                                        1000000,    30,  120, true, true)
 on conflict (provider, model_id) do nothing;
 
+-- ---- WhatsApp: unificação de conversas por contato (migration 0027) ----
 alter table public.contacts
   add column if not exists wa_identity text
   generated always as (
@@ -3979,6 +3985,7 @@ grant execute on function public.fn_upsert_wa_conversation(uuid, uuid, uuid) to 
 
 grant execute on function public.fn_mark_conversation_message(uuid, text, text, timestamptz) to service_role;
 
+-- ---- RLS por role em tabelas de config + viewer read-only (migration 0030) ----
 drop policy if exists "tenant_isolation_crm_pipelines_all" on public.crm_pipelines;
 
 drop policy if exists "crm_pipelines_select" on public.crm_pipelines;
@@ -4051,6 +4058,7 @@ create policy "conversations_agent_write" on public.conversations
         and public.fn_role_at_least(organization_id, 'agent'))
   );
 
+-- ---- Auditoria de atribuição de conversas + fn_conversation_assign (migration 0031) ----
 create table if not exists public.conversation_assignment_events (
   id              uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -4134,6 +4142,7 @@ revoke all on function public.fn_conversation_assign(uuid, uuid, uuid, text, uui
 grant execute on function public.fn_conversation_assign(uuid, uuid, uuid, text, uuid, boolean)
   to authenticated, service_role;
 
+-- ---- assignee_kind + guard de membership na fn_conversation_assign (migration 0032) ----
 alter table public.conversations
   add column if not exists assignee_kind text
   check (assignee_kind in ('user','ai'));
@@ -4249,6 +4258,7 @@ revoke all on function public.fn_conversation_assign(uuid, uuid, uuid, text, uui
 grant execute on function public.fn_conversation_assign(uuid, uuid, uuid, text, uuid, boolean)
   to authenticated, service_role;
 
+-- ---- conversation tags (migration 0033) ----
 alter table public.conversations
   add column if not exists tags text[] not null default '{}';
 
@@ -4266,6 +4276,7 @@ update public.organizations
           )
  where not (coalesce(settings, '{}'::jsonb) ? 'canonical_conversation_tags');
 
+-- ---- revoke anon EXECUTE em SECURITY DEFINER de escrita (migration 0034) ----
 revoke execute on function public.fn_upsert_wa_contact(uuid, text, text, text, text, text) from anon;
 
 revoke execute on function public.fn_upsert_wa_conversation(uuid, uuid, uuid) from anon;
@@ -4290,6 +4301,7 @@ revoke execute on function public.fn_audit_log_row() from anon;
 
 grant execute on function public.fn_audit_log_row() to service_role;
 
+-- ---- visibility_mode: RLS de conversas/mensagens por atendente (migration 0035) ----
 create or replace function public.fn_can_view_conversation(
   p_org uuid,
   p_assigned_to_user_id uuid
@@ -4462,6 +4474,7 @@ revoke execute on function public.fn_conversation_assign(uuid, uuid, uuid, text,
 grant execute on function public.fn_conversation_assign(uuid, uuid, uuid, text, uuid, boolean)
   to authenticated, service_role;
 
+-- ---- visibility_mode: RLS de crm_leads (kanban) por atendente (migration 0036) ----
 create or replace function public.fn_can_view_lead(
   p_org uuid,
   p_owner_user_id uuid
@@ -4539,6 +4552,7 @@ create policy "crm_leads_delete" on public.crm_leads
              or public.fn_can_view_lead(organization_id, owner_user_id)))
   );
 
+-- ---- métricas por responsável: índices + fn_attendant_metrics (migration 0037) ----
 create index if not exists idx_crm_leads_org_status_closed_owner
   on public.crm_leads (organization_id, status, closed_at, owner_user_id)
   where closed_at is not null;
@@ -4656,6 +4670,7 @@ revoke execute on function public.fn_attendant_metrics(uuid, timestamptz, timest
 grant execute on function public.fn_attendant_metrics(uuid, timestamptz, timestamptz, uuid)
   to authenticated, service_role;
 
+-- ---- webhooks universais + motor de regras (migration 0038) ----
 create table if not exists public.webhook_sources (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -4769,6 +4784,7 @@ create policy "automation_rule_runs_select" on public.automation_rule_runs
     or public.fn_is_platform_admin()
   );
 
+-- ---- disponibilidade/horário por atendente: attendant_availability (migration 0039) ----
 create table if not exists public.attendant_availability (
   id                uuid primary key default gen_random_uuid(),
   organization_id   uuid not null references public.organizations(id) on delete cascade,
@@ -4830,6 +4846,7 @@ create policy "attendant_availability_delete" on public.attendant_availability
              or public.fn_role_at_least(organization_id, 'manager')))
   );
 
+-- ---- roteamento: disponibilidade/horário por atendente (migration 0039) ----
 create table if not exists public.attendant_availability (
   id                uuid primary key default gen_random_uuid(),
   organization_id   uuid not null references public.organizations(id) on delete cascade,
@@ -4891,6 +4908,7 @@ create policy "attendant_availability_delete" on public.attendant_availability
              or public.fn_role_at_least(organization_id, 'manager')))
   );
 
+-- ---- roteamento: emissão de conversation.routing_requested (migration 0040) ----
 create or replace function public.fn_emit_conversation_routing() returns trigger
   language plpgsql
   security definer
@@ -4917,6 +4935,7 @@ create trigger trg_conversation_routing_requested
   when (new.assigned_to_user_id is null and new.status in ('open', 'pending'))
   execute function public.fn_emit_conversation_routing();
 
+-- ---- cifragem at-rest dos secrets de webhooks (migration 0041) ----
 create schema if not exists extensions;
 
 create extension if not exists pgcrypto with schema extensions;
@@ -5041,6 +5060,7 @@ begin
   end if;
 end$$;
 
+-- ---- trigger de leads sem duplicatas de evento (migration 0043) ----
 create or replace function public.fn_emit_event_on_lead_change() returns trigger
     language plpgsql
     set search_path to 'public', 'pg_temp'
@@ -5082,6 +5102,7 @@ update public.event_log
     and entity_kind = 'lead'
     and event_type in ('lead.created', 'lead.stage_changed');
 
+-- ---- RLS por role em crm_lead_activities/crm_lead_links (migration 0042) ----
 drop policy if exists "tenant_isolation_crm_lead_activities_select" on public.crm_lead_activities;
 
 drop policy if exists "tenant_isolation_crm_lead_activities_insert" on public.crm_lead_activities;
@@ -5145,6 +5166,7 @@ create policy "crm_lead_links_delete" on public.crm_lead_links
     or public.fn_is_platform_admin()
   );
 
+-- ---- user_organizations SELECT org-wide para manager+ (migration 0044) ----
 drop policy if exists "user_orgs_select" on public.user_organizations;
 
 create policy "user_orgs_select" on public.user_organizations
@@ -5817,6 +5839,7 @@ alter table flywheel_distiller_proposals
   add column if not exists applied_version_id uuid references ai_agent_versions(id) on delete set null,
   add column if not exists applied_by uuid;
 
+-- ---- followup flows (migration 0054) ----
 create table if not exists followup_flow_versions (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -5947,6 +5970,7 @@ $$;
 
 revoke all on function fn_claim_due_followup_enrollments(int, int) from public, anon, authenticated;
 
+-- ---- followup version lineage + atomic publish (migration 0056) ----
 alter table followup_flow_versions
   add column if not exists pointer_id uuid references followup_flow_pointers(id) on delete cascade;
 
@@ -5996,6 +6020,8 @@ $$;
 
 revoke all on function fn_publish_followup_flow_version(uuid, uuid, jsonb, uuid) from public, anon, authenticated;
 
+-- ---- agent_inbox_items: kind 'followup_dead' (migration 0057) ----
+-- ---- agent editor: seletor de fluxo de follow-up (migration 0061) ----
 alter table ai_agent_versions
   add column if not exists followup jsonb not null default '{"enabled": false, "flow_pointer_ids": []}'::jsonb;
 
@@ -6035,6 +6061,7 @@ create trigger trg_ai_agent_versions_content_immutable
   before update on public.ai_agent_versions
   for each row execute function fn_ai_agent_version_content_immutable();
 
+-- ---- followup enrollment: 1 vivo por lead ORG-WIDE + agent_id (migration 0064) ----
 with ranked as (
   select id,
          row_number() over (
@@ -6065,6 +6092,8 @@ alter table followup_enrollments
 create index if not exists idx_followup_enrollments_agent
   on followup_enrollments (agent_id);
 
+-- ---- bucket whatsapp-media (migration 0055) ----
+-- ---- media multimodal: derivado + flags (migration 0058) ----
 alter table messages
   add column if not exists media_derived_text text,
   add column if not exists media_derived_status text;
@@ -6073,10 +6102,12 @@ alter table ai_agent_versions
   add column if not exists multimodal_input boolean not null default true,
   add column if not exists video_frames_enabled boolean not null default false;
 
+-- ---- split de mensagens por-agente (migration 0059) ----
 alter table ai_agent_versions
   add column if not exists split_messages boolean not null default false,
   add column if not exists split_max_chars integer not null default 600;
 
+-- ---- templates de script do vendedor (migration 0060) ----
 create table if not exists message_templates (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -6122,6 +6153,7 @@ create policy "message_templates_write" on message_templates
     )
   );
 
+-- ---- snooze por conversa (migration 0062) ----
 alter table conversations
   add column if not exists snooze_until timestamptz,
   add column if not exists snoozed_by_user_id uuid references neon_auth.user(id) on delete set null,
@@ -6130,6 +6162,7 @@ alter table conversations
 create index if not exists idx_conversations_snooze_until
   on conversations (snooze_until) where snooze_until is not null;
 
+-- ---- notas internas de conversa (migration 0063) ----
 create table if not exists conversation_notes (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -6162,6 +6195,7 @@ create policy "conversation_notes_write" on conversation_notes
     organization_id in (select fn_user_org_ids()) and fn_role_at_least(organization_id, 'agent')
   );
 
+-- ---- human cases (migration 0066) ----
 create table if not exists agent_cases (
   id uuid primary key default uuid_generate_v4(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -6250,6 +6284,8 @@ alter table cron_jobs drop constraint if exists cron_jobs_job_kind_check;
 alter table cron_jobs add constraint cron_jobs_job_kind_check
   check (job_kind in ('inbound_turn','followup_turn','watchdog','flywheel','case_reply_turn'));
 
+-- ---- agent_inbox_items: reconcilia kind check followup_dead+snooze_expired (migration 0065) ----
+-- ---- memória geral da org: org_memory_versions/pointers/entries (migration 0067) ----
 create table if not exists org_memory_versions (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -6309,6 +6345,7 @@ begin
   end loop;
 end $$;
 
+-- ---- skills instaláveis: manifest + skill_activations + catálogo (migration 0068) ----
 alter table skill_versions add column if not exists manifest jsonb not null default '[]'::jsonb;
 
 alter table skill_versions add column if not exists forked_from_version_id uuid references skill_versions(id) on delete set null;
@@ -6355,6 +6392,7 @@ drop policy if exists catalog_read_skill_pointers on skill_pointers;
 create policy catalog_read_skill_pointers on skill_pointers for select
   to authenticated using (organization_id is null);
 
+-- ---- seed de skills de plataforma: catálogo inicial do marketplace (migration 0069) ----
 do $seed$
 declare
   v_id uuid;
@@ -6530,6 +6568,7 @@ $body$,
 end
 $seed$;
 
+-- ---- ai_pricing backfill (migration 0113, renumerada de 0068) ----
 insert into public.ai_pricing (model, prompt_cents_per_million_tokens, completion_cents_per_million_tokens, notes)
 select
   m.model_id,
@@ -6552,6 +6591,7 @@ where not exists (
   where p.model = 'openai/text-embedding-3-small' and p.superseded_at is null
 );
 
+-- ---- crm_leads owner_kind/owner_agent_id (migration 0070) ----
 alter table public.crm_leads
   add column if not exists owner_kind text
   check (owner_kind in ('user','ai'));
@@ -6622,6 +6662,7 @@ begin
   return new;
 end$$;
 
+-- ---- crm_lead_activities: barramento único da vida do lead (migration 0071) ----
 alter table public.crm_lead_activities
   add column if not exists actor_kind text
   check (actor_kind in ('user','ai','system','rule','contact'));
@@ -6715,6 +6756,7 @@ create trigger trg_stamp_stage_changed_at
   before insert or update on public.crm_leads
   for each row execute function public.fn_stamp_stage_changed_at();
 
+-- ---- evidence: lastro pode apontar para llm_calls (migration 0072) ----
 alter table public.crm_lead_activities
   drop constraint if exists crm_lead_activities_ai_needs_evidence;
 
@@ -6726,9 +6768,11 @@ alter table public.crm_lead_activities
     or coalesce(jsonb_array_length(evidence->'llm_call_ids'), 0) > 0
   );
 
+-- ---- identidade da próxima ação + caixa para o caso ambíguo (migration 0073) ----
 alter table public.lead_state
   add column if not exists next_action_seq bigint not null default 0;
 
+-- ---- score de probabilidade com evidência, em tabela própria (migrations 0074+0075) ----
 create table if not exists public.crm_lead_scores (
   lead_id uuid primary key references public.crm_leads(id) on delete cascade,
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -6741,6 +6785,7 @@ create table if not exists public.crm_lead_scores (
   updated_at timestamptz not null default now()
 );
 
+-- ---- migra o que existir (clones que já aplicaram a 0074) ----
 do $$
 begin
   if exists (
@@ -6778,9 +6823,12 @@ alter table public.crm_leads
   drop column if exists ai_probability_band,
   drop column if exists ai_probability_band_since;
 
+-- ---- as mesmas garantias, agora na tabela certa ----
 alter table public.crm_lead_scores
   drop constraint if exists crm_lead_scores_needs_reason;
 
+-- ---- evidência do score: FONTE ÚNICA (migrations 0076+0077) ----
+-- ---- limpeza ANTES da constraint ----
 update public.crm_lead_scores
    set ai_probability = null,
        ai_probability_reason = null,
@@ -6837,6 +6885,7 @@ alter table public.crm_lead_scores
     or (ai_probability_band = 'frio' and ai_probability <= 45)
   );
 
+-- ---- tenancy ----
 alter table public.crm_lead_scores enable row level security;
 
 drop policy if exists tenant_isolation_crm_lead_scores_all on public.crm_lead_scores;
@@ -6849,6 +6898,7 @@ create policy tenant_isolation_crm_lead_scores_all on public.crm_lead_scores
 create index if not exists idx_crm_lead_scores_org_band
   on public.crm_lead_scores (organization_id, ai_probability_band);
 
+-- ---- estado de risco do negócio (migration 0078) ----
 create table if not exists public.crm_lead_risk_states (
   lead_id uuid primary key references public.crm_leads(id) on delete cascade,
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -6891,6 +6941,7 @@ create policy tenant_isolation_crm_lead_risk_states_all on public.crm_lead_risk_
 create index if not exists idx_crm_lead_risk_states_org_bucket
   on public.crm_lead_risk_states (organization_id, bucket, since);
 
+-- ---- relógio do silêncio só conta interação (migration 0079) ----
 create or replace function public.fn_update_last_activity_at()
   returns trigger
   language plpgsql
@@ -6920,6 +6971,8 @@ begin
   return new;
 end$function$;
 
+-- ---- kind de caixa para o acervo de risco (migration 0080) ----
+-- ---- detected_at é carimbo do banco (migration 0081) ----
 create or replace function public.fn_carimba_detected_at()
   returns trigger
   language plpgsql
@@ -6938,6 +6991,7 @@ create trigger trg_crm_lead_risk_states_detected_at
   for each row
   execute function public.fn_carimba_detected_at();
 
+-- ---- proposta de reativação com prazo (migration 0082) ----
 create table if not exists public.crm_lead_reactivations (
   id uuid primary key default gen_random_uuid(),
   lead_id uuid not null references public.crm_leads(id) on delete cascade,
@@ -7011,6 +7065,8 @@ create trigger trg_crm_lead_reactivations_carimbo
   for each row
   execute function public.fn_carimba_reativacao();
 
+-- ---- kind de caixa para reativação vencida (migration 0083) ----
+-- ---- agent_stage_hint (migration 0084) ----
 alter table public.crm_stages
   add column if not exists agent_stage_hint text;
 
@@ -7040,6 +7096,7 @@ create unique index if not exists uniq_crm_stages_pipeline_hint
   on public.crm_stages (pipeline_id, agent_stage_hint)
   where agent_stage_hint is not null and is_archived = false;
 
+-- ---- backfill do que JÁ ESTÁ DECIDIDO, e só dele ----
 update public.crm_stages
    set agent_stage_hint = 'won'
  where is_won and agent_stage_hint is null;
@@ -7050,6 +7107,7 @@ update public.crm_stages
 
 analyze public.crm_leads;
 
+-- ---- intent router: ai_routers/members/decisions + stickiness (migration 0085) ----
 create table if not exists ai_routers (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -7152,6 +7210,7 @@ begin
   end loop;
 end $$;
 
+-- ---- knowledge_searches: telemetria de busca de conhecimento (migration 0086) ----
 create table if not exists knowledge_searches (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references organizations(id) on delete cascade,
@@ -7177,6 +7236,7 @@ create policy tenant_isolation_knowledge_searches_all on knowledge_searches
 
 revoke all on public.knowledge_searches from anon;
 
+-- ---- atualização self-service pela UI (migration 0089) ----
 create table if not exists public.system_version (
   id                  smallint primary key default 1 check (id = 1),
   current_version     text not null default '',
@@ -7212,6 +7272,7 @@ alter table public.system_version    enable row level security;
 
 alter table public.system_update_runs enable row level security;
 
+-- ---- índice único parcial: no máximo 1 run "dispatched" por vez (migration 0090) ----
 with ranked as (
   select id, row_number() over (order by dispatched_at desc) as rn
   from public.system_update_runs
@@ -7225,10 +7286,12 @@ create unique index if not exists uniq_system_update_runs_dispatched
   on public.system_update_runs (status)
   where status = 'dispatched';
 
+-- ---- acentos nas etapas padrão do funil (migration 0092) ----
 update public.crm_stages set name = 'Em separação' where name = 'Em separacao';
 
 update public.crm_stages set name = 'Pós-venda'    where name = 'Pos-venda';
 
+-- ---- channel provider (migration 0087) ----
 alter table public.channel_sessions
   add column if not exists provider text not null default 'waha',
   add column if not exists meta_phone_number_id text,
@@ -7237,9 +7300,11 @@ alter table public.channel_sessions
 
 alter table public.channel_sessions alter column waha_session_name drop not null;
 
+-- ---- vocabulário do terceiro canal (migration 0131) ----
 alter table public.channel_sessions
   add column if not exists zernio_account_id text;
 
+-- ---- o que falta para o terceiro canal ENVIAR (migration 0132) ----
 alter table public.conversations
   add column if not exists provider_conversation_id text;
 
@@ -7250,6 +7315,7 @@ create index if not exists idx_conversations_provider_conversation_id
 alter table public.channel_sessions
   add column if not exists zernio_token_encrypted bytea;
 
+-- ---- carimbo do lookup de telefone (migration 0119) ----
 alter table public.contacts
   add column if not exists phone_lookup_at timestamptz;
 
@@ -7257,6 +7323,7 @@ create index if not exists idx_contacts_phone_lookup_pendente
   on public.contacts (organization_id, phone_lookup_at nulls first)
   where phone_number is null;
 
+-- ---- meta templates (migration 0088) ----
 create table if not exists public.meta_templates (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -7296,6 +7363,7 @@ create policy tenant_isolation_meta_templates_all on public.meta_templates
   using (organization_id in (select public.fn_user_org_ids()))
   with check (organization_id in (select public.fn_user_org_ids()));
 
+-- ---- message type: template (migration 0091) ----
 do $$ begin
   alter table public.messages drop constraint if exists messages_type_check;
   alter table public.messages add constraint messages_type_check
@@ -7315,12 +7383,15 @@ create index if not exists messages_template_idx
   on public.messages (organization_id, template_name)
   where template_name is not null;
 
+-- ---- "não consegui comparar" não é "está em dia" (migration 0093) ----
 alter table public.system_version
   add column if not exists compare_failed boolean not null default false;
 
+-- ---- distingue "à frente da publicada" de "nunca houve publicada" (migration 0094) ----
 alter table public.system_version
   add column if not exists has_known_release boolean not null default true;
 
+-- ---- orçamento de IA conta o runtime real (migration 0095) ----
 drop trigger if exists trg_llm_calls_budget on public.llm_calls;
 
 create trigger trg_llm_calls_budget
@@ -7338,6 +7409,7 @@ on conflict (organization_id) do update
 set current_month_consumed_cents = excluded.current_month_consumed_cents,
     updated_at = now();
 
+-- ---- modelo de LLM padrão da organização (migration 0096) ----
 update public.organizations o
 set settings = jsonb_set(
       coalesce(o.settings, '{}'::jsonb),
@@ -7390,6 +7462,7 @@ create trigger trg_seed_org_llm_defaults
   before insert on public.organizations
   for each row execute function public.fn_seed_org_llm_defaults();
 
+-- ---- limiar do RAG calibrado (migration 0097) ----
 alter table public.ai_agents
   alter column config set default jsonb_build_object(
     'temperature', 0.3, 'max_tokens', 1024, 'rag_top_k', 5,
@@ -7419,9 +7492,11 @@ CREATE OR REPLACE FUNCTION "public"."retrieve_top_k_chunks"("p_organization_id" 
   limit greatest(p_k, 0);
 $$;
 
+-- ---- idioma do contato (migration 0098) ----
 alter table public.contacts
   add column if not exists locale text;
 
+-- ---- foto de perfil do contato (migration 0099) ----
 alter table public.contacts
   add column if not exists avatar_storage_path text,
   add column if not exists avatar_updated_at   timestamptz;
@@ -7443,6 +7518,7 @@ create index if not exists idx_contacts_avatar_refresh
   on public.contacts (avatar_updated_at nulls first)
   where wa_identity is not null and is_anonymized = false;
 
+-- ---- autoria da configuração da operação (migration 0101) ----
 alter table public.crm_stages
   add column if not exists last_change_actor_kind text
   check (last_change_actor_kind in ('user','ai','system'));
@@ -7466,6 +7542,7 @@ alter table public.automation_rules
 
 notify pgrst, 'reload schema';
 
+-- ---- uso das capacidades do agente (migration 0103) ----
 create or replace function public.fn_agent_tool_usage(
   p_organization_id uuid,
   p_agent_id        uuid,
@@ -7513,6 +7590,7 @@ create index if not exists idx_cron_jobs_retorno_vivo
   on public.cron_jobs (organization_id, contact_id, next_run_at)
   where enabled = true and job_kind = 'followup_turn';
 
+-- ---- agent_case_events.kind ganha 'agent_noted' (migration 0100) ----
 alter table public.agent_case_events
   drop constraint if exists agent_case_events_kind_check;
 
@@ -7529,6 +7607,7 @@ alter table public.agent_case_events
     'agent_noted'
   ));
 
+-- ---- catálogo de modelos atualizado (migration 0104) ----
 insert into public.ai_models
   (provider, model_id, display_name, description,
    input_price_per_million_cents, output_price_per_million_cents, supports_tools)
@@ -7638,6 +7717,7 @@ alter table public.agent_inbox_items
 
 notify pgrst, 'reload schema';
 
+-- ---- channel_sessions.archived_at (migration 0106) ----
 alter table public.channel_sessions
   add column if not exists archived_at timestamptz;
 
@@ -7647,6 +7727,7 @@ create index if not exists channel_sessions_org_active_idx
 
 notify pgrst, 'reload schema';
 
+-- ---- número único só entre canais ATIVOS (migration 0107) ----
 do $$
 begin
   if exists (
@@ -7663,6 +7744,8 @@ create unique index if not exists channel_sessions_phone_per_org_unique
   on public.channel_sessions (organization_id, phone_number)
   where archived_at is null;
 
+-- ---- SECURITY DEFINER exposta a anon/authenticated (migration 0108) ----
+-- ---- anon: nenhuma SECURITY DEFINER de public ----
 revoke execute on function public.fn_is_platform_admin() from public, anon;
 
 revoke execute on function public.fn_user_org_ids() from public, anon;
@@ -7679,6 +7762,7 @@ revoke execute on function public.fn_emit_conversation_routing() from public, an
 
 revoke execute on function public.rls_auto_enable() from public, anon;
 
+-- ---- authenticated: definer volátil sem call site de sessão de usuário ----
 revoke execute on function public.fn_upsert_wa_contact(uuid, text, text, text, text, text) from authenticated;
 
 revoke execute on function public.fn_upsert_wa_conversation(uuid, uuid, uuid) from authenticated;
@@ -7693,6 +7777,7 @@ revoke execute on function public.fn_emit_conversation_routing() from authentica
 
 revoke execute on function public.rls_auto_enable() from authenticated;
 
+-- ---- re-grant explícito: quem precisa continua podendo (probe positivo) ----
 grant execute on function public.fn_upsert_wa_contact(uuid, text, text, text, text, text) to service_role;
 
 grant execute on function public.fn_upsert_wa_conversation(uuid, uuid, uuid) to service_role;
@@ -7717,9 +7802,11 @@ grant execute on function public.fn_user_role_in(uuid) to authenticated, service
 
 grant execute on function public.fn_role_at_least(uuid, text) to authenticated, service_role;
 
+-- ---- ai_invocations.agent_id aceita NULL (migration 0114) ----
 alter table public.ai_invocations
   alter column agent_id drop not null;
 
+-- ---- Índice de Atrito + DEMANDAS (migrations 0116–0120) ----
 create index if not exists idx_conversations_org_silencio
   on public.conversations (organization_id, last_outbound_at)
   where last_outbound_at is not null;
@@ -8139,6 +8226,7 @@ revoke execute on function public.fn_atrito_metrics(uuid, timestamptz, timestamp
 grant  execute on function public.fn_atrito_metrics(uuid, timestamptz, timestamptz, int, float8, int)
   to authenticated, service_role;
 
+-- ---- demanda nasce no ponto de entrada (migration 0138) ----
 create or replace function public.fn_demanda_abre_no_inbound()
 returns trigger
 language plpgsql
@@ -8231,11 +8319,13 @@ create trigger trg_demanda_fecha_com_conversa
 
 notify pgrst, 'reload schema';
 
+-- ---- lead_checkpoints.declaracao: a fronteira FALAR/OPERAR (migration 0110) ----
 alter table lead_checkpoints
   add column if not exists declaracao jsonb;
 
 notify pgrst, 'reload schema';
 
+-- ---- turno do OPERADOR: config por versão (migration 0111) ----
 alter table ai_agent_versions
   add column if not exists operator_enabled boolean not null default false;
 
@@ -8315,6 +8405,7 @@ create trigger trg_liberar_leads_do_agente
   before delete on public.ai_agents
   for each row execute function public.fn_liberar_leads_do_agente();
 
+-- ---- ai_purpose_bindings: qual modelo cada ponto usa (migration 0126) ----
 create table if not exists public.ai_purpose_bindings (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -8377,6 +8468,7 @@ create trigger ai_purpose_bindings_updated_at
   before update on public.ai_purpose_bindings
   for each row execute function public.fn_set_updated_at();
 
+-- ---- provider vira vocabulário aberto + catálogo sincronizável (migration 0127) ----
 alter table public.ai_agent_versions       drop constraint if exists ai_agent_versions_provider_check;
 
 alter table public.ai_models               drop constraint if exists ai_models_provider_check;
@@ -8418,6 +8510,7 @@ create unique index if not exists ai_models_provider_model_unique on public.ai_m
 
 create index if not exists ai_models_source_idx on public.ai_models (source) where deprecated_at is null;
 
+-- ---- llm_calls registra a FALHA, não só o sucesso (migration 0128) ----
 alter table public.llm_calls add column if not exists status text not null default 'ok';
 
 alter table public.llm_calls add column if not exists error_code text;
@@ -8443,6 +8536,7 @@ create index if not exists llm_calls_erros_idx
 create index if not exists llm_calls_purpose_idx
   on public.llm_calls (organization_id, purpose, created_at desc);
 
+-- ---- uma tabela de telemetria de IA, não duas (migration 0130) ----
 alter table public.llm_calls add column if not exists agent_id uuid
   references public.ai_agents(id) on delete set null;
 
@@ -8489,6 +8583,7 @@ where not exists (
 )
 on conflict do nothing;
 
+-- ---- o orçamento do mês não conta o backfill como gasto novo (migration 0140) ----
 insert into public.ai_budgets (organization_id, current_month_consumed_cents)
 select o.id,
        coalesce((select sum(c.cost_cents) from public.llm_calls c
@@ -8505,12 +8600,15 @@ on conflict (organization_id) do update
 set current_month_consumed_cents = excluded.current_month_consumed_cents,
     updated_at = now();
 
+-- ---- telefone do contato @lid (migration 0122) ----
+-- ---- 1 · wa_lid: a correlação que sobrevive ao telefone ----
 alter table public.contacts
   add column if not exists wa_lid text
   generated always as (
     nullif(regexp_replace(coalesce(source_metadata->>'waha_lid', ''), '@.*$', ''), '')
   ) stored;
 
+-- ---- 2 · deduplicar ANTES da constraint (auto-curativo) ----
 with ranked as (
   select id,
          first_value(id) over (
@@ -8545,6 +8643,7 @@ create unique index if not exists uniq_contacts_org_wa_lid
   on public.contacts (organization_id, wa_lid)
   where wa_lid is not null and is_merged_into is null;
 
+-- ---- 3 · o upsert passa a reencontrar por LID, e a completar o que falta ----
 create or replace function public.fn_upsert_wa_contact(
   p_org uuid, p_kind text, p_phone text, p_lid text, p_chat_id text, p_notify text
 ) returns uuid language plpgsql security definer set search_path = public as $$
@@ -8635,11 +8734,13 @@ begin
   return v_id;
 end; $$;
 
+-- ---- 4 · o rótulo técnico legado sai ----
 update public.contacts
    set display_name = null, updated_at = now()
  where display_name ~ '^Contato [0-9]+(@lid)?$'
    and is_anonymized = false;
 
+-- ---- fila de confirmação de dado do contato (migration 0123) ----
 create table if not exists public.contact_field_proposals (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -8732,6 +8833,7 @@ create trigger trg_contact_field_proposals_carimbo
   for each row
   execute function public.fn_carimba_proposta_de_dado();
 
+-- ---- LGPD: anonimizar o contato apaga as propostas dele ----
 create or replace function public.fn_apaga_propostas_de_contato_anonimizado()
   returns trigger
   language plpgsql
@@ -8757,9 +8859,11 @@ create trigger trg_contacts_anonimizado_limpa_propostas
   when (new.is_anonymized = true and coalesce(old.is_anonymized, false) = false)
   execute function public.fn_apaga_propostas_de_contato_anonimizado();
 
+-- ---- escopo de funil do agente (migration 0125) ----
 alter table public.ai_agent_versions
   add column if not exists pipeline_ids uuid[] not null default '{}'::uuid[];
 
+-- ---- backfill: o que JÁ funcionava continua funcionando ----
 update public.ai_agent_versions v
    set pipeline_ids = sub.funis
   from (
@@ -8773,6 +8877,7 @@ update public.ai_agent_versions v
  where v.agent_id = sub.agent_id
    and v.pipeline_ids = '{}'::uuid[];
 
+-- ---- o trigger de imutabilidade para de ignorar metade da configuração ----
 create or replace function fn_ai_agent_version_content_immutable() returns trigger
 language plpgsql as $fn$
 begin
@@ -8821,6 +8926,7 @@ create trigger trg_ai_agent_versions_content_immutable
 
 notify pgrst, 'reload schema';
 
+-- ---- camadas de segurança por organização (migration 0142) ----
 create table if not exists public.org_guardrail_layers (
   organization_id uuid not null references public.organizations(id) on delete cascade,
   layer text not null,
@@ -8831,6 +8937,7 @@ create table if not exists public.org_guardrail_layers (
 
 alter table public.org_guardrail_layers enable row level security;
 
+-- ---- escrita de guardrail exige admin (migration 0143) ----
 drop policy if exists tenant_isolation_org_guardrail_layers_all on public.org_guardrail_layers;
 
 drop policy if exists org_guardrail_layers_select on public.org_guardrail_layers;
@@ -8857,11 +8964,13 @@ create policy org_guardrail_layers_admin_write on public.org_guardrail_layers
 
 revoke all on public.org_guardrail_layers from anon;
 
+-- ---- plano de tempo do follow-up (migration 0144) ----
 alter table followup_enrollments
   add column if not exists timing_plan jsonb;
 
 notify pgrst, 'reload schema';
 
+-- ---- o tick do follow-up para de servir uma organização de cada vez (migration 0146) ----
 create index if not exists idx_followup_enrollments_due_por_org
   on followup_enrollments (organization_id, next_eval_at)
   where status in ('active','waiting_reply');
@@ -8923,6 +9032,7 @@ $$;
 
 revoke execute on function fn_claim_due_followup_enrollments(int, int) from public, anon, authenticated;
 
+-- ---- o dossiê do follow-up: tempo escolhido pela IA + pausa manual (migration 0145) ----
 do $$
 declare
   c record;
@@ -8968,6 +9078,7 @@ create index if not exists idx_followup_events_enrollment_tempo
 
 notify pgrst, 'reload schema';
 
+-- ---- relógio do banco para o agendamento do follow-up (migration 0147) ----
 alter table public.followup_enrollments
   alter column next_eval_at set default now();
 
@@ -8986,6 +9097,7 @@ revoke execute on function public.fn_agora() from anon, authenticated;
 
 grant  execute on function public.fn_agora() to service_role;
 
+-- ---- o caso anuncia abertura e fechamento no barramento (migration 0148) ----
 create or replace function public.fn_emit_agent_case_event()
 returns trigger
 language plpgsql
@@ -9047,6 +9159,7 @@ create trigger trg_agent_case_closed
 
 notify pgrst, 'reload schema';
 
+-- ---- definer valida a organização de quem chamou (migration 0149) ----
 create or replace function public.emit_event(
   p_event_type text,
   p_entity_kind text,
@@ -9150,6 +9263,8 @@ end $$;
 
 notify pgrst, 'reload schema';
 
+-- ---- RBAC na configuração de IA e canais (migration 0150) ----
+-- ---- canais ----
 drop policy if exists channel_sessions_tenant_isolation_all on public.channel_sessions;
 
 drop policy if exists channel_sessions_tenant_select on public.channel_sessions;
@@ -9172,6 +9287,7 @@ create policy channel_sessions_tenant_write on public.channel_sessions
     or public.fn_is_platform_admin()
   );
 
+-- ---- agentes de IA ----
 drop policy if exists tenant_isolation_ai_agents_all on public.ai_agents;
 
 drop policy if exists tenant_isolation_ai_agents_select on public.ai_agents;
@@ -9194,6 +9310,7 @@ create policy tenant_isolation_ai_agents_write on public.ai_agents
     or public.fn_is_platform_admin()
   );
 
+-- ---- versões de agente ----
 drop policy if exists tenant_isolation_ai_agent_versions_all on public.ai_agent_versions;
 
 drop policy if exists tenant_isolation_ai_agent_versions_select on public.ai_agent_versions;
@@ -9212,6 +9329,7 @@ create policy tenant_isolation_ai_agent_versions_write on public.ai_agent_versio
       and public.fn_role_at_least(organization_id, 'admin')
   );
 
+-- ---- orçamento de IA ----
 drop policy if exists tenant_isolation_ai_budgets_all on public.ai_budgets;
 
 drop policy if exists tenant_isolation_ai_budgets_select on public.ai_budgets;
@@ -9234,6 +9352,7 @@ create policy tenant_isolation_ai_budgets_write on public.ai_budgets
     or public.fn_is_platform_admin()
   );
 
+-- ---- roteadores de IA ----
 drop policy if exists tenant_isolation_ai_routers_all on public.ai_routers;
 
 drop policy if exists tenant_isolation_ai_routers_select on public.ai_routers;
@@ -9288,6 +9407,7 @@ create policy tenant_isolation_ai_purpose_bindings_write on public.ai_purpose_bi
       and public.fn_role_at_least(organization_id, 'admin')
   );
 
+-- ---- credenciais de provedor de IA: remover a superfície, não negociá-la ----
 drop policy if exists tenant_isolation_ai_provider_credentials_select on public.ai_provider_credentials;
 
 drop policy if exists tenant_isolation_ai_provider_credentials_modify on public.ai_provider_credentials;
@@ -9314,6 +9434,7 @@ grant select on public.ai_provider_credentials_safe to authenticated;
 
 notify pgrst, 'reload schema';
 
+-- ---- o quadro de clientes montado no onboarding (migration 0156) ----
 create or replace function public.fn_aplicar_quadro_do_onboarding(
   p_organization_id uuid,
   p_pipeline_id uuid,
@@ -9382,6 +9503,7 @@ revoke execute on function public.fn_aplicar_quadro_do_onboarding(uuid, uuid, te
 grant execute on function public.fn_aplicar_quadro_do_onboarding(uuid, uuid, text, text, jsonb)
   to service_role;
 
+-- ---- marca por organização (migration 0157) ----
 create or replace function public.fn_definir_marca_da_organizacao(
   p_org   uuid,
   p_actor uuid,
@@ -9458,6 +9580,7 @@ grant  execute on function public.fn_definir_marca_da_organizacao(uuid, uuid, js
 
 notify pgrst, 'reload schema';
 
+-- ---- logo da marca: as FUNÇÕES (migration 0158) ----
 create or replace function public.fn_definir_logo_da_organizacao(
   p_org   uuid,
   p_actor uuid,
@@ -9610,6 +9733,7 @@ grant  execute on function public.fn_definir_marca_da_organizacao(uuid, uuid, js
 
 notify pgrst, 'reload schema';
 
+-- ---- gasto de IA do mês: uma régua só (migration 0159) ----
 create or replace function public.fn_gasto_de_ia_do_mes(p_org uuid)
 returns numeric
   language sql
@@ -9631,6 +9755,7 @@ grant  execute on function public.fn_gasto_de_ia_do_mes(uuid)
 
 notify pgrst, 'reload schema';
 
+-- ---- outbound zera unread na fila (migration 0161) ----
 create or replace function public.fn_mark_conversation_message(
   p_conv uuid, p_direction text, p_preview text, p_at timestamptz
 ) returns void language plpgsql security definer set search_path = public as $$
@@ -9666,6 +9791,7 @@ where unread_count_for_assignee <> coalesce((
 
 notify pgrst, 'reload schema';
 
+-- ---- contato: última atividade carimbada por mensagem (migration 0162) ----
 create or replace function public.fn_mark_conversation_message(
   p_conv uuid, p_direction text, p_preview text, p_at timestamptz
 ) returns void language plpgsql security definer set search_path = public as $$
@@ -9701,6 +9827,7 @@ update public.contacts c
 
 notify pgrst, 'reload schema';
 
+-- ---- atribuição de anúncio: de qual campanha um contato do WhatsApp veio (migration 0164) ----
 create or replace function public.fn_estampar_atribuicao_de_anuncio(
   p_contact uuid,
   p_platform text,
@@ -9727,6 +9854,7 @@ grant  execute on function public.fn_estampar_atribuicao_de_anuncio(uuid, text, 
 
 notify pgrst, 'reload schema';
 
+-- ---- poda da fila e expurgo do audit (migration 0167) ----
 create index if not exists idx_job_queue_poda
   on public.job_queue (created_at)
   where status in ('done', 'failed', 'dead');
@@ -9820,6 +9948,7 @@ grant  execute on function public.fn_expurgar_auditoria_vencida(int, int)
 
 notify pgrst, 'reload schema';
 
+-- ---- quem manda na conversa: "Assumir" cala o automático (migration 0173) ----
 create or replace function public.fn_conversation_assign(
   p_organization_id uuid,
   p_conversation_id uuid,
@@ -9900,6 +10029,7 @@ revoke execute on function public.fn_conversation_assign(uuid, uuid, uuid, text,
 grant  execute on function public.fn_conversation_assign(uuid, uuid, uuid, text, uuid, boolean)
   to authenticated, service_role;
 
+-- ---- o histórico de atribuição herda o escopo da conversa (migration 0173) ----
 drop policy if exists cae_select on public.conversation_assignment_events;
 
 create policy cae_select on public.conversation_assignment_events
@@ -9915,6 +10045,7 @@ create policy cae_select on public.conversation_assignment_events
     )
   );
 
+-- ---- LGPD alcança o histórico de captação: função + trigger (migration 0174) ----
 create or replace function public.fn_redigir_captacoes_do_contato_anonimizado()
 returns trigger
 language plpgsql
@@ -9942,10 +10073,12 @@ grant execute on function public.fn_redigir_captacoes_do_contato_anonimizado() t
 
 notify pgrst, 'reload schema';
 
+-- ---- mensagem editada e mensagem apagada (migration 0153) ----
 alter table public.messages add column if not exists edited_at timestamptz;
 
 alter table public.messages add column if not exists revoked_at timestamptz;
 
+-- ---- definição sabe de qual conexão é (migration 0154) ----
 alter table public.meta_templates
   add column if not exists channel_session_id uuid
     references public.channel_sessions(id) on delete set null;
@@ -9954,6 +10087,8 @@ create index if not exists meta_templates_sessao_idx
   on public.meta_templates (channel_session_id, status)
   where channel_session_id is not null;
 
+-- ---- o arquivo do webhook aceita os canais novos (migration 0151) ----
+-- ---- a marca da instalação sai do .env e vai para o banco (migration 0155) ----
 create table if not exists public.platform_branding (
   id                  smallint primary key default 1,
   app_name            text,
@@ -9983,6 +10118,7 @@ create trigger trg_platform_branding_touch
 
 notify pgrst, 'reload schema';
 
+-- ---- logo da marca: BUCKET e COLUNA (migration 0158) ----
 alter table public.platform_branding
   add column if not exists logo_path text;
 
@@ -10002,12 +10138,14 @@ alter table public.platform_branding
 
 notify pgrst, 'reload schema';
 
+-- ---- o teto de IA que vincula (migration 0159) ----
 alter table public.ai_budgets
   add column if not exists enforcement_mode text not null default 'off';
 
 alter table public.ai_budgets
   add column if not exists enforcement_effective_at timestamptz;
 
+-- >>> RESGATE B->A: INICIO <<<
 insert into public.ai_budgets (organization_id)
 select o.id from public.organizations o
  where jsonb_typeof(o.settings->'llm'->'monthly_budget_cents') = 'number'
@@ -10026,6 +10164,7 @@ update public.ai_budgets b
    and (o.settings->'llm'->>'monthly_budget_cents')::numeric >= 100
    and (o.settings->'llm'->>'monthly_budget_cents')::numeric <= 2147483647;
 
+-- >>> RESGATE B->A: FIM <<<
 update public.organizations
    set settings = jsonb_set(settings, '{llm}', (settings->'llm') - 'monthly_budget_cents')
  where jsonb_typeof(settings->'llm') = 'object'
@@ -10064,8 +10203,10 @@ select b.organization_id, 'budget_warning', 'info',
 
 notify pgrst, 'reload schema';
 
+-- ---- ai_budgets só se escreve pela rota (migration 0160) ----
 revoke insert, update, delete on table public.ai_budgets from authenticated, anon;
 
+-- ---- o arquivo do webhook pode perder o corpo (migration 0163) ----
 alter table public.webhook_events_log
   alter column raw_body drop not null;
 
@@ -10075,6 +10216,7 @@ create index if not exists webhook_events_log_a_esvaziar_idx
 
 notify pgrst, 'reload schema';
 
+-- ---- índice do cap global do claim da fila (migration 0166) ----
 do $$
 declare
   v_relkind "char";
@@ -10111,6 +10253,7 @@ $$;
 create index if not exists idx_job_queue_running
   on job_queue (status) where status = 'running';
 
+-- ---- identificador de canal único entre os ATIVOS (migration 0165) ----
 with ativos as (
   select id,
          row_number() over (
@@ -10151,6 +10294,7 @@ create unique index if not exists channel_sessions_zernio_account_id_ativo_uniqu
   on public.channel_sessions (zernio_account_id)
   where archived_at is null and zernio_account_id is not null;
 
+-- ---- a mensagem que responde outra (migration 0168) ----
 alter table public.messages
   add column if not exists reply_to_message_id uuid
     references public.messages(id) on delete set null;
@@ -10161,6 +10305,7 @@ create index if not exists messages_reply_to_idx
 
 notify pgrst, 'reload schema';
 
+-- ---- histórico DURÁVEL de leads captados: tabela (migration 0174) ----
 create table if not exists public.webhook_lead_captures (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -10216,6 +10361,7 @@ create trigger trg_redigir_captacoes_ao_anonimizar
   when (new.is_anonymized is true and old.is_anonymized is distinct from true)
   execute function public.fn_redigir_captacoes_do_contato_anonimizado();
 
+-- ---- a automação precisa poder dizer "ainda não" (migration 0175) ----
 alter table public.automation_rule_runs
   drop constraint if exists automation_rule_runs_status_check;
 
@@ -10229,6 +10375,7 @@ alter table public.automation_rule_runs
 
 notify pgrst, 'reload schema';
 
+-- ---- Evolution Go pour AI WhatsApp Sales OS (migration 0176) ----
 alter table public.channel_sessions
   add column if not exists evolution_instance_name text;
 
@@ -10273,6 +10420,7 @@ create unique index if not exists channel_sessions_evolution_instance_name_activ
     and provider = 'evolution_go'
     and evolution_instance_name is not null;
 
+-- ---- AI Sales OS : catalogue, commandes et paiements (migration 0177) ----
 create table if not exists public.products (
   id uuid primary key default gen_random_uuid(),
   organization_id uuid not null references public.organizations(id) on delete cascade,
@@ -10494,6 +10642,7 @@ revoke all on function public.fn_approve_sales_payment(uuid, uuid, uuid, uuid) f
 
 grant execute on function public.fn_approve_sales_payment(uuid, uuid, uuid, uuid) to authenticated, service_role;
 
+-- ---- AI Sales OS : création atomique de commande (migration 0178) ----
 alter table public.sales_orders add column if not exists idempotency_key text;
 
 create unique index if not exists idx_sales_orders_org_idempotency
@@ -10559,6 +10708,7 @@ revoke all on function public.fn_create_sales_order(uuid, uuid, uuid, jsonb, tex
 
 grant execute on function public.fn_create_sales_order(uuid, uuid, uuid, jsonb, text, uuid, text) to authenticated, service_role;
 
+-- ---- Evolution Go : idempotence des webhooks (migration 0179) ----
 alter table public.webhook_events_log
   drop constraint if exists webhook_events_log_provider_check;
 
@@ -10593,6 +10743,7 @@ begin
   end if;
 end $$;
 
+-- ---- Tableau par défaut en français pour les nouvelles organisations (migration 0181) ----
 create or replace function public.fn_seed_default_pipeline_for_org() returns trigger
   language plpgsql
   set search_path to 'public', 'pg_temp'
@@ -10624,6 +10775,7 @@ begin
   return new;
 end$$;
 
+-- ---- Une commande payée peut partir en livraison (migration 0182) ----
 alter table public.sales_orders drop constraint if exists sales_orders_check;
 
 alter table public.sales_orders drop constraint if exists sales_orders_check1;
@@ -10638,10 +10790,12 @@ alter table public.sales_orders drop constraint if exists sales_orders_paiement_
 alter table public.sales_orders add constraint sales_orders_paiement_seulement_si_payee
   check (paid_at is null or status in ('payée', 'a_livrer', 'livree'));
 
+-- ---- Mots-clés de passage à un humain en français (migration 0183) ----
 alter table public.ai_agent_versions
   alter column handoff_keywords
   set default array['parler à un humain', 'conseiller', 'vraie personne']::text[];
 
+-- ---- Base de connaissances en plein texte, sans embeddings (migration 0184) ----
 alter table public.ai_chunks alter column embedding drop not null;
 
 alter table public.ai_chunks
@@ -10715,6 +10869,7 @@ on conflict (provider, model_id) do update
       output_price_per_million_cents = excluded.output_price_per_million_cents,
       supports_tools                 = excluded.supports_tools;
 
+-- ---- Valeurs par défaut visibles en français (migration 0185) ----
 update public.organizations
    set display_name = 'Mon entreprise'
  where display_name in ('Minha empresa', 'Minha Empresa');
@@ -10908,6 +11063,7 @@ $body$,
 end
 $skills$;
 
+-- ---- Défauts du marché africain francophone : XAF / Africa/Douala / fr-FR (migration 0186) ----
 alter table if exists public.organizations      alter column timezone set default 'Africa/Douala';
 
 alter table if exists public.organizations      alter column locale   set default 'fr-FR';
@@ -10924,6 +11080,7 @@ alter table if exists public.sales_orders       alter column currency set defaul
 
 alter table if exists public.sales_order_items  alter column currency set default 'XAF';
 
+-- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 do $$
 declare
   f record;

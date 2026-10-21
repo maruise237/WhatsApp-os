@@ -5,7 +5,7 @@ pile les recrée en local pour pouvoir dérouler les parcours dans un vrai navig
 
 | Service hébergé | Remplaçant local | Port |
 |---|---|---|
-| Postgres Neon | `pgvector/pgvector:pg17` + `supabase/baseline.sql` (même prélude que `scripts/test-db.sh`) | 54340 |
+| Postgres Neon | `pgvector/pgvector:pg17` + `db/migrations/0001_schema_initial.sql` (même émulation Neon que `scripts/test-db.sh`) | 54340 |
 | Neon Auth | `auth-server.mjs` — Better Auth (la brique de Neon Auth) avec cookies `__Secure-neon-auth.*` et JWT RS256 dans `set-auth-jwt` | 3100 |
 | Neon Data API | PostgREST v12, JWT vérifié contre le `/jwks` du serveur d'auth | 3001 |
 | Stockage médias | SeaweedFS S3 | 8333 |

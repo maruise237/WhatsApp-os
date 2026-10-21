@@ -23,7 +23,7 @@ import { describe, expect, it } from "vitest";
 import { PAPEIS_HUMANOS, ROLE_RANK, ROTULO_DO_PAPEL, type Role } from "@/lib/auth/types";
 
 const RAIZ = join(__dirname, "..", "..");
-const baseline = readFileSync(join(RAIZ, "supabase/baseline.sql"), "utf8");
+const baseline = readFileSync(join(RAIZ, "db/migrations/0001_schema_initial.sql"), "utf8");
 
 describe("papel do agente publicado", () => {
   it("senta ENTRE atendente e gerente, nessa ordem", () => {

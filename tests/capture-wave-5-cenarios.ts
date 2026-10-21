@@ -741,8 +741,8 @@ async function main(): Promise<void> {
     // produto não commitado. Declarar só as dependências do produto deixa o carimbo
     // dizer "todas limpas" enquanto a RÉGUA muda debaixo do resultado.
     "tests/capture-wave-5-cenarios.ts",
-    "supabase/migrations/20260725040000_0074_lead_score_com_evidencia.sql",
-    "supabase/migrations/20260725050000_0075_score_sai_do_lead_para_tabela_propria.sql",
+    "db/migrations/0001_schema_initial.sql",
+    "db/migrations/0001_schema_initial.sql",
     "lib/kanban/score-band.ts",
     "lib/kanban/card-state.ts",
     "components/kanban/KanbanCard.tsx",

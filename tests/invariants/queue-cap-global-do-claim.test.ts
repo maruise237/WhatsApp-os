@@ -107,7 +107,7 @@ describe("cap global do claim × volume da fila", () => {
   });
 
   it("o índice chegou par les migrations, avec la définition attendue", () => {
-    // O banco desta suíte é construído SÓ do supabase/baseline.sql — que é o que
+    // O banco desta suíte é construído SÓ do db/migrations/0001_schema_initial.sql — que é o que
     // o self-hoster aplica. Migration que ficasse só em migrations/ não chega a
     // ninguém, e aqui isso aparece como índice ausente.
     const [def = ""] = sql(`

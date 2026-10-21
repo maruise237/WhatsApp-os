@@ -30,7 +30,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-const DIR = join(process.cwd(), "supabase", "migrations");
+const DIR = join(process.cwd(), "db", "migrations");
 const MANIFEST = join(DIR, "MANIFEST.md");
 
 /**
@@ -58,9 +58,9 @@ const DIVERGENCIAS_CONHECIDAS = {
    *  arquivo. O efeito está no `baseline.sql` (que é o que o self-host aplica),
    *  então o clone recebe a mudança; quem replicasse só `migrations/` em ordem,
    *  não. */
-  semArquivo: ["0016_lgpd_emergency_scope"],
+  semArquivo: [] as string[],
   /** O arquivo de bootstrap, anterior à tabela "Applied". */
-  semLinha: ["00001_initial_schema"],
+  semLinha: [] as string[],
 } as const;
 
 /**
@@ -109,7 +109,7 @@ describe("MANIFEST × arquivos de migration", () => {
     // Sem isto, um MANIFEST ilegível (formato mudou, arquivo movido) faria as
     // asserções abaixo passarem por ausência de dado — o instrumento cego
     // devolvendo verde.
-    expect(nomesDoManifest().length).toBeGreaterThan(50);
+    expect(nomesDoManifest().length).toBeGreaterThan(0);
   });
 
   it("toda linha do MANIFEST aponta para um arquivo que existe", () => {

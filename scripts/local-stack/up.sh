@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Pile locale « comme une VPS fraîche » pour tester l'app PAR L'ÉCRAN.
 #
-#   Postgres pg17 + baseline.sql   (le même prélude que scripts/test-db.sh)
+#   Postgres pg17 + db/migrations   (même émulation Neon que scripts/test-db.sh)
 #   Neon Auth   → Better Auth local   (scripts/local-stack/auth-server.mjs, :3100)
 #   Data API    → PostgREST           (JWT vérifié contre le /jwks du serveur d'auth, :3001)
 #   Stockage    → SeaweedFS S3        (:8333)
@@ -37,29 +37,11 @@ for _ in $(seq 1 60); do
 done
 psql_db() { docker exec -i "$DB" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - "$@"; }
 
-echo "==> schéma neon_auth complet (Better Auth) + rôle authenticator"
-psql_db < scripts/local-stack/neon-auth.sql
+echo "==> émulation Neon (neon_auth, auth.uid(), rôles)"
+psql_db < db/local/emulation-neon.sql
 
-echo "==> prélude Supabase (extrait de scripts/test-db.sh, sans copie)"
-awk '/==> prélude :/{f=1} f&&/^psql_install <<.SQL.$/{g=1; next} g&&/^SQL$/{exit} g{print}' scripts/test-db.sh | psql_db
-
-echo "==> baseline.sql (mode install, ON_ERROR_STOP=1)"
-psql_db < supabase/baseline.sql
-
-echo "==> utilisateurs Better Auth → auth.users (FK mixtes du cutover Neon)"
-psql_db <<'SQL'
-grant anon, authenticated, service_role to authenticator;
-
-create or replace function neon_auth.espelhar_usuario_no_auth() returns trigger
-language plpgsql as $$
-begin
-  insert into auth.users (id, email) values (new.id, new.email) on conflict (id) do nothing;
-  return new;
-end $$;
-drop trigger if exists trg_espelha_neon_no_auth on neon_auth."user";
-create trigger trg_espelha_neon_no_auth after insert on neon_auth."user"
-  for each row execute function neon_auth.espelhar_usuario_no_auth();
-SQL
+echo "==> schéma (db-migrate)"
+node scripts/db-migrate.mjs "$DB_URL"
 
 echo "==> Neon Auth local (Better Auth, :$AUTH_PORT)"
 pkill -f "scripts/local-stack/auth-server.mjs" 2>/dev/null || true

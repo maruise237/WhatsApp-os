@@ -31,7 +31,7 @@ done
 
 echo "==> prelude + baseline (install, ON_ERROR_STOP=1)"
 docker exec -i "$CONTAINER" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - < "$ROOT/scripts/selfhost-prelude.sql"
-docker exec -i "$CONTAINER" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - < "$ROOT/supabase/baseline.sql"
+docker exec -i "$CONTAINER" psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q -f - < "$ROOT/db/migrations/0001_schema_initial.sql"
 
 echo "==> smoke contre le vrai modèle"
 # lib/env (importado transitivamente por aes_gcm) valida vars do APP que o

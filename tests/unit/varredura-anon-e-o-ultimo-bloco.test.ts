@@ -49,7 +49,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-const BASELINE = join(process.cwd(), "supabase", "baseline.sql");
+const BASELINE = join(process.cwd(), "db", "migrations", "0001_schema_initial.sql");
 
 /** O cabeçalho do bloco da 0116, no apêndice. */
 const MARCADOR = /^-- ---- VARREDURA anon:/m;

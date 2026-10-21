@@ -144,7 +144,7 @@ describe("o envelope carrega a thread do provider", () => {
 describe("banco e TypeScript falam o mesmo vocabulário", () => {
   // O `pnpm test:db` prova isto contra um Postgres real; aqui é a leitura do
   // artefato que o self-hoster de fato aplica — o baseline, não as migrations.
-  const baseline = readFileSync("supabase/baseline.sql", "utf8");
+  const baseline = readFileSync("db/migrations/0001_schema_initial.sql", "utf8");
 
   it("o CHECK de provider do baseline conhece o canal novo", () => {
     expect(baseline).toMatch(/channel_sessions_provider_check[\s\S]{0,300}'zernio'/);
@@ -171,12 +171,10 @@ describe("banco e TypeScript falam o mesmo vocabulário", () => {
 
   it("a migration versionada existe junto do apêndice — clone atualiza pelas duas vias", () => {
     const mig = readFileSync(
-      "supabase/migrations/20260808020000_0131_canal_zernio_vocabulario.sql",
+      "db/migrations/0001_schema_initial.sql",
       "utf8",
     );
     expect(mig).toContain("zernio_account_id");
-    expect(readFileSync("supabase/migrations/MANIFEST.md", "utf8")).toContain(
-      "0131_canal_zernio_vocabulario",
-    );
+    expect(readFileSync("db/migrations/MANIFEST.md", "utf8")).toContain("0001_schema_initial");
   });
 });

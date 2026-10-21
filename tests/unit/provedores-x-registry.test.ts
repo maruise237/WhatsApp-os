@@ -169,7 +169,7 @@ describe("lista de provedores × os pontos de ESCRITA", () => {
       // Deriva o provedor do PREFIXO de um id de modelo legado — não é uma
       // lista de provedores suportados, é um mapa de prefixos históricos.
       "lib/ai/log-invocation.ts",
-      "supabase/baseline.sql",
+      "db/migrations/0001_schema_initial.sql",
     ]);
     const TRINCA = /["']anthropic["']\s*,\s*["']openai["']\s*,\s*["']google["']/;
 

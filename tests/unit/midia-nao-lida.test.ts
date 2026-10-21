@@ -68,7 +68,7 @@ describe("o vocabulário do banco acompanha", () => {
     // O par TypeScript × banco é o eixo que este repo já viu divergir em
     // silêncio: o insert falharia com 23514 dentro de um caminho que engole
     // erro, e o aviso simplesmente não apareceria.
-    const baseline = readFileSync("supabase/baseline.sql", "utf8");
+    const baseline = readFileSync("db/migrations/0001_schema_initial.sql", "utf8");
     const constraint = baseline.slice(
       baseline.lastIndexOf("add constraint agent_inbox_items_kind_check"),
     );
@@ -92,7 +92,7 @@ describe("o vocabulário do banco acompanha", () => {
       "não achei o `severity:` do aviso de mídia no worker — o instrumento perdeu o alvo",
     ).toBeDefined();
 
-    const baseline = readFileSync("supabase/baseline.sql", "utf8");
+    const baseline = readFileSync("db/migrations/0001_schema_initial.sql", "utf8");
     const check = /severity text not null default '[a-z]+' check \(severity in \(([^)]*)\)\)/.exec(baseline);
     expect(check, "não achei o CHECK de severity no baseline — instrumento cego").not.toBeNull();
     const aceitos = [...(check?.[1] ?? "").matchAll(/'([a-z]+)'/g)].map((m) => m[1]);
@@ -116,7 +116,7 @@ describe("o vocabulário do banco acompanha", () => {
   it("a constraint é reconstruída UMA vez só no baseline", () => {
     // A lição da issue #159: reconstruir a mesma constraint em N blocos faz o
     // último vencer e os valores dos anteriores sumirem sem ninguém notar.
-    const baseline = readFileSync("supabase/baseline.sql", "utf8");
+    const baseline = readFileSync("db/migrations/0001_schema_initial.sql", "utf8");
     const ocorrencias = baseline.split("add constraint agent_inbox_items_kind_check").length - 1;
     expect(ocorrencias).toBe(1);
   });

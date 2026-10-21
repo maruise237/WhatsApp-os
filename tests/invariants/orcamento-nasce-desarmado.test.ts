@@ -22,7 +22,7 @@
  *
  * ## Técnica: o texto vem do artefato, nunca daqui
  *
- * O bloco é EXTRAÍDO do `supabase/baseline.sql` pelo rótulo, e o statement é
+ * O bloco é EXTRAÍDO do `db/migrations/0001_schema_initial.sql` pelo rótulo, e o statement é
  * IMPORTADO de `lib/agent-engine/edge/llm/orcamento.ts`. Reimplementar qualquer
  * um dos dois mediria a minha cópia, e a cópia continuaria certa com o original
  * sabotado — o modo mais comum de um teste de migration ficar decorativo.
@@ -47,7 +47,7 @@ import { SQL_ORCAMENTO, PISO_DE_TETO_CENTS } from "@/lib/agent-engine/edge/llm/o
 
 import { sql } from "./psql-transporte";
 
-const BASELINE = join(process.cwd(), "supabase", "baseline.sql");
+const BASELINE = join(process.cwd(), "db", "migrations", "0001_schema_initial.sql");
 
 /** Uma org por propriedade — o cruzamento entre elas é o que a fixture evita. */
 const ORG_HERDADA = "e0000000-0000-4000-8000-0000000000e0"; // teto 5000 herdado, sem jsonb

@@ -48,7 +48,7 @@ import { sql } from "./gov-helpers";
  *
  * O conserto de fundo tem duas metades, e a segunda não tem dono:
  *
- *   1. o bloco de varredura no fim de `supabase/baseline.sql` (migration 0116);
+ *   1. o bloco de varredura no fim de `db/migrations/0001_schema_initial.sql` (migration 0116);
  *   2. as 4 linhas de `alter default privileges` no prelude do
  *      `scripts/test-db.sh`, que fazem o banco efêmero ser o banco do produto.
  *
@@ -76,7 +76,7 @@ import { sql } from "./gov-helpers";
  * é revogar de todo mundo e quebrar a leitura logada.
  */
 
-const BASELINE = join(process.cwd(), "supabase", "baseline.sql");
+const BASELINE = join(process.cwd(), "db", "migrations", "0001_schema_initial.sql");
 
 /** Nome único para a sonda, para nunca colidir com função de verdade. */
 const SONDA = "fn_sonda_definer_nasce_exposta";
@@ -92,7 +92,7 @@ function blocoDaVarredura(): string {
   const cabecalho = /^-- ---- VARREDURA anon:/m.exec(texto);
   if (cabecalho === null) {
     throw new Error(
-      "bloco da varredura de anon não encontrado em supabase/baseline.sql " +
+      "bloco da varredura de anon não encontrado em db/migrations/0001_schema_initial.sql " +
         "(cabeçalho '-- ---- VARREDURA anon:'). Ele foi removido ou renomeado?",
     );
   }

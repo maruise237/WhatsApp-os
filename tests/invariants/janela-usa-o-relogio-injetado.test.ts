@@ -273,7 +273,7 @@ describe("a janela de horário é decidida pelo relógio injetado", () => {
     // Adiado, não gasto: `JobSettledError` é o contrato de "o run já dispôs do
     // job". Quem escreveu às 3h é atendido às 7h — e nada sai agora.
     expect(erro).not.toBeNull();
-    expect(String(erro?.message)).toMatch(/fora da janela anti-ban/);
+    expect(String(erro?.message)).toMatch(/hors de la plage anti-blocage/);
     expect(enviados).toHaveLength(0);
   });
 

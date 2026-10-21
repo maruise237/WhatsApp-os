@@ -26,7 +26,7 @@ const GUC_KEY = "test-guc-key-0123456789abcdef0123456789abcdef";
 const SET_KEY = `select set_config('app.nuvemshop_oauth_key', '${GUC_KEY}', false);`;
 
 const migrationSql = readFileSync(
-  join(__dirname, "../../supabase/migrations/20260718150000_0041_webhook_secret_encryption.sql"),
+  join(__dirname, "../../db/migrations/0001_schema_initial.sql"),
   "utf8",
 );
 

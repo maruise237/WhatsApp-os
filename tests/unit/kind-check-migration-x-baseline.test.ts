@@ -3,7 +3,7 @@
  *
  * O repo tem dois caminhos de schema que precisam terminar no mesmo lugar:
  *
- *   * `supabase/baseline.sql`, que o kit self-host aplica (install + update);
+ *   * `db/migrations/0001_schema_initial.sql`, que o kit self-host aplica (install + update);
  *   * `supabase/migrations/*.sql`, que o Supabase CLI aplica em ordem.
  *
  * `tests/unit/baseline-constraint-reconstruida.test.ts` já vigia o primeiro:
@@ -29,8 +29,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const RAIZ = process.cwd();
-const BASELINE = join(RAIZ, "supabase", "baseline.sql");
-const MIGRATIONS = join(RAIZ, "supabase", "migrations");
+const BASELINE = join(RAIZ, "db", "migrations", "0001_schema_initial.sql");
+const MIGRATIONS = join(RAIZ, "db", "migrations");
 
 /**
  * Vocabulário de um `add constraint <nome> check (<coluna> in ( … ))`.

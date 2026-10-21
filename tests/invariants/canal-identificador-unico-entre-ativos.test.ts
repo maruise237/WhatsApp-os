@@ -5,7 +5,7 @@ import { lastLine, sql } from "./gov-helpers";
 /**
  * 0165 · o identificador do canal é único entre os canais ATIVOS.
  *
- * Cobrado no Postgres descartável que nasce do `supabase/baseline.sql` — o
+ * Cobrado no Postgres descartável que nasce do `db/migrations/0001_schema_initial.sql` — o
  * arquivo que o self-hoster de fato aplica. Migration que existe só em
  * `migrations/` não chega a ele.
  *

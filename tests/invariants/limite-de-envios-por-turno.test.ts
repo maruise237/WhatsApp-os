@@ -244,7 +244,7 @@ describe("turno completo — send_message chamado repetidamente pelo modelo", ()
     // "engoliu em silêncio", que é o mesmo defeito medido em produção com outra cara.
     const vistos = JSON.stringify(resultadosVistos);
     expect(vistos).toMatch(/max_sends_per_turn/);
-    expect(vistos).toMatch(/encerre o turno/);
+    expect(vistos).toMatch(/terminez le tour/);
   });
 
   it("sem o knob explícito, o teto padrão (DEFAULT_MAX_SENDS_PER_TURN) ainda protege", async () => {

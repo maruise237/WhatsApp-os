@@ -224,11 +224,9 @@ describe("o encanamento", () => {
 
   it("a migration do carimbo existe, com apêndice e MANIFEST", () => {
     expect(
-      readFileSync("supabase/migrations/20260808180000_0119_contato_lookup_telefone.sql", "utf8"),
+      readFileSync("db/migrations/0001_schema_initial.sql", "utf8"),
     ).toContain("phone_lookup_at");
-    expect(readFileSync("supabase/baseline.sql", "utf8")).toContain("phone_lookup_at");
-    expect(readFileSync("supabase/migrations/MANIFEST.md", "utf8")).toContain(
-      "0119_contato_lookup_telefone",
-    );
+    expect(readFileSync("db/migrations/0001_schema_initial.sql", "utf8")).toContain("phone_lookup_at");
+    expect(readFileSync("db/migrations/MANIFEST.md", "utf8")).toContain("0001_schema_initial");
   });
 });

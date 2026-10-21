@@ -254,13 +254,13 @@ describe("ai_purpose_bindings — o apêndice do baseline se auto-cura", () => {
  * trecho vazio e a asserção de dedup falha, em vez de continuar verde.
  */
 function trechoDeAutoCuraDoBaseline(): string {
-  const baseline = readFileSync("supabase/baseline.sql", "utf8");
+  const baseline = readFileSync("db/migrations/0001_schema_initial.sql", "utf8");
   const inicio = baseline.indexOf("delete from public.ai_purpose_bindings a");
   const fimMarcador = "end $$;";
   const fim = baseline.indexOf(fimMarcador, inicio);
   if (inicio === -1 || fim === -1) {
     throw new Error(
-      "bloco de auto-cura de ai_purpose_bindings não encontrado em supabase/baseline.sql — " +
+      "bloco de auto-cura de ai_purpose_bindings não encontrado em db/migrations/0001_schema_initial.sql — " +
         "se ele foi removido, clones com dado duplicado ficam sem a constraint única",
     );
   }

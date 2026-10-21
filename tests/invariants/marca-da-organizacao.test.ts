@@ -180,7 +180,7 @@ beforeAll(() => {
 
 describe("guarda de vacuidade — o que todo caso abaixo supõe", () => {
   // PRIMEIRO, e não por último: o banco do `test:db` nasce com ZERO organizações
-  // (`grep -c 'insert into public.organizations' supabase/baseline.sql` → 0), e
+  // (`grep -c 'insert into public.organizations' db/migrations/0001_schema_initial.sql` → 0), e
   // uma sonda medindo uma linha que não existe devolve as mesmas saídas plausíveis
   // que uma sonda medindo o produto correto.
   it("a organização existe e o `settings` de partida é o que os casos supõem", () => {

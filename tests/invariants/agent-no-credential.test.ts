@@ -167,8 +167,8 @@ describe("4B — turno sem credencial NENHUMA (nem env, nem BYOK)", () => {
 
     // 1. erro CLARO e instrutivo (nunca stack críptico)
     expect(turnError).not.toBeNull();
-    expect(turnError!.message).toMatch(/credencial LLM/);
-    expect(turnError!.message).toMatch(/ai_provider_credentials|ANTHROPIC_API_KEY/);
+    expect(turnError!.message).toMatch(/sans accès IA utilisable/);
+    expect(turnError!.message).toMatch(/clé de plateforme absente/);
 
     // 2. job dead (max_attempts=1), com o erro gravado
     const { rows: jobs } = await pool.query(
@@ -176,7 +176,7 @@ describe("4B — turno sem credencial NENHUMA (nem env, nem BYOK)", () => {
       [job.id],
     );
     expect(jobs[0]!.status).toBe("dead");
-    expect(jobs[0]!.last_error).toMatch(/credencial LLM/);
+    expect(jobs[0]!.last_error).toMatch(/sans accès IA utilisable/);
 
     // 3. trilha humana: inbox item crítico
     const { rows: inbox } = await pool.query(

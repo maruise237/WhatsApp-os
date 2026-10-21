@@ -54,7 +54,7 @@ const pool = new pg.Pool({
  * teste roda; divergir passa a ser impossível em vez de improvável.
  */
 function backfillDoBaseline(): string {
-  const sql = fs.readFileSync(path.join(process.cwd(), "supabase/baseline.sql"), "utf8");
+  const sql = fs.readFileSync(path.join(process.cwd(), "db/migrations/0001_schema_initial.sql"), "utf8");
   const alvo = /update public\.contacts\s+set display_name = null[\s\S]*?;/g;
   const achados = sql.match(alvo);
   if (!achados || achados.length !== 1) {

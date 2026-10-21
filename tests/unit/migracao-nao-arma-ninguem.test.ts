@@ -46,8 +46,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const RAIZ = process.cwd();
-const MIGRATION = join(RAIZ, "supabase", "migrations", "20260814210000_0159_o_teto_que_vincula.sql");
-const BASELINE = join(RAIZ, "supabase", "baseline.sql");
+const MIGRATION = join(RAIZ, "db", "migrations", "0001_schema_initial.sql");
+const BASELINE = join(RAIZ, "db", "migrations", "0001_schema_initial.sql");
 
 /** O cabeçalho do bloco compartilhado, idêntico nos dois arquivos. */
 const ROTULO = "-- ---- o teto de IA que vincula (migration 0159) ----";
@@ -164,8 +164,8 @@ const migration = readFileSync(MIGRATION, "utf8");
 const baseline = readFileSync(BASELINE, "utf8");
 
 const ARQUIVOS: Array<{ nome: string; texto: string }> = [
-  { nome: "supabase/migrations/20260814210000_0159_o_teto_que_vincula.sql", texto: migration },
-  { nome: "supabase/baseline.sql", texto: baseline },
+  { nome: "db/migrations/0001_schema_initial.sql", texto: migration },
+  { nome: "db/migrations/0001_schema_initial.sql", texto: baseline },
 ];
 
 describe("0159 — a migration não arma ninguém", () => {

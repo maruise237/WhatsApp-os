@@ -26,7 +26,7 @@
  *
  * ## O que este arquivo mede, e por que assim
  *
- * Os dois blocos são EXTRAÍDOS do `supabase/baseline.sql` e executados como
+ * Os dois blocos são EXTRAÍDOS do `db/migrations/0001_schema_initial.sql` e executados como
  * texto — não reimplementados aqui. Reimplementar mediria a minha cópia, e a
  * cópia continuaria certa com o baseline sabotado (é o modo mais comum de um
  * teste de migration ficar decorativo).
@@ -42,7 +42,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { sql } from "./psql-transporte";
 
-const BASELINE = join(process.cwd(), "supabase", "baseline.sql");
+const BASELINE = join(process.cwd(), "db", "migrations", "0001_schema_initial.sql");
 
 const ORG = "d0000000-0000-4000-8000-0000000000d0";
 const AGENTE = "d1000000-0000-4000-8000-0000000000d1";

@@ -399,7 +399,7 @@ describe("o desfecho do Operador vira registro", () => {
     for (const proibido of ["cumpriu", "cumprida", "cumprimento"]) {
       expect(texto, `o aviso voltou a afirmar cumprimento ("${proibido}")`).not.toContain(proibido);
     }
-    expect(texto).toContain("responsável");
+    expect(texto).toContain("responsable");
   });
 
   it("com um humano na conversa, registra o desfecho e NÃO abre aviso", async () => {

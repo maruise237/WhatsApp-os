@@ -5,7 +5,7 @@
  *
  * A definição estava copiada em SEIS sítios e eles não concordavam entre si:
  *
- *   supabase/baseline.sql (trg_conversation_routing_requested)   open+pending
+ *   db/migrations/0001_schema_initial.sql (trg_conversation_routing_requested)   open+pending
  *   lib/routing/queue.ts  getQueuePosition  (o nº que o CLIENTE ouve)  open+pending
  *   lib/routing/queue.ts  getQueuePositions (o nº que a TELA mostra)   open
  *   lib/routing/queue.ts  getQueueStatus    (o painel do gerente)      open
@@ -79,7 +79,7 @@ describe("a fila tem uma definição só", () => {
     // tempo todo: o trigger sempre enfileirou `pending`. Se alguém encolher a
     // constante sem mexer no trigger, o rodízio volta a atribuir conversa que a
     // tela jura não existir — que era exatamente o estado anterior.
-    const baseline = fonte("supabase/baseline.sql");
+    const baseline = fonte("db/migrations/0001_schema_initial.sql");
     const gatilho = baseline.slice(baseline.indexOf("trg_conversation_routing_requested"));
     const when = gatilho.slice(0, gatilho.indexOf("execute function"));
 

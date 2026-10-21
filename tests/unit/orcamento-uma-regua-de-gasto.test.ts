@@ -57,8 +57,8 @@ import { join, posix } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const RAIZ = process.cwd();
-const MIGRATION = join(RAIZ, "supabase", "migrations", "20260814210000_0159_o_teto_que_vincula.sql");
-const BASELINE = join(RAIZ, "supabase", "baseline.sql");
+const MIGRATION = join(RAIZ, "db", "migrations", "0001_schema_initial.sql");
+const BASELINE = join(RAIZ, "db", "migrations", "0001_schema_initial.sql");
 const ORCAMENTO = "lib/agent-engine/edge/llm/orcamento.ts";
 
 const FUNCAO = "fn_gasto_de_ia_do_mes";
