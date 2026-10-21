@@ -44,7 +44,7 @@ export default async function AgentsListPage() {
   // Degradar para lista vazia continua sendo o comportamento (a tela não pode
   // quebrar), mas agora deixa rastro.
   if (error) {
-    logger.error("[ai/agents] não consegui listar os agentes — a tela vai parecer vazia", {
+    logger.error("[ai/agents] impossible de lister les agents — l’écran paraîtra vide", {
       organization_id: activeOrg.orgId,
       detail: error.message.slice(0, 200),
     });

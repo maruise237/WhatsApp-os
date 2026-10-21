@@ -99,15 +99,15 @@ export async function abrirArquivoDoWebhook(
       .maybeSingle();
 
     if (error) {
-      logger.warn("[arquivo-webhook] não consegui abrir a linha", {
+      logger.warn("[arquivo-webhook] impossible d’ouvrir la ligne", {
         detail: error.message.slice(0, 160),
       });
       return null;
     }
     return (data as { id: string } | null)?.id ?? null;
   } catch (err) {
-    logger.warn("[arquivo-webhook] não consegui abrir a linha", {
-      detail: err instanceof Error ? err.message.slice(0, 160) : "desconhecido",
+    logger.warn("[arquivo-webhook] impossible d’ouvrir la ligne", {
+      detail: err instanceof Error ? err.message.slice(0, 160) : "inconnu",
     });
     return null;
   }

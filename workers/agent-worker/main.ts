@@ -141,7 +141,7 @@ export function createHealthzServer(pool: pg.Pool, log: Logger, metricsWindowMs:
       try {
         respond(res, 200, await metricsSnapshot(pool, metricsWindowMs));
       } catch (err) {
-        log.error('metrics: snapshot indisponível', { error: errMsg(err) });
+        log.error('metrics : instantané indisponible', { error: errMsg(err) });
         respond(res, 503, { status: 'degraded', db: 'error' });
       }
       return;
@@ -158,7 +158,7 @@ export function createHealthzServer(pool: pg.Pool, log: Logger, metricsWindowMs:
       const sessions = await sessionHealthMetrics(pool);
       respond(res, 200, { status: 'ok', db: 'ok', queue, sessions, uptime_s });
     } catch (err) {
-      log.error('healthz: banco indisponível', { error: errMsg(err) });
+      log.error('healthz : base de données indisponible', { error: errMsg(err) });
       respond(res, 503, { status: 'degraded', db: 'error', queue: null, sessions: null, uptime_s });
     }
   };
@@ -171,7 +171,7 @@ export async function startWorker(
   log: Logger = createLogger(),
 ): Promise<void> {
   const pool = createPool(env.NEON_DATABASE_URL, (err) =>
-    log.error('pool: conexão caiu — recria no próximo uso', { error: errMsg(err) }),
+    log.error('pool : connexion perdue — recréée à la prochaine utilisation', { error: errMsg(err) }),
   );
   const workerId = `agent-engine-${hostname()}-${process.pid}`;
 
@@ -182,14 +182,14 @@ export async function startWorker(
   // ponteiro existente) e é concorrência-safe (advisory lock).
   const playbookSeed = await seedPlatformPlaybook(pool);
   if (playbookSeed === 'seeded') {
-    log.info('playbook platform seedado no boot (primeiro boot do self-host)');
+    log.info('playbook plateforme initialisé au démarrage (premier démarrage du self-host)');
   }
 
   const bootReap = await reapExpiredJobs(pool, {
     visibilityTimeoutMs: env.QUEUE_VISIBILITY_TIMEOUT_MS,
   });
   if (bootReap.revived + bootReap.dead > 0) {
-    log.warn('órfãos soltos no boot', bootReap);
+    log.warn('orphelins libérés au démarrage', bootReap);
   }
 
   const server = createHealthzServer(pool, log, env.METRICS_WINDOW_MS);
@@ -206,9 +206,9 @@ export async function startWorker(
   const reaperTimer = setInterval(() => {
     reapExpiredJobs(pool, { visibilityTimeoutMs: env.QUEUE_VISIBILITY_TIMEOUT_MS })
       .then((reaped) => {
-        if (reaped.revived + reaped.dead > 0) log.warn('reaper devolveu jobs órfãos', reaped);
+        if (reaped.revived + reaped.dead > 0) log.warn('le reaper a remis en file des jobs orphelins', reaped);
       })
-      .catch((err: unknown) => log.error('reaper falhou', { error: errMsg(err) }));
+      .catch((err: unknown) => log.error('échec du reaper', { error: errMsg(err) }));
   }, env.QUEUE_REAPER_INTERVAL_MS);
 
   // Holds de sessão/saúde: retém jobs de envio de número fora do ar (WORKING é a
@@ -216,9 +216,9 @@ export async function startWorker(
   const holdsTimer = setInterval(() => {
     enforceHolds(pool)
       .then(({ held, released }) => {
-        if (held + released > 0) log.info('holds de sessão aplicados', { held, released });
+        if (held + released > 0) log.info('blocages de session appliqués', { held, released });
       })
-      .catch((err: unknown) => log.error('enforceHolds falhou', { error: errMsg(err) }));
+      .catch((err: unknown) => log.error('échec de enforceHolds', { error: errMsg(err) }));
   }, env.QUEUE_REAPER_INTERVAL_MS);
 
   const loopsAbort = new AbortController();
@@ -227,7 +227,7 @@ export async function startWorker(
   // jobs. Fase 0 (convergência, spec 2026-07-23): o drain liga SEMPRE — o
   // dispatcher nativo EPIC-13 foi aposentado, o engine é o único consumidor.
   if (env.AGENT_DISPATCH_CONSUMER === 'native') {
-    log.warn('AGENT_DISPATCH_CONSUMER=native é OBSOLETO (Fase 0) — o drain do engine é o único consumidor; valor ignorado', {});
+    log.warn('AGENT_DISPATCH_CONSUMER=native est OBSOLÈTE (Phase 0) — le drain du moteur est le seul consommateur ; valeur ignorée', {});
   }
   const drainLoop = runDrainLoop(
     pool,
@@ -275,7 +275,7 @@ export async function startWorker(
           log,
           loopsAbort.signal,
         )
-      : (log.warn('watchdog de sessão OFF — WAHA_API_BASE_URL/WAHA_API_KEY ausentes no env', {}),
+      : (log.warn('watchdog de session désactivé — WAHA_API_BASE_URL/WAHA_API_KEY absents de l’env', {}),
         Promise.resolve());
 
   // Circuito de saúde do número (block/response rate → hold).
@@ -325,27 +325,27 @@ export async function startWorker(
       }
       await handler(job, pool, { workerId });
       await completeJob(pool, job.id, workerId);
-      log.info('job concluído', { job_id: job.id, kind: job.kind });
+      log.info('job terminé', { job_id: job.id, kind: job.kind });
       try {
         const wrote = await recordRunMetrics(pool, job);
         if (wrote > 0) {
           await evaluateCacheHitAlert(pool, job.organization_id, cacheAlertKnobs);
         }
       } catch (metricsErr) {
-        log.error('métricas do run não registradas', { job_id: job.id, error: errMsg(metricsErr) });
+        log.error('métriques du run non enregistrées', { job_id: job.id, error: errMsg(metricsErr) });
       }
     } catch (err) {
       const terminal = ehVetoPermanenteDeNegocio(err);
       // `warn`, não `error`: veto de negócio é o sistema funcionando como
       // configurado. Rotulá-lo de erro treina quem opera a ignorar o painel.
       if (terminal) {
-        log.warn('job cancelado por veto permanente de negócio', {
+        log.warn('job annulé par un veto métier permanent', {
           job_id: job.id,
           kind: job.kind,
           error: errMsg(err),
         });
       } else {
-        log.error('job falhou', { job_id: job.id, kind: job.kind, error: errMsg(err) });
+        log.error('échec du job', { job_id: job.id, kind: job.kind, error: errMsg(err) });
       }
       try {
         if (terminal) {
@@ -354,7 +354,7 @@ export async function startWorker(
           await failJob(pool, job.id, workerId, err);
         }
       } catch (failErr) {
-        log.error('disposição do job indisponível — lease expira via reaper', {
+        log.error('statut final du job indisponible — le bail expirera via le reaper', {
           job_id: job.id,
           error: errMsg(failErr),
         });
@@ -390,7 +390,7 @@ export async function startWorker(
   const shutdown = async (signal: NodeJS.Signals): Promise<void> => {
     if (shuttingDown) return;
     shuttingDown = true;
-    log.info('sinal recebido — parando de claimar e drenando jobs em curso', {
+    log.info('signal reçu — arrêt des claims et vidage des jobs en cours', {
       signal,
       in_flight: inFlight.size,
     });
@@ -411,14 +411,14 @@ export async function startWorker(
     ]);
     clearTimeout(graceTimer);
     if (outcome === 'grace') {
-      log.error('shutdown: jobs em curso não drenaram no prazo — saindo sem esperar', {
+      log.error('arrêt : les jobs en cours ne se sont pas vidés à temps — sortie sans attendre', {
         grace_ms: env.SHUTDOWN_GRACE_MS,
         in_flight: inFlight.size,
       });
       process.exit(1);
     }
     await pool.end();
-    log.info('worker encerrado limpo', {});
+    log.info('worker arrêté proprement', {});
     resolveStopped();
   };
   process.once('SIGTERM', (signal) => void shutdown(signal));
@@ -428,7 +428,7 @@ export async function startWorker(
   // Os dois intervalos vão junto porque governam a conta de egress do banco (issue
   // #258) e quem os ajusta precisa conseguir CONFERIR o que está em vigor sem ler
   // o código-fonte — foi o que o autor da issue teve de fazer para achar o knob.
-  log.info('agent-engine pronto', {
+  log.info('agent-engine prêt', {
     worker_id: workerId,
     healthz_port: port,
     max_concurrency: env.QUEUE_MAX_CONCURRENCY,
@@ -443,7 +443,7 @@ export async function startWorker(
   // RECUSAR subir numa máquina cujo .env já tem um valor maior, e a doutrina de
   // packaging proíbe atualização que exija edição manual de arquivo.
   if (env.QUEUE_POLL_INTERVAL_MS >= 10_000) {
-    log.warn('QUEUE_POLL_INTERVAL_MS ≥ 10s — cada rodada ociosa reconecta ao banco e gasta MAIS que um valor menor', {
+    log.warn('QUEUE_POLL_INTERVAL_MS ≥ 10s — chaque tour inactif se reconnecte à la base et coûte PLUS qu’une valeur plus petite', {
       poll_ocioso_ms: env.QUEUE_POLL_INTERVAL_MS,
     });
   }

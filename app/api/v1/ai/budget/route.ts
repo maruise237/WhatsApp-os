@@ -123,7 +123,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
     .eq("organization_id", activeOrg.orgId)
     .maybeSingle();
   if (readErr) {
-    logger.error("ai-budget: leitura do estado atual falhou", {
+    logger.error("ai-budget : échec de la lecture de l’état actuel", {
       organization_id: activeOrg.orgId,
       request_id: requestId,
       causa: readErr.message,
@@ -221,7 +221,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
       .update(patch)
       .eq("organization_id", activeOrg.orgId);
     if (updErr) {
-      logger.error("ai-budget: update falhou", {
+      logger.error("ai-budget : échec de la mise à jour", {
         organization_id: activeOrg.orgId,
         request_id: requestId,
         causa: updErr.message,
@@ -237,7 +237,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
       ...patch,
     });
     if (insErr) {
-      logger.error("ai-budget: insert falhou", {
+      logger.error("ai-budget : échec de l’insertion", {
         organization_id: activeOrg.orgId,
         request_id: requestId,
         causa: insErr.message,
@@ -323,7 +323,7 @@ async function retratarAvisos(d: {
     .eq("status", "open")
     .select("id");
   if (error) {
-    logger.warn("ai-budget: avisos de orçamento não puderam ser retratados", {
+    logger.warn("ai-budget : les alertes de budget n’ont pas pu être retirées", {
       organization_id: d.orgId,
       request_id: d.requestId,
       causa: error.message,

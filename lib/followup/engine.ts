@@ -456,7 +456,7 @@ export async function runFollowupTick(deps: TickDeps, opts?: { limit?: number })
     // morre inteiro e o sintoma é a ausência de sintoma — ninguém descobre.
     // A doutrina já tem a regra escrita para o audit (`CLAUDE.md`: falha de
     // write gera alerta, não bloqueia); aqui ela vale igual.
-    logger.error("followup: claim falhou — tick sem enrollments, NAO e 'nada vencido'", {
+    logger.error("followup : échec du claim — tick sans inscriptions, ce n’est PAS 'rien d’échu'", {
       erro: err instanceof Error ? err.message : String(err),
     });
     summary.claim_falhou = true;

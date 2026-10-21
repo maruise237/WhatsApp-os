@@ -160,10 +160,10 @@ describe("InboxFilters — seletor de número e o filtro órfão", () => {
     );
     const seletor = screen.getByLabelText(SELETOR);
     expect(seletor).toBeInTheDocument();
-    expect(seletor).toHaveTextContent("Número removido");
+    expect(seletor).toHaveTextContent("Numéro supprimé");
   });
 
-  it("filtro que casa com a lista: nada de 'Número removido'", () => {
+  it("filtro que casa com a lista: nada de 'Numéro supprimé'", () => {
     setOrg("manager", "all");
     canaisRef.current = [canal(), canal({ id: "canal-2", display_name: "Suporte" })];
     render(

@@ -59,7 +59,7 @@ export async function nomesDosAtendentes(
     // Declarado, não acidental: uma linha de log por leitura degradada, e o
     // chamador recebe um mapa VAZIO (não um mapa de nulls), para nunca confundir
     // "não consegui ler" com "esse atendente não tem nome".
-    logger.info("[nome-do-atendente] sem service role: o nome do atendente não é resolvido", {
+    logger.info("[nome-do-atendente] pas de service role : le nom du conseiller n’est pas résolu", {
       atendentes: unicos.length,
     });
     return new Map();
@@ -73,13 +73,13 @@ export async function nomesDosAtendentes(
         if (error) {
           // O supabase-js NÃO lança aqui — é este ramo, e não o catch, que pega o
           // caso real (403 not_admin, usuário apagado, GoTrue fora do ar).
-          logger.warn("[nome-do-atendente] lookup falhou", { user_id: id, erro: error.message });
+          logger.warn("[nome-do-atendente] échec de la recherche", { user_id: id, erro: error.message });
           return [id, null] as const;
         }
         const nome = (data?.user?.user_metadata?.full_name as string | undefined) ?? null;
         return [id, nome] as const;
       } catch (err) {
-        logger.warn("[nome-do-atendente] lookup lançou", {
+        logger.warn("[nome-do-atendente] la recherche a levé une exception", {
           user_id: id,
           erro: err instanceof Error ? err.message : String(err),
         });

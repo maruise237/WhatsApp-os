@@ -71,7 +71,7 @@ export async function resolverModeloDoPonto(
     // Binding configurado mas sem chave utilizável: cai no padrão em vez de
     // deixar o ponto morto. O aviso é o que impede isso de virar mais uma
     // falha muda — foi justamente o que esta frente veio acabar.
-    logger.warn("[gateway-binding] binding sem credencial utilizável — usando o padrão", {
+    logger.warn("[gateway-binding] liaison sans identifiant utilisable — valeur par défaut utilisée", {
       organization_id: organizationId,
       purpose,
     });
@@ -81,7 +81,7 @@ export async function resolverModeloDoPonto(
 
   const model = instanciar(binding.provider, apiKey, binding.model_id, binding.base_url);
   if (model === null) {
-    logger.warn("[gateway-binding] provider do binding é desconhecido — usando o padrão", {
+    logger.warn("[gateway-binding] fournisseur de la liaison inconnu — valeur par défaut utilisée", {
       organization_id: organizationId,
       purpose,
       provider: binding.provider,
@@ -119,7 +119,7 @@ async function lerBinding(
   } catch (err) {
     // Tabela ausente (clone sem o baseline aplicado) não pode derrubar o
     // atendimento — mas também não pode passar em silêncio.
-    logger.warn("[gateway-binding] não consegui ler o binding — usando o padrão", {
+    logger.warn("[gateway-binding] impossible de lire la liaison — valeur par défaut utilisée", {
       organization_id: organizationId,
       purpose,
       motivo: err instanceof Error ? err.message : String(err),

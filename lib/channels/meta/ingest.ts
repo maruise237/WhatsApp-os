@@ -153,7 +153,7 @@ export async function ingestMetaInbound(
     } as never,
   );
   if (erroContato || !contactId) {
-    return { status: "failed", reason: `contato: ${erroContato?.message ?? "sem id"}` };
+    return { status: "failed", reason: `contact : ${erroContato?.message ?? "sans id"}` };
   }
 
   const { data: conversationId, error: erroConversa } = await admin.rpc(
@@ -161,7 +161,7 @@ export async function ingestMetaInbound(
     { p_org: orgId, p_contact: contactId as string, p_session: sessao.id } as never,
   );
   if (erroConversa || !conversationId) {
-    return { status: "failed", reason: `conversa: ${erroConversa?.message ?? "sem id"}` };
+    return { status: "failed", reason: `conversation : ${erroConversa?.message ?? "sans id"}` };
   }
 
   const { data: inserida, error: erroInsert } = await admin
@@ -192,7 +192,7 @@ export async function ingestMetaInbound(
   // 23505 = a mesma `external_id` já entrou. Não é erro: é a Meta re-entregando.
   if (erroInsert) {
     if (erroInsert.code === "23505") return { status: "duplicate" };
-    return { status: "failed", reason: `mensagem: ${erroInsert.message}` };
+    return { status: "failed", reason: `message : ${erroInsert.message}` };
   }
 
   // Carimba a conversa — é ISTO que move `last_inbound_at` e abre a janela de 24h.

@@ -137,7 +137,7 @@ export async function escalateLgpdVeto(
       [input.tenantId, title, body, input.leadId],
     );
   } catch (err) {
-    log.error('falha ao escalar veto de LGPD à inbox (segue: o gate já barrou o envio)', {
+    log.error('échec de l’escalade du veto LGPD vers la boîte de réception (on continue : le gate a déjà bloqué l’envoi)', {
       code: input.code,
       error: err instanceof Error ? err.name : 'unknown',
     });

@@ -82,7 +82,7 @@ function fmtRelative(iso: string): string {
     const then = new Date(iso).getTime();
     const diffMs = now - then;
     const diffMin = Math.floor(diffMs / 60_000);
-    if (diffMin < 1) return "agora";
+    if (diffMin < 1) return "à l’instant";
     if (diffMin < 60) return `il y a ${diffMin} min`;
     const diffH = Math.floor(diffMin / 60);
     if (diffH < 24) return `il y a ${diffH} h`;

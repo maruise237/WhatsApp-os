@@ -124,7 +124,7 @@ async function registrarAdiamento(
     ],
   });
   if (error) {
-    logger.error("[automation.engine] não foi possível registrar o adiamento", {
+    logger.error("[automation.engine] impossible d’enregistrer le report", {
       rule_id: rule.id,
       organization_id: row.organization_id,
       error: error.message,

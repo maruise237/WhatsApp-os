@@ -53,7 +53,7 @@ export async function buildMcpTurnTools(
   const blocked = agentConfig.toolIds.filter((id) => BLOCKED_TOOL_IDS.has(id));
   if (blocked.length > 0) {
     // A tela permite marcar; o engine recusa em silêncio NUNCA — loga o porquê.
-    log.warn('tools MCP bloqueadas no turno do engine (envio/handoff são do harness)', {
+    log.warn('outils MCP bloqués pendant le tour du moteur (envoi/handoff relèvent du harness)', {
       blocked_tool_ids: blocked,
     });
   }

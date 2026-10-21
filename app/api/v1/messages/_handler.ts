@@ -104,9 +104,9 @@ async function removerEcoDoProprioEnvio(
       // produzir: apagar a própria mensagem que acabou de ser entregue. Quem
       // mexer no filtro de cima não vai ser avisado por teste nenhum.
       .neq("id", minhaLinhaId);
-    if (error) console.error("[messages.send] não consegui remover o eco do próprio envio", error.message);
+    if (error) console.error("[messages.send] impossible de supprimer l’écho de l’envoi lui-même", error.message);
   } catch (err) {
-    console.error("[messages.send] a remoção do eco lançou", err instanceof Error ? err.message : err);
+    console.error("[messages.send] la suppression de l’écho a levé une exception", err instanceof Error ? err.message : err);
   }
 }
 

@@ -57,7 +57,7 @@ export async function loadSpinningKnobs(
   if (!parsed) {
     // Falha FECHADO sem derrubar o worker: knob inválido → defaults conservadores.
     // ids não são PII (a disciplina do pacing/store).
-    logger?.warn('spinning_knobs inválido em channel_knobs — usando defaults conservadores', {
+    logger?.warn('spinning_knobs invalide dans channel_knobs — valeurs par défaut prudentes utilisées', {
       tenantId,
       channelSessionId,
     });

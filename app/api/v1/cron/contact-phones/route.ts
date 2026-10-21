@@ -180,9 +180,9 @@ async function handle(req: NextRequest): Promise<Response> {
     } catch (err) {
       // Falha de rede não é "não existe": carimba e tenta de novo no ciclo
       // seguinte, sem derrubar o lote inteiro por um contato.
-      logger.warn("[contact-phones] lookup falhou", {
+      logger.warn("[contact-phones] échec de la recherche", {
         contactId: c.id,
-        detail: err instanceof Error ? err.message : "erro",
+        detail: err instanceof Error ? err.message : "erreur",
         requestId,
       });
     }

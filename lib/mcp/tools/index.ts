@@ -149,7 +149,7 @@ if (process.env.NODE_ENV !== "production") {
   }
   for (const n of catalogNames) {
     if (!handlerNames.has(n)) {
-      throw new Error(`mcp/tools: catalog "${n}" sem handler correspondente`);
+      throw new Error(`mcp/tools: catalog "${n}" sans handler correspondant`);
     }
   }
 }
