@@ -54,7 +54,7 @@ export const crmListConversations: McpToolDefinition<typeof listInputShape> = {
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const result = await listConversationsHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -73,11 +73,11 @@ export const crmListConversations: McpToolDefinition<typeof listInputShape> = {
     }
     // Nomes (dedupe) e posições de fila (1 query cada) — sem N+1 na listagem.
     const names = await resolveUserNames(
-      ctx.supabase,
+      ctx.db,
       conversations.map((c) => c.assigned_to_user_id),
     );
     const queueMap = conversations.some(isInQueue)
-      ? await getQueuePositions(ctx.supabase, ctx.organizationId)
+      ? await getQueuePositions(ctx.db, ctx.organizationId)
       : new Map<string, number>();
     return {
       conversations: conversations.map((c) => ({
@@ -118,7 +118,7 @@ export const crmGetConversation: McpToolDefinition<typeof getInputShape> = {
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const conv = await getConversationHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -126,9 +126,9 @@ export const crmGetConversation: McpToolDefinition<typeof getInputShape> = {
       },
       input.conversation_id,
     );
-    const names = await resolveUserNames(ctx.supabase, [conv.assigned_to_user_id]);
+    const names = await resolveUserNames(ctx.db, [conv.assigned_to_user_id]);
     const queue_position = isInQueue(conv)
-      ? ((await getQueuePositions(ctx.supabase, ctx.organizationId)).get(conv.id) ?? null)
+      ? ((await getQueuePositions(ctx.db, ctx.organizationId)).get(conv.id) ?? null)
       : null;
     return {
       id: conv.id,
@@ -171,7 +171,7 @@ export const crmGetConversationHistory: McpToolDefinition<typeof historyInputSha
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const result = await listMessagesHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,

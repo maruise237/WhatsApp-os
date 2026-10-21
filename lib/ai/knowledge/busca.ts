@@ -53,14 +53,14 @@ interface LinhaDaRpc {
 }
 
 export async function buscarConhecimento(
-  supabase: DbClient,
+  db: DbClient,
   p: ParametrosDaBusca,
   deps?: { embed?: typeof embedText; enTexte?: boolean },
 ): Promise<ResultadoDaBusca> {
   // Plein texte (migration 0184) : même recherche que le tour de l'assistant,
   // mêmes plafonds — l'humain et l'IA voient le même acervo de la même façon.
   if (deps?.enTexte ?? connaissancesEnTexte()) {
-    const { data, error } = await supabase.rpc("rechercher_chunks_texte", {
+    const { data, error } = await db.rpc("rechercher_chunks_texte", {
       p_organization_id: p.organizationId,
       p_kb_version_id: p.kbVersionId,
       p_requete: p.pergunta,
@@ -88,7 +88,7 @@ export async function buscarConhecimento(
   // se faltou pouco ou se nao ha nada parecido no acervo.
   const PISO = -1;
 
-  const { data, error } = await supabase.rpc("retrieve_top_k_chunks", {
+  const { data, error } = await db.rpc("retrieve_top_k_chunks", {
     p_organization_id: p.organizationId,
     p_kb_version_id: p.kbVersionId,
     p_embedding: `[${embedding.join(",")}]`,
@@ -126,11 +126,11 @@ export async function buscarConhecimento(
  * ela precisa dizer por qual assistente quer buscar.
  */
 export async function resolverAcervoDoAgente(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   agentId: string,
 ): Promise<string | null> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("ai_agents")
     .select("active_kb_version_id")
     .eq("id", agentId)

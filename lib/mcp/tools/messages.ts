@@ -60,7 +60,7 @@ export const crmSendWhatsappMessage: McpToolDefinition<typeof inputShape> = {
     });
 
     if (input.idempotency_key) {
-      const { data: cached } = await ctx.supabase
+      const { data: cached } = await ctx.db
         .from("idempotency_keys")
         .select("response_body")
         .eq("organization_id", ctx.organizationId)
@@ -76,7 +76,7 @@ export const crmSendWhatsappMessage: McpToolDefinition<typeof inputShape> = {
     }
 
     const message = await sendMessageHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -94,7 +94,7 @@ export const crmSendWhatsappMessage: McpToolDefinition<typeof inputShape> = {
 
     if (input.idempotency_key) {
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-      await ctx.supabase
+      await ctx.db
         .from("idempotency_keys")
         .insert({
           organization_id: ctx.organizationId,

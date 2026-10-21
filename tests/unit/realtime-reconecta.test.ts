@@ -45,8 +45,8 @@ describe("o canal volta sozinho", () => {
 
   it("monta canal NOVO a cada tentativa", () => {
     // Reassinar o mesmo objeto devolve SUBSCRIBED e não entrega nada.
-    expect(FONTE).toMatch(/supabase\.removeChannel\(active\);\s*\n\s*montar\(\);/);
-    expect(FONTE).toMatch(/supabase\.channel\(`\$\{channelName\}#\$\{tentativas\}`\)/);
+    expect(FONTE).toMatch(/db\.removeChannel\(active\);\s*\n\s*montar\(\);/);
+    expect(FONTE).toMatch(/db\.channel\(`\$\{channelName\}#\$\{tentativas\}`\)/);
   });
 
   it("ao voltar, FORÇA uma busca — o que passou não chega sozinho", () => {

@@ -48,7 +48,7 @@ async function main(): Promise<void> {
     },
     apiTokenId: "00000000-0000-4000-8000-e2e000000000",
     requestId: `visao-agente-${Date.now()}`,
-    supabase: admin,
+    db: admin,
   };
 
   const visto = await crmListFollowups.handler(

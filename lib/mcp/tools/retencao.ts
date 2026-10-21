@@ -155,7 +155,7 @@ export const crmScheduleFollowup: McpToolDefinition<typeof agendarShape> = {
 
     const resultado = await agendaRetornoNoCrm(
       {
-        admin: ctx.supabase,
+        admin: ctx.db,
         orgId: ctx.organizationId,
         actor: ctx.actor,
         requestId: ctx.requestId,
@@ -264,7 +264,7 @@ export const crmCancelFollowup: McpToolDefinition<typeof cancelarShape> = {
   handler: async (input, ctx) => {
     const resultado = await cancelaRetornoNoCrm(
       {
-        admin: ctx.supabase,
+        admin: ctx.db,
         orgId: ctx.organizationId,
         actor: ctx.actor,
         requestId: ctx.requestId,
@@ -334,7 +334,7 @@ export const crmListFollowups: McpToolDefinition<typeof listarShape> = {
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const resultado = await listaRetornosNoCrm(
-      { admin: ctx.supabase, orgId: ctx.organizationId, actor: ctx.actor, requestId: ctx.requestId },
+      { admin: ctx.db, orgId: ctx.organizationId, actor: ctx.actor, requestId: ctx.requestId },
       { leadId: input.lead_id ?? null, contactId: input.contact_id ?? null },
       { limite: input.limit },
     );
@@ -394,7 +394,7 @@ export const crmListAtRiskLeads: McpToolDefinition<typeof radarShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const radar = await carregaRadarDeRisco(ctx.supabase, {
+    const radar = await carregaRadarDeRisco(ctx.db, {
       organizationId: ctx.organizationId,
       limit: input.limit,
       ...(input.min_hours !== undefined ? { minHours: input.min_hours } : {}),
@@ -428,7 +428,7 @@ export const crmCloseDemand: McpToolDefinition<typeof encerrarShape> = {
   handler: async (input, ctx) => {
     try {
       const { lead, jaEstava } = await encerraDemanda(
-        ctx.supabase,
+        ctx.db,
         {
           organization_id: ctx.organizationId,
           actor: ctx.actor,
@@ -474,7 +474,7 @@ export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> =
   requiresRole: "agent",
   requiresScope: "mcp:write",
   handler: async (input, ctx) => {
-    const { data: lead, error } = await ctx.supabase
+    const { data: lead, error } = await ctx.db
       .from("crm_leads")
       .select("id, contact_id, stage_id, status")
       .eq("organization_id", ctx.organizationId)
@@ -507,7 +507,7 @@ export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> =
     // A janela da proposta é a MESMA que definiu o esfriamento (cabeçalho da
     // 0082): uma proposta que vence antes ou depois do prazo do estágio faria o
     // negócio sumir do quadro num ritmo que ninguém configurou.
-    const { data: stage } = await ctx.supabase
+    const { data: stage } = await ctx.db
       .from("crm_stages")
       .select("expected_duration_hours")
       .eq("organization_id", ctx.organizationId)
@@ -517,7 +517,7 @@ export const crmProposeReactivation: McpToolDefinition<typeof reativacaoShape> =
       stage as { expected_duration_hours: number | null } | null,
     );
 
-    const proposta = await propoeReativacao(ctx.supabase, {
+    const proposta = await propoeReativacao(ctx.db, {
       organizationId: ctx.organizationId,
       leadId: input.lead_id,
       coldHours,

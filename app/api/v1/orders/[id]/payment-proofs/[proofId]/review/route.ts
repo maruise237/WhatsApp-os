@@ -33,10 +33,10 @@ export async function POST(request: NextRequest, { params }: Context): Promise<R
     });
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   if (parsed.data.action === "approve") {
-    const { data, error } = await supabase.rpc("fn_approve_sales_payment", {
+    const { data, error } = await db.rpc("fn_approve_sales_payment", {
       p_organization_id: authz.org.orgId,
       p_order_id: orderId,
       p_proof_id: proofId,
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest, { params }: Context): Promise<R
     return ok(data, { requestId });
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("payment_proofs")
     .update({
       review_status: "rejected",

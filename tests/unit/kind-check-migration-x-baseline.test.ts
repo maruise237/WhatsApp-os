@@ -101,7 +101,7 @@ describe("migrations × baseline — vocabulário de constraint não encolhe", (
         `A migration ${ultima.arquivo} deixa ${constraint} diferente do baseline.sql.\n` +
           `Faltando nela: ${faltando.join(", ") || "(nada)"}\n` +
           `Sobrando nela: ${sobrando.join(", ") || "(nada)"}\n` +
-          "Quem aplica migrations em ordem (supabase db push) fica com um vocabulário\n" +
+          "Quem aplica migrations em ordem (db db push) fica com um vocabulário\n" +
           "menor que o do kit, e os INSERTs dos valores perdidos passam a violar a\n" +
           "constraint em silêncio — o aviso simplesmente nunca abre.\n" +
           "Conserto: uma migration NOVA (forward-fix) com a lista completa do baseline.",

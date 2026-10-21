@@ -121,7 +121,7 @@ function ctxDe(resolve: Resolver, cap: Capturas): McpContext {
     apiTokenId: "tok",
     requestId: "req-1",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase: fakeSupabase(resolve, cap) as any,
+    db: fakeSupabase(resolve, cap) as any,
   } as McpContext;
 }
 
@@ -912,7 +912,7 @@ describe("crm_list_at_risk_leads", () => {
       actor: { type: "ai_agent", id: "agente-1", role: "ai_operator" },
       apiTokenId: "tok-1",
       requestId: "run-1",
-      supabase: {} as never,
+      db: {} as never,
     } as unknown as McpContext;
     const auth = {
       organizationId: ORG,
@@ -923,7 +923,7 @@ describe("crm_list_at_risk_leads", () => {
     } as unknown as McpAuthResult;
 
     const montadas = pickToolsFromMcp({
-      supabase: ctx.supabase,
+      db: ctx.db,
       ctx,
       auth,
       toolIds: [crmListAtRiskLeads.name],

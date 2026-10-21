@@ -30,9 +30,9 @@ export async function GET(
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) return new NextResponse(null, { status: 403 });
 
-  const supabase = await createClient();
+  const db = await createClient();
   const buscar = (colunas: string) =>
-    supabase.from("channel_sessions").select(colunas).eq("organization_id", activeOrg.orgId).eq("id", id).maybeSingle();
+    db.from("channel_sessions").select(colunas).eq("organization_id", activeOrg.orgId).eq("id", id).maybeSingle();
   const { data: sessionRaw } = await queryTolerantToMissingArchived(
     () => buscar(`${CHANNEL_SESSION_REF_COLUMNS}, ${ARCHIVED_AT}`),
     () => buscar(CHANNEL_SESSION_REF_COLUMNS),

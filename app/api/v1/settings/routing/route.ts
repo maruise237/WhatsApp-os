@@ -50,8 +50,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: orgRow, error } = await supabase
+  const db = await createClient();
+  const { data: orgRow, error } = await db
     .from("organizations")
     .select("settings")
     .eq("id", activeOrg.orgId)
@@ -105,8 +105,8 @@ export async function PATCH(req: NextRequest): Promise<Response> {
  * filtro por `organization_id` é explícito, como a doutrina exige de todo
  * handler que usa service role.
  */
-  const supabase = createAdminClient();
-  const { data: orgRow, error: readErr } = await supabase
+  const db = createAdminClient();
+  const { data: orgRow, error: readErr } = await db
     .from("organizations")
     .select("settings")
     .eq("id", activeOrg.orgId)
@@ -122,7 +122,7 @@ export async function PATCH(req: NextRequest): Promise<Response> {
   const nextSettings: Record<string, unknown> = { ...currentSettings, routing };
   if (visibility_mode !== undefined) nextSettings.visibility_mode = visibility_mode;
 
-  const { error: updErr } = await supabase
+  const { error: updErr } = await db
     .from("organizations")
     .update({ settings: nextSettings })
     .eq("id", activeOrg.orgId);

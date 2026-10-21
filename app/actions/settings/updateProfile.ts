@@ -21,13 +21,13 @@ export async function updateProfile(input: ProfileInput): Promise<UpdateProfileR
   const authUser = await loadAuthUser();
   if (!authUser) return { ok: false, error: "unauthenticated" };
 
-  const supabase = await createClient();
+  const db = await createClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
   const userAgent = hdrs.get("user-agent") ?? null;
 
-  const { error } = await supabase.auth.updateUser({
+  const { error } = await db.auth.updateUser({
     data: {
       full_name: parsed.data.full_name ?? null,
       locale: parsed.data.locale,
@@ -58,7 +58,7 @@ export async function updateProfile(input: ProfileInput): Promise<UpdateProfileR
 
   // Best-effort emit (event_log is org-scoped; skip if no org).
   if (activeOrg) {
-    await supabase
+    await db
       .rpc("emit_event", {
         p_event_type: "user.profile_updated",
         p_entity_kind: "user",

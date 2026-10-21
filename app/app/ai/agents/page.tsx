@@ -30,8 +30,8 @@ export default async function AgentsListPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("ai_agents")
     .select(AGENT_COLUMNS)
     .eq("organization_id", activeOrg.orgId)

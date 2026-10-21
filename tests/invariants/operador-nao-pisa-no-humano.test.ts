@@ -98,7 +98,7 @@ function fakeLogger(): Logger & { entries: Array<{ level: string; msg: string; f
 
 function fakeDeps(log: Logger): InboundTurnDeps {
   return {
-    crmCfg: { supabase: {} as DbClient },
+    crmCfg: { db: {} as DbClient },
     llmCfg: {},
     knobs: {
       historyLimit: 20,

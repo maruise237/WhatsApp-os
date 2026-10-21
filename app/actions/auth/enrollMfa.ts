@@ -19,17 +19,17 @@ export type EnrollMfaResult =
  * re-scan a fresh QR.
  */
 export async function enrollMfa(): Promise<EnrollMfaResult> {
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) redirect("/login");
 
   // Drop any stale unverified TOTP factors (idempotent re-enroll).
-  const { data: existing } = await supabase.auth.mfa.listFactors();
+  const { data: existing } = await db.auth.mfa.listFactors();
   for (const f of existing?.all ?? []) {
     if (f.factor_type === "totp" && f.status === "unverified") {
-      await supabase.auth.mfa.unenroll({ factorId: f.id });
+      await db.auth.mfa.unenroll({ factorId: f.id });
     }
   }
 
@@ -53,7 +53,7 @@ export async function enrollMfa(): Promise<EnrollMfaResult> {
   // propósito — trocar por horário local só criaria uma colisão nova perto da
   // meia-noite.
   const marca = await marcaDaSaida(null);
-  const { data, error } = await supabase.auth.mfa.enroll({
+  const { data, error } = await db.auth.mfa.enroll({
     factorType: "totp",
     friendlyName: `Accès ${new Date().toISOString().slice(0, 10)}`,
     issuer: marca.nome,

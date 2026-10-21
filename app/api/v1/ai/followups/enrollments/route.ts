@@ -46,8 +46,8 @@ export async function GET(req: NextRequest): Promise<Response> {
     return fail("invalid_request", "Statut invalide.", 400, { requestId });
   }
 
-  const supabase = await createClient();
-  let query = supabase
+  const db = await createClient();
+  let query = db
     .from("followup_enrollments")
     .select(LIST_COLUMNS)
     .eq("organization_id", activeOrg.orgId)
@@ -81,9 +81,9 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   const { pointer_id, contact_id, agent_id: agentIdInput } = parsed.data;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
-  const { data: pointer, error: pointerErr } = await supabase
+  const { data: pointer, error: pointerErr } = await db
     .from("followup_flow_pointers")
     .select("id, status, active_version_id")
     .eq("organization_id", activeOrg.orgId)
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     return fail("flow_not_active", "Ce scénario n’est pas actif (il doit être publié).", 422, { requestId });
   }
 
-  const { data: contact, error: contactErr } = await supabase
+  const { data: contact, error: contactErr } = await db
     .from("contacts")
     .select("id")
     .eq("organization_id", activeOrg.orgId)
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (contactErr) return fail("internal_error", contactErr.message, 500, { requestId });
   if (!contact) return fail("not_found", "Contact introuvable.", 404, { requestId });
 
-  const { data: version, error: versionErr } = await supabase
+  const { data: version, error: versionErr } = await db
     .from("followup_flow_versions")
     .select("graph")
     .eq("organization_id", activeOrg.orgId)
@@ -125,7 +125,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   // pick determinístico do silence-sweep. Sem nenhum resolvível → null (ok).
   let agentId: string | null = null;
   if (agentIdInput !== undefined) {
-    const { data: agent, error: agentErr } = await supabase
+    const { data: agent, error: agentErr } = await db
       .from("ai_agents")
       .select("id")
       .eq("organization_id", activeOrg.orgId)
@@ -136,14 +136,14 @@ export async function POST(req: NextRequest): Promise<Response> {
     agentId = agentIdInput;
   } else {
     agentId = await resolveAgentForAutomaticTrigger(
-      createSupabaseFollowupGateDb(supabase),
+      createSupabaseFollowupGateDb(db),
       activeOrg.orgId,
       pointer_id,
     );
   }
 
   const now = new Date().toISOString();
-  const { data: created, error: insErr } = await supabase
+  const { data: created, error: insErr } = await db
     .from("followup_enrollments")
     .insert({
       organization_id: activeOrg.orgId,

@@ -58,12 +58,12 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (!authz.ok) return authz.response;
   const { user, org } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // Client do REQUEST, nunca admin: é a policy `conversations_select` que aplica
   // o `visibility_mode`, e ler com service role aqui deixaria um agent fora de
   // escopo pausar o automático de uma conversa que ele nem enxerga.
-  const { data: convData, error: convErr } = await supabase
+  const { data: convData, error: convErr } = await db
     .from("conversations")
     .select("id, contact_id, status, assigned_to_user_id, bot_silenced_until")
     .eq("id", id)
@@ -94,7 +94,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (conv.assigned_to_user_id === null) {
     // Sem dono: quem pausa assume. Pela RPC, que grava o evento de atribuição na
     // MESMA transação e — desde a migration 0173 — já deixa o silêncio durável.
-    const { data: atribuida, error: rpcErr } = await supabase.rpc("fn_conversation_assign", {
+    const { data: atribuida, error: rpcErr } = await db.rpc("fn_conversation_assign", {
       p_organization_id: org.orgId,
       p_conversation_id: id,
       p_to_user_id: user.id,
@@ -119,7 +119,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // barato e imune a um clone cuja função ainda seja a versão anterior — o
   // `update.sh` aplica o baseline, mas nada garante que este código não chegou
   // primeiro.
-  const { data: atualizada, error: updErr } = await supabase
+  const { data: atualizada, error: updErr } = await db
     .from("conversations")
     .update({ bot_silenced_until: SILENCIO_DURAVEL, last_handoff_reason: MOTIVO })
     .eq("id", id)
@@ -144,7 +144,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // O log que aparece na TELA (invariante 3: log invisível é log morto). A
   // auditoria acima só `admin` lê; esta linha vai para o painel da conversa.
   await registrarTrocaDeComando({
-    supabase,
+    db,
     organizationId: org.orgId,
     conversationId: id,
     contactId: conv.contact_id,

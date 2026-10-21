@@ -12,7 +12,7 @@
  * O checkbox por tool continua existindo em "modo avancado"; o pacote e o
  * caminho padrao.
  *
- * Este modulo e CLIENT-SAFE: zero import de zod, supabase ou next/headers.
+ * Este modulo e CLIENT-SAFE: zero import de zod, db ou next/headers.
  * Pode ser importado por Client Component.
  */
 

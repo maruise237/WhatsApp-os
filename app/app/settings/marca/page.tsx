@@ -56,8 +56,8 @@ export default async function MarcaDaOrganizacaoPage() {
   // é permitida a membro pela RLS, e usar o admin client aqui seria contornar a
   // política para buscar o que a política já entrega. Quem precisa de privilégio
   // é a ESCRITA — e ela mora na função SQL, não nesta tela.
-  const supabase = await createClient();
-  const { data } = await supabase
+  const db = await createClient();
+  const { data } = await db
     .from("organizations")
     .select("settings")
     .eq("id", activeOrg.orgId)

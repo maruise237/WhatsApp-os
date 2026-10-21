@@ -45,7 +45,7 @@ export function provedorDaOrg(settings: unknown): string {
 
 export interface DependenciasDoRetrato {
   /** Client com a sessão do usuário — o RLS faz o escopo. */
-  supabase: DbClient;
+  db: DbClient;
   orgId: string;
   /** Injetável para teste; em produção é o `process.env` do servidor. */
   ambiente?: FonteDeAmbiente;
@@ -59,10 +59,10 @@ export interface DependenciasDoRetrato {
 export async function lerRetratoDaInstalacao(
   deps: DependenciasDoRetrato,
 ): Promise<RetratoDaInstalacao> {
-  const { supabase, orgId } = deps;
+  const { db, orgId } = deps;
   const ambiente = lerAmbiente(deps.ambiente);
 
-  const { data: orgRow } = await supabase
+  const { data: orgRow } = await db
     .from("organizations")
     .select("slug, display_name, settings")
     .eq("id", orgId)
@@ -85,7 +85,7 @@ export async function lerRetratoDaInstalacao(
   // A precedência não muda: só a VALIDADA vira `origemDaChave: "org"`, porque é
   // ela que `loadCredential` aceita e que o turno consegue usar. O que passa a
   // existir é a resposta honesta para o intervalo entre as duas coisas.
-  const { data: credenciais } = await supabase
+  const { data: credenciais } = await db
     .from("ai_provider_credentials")
     .select("id, label, api_key_last4, validated_at")
     .eq("organization_id", orgId)
@@ -98,7 +98,7 @@ export async function lerRetratoDaInstalacao(
   const emVerificacao =
     !credencial && (credenciais ?? []).some((c) => c.validated_at === null);
 
-  const { data: modelo } = await supabase
+  const { data: modelo } = await db
     .from("ai_models")
     .select("model_id")
     .eq("provider", provider)
@@ -107,7 +107,7 @@ export async function lerRetratoDaInstalacao(
     .limit(1)
     .maybeSingle();
 
-  const { data: funil } = await supabase
+  const { data: funil } = await db
     .from("crm_pipelines")
     .select("id, name")
     .eq("organization_id", orgId)

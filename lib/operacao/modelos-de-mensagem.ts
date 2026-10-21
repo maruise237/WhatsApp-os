@@ -28,7 +28,7 @@ export interface ModeloVisivel {
 }
 
 export async function listarModelosDeMensagem(deps: DepsDaOperacao): Promise<ModeloVisivel[]> {
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("message_templates")
     .select("id, title, body, shortcut, owner_user_id")
     .eq("organization_id", deps.organizationId)
@@ -65,7 +65,7 @@ export async function preencherModeloDeMensagem(
   deps: DepsDaOperacao,
   input: { templateId: string; contactId?: string; leadId?: string },
 ): Promise<ModeloPreenchido> {
-  const { data: modelo, error } = await deps.supabase
+  const { data: modelo, error } = await deps.db
     .from("message_templates")
     .select("id, title, body")
     .eq("id", input.templateId)
@@ -109,7 +109,7 @@ async function montarContexto(
   let contactId = input.contactId ?? null;
 
   if (input.leadId) {
-    const { data: lead } = await deps.supabase
+    const { data: lead } = await deps.db
       .from("crm_leads")
       .select("id, title, value_cents, currency, contact_id")
       .eq("id", input.leadId)
@@ -122,7 +122,7 @@ async function montarContexto(
   }
 
   if (contactId) {
-    const { data: contato } = await deps.supabase
+    const { data: contato } = await deps.db
       .from("contacts")
       .select("id, name, phone_number, email")
       .eq("id", contactId)

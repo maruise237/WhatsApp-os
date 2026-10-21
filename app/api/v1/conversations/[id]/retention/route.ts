@@ -24,12 +24,12 @@ interface RouteCtx {
 export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -40,7 +40,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     return fail("no_active_org", "No active organization.", 403, { requestId });
   }
 
-  const { data: conv, error: convErr } = await supabase
+  const { data: conv, error: convErr } = await db
     .from("conversations")
     .select("id, contact_id, channel_session_id")
     .eq("organization_id", activeOrg.orgId)
@@ -54,7 +54,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
 
   const since = new Date(Date.now() - RETENTION_LOOKBACK_MS).toISOString();
-  const { data: traces, error: traceErr } = await supabase
+  const { data: traces, error: traceErr } = await db
     .from("before_send_traces")
     .select("id, created_at, vetoed_gate, vetoed_code")
     .eq("organization_id", activeOrg.orgId)
@@ -69,7 +69,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   // Knobs do número (coluna NULL = default conservador do engine) — a UI usa o
   // contexto pra dizer QUAL janela segurou o envio, não a genérica.
-  const { data: knobs } = await supabase
+  const { data: knobs } = await db
     .from("channel_knobs")
     .select("window_start_hour, window_end_hour, allow_sunday, timezone")
     .eq("organization_id", activeOrg.orgId)

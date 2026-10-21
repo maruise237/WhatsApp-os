@@ -6,7 +6,7 @@
  * mesmo cálculo alimenta o worker (cron), o handoff v2 (crm_request_human_handoff)
  * e o crm_get_queue_status — UM algoritmo, não três divergentes.
  *
- * O client é injetado (worker passa admin; tools MCP passam ctx.supabase admin),
+ * O client é injetado (worker passa admin; tools MCP passam ctx.db admin),
  * mantendo a org-scoping explícita em toda query (service role bypassa RLS).
  */
 import type { DbClient } from "@/lib/db/client";
@@ -17,11 +17,11 @@ import { availabilityScheduleSchema } from "@/lib/schemas/routing";
 
 /** Elegíveis = disponíveis ∧ dentro do horário ∧ com folga (carga < capacidade). */
 export async function loadEligibleAttendants(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   now: Date,
 ): Promise<RoutingCandidate[]> {
-  const { data: avail } = await supabase
+  const { data: avail } = await db
     .from("attendant_availability")
     .select("user_id, capacity, schedule")
     .eq("organization_id", organizationId)
@@ -33,7 +33,7 @@ export async function loadEligibleAttendants(
   const userIds = rows.map((r) => r.user_id);
 
   // Carga atual: conversas abertas atribuídas, contadas por dono (1 query).
-  const { data: openConvs } = await supabase
+  const { data: openConvs } = await db
     .from("conversations")
     .select("assigned_to_user_id")
     .eq("organization_id", organizationId)
@@ -47,7 +47,7 @@ export async function loadEligibleAttendants(
   }
 
   // Última atribuição recebida (rodízio real, sem coluna de estado).
-  const { data: assignEvents } = await supabase
+  const { data: assignEvents } = await db
     .from("conversation_assignment_events")
     .select("to_user_id, created_at")
     .eq("organization_id", organizationId)

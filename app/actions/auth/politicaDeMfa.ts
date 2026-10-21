@@ -137,11 +137,11 @@ export async function desativarMfaDaConta(): Promise<ResultadoDaPolitica> {
     };
   }
 
-  const supabase = await createClient();
-  const { data: fatores } = await supabase.auth.mfa.listFactors();
+  const db = await createClient();
+  const { data: fatores } = await db.auth.mfa.listFactors();
   for (const f of fatores?.all ?? []) {
     if (f.factor_type !== "totp") continue;
-    const { error } = await supabase.auth.mfa.unenroll({ factorId: f.id });
+    const { error } = await db.auth.mfa.unenroll({ factorId: f.id });
     if (error) return { ok: false, erro: "Impossible de supprimer la vérification pour le moment." };
   }
 

@@ -47,8 +47,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   // Dev sem service role: devolve só as linhas de availability (org-wide via RLS
   // própria da tabela), sem roster completo nem nomes.
   if (!isServiceRoleConfigured()) {
-    const supabase = await createClient();
-    const { data, error } = await supabase
+    const db = await createClient();
+    const { data, error } = await db
       .from("attendant_availability")
       .select(SELECT_COLS)
       .eq("organization_id", activeOrg.orgId);

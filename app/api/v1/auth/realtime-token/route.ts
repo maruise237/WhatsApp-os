@@ -34,13 +34,13 @@ const NO_STORE = { "cache-control": "no-store, max-age=0" } as const;
 
 export async function GET(_req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
 
   // getUser() valida o JWT no servidor — é ele que autoriza a resposta.
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId, headers: NO_STORE });
   }
@@ -49,7 +49,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
   // para extrair o token que o cookie httpOnly guarda.
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await db.auth.getSession();
   if (!session?.access_token) {
     return fail("unauthenticated", "Session sans jeton.", 401, { requestId, headers: NO_STORE });
   }

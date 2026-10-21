@@ -28,8 +28,8 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
   const { org } = authz;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data: conversation } = await supabase
+  const db = await createClient();
+  const { data: conversation } = await db
     .from("conversations")
     .select("id")
     .eq("id", id)
@@ -37,7 +37,7 @@ export async function GET(_req: NextRequest, { params }: RouteParams): Promise<R
     .maybeSingle();
   if (!conversation) return fail("not_found", "Conversation introuvable.", 404, { requestId });
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversation_notes")
     .select(COLS)
     .eq("conversation_id", id)
@@ -54,8 +54,8 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
   const { user, org } = authz;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data: conversation } = await supabase
+  const db = await createClient();
+  const { data: conversation } = await db
     .from("conversations")
     .select("id")
     .eq("id", id)
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
     });
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversation_notes")
     .insert({
       organization_id: org.orgId,

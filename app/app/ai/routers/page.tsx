@@ -18,16 +18,16 @@ export default async function RoutersPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   const [{ data: routerRows }, { data: memberRows }, channelSessions] = await Promise.all([
-    supabase
+    db
       .from("ai_routers")
       .select("id, name, channel_session_id, is_active, fallback_agent_id, updated_at")
       .eq("organization_id", activeOrg.orgId)
       .order("created_at", { ascending: false }),
-    supabase.from("ai_router_members").select("router_id").eq("organization_id", activeOrg.orgId),
-    listSelectableChannels(supabase, activeOrg.orgId),
+    db.from("ai_router_members").select("router_id").eq("organization_id", activeOrg.orgId),
+    listSelectableChannels(db, activeOrg.orgId),
   ]);
 
   const counts = new Map<string, number>();

@@ -28,14 +28,14 @@ interface RouteCtx {
 export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "conversations" });
   if (!authz.ok) return authz.response;
   const user = authz.user;
 
-  const { data, error } = await supabase.rpc("fn_conversation_assign", {
+  const { data, error } = await db.rpc("fn_conversation_assign", {
     p_organization_id: authz.org.orgId,
     p_conversation_id: id,
     // Release: volta à fila. A função aceita null (types gerados não expõem a nulabilidade do arg).
@@ -68,7 +68,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // `bot_silenced_until`), então a linha na timeline não é decoração: ela é o
   // registro de que o cliente voltou a ser atendido por máquina.
   await registrarTrocaDeComando({
-    supabase,
+    db,
     organizationId: conv.organization_id,
     conversationId: conv.id,
     contactId: conv.contact_id,

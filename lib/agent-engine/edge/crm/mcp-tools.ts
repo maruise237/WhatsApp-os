@@ -82,7 +82,7 @@ export async function buildMcpTurnTools(
     },
     apiTokenId: ephemeral.id,
     requestId: ids.jobId,
-    supabase: cfg.supabase,
+    db: cfg.db,
   };
   const auth: McpAuthResult = {
     organizationId: ids.organizationId,
@@ -95,7 +95,7 @@ export async function buildMcpTurnTools(
   const handoffSignal: RuntimeHandoffSignal = { triggered: false };
 
   const tools = pickToolsFromMcp({
-    supabase: cfg.supabase,
+    db: cfg.db,
     ctx,
     auth,
     toolIds: allowed,

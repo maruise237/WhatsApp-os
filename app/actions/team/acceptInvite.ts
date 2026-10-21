@@ -25,10 +25,10 @@ export async function acceptInviteAction(token: string): Promise<AcceptInviteRes
   const payload = verifyInviteToken(token);
   if (!payload) return { ok: false, error: "invalid_or_expired" };
 
-  const supabase = await createClient();
+  const session = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await session.auth.getUser();
   if (!user) return { ok: false, error: "not_authenticated" };
 
   const userEmail = (user.email ?? "").trim().toLowerCase();

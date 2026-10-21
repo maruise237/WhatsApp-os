@@ -27,8 +27,8 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (!authz.ok) return authz.response;
   const { user, org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("followup_flow_pointers")
     .select("id, status")
     .eq("id", id)
@@ -41,7 +41,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     return ok({ id, status: "disabled" }, { requestId });
   }
 
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("followup_flow_pointers")
     .update({ status: "disabled", updated_at: new Date().toISOString() })
     .eq("id", id)

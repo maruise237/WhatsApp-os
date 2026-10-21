@@ -24,7 +24,7 @@ export async function confirmMfaEnroll(
   code: string,
   factorId: string,
 ): Promise<ConfirmMfaEnrollResult> {
-  const supabase = await createClient();
+  const db = await createClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
@@ -32,21 +32,21 @@ export async function confirmMfaEnroll(
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) redirect("/login");
 
   if (!/^\d{6}$/.test(code)) {
     return { ok: false, error: "invalid_code" };
   }
 
-  const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({
+  const { data: challenge, error: challengeErr } = await db.auth.mfa.challenge({
     factorId,
   });
   if (challengeErr || !challenge) {
     return { ok: false, error: "challenge_failed", message: challengeErr?.message };
   }
 
-  const { error: verifyErr } = await supabase.auth.mfa.verify({
+  const { error: verifyErr } = await db.auth.mfa.verify({
     factorId,
     challengeId: challenge.id,
     code,
@@ -65,7 +65,7 @@ export async function confirmMfaEnroll(
   // Try user-scoped first (RLS policy `recovery_codes_self` permits insert
   // where user_id = auth.uid()). Fall back to admin if RLS rejects (e.g. AAL
   // policy mismatch).
-  let { error: insertErr } = await supabase.from("user_recovery_codes").insert(rows);
+  let { error: insertErr } = await db.from("user_recovery_codes").insert(rows);
   if (insertErr && isServiceRoleConfigured()) {
     const admin = createAdminClient();
     const r = await admin.from("user_recovery_codes").insert(rows);

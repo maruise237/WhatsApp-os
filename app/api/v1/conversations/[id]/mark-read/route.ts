@@ -23,14 +23,14 @@ interface RouteCtx {
 export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   const authz = await requireRole("agent", { requestId, resource: "conversations" });
   if (!authz.ok) return authz.response;
 
   try {
     const conv = await markConversationReadHandler(
-      supabase,
+      db,
       {
         organization_id: authz.org.orgId,
         actor: { type: "user", id: authz.user.id },

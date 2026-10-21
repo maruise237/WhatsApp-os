@@ -91,8 +91,8 @@ export async function resolverOperador(): Promise<Operador> {
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) return SEM_SESSAO();
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("organizations")
     .select("display_name, legal_name, cnpj, dpo_email, privacy_policy_url")
     .eq("id", activeOrg.orgId)

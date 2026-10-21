@@ -1,6 +1,6 @@
 /**
  * G6-01 acceptance 6 — unit por tool nova de governança, contra os handlers REAIS
- * (ctx.supabase stub). Cobre: sucesso, cross-org negado, input inválido,
+ * (ctx.db stub). Cobre: sucesso, cross-org negado, input inválido,
  * idempotência (assign) e números exatos (queue_status).
  */
 import { describe, expect, it, vi } from "vitest";
@@ -95,7 +95,7 @@ function makeCtx(resolve: Resolver, cap: Captures): McpContext {
     apiTokenId: "tok",
     requestId: "req",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase: makeSupabase(resolve, cap) as any,
+    db: makeSupabase(resolve, cap) as any,
   } as McpContext;
 }
 

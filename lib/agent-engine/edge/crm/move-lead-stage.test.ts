@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { MIRROR_WARN_ONLY, mirrorLeadStageToCrm } from './move-lead-stage';
 
-const cfg = { supabase: {} as never };
+const cfg = { db: {} as never };
 const db = {} as never;
 
 describe('mirrorLeadStageToCrm', () => {
@@ -19,7 +19,7 @@ describe('mirrorLeadStageToCrm', () => {
 
     expect(r).toEqual({ ok: true });
     // O `leadId` do engine É o contact_id do CRM — trocar isso move o card errado.
-    expect(sync).toHaveBeenCalledWith(cfg.supabase, {
+    expect(sync).toHaveBeenCalledWith(cfg.db, {
       organizationId: 'org-1', contactId: 'contato-1', passo: 'negotiating',
     });
   });

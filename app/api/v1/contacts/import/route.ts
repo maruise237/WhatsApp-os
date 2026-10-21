@@ -53,7 +53,7 @@ interface ImportSummary {
 
 export async function POST(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
   // spec 13 §4: escrita é agent+ (viewer é read-only), igual ao POST unitário.
   const authz = await requireRole("agent", { requestId, resource: "contacts" });
   if (!authz.ok) return authz.response;
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Numéro sans indicatif ⇒ indicatif par défaut de l'organisation
   // (`settings.phone_country_code`, 237 si absent). Lecture qui échoue ⇒ défaut.
-  const { data: orgDoImport } = await supabase
+  const { data: orgDoImport } = await db
     .from("organizations")
     .select("settings")
     .eq("id", orgId)
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const existentes = new Set<string>();
   if (phones.length > 0) {
-    const { data } = await supabase
+    const { data } = await db
       .from("contacts")
       .select("phone_number")
       .eq("organization_id", orgId)
@@ -185,7 +185,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     for (const r of data ?? []) existentes.add(`tel:${(r as { phone_number: string }).phone_number}`);
   }
   if (emails.length > 0) {
-    const { data } = await supabase
+    const { data } = await db
       .from("contacts")
       .select("email_normalized")
       .eq("organization_id", orgId)
@@ -222,11 +222,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       insertRow.cpf_hash = hashCpf(contato.cpf as string);
       // LGPD: além do hash (dedupe), grava a versão cifrada — igual ao create
       // unitário, senão o contato importado nasce sem CPF recuperável.
-      const enc = await encryptCpfSql(supabase, contato.cpf as string);
+      const enc = await encryptCpfSql(db, contato.cpf as string);
       if (enc) insertRow.cpf_encrypted = enc;
     }
 
-    const { data: criado, error: insErr } = await supabase
+    const { data: criado, error: insErr } = await db
       .from("contacts")
       .insert(insertRow)
       .select("id, display_name, phone_number")
@@ -248,7 +248,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     // Mesmo evento do create unitário — quem consome `contact.created`
     // (workers, métricas) trata importado e manual igual.
-    await supabase
+    await db
       .rpc("emit_event", {
         p_event_type: "contact.created",
         p_entity_kind: "contact",

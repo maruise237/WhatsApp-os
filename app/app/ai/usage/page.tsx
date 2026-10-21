@@ -26,8 +26,8 @@ export default async function AiUsagePage({ searchParams }: PageProps) {
     redirect("/403");
   }
 
-  const supabase = await createClient();
-  const { data: agentRows } = await supabase
+  const db = await createClient();
+  const { data: agentRows } = await db
     .from("ai_agents")
     .select("id, name, is_default")
     .eq("organization_id", activeOrg.orgId)

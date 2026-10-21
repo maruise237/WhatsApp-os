@@ -32,7 +32,7 @@ export interface PipelineRow {
 }
 
 export async function listPipelinesHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   q: ListPipelinesQuery = {},
 ): Promise<{ pipelines: PipelineRow[] }> {
@@ -48,7 +48,7 @@ export async function listPipelinesHandler(
   // — o remendo estava no chamador, e o outro chamador não o tinha. Filtrar aqui
   // é a correção na origem; a defesa em profundidade da tool fica redundante e
   // inofensiva, que é como defesa em profundidade deve ficar.
-  let query = supabase
+  let query = db
     .from("crm_pipelines")
     .select(
       "id, organization_id, name, slug, description, is_default, is_archived, position, vocabulary, settings, created_at, updated_at",

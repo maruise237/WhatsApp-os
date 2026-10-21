@@ -42,8 +42,8 @@ export async function GET(): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("ai_provider_credentials_safe")
     .select(SAFE_COLUMNS)
     .eq("organization_id", activeOrg.orgId)

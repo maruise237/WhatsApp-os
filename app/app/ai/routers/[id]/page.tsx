@@ -22,29 +22,29 @@ export default async function RouterEditorPage({ params }: { params: Promise<{ i
     redirect("/403");
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   const [{ data: routerRow }, { data: memberRows }, { data: agentRows }, channelSessions] =
     await Promise.all([
-      supabase
+      db
         .from("ai_routers")
         .select(ROUTER_DETAIL_COLUMNS)
         .eq("id", id)
         .eq("organization_id", activeOrg.orgId)
         .maybeSingle(),
-      supabase
+      db
         .from("ai_router_members")
         .select(MEMBER_COLUMNS)
         .eq("router_id", id)
         .eq("organization_id", activeOrg.orgId)
         .order("position", { ascending: true }),
-      supabase
+      db
         .from("ai_agents")
         .select("id, name")
         .eq("organization_id", activeOrg.orgId)
         .is("archived_at", null)
         .order("name", { ascending: true }),
-      listSelectableChannels(supabase, activeOrg.orgId),
+      listSelectableChannels(db, activeOrg.orgId),
     ]);
 
   if (!routerRow) notFound();

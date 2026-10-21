@@ -192,7 +192,7 @@ async function main(): Promise<void> {
     // escondendo justamente o caminho que este script existe para exercitar.
     apiTokenId: "00000000-0000-4000-8000-e2e000000000",
     requestId: `seed-retorno-${Date.now()}`,
-    supabase: admin,
+    db: admin,
   };
 
   const daquiADoisDias = new Date(Date.now() + 2 * 86_400_000).toISOString();

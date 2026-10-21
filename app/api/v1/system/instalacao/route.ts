@@ -54,9 +54,9 @@ export async function GET(req: NextRequest) {
     return fail("forbidden", "nécessite le rôle de manager ou supérieur", 403);
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const retrato = await lerRetratoDaInstalacao({
-    supabase,
+    db,
     orgId: org.orgId,
     contarCanais: () => contarCanaisDaOrg(org.orgId),
   });

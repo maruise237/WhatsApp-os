@@ -47,8 +47,8 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
   const q = parsed.data;
 
-  const supabase = await createClient();
-  let query = supabase
+  const db = await createClient();
+  let query = db
     .from("webhook_lead_captures")
     .select(COLUNAS)
     .eq("organization_id", activeOrg.orgId)

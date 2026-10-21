@@ -89,7 +89,7 @@ function fazerCtx(resolve: Resolver, role: McpContext["role"] = "agent"): McpCon
     apiTokenId: "tok",
     requestId: "req",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase: fazerSupabase(resolve) as any,
+    db: fazerSupabase(resolve) as any,
   } as McpContext;
 }
 

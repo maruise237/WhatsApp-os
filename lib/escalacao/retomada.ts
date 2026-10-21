@@ -41,7 +41,7 @@ import { lerContinuidadeHumana, type ContinuidadeHumana } from "./continuidade";
 
 export interface RetomadaDeps {
   /** Admin client (service role) OU client do request — os dois filtram org aqui. */
-  supabase: DbClient;
+  db: DbClient;
   organizationId: string;
   actor: Actor;
   requestId: string;
@@ -81,9 +81,9 @@ export async function devolverAtendimentoAoAgente(
   deps: RetomadaDeps,
   input: { conversationId: string },
 ): Promise<RetomadaResultado> {
-  const { supabase, organizationId } = deps;
+  const { db, organizationId } = deps;
 
-  const { data: convData, error: convErr } = await supabase
+  const { data: convData, error: convErr } = await db
     .from("conversations")
     .select("id, contact_id, status, assigned_to_user_id, assignee_kind, bot_silenced_until")
     .eq("id", input.conversationId)
@@ -102,7 +102,7 @@ export async function devolverAtendimentoAoAgente(
   // chamado pode ser fechado por outro caminho e o rastro do que a pessoa fez
   // ficaria mais pobre justamente no momento em que ele importa.
   const continuidade = await lerContinuidadeHumana(
-    supabase,
+    db,
     organizationId,
     input.conversationId,
   );
@@ -112,7 +112,7 @@ export async function devolverAtendimentoAoAgente(
   // idempotente por natureza: se outro release ganhou a corrida, o estado final
   // é o mesmo que queríamos.
   if (conv.assigned_to_user_id !== null) {
-    const { error: releaseErr } = await supabase.rpc("fn_conversation_assign", {
+    const { error: releaseErr } = await db.rpc("fn_conversation_assign", {
       p_organization_id: organizationId,
       p_conversation_id: input.conversationId,
       p_to_user_id: null,
@@ -132,7 +132,7 @@ export async function devolverAtendimentoAoAgente(
   const proximoStatus = STATUS_REATIVAVEIS.has(conv.status ?? "")
     ? "ai_handling"
     : (conv.status ?? "open");
-  const { data: atualizada, error: updErr } = await supabase
+  const { data: atualizada, error: updErr } = await db
     .from("conversations")
     .update({
       bot_silenced_until: null,
@@ -153,7 +153,7 @@ export async function devolverAtendimentoAoAgente(
   // (3) A trava que ninguém soltava. Sem esta linha as outras duas não servem de
   // nada: os três guards (worker nativo, harness, before-send) leem daqui.
   if (conv.contact_id !== null) {
-    const { error: contatoErr } = await supabase
+    const { error: contatoErr } = await db
       .from("contacts")
       .update({ force_human: false })
       .eq("id", conv.contact_id)
@@ -171,7 +171,7 @@ export async function devolverAtendimentoAoAgente(
   // mesma razão que a rota original documentava: é o ÚNICO produtor do sinal que
   // retoma um follow-up pausado por passagem a humano (lib/followup/reactivity.ts).
   // Perder aqui órfã o enrollment para sempre.
-  const { error: emitErr } = await supabase.rpc("emit_event", {
+  const { error: emitErr } = await db.rpc("emit_event", {
     p_event_type: "ai.handoff_resolved",
     p_entity_kind: "conversation",
     p_entity_id: input.conversationId,
@@ -189,7 +189,7 @@ export async function devolverAtendimentoAoAgente(
 
   // (5) O input estruturado que a IA lê para retomar (invariante 2 da doutrina).
   if (conv.contact_id !== null && continuidade.houveAtendimentoHumano) {
-    await gravarCheckpointDeRetomada(supabase, organizationId, conv.contact_id, continuidade);
+    await gravarCheckpointDeRetomada(db, organizationId, conv.contact_id, continuidade);
   }
 
   // (6) Passagem de atendimento é evento de vida do negócio — a ida já emitia
@@ -231,12 +231,12 @@ export async function devolverAtendimentoAoAgente(
  * histórico da conversa justamente para contar um pedaço dela.
  */
 async function gravarCheckpointDeRetomada(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   contactId: string,
   continuidade: ContinuidadeHumana,
 ): Promise<void> {
-  const { data: anteriorData } = await supabase
+  const { data: anteriorData } = await db
     .from("lead_checkpoints")
     .select("commitments, objections, next_action, rolling_summary")
     .eq("organization_id", organizationId)
@@ -252,7 +252,7 @@ async function gravarCheckpointDeRetomada(
   } | null;
 
   const acumulado = (anterior?.rolling_summary ?? "").trim();
-  const { error } = await supabase.from("lead_checkpoints").insert({
+  const { error } = await db.from("lead_checkpoints").insert({
     organization_id: organizationId,
     contact_id: contactId,
     // Não nasceu de um run do agente — a pessoa é que devolveu o atendimento.
@@ -280,12 +280,12 @@ async function emitirAtividadeDeRetomada(
   conversationId: string,
   continuidade: ContinuidadeHumana,
 ): Promise<void> {
-  const { data: leadsData } = await deps.supabase
+  const { data: leadsData } = await deps.db
     .from("crm_leads")
     .select("id, organization_id, pipeline_id, status, last_activity_at, created_at")
     .eq("organization_id", deps.organizationId)
     .eq("contact_id", contactId);
-  const { data: defaultPipeline } = await deps.supabase
+  const { data: defaultPipeline } = await deps.db
     .from("crm_pipelines")
     .select("id")
     .eq("organization_id", deps.organizationId)
@@ -299,7 +299,7 @@ async function emitirAtividadeDeRetomada(
   });
   if (!alvo.routed) return;
 
-  const resultado = await emitLeadActivity(deps.supabase, {
+  const resultado = await emitLeadActivity(deps.db, {
     organizationId: deps.organizationId,
     leadId: alvo.leadId,
     contactId,

@@ -17,9 +17,9 @@ export default async function OrgMemoryPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
-  const { data: pointer } = await supabase
+  const { data: pointer } = await db
     .from("org_memory_pointers")
     .select("version_id")
     .eq("organization_id", activeOrg.orgId)
@@ -27,7 +27,7 @@ export default async function OrgMemoryPage() {
 
   let document: OrgMemoryState["document"] = null;
   if (pointer?.version_id) {
-    const { data: ver } = await supabase
+    const { data: ver } = await db
       .from("org_memory_versions")
       .select("id, version_number, content, created_at")
       .eq("id", pointer.version_id)
@@ -43,13 +43,13 @@ export default async function OrgMemoryPage() {
     }
   }
 
-  const { data: versionsRaw } = await supabase
+  const { data: versionsRaw } = await db
     .from("org_memory_versions")
     .select("id, version_number, created_at")
     .eq("organization_id", activeOrg.orgId)
     .order("version_number", { ascending: false });
 
-  const { data: entriesRaw } = await supabase
+  const { data: entriesRaw } = await db
     .from("org_memory_entries")
     .select("id, title, body, source, status, created_at")
     .eq("organization_id", activeOrg.orgId)

@@ -55,11 +55,11 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id: leadId } = await ctx.params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
 
   // O lead vem pela RLS do caller — é ele que prova a org, nunca o body.
-  const { data: lead, error: leadErr } = await supabase
+  const { data: lead, error: leadErr } = await db
     .from("crm_leads")
     .select("id, contact_id")
     .eq("id", leadId)
@@ -85,7 +85,7 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   const contactId = (lead as { contact_id: string | null }).contact_id;
 
-  let q = supabase
+  let q = db
     .from("crm_lead_activities")
     .select(TIMELINE_COLS)
     .order("performed_at", { ascending: false })
@@ -111,7 +111,7 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const rows = (data ?? []) as unknown as TimelineItem[];
   const hasMore = rows.length > limit;
   const pageRows = hasMore ? rows.slice(0, limit) : rows;
-  const page = await comNomeDoAtor(supabase, pageRows);
+  const page = await comNomeDoAtor(db, pageRows);
   const last = pageRows[pageRows.length - 1];
 
   return ok(page, {

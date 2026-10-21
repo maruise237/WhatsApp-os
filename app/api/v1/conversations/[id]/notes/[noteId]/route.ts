@@ -24,11 +24,11 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
   const { user, org } = authz;
   const { id, noteId } = await params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   // Filtra também por conversation_id do path: a nota tem que pertencer À
   // conversa da URL (não só à org), senão o `[id]` seria decorativo e uma nota
   // poderia ser apagada via a URL de outra conversa.
-  const { data: note } = await supabase
+  const { data: note } = await db
     .from("conversation_notes")
     .select("created_by_user_id")
     .eq("id", noteId)
@@ -41,7 +41,7 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
     return fail("forbidden", "Seul l’auteur ou un manager (ou plus) peut supprimer cette note.", 403, { requestId });
   }
 
-  const { data: deleted, error } = await supabase
+  const { data: deleted, error } = await db
     .from("conversation_notes")
     .delete()
     .eq("id", noteId)

@@ -50,7 +50,7 @@ interface Entrada {
    * Client do REQUEST — usado para ESCREVER a atividade, herdando a RLS de quem
    * clicou.
    */
-  supabase: DbClient;
+  db: DbClient;
   organizationId: string;
   conversationId: string;
   contactId: string | null;
@@ -72,7 +72,7 @@ interface Entrada {
 }
 
 export async function registrarTrocaDeComando(entrada: Entrada): Promise<void> {
-  const { supabase, organizationId, conversationId, contactId, tipo, actor, motivo } = entrada;
+  const { db, organizationId, conversationId, contactId, tipo, actor, motivo } = entrada;
   if (!contactId) return;
 
   try {
@@ -100,7 +100,7 @@ export async function registrarTrocaDeComando(entrada: Entrada): Promise<void> {
      * admin. Doutrina do service role satisfeita: `organizationId` vem de fonte
      * confiável (o cookie validado pela rota), e todo filtro é explícito.
      */
-    const leitor = isServiceRoleConfigured() ? createAdminClient() : supabase;
+    const leitor = isServiceRoleConfigured() ? createAdminClient() : db;
     const [{ data: leadsData }, { data: defaultPipeline }] = await Promise.all([
       leitor
         .from("crm_leads")
@@ -131,7 +131,7 @@ export async function registrarTrocaDeComando(entrada: Entrada): Promise<void> {
       return;
     }
 
-    const resultado = await emitLeadActivity(supabase, {
+    const resultado = await emitLeadActivity(db, {
       organizationId,
       leadId: alvo.leadId,
       contactId,

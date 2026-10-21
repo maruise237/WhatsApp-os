@@ -25,15 +25,15 @@ export default async function FollowupFlowBuilderPage({
     redirect("/403");
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const [{ data: pointer }, { data: versionRows }] = await Promise.all([
-    supabase
+    db
       .from("followup_flow_pointers")
       .select(DETAIL_COLUMNS)
       .eq("id", id)
       .eq("organization_id", activeOrg.orgId)
       .maybeSingle(),
-    supabase
+    db
       .from("followup_flow_versions")
       .select("id, created_at")
       .eq("organization_id", activeOrg.orgId)

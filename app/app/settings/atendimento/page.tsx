@@ -37,8 +37,8 @@ export default async function AtendimentoSettingsPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
-  const { data } = await supabase
+  const db = await createClient();
+  const { data } = await db
     .from("organizations")
     .select("settings")
     .eq("id", activeOrg.orgId)

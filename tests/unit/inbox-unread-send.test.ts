@@ -115,7 +115,7 @@ describe("sendMessageHandler — unread zera ao responder", () => {
     vi.stubEnv("WAHA_API_BASE_URL", "http://localhost:3030");
     vi.stubEnv("WAHA_API_KEY", "hash123");
 
-    const supabase = makeSupabase({
+    const db = makeSupabase({
       id: CONV,
       organization_id: ORG,
       contact_id: CONTACT,
@@ -127,22 +127,22 @@ describe("sendMessageHandler — unread zera ao responder", () => {
     });
 
     await sendMessageHandler(
-      supabase,
+      db,
       ctx,
       { conversation_id: CONV, type: "text", body: "oi" } as SendMessageInput,
     );
 
-    expect(supabase.getConversationPatch()).toMatchObject({
+    expect(db.getConversationPatch()).toMatchObject({
       unread_count_for_assignee: 0,
       last_outbound_at: expect.any(String),
     });
-    expect(supabase.getContactPatch()).toMatchObject({
+    expect(db.getContactPatch()).toMatchObject({
       last_activity_at: expect.any(String),
     });
     // Anti-pattern nº 10 do CLAUDE.md: este handler também é chamado com o
     // client de SERVICE ROLE (agent-engine), que bypassa RLS — a escrita no
     // contato precisa filtrar a organização de fonte confiável, não só o id.
-    expect(supabase.getContactFilters()).toMatchObject({
+    expect(db.getContactFilters()).toMatchObject({
       id: expect.any(String),
       organization_id: expect.any(String),
     });

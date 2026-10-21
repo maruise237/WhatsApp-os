@@ -69,23 +69,23 @@ export async function GET(
   const requestId = randomUUID();
   const { id: contactId } = await ctx.params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
 
   const [leads, orders, activities, demandas] = await Promise.all([
-    supabase
+    db
       .from("crm_leads")
       .select(LEAD_COLS)
       .eq("contact_id", contactId)
       .order("updated_at", { ascending: false })
       .limit(3),
-    supabase
+    db
       .from("orders")
       .select(ORDER_COLS)
       .eq("contact_id", contactId)
@@ -96,7 +96,7 @@ export async function GET(
     // liberou → voltou ao automático) gasta QUATRO linhas sozinho, e com 5 o
     // painel mostraria só a movimentação de dono, empurrando para fora o que o
     // negócio fez. 12 cabe sem rolagem própria na coluna de 296px.
-    supabase
+    db
       .from("crm_lead_activities")
       .select(ACTIVITY_COLS)
       .eq("contact_id", contactId)
@@ -106,7 +106,7 @@ export async function GET(
     // mais antiga para a mais nova — quem espera há mais tempo aparece primeiro,
     // mesma régua do Radar, para as duas telas não contarem histórias
     // diferentes sobre o mesmo contato.
-    supabase
+    db
       .from("demandas")
       .select(DEMANDA_COLS)
       .eq("contact_id", contactId)

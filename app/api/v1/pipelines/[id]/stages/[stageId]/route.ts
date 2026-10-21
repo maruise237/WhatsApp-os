@@ -68,11 +68,11 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     });
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   try {
     const { funil } = await atualizarEtapa(
       {
-        supabase,
+        db,
         organizationId: authz.org.orgId,
         actor: { type: "user", id: authz.user.id, role: authz.org.role },
         requestId,
@@ -93,11 +93,11 @@ export async function DELETE(req: NextRequest, ctx: RouteCtx): Promise<Response>
   const { id: pipelineId, stageId } = await ctx.params;
   const destinoId = req.nextUrl.searchParams.get("destino");
 
-  const supabase = await createClient();
+  const db = await createClient();
   try {
     const { funil } = await arquivarEtapa(
       {
-        supabase,
+        db,
         organizationId: authz.org.orgId,
         actor: { type: "user", id: authz.user.id, role: authz.org.role },
         requestId,

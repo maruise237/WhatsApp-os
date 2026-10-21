@@ -32,17 +32,17 @@ export interface PlatformAdminContext {
 }
 
 export async function requirePlatformAdmin(): Promise<PlatformAdminContext> {
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) {
     redirect("/login?next=/admin");
   }
 
   // platform_admins RLS: only platform admins read; non-admins get null → forbid.
-  const { data: paRow } = await supabase
+  const { data: paRow } = await db
     .from("platform_admins")
     .select("user_id, scope, mfa_required, revoked_at")
     .eq("user_id", user.id)
@@ -54,7 +54,7 @@ export async function requirePlatformAdmin(): Promise<PlatformAdminContext> {
   }
 
   if (paRow.mfa_required) {
-    const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    const { data: aalData } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
     if (aalData?.currentLevel !== "aal2") {
       redirect("/login/mfa?next=/admin");
     }

@@ -35,7 +35,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   const { user, org } = authz;
 
   const resultado = await retomaEnrollment(
-    { supabase: await createClient(), admin: createAdminClient(), orgId: org.orgId, userId: user.id, requestId },
+    { db: await createClient(), admin: createAdminClient(), orgId: org.orgId, userId: user.id, requestId },
     id,
   );
   if (!resultado.ok) return respostaDaFalha(resultado, requestId);

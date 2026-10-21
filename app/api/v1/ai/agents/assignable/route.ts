@@ -41,8 +41,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   if (!authz.ok) return authz.response;
   const orgId = authz.org.orgId;
 
-  const supabase = await createClient();
-  const { data: agents, error } = await supabase
+  const db = await createClient();
+  const { data: agents, error } = await db
     .from("ai_agents")
     .select("id, name, published_version_id")
     .eq("organization_id", orgId)
@@ -62,7 +62,7 @@ export async function GET(_req: NextRequest): Promise<Response> {
   const publishedIds = rows.map((a) => a.published_version_id).filter((v): v is string => !!v);
   const versionById = new Map<string, number>();
   if (publishedIds.length > 0) {
-    const { data: versions, error: versionsErr } = await supabase
+    const { data: versions, error: versionsErr } = await db
       .from("ai_agent_versions")
       .select("id, version_number")
       .eq("organization_id", orgId)

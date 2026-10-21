@@ -28,7 +28,7 @@ export async function POST(
   const requestId = randomUUID();
   const { id: leadId } = await ctx.params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "crm_leads" });
   if (!authz.ok) return authz.response;
@@ -48,7 +48,7 @@ export async function POST(
   }
 
   // Fetch current lead (RLS scoped).
-  const { data: lead, error: selErr } = await supabase
+  const { data: lead, error: selErr } = await db
     .from("crm_leads")
     .select("*")
     .eq("id", leadId)
@@ -62,7 +62,7 @@ export async function POST(
   }
 
   // Fetch target stage to validate same pipeline (P-01).
-  const { data: stage, error: stageErr } = await supabase
+  const { data: stage, error: stageErr } = await db
     .from("crm_stages")
     .select("id, pipeline_id, name")
     .eq("id", input.stage_id)
@@ -84,7 +84,7 @@ export async function POST(
   }
 
   // OCC update (Pattern B / Spec 09 §7.2).
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("crm_leads")
     .update({
       stage_id: input.stage_id,
@@ -102,7 +102,7 @@ export async function POST(
 
   if (!updated) {
     // Concurrent edit. Re-fetch current to surface the latest updated_at.
-    const { data: current } = await supabase
+    const { data: current } = await db
       .from("crm_leads")
       .select("updated_at")
       .eq("id", leadId)
@@ -119,7 +119,7 @@ export async function POST(
   }
 
   // Re-SELECT so trigger-driven status/closed_at changes are reflected.
-  const { data: fresh } = await supabase
+  const { data: fresh } = await db
     .from("crm_leads")
     .select("*")
     .eq("id", leadId)
@@ -131,13 +131,13 @@ export async function POST(
   // aqui, não pelo moveLeadHandler. O emissor é o mesmo dos outros escritores
   // (lib/leads/activity-emitter), para os quatro caminhos escreverem a mesma
   // linha na timeline.
-  const { data: fromStage } = await supabase
+  const { data: fromStage } = await db
     .from("crm_stages")
     .select("name")
     .eq("id", lead.stage_id)
     .maybeSingle();
 
-  const atividade = await emitLeadActivity(supabase, {
+  const atividade = await emitLeadActivity(db, {
     organizationId: lead.organization_id,
     leadId,
     contactId: (lead as { contact_id?: string | null }).contact_id ?? null,
@@ -155,7 +155,7 @@ export async function POST(
   if (!atividade.ok) {
     // Mesma política do handler: mutação já ocorrida não bloqueia, mas o rastro
     // perdido é contado em vez de sumir num log de processo.
-    await registraFalhaDeAtividade(supabase, {
+    await registraFalhaDeAtividade(db, {
       organizationId: lead.organization_id,
       leadId,
       tipo: "stage_changed",
@@ -166,7 +166,7 @@ export async function POST(
   }
 
   // Emit domain event (fire-and-forget; trigger NEVER does HTTP — workers do).
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "lead.stage_changed",
       p_entity_kind: "crm_lead",

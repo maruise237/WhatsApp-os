@@ -54,7 +54,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // Parse + validate query params
   const rawParams: Record<string, string> = {};
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const offset = (page - 1) * limit;
 
   // Count query (before sla_bucket filter which is client-side)
-  let countQuery = supabase
+  let countQuery = db
     .from("lgpd_requests")
     .select("id", { count: "exact", head: true })
     .eq("organization_id", orgId);
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const total = count ?? 0;
 
   // Data query
-  let dataQuery = supabase
+  let dataQuery = db
     .from("lgpd_requests")
     .select(
       "id, organization_id, request_type, source, contact_id, external_customer_id, status, attempts, received_at, due_at, completed_at, emergency, scope, error_message",

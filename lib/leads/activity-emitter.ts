@@ -109,10 +109,10 @@ export function buildLeadActivityRow(input: EmitLeadActivityInput): LeadActivity
 }
 
 export async function emitLeadActivity(
-  supabase: DbClient,
+  db: DbClient,
   input: EmitLeadActivityInput,
 ): Promise<{ ok: boolean; error?: string }> {
-  const { error } = await supabase
+  const { error } = await db
     .from("crm_lead_activities")
     .insert(buildLeadActivityRow(input));
 

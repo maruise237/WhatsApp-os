@@ -96,7 +96,7 @@ export function eixoDoDossie(leadId: string, contactId: string | null): string |
 
 /** Anexa o nome do agente e da pessoa que agiram, para a linha não dizer só "Agente". */
 export async function comNomeDoAtor(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   rows: TimelineItem[],
 ): Promise<TimelineItemView[]> {
   const agentIds = [...new Set(rows.map((r) => r.actor_agent_id).filter((v): v is string => !!v))];
@@ -104,7 +104,7 @@ export async function comNomeDoAtor(
 
   const nomeAgente = new Map<string, string>();
   if (agentIds.length > 0) {
-    const { data } = await supabase.from("ai_agents").select("id, name").in("id", agentIds);
+    const { data } = await db.from("ai_agents").select("id, name").in("id", agentIds);
     for (const a of (data ?? []) as Array<{ id: string; name: string }>) nomeAgente.set(a.id, a.name);
   }
 

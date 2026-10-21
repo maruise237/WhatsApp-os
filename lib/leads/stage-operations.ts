@@ -42,7 +42,7 @@ import { autoriaDaMudanca } from "@/lib/operacao/autoria";
 type SB = DbClient;
 
 export interface DepsDeEtapa {
-  supabase: SB;
+  db: SB;
   organizationId: string;
   /** Quem está agindo. NUNCA sai do input — é resolvido de fonte confiável pelo chamador. */
   actor: Actor;
@@ -83,11 +83,11 @@ type EtapaLida = EtapaEditavel & {
  * slug), enquanto os índices de ganho/perda são.
  */
 export async function lerFunil(
-  supabase: SB,
+  db: SB,
   orgId: string,
   pipelineId: string,
 ): Promise<EtapaLida[] | null> {
-  const { data: pipeline, error: pipeErr } = await supabase
+  const { data: pipeline, error: pipeErr } = await db
     .from("crm_pipelines")
     .select("id")
     .eq("id", pipelineId)
@@ -96,7 +96,7 @@ export async function lerFunil(
   if (pipeErr) throw new Error(pipeErr.message);
   if (!pipeline) return null;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("crm_stages")
     .select(COLUNAS)
     .eq("organization_id", orgId)
@@ -176,7 +176,7 @@ function erroDeBanco(
 async function funilOuNadaFeito(deps: DepsDeEtapa, pipelineId: string): Promise<EtapaLida[]> {
   let etapas: EtapaLida[] | null;
   try {
-    etapas = await lerFunil(deps.supabase, deps.organizationId, pipelineId);
+    etapas = await lerFunil(deps.db, deps.organizationId, pipelineId);
   } catch (err) {
     throw new ApiError(500, "internal_error", undefined, deps.requestId, (err as Error).message);
   }
@@ -246,7 +246,7 @@ export async function criarEtapa(
     ...autoria,
   };
 
-  const { data: criada, error } = await deps.supabase
+  const { data: criada, error } = await deps.db
     .from("crm_stages")
     .insert(row)
     .select("id")
@@ -388,7 +388,7 @@ export async function atualizarEtapa(
   // erro não mente sobre isso; a saída definitiva seria uma função SQL, que só
   // vale a pena se isto deixar de ser uma configuração ocasional.
   for (const u of updates) {
-    const { error } = await deps.supabase
+    const { error } = await deps.db
       .from("crm_stages")
       .update({ ...u.patch, ...autoria })
       .eq("id", u.stageId)
@@ -451,7 +451,7 @@ export async function arquivarEtapa(
     data: negociosDaEtapa,
     count,
     error: contErr,
-  } = await deps.supabase
+  } = await deps.db
     .from("crm_leads")
     .select("id, contact_id", { count: "exact" })
     .eq("organization_id", deps.organizationId)
@@ -483,7 +483,7 @@ export async function arquivarEtapa(
   // apontando para uma coluna fora do quadro se a segunda escrita falhasse —
   // sumiço silencioso, o pior desfecho possível aqui.
   if (negocios > 0 && destinoId) {
-    const { error } = await deps.supabase
+    const { error } = await deps.db
       .from("crm_leads")
       .update({ stage_id: destinoId })
       .eq("organization_id", deps.organizationId)
@@ -502,7 +502,7 @@ export async function arquivarEtapa(
   }
 
   const autoria = autoriaDaMudanca(deps.actor);
-  const { error } = await deps.supabase
+  const { error } = await deps.db
     .from("crm_stages")
     .update({ is_archived: true, ...autoria })
     .eq("id", stageId)
@@ -520,7 +520,7 @@ export async function arquivarEtapa(
   const movidos = destinoId ? (negociosDaEtapa ?? []) : [];
   if (movidos.length > 0) {
     const destinoNome = etapas.find((e) => e.id === destinoId)?.name ?? null;
-    const { error: ativErr } = await deps.supabase.from("crm_lead_activities").insert(
+    const { error: ativErr } = await deps.db.from("crm_lead_activities").insert(
       (movidos as Array<Record<string, unknown>>).map((lead) =>
         buildLeadActivityRow({
           organizationId: deps.organizationId,
@@ -544,7 +544,7 @@ export async function arquivarEtapa(
     // causa do rastro — mas falhar baixo é escolher não bloquear, não escolher
     // não contar (`registraFalhaDeAtividade` avisa em `event_log`).
     if (ativErr) {
-      await registraFalhaDeAtividade(deps.supabase, {
+      await registraFalhaDeAtividade(deps.db, {
         organizationId: deps.organizationId,
         leadId: (movidos[0] as Record<string, unknown>).id as string,
         tipo: "stage_changed",

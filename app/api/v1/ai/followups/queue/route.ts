@@ -154,7 +154,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const limitParam = Number(sp.get("limit") ?? "20");
   const limit = Number.isFinite(limitParam) ? Math.min(100, Math.max(1, Math.trunc(limitParam))) : 20;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // `q` resolve pra um conjunto de contact_ids ANTES das 2 queries (mesma
   // filtragem aplicada às duas fontes). Sem match → resultado vazio direto.
@@ -166,7 +166,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     // `.or()`, então também são removidos (não só escapados) pra um termo de
     // busca nunca injetar uma condição extra na string do filtro.
     const safeQ = q.replace(/[%_]/g, (m) => `\\${m}`).replace(/[,()]/g, " ");
-    const { data: matches, error: cErr } = await supabase
+    const { data: matches, error: cErr } = await db
       .from("contacts")
       .select("id")
       .eq("organization_id", activeOrg.orgId)
@@ -182,7 +182,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const skipPromises = status !== null || pointerId !== null;
 
   // --- fonte 1: enrollments ---
-  let enrollQuery = supabase
+  let enrollQuery = db
     .from("followup_enrollments")
     .select(
       `id, pointer_id, contact_id, status, current_node_id, next_eval_at, outcome, updated_at, agent_id,
@@ -207,7 +207,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   // --- fonte 2: promessas (cron_jobs kind='at' + job_kind='followup_turn') ---
-  let promiseQuery = supabase
+  let promiseQuery = db
     .from("cron_jobs")
     .select(
       "id, contact_id, next_run_at, enabled, cancelled_at, payload, contacts:contact_id(id, name, display_name, phone_number)",

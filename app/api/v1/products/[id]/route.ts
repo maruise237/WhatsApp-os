@@ -18,8 +18,8 @@ export async function GET(_request: NextRequest, { params }: Context): Promise<R
   if (!authz.ok) return authz.response;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("products")
     .select("*, product_media(*)")
     .eq("id", id)
@@ -51,8 +51,8 @@ export async function PATCH(request: NextRequest, { params }: Context): Promise<
     });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("products")
     .update(parsed.data)
     .eq("id", id)
@@ -82,8 +82,8 @@ export async function DELETE(_request: NextRequest, { params }: Context): Promis
   if (!authz.ok) return authz.response;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("products")
     .update({ is_active: false })
     .eq("id", id)

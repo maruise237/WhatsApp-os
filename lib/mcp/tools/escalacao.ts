@@ -71,7 +71,7 @@ export const crmListAvailableAttendants: McpToolDefinition<typeof atendentesInpu
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const agora = new Date();
-    const roster = await carregarRosterDeAtendimento(ctx.supabase, ctx.organizationId);
+    const roster = await carregarRosterDeAtendimento(ctx.db, ctx.organizationId);
     const linhas = roster.map((a) => ({
       user_id: a.userId,
       role: a.papel,
@@ -116,7 +116,7 @@ export const crmListHumanCases: McpToolDefinition<typeof listaChamadosInputShape
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const { chamados, abertos } = await listarChamados(ctx.supabase, ctx.organizationId, {
+    const { chamados, abertos } = await listarChamados(ctx.db, ctx.organizationId, {
       estado: input.state,
       limite: input.limit,
     });
@@ -143,11 +143,11 @@ export const crmGetHumanCase: McpToolDefinition<typeof chamadoInputShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const chamado = await lerChamado(ctx.supabase, ctx.organizationId, input.case_id);
+    const chamado = await lerChamado(ctx.db, ctx.organizationId, input.case_id);
     if (!chamado) throw new Error("case_not_found");
 
     const continuidade = await lerContinuidadeHumana(
-      ctx.supabase,
+      ctx.db,
       ctx.organizationId,
       chamado.conversation_id,
     );
@@ -306,7 +306,7 @@ export const crmResumeAiAttendance: McpToolDefinition<typeof retomarInputShape> 
 
     const resultado = await devolverAtendimentoAoAgente(
       {
-        supabase: ctx.supabase,
+        db: ctx.db,
         organizationId: ctx.organizationId,
         actor: ctx.actor,
         requestId: ctx.requestId,

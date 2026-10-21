@@ -174,7 +174,7 @@ export function validaAdiamento(iso: string, agora: Date): ValidacaoDoAdiamento 
 
 export interface DepsDaIntervencao {
   /** Client da SESSÃO do humano: a RLS continua valendo sobre o enrollment. */
-  supabase: DbClient;
+  db: DbClient;
   /**
    * Service role, e SÓ para a timeline do negócio. `fn_can_view_lead` pode
    * esconder do usuário o negócio dono do contato (visibilidade por dono), e
@@ -237,7 +237,7 @@ async function carrega(
   deps: DepsDaIntervencao,
   id: string,
 ): Promise<EnrollmentParaIntervir | null | FalhaDaIntervencao> {
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("followup_enrollments")
     .select(COLUNAS)
     .eq("organization_id", deps.orgId)
@@ -275,7 +275,7 @@ async function aplicaPatchComGuarda(
   patch: Patch,
   agoraIso: string,
 ): Promise<{ ok: true } | FalhaDaIntervencao> {
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("followup_enrollments")
     .update(patch)
     .eq("id", alvo.id)
@@ -323,7 +323,7 @@ async function registraEvento(
   eventType: string,
   payload: Record<string, unknown>,
 ): Promise<void> {
-  const { error } = await deps.supabase.from("followup_enrollment_events").insert({
+  const { error } = await deps.db.from("followup_enrollment_events").insert({
     organization_id: deps.orgId,
     enrollment_id: alvo.id,
     node_id: alvo.current_node_id,
@@ -468,7 +468,7 @@ export async function retomaEnrollment(
   if (!aberto.ok) return aberto;
   const alvo = aberto.alvo;
 
-  const { data: eventos } = await deps.supabase
+  const { data: eventos } = await deps.db
     .from("followup_enrollment_events")
     .select("payload")
     .eq("organization_id", deps.orgId)
@@ -566,7 +566,7 @@ export async function pulaPassoDoEnrollment(
   if (!aberto.ok) return aberto;
   const alvo = aberto.alvo;
 
-  const { data: versao, error: versaoErr } = await deps.supabase
+  const { data: versao, error: versaoErr } = await deps.db
     .from("followup_flow_versions")
     .select("graph")
     .eq("organization_id", deps.orgId)

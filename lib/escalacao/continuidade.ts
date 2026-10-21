@@ -107,11 +107,11 @@ interface NoteRow {
  * query — nunca vem do input do modelo.
  */
 export async function lerContinuidadeHumana(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   conversationId: string,
 ): Promise<ContinuidadeHumana> {
-  const { data: casesData } = await supabase
+  const { data: casesData } = await db
     .from("agent_cases")
     .select("id, title, status, opened_at, closed_at")
     .eq("organization_id", organizationId)
@@ -123,7 +123,7 @@ export async function lerContinuidadeHumana(
 
   let eventos: CaseEventRow[] = [];
   if (cases.length > 0) {
-    const { data: eventsData } = await supabase
+    const { data: eventsData } = await db
       .from("agent_case_events")
       .select("case_id, human_action, body, created_at")
       .eq("organization_id", organizationId)
@@ -136,7 +136,7 @@ export async function lerContinuidadeHumana(
     eventos = ((eventsData ?? []) as CaseEventRow[]).slice(-LIMITE_POR_SUPERFICIE);
   }
 
-  const { data: notesData } = await supabase
+  const { data: notesData } = await db
     .from("conversation_notes")
     .select("body, created_by_name, created_at")
     .eq("organization_id", organizationId)

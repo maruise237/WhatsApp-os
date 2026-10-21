@@ -26,8 +26,8 @@ export async function GET(request: NextRequest, { params }: Context): Promise<Re
   if (!authz.ok) return authz.response;
   const { id, proofId } = await params;
 
-  const supabase = await createClient();
-  const { data: proof, error } = await supabase
+  const db = await createClient();
+  const { data: proof, error } = await db
     .from("payment_proofs")
     .select("id, storage_key, message_id")
     .eq("id", proofId)

@@ -132,8 +132,8 @@ export async function GET(
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
 
-  const supabase = await createClient();
-  const { data: session } = await supabase
+  const db = await createClient();
+  const { data: session } = await db
     .from("channel_sessions")
     .select("id, provider, waha_session_name, meta_phone_number_id, zernio_account_id, evolution_instance_name, display_name, phone_number, status")
     .eq("organization_id", activeOrg.orgId)
@@ -187,7 +187,7 @@ export async function GET(
   if (phoneNumber && phoneNumber !== session.phone_number) patch.phone_number = phoneNumber;
 
   const gravar = (corpo: Record<string, unknown>) =>
-    supabase
+    db
       .from("channel_sessions")
       .update(corpo)
       .eq("organization_id", activeOrg.orgId)
@@ -288,8 +288,8 @@ export async function DELETE(
   if (!authz.ok) return authz.response;
   const { user, org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: session } = await supabase
+  const db = await createClient();
+  const { data: session } = await db
     .from("channel_sessions")
     .select("id, provider, waha_session_name, meta_phone_number_id, zernio_account_id, evolution_instance_name, display_name, phone_number")
     .eq("organization_id", activeOrg.orgId)
@@ -336,14 +336,14 @@ export async function DELETE(
   }
 
   if (arquivar) {
-    const { error: archErr } = await supabase
+    const { error: archErr } = await db
       .from("channel_sessions")
       .update(patch)
       .eq("organization_id", activeOrg.orgId)
       .eq("id", id);
     if (archErr) return fail("internal_error", archErr.message, 500, { requestId });
   } else {
-    const { error: delErr } = await supabase
+    const { error: delErr } = await db
       .from("channel_sessions")
       .delete()
       .eq("organization_id", activeOrg.orgId)

@@ -105,8 +105,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // --- Validate agent belongs to org (user-scoped client, RLS enforces tenant) ---
-  const supabase = await createClient();
-  const { data: agent, error: agentErr } = await supabase
+  const db = await createClient();
+  const { data: agent, error: agentErr } = await db
     .from("ai_agents")
     .select("id")
     .eq("id", agentId)

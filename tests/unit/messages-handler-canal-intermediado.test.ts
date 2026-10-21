@@ -254,7 +254,7 @@ function makeSupabase(linhaCompleta: Row) {
     },
     rpc: async () => ({ error: null }),
   };
-  return { supabase: client as unknown as DbClient, estado };
+  return { db: client as unknown as DbClient, estado };
 }
 
 const ctx: HandlerCtx = {
@@ -305,8 +305,8 @@ describe("o projetor do dublê é discriminante (guarda de vacuidade)", () => {
     vi.stubEnv("ZERNIO_ACCOUNT_ID", CONTA);
     vi.stubEnv("ZERNIO_API_KEY", "sk_env");
     vi.stubGlobal("fetch", respostaOk("wamid.LID"));
-    const { supabase, estado } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
-    await sendMessageHandler(supabase, ctx, texto());
+    const { db, estado } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
+    await sendMessageHandler(db, ctx, texto());
     expect(estado.selects.length, "guarda de vacuidade: o handler consultou a conversa").toBeGreaterThan(0);
     expect(estado.selects.every((sel) => colunasDoEmbed(sel, "contacts").includes("wa_lid"))).toBe(
       true,
@@ -329,8 +329,8 @@ describe("a thread do provider atravessa os três elos até o transporte", () =>
     const fetchMock = respostaOk("wamid.THREAD");
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase, estado } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
-    const msg = await sendMessageHandler(supabase, ctx, texto());
+    const { db, estado } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
+    const msg = await sendMessageHandler(db, ctx, texto());
 
     expect(msg.status).toBe("sent");
     expect(msg.external_id).toBe("wamid.THREAD");
@@ -355,9 +355,9 @@ describe("a thread do provider atravessa os três elos até o transporte", () =>
     // com URL assinada). Usar `media_url` cairia no ramo de texto e este caso
     // viraria uma segunda cópia do anterior — cobertura aparente, elo real não
     // exercitado.
-    const { supabase } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
+    const { db } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
     const msg = await sendMessageHandler(
-      supabase,
+      db,
       ctx,
       texto({
         type: "image",
@@ -386,8 +386,8 @@ describe("a thread do provider atravessa os três elos até o transporte", () =>
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase } = makeSupabase(conversaCompleta({ providerConversationId: null }));
-    const msg = await sendMessageHandler(supabase, ctx, texto());
+    const { db } = makeSupabase(conversaCompleta({ providerConversationId: null }));
+    const msg = await sendMessageHandler(db, ctx, texto());
 
     expect(msg.status).toBe("failed");
     expect(msg.error_code).toBe("zernio_error");
@@ -401,10 +401,10 @@ describe("a thread do provider atravessa os três elos até o transporte", () =>
     const fetchMock = vi.fn(async () => Response.json({ key: { id: "TEXT1" } }));
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase } = makeSupabase(
+    const { db } = makeSupabase(
       conversaCompleta({ provider: "waha", providerConversationId: null }),
     );
-    const msg = await sendMessageHandler(supabase, ctx, texto());
+    const msg = await sendMessageHandler(db, ctx, texto());
 
     expect(msg.status).toBe("sent");
     expect(msg.external_id).toBe("TEXT1");
@@ -423,8 +423,8 @@ describe("nenhum desfecho diz `sent` sem nada ter saído", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
-    const msg = await sendMessageHandler(supabase, ctx, texto());
+    const { db } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
+    const msg = await sendMessageHandler(db, ctx, texto());
 
     expect(fetchMock).not.toHaveBeenCalled();
     expect(msg.status).not.toBe("sent");
@@ -439,8 +439,8 @@ describe("nenhum desfecho diz `sent` sem nada ter saído", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase } = makeSupabase(conversaCompleta({ provider: "meta_cloud" }));
-    const msg = await sendMessageHandler(supabase, ctx, texto());
+    const { db } = makeSupabase(conversaCompleta({ provider: "meta_cloud" }));
+    const msg = await sendMessageHandler(db, ctx, texto());
 
     expect(msg.status).toBe("queued");
     expect((msg.metadata as Record<string, unknown>).queued_reason).toBe("meta_not_configured");
@@ -466,9 +466,9 @@ describe("nenhum desfecho diz `sent` sem nada ter saído", () => {
     const fetchMock = respostaOk("wamid.TPL");
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
+    const { db } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
     await sendMessageHandler(
-      supabase,
+      db,
       ctx,
       texto({ type: "template", body: undefined, template_name: "cuenta_activa", template_language: "es" }),
     );
@@ -484,8 +484,8 @@ describe("nenhum desfecho diz `sent` sem nada ter saído", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
-    const { supabase } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
-    const msg = await sendMessageHandler(supabase, ctx, texto());
+    const { db } = makeSupabase(conversaCompleta({ providerConversationId: THREAD }));
+    const msg = await sendMessageHandler(db, ctx, texto());
 
     expect(msg.status).toBe("queued");
     expect((msg.metadata as Record<string, unknown>).queued_reason).toBe("zernio_not_configured");

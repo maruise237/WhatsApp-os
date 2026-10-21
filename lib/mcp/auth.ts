@@ -88,8 +88,8 @@ export async function validateBearerToken(
   const tokenHash = createHash("sha256").update(plaintext).digest();
   const hashLiteral = `\\x${tokenHash.toString("hex")}`;
 
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
+  const db = createAdminClient();
+  const { data, error } = await db
     .from("api_tokens")
     .select("id, organization_id, scopes, revoked_at, expires_at")
     .eq("token_hash", hashLiteral)
@@ -112,7 +112,7 @@ export async function validateBearerToken(
   const role = scopesRole(scopes);
   const actor = deriveActor(scopes, data.id);
 
-  supabase
+  db
     .from("api_tokens")
     .update({ last_used_at: new Date().toISOString() })
     .eq("id", data.id)

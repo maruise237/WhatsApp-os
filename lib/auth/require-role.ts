@@ -83,8 +83,8 @@ export async function requireRole(min: Role, opts: RequireRoleOpts = {}): Promis
   }
 
   // Role efetivo do banco (não do snapshot do cookie/membership em memória).
-  const supabase = await createClient();
-  const { data: effectiveRole, error } = await supabase.rpc("fn_user_role_in_org", {
+  const db = await createClient();
+  const { data: effectiveRole, error } = await db.rpc("fn_user_role_in_org", {
     p_org: org.orgId,
   });
   if (error) {

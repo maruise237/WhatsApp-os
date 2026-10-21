@@ -7,14 +7,14 @@ import { audit } from "@/lib/audit";
 import { headers } from "next/headers";
 
 export async function signOutEverywhere(): Promise<void> {
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
 
-  await supabase.auth.signOut({ scope: "global" });
+  await db.auth.signOut({ scope: "global" });
 
   if (user) {
     await audit({

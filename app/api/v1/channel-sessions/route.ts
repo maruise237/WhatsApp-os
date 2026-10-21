@@ -35,9 +35,9 @@ export async function GET(): Promise<Response> {
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
 
-  const supabase = await createClient();
+  const db = await createClient();
   const base = () =>
-    supabase
+    db
       .from("channel_sessions")
       .select(CHANNEL_COLUMNS)
       .eq("organization_id", activeOrg.orgId);
@@ -85,11 +85,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   // Nome de sessão único por canal — o hardcode `org_<8>` era 1 número por org.
   const sessionName = `org_${activeOrg.orgId.slice(0, 8)}_${randomUUID().replace(/-/g, "").slice(0, 6)}`;
 
-  const { data: created, error: insErr } = await supabase
+  const { data: created, error: insErr } = await db
     .from("channel_sessions")
     .insert({
       organization_id: activeOrg.orgId,
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   } catch (err) {
     // Rollback : aucun canal fantôme ne doit rester en STARTING si le transport
     // n’a pas pu créer l’instance.
-    await supabase
+    await db
       .from("channel_sessions")
       .delete()
       .eq("organization_id", activeOrg.orgId)

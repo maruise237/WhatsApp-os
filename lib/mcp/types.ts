@@ -3,7 +3,7 @@
  *
  * Cada tool MCP é uma `McpToolDefinition` que declara name + description +
  * inputSchema (Zod) + handler. Handlers recebem `McpContext` resolvido pelo
- * server core (org, role, actor, supabase admin client).
+ * server core (org, role, actor, db admin client).
  */
 import type { z } from "zod";
 import type { DbClient } from "@/lib/db/client";
@@ -18,7 +18,7 @@ export interface McpContext {
   apiTokenId: string;
   requestId: string;
   /** Service-role admin client. Tools devem filtrar `organization_id` em toda query. */
-  supabase: DbClient;
+  db: DbClient;
 }
 
 export type McpToolCategory = "read" | "write" | "handoff";

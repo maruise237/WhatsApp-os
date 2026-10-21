@@ -30,7 +30,7 @@ interface RouteCtx {
 export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "conversations" });
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     }
   }
 
-  const { data, error } = await supabase.rpc("fn_conversation_assign", {
+  const { data, error } = await db.rpc("fn_conversation_assign", {
     p_organization_id: orgId,
     p_conversation_id: id,
     p_to_user_id: input.to_user_id,
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   });
 
   // Notificação ao destino (G1-06d): evento no bus; worker/Realtime consome.
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "conversation.transferred",
       p_entity_kind: "conversation",
@@ -125,7 +125,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // atividade é coberto pela cascata de anonimização da LGPD, que é o que
   // permite texto escrito por humano sobre um cliente morar ali.
   await registrarTrocaDeComando({
-    supabase,
+    db,
     organizationId: conv.organization_id,
     conversationId: conv.id,
     contactId: conv.contact_id,

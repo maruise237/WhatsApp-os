@@ -37,10 +37,10 @@ export async function GET(): Promise<Response> {
   const authz = await requireRole("manager", { requestId, resource: "webhook_sources" });
   if (!authz.ok) return authz.response;
 
-  const supabase = await createClient();
+  const db = await createClient();
   try {
     const entradas = await listarEntradasAutomaticas({
-      supabase,
+      db,
       organizationId: authz.org.orgId,
       actor: { type: "user", id: authz.user.id, role: authz.org.role },
       requestId,
@@ -86,9 +86,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const deps: DepsDaOperacao = {
-    supabase,
+    db,
     organizationId: authz.org.orgId,
     actor: { type: "user", id: authz.user.id, role: authz.org.role },
     requestId,

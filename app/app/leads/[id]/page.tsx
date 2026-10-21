@@ -31,8 +31,8 @@ export default async function LeadPage({
   await requireAuth();
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data: lead } = await supabase
+  const db = await createClient();
+  const { data: lead } = await db
     .from("crm_leads")
     .select("id, pipeline_id")
     .eq("id", id)

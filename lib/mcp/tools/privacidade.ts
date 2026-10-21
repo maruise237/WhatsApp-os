@@ -38,7 +38,7 @@ export const crmListPrivacyRequests: McpToolDefinition<typeof inputShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    let q = ctx.supabase
+    let q = ctx.db
       .from("lgpd_requests")
       .select("id, request_type, source, contact_id, status, received_at, due_at, completed_at, emergency, scope")
       .eq("organization_id", ctx.organizationId)

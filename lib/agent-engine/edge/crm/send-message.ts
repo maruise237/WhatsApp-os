@@ -117,7 +117,7 @@ export async function sendTurnMessage(
   let message: Message;
   try {
     message = await sendMessageHandler(
-      cfg.supabase,
+      cfg.db,
       {
         organization_id: input.tenantId,
         actor: { type: 'ai_agent', id: cfg.agentActorId ?? AGENT_ACTOR_ID, role: 'manager' },

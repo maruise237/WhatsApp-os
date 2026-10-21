@@ -27,11 +27,11 @@ export interface QueueStatus {
 }
 
 export async function getQueueStatus(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   now: Date,
 ): Promise<QueueStatus> {
-  const { data: queueRows } = await supabase
+  const { data: queueRows } = await db
     .from("conversations")
     .select("last_inbound_at")
     .eq("organization_id", organizationId)
@@ -50,7 +50,7 @@ export async function getQueueStatus(
   }
   const avgWaitSeconds = queueSize === 0 ? 0 : Math.round(totalWaitMs / queueSize / 1000);
 
-  const eligibles = await loadEligibleAttendants(supabase, organizationId, now);
+  const eligibles = await loadEligibleAttendants(db, organizationId, now);
 
   return {
     queue_size: queueSize,
@@ -67,10 +67,10 @@ export async function getQueueStatus(
  * atendente. Uma query só (a fila é limitada) — evita N+1 numa listagem.
  */
 export async function getQueuePositions(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
 ): Promise<Map<string, number>> {
-  const { data } = await supabase
+  const { data } = await db
     .from("conversations")
     .select("id")
     .eq("organization_id", organizationId)
@@ -93,13 +93,13 @@ export async function getQueuePositions(
  * (recém-chegada, vai ao fim).
  */
 export async function getQueuePosition(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   lastInboundAt: string | null,
   now: Date,
 ): Promise<number> {
   const ref = lastInboundAt ?? now.toISOString();
-  const { count } = await supabase
+  const { count } = await db
     .from("conversations")
     .select("id", { count: "exact", head: true })
     .eq("organization_id", organizationId)

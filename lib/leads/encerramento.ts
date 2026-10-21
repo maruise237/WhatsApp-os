@@ -70,7 +70,7 @@ function actorAuditPayload(actor: Actor): {
  * segura numa porta e aberta na outra.
  */
 export async function encerraDemanda(
-  supabase: DbClient,
+  db: DbClient,
   ctx: HandlerCtx,
   input: EncerraDemandaInput,
 ): Promise<DemandaEncerrada> {
@@ -84,7 +84,7 @@ export async function encerraDemanda(
     );
   }
 
-  const { data: lead, error: selErr } = await supabase
+  const { data: lead, error: selErr } = await db
     .from("crm_leads")
     .select("*")
     .eq("id", input.leadId)
@@ -103,7 +103,7 @@ export async function encerraDemanda(
   }
 
   const colunaTerminal = input.desfecho === "won" ? "is_won" : "is_lost";
-  const { data: stage, error: stErr } = await supabase
+  const { data: stage, error: stErr } = await db
     .from("crm_stages")
     .select("id, name")
     .eq("organization_id", ctx.organization_id)
@@ -133,7 +133,7 @@ export async function encerraDemanda(
   };
   if (input.desfecho === "lost") patch.lost_reason = input.motivo;
 
-  const { error: updErr } = await supabase
+  const { error: updErr } = await db
     .from("crm_leads")
     .update(patch)
     .eq("id", input.leadId)
@@ -143,7 +143,7 @@ export async function encerraDemanda(
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, updErr.message);
   }
 
-  const { data: fresh } = await supabase
+  const { data: fresh } = await db
     .from("crm_leads")
     .select("*")
     .eq("id", input.leadId)
@@ -154,7 +154,7 @@ export async function encerraDemanda(
   const a = actorAuditPayload(ctx.actor);
   const eventType = input.desfecho === "won" ? "lead.won" : "lead.lost";
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: eventType,
       p_entity_kind: "crm_lead",
@@ -176,7 +176,7 @@ export async function encerraDemanda(
   // A LINHA NA TIMELINE — o que faltava. `reason` nomeia o desfecho e, na perda,
   // carrega o motivo, que é justamente o que muda a decisão de quem lê depois
   // ("perdemos por preço" e "perdemos por prazo" pedem coisas diferentes).
-  const atividade = await emitLeadActivity(supabase, {
+  const atividade = await emitLeadActivity(db, {
     organizationId: ctx.organization_id,
     leadId: input.leadId,
     contactId: (finalLead as { contact_id?: string | null }).contact_id ?? null,
@@ -197,7 +197,7 @@ export async function encerraDemanda(
   if (!atividade.ok) {
     // Falha BAIXO: o negócio já fechou e prender o desfecho à timeline deixaria a
     // operação refém do registro. Mas a perda é CONTADA — nunca engolida.
-    await registraFalhaDeAtividade(supabase, {
+    await registraFalhaDeAtividade(db, {
       organizationId: ctx.organization_id,
       leadId: input.leadId,
       tipo: "demand_closed",

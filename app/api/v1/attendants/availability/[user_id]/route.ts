@@ -64,12 +64,12 @@ export async function PATCH(
     throw err;
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // Manager alterando outro: alvo tem que ser membro da org (evita linha órfã;
   // a RLS permite manager inserir qualquer user_id da própria org).
   if (!isSelf) {
-    const { data: member, error: memberErr } = await supabase
+    const { data: member, error: memberErr } = await db
       .from("user_organizations")
       .select("user_id")
       .eq("organization_id", activeOrg.orgId)
@@ -92,7 +92,7 @@ export async function PATCH(
   // "online" = ping de vida (heartbeat AT-08).
   if (input.is_available === true) patch.last_heartbeat_at = now;
 
-  const { data: row, error } = await supabase
+  const { data: row, error } = await db
     .from("attendant_availability")
     .upsert(patch, { onConflict: "organization_id,user_id" })
     .select(SELECT_COLS)

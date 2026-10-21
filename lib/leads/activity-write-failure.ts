@@ -46,10 +46,10 @@ export interface FalhaDeAtividade {
  * que o `console.error` sozinho não tinha.
  */
 export async function registraFalhaDeAtividade(
-  supabase: DbClient,
+  db: DbClient,
   f: FalhaDeAtividade,
 ): Promise<void> {
-  const { error } = await supabase.rpc("emit_event", {
+  const { error } = await db.rpc("emit_event", {
     p_event_type: "crm.activity_write_failed",
     p_entity_kind: "crm_lead",
     p_entity_id: f.leadId,

@@ -154,7 +154,7 @@ function makeSupabase(preexistentes: Row[] = []) {
   };
 
   const client = { from, rpc: async () => ({ error: null }) };
-  return { supabase: client as unknown as DbClient, messages };
+  return { db: client as unknown as DbClient, messages };
 }
 
 /** A linha que o webhook cria quando o eco chega antes do envio terminar. */
@@ -195,9 +195,9 @@ afterEach(() => {
 describe('eco do próprio envio na janela em que a linha ainda não tem external_id', () => {
   it('o eco que chegou primeiro não deixa a frase duplicada', async () => {
     wahaRespondendo(BARE);
-    const { supabase, messages } = makeSupabase([ecoDoWebhook()]);
+    const { db, messages } = makeSupabase([ecoDoWebhook()]);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     const daMensagem = messages.filter((m) => m.external_id === BARE || m.external_id === COMPOSTO);
     expect(daMensagem, 'a mesma frase ficou duas vezes na conversa').toHaveLength(1);
@@ -208,9 +208,9 @@ describe('eco do próprio envio na janela em que a linha ainda não tem external
     // `sent_via`, que é o que a tela usa para dizer quem falou. Ficar com a do
     // webhook apagaria a autoria.
     wahaRespondendo(BARE);
-    const { supabase, messages } = makeSupabase([ecoDoWebhook()]);
+    const { db, messages } = makeSupabase([ecoDoWebhook()]);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     const sobrou = messages.find((m) => m.external_id === BARE || m.external_id === COMPOSTO)!;
     expect(sobrou.sent_by_user_id).toBe(USER);
@@ -223,9 +223,9 @@ describe('eco do próprio envio na janela em que a linha ainda não tem external
     // ainda daria 1 linha — por isso ele também confere que a linha é a do envio
     // e que ela recebeu o id.
     wahaRespondendo(BARE);
-    const { supabase, messages } = makeSupabase();
+    const { db, messages } = makeSupabase();
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     expect(messages).toHaveLength(1);
     expect(messages[0]!.external_id).toBe(BARE);
@@ -245,9 +245,9 @@ describe('o que a correção NÃO pode apagar', () => {
       external_id: 'true_5531999998888@c.us_3EB0OUTRAMENSAGEM99',
       body: 'vou verificar e ja te falo',
     });
-    const { supabase, messages } = makeSupabase([outraMensagem]);
+    const { db, messages } = makeSupabase([outraMensagem]);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     expect(
       messages.find((m) => m.body === 'vou verificar e ja te falo'),
@@ -262,9 +262,9 @@ describe('o que a correção NÃO pode apagar', () => {
     // colisão dentro do único lugar onde ela seria mesmo a nossa mensagem.
     wahaRespondendo(BARE);
     const deOutraConversa = ecoDoWebhook({ id: 'outro-1', conversation_id: OUTRA_CONV });
-    const { supabase, messages } = makeSupabase([deOutraConversa]);
+    const { db, messages } = makeSupabase([deOutraConversa]);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     expect(messages.find((m) => m.id === 'outro-1'), 'apagou linha de outra conversa').toBeDefined();
   });
@@ -274,9 +274,9 @@ describe('o que a correção NÃO pode apagar', () => {
     // mesmo id seria outra coisa — e apagá-la seria perder envio de verdade.
     wahaRespondendo(BARE);
     const doCrm = ecoDoWebhook({ id: 'crm-1', sent_via: 'ai' });
-    const { supabase, messages } = makeSupabase([doCrm]);
+    const { db, messages } = makeSupabase([doCrm]);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     expect(messages.find((m) => m.id === 'crm-1'), 'apagou uma linha que não era eco de dispositivo').toBeDefined();
   });

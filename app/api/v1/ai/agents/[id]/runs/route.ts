@@ -64,8 +64,8 @@ export async function GET(req: NextRequest, ctx: Ctx): Promise<Response> {
   }
   const q = parsed.data;
 
-  const supabase = await createClient();
-  let query = supabase
+  const db = await createClient();
+  let query = db
     .from("ai_agent_runs")
     .select(RUN_COLUMNS)
     .eq("organization_id", activeOrg.orgId)

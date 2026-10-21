@@ -24,8 +24,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const validation = validateOutboundMedia(file.type, file.size);
   if (!validation.ok) return fail(validation.code, validation.message, validation.code === "payload_too_large" ? 413 : 422, { requestId });
 
-  const supabase = await createClient();
-  const { data: order, error: orderError } = await supabase
+  const db = await createClient();
+  const { data: order, error: orderError } = await db
     .from("sales_orders")
     .select("id, status")
     .eq("id", id)
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const amountCents = typeof amountRaw === "string" && amountRaw.trim() ? Number(amountRaw) : null;
   const safeAmountCents = amountCents !== null && Number.isInteger(amountCents) && amountCents >= 0 ? amountCents : null;
   const reference = typeof form.get("reference") === "string" ? String(form.get("reference")) : null;
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("payment_proofs")
     .insert({
       organization_id: authz.org.orgId,

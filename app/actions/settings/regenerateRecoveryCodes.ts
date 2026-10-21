@@ -16,7 +16,7 @@ export type RegenerateRecoveryCodesResult =
  * fresh codes. Plaintext returned ONCE — never persisted.
  */
 export async function regenerateRecoveryCodes(): Promise<RegenerateRecoveryCodesResult> {
-  const supabase = await createClient();
+  const db = await createClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
@@ -24,11 +24,11 @@ export async function regenerateRecoveryCodes(): Promise<RegenerateRecoveryCodes
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) return { ok: false, error: "unauthenticated" };
 
   // Confirm user has a verified TOTP factor (regenerate is meaningless otherwise).
-  const { data: factors } = await supabase.auth.mfa.listFactors();
+  const { data: factors } = await db.auth.mfa.listFactors();
   const hasFactor = factors?.totp?.some((f) => f.status === "verified");
   if (!hasFactor) return { ok: false, error: "mfa_not_enrolled" };
 
@@ -48,10 +48,10 @@ export async function regenerateRecoveryCodes(): Promise<RegenerateRecoveryCodes
       insErr = ins.error;
     }
   } else {
-    const d = await supabase.from("user_recovery_codes").delete().eq("user_id", user.id);
+    const d = await db.from("user_recovery_codes").delete().eq("user_id", user.id);
     delErr = d.error;
     if (!delErr) {
-      const ins = await supabase.from("user_recovery_codes").insert(rows);
+      const ins = await db.from("user_recovery_codes").insert(rows);
       insErr = ins.error;
     }
   }

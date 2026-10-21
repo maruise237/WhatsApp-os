@@ -307,7 +307,7 @@ const REGRAS: ReadonlyArray<RegraTexto> = [
  * 1. Deriva do `TOOL_CATALOG` (hoje 51 capacidades `crm_*` — o comentário dizia 31, medido
  *    e corrigido; é justamente o número que o código NÃO usa, por isso envelheceu calado)
  *    porque `lib/mcp/tools/catalog` é
- *    client-safe por contrato do próprio módulo — zero zod, zero supabase, zero
+ *    client-safe por contrato do próprio módulo — zero zod, zero db, zero
  *    next/headers; o grafo de runtime dele é só dado. Importar daqui não arrasta nada.
  * 2. NÃO deriva de `AGENT_TOOL_DEFS` (as 12 nativas), que vive em
  *    `lib/agent-engine/agent/inbound-turn.ts`. Importá-lo criaria ciclo

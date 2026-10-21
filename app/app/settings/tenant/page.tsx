@@ -31,8 +31,8 @@ export default async function TenantSettingsPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
-  const { data } = await supabase
+  const db = await createClient();
+  const { data } = await db
     .from("organizations")
     .select(
       "display_name, legal_name, cnpj, timezone, locale, media_retention_days, dpo_email, privacy_policy_url, settings",

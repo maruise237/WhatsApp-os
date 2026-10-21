@@ -3,7 +3,7 @@
  *
  * Separado do agregador (`lib/mcp/tools/catalog.ts`) para que cada dominio
  * declare suas capacidades no proprio arquivo sem que times paralelos colidam
- * no mesmo hunk. Client-safe: zero import de zod, supabase ou next/headers.
+ * no mesmo hunk. Client-safe: zero import de zod, db ou next/headers.
  */
 import type { McpToolCategory } from "../../types";
 import type { ToolBundle, ToolRisk } from "../pacotes";

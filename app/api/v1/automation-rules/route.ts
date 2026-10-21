@@ -22,8 +22,8 @@ export async function GET(): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("automation_rules")
     .select("*")
     .eq("organization_id", activeOrg.orgId)
@@ -63,8 +63,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
-  const supabase = await createClient();
-  const { data: created, error: insErr } = await supabase
+  const db = await createClient();
+  const { data: created, error: insErr } = await db
     .from("automation_rules")
     .insert({
       organization_id: activeOrg.orgId,

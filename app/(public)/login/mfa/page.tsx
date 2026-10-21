@@ -11,13 +11,13 @@ export default async function MfaChallengePage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const { next } = await searchParams;
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: factorsData } = await supabase.auth.mfa.listFactors();
+  const { data: factorsData } = await db.auth.mfa.listFactors();
   const hasVerified = !!factorsData?.totp?.some((f) => f.status === "verified");
   if (!hasVerified) redirect("/app/inbox");
 

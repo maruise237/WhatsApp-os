@@ -77,8 +77,8 @@ export async function PATCH(
   const input = parsed.data;
 
   // Verify the source exists and belongs to the org (user-scoped client for RLS check).
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("ai_knowledge_sources")
     .select("id, source_type, agent_id")
     .eq("id", sourceId)
@@ -192,8 +192,8 @@ export async function DELETE(
   const { activeOrg } = ctx as Exclude<typeof ctx, { error: Response }>;
 
   // Verify ownership with user-scoped client.
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("ai_knowledge_sources")
     .select("id")
     .eq("id", sourceId)

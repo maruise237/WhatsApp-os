@@ -33,8 +33,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   const guard = await requireRole("viewer", { requestId });
   if (!guard.ok) return guard.response;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("crm_lead_reactivations")
     .select("id, lead_id, expires_at")
     .eq("organization_id", guard.org.orgId)

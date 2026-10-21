@@ -28,7 +28,7 @@ import { autoriaDaMudanca } from "@/lib/operacao/autoria";
 type SB = DbClient;
 
 export interface DepsDaOperacao {
-  supabase: SB;
+  db: SB;
   organizationId: string;
   /** Resolvido de fonte confiável pelo chamador — nunca do body. */
   actor: Actor;
@@ -76,7 +76,7 @@ export async function listarEntradasAutomaticas(
   deps: DepsDaOperacao,
   opts: { apenasAtivas?: boolean } = {},
 ): Promise<FonteVisivel[]> {
-  let q = deps.supabase
+  let q = deps.db
     .from("webhook_sources")
     .select(COLUNAS)
     .eq("organization_id", deps.organizationId)
@@ -93,7 +93,7 @@ async function fonteDaOrg(
   deps: DepsDaOperacao,
   id: string,
 ): Promise<{ id: string; name: string; path_token: string; is_active: boolean }> {
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("webhook_sources")
     .select("id, name, path_token, is_active")
     .eq("id", id)
@@ -123,7 +123,7 @@ async function destinoValido(
   pipelineId: string,
   stageId: string,
 ): Promise<void> {
-  const { data: funil, error: funilErr } = await deps.supabase
+  const { data: funil, error: funilErr } = await deps.db
     .from("crm_pipelines")
     .select("id")
     .eq("id", pipelineId)
@@ -142,7 +142,7 @@ async function destinoValido(
     );
   }
 
-  const { data: etapa, error: etapaErr } = await deps.supabase
+  const { data: etapa, error: etapaErr } = await deps.db
     .from("crm_stages")
     .select("id, is_archived")
     .eq("id", stageId)
@@ -198,7 +198,7 @@ export async function criarEntradaAutomatica(
   // onde o acoplamento reaparece primeiro, porque ninguém a compila.
   const pathToken = randomBytes(24).toString("base64url");
 
-  const { data: created, error } = await deps.supabase
+  const { data: created, error } = await deps.db
     .from("webhook_sources")
     .insert({
       organization_id: deps.organizationId,
@@ -250,7 +250,7 @@ export async function definirEntradaAtiva(
 ): Promise<FonteVisivel> {
   const antes = await fonteDaOrg(deps, input.id);
 
-  const { data: updated, error } = await deps.supabase
+  const { data: updated, error } = await deps.db
     .from("webhook_sources")
     .update({
       is_active: input.ativa,
@@ -313,7 +313,7 @@ export async function recebimentosDaEntrada(
 ): Promise<RecebimentoDaEntrada[]> {
   const fonte = await fonteDaOrg(deps, input.id);
 
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("webhook_events_log")
     .select("id, received_at, valid_signature, payload_parsed, status")
     .eq("webhook_path_token", fonte.path_token)

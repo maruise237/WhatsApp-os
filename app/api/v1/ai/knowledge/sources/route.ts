@@ -84,8 +84,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
     return fail("forbidden", "Aucune organisation active.", 403, { requestId });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("ai_knowledge_sources")
     .select(
       "id, agent_id, organization_id, source_type, name, status, last_index_status, last_index_error, last_indexed_at, chunks_count, is_active, source_metadata, ingested_at, created_at, updated_at",
@@ -149,8 +149,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Validate agent_id belongs to org (using user-scoped client — RLS enforces tenant).
-  const supabase = await createClient();
-  const { data: agent, error: agentErr } = await supabase
+  const db = await createClient();
+  const { data: agent, error: agentErr } = await db
     .from("ai_agents")
     .select("id")
     .eq("id", input.agent_id)

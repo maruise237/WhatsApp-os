@@ -2189,7 +2189,7 @@ async function executarTurnoDoAgente(
       execute: async ({ skill_name, ref_path }) => {
         try {
           return await readSkillReference(
-            { admin: deps.crmCfg.supabase },
+            { admin: deps.crmCfg.db },
             { organizationId: tenantId, matchedSkills: skillMatch.matched, skillName: skill_name, refPath: ref_path },
           );
         } catch (err) {
@@ -2487,7 +2487,7 @@ async function executarTurnoDoAgente(
     provider: agentConfig?.provider ?? 'anthropic',
     model: agentConfig?.model ?? '',
     multimodalInput: agentConfig?.multimodalInput ?? false,
-    admin: deps.crmCfg.supabase,
+    admin: deps.crmCfg.db,
   });
   const openingTextOnly: ModelMessage[] = [{ role: 'user', content: openingText }];
   const openingMessages: ModelMessage[] =

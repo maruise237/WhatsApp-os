@@ -173,7 +173,7 @@ async function retomar(cenario: CenarioBanco, cap: Captura, actor: Actor = USUAR
   return devolverAtendimentoAoAgente(
     {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      supabase: fazerSupabase(cenario, cap) as any,
+      db: fazerSupabase(cenario, cap) as any,
       organizationId: ORG,
       actor,
       requestId: "req-1",

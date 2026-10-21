@@ -68,9 +68,9 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
   const { decision, motivo } = parsed.data;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
-  const { data: decidida, error } = await supabase
+  const { data: decidida, error } = await db
     .from("contact_field_proposals")
     .update({
       status: decision === "accept" ? "accepted" : "dismissed",
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!decidida) {
     // Distinguir "já decidida" de "não existe" AJUDA e não expõe nada: sem
     // isso a pessoa clica de novo achando que falhou.
-    const { data: existe } = await supabase
+    const { data: existe } = await db
       .from("contact_field_proposals")
       .select("status")
       .eq("id", proposal_id)
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // ---- accept: agora sim escreve, e pelo caminho que já tem as regras ----
   try {
     await patchContactHandler(
-      supabase,
+      db,
       { organization_id: orgId, actor: { type: "user", id: userId }, requestId },
       contactId,
       {

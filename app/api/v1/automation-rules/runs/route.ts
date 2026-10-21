@@ -23,8 +23,8 @@ export async function GET(req: NextRequest): Promise<Response> {
   const rawLimit = Number(req.nextUrl.searchParams.get("limit"));
   const limit = Math.min(Number.isFinite(rawLimit) && rawLimit > 0 ? rawLimit : DEFAULT_LIMIT, MAX_LIMIT);
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("automation_rule_runs")
     .select("*, automation_rules(name)")
     .eq("organization_id", activeOrg.orgId)

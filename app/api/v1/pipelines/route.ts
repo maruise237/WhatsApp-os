@@ -30,9 +30,9 @@ export async function GET(): Promise<Response> {
   const authz = await requireRole("manager", { requestId, resource: "pipelines" });
   if (!authz.ok) return authz.response;
 
-  const supabase = await createClient();
+  const db = await createClient();
   try {
-    const { pipelines } = await listPipelinesHandler(supabase, {
+    const { pipelines } = await listPipelinesHandler(db, {
       organization_id: authz.org.orgId,
       actor: { type: "user", id: authz.user.id },
       requestId,
@@ -88,11 +88,11 @@ export async function POST(req: NextRequest): Promise<Response> {
   const name = parsed.data.name.trim();
   const description = parsed.data.description?.trim() || null;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   let funis: FunilEditavel[];
   try {
-    funis = await lerFunis(supabase, orgId);
+    funis = await lerFunis(db, orgId);
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     is_default: funis.filter((f) => !f.is_archived).length === 0,
   };
 
-  const { data: criado, error } = await supabase
+  const { data: criado, error } = await db
     .from("crm_pipelines")
     .insert(row)
     .select("id")
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
   const pipelineId = (criado as { id: string }).id;
 
-  const { error: etapasErr } = await supabase
+  const { error: etapasErr } = await db
     .from("crm_stages")
     .insert(etapasIniciais(orgId, pipelineId));
 
@@ -143,7 +143,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   // função SQL transacional — que custaria migration + apêndice no baseline para
   // um caso que estas três linhas cobrem.
   if (etapasErr) {
-    await supabase
+    await db
       .from("crm_pipelines")
       .delete()
       .eq("id", pipelineId)
@@ -168,7 +168,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Relê em vez de espelhar o que foi pedido: a tela mostra o que o banco tem.
   try {
-    const depois = await lerFunis(supabase, orgId);
+    const depois = await lerFunis(db, orgId);
     return ok(corpo(depois), { status: 201, requestId });
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });

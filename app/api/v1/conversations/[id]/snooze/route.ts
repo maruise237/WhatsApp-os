@@ -47,8 +47,8 @@ export async function POST(req: NextRequest, { params }: RouteParams): Promise<R
   const nowIso = new Date().toISOString();
   const snoozeUntil = new Date(Date.now() + duration_hours * 3600_000).toISOString();
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("conversations")
     .update({ snooze_until: snoozeUntil, snoozed_at: nowIso, snoozed_by_user_id: user.id })
     .eq("id", id)
@@ -77,8 +77,8 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
   const { user, org } = authz;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("conversations")
     .update({ snooze_until: null, snoozed_at: null, snoozed_by_user_id: null })
     .eq("id", id)

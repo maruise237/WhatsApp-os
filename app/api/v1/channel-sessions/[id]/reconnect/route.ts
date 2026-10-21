@@ -44,9 +44,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (!authz.ok) return authz.response;
   const { user, org: activeOrg } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
   const buscar = (colunas: string) =>
-    supabase.from("channel_sessions").select(colunas).eq("organization_id", activeOrg.orgId).eq("id", id).maybeSingle();
+    db.from("channel_sessions").select(colunas).eq("organization_id", activeOrg.orgId).eq("id", id).maybeSingle();
   const { data: sessionRaw } = await queryTolerantToMissingArchived(
     () => buscar(`id, ${CHANNEL_SESSION_REF_COLUMNS}, ${ARCHIVED_AT}`),
     () => buscar(`id, ${CHANNEL_SESSION_REF_COLUMNS}`),
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   try {
     const remote = await adapter.reconnect({ organizationId: activeOrg.orgId, sessionRef, force });
-    await supabase
+    await db
       .from("channel_sessions")
       .update({
         status: "STARTING",

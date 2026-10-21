@@ -59,8 +59,8 @@ export async function POST(
   }
 
   // Valida ownership via cliente user-scoped (RLS).
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("ai_knowledge_sources")
     .select("id, agent_id, source_type")
     .eq("id", id)

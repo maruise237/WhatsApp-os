@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "messages" });
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   try {
     const message = await sendMessageHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },

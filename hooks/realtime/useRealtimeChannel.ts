@@ -105,7 +105,7 @@ export function useRealtimeChannel(opts: UseRealtimeChannelOpts): {
       setStatus("closed");
       return;
     }
-    const supabase = createClient();
+    const db = createClient();
     const channelName = `${name}::${instanceId}`;
 
     const handler = (payload: unknown) => {
@@ -137,7 +137,7 @@ export function useRealtimeChannel(opts: UseRealtimeChannelOpts): {
     const montar = () => {
       if (cancelado) return;
 
-      let novo: RealtimeChannel = supabase.channel(`${channelName}#${tentativas}`);
+      let novo: RealtimeChannel = db.channel(`${channelName}#${tentativas}`);
       if (postgresChanges) {
         novo = novo.on(
           "postgres_changes",
@@ -193,7 +193,7 @@ export function useRealtimeChannel(opts: UseRealtimeChannelOpts): {
           if (retomada) clearTimeout(retomada);
           retomada = setTimeout(() => {
             if (cancelado) return;
-            if (active) supabase.removeChannel(active);
+            if (active) db.removeChannel(active);
             montar();
           }, espera);
         }
@@ -206,7 +206,7 @@ export function useRealtimeChannel(opts: UseRealtimeChannelOpts): {
       cancelado = true;
       if (retomada) clearTimeout(retomada);
       if (active) {
-        supabase.removeChannel(active);
+        db.removeChannel(active);
         active = null;
       }
     };

@@ -451,11 +451,11 @@ export async function runAgent(input: RunAgentInput): Promise<RunAgentResult> {
       actor: auth.actor,
       apiTokenId: ephemeral.id,
       requestId: run.id,
-      supabase: admin,
+      db: admin,
     };
     const handoffSignal: RuntimeHandoffSignal = { triggered: false };
     const tools = pickToolsFromMcp({
-      supabase: admin,
+      db: admin,
       ctx,
       auth,
       toolIds: version.tool_ids ?? [],
@@ -623,7 +623,7 @@ export async function runAgent(input: RunAgentInput): Promise<RunAgentResult> {
     const finalText = (result.text ?? "").trim();
     if (!run.is_dry_run && finalText && run.conversation_id) {
       outboundMessageId = await sendFinalResponse({
-        supabase: admin,
+        db: admin,
         organizationId: run.organization_id,
         runId: run.id,
         agentId: run.agent_id,

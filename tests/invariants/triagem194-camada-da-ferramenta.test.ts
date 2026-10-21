@@ -42,7 +42,7 @@ function ctxDeA(): McpContext {
     actor: { type: "ai_agent", id: "run-de-a", role: "agent" },
     apiTokenId: "tok-de-a",
     requestId: "req-camada-ferramenta",
-    supabase: db,
+    db: db,
   } as McpContext;
 }
 

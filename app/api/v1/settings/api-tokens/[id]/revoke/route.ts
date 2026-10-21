@@ -23,8 +23,8 @@ export async function POST(
   if (!authz.ok) return authz.response;
   const { user: authUser, org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: token, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: token, error: fetchErr } = await db
     .from("api_tokens")
     .select("id, revoked_at")
     .eq("id", id)
@@ -37,7 +37,7 @@ export async function POST(
   }
 
   const nowIso = new Date().toISOString();
-  const { error: updErr } = await supabase
+  const { error: updErr } = await db
     .from("api_tokens")
     .update({ revoked_at: nowIso, revoked_by: authUser.id, updated_at: nowIso })
     .eq("id", id);

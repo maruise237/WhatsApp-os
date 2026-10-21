@@ -16,7 +16,7 @@ import { lastLine, sql } from "./gov-helpers";
  *
  * ─── O defeito medido ───────────────────────────────────────────────────────
  *
- *     $ grep -rn "from job_queue" lib workers app supabase scripts | grep -i delete
+ *     $ grep -rn "from job_queue" lib workers app db scripts | grep -i delete
  *     (zero linhas)
  *
  * `job_queue` crescia desde a instalação; `api_audit_log` prometia retenção de 5

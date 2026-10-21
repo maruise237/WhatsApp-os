@@ -38,8 +38,8 @@ export async function PATCH(req: NextRequest, { params }: RouteParams): Promise<
     });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("message_templates")
     .update({ ...parsed.data, updated_at: new Date().toISOString() })
     .eq("id", id)
@@ -67,11 +67,11 @@ export async function DELETE(_req: NextRequest, { params }: RouteParams): Promis
   const { user, org } = authz;
   const { id } = await params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   // .select() confirma que a linha existia E era visível/apagável pela RLS.
   // Sem isso, um DELETE barrado pela RLS afeta 0 linhas mas ainda retornaria
   // 204 + audit falso (mutação que não ocorreu). Espelha a semântica do PATCH.
-  const { data: deleted, error } = await supabase
+  const { data: deleted, error } = await db
     .from("message_templates")
     .delete()
     .eq("id", id)

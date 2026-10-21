@@ -86,13 +86,13 @@ export interface ResultadoDaLista {
 }
 
 export async function listarChamados(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   opts: { estado: "abertos" | "fechados"; limite?: number },
 ): Promise<ResultadoDaLista> {
   const estados = opts.estado === "abertos" ? ESTADOS_ABERTOS : ESTADOS_FECHADOS;
 
-  const base = supabase
+  const base = db
     .from("agent_cases")
     .select(COLUNAS_LISTA)
     .eq("organization_id", organizationId)
@@ -102,7 +102,7 @@ export async function listarChamados(
   const { data, error } = await (opts.limite === undefined ? base : base.limit(opts.limite));
   if (error) throw new Error(error.message);
 
-  const { count } = await supabase
+  const { count } = await db
     .from("agent_cases")
     .select("id", { count: "exact", head: true })
     .eq("organization_id", organizationId)
@@ -116,11 +116,11 @@ export async function listarChamados(
 
 /** null = não existe OU é de outra organização — 404 honesto, sem vazar existência. */
 export async function lerChamado(
-  supabase: DbClient,
+  db: DbClient,
   organizationId: string,
   caseId: string,
 ): Promise<ChamadoDetalhado | null> {
-  const { data: caseRow, error: caseErr } = await supabase
+  const { data: caseRow, error: caseErr } = await db
     .from("agent_cases")
     .select(COLUNAS_DETALHE)
     .eq("id", caseId)
@@ -129,7 +129,7 @@ export async function lerChamado(
   if (caseErr) throw new Error(caseErr.message);
   if (!caseRow) return null;
 
-  const { data: events, error: eventsErr } = await supabase
+  const { data: events, error: eventsErr } = await db
     .from("agent_case_events")
     .select("id, kind, actor_kind, actor_user_id, human_action, body, created_at")
     .eq("organization_id", organizationId)

@@ -24,9 +24,9 @@ export async function GET(_req: NextRequest): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
   // RLS já limita a compartilhados + próprios da org ativa.
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("message_templates")
     .select(COLS)
     .eq("organization_id", org.orgId)
@@ -56,8 +56,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (shared && ROLE_RANK[org.role] < ROLE_RANK.manager) {
     return fail("forbidden", "Seul un manager (ou plus) peut créer un modèle partagé.", 403, { requestId });
   }
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("message_templates")
     .insert({
       organization_id: org.orgId,

@@ -72,8 +72,8 @@ export async function GET(req: NextRequest): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("fn_attendant_metrics", {
+  const db = await createClient();
+  const { data, error } = await db.rpc("fn_attendant_metrics", {
     p_org: activeOrg.orgId,
     p_from: from.toISOString(),
     p_to: to.toISOString(),

@@ -32,7 +32,7 @@ function contexto() {
     actor: { type: "ai_agent", id: "agente-1", role: "ai_operator" },
     apiTokenId: "tok-1",
     requestId: "run-1",
-    supabase: {} as never,
+    db: {} as never,
   } as unknown as McpContext;
   const auth = {
     organizationId: ORG,
@@ -56,7 +56,7 @@ describe("a ponte do turno respeita `apenasHumano`", () => {
   it("nenhuma capacidade de pessoa é montada no turno do agente", () => {
     const { ctx, auth } = contexto();
     const montadas = pickToolsFromMcp({
-      supabase: ctx.supabase,
+      db: ctx.db,
       ctx,
       auth,
       // Pede TODAS: simula o dono tendo ligado tudo o que a tela oferece.
@@ -72,7 +72,7 @@ describe("a ponte do turno respeita `apenasHumano`", () => {
   it("as demais capacidades continuam chegando (não virou filtro cego)", () => {
     const { ctx, auth } = contexto();
     const montadas = pickToolsFromMcp({
-      supabase: ctx.supabase,
+      db: ctx.db,
       ctx,
       auth,
       toolIds: allTools.map((t) => t.name),

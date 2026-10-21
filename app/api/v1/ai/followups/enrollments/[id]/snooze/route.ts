@@ -51,7 +51,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
 
   const resultado = await adiaEnrollment(
-    { supabase: await createClient(), admin: createAdminClient(), orgId: org.orgId, userId: user.id, requestId },
+    { db: await createClient(), admin: createAdminClient(), orgId: org.orgId, userId: user.id, requestId },
     id,
     parsed.data.next_eval_at,
   );

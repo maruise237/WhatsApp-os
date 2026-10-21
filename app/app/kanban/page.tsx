@@ -32,8 +32,8 @@ export default async function KanbanPickerPage() {
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) redirect("/app");
 
-  const supabase = await createClient();
-  const { data } = await supabase
+  const db = await createClient();
+  const { data } = await db
     .from("crm_pipelines")
     .select("id, name, slug, description, position, is_default")
     .eq("organization_id", activeOrg.orgId)

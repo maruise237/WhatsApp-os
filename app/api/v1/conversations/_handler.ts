@@ -80,7 +80,7 @@ export interface ListConversationsResult {
 }
 
 export async function listConversationsHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   q: ListConversationsQuery,
 ): Promise<ListConversationsResult> {
@@ -92,7 +92,7 @@ export async function listConversationsHandler(
   const sortCol = isQueue ? "last_inbound_at" : "last_message_at";
   const asc = isQueue;
 
-  let query = supabase
+  let query = db
     .from("conversations")
     .select(SELECT_COLS)
     .eq("organization_id", ctx.organization_id)
@@ -175,11 +175,11 @@ export async function listConversationsHandler(
 // ---------------------------------------------------------------------------
 
 export async function getConversationHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   conversationId: string,
 ): Promise<Conversation> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .select(SELECT_COLS)
     .eq("id", conversationId)
@@ -200,7 +200,7 @@ export async function getConversationHandler(
 // ---------------------------------------------------------------------------
 
 export async function patchConversationHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   conversationId: string,
   input: PatchConversationInput,
@@ -226,7 +226,7 @@ export async function patchConversationHandler(
     input.status === "claimed" && ctx.actor.type === "user" ? ctx.actor.id : null;
 
   if (assumirPelaRpc !== null) {
-    const { error: erroRpc } = await supabase.rpc("fn_conversation_assign", {
+    const { error: erroRpc } = await db.rpc("fn_conversation_assign", {
       p_organization_id: ctx.organization_id,
       p_conversation_id: conversationId,
       p_to_user_id: assumirPelaRpc,
@@ -249,7 +249,7 @@ export async function patchConversationHandler(
     update.tags = input.tags;
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .update(update)
     .eq("id", conversationId)
@@ -273,7 +273,7 @@ export async function patchConversationHandler(
     input.status !== undefined &&
     (CONVERSATION_TERMINAL_STATUSES as readonly string[]).includes(input.status);
   if (virouTerminal) {
-    await supabase
+    await db
       .from("conversations")
       .update({ bot_silenced_until: null })
       .eq("id", conversationId)
@@ -319,11 +319,11 @@ export async function patchConversationHandler(
 // ---------------------------------------------------------------------------
 
 export async function markConversationReadHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   conversationId: string,
 ): Promise<Conversation> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .update({ unread_count_for_assignee: 0 })
     .eq("id", conversationId)

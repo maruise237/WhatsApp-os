@@ -52,8 +52,8 @@ export function MergeDialog({ queueItemId, open, onOpenChange }: Props) {
     if (!open || !queueItemId) return;
     let cancelled = false;
     setLoading(true);
-    const supabase = createClient();
-    supabase
+    const db = createClient();
+    db
       .from("merge_queue")
       .select("id, candidates, status")
       .eq("id", queueItemId)

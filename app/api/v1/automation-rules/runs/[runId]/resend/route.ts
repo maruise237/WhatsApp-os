@@ -35,9 +35,9 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (!authz.ok) return authz.response;
   const { user, org: activeOrg } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
-  const { data: run, error: runErr } = await supabase
+  const { data: run, error: runErr } = await db
     .from("automation_rule_runs")
     .select("id, rule_id, event_id")
     .eq("id", runId)
@@ -50,7 +50,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     return fail("event_gone", "L’événement d’origine de cette exécution a été supprimé.", 409, { requestId });
   }
 
-  const { data: rule, error: ruleErr } = await supabase
+  const { data: rule, error: ruleErr } = await db
     .from("automation_rules")
     .select("id, name, actions")
     .eq("id", run.rule_id)
@@ -59,7 +59,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (ruleErr) return fail("internal_error", ruleErr.message, 500, { requestId });
   if (!rule) return fail("not_found", "Règle de cette exécution introuvable.", 404, { requestId });
 
-  const { data: eventRow, error: eventErr } = await supabase
+  const { data: eventRow, error: eventErr } = await db
     .from("event_log")
     .select("*")
     .eq("id", run.event_id)
@@ -71,7 +71,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   }
 
   const typedEvent = eventRow as unknown as EventRow;
-  const context = await buildContext(supabase, typedEvent);
+  const context = await buildContext(db, typedEvent);
 
   const callWebhookActions = ((rule.actions ?? []) as RuleAction[]).filter(
     (action) => action.type === "call_webhook",

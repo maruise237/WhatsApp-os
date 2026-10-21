@@ -58,7 +58,7 @@ export const crmSearchKnowledge: McpToolDefinition<typeof buscarInputShape> = {
       };
     }
 
-    const kbVersionId = await resolverAcervoDoAgente(ctx.supabase, ctx.organizationId, agentId);
+    const kbVersionId = await resolverAcervoDoAgente(ctx.db, ctx.organizationId, agentId);
     if (!kbVersionId) {
       // Nao e erro: e um estado legitimo e acionavel — o assistente ainda nao
       // tem material publicado. Devolver como falha faria o modelo tratar como
@@ -70,7 +70,7 @@ export const crmSearchKnowledge: McpToolDefinition<typeof buscarInputShape> = {
       };
     }
 
-    const resultado = await buscarConhecimento(ctx.supabase, {
+    const resultado = await buscarConhecimento(ctx.db, {
       organizationId: ctx.organizationId,
       kbVersionId,
       pergunta: input.pergunta,
@@ -104,7 +104,7 @@ export const crmListKnowledgeSources: McpToolDefinition<typeof listarMateriaisIn
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    let q = ctx.supabase
+    let q = ctx.db
       .from("ai_knowledge_sources")
       .select(
         "id, agent_id, name, source_type, status, last_index_status, last_index_error, last_indexed_at, chunks_count, is_active, created_at",
@@ -141,7 +141,7 @@ export const crmListImprovementProposals: McpToolDefinition<typeof propostasInpu
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const { data, error } = await ctx.supabase
+    const { data, error } = await ctx.db
       .from("flywheel_distiller_proposals")
       .select("id, run_id, dataset, type, target, content, evidence, proposed_at")
       .eq("organization_id", ctx.organizationId)
@@ -171,7 +171,7 @@ export const crmGetOrgMemory: McpToolDefinition<typeof lerMemoriaInputShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const { data, error } = await ctx.supabase
+    const { data, error } = await ctx.db
       .from("org_memory_entries")
       .select("id, title, body, source, status, created_at, updated_at")
       .eq("organization_id", ctx.organizationId)
@@ -202,7 +202,7 @@ export const crmSaveOrgMemory: McpToolDefinition<typeof gravarMemoriaInputShape>
   requiresRole: "ai_operator",
   requiresScope: "mcp:write",
   handler: async (input, ctx) => {
-    const { data, error } = await ctx.supabase
+    const { data, error } = await ctx.db
       .from("org_memory_entries")
       .insert({
         organization_id: ctx.organizationId,

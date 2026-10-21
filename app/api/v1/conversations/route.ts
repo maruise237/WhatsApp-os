@@ -17,12 +17,12 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   try {
     const { conversations, cursor, has_more } = await listConversationsHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },

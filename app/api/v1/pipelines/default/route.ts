@@ -21,9 +21,9 @@ export async function GET(): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
-  const { data: pipeline, error: pipelineErr } = await supabase
+  const { data: pipeline, error: pipelineErr } = await db
     .from("crm_pipelines")
     .select("*")
     .eq("organization_id", org.orgId)
@@ -39,7 +39,7 @@ export async function GET(): Promise<Response> {
     });
   }
 
-  const { data: stages, error: stagesErr } = await supabase
+  const { data: stages, error: stagesErr } = await db
     .from("crm_stages")
     .select("*")
     .eq("pipeline_id", (pipeline as Pipeline).id)

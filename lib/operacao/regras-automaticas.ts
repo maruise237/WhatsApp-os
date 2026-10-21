@@ -67,7 +67,7 @@ export async function listarRegrasAutomaticas(
   deps: DepsDaOperacao,
   opts: { apenasAtivas?: boolean } = {},
 ): Promise<RegraVisivel[]> {
-  let q = deps.supabase
+  let q = deps.db
     .from("automation_rules")
     .select(COLUNAS)
     .eq("organization_id", deps.organizationId)
@@ -83,7 +83,7 @@ async function regraDaOrg(
   deps: DepsDaOperacao,
   id: string,
 ): Promise<{ id: string; name: string; is_active: boolean }> {
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("automation_rules")
     .select("id, name, is_active")
     .eq("id", id)
@@ -103,7 +103,7 @@ export async function definirRegraAtiva(
 ): Promise<RegraVisivel> {
   const antes = await regraDaOrg(deps, input.id);
 
-  const { data: updated, error } = await deps.supabase
+  const { data: updated, error } = await deps.db
     .from("automation_rules")
     .update({
       is_active: input.ativa,
@@ -166,7 +166,7 @@ export async function execucoesDasRegras(
 ): Promise<ExecucaoVisivel[]> {
   if (input.ruleId) await regraDaOrg(deps, input.ruleId);
 
-  let q = deps.supabase
+  let q = deps.db
     .from("automation_rule_runs")
     .select("id, status, created_at, actions_result, error, rule_id, automation_rules(name)")
     .eq("organization_id", deps.organizationId)

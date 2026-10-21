@@ -15,7 +15,7 @@ import { createAdminClient } from "@/lib/neon/admin-client";
 
 export interface CrmEdgeConfig {
   /** Client administrateur PostgreSQL direct — utilisé uniquement côté serveur. */
-  supabase: DbClient;
+  db: DbClient;
   /**
    * ai_agents.id do agente PUBLICADO deste turno (Fase 2B) — vira o actor.id do
    * envio (audit/metadata do CRM). Ausente = id genérico do engine.
@@ -40,5 +40,5 @@ export function crmEdgeConfigFromEnv(_env: {
   NEON_DATABASE_URL?: string;
   NEON_DATA_API_URL?: string;
 }): CrmEdgeConfig {
-  return { supabase: createAdminClient() };
+  return { db: createAdminClient() };
 }

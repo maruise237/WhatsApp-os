@@ -33,7 +33,7 @@ export const crmListContactOrders: McpToolDefinition<typeof pedidosInputShape> =
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const { data, error } = await ctx.supabase
+    const { data, error } = await ctx.db
       .from("orders")
       .select(
         "id, external_id, external_provider, status, total_cents, currency, payment_method, fulfillment_status, tracking_code, ordered_at, is_anonymized",
@@ -77,7 +77,7 @@ export const crmSearchProducts: McpToolDefinition<typeof produtosInputShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    let q = ctx.supabase
+    let q = ctx.db
       .from("nuvemshop_products")
       .select("id, external_id, title, description, price_cents, available_qty, url, image_url")
       .eq("organization_id", ctx.organizationId)

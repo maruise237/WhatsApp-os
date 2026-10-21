@@ -58,11 +58,11 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   try {
     const { funil } = await criarEtapa(
       {
-        supabase,
+        db,
         organizationId: authz.org.orgId,
         actor: { type: "user", id: authz.user.id, role: authz.org.role },
         requestId,

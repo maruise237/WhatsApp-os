@@ -21,7 +21,7 @@ export async function PATCH(
   const requestId = randomUUID();
   const { id: leadId } = await ctx.params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "crm_leads" });
   if (!authz.ok) return authz.response;
@@ -43,7 +43,7 @@ export async function PATCH(
 
   try {
     const updated = await updateLeadHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },

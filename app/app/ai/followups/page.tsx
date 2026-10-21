@@ -19,8 +19,8 @@ export default async function FollowupFlowsPage() {
   // Fluxos (edição) segue exigindo manager+; a Fila (leitura) é de qualquer
   // member — o gate por tela fica dentro das abas (canWrite), não na rota.
 
-  const supabase = await createClient();
-  const { data } = await supabase
+  const db = await createClient();
+  const { data } = await db
     .from("followup_flow_pointers")
     .select(FLOW_COLUMNS)
     .eq("organization_id", activeOrg.orgId)

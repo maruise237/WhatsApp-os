@@ -76,7 +76,7 @@ function fakeLogger(): Logger {
 
 function fakeDeps(): InboundTurnDeps {
   return {
-    crmCfg: { supabase: {} as DbClient },
+    crmCfg: { db: {} as DbClient },
     llmCfg: {},
     knobs: {
       historyLimit: 20,

@@ -19,8 +19,8 @@ export default async function KnowledgeSourcesPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
-  const { data: agent } = await supabase
+  const db = await createClient();
+  const { data: agent } = await db
     .from("ai_agents")
     .select("id, name, is_default")
     .eq("organization_id", activeOrg.orgId)
@@ -49,7 +49,7 @@ export default async function KnowledgeSourcesPage() {
     );
   }
 
-  const { data: sourcesRaw } = await supabase
+  const { data: sourcesRaw } = await db
     .from("ai_knowledge_sources")
     .select("*")
     .eq("organization_id", activeOrg.orgId)

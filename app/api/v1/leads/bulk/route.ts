@@ -27,7 +27,7 @@ const MAX_BULK = 50;
 
 export async function POST(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "crm_leads" });
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   // orgs veria leads de ambas — o filtro explícito garante que o bulk só toca a
   // org ativa (mesmo padrão do gate de owner acima).
   const organizationId = authz.org.orgId;
-  const { data: scoped } = await supabase
+  const { data: scoped } = await db
     .from("crm_leads")
     .select("id, organization_id, tags, stage_id, pipeline_id")
     .eq("organization_id", organizationId)
@@ -124,7 +124,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   switch (input.action) {
     case "move": {
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from("crm_leads")
         .update({
           stage_id: input.params.stage_id,
@@ -145,7 +145,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       // cada uma entra no barramento, senão o lote inteiro fica invisível na
       // timeline e a operação em massa vira o buraco por onde a atividade some.
       const nomesEstagio = new Map<string, string>();
-      const { data: stageRows } = await supabase
+      const { data: stageRows } = await db
         .from("crm_stages")
         .select("id, name")
         .eq("organization_id", organizationId)
@@ -158,7 +158,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         visible
           .filter((row) => movedIds.has(row.id) && row.stage_id !== input.params.stage_id)
           .map(async (row) => {
-            const r = await emitLeadActivity(supabase, {
+            const r = await emitLeadActivity(db, {
               organizationId,
               leadId: row.id as string,
               type: "stage_changed",
@@ -180,7 +180,7 @@ export async function POST(req: NextRequest): Promise<Response> {
               // O bulk é o pior caso dos três: N leads movidos, e uma falha de
               // atividade some junto com as outras N-1 que deram certo. Sem o
               // aviso, o buraco na timeline não tem nem tamanho conhecido.
-              await registraFalhaDeAtividade(supabase, {
+              await registraFalhaDeAtividade(db, {
                 organizationId: row.organization_id,
                 leadId: row.id,
                 tipo: "stage_changed",
@@ -195,7 +195,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         visible
           .filter((row) => movedIds.has(row.id) && row.stage_id !== input.params.stage_id)
           .map((row) =>
-            supabase
+            db
               .rpc("emit_event", {
                 p_event_type: "lead.stage_changed",
                 p_entity_kind: "crm_lead",
@@ -236,7 +236,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       if (owner.patch.owner_kind !== null) {
         patch.assigned_at = nowIso;
       }
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from("crm_leads")
         .update(patch)
         .in("id", visibleIds)
@@ -252,7 +252,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       for (const row of visible) {
         const current = (row.tags ?? []) as string[];
         const next = Array.from(new Set([...current.filter((t) => !remove.has(t)), ...add]));
-        const { error } = await supabase
+        const { error } = await db
           .from("crm_leads")
           .update({ tags: next, updated_at: nowIso })
           .eq("id", row.id);
@@ -263,7 +263,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         // updateLeadHandler, so the automation engine fires for bulk tags too.
         const addedTags = add.filter((t) => !current.includes(t));
         if (addedTags.length) {
-          await supabase
+          await db
             .rpc("emit_event", {
               p_event_type: "lead.tag_added",
               p_entity_kind: "crm_lead",
@@ -281,7 +281,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
     case "delete": {
       // crm_leads has no `is_archived` column → real DELETE.
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from("crm_leads")
         .delete()
         .in("id", visibleIds)
@@ -302,7 +302,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           ? "lead.bulk_tagged"
           : "lead.bulk_deleted";
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: eventType,
       p_entity_kind: "crm_lead",

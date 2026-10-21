@@ -35,8 +35,8 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
   const q = parsed.data;
 
-  const supabase = await createClient();
-  let query = supabase
+  const db = await createClient();
+  let query = db
     .from("api_audit_log")
     .select(
       "id, created_at, actor_user_id, actor_api_token_id, acting_as_platform_admin, action, resource_type, resource_id, request_id, metadata, actor_ip, actor_user_agent",

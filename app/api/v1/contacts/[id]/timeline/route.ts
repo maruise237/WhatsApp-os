@@ -40,11 +40,11 @@ export async function GET(
   const requestId = randomUUID();
   const { id: contactId } = await ctx.params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -64,7 +64,7 @@ export async function GET(
   }
 
   // Verify contact accessible (RLS will filter); 404 if not.
-  const { data: contactRow, error: cErr } = await supabase
+  const { data: contactRow, error: cErr } = await db
     .from("contacts")
     .select("id")
     .eq("id", contactId)
@@ -73,7 +73,7 @@ export async function GET(
   if (!contactRow) return fail("not_found", "Contact introuvable.", 404, { requestId });
 
   // Resolve owned lead ids first.
-  const { data: leadRows, error: lErr } = await supabase
+  const { data: leadRows, error: lErr } = await db
     .from("crm_leads")
     .select("id")
     .eq("contact_id", contactId);
@@ -86,7 +86,7 @@ export async function GET(
   const FETCH = limit + 1;
 
   const buildQuery = (column: "contact_id" | "lead_id", values: string | string[]) => {
-    let q = supabase
+    let q = db
       .from("crm_lead_activities")
       .select(TIMELINE_COLS)
       .order("performed_at", { ascending: false })
@@ -141,7 +141,7 @@ export async function GET(
   // vez de a tela ter de descobrir sozinha (e mostrar "Agente" genérico quando
   // não descobre). Sem filtro de is_active/archived: quem AGIU agiu, mesmo que
   // o agente tenha sido desligado depois.
-  const page = await comNomeDoAtor(supabase, pageRows);
+  const page = await comNomeDoAtor(db, pageRows);
   const last = page[page.length - 1];
   const nextCursor =
     hasMore && last

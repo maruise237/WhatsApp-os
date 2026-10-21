@@ -34,8 +34,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   const authz = await requireRole("agent", { requestId, resource: "ai_agents" });
   if (!authz.ok) return authz.response;
 
-  const supabase = await createClient();
-  const { count, error } = await supabase
+  const db = await createClient();
+  const { count, error } = await db
     .from("ai_agents")
     .select("id", { count: "exact", head: true })
     .eq("organization_id", authz.org.orgId)

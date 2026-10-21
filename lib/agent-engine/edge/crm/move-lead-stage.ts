@@ -61,7 +61,7 @@ export async function mirrorLeadStageToCrm(
     // `input.leadId` é o contact_id do CRM: o funil do agente é por CONTATO
     // (lead_state.contact_id) e quem resolve "qual negócio deste contato" é o
     // `resolveActiveLeadForContact` lá dentro — não aqui.
-    const r = await sync(cfg.supabase, {
+    const r = await sync(cfg.db, {
       organizationId: input.tenantId,
       contactId: input.leadId,
       passo: input.toStage,

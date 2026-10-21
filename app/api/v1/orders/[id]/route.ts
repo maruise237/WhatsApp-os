@@ -19,8 +19,8 @@ export async function GET(_request: NextRequest, { params }: Context): Promise<R
   if (!authz.ok) return authz.response;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("sales_orders")
     .select("*, sales_order_items(*), payment_proofs(*), contacts(id, name, display_name, phone_number)")
     .eq("id", id)
@@ -52,8 +52,8 @@ export async function PATCH(request: NextRequest, { params }: Context): Promise<
     });
   }
 
-  const supabase = await createClient();
-  const { data: current, error: readError } = await supabase
+  const db = await createClient();
+  const { data: current, error: readError } = await db
     .from("sales_orders")
     .select("id, status")
     .eq("id", id)
@@ -68,7 +68,7 @@ export async function PATCH(request: NextRequest, { params }: Context): Promise<
     return fail("invalid_order_transition", "Transition de commande non autorisée.", 409, { requestId });
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("sales_orders")
     .update({
       status: target,

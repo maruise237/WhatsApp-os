@@ -48,10 +48,10 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     throw err;
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // Read prev value first to put it in the audit payload (best-effort).
-  const { data: prevRow } = await supabase
+  const { data: prevRow } = await db
     .from("conversations")
     .select("usable_for_rag")
     .eq("id", id)
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
         rag_review_status: null,
       };
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .update(update)
     .eq("id", id)

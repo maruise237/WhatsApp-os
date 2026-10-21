@@ -63,8 +63,8 @@ export default async function AgentEditorPage({
     redirect("/403");
   }
 
-  const supabase = await createClient();
-  const { data: agentRow } = await supabase
+  const db = await createClient();
+  const { data: agentRow } = await db
     .from("ai_agents")
     .select(AGENT_COLUMNS)
     .eq("id", id)
@@ -87,18 +87,18 @@ export default async function AgentEditorPage({
 
   // mcp_agent: busca versions + lookups.
   const [versionsRes, credentialsRes, channelSessions, routerMemberRes, funisRes] = await Promise.all([
-    supabase
+    db
       .from("ai_agent_versions")
       .select(VERSION_COLUMNS)
       .eq("organization_id", activeOrg.orgId)
       .eq("agent_id", id)
       .order("version_number", { ascending: false }),
-    supabase
+    db
       .from("ai_provider_credentials_safe")
       .select(CREDENTIAL_COLUMNS)
       .eq("organization_id", activeOrg.orgId),
-    listSelectableChannels(supabase, activeOrg.orgId),
-    supabase
+    listSelectableChannels(db, activeOrg.orgId),
+    db
       .from("ai_router_members")
       .select("router_id, ai_routers(name)")
       .eq("organization_id", activeOrg.orgId)
@@ -108,7 +108,7 @@ export default async function AgentEditorPage({
     // Os funis vêm com a página, não por fetch no cliente: a marcação usa
     // "nenhum funil" para dizer algo importante, e uma lista que chega vazia no
     // primeiro render diria isso por engano.
-    supabase
+    db
       .from("crm_pipelines")
       .select("id, name, slug, description, position, is_default")
       .eq("organization_id", activeOrg.orgId)
@@ -123,7 +123,7 @@ export default async function AgentEditorPage({
   // junto com a página porque a lacuna precisa aparecer no MESMO lugar em que o
   // dono marca o funil — descobrir isso entrando funil por funil na tela de
   // tradução é o que fez 3 dos 4 funis da produção ficarem mudos sem ninguém ver.
-  const { data: etapasRes } = await supabase
+  const { data: etapasRes } = await db
     .from("crm_stages")
     .select("id, name, is_won, is_lost, agent_stage_hint, pipeline_id")
     .eq("organization_id", activeOrg.orgId)

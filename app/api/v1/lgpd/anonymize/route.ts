@@ -26,11 +26,11 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Fetch contact (RLS scoped).
-  const { data: existing, error: selErr } = await supabase
+  const { data: existing, error: selErr } = await db
     .from("contacts")
     .select("id, organization_id, is_anonymized, anonymized_at")
     .eq("id", input.contact_id)
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   const shortId = existing.id.slice(0, 8);
 
   // Step 1 — contacts.
-  const { error: c1Err } = await supabase
+  const { error: c1Err } = await db
     .from("contacts")
     .update({
       name: null,
@@ -111,14 +111,14 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Step 2 — leads owned by contact (best-effort; non-fatal).
-  const { data: leadRows } = await supabase
+  const { data: leadRows } = await db
     .from("crm_leads")
     .select("id, title")
     .eq("contact_id", existing.id);
   const redactedLeadIds: string[] = [];
   for (const row of (leadRows ?? []) as { id: string; title: string | null }[]) {
     const newTitle = `${(row.title ?? "").slice(0, 20)} (anonymisé)`;
-    const { error: leadErr } = await supabase
+    const { error: leadErr } = await db
       .from("crm_leads")
       .update({ title: newTitle })
       .eq("id", row.id);
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Step 3 — activities (RLS-scoped UPDATE).
-  const { error: actErr } = await supabase
+  const { error: actErr } = await db
     .from("crm_lead_activities")
     .update({ payload: { redacted: true } })
     .eq("contact_id", existing.id);
@@ -139,7 +139,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   // Emit + audit.
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "contact.anonymized",
       p_entity_kind: "contact",

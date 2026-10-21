@@ -80,7 +80,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const fromIso = range.from.toISOString();
   const toIso = endOfUtcDay(range.to).toISOString();
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // ---- 1. llm_calls: a ÚNICA tabela de telemetria (migration 0130) ---------
   //
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   // esquecesse mentia (foi assim que esta tela mostrou ZERO custo com o
   // dinheiro saindo). A 0130 fez o backfill; `ai_invocations` é histórico e
   // ninguém mais escreve nela.
-  let invQ = supabase
+  let invQ = db
     .from("llm_calls")
     .select("created_at, purpose, cost_cents, input_tokens, output_tokens, latency_ms, agent_id")
     .eq("organization_id", activeOrg.orgId)
@@ -125,7 +125,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   // ---- 2. inbound messages per day ----------------------------------------
   const dailyInbounds = new Map<string, number>();
-  const { data: inboundRows, error: inboundErr } = await supabase
+  const { data: inboundRows, error: inboundErr } = await db
     .from("messages")
     .select("created_at")
     .eq("organization_id", activeOrg.orgId)
@@ -144,7 +144,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   // ---- 3. handoffs per day (event_log: ai.handoff_triggered) --------------
   const dailyHandoffs = new Map<string, number>();
-  const { data: handoffRows, error: handoffErr } = await supabase
+  const { data: handoffRows, error: handoffErr } = await db
     .from("event_log")
     .select("created_at")
     .eq("organization_id", activeOrg.orgId)

@@ -10,8 +10,8 @@ export default async function PipelinePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: pipeline } = await supabase
+  const db = await createClient();
+  const { data: pipeline } = await db
     .from("crm_pipelines")
     .select("id, name, vocabulary")
     .eq("id", id)

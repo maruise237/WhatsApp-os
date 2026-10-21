@@ -148,7 +148,7 @@ function modeloQueManda(rotulo: string) {
 
 function montaHandler(doGenerate: unknown, instante: Date) {
   return m.createInboundTurnHandler({
-    crmCfg: { supabase: {} as never },
+    crmCfg: { db: {} as never },
     llmCfg: { anthropicApiKey: "fake" } as never,
     knobs: {
       historyLimit: 10,

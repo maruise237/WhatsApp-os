@@ -24,12 +24,12 @@ interface RouteCtx {
 export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -42,7 +42,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   try {
     const conv = await getConversationHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },
@@ -65,7 +65,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
 export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "conversations" });
@@ -88,7 +88,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
 
   try {
     const conv = await patchConversationHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },

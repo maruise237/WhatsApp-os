@@ -198,7 +198,7 @@ describe("os elos que somem sem barulho", () => {
     const fonte = readFileSync("app/api/v1/messages/_handler.ts", "utf8");
     expect(fonte).toMatch(/adapter\.sendTemplate/);
     expect(fonte.indexOf("adapter.sendTemplate")).toBeLessThan(
-      fonte.indexOf("sendTemplateForSession(supabase"),
+      fonte.indexOf("sendTemplateForSession(db"),
     );
   });
 

@@ -4,7 +4,7 @@
  * As duas tabelas que crescem sozinhas numa instalação parada — `job_queue` e
  * `api_audit_log` — não tinham poda nenhuma. Medido no HEAD anterior:
  *
- *     $ grep -rn "from job_queue" lib workers app supabase scripts | grep -i delete
+ *     $ grep -rn "from job_queue" lib workers app db scripts | grep -i delete
  *     (zero linhas)
  *
  * E a retenção de 5 anos do audit existia só no `COMMENT ON TABLE` e em seis

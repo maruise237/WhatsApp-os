@@ -26,11 +26,11 @@ export function estimateTokens(text: string): number {
 }
 
 export async function loadHistoryWithBudget(
-  supabase: DbClient,
+  db: DbClient,
   input: LoadHistoryInput,
 ): Promise<HistoryMessage[]> {
   const limit = Math.max(input.messageWindow, 1);
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("messages")
     .select("id, body, direction, sent_at")
     .eq("organization_id", input.organizationId)

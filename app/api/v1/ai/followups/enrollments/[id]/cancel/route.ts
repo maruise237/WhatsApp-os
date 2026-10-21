@@ -38,8 +38,8 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (!authz.ok) return authz.response;
   const { user, org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("followup_enrollments")
     .select("id, status, current_node_id")
     .eq("id", id)
@@ -52,7 +52,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     return fail("already_terminal", "Cette inscription est déjà terminée.", 409, { requestId });
   }
 
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("followup_enrollments")
     .update({
       status: "cancelled",
@@ -72,7 +72,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
     });
   }
 
-  const { error: eventErr } = await supabase.from("followup_enrollment_events").insert({
+  const { error: eventErr } = await db.from("followup_enrollment_events").insert({
     organization_id: activeOrg.orgId,
     enrollment_id: id,
     node_id: existing.current_node_id,

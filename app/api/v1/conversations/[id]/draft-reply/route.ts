@@ -44,8 +44,8 @@ export async function POST(_req: NextRequest, { params }: RouteParams): Promise<
   const { org } = authz;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data: conv } = await supabase
+  const db = await createClient();
+  const { data: conv } = await db
     .from("conversations")
     .select("id, organization_id, contact_id, channel_session_id")
     .eq("id", id)

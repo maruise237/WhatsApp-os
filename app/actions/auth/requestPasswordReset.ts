@@ -45,8 +45,8 @@ export async function requestPasswordReset(
     return { ok: false, error: "rate_limited" };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
+  const db = await createClient();
+  const { error } = await db.auth.resetPasswordForEmail(parsed.data.email, {
     // ?type=recovery sobrevive ao redirect do GoTrue (preserva query string
     // existente ao anexar `code=`/`token_hash=`) — sem SMTP customizado o
     // Supabase usa o template padrão dele, que só devolve `code` (PKCE), sem

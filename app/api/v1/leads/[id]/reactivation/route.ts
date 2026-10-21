@@ -52,11 +52,11 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
   const { decision, proposal_id } = parsed.data;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // O UPDATE condicional É a trava: `status = 'pending'` no WHERE. Ler-e-depois-
   // escrever deixaria a janela em que o watcher vence a proposta no meio.
-  const { data: decidida, error } = await supabase
+  const { data: decidida, error } = await db
     .from("crm_lead_reactivations")
     .update({
       status: decision === "accept" ? "accepted" : "dismissed",
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     // Não distinguimos "não existe" de "já não está pendente" na MENSAGEM por
     // vazamento? Não: aqui distinguir ajuda e não expõe nada — a pessoa precisa
     // saber que a proposta venceu, senão ela clica de novo achando que falhou.
-    const { data: existe } = await supabase
+    const { data: existe } = await db
       .from("crm_lead_reactivations")
       .select("status")
       .eq("id", proposal_id)
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     return fail("not_found", "Suggestion introuvable.", 404, { requestId });
   }
 
-  const { data: lead } = await supabase
+  const { data: lead } = await db
     .from("crm_leads")
     .select("contact_id")
     .eq("id", leadId)
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // mas o raro acontece quando o agente agenda ENTRE a proposta e o clique.
   let envioAgendado = false;
   if (decision === "accept" && contactId) {
-    const { data: pendente } = await supabase
+    const { data: pendente } = await db
       .from("cron_jobs")
       .select("id")
       .eq("organization_id", orgId)
@@ -127,7 +127,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
       .gt("next_run_at", new Date().toISOString())
       .maybeSingle();
     if (!pendente) {
-      const { error: cronErr } = await supabase.from("cron_jobs").insert({
+      const { error: cronErr } = await db.from("cron_jobs").insert({
         organization_id: orgId,
         contact_id: contactId,
         kind: "at",
@@ -147,7 +147,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     }
   }
 
-  const atividade = await emitLeadActivity(supabase, {
+  const atividade = await emitLeadActivity(db, {
     organizationId: orgId,
     leadId,
     contactId,
@@ -166,7 +166,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     // ALTO: esta atividade É O REGISTRO DA DECISÃO, não rastro de algo já
     // visível. Sem ela, o negócio volta ao normal e ninguém sabe quem mandou —
     // e a próxima proposta nasce sem saber que esta foi recusada.
-    await registraFalhaDeAtividade(supabase, {
+    await registraFalhaDeAtividade(db, {
       organizationId: orgId,
       leadId,
       tipo: decision === "accept" ? "reactivation_accepted" : "reactivation_dismissed",

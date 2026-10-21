@@ -47,7 +47,7 @@ const PESSOA: Actor = { type: "user", id: USER_ID, role: "manager" };
 
 function deps(db: ReturnType<typeof makeDb>, actor: Actor = PESSOA): DepsDaOperacao {
   return {
-    supabase: db.client as unknown as DbClient,
+    db: db.client as unknown as DbClient,
     organizationId: ORG_ID,
     actor,
     requestId: "req-1",

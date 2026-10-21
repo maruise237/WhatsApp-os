@@ -5,13 +5,13 @@ import { createClient } from "@/lib/db/server";
 import { audit } from "@/lib/audit";
 
 export async function signOut(): Promise<void> {
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
 
   const hdrs = await headers();
-  await supabase.auth.signOut();
+  await db.auth.signOut();
 
   // Clear active_org cookie too.
   const store = await cookies();

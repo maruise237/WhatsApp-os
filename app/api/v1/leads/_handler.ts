@@ -29,7 +29,7 @@ const LEAD_COLS = "*";
  * = o chamador não mencionou dono.
  */
 async function ownerPatchOrThrow(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   input: OwnerPatchInput,
 ): Promise<OwnerPatch | null> {
@@ -46,7 +46,7 @@ async function ownerPatchOrThrow(
   if (!result.patch) return null;
 
   if (result.patch.owner_agent_id !== null) {
-    const { data: agent, error: agentErr } = await supabase
+    const { data: agent, error: agentErr } = await db
       .from("ai_agents")
       .select("id")
       .eq("id", result.patch.owner_agent_id)
@@ -131,7 +131,7 @@ function decLeadCursor(raw: string): LeadCursor | null {
 }
 
 export async function listLeadsHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   q: ListLeadsQuery,
 ): Promise<ListLeadsResult> {
@@ -144,7 +144,7 @@ export async function listLeadsHandler(
   // ler não devolve erro, então nada quebrava; o agente só passava a "saber"
   // coisas que não são da casa dele. Escopo de funil montado por cima de um
   // caminho que vaza ORG seria porta trancada em casa sem parede.
-  let query = supabase
+  let query = db
     .from("crm_leads")
     .select(LEAD_COLS)
     .eq("organization_id", ctx.organization_id)
@@ -187,7 +187,7 @@ export async function listLeadsHandler(
 // ---------------------------------------------------------------------------
 
 export async function getLeadHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   leadId: string,
 ): Promise<Record<string, unknown>> {
@@ -198,7 +198,7 @@ export async function getLeadHandler(
   // **bypassa RLS**. Sem esta linha, o agente de uma organização LIA o negócio
   // de outra — medido, não suposto: `tests/invariants/mcp-nao-alcanca-outro-tenant.test.ts`
   // reprovava aqui antes deste filtro. É o anti-pattern 10 do CLAUDE.md.
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("crm_leads")
     .select(LEAD_COLS)
     .eq("organization_id", ctx.organization_id)
@@ -220,7 +220,7 @@ export async function getLeadHandler(
 // ---------------------------------------------------------------------------
 
 export async function createLeadHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   input: CreateLeadInput & {
     custom_fields?: Record<string, unknown>;
@@ -230,7 +230,7 @@ export async function createLeadHandler(
   },
 ): Promise<Record<string, unknown>> {
   // Validate stage belongs to pipeline within active org.
-  const { data: stage, error: stageErr } = await supabase
+  const { data: stage, error: stageErr } = await db
     .from("crm_stages")
     .select("id, pipeline_id, organization_id")
     .eq("id", input.stage_id)
@@ -253,7 +253,7 @@ export async function createLeadHandler(
   }
 
   // next position_in_stage = MAX + 1000.
-  const { data: maxRow, error: maxErr } = await supabase
+  const { data: maxRow, error: maxErr } = await db
     .from("crm_leads")
     .select("position_in_stage")
     .eq("stage_id", input.stage_id)
@@ -269,10 +269,10 @@ export async function createLeadHandler(
   // Nascer com dono e sem owner_kind é drift silencioso (o CHECK aceita kind
   // null): o lead teria dono e sumiria do filtro e das métricas por kind.
   const ownerPatch =
-    (await ownerPatchOrThrow(supabase, ctx, input)) ??
+    (await ownerPatchOrThrow(db, ctx, input)) ??
     ({ owner_user_id: null, owner_agent_id: null, owner_kind: null } satisfies OwnerPatch);
 
-  const { data: lead, error: insErr } = await supabase
+  const { data: lead, error: insErr } = await db
     .from("crm_leads")
     .insert({
       organization_id: ctx.organization_id,
@@ -310,7 +310,7 @@ export async function createLeadHandler(
   }
 
   const a = actorAuditPayload(ctx.actor);
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "lead.created",
       p_entity_kind: "crm_lead",
@@ -350,7 +350,7 @@ export async function createLeadHandler(
 // ---------------------------------------------------------------------------
 
 export async function updateLeadHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   leadId: string,
   input: UpdateLeadInput,
@@ -364,7 +364,7 @@ export async function updateLeadHandler(
   // negócio de outra — o teste de cross-tenant provou a escrita comparando o
   // título depois. Pior: o audit era gravado sob `existing.organization_id`,
   // ou seja, no log da VÍTIMA.
-  const { data: existing, error: selErr } = await supabase
+  const { data: existing, error: selErr } = await db
     .from("crm_leads")
     .select("*")
     .eq("organization_id", ctx.organization_id)
@@ -386,7 +386,7 @@ export async function updateLeadHandler(
   if (input.currency !== undefined) patch.currency = input.currency;
   // Dono do negócio (0070): regra em lib/leads/owner-patch.ts, compartilhada
   // com create, bulk e MCP. owner_kind é DERIVADO — nunca lido do body.
-  const ownerPatch = await ownerPatchOrThrow(supabase, ctx, input);
+  const ownerPatch = await ownerPatchOrThrow(db, ctx, input);
   if (ownerPatch) {
     Object.assign(patch, ownerPatch);
     if (ownerPatch.owner_user_id !== null || ownerPatch.owner_agent_id !== null) {
@@ -401,7 +401,7 @@ export async function updateLeadHandler(
   // O filtro entra AQUI TAMBÉM, e não só no SELECT acima: entre ler e escrever
   // há uma janela, e defesa que depende de uma leitura anterior é defesa que
   // some quando alguém reordena o código.
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("crm_leads")
     .update(patch)
     .eq("organization_id", ctx.organization_id)
@@ -434,7 +434,7 @@ export async function updateLeadHandler(
   // dossie e clicar Salvar geraria "Dados do negocio alterados" com a lista
   // vazia — ruido na timeline exatamente na superficie que promete contar a
   // vida do negocio.
-  const atividadeEdicao = fields.length === 0 ? { ok: true as const } : await emitLeadActivity(supabase, {
+  const atividadeEdicao = fields.length === 0 ? { ok: true as const } : await emitLeadActivity(db, {
     organizationId: existing.organization_id,
     leadId,
     contactId: (updated as { contact_id?: string | null }).contact_id ?? null,
@@ -462,7 +462,7 @@ export async function updateLeadHandler(
   if (!atividadeEdicao.ok) {
     // Rastro de mutação já ocorrida: falha BAIXO, mas contada (ver
     // lib/leads/activity-write-failure.ts).
-    await registraFalhaDeAtividade(supabase, {
+    await registraFalhaDeAtividade(db, {
       organizationId: existing.organization_id,
       leadId,
       tipo: "lead_edited",
@@ -472,7 +472,7 @@ export async function updateLeadHandler(
     });
   }
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "lead.updated",
       p_entity_kind: "crm_lead",
@@ -489,7 +489,7 @@ export async function updateLeadHandler(
     const prevTags: string[] = (existing as { tags?: string[] }).tags ?? [];
     const addedTags = input.tags.filter((t) => !prevTags.includes(t));
     if (addedTags.length) {
-      await supabase
+      await db
         .rpc("emit_event", {
           p_event_type: "lead.tag_added",
           p_entity_kind: "crm_lead",
@@ -529,12 +529,12 @@ export interface MoveLeadAdminInput {
 }
 
 export async function moveLeadHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   leadId: string,
   input: MoveLeadAdminInput,
 ): Promise<Record<string, unknown>> {
-  const { data: lead, error: selErr } = await supabase
+  const { data: lead, error: selErr } = await db
     .from("crm_leads")
     .select("*")
     .eq("id", leadId)
@@ -547,7 +547,7 @@ export async function moveLeadHandler(
     throw new ApiError(404, "not_found", undefined, ctx.requestId, "Client introuvable.");
   }
 
-  const { data: stage, error: stageErr } = await supabase
+  const { data: stage, error: stageErr } = await db
     .from("crm_stages")
     .select("id, pipeline_id, organization_id, name")
     .eq("id", input.to_stage_id)
@@ -570,7 +570,7 @@ export async function moveLeadHandler(
 
   let position = input.position_in_stage;
   if (position === undefined) {
-    const { data: maxRow } = await supabase
+    const { data: maxRow } = await db
       .from("crm_leads")
       .select("position_in_stage")
       .eq("stage_id", input.to_stage_id)
@@ -581,7 +581,7 @@ export async function moveLeadHandler(
   }
 
   const nowIso = new Date().toISOString();
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("crm_leads")
     .update({
       stage_id: input.to_stage_id,
@@ -606,7 +606,7 @@ export async function moveLeadHandler(
     );
   }
 
-  const { data: fresh } = await supabase
+  const { data: fresh } = await db
     .from("crm_leads")
     .select("*")
     .eq("id", leadId)
@@ -614,7 +614,7 @@ export async function moveLeadHandler(
   const finalLead = (fresh ?? updated) as Record<string, unknown>;
 
   const a = actorAuditPayload(ctx.actor);
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "lead.stage_changed",
       p_entity_kind: "crm_lead",
@@ -638,13 +638,13 @@ export async function moveLeadHandler(
   // faria a seguir?". O nome do estágio de origem sai de crm_stages para o
   // reason ser legível ("Movido de Avaliação para Proposta enviada") em vez de
   // dois UUIDs.
-  const { data: fromStage } = await supabase
+  const { data: fromStage } = await db
     .from("crm_stages")
     .select("name")
     .eq("id", lead.stage_id)
     .maybeSingle();
 
-  const atividade = await emitLeadActivity(supabase, {
+  const atividade = await emitLeadActivity(db, {
     organizationId: lead.organization_id,
     leadId,
     contactId: (lead as { contact_id: string | null }).contact_id,
@@ -670,7 +670,7 @@ export async function moveLeadHandler(
   // Só para ator HUMANO: a IA reorganizando o próprio trabalho não é correção.
   if (ctx.actor.type === "user") {
     try {
-      const { data: historico } = await supabase
+      const { data: historico } = await db
         .from("crm_lead_activities")
         .select("actor_kind, actor_agent_id, payload, performed_at")
         .eq("organization_id", lead.organization_id)
@@ -703,7 +703,7 @@ export async function moveLeadHandler(
       });
 
       if (veredito.ehCorrecao) {
-        await emitLeadActivity(supabase, {
+        await emitLeadActivity(db, {
           organizationId: lead.organization_id,
           leadId,
           contactId: (lead as { contact_id: string | null }).contact_id,
@@ -736,7 +736,7 @@ export async function moveLeadHandler(
     // Falha BAIXO: o card já moveu e bloquear deixaria o negócio refém da
     // timeline. Mas falhar baixo é escolher não bloquear, não escolher não
     // contar — o rastro perdido vira evento e alerta.
-    await registraFalhaDeAtividade(supabase, {
+    await registraFalhaDeAtividade(db, {
       organizationId: lead.organization_id,
       leadId,
       tipo: "stage_changed",

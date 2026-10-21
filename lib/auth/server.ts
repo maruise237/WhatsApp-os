@@ -59,11 +59,11 @@ export function ehSessaoAusente(error: { name?: string } | null | undefined): bo
 }
 
 export async function loadAuthUser(): Promise<AuthUser | null> {
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   // ⚠️ O `error` era DESCARTADO — nem chegava a ser desestruturado —, e aqui
   // `user: null` é tão ambíguo quanto o `data: null` que a query logo abaixo
   // trata com todo o cuidado: significa "não está logado" (estado normal) E
@@ -108,7 +108,7 @@ export async function loadAuthUser(): Promise<AuthUser | null> {
   // ⚠️ O erro é capturado de propósito: aqui `data: null` é AMBÍGUO — significa tanto
   // "não é platform admin" (RLS filtrou, estado normal) quanto "a query falhou".
   // Sem separar os dois, um banco instável rebaixa silenciosamente um super-admin.
-  const { data: paRow, error: paErro } = await supabase
+  const { data: paRow, error: paErro } = await db
     .from("platform_admins")
     .select("user_id, revoked_at")
     .eq("user_id", user.id)
@@ -116,7 +116,7 @@ export async function loadAuthUser(): Promise<AuthUser | null> {
     .maybeSingle();
 
   // Org memberships (only active = not revoked, accepted)
-  const { data: rawMemberships, error: membErro } = await supabase
+  const { data: rawMemberships, error: membErro } = await db
     .from("user_organizations")
     .select("organization_id, role, organizations(display_name)")
     .eq("user_id", user.id)
@@ -215,8 +215,8 @@ export async function requireAuth(): Promise<AuthUser> {
  * Use only in Server Components / Server Actions (cookie session).
  */
 export async function isMfaEnrolled(): Promise<boolean> {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.mfa.listFactors();
+  const db = await createClient();
+  const { data } = await db.auth.mfa.listFactors();
   return !!data?.totp?.some((f) => f.status === "verified");
 }
 
@@ -282,8 +282,8 @@ export async function requiresMfa(
  * vazada/phishing).
  */
 export async function sessionAal(): Promise<"aal1" | "aal2" | null> {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  const db = await createClient();
+  const { data } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
   // O tipo do SDK é `"aal1" | "aal2" | (string & {})` — aberto de propósito, para
   // aceitar níveis futuros. Estreitar aqui mantém a decisão em quem chama.
   const nivel: string | null | undefined = data?.currentLevel;

@@ -32,8 +32,8 @@ export default async function PipelinesSettingsPage() {
   }
   const podeEditarConfig = user.is_platform_admin || ROLE_RANK[activeOrg.role] >= ROLE_RANK.admin;
 
-  const supabase = await createClient();
-  const { data } = await supabase
+  const db = await createClient();
+  const { data } = await db
     .from("crm_pipelines")
     .select("id, name, slug, vocabulary, settings")
     .eq("organization_id", activeOrg.orgId)

@@ -28,8 +28,8 @@ const COLUNAS = "id, name, slug, description, position, is_default, is_archived"
  * O filtro explícito de `organization_id` é a convenção do repo e a rede que
  * sobra se a policy mudar — a RLS já vale porque o client é o do usuário.
  */
-export async function lerFunis(supabase: Supabase, orgId: string): Promise<FunilEditavel[]> {
-  const { data, error } = await supabase
+export async function lerFunis(db: Supabase, orgId: string): Promise<FunilEditavel[]> {
+  const { data, error } = await db
     .from("crm_pipelines")
     .select(COLUNAS)
     .eq("organization_id", orgId)
@@ -54,25 +54,25 @@ export async function lerFunis(supabase: Supabase, orgId: string): Promise<Funil
  * milhares — ler e filtrar é honesto e testável sem Postgres.
  */
 export async function lerDependencias(
-  supabase: Supabase,
+  db: Supabase,
   orgId: string,
   pipelineId: string,
 ): Promise<DependenciasDoFunil> {
-  const { count, error: leadsErr } = await supabase
+  const { count, error: leadsErr } = await db
     .from("crm_leads")
     .select("id", { count: "exact", head: true })
     .eq("organization_id", orgId)
     .eq("pipeline_id", pipelineId);
   if (leadsErr) throw new Error(leadsErr.message);
 
-  const { data: fontes, error: fontesErr } = await supabase
+  const { data: fontes, error: fontesErr } = await db
     .from("webhook_sources")
     .select("name")
     .eq("organization_id", orgId)
     .eq("default_pipeline_id", pipelineId);
   if (fontesErr) throw new Error(fontesErr.message);
 
-  const { data: regras, error: regrasErr } = await supabase
+  const { data: regras, error: regrasErr } = await db
     .from("automation_rules")
     .select("name, is_active, actions")
     .eq("organization_id", orgId);

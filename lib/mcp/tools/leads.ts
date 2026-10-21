@@ -38,7 +38,7 @@ async function enrichLeads(
   if (leads.length === 0) return leads;
 
   const names = await resolveUserNames(
-    ctx.supabase,
+    ctx.db,
     leads.map((l) => l.owner_user_id as string | null),
   );
 
@@ -47,7 +47,7 @@ async function enrichLeads(
   ];
   const stageById = new Map<string, { id: string; name: string }>();
   if (stageIds.length > 0) {
-    const { data } = await ctx.supabase
+    const { data } = await ctx.db
       .from("crm_stages")
       .select("id, name")
       .eq("organization_id", ctx.organizationId)
@@ -90,7 +90,7 @@ export const crmListLeads: McpToolDefinition<typeof listInputShape> = {
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const result = await listLeadsHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -132,7 +132,7 @@ export const crmGetLead: McpToolDefinition<typeof getInputShape> = {
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const lead = await getLeadHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -196,7 +196,7 @@ export const crmCreateLead: McpToolDefinition<typeof createInputShape> = {
       source: input.source ?? "ai_agent",
     });
     const lead = await createLeadHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -241,7 +241,7 @@ export const crmUpdateLead: McpToolDefinition<typeof updateInputShape> = {
     const { lead_id, ...rest } = input;
     const parsed = updateLeadSchema.parse(rest);
     const lead = await updateLeadHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,
@@ -275,7 +275,7 @@ export const crmMoveLeadStage: McpToolDefinition<typeof moveInputShape> = {
   requiresScope: "mcp:write",
   handler: async (input, ctx) => {
     const lead = await moveLeadHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,

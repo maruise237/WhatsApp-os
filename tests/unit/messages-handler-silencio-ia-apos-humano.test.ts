@@ -92,7 +92,7 @@ function makeSupabase(botSilencedUntil: string | null) {
     },
     rpc: async () => ({ error: null }),
   };
-  return { supabase: client as unknown as DbClient, patches };
+  return { db: client as unknown as DbClient, patches };
 }
 
 const input = { conversation_id: CONV, type: 'text', body: 'oi' } as SendMessageInput;
@@ -112,10 +112,10 @@ describe('sendMessageHandler — silêncio da IA de 5min após resposta manual h
   it('humano manda mensagem numa conversa sem silêncio → bot_silenced_until vira ~agora+5min', async () => {
     wahaConfigured();
     const ctx: HandlerCtx = { organization_id: ORG, actor: { type: 'user', id: USER }, requestId: 'req-1' };
-    const { supabase, patches } = makeSupabase(null);
+    const { db, patches } = makeSupabase(null);
 
     const before = Date.now();
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
     const after = Date.now();
 
     const convPatch = patches[patches.length - 1]!;
@@ -128,9 +128,9 @@ describe('sendMessageHandler — silêncio da IA de 5min após resposta manual h
   it('IA envia mensagem (ai_agent) → NÃO mexe em bot_silenced_until', async () => {
     wahaConfigured();
     const ctx: HandlerCtx = { organization_id: ORG, actor: { type: 'ai_agent', id: AGENT_RUN, role: 'agent' }, requestId: 'req-2' };
-    const { supabase, patches } = makeSupabase(null);
+    const { db, patches } = makeSupabase(null);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     const convPatch = patches[patches.length - 1]!;
     expect(convPatch.bot_silenced_until, 'a IA silenciou a si mesma ao responder').toBeUndefined();
@@ -139,9 +139,9 @@ describe('sendMessageHandler — silêncio da IA de 5min após resposta manual h
   it('handoff permanente (infinity) já ativo → resposta manual NÃO encurta para 5min', async () => {
     wahaConfigured();
     const ctx: HandlerCtx = { organization_id: ORG, actor: { type: 'user', id: USER }, requestId: 'req-3' };
-    const { supabase, patches } = makeSupabase('infinity');
+    const { db, patches } = makeSupabase('infinity');
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     const convPatch = patches[patches.length - 1]!;
     expect(convPatch.bot_silenced_until, 'rebaixou o handoff permanente para uma janela de 5min').toBeUndefined();
@@ -151,9 +151,9 @@ describe('sendMessageHandler — silêncio da IA de 5min após resposta manual h
     wahaConfigured();
     const ctx: HandlerCtx = { organization_id: ORG, actor: { type: 'user', id: USER }, requestId: 'req-4' };
     const trintaMin = new Date(Date.now() + 30 * 60 * 1000).toISOString();
-    const { supabase, patches } = makeSupabase(trintaMin);
+    const { db, patches } = makeSupabase(trintaMin);
 
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     const convPatch = patches[patches.length - 1]!;
     expect(convPatch.bot_silenced_until, 'encurtou um silêncio maior já setado').toBeUndefined();
@@ -163,10 +163,10 @@ describe('sendMessageHandler — silêncio da IA de 5min após resposta manual h
     wahaConfigured();
     const ctx: HandlerCtx = { organization_id: ORG, actor: { type: 'user', id: USER }, requestId: 'req-5' };
     const umMin = new Date(Date.now() + 60 * 1000).toISOString();
-    const { supabase, patches } = makeSupabase(umMin);
+    const { db, patches } = makeSupabase(umMin);
 
     const before = Date.now();
-    await sendMessageHandler(supabase, ctx, input);
+    await sendMessageHandler(db, ctx, input);
 
     const convPatch = patches[patches.length - 1]!;
     expect(convPatch.bot_silenced_until, 'não renovou a janela com a nova mensagem').toBeDefined();

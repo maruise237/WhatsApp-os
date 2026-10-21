@@ -39,8 +39,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: rows, error } = await supabase
+  const db = await createClient();
+  const { data: rows, error } = await db
     .from("user_organizations")
     .select("user_id, role, invited_at, accepted_at, revoked_at, created_at")
     .eq("organization_id", activeOrg.orgId)

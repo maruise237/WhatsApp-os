@@ -26,8 +26,8 @@ export async function GET(_req: NextRequest): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("api_tokens")
     .select(SELECT_COLS)
     .eq("organization_id", activeOrg.orgId)
@@ -64,8 +64,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     ? new Date(Date.now() + input.expires_in_days * 24 * 60 * 60 * 1000).toISOString()
     : null;
 
-  const supabase = await createClient();
-  const { data: created, error: insErr } = await supabase
+  const db = await createClient();
+  const { data: created, error: insErr } = await db
     .from("api_tokens")
     .insert({
       organization_id: activeOrg.orgId,

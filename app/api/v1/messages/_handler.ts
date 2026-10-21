@@ -74,7 +74,7 @@ type SB = DbClient;
  * do próprio CRM.
  */
 async function removerEcoDoProprioEnvio(
-  supabase: SB,
+  db: SB,
   organizationId: string,
   conversationId: string,
   minhaLinhaId: string,
@@ -89,7 +89,7 @@ async function removerEcoDoProprioEnvio(
   // trocar uma duplicata visível por um status mentiroso. O pior caso aceitável
   // é não conseguir remover, que é exatamente o mundo de antes desta função.
   try {
-    const { error } = await supabase
+    const { error } = await db
       .from("messages")
       .delete()
       .eq("organization_id", organizationId)
@@ -161,7 +161,7 @@ export interface ListMessagesResult {
 }
 
 export async function listMessagesHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   conversationId: string,
   q: ListMessagesQuery,
@@ -183,7 +183,7 @@ export async function listMessagesHandler(
   // Chat lê de baixo para cima: o padrão certo é buscar as ÚLTIMAS N e paginar
   // para trás ao rolar. O cursor, portanto, passa a andar para o passado
   // (`lt`), e não mais para o futuro.
-  let query = supabase
+  let query = db
     .from("messages")
     .select(MSG_COLS)
     .eq("conversation_id", conversationId)
@@ -259,7 +259,7 @@ function extendBotSilence(current: string | null, now: string): string | undefin
 }
 
 export async function sendMessageHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   input: SendMessageInput,
 ): Promise<Message> {
@@ -271,8 +271,8 @@ export async function sendMessageHandler(
   const convSelect = (comArchived: boolean) =>
     `id, organization_id, contact_id, channel_session_id, is_group, group_chat_id, bot_silenced_until, provider_conversation_id, contacts:contact_id(phone_number, wa_identity, wa_lid, is_blocked), channel_sessions:channel_session_id(${CHANNEL_SESSION_REF_COLUMNS}, status${comArchived ? `, ${ARCHIVED_AT}` : ""})`;
   const { data: conv, error: convErr } = await queryTolerantToMissingArchived(
-    () => supabase.from("conversations").select(convSelect(true)).eq("id", input.conversation_id).maybeSingle(),
-    () => supabase.from("conversations").select(convSelect(false)).eq("id", input.conversation_id).maybeSingle(),
+    () => db.from("conversations").select(convSelect(true)).eq("id", input.conversation_id).maybeSingle(),
+    () => db.from("conversations").select(convSelect(false)).eq("id", input.conversation_id).maybeSingle(),
   );
 
   if (convErr) {
@@ -330,7 +330,7 @@ export async function sendMessageHandler(
     const inline = input.metadata?.shared_contact;
 
     if (typeof sharedId === "string" && sharedId.length > 0) {
-      const { data: shared, error: sharedErr } = await supabase
+      const { data: shared, error: sharedErr } = await db
         .from("contacts")
         .select("id, display_name, name, phone_number, is_anonymized, is_blocked")
         .eq("id", sharedId)
@@ -422,7 +422,7 @@ export async function sendMessageHandler(
   // "responder" veria a mensagem sair sem o fio e não saberia por quê.
   let citada: { id: string; external_id: string | null } | null = null;
   if (input.reply_to_message_id) {
-    const { data: alvo } = await supabase
+    const { data: alvo } = await db
       .from("messages")
       .select("id, external_id")
       .eq("id", input.reply_to_message_id)
@@ -467,7 +467,7 @@ export async function sendMessageHandler(
     },
   };
 
-  const { data: created, error: insErr } = await supabase
+  const { data: created, error: insErr } = await db
     .from("messages")
     .insert(insertRow)
     .select(MSG_COLS)
@@ -508,7 +508,7 @@ export async function sendMessageHandler(
     // e é o que o ledger do agente lê como desfecho TERMINAL — em `queued` o
     // follow-up ficaria retentando contra um número que não existe mais.
     // Vem ANTES de `isConfigured`: um canal excluído não espera configuração.
-    const { data: updated } = await supabase
+    const { data: updated } = await db
       .from("messages")
       .update({
         status: "failed",
@@ -520,7 +520,7 @@ export async function sendMessageHandler(
       .maybeSingle();
     if (updated) message = updated as unknown as Message;
   } else if (!adapter.isConfigured()) {
-    const { data: updated } = await supabase
+    const { data: updated } = await db
       .from("messages")
       .update({
         metadata: { ...(message.metadata ?? {}), queued_reason: adapter.codes.notConfigured },
@@ -530,7 +530,7 @@ export async function sendMessageHandler(
       .maybeSingle();
     if (updated) message = updated as unknown as Message;
   } else if (!chatId) {
-    const { data: updated } = await supabase
+    const { data: updated } = await db
       .from("messages")
       .update({
         status: "failed",
@@ -542,7 +542,7 @@ export async function sendMessageHandler(
       .maybeSingle();
     if (updated) message = updated as unknown as Message;
   } else if (!c.channel_sessions || c.channel_sessions.status !== "WORKING") {
-    const { data: updated } = await supabase
+    const { data: updated } = await db
       .from("messages")
       .update({
         metadata: {
@@ -579,7 +579,7 @@ export async function sendMessageHandler(
         // característica do transporte. O caminho de baixo já conferia; o
         // adapter postava direto, e um parâmetro a mais virava `400` cru em vez
         // de "falta o valor {{2}}".
-        await conferirDefinicao(supabase, {
+        await conferirDefinicao(db, {
           organizationId: ctx.organization_id,
           // A conexão dona da definição: dois números têm modelos diferentes, e
           // conferir a do número errado aprovaria um envio que a plataforma
@@ -602,7 +602,7 @@ export async function sendMessageHandler(
                 values: input.template_values ?? {},
               })
             ).externalId
-          : await sendTemplateForSession(supabase, {
+          : await sendTemplateForSession(db, {
               organizationId: ctx.organization_id,
               to: chatId,
               name: input.template_name ?? "",
@@ -675,14 +675,14 @@ export async function sendMessageHandler(
         }));
       }
       await removerEcoDoProprioEnvio(
-        supabase,
+        db,
         ctx.organization_id,
         c.id,
         message.id,
         externalId,
         externalId ? (adapter.echoExternalIds?.({ externalId, recipient: chatId }) ?? [externalId]) : [],
       );
-      const { data: updated } = await supabase
+      const { data: updated } = await db
         .from("messages")
         .update({
           status: "sent",
@@ -718,7 +718,7 @@ export async function sendMessageHandler(
       // Quem sabe é `send()`, que pode consultar o banco — então ele lança, e a
       // tradução do desfecho acontece aqui.
       if (msg.startsWith(adapter.codes.notConfigured)) {
-        const { data: emFila } = await supabase
+        const { data: emFila } = await db
           .from("messages")
           .update({
             metadata: { ...(message.metadata ?? {}), queued_reason: adapter.codes.notConfigured },
@@ -730,7 +730,7 @@ export async function sendMessageHandler(
         return message;
       }
 
-      const { data: updated } = await supabase
+      const { data: updated } = await db
         .from("messages")
         .update({
           status: "failed",
@@ -768,7 +768,7 @@ export async function sendMessageHandler(
     if (silenceUntil) conversationUpdate.bot_silenced_until = silenceUntil;
   }
 
-  await supabase.from("conversations").update(conversationUpdate).eq("id", c.id);
+  await db.from("conversations").update(conversationUpdate).eq("id", c.id);
 
   // Envio pelo CRM não passa por `fn_mark_conversation_message` — carimba o
   // contato aqui para /app/contacts refletir a resposta (migration 0162).
@@ -780,7 +780,7 @@ export async function sendMessageHandler(
   // única coisa entre esta escrita e outro tenant seria a confiança em
   // `c.contact_id` — e o anti-pattern nº 10 do CLAUDE.md existe justamente
   // porque essa confiança já falhou antes.
-  await supabase
+  await db
     .from("contacts")
     .update({ last_activity_at: now })
     .eq("id", c.contact_id)
@@ -797,7 +797,7 @@ export async function sendMessageHandler(
     metadata: { ...a.metadataActor, status: message.status, type: message.type },
   });
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "message.sent",
       p_entity_kind: "message",

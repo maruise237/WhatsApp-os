@@ -59,8 +59,8 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const includeArchived = req.nextUrl.searchParams.get("include_archived") === "true";
 
-  const supabase = await createClient();
-  let query = supabase
+  const db = await createClient();
+  let query = db
     .from("ai_agents")
     .select(AGENT_COLUMNS_COM_VERSAO)
     .eq("organization_id", activeOrg.orgId);

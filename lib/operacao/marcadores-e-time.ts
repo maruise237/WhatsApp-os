@@ -47,7 +47,7 @@ export async function listarMarcadores(
 ): Promise<MarcadorEmUso[]> {
   const limite = opts.limite ?? 60;
 
-  const { data: org, error: orgErr } = await deps.supabase
+  const { data: org, error: orgErr } = await deps.db
     .from("organizations")
     .select("settings")
     .eq("id", deps.organizationId)
@@ -65,7 +65,7 @@ export async function listarMarcadores(
   // clone atualizar; a leitura é limitada e a org tem conversas na casa dos
   // milhares, não dos milhões. Se um dia doer, vira índice GIN + RPC — e o
   // contrato desta função não muda.
-  const { data: conversas, error: convErr } = await deps.supabase
+  const { data: conversas, error: convErr } = await deps.db
     .from("conversations")
     .select("tags")
     .eq("organization_id", deps.organizationId)
@@ -116,7 +116,7 @@ export interface PessoaDoTime {
  * definição de mudança que ninguém quer descobrir depois.
  */
 export async function listarTime(deps: DepsDaOperacao): Promise<PessoaDoTime[]> {
-  const { data, error } = await deps.supabase
+  const { data, error } = await deps.db
     .from("user_organizations")
     .select("user_id, role, accepted_at, created_at")
     .eq("organization_id", deps.organizationId)

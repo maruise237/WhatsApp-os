@@ -93,11 +93,11 @@ type EtapaComAutoria = EtapaDoMapa & {
 };
 
 async function lerFunil(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   orgId: string,
   pipelineId: string,
 ): Promise<{ etapas: EtapaComAutoria[] } | null> {
-  const { data: pipeline, error: pipeErr } = await supabase
+  const { data: pipeline, error: pipeErr } = await db
     .from("crm_pipelines")
     .select("id")
     .eq("id", pipelineId)
@@ -106,7 +106,7 @@ async function lerFunil(
   if (pipeErr) throw new Error(pipeErr.message);
   if (!pipeline) return null;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("crm_stages")
     // A autoria entra na MESMA leitura que a tela de etapas já faz. Uma segunda
     // consulta só para ela seria um round-trip por render numa tela de
@@ -156,10 +156,10 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!authz.ok) return authz.response;
 
   const { id: pipelineId } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   try {
-    const funil = await lerFunil(supabase, authz.org.orgId, pipelineId);
+    const funil = await lerFunil(db, authz.org.orgId, pipelineId);
     if (!funil) return fail("not_found", "Tableau introuvable.", 404, { requestId });
     return ok(corpo(funil.etapas), { requestId });
   } catch (err) {
@@ -192,11 +192,11 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     );
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   let funil: Awaited<ReturnType<typeof lerFunil>>;
   try {
-    funil = await lerFunil(supabase, orgId, pipelineId);
+    funil = await lerFunil(db, orgId, pipelineId);
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
@@ -230,7 +230,7 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // estado; a saída definitiva seria uma função SQL, que só vale a pena se isto
   // deixar de ser uma tela de configuração ocasional.
   for (const u of updates) {
-    const { error } = await supabase
+    const { error } = await db
       .from("crm_stages")
       .update({ agent_stage_hint: u.hint })
       .eq("id", u.stageId)
@@ -272,7 +272,7 @@ export async function PUT(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // Relê em vez de espelhar o que foi pedido: a tela mostra o que o banco tem,
   // inclusive se um update parcial deixou o funil diferente do mapa enviado.
   try {
-    const depois = await lerFunil(supabase, orgId, pipelineId);
+    const depois = await lerFunil(db, orgId, pipelineId);
     if (!depois) return fail("not_found", "Tableau introuvable.", 404, { requestId });
     return ok(corpo(depois.etapas), { requestId });
   } catch (err) {

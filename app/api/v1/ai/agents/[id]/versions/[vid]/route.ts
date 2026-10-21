@@ -34,8 +34,8 @@ export async function GET(_req: NextRequest, ctx: Ctx): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("ai_agent_versions")
     .select(VERSION_COLUMNS)
     .eq("organization_id", activeOrg.orgId)

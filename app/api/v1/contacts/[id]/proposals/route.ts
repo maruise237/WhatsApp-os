@@ -41,8 +41,8 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const guard = await requireRole("viewer", { requestId });
   if (!guard.ok) return guard.response;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("contact_field_proposals")
     .select("id, campo, valor_proposto, valor_anterior, trecho, conversation_id, expires_at, proposed_at")
     .eq("organization_id", guard.org.orgId)

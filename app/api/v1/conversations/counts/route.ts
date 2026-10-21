@@ -17,12 +17,12 @@ export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -35,7 +35,7 @@ export async function GET(): Promise<Response> {
 
   const org = activeOrg.orgId;
   const countExact = () =>
-    supabase
+    db
       .from("conversations")
       .select("id", { count: "exact", head: true })
       .eq("organization_id", org);

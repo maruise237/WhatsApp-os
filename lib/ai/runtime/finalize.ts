@@ -113,7 +113,7 @@ export async function finalizeRun(input: FinalizeRunInput): Promise<void> {
 }
 
 export interface SendFinalResponseInput {
-  supabase: DbClient;
+  db: DbClient;
   organizationId: string;
   runId: string;
   /**
@@ -144,7 +144,7 @@ export async function sendFinalResponse(
   };
   try {
     const message = await sendMessageHandler(
-      input.supabase,
+      input.db,
       {
         organization_id: input.organizationId,
         actor,

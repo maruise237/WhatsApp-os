@@ -10,14 +10,14 @@
 import type { DbClient } from "@/lib/db/client";
 
 export async function resolveUserNames(
-  supabase: DbClient,
+  db: DbClient,
   userIds: Array<string | null | undefined>,
 ): Promise<Map<string, string | null>> {
   const unique = [...new Set(userIds.filter((id): id is string => Boolean(id)))];
   const entries = await Promise.all(
     unique.map(async (id): Promise<readonly [string, string | null]> => {
       try {
-        const { data } = await supabase.auth.admin.getUserById(id);
+        const { data } = await db.auth.admin.getUserById(id);
         const fullName = (data?.user?.user_metadata?.full_name as string | undefined) ?? null;
         return [id, fullName] as const;
       } catch {

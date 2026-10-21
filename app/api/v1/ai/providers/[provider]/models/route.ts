@@ -40,8 +40,8 @@ export async function GET(
     return fail("forbidden_tenant", "Aucune organisation active.", 403, { requestId });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("ai_models")
     .select(MODEL_COLUMNS)
     .eq("provider", provider)

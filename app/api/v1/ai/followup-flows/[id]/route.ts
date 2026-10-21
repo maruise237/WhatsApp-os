@@ -34,8 +34,8 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("followup_flow_pointers")
     .select(DETAIL_COLUMNS)
     .eq("id", id)
@@ -49,7 +49,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // evitado (não coberto pelo fake DB de tests/api/followup-flows.test.ts);
   // volume por pointer é baixo (1 insert por publish), então ordenar tudo em
   // memória é seguro.
-  const { data: versionRows, error: versionsErr } = await supabase
+  const { data: versionRows, error: versionsErr } = await db
     .from("followup_flow_versions")
     .select("id, created_at")
     .eq("organization_id", activeOrg.orgId)
@@ -93,8 +93,8 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     });
   }
 
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("followup_flow_pointers")
     .select("id")
     .eq("id", id)
@@ -105,7 +105,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
 
   const patch = parsed.data;
   if (Object.keys(patch).length === 0) {
-    const { data: unchanged, error: reloadErr } = await supabase
+    const { data: unchanged, error: reloadErr } = await db
       .from("followup_flow_pointers")
       .select(DETAIL_COLUMNS)
       .eq("id", id)
@@ -119,7 +119,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
 
   const update: Record<string, unknown> = { ...patch, updated_at: new Date().toISOString() };
 
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("followup_flow_pointers")
     .update(update)
     .eq("id", id)

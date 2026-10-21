@@ -66,17 +66,17 @@ export async function GET(req: NextRequest): Promise<Response> {
     return fail("forbidden", "aucune organisation active", 403, { requestId });
   }
   const orgId = activeOrg.orgId;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // ── PENDENTES ────────────────────────────────────────────────────────────
   const [{ data: estados, error: estadosErr }, { data: candidatos, error: candErr }] =
     await Promise.all([
-      supabase
+      db
         .from("lead_state")
         .select("contact_id, next_action, next_action_seq, updated_at")
         .eq("organization_id", orgId)
         .not("next_action", "is", null),
-      supabase
+      db
         .from("crm_leads")
         .select(
           "id, organization_id, pipeline_id, status, last_activity_at, created_at, contact_id",
@@ -100,7 +100,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const pendentes: PropostaPendente[] = [];
 
   if (leadIds.length > 0) {
-    const { data: leads, error: leadsErr } = await supabase
+    const { data: leads, error: leadsErr } = await db
       .from("crm_leads")
       .select("id, title, contact_id, crm_stages(name), contacts(display_name)")
       .eq("organization_id", orgId)
@@ -135,7 +135,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   // O histórico é o que PROVA que recusar virou registro. Sem ele, a aba
   // mostraria só o que falta decidir e a recusa continuaria parecendo ausência
   // de decisão — que é exatamente o defeito que a wave 4 consertou.
-  const { data: decididas, error: decErr } = await supabase
+  const { data: decididas, error: decErr } = await db
     .from("crm_lead_activities")
     .select("id, lead_id, type, payload, performed_at, performed_by_user_id, crm_leads(title)")
     .eq("organization_id", orgId)

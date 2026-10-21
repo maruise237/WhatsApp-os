@@ -66,7 +66,7 @@ export const crmAssignConversation: McpToolDefinition<typeof assignInputShape> =
     const parsed = assignObject.parse(input);
 
     // Defesa em profundidade — service role bypassa RLS: a conversa TEM que ser da org.
-    const { data: conv, error: convErr } = await ctx.supabase
+    const { data: conv, error: convErr } = await ctx.db
       .from("conversations")
       .select("id, organization_id, assigned_to_user_id")
       .eq("id", parsed.conversation_id)
@@ -95,7 +95,7 @@ export const crmAssignConversation: McpToolDefinition<typeof assignInputShape> =
     // true com o dono que ACABAMOS de ler ⇒ optimistic lock: sob CORRIDA (dois
     // assigns idênticos leem o mesmo dono antigo), o 1º vence (1 evento) e o 2º
     // vê o dono já mudado (v_from ≠ expected) ⇒ 0 rows, SEM evento duplicado.
-    const { data: rows, error: assignErr } = await ctx.supabase.rpc("fn_conversation_assign", {
+    const { data: rows, error: assignErr } = await ctx.db.rpc("fn_conversation_assign", {
       p_organization_id: ctx.organizationId,
       p_conversation_id: parsed.conversation_id,
       p_to_user_id: parsed.to_user_id,
@@ -108,7 +108,7 @@ export const crmAssignConversation: McpToolDefinition<typeof assignInputShape> =
       // 0 rows = perdeu o optimistic lock. Re-lê: se o dono já é o alvo, foi a
       // corrida idêntica (sibling aplicou) ⇒ idempotente. Senão, outro assign
       // concorrente venceu com destino diferente ⇒ conflito.
-      const { data: recheck } = await ctx.supabase
+      const { data: recheck } = await ctx.db
         .from("conversations")
         .select("assigned_to_user_id")
         .eq("id", parsed.conversation_id)
@@ -190,7 +190,7 @@ export const crmManageTags: McpToolDefinition<typeof tagsInputShape> = {
 
     const table = TAG_TARGET_TABLE[input.target_kind];
 
-    const { data: row, error: fetchErr } = await ctx.supabase
+    const { data: row, error: fetchErr } = await ctx.db
       .from(table)
       .select("id, tags")
       .eq("id", input.target_id)
@@ -204,7 +204,7 @@ export const crmManageTags: McpToolDefinition<typeof tagsInputShape> = {
     // Dedup + teto de 20 (rejeita se estourar) — mesma validação da G3-05.
     const nextTags = conversationTagsSchema.parse(merged);
 
-    const { error: updateErr } = await ctx.supabase
+    const { error: updateErr } = await ctx.db
       .from(table)
       .update({ tags: nextTags })
       .eq("id", input.target_id)
@@ -244,6 +244,6 @@ export const crmGetQueueStatus: McpToolDefinition<typeof queueInputShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (_input, ctx) => {
-    return getQueueStatus(ctx.supabase, ctx.organizationId, new Date());
+    return getQueueStatus(ctx.db, ctx.organizationId, new Date());
   },
 };

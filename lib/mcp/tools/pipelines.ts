@@ -20,7 +20,7 @@ export const crmListPipelines: McpToolDefinition<typeof listInputShape> = {
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
     const result = await listPipelinesHandler(
-      ctx.supabase,
+      ctx.db,
       {
         organization_id: ctx.organizationId,
         actor: ctx.actor,

@@ -36,10 +36,10 @@ export async function updatePassword(
     };
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) return { ok: false, error: "session_expired" };
 
   const hdrs = await headers();
@@ -50,17 +50,17 @@ export async function updatePassword(
   // Conta com MFA: a sessão de recovery entra em AAL1, mas o GoTrue recusa a
   // troca de senha em AAL1 quando há fator verificado ("AAL2 session is
   // required..."). Elevamos para AAL2 com um challenge TOTP antes do update.
-  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  const { data: aal } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
   if (aal?.currentLevel === "aal1" && aal?.nextLevel === "aal2") {
     if (!parsed.data.mfa_code) return { ok: false, error: "mfa_required" };
-    const { data: factors } = await supabase.auth.mfa.listFactors();
+    const { data: factors } = await db.auth.mfa.listFactors();
     const totp = factors?.totp?.[0];
     if (!totp) return { ok: false, error: "update_failed" };
-    const { data: challenge, error: chErr } = await supabase.auth.mfa.challenge({
+    const { data: challenge, error: chErr } = await db.auth.mfa.challenge({
       factorId: totp.id,
     });
     if (chErr || !challenge) return { ok: false, error: "mfa_invalid" };
-    const { error: verifyErr } = await supabase.auth.mfa.verify({
+    const { error: verifyErr } = await db.auth.mfa.verify({
       factorId: totp.id,
       challengeId: challenge.id,
       code: parsed.data.mfa_code,
@@ -68,7 +68,7 @@ export async function updatePassword(
     if (verifyErr) return { ok: false, error: "mfa_invalid" };
   }
 
-  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  const { error } = await db.auth.updateUser({ password: parsed.data.password });
 
   if (error) {
     if (/different from the old password/i.test(error.message)) {
@@ -94,6 +94,6 @@ export async function updatePassword(
     userAgent,
   });
 
-  await supabase.auth.signOut();
+  await db.auth.signOut();
   redirect("/login?reset=success");
 }

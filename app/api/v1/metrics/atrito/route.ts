@@ -112,7 +112,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   // A RÉGUA é lida pelo ADMIN client com filtro explícito de organization_id
   // (mesmo padrão de /api/v1/settings/routing): `organizations` só aceita
@@ -127,7 +127,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     .maybeSingle();
   const abandonoHoras = lerAbandonoHoras(orgRow?.settings);
 
-  const { data, error } = await supabase.rpc("fn_atrito_metrics", {
+  const { data, error } = await db.rpc("fn_atrito_metrics", {
     p_org: activeOrg.orgId,
     p_from: from.toISOString(),
     p_to: to.toISOString(),

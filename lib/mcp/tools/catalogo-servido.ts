@@ -3,7 +3,7 @@
  * PRECISA LER para decidir (a camada de apresentação do catálogo).
  *
  * As duas metades vivem separadas por um motivo: `lib/mcp/tools/index.ts`
- * importa zod, supabase e os handlers — nada disso pode entrar num Client
+ * importa zod, db e os handlers — nada disso pode entrar num Client
  * Component. A tela consome esta junção pela rota `/api/v1/mcp/tools`.
  *
  * Por que falhar alto em vez de servir o que der: uma capacidade sem rótulo

@@ -43,9 +43,9 @@ export async function changeMemberRole(
     throw err;
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
-  const { data: target, error: fetchErr } = await supabase
+  const { data: target, error: fetchErr } = await db
     .from("user_organizations")
     .select("id, user_id, role, revoked_at")
     .eq("organization_id", activeOrg.orgId)
@@ -58,7 +58,7 @@ export async function changeMemberRole(
   }
 
   if (target.role === "admin" && input.role !== "admin") {
-    const { count, error: countErr } = await supabase
+    const { count, error: countErr } = await db
       .from("user_organizations")
       .select("id", { count: "exact", head: true })
       .eq("organization_id", activeOrg.orgId)
@@ -75,7 +75,7 @@ export async function changeMemberRole(
     }
   }
 
-  const { error: updErr } = await supabase
+  const { error: updErr } = await db
     .from("user_organizations")
     .update({ role: input.role, updated_at: new Date().toISOString() })
     .eq("id", target.id);

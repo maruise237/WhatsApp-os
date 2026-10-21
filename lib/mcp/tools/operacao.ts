@@ -56,7 +56,7 @@ import type { McpContext, McpToolDefinition } from "../types";
 /** O contexto MCP traduzido para o que as operações pedem. */
 function deps(ctx: McpContext): DepsDaOperacao {
   return {
-    supabase: ctx.supabase,
+    db: ctx.db,
     organizationId: ctx.organizationId,
     actor: ctx.actor,
     requestId: ctx.requestId,
@@ -82,7 +82,7 @@ export const crmListStages: McpToolDefinition<typeof listStagesShape> = {
   requiresRole: "agent",
   requiresScope: "mcp:read",
   handler: async (input, ctx) => {
-    const etapas = await lerFunil(ctx.supabase, ctx.organizationId, input.pipeline_id);
+    const etapas = await lerFunil(ctx.db, ctx.organizationId, input.pipeline_id);
     if (!etapas) {
       throw new ApiError(404, "not_found", undefined, ctx.requestId, "Tableau introuvable.");
     }

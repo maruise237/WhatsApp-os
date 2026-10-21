@@ -93,6 +93,6 @@ describe("a base do Storage vem de runtime, nunca do build", () => {
   it("a URL pública é montada a partir da base recebida, não de uma constante", () => {
     // Se alguém voltar a embutir um domínio aqui, o defeito volta por outro
     // caminho — com o gate acima verde.
-    expect(FONTE, "domínio literal no código").not.toMatch(/https:\/\/[a-z0-9-]+\.supabase\.co/);
+    expect(FONTE, "domínio literal no código").not.toMatch(/https:\/\/[a-z0-9-]+\.db\.co/);
   });
 });

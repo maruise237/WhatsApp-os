@@ -18,8 +18,8 @@ export async function GET(request: NextRequest): Promise<Response> {
   // `?include_archived=1` : le catalogue montre aussi les produits archivés,
   // pour qu'un vendeur puisse les réactiver au lieu de les recréer.
   const includeArchived = request.nextUrl.searchParams.get("include_archived") === "1";
-  const supabase = await createClient();
-  let query = supabase.from("products").select("*").eq("organization_id", authz.org.orgId);
+  const db = await createClient();
+  let query = db.from("products").select("*").eq("organization_id", authz.org.orgId);
   if (!includeArchived) query = query.eq("is_active", true);
   const { data, error } = await query.order("created_at", { ascending: false });
 
@@ -47,8 +47,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("products")
     .insert({ organization_id: authz.org.orgId, ...parsed.data })
     .select("*")

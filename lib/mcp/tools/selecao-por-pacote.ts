@@ -6,7 +6,7 @@
  * nunca é exercitada por teste. Aqui é função pura sobre listas de `name` —
  * o `ToolPicker` só chama e renderiza o resultado.
  *
- * Client-safe: zero import de zod, supabase ou next/headers.
+ * Client-safe: zero import de zod, db ou next/headers.
  *
  * A regra que justifica o módulo inteiro: **capacidade `critico` nunca entra
  * por pacote** (`entraPorPacote`). Ligar "Atender e responder" não pode, num

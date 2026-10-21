@@ -13,8 +13,8 @@ export default async function WelcomePage() {
   const activeOrg = await resolveActiveOrg(user);
   if (!activeOrg) redirect("/login");
 
-  const supabase = await createClient();
-  const retrato = await lerRetratoDaInstalacao({ supabase, orgId: activeOrg.orgId });
+  const db = await createClient();
+  const retrato = await lerRetratoDaInstalacao({ db, orgId: activeOrg.orgId });
 
   return (
     <div className="space-y-6">

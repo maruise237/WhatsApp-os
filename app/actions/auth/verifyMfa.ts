@@ -27,7 +27,7 @@ const MAX_ATTEMPTS = 3;
  * keyed on user_id + IP.
  */
 export async function verifyMfa(code: string, next?: string): Promise<VerifyMfaResult> {
-  const supabase = await createClient();
+  const db = await createClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
@@ -35,11 +35,11 @@ export async function verifyMfa(code: string, next?: string): Promise<VerifyMfaR
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (!user) redirect("/login");
 
   // Sanity-check: must have a verified TOTP factor.
-  const { data: factorsData } = await supabase.auth.mfa.listFactors();
+  const { data: factorsData } = await db.auth.mfa.listFactors();
   const totp = factorsData?.totp?.find((f) => f.status === "verified");
   if (!totp) redirect("/app/inbox");
 
@@ -60,14 +60,14 @@ export async function verifyMfa(code: string, next?: string): Promise<VerifyMfaR
   }
 
   // Issue challenge + verify.
-  const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({
+  const { data: challenge, error: challengeErr } = await db.auth.mfa.challenge({
     factorId: totp.id,
   });
   if (challengeErr || !challenge) {
     return { ok: false, error: "mfa_invalid" };
   }
 
-  const { error: verifyErr } = await supabase.auth.mfa.verify({
+  const { error: verifyErr } = await db.auth.mfa.verify({
     factorId: totp.id,
     challengeId: challenge.id,
     code,

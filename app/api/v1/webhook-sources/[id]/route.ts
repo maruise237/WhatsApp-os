@@ -41,8 +41,8 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     });
   }
 
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("webhook_sources")
     .select("id")
     .eq("id", id)
@@ -79,7 +79,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
     }
   }
 
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("webhook_sources")
     .update(patch)
     .eq("id", id)
@@ -109,8 +109,8 @@ export async function DELETE(_req: NextRequest, ctx: RouteCtx): Promise<Response
   if (!authz.ok) return authz.response;
   const { user, org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: existing, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: existing, error: fetchErr } = await db
     .from("webhook_sources")
     .select("id")
     .eq("id", id)
@@ -119,7 +119,7 @@ export async function DELETE(_req: NextRequest, ctx: RouteCtx): Promise<Response
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
   if (!existing) return fail("not_found", "Source introuvable.", 404, { requestId });
 
-  const { error: delErr } = await supabase.from("webhook_sources").delete().eq("id", id);
+  const { error: delErr } = await db.from("webhook_sources").delete().eq("id", id);
   if (delErr) return fail("internal_error", delErr.message, 500, { requestId });
 
   void audit({

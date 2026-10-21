@@ -82,11 +82,11 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   }
   const pedido = parsed.data;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   let funis: FunilEditavel[];
   try {
-    funis = await lerFunis(supabase, orgId);
+    funis = await lerFunis(db, orgId);
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
@@ -182,7 +182,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // antes de liberar o antigo é 23505 na cara do usuário. Disparar em paralelo
   // desfaz exatamente essa proteção.
   for (const u of updates) {
-    const { error } = await supabase
+    const { error } = await db
       .from("crm_pipelines")
       .update(u.patch)
       .eq("id", u.pipelineId)
@@ -208,7 +208,7 @@ export async function PATCH(req: NextRequest, ctx: RouteCtx): Promise<Response> 
   }
 
   try {
-    return ok(corpo(await lerFunis(supabase, orgId)), { requestId });
+    return ok(corpo(await lerFunis(db, orgId)), { requestId });
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
@@ -223,11 +223,11 @@ export async function DELETE(req: NextRequest, ctx: RouteCtx): Promise<Response>
   const { id: pipelineId } = await ctx.params;
   const definitivo = req.nextUrl.searchParams.get("definitivo") === "1";
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   let funis: FunilEditavel[];
   try {
-    funis = await lerFunis(supabase, orgId);
+    funis = await lerFunis(db, orgId);
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
@@ -236,7 +236,7 @@ export async function DELETE(req: NextRequest, ctx: RouteCtx): Promise<Response>
 
   let deps;
   try {
-    deps = await lerDependencias(supabase, orgId, pipelineId);
+    deps = await lerDependencias(db, orgId, pipelineId);
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }
@@ -259,8 +259,8 @@ export async function DELETE(req: NextRequest, ctx: RouteCtx): Promise<Response>
   }
 
   const { error } = definitivo
-    ? await supabase.from("crm_pipelines").delete().eq("id", pipelineId).eq("organization_id", orgId)
-    : await supabase
+    ? await db.from("crm_pipelines").delete().eq("id", pipelineId).eq("organization_id", orgId)
+    : await db
         .from("crm_pipelines")
         .update({ is_archived: true })
         .eq("id", pipelineId)
@@ -283,7 +283,7 @@ export async function DELETE(req: NextRequest, ctx: RouteCtx): Promise<Response>
   });
 
   try {
-    return ok(corpo(await lerFunis(supabase, orgId)), { requestId });
+    return ok(corpo(await lerFunis(db, orgId)), { requestId });
   } catch (err) {
     return fail("internal_error", (err as Error).message, 500, { requestId });
   }

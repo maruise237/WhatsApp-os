@@ -26,7 +26,7 @@ export type SignInResult = {
  * Sign in with password.
  *
  * On success: redirects server-side to `next` (or /app/inbox / /onboarding/mfa).
- * The redirect ensures Set-Cookie headers from supabase.auth propagate before
+ * The redirect ensures Set-Cookie headers from db.auth propagate before
  * middleware re-evaluates the session — fixes Next 15 Server Action cookie
  * propagation race.
  *
@@ -45,7 +45,7 @@ export async function signInWithPassword(
     };
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
@@ -68,7 +68,7 @@ export async function signInWithPassword(
     return { ok: false, error: "rate_limited" };
   }
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await db.auth.signInWithPassword({
     email: parsed.data.email,
     password: parsed.data.password,
   });
@@ -91,7 +91,7 @@ export async function signInWithPassword(
 
   // MFA gating — if the user has any verified TOTP factor enrolled, they must
   // complete the challenge in /login/mfa before reaching the app.
-  const { data: factorsData } = await supabase.auth.mfa.listFactors();
+  const { data: factorsData } = await db.auth.mfa.listFactors();
   const verifiedTotp = factorsData?.totp?.find((f) => f.status === "verified");
   if (verifiedTotp) {
     return { ok: false, error: "mfa_required", challengeId: verifiedTotp.id };

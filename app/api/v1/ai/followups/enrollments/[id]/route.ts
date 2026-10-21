@@ -138,8 +138,8 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org } = authz;
 
-  const supabase = await createClient();
-  const { data: row, error } = await supabase
+  const db = await createClient();
+  const { data: row, error } = await db
     .from("followup_enrollments")
     .select(
       `id, status, contact_id, pointer_id, version_id, current_node_id, next_eval_at, claimed_until,
@@ -157,7 +157,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (error) return fail("internal_error", error.message, 500, { requestId });
   if (!row) return fail("not_found", "Relance introuvable.", 404, { requestId });
 
-  const { data: eventos, error: evErr } = await supabase
+  const { data: eventos, error: evErr } = await db
     .from("followup_enrollment_events")
     .select("id, node_id, event_type, payload, created_at")
     .eq("organization_id", org.orgId)

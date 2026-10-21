@@ -52,8 +52,8 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
-  const { data: pointer, error: fetchErr } = await supabase
+  const db = await createClient();
+  const { data: pointer, error: fetchErr } = await db
     .from("followup_flow_pointers")
     .select("id")
     .eq("id", id)
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (fetchErr) return fail("internal_error", fetchErr.message, 500, { requestId });
   if (!pointer) return fail("not_found", "Scénario introuvable.", 404, { requestId });
 
-  const { data: version, error: versionErr } = await supabase
+  const { data: version, error: versionErr } = await db
     .from("followup_flow_versions")
     .select("id")
     .eq("id", parsed.data.version_id)
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (versionErr) return fail("internal_error", versionErr.message, 500, { requestId });
   if (!version) return fail("not_found", "Version introuvable.", 404, { requestId });
 
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("followup_flow_pointers")
     .update({
       active_version_id: version.id,

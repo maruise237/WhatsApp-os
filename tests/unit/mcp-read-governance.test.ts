@@ -1,7 +1,7 @@
 /**
  * G6-03 — as 4 tools de leitura expõem governança (spec 13 §3.1).
  *
- * Prova, contra os handlers REAIS (ctx.supabase stub):
+ * Prova, contra os handlers REAIS (ctx.db stub):
  *  - campos ADITIVOS presentes (assignee_kind, assigned_to_user_name, tags,
  *    queue_position; owner_user_name, stage, tags) por tool;
  *  - shape ANTIGO intacto (nada renomeado/removido — consumidor atual não quebra);
@@ -14,7 +14,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 // env.ts valida process.env no import; corta os chains client→env (os handlers só
-// recebem o ctx.supabase stub, nunca criam client real).
+// recebem o ctx.db stub, nunca criam client real).
 vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
@@ -109,7 +109,7 @@ function makeCtx(resolve: Resolver): McpContext {
     apiTokenId: "tok",
     requestId: "req",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase: makeSupabase(resolve) as any,
+    db: makeSupabase(resolve) as any,
   } as McpContext;
 }
 

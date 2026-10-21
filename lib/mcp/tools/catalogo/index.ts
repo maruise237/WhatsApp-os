@@ -11,7 +11,7 @@
  * `declararTools([...])` e acrescente UMA linha no import e UMA no spread
  * abaixo. Nao edite os arquivos dos outros dominios.
  *
- * Client-safe: zero import de zod, supabase ou next/headers.
+ * Client-safe: zero import de zod, db ou next/headers.
  */
 import { TOOLS_ATENDIMENTO } from "./atendimento";
 import { TOOLS_COMERCIO } from "./comercio";

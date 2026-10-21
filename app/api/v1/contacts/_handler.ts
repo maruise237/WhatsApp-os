@@ -87,7 +87,7 @@ export interface ListContactsResult {
 }
 
 export async function listContactsHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   raw: ContactListQueryParams,
 ): Promise<ListContactsResult> {
@@ -95,7 +95,7 @@ export async function listContactsHandler(
   const sortCol = q.order_by;
   const asc = q.order_dir === "asc";
 
-  let query = supabase
+  let query = db
     .from("contacts")
     .select(SELECT_COLS)
     .eq("organization_id", ctx.organization_id)
@@ -169,7 +169,7 @@ export async function listContactsHandler(
         })
       : null;
 
-  const { contacts, error: convErr } = await withConversas(supabase, ctx.organization_id, page);
+  const { contacts, error: convErr } = await withConversas(db, ctx.organization_id, page);
   if (convErr) {
     throw new ApiError(500, "internal_error", undefined, ctx.requestId, convErr);
   }
@@ -182,14 +182,14 @@ export async function listContactsHandler(
  * Mesma regra do quadro Kanban (`pipelines/[id]/board/route.ts:withConversas`).
  */
 async function withConversas(
-  supabase: SB,
+  db: SB,
   organizationId: string,
   contacts: Contact[],
 ): Promise<{ contacts: Contact[]; error: string | null }> {
   const contactIds = contacts.map((c) => c.id);
   if (contactIds.length === 0) return { contacts, error: null };
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .select("id, contact_id, last_message_preview, last_message_at, unread_count_for_assignee")
     .eq("organization_id", organizationId)
@@ -239,11 +239,11 @@ export interface GetContactResult extends Contact {
 }
 
 export async function getContactHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   input: GetContactInput,
 ): Promise<GetContactResult> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("contacts")
     .select(SELECT_COLS)
     .eq("id", input.contactId)
@@ -262,7 +262,7 @@ export async function getContactHandler(
   let cpfDecryptDenied = false;
 
   if (input.decryptPurpose && contact.cpf_hash && ctx.actor.type === "user") {
-    const { data: membership } = await supabase
+    const { data: membership } = await db
       .from("user_organizations")
       .select("role")
       .eq("user_id", ctx.actor.id)
@@ -275,7 +275,7 @@ export async function getContactHandler(
     if (rank < ROLE_RANK.manager!) {
       cpfDecryptDenied = true;
     } else {
-      const { data: dec, error: decErr } = await supabase.rpc("decrypt_cpf", {
+      const { data: dec, error: decErr } = await db.rpc("decrypt_cpf", {
         p_contact_id: input.contactId,
       });
       if (decErr) {
@@ -300,7 +300,7 @@ export async function getContactHandler(
     }
   }
 
-  const { contacts: enriched, error: convErr } = await withConversas(supabase, ctx.organization_id, [
+  const { contacts: enriched, error: convErr } = await withConversas(db, ctx.organization_id, [
     contact,
   ]);
   if (convErr) {
@@ -326,7 +326,7 @@ export interface CreateContactResult {
 }
 
 export async function createContactHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   input: ContactCreate,
 ): Promise<CreateContactResult> {
@@ -347,11 +347,11 @@ export async function createContactHandler(
 
   if (input.cpf) {
     insertRow.cpf_hash = hashCpf(input.cpf);
-    const enc = await encryptCpfSql(supabase, input.cpf);
+    const enc = await encryptCpfSql(db, input.cpf);
     if (enc) insertRow.cpf_encrypted = enc;
   }
 
-  const { data: created, error: insErr } = await supabase
+  const { data: created, error: insErr } = await db
     .from("contacts")
     .insert(insertRow)
     .select(SELECT_COLS)
@@ -363,7 +363,7 @@ export async function createContactHandler(
 
   const contact = created as Contact;
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "contact.created",
       p_entity_kind: "contact",
@@ -399,12 +399,12 @@ export async function createContactHandler(
 // ---------------------------------------------------------------------------
 
 export async function patchContactHandler(
-  supabase: SB,
+  db: SB,
   ctx: HandlerCtx,
   contactId: string,
   input: ContactPatch,
 ): Promise<Contact> {
-  const { data: existing, error: selErr } = await supabase
+  const { data: existing, error: selErr } = await db
     .from("contacts")
     // ⚠️ Os campos sensíveis entram aqui para existir o **`from`** da regra L-06
     // ("audit com who/what/which/when/**from/to**", exceção: "Nenhuma"). Antes
@@ -468,7 +468,7 @@ export async function patchContactHandler(
   }
   if (input.cpf !== undefined) {
     patch.cpf_hash = hashCpf(input.cpf);
-    const enc = await encryptCpfSql(supabase, input.cpf);
+    const enc = await encryptCpfSql(db, input.cpf);
     if (enc) patch.cpf_encrypted = enc;
   }
 
@@ -484,7 +484,7 @@ export async function patchContactHandler(
 
   patch.updated_at = new Date().toISOString();
 
-  const { data: updated, error: updErr } = await supabase
+  const { data: updated, error: updErr } = await db
     .from("contacts")
     .update(patch)
     .eq("id", contactId)
@@ -533,7 +533,7 @@ export async function patchContactHandler(
     sensiveis.consent_scopes = Object.keys(input.consent);
   }
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "contact.updated",
       p_entity_kind: "contact",
@@ -550,7 +550,7 @@ export async function patchContactHandler(
     const prevTags: string[] = (existing as { tags?: string[] }).tags ?? [];
     const addedTags = input.tags.filter((t) => !prevTags.includes(t));
     if (addedTags.length) {
-      await supabase
+      await db
         .rpc("emit_event", {
           p_event_type: "contact.tag_added",
           p_entity_kind: "contact",

@@ -36,7 +36,7 @@ export function createMcpServer(auth: McpAuthResult, requestId: string): McpServ
     version: SERVER_VERSION,
   });
 
-  const supabase = createAdminClient();
+  const db = createAdminClient();
 
   for (const tool of allTools) {
     server.registerTool(
@@ -54,7 +54,7 @@ export function createMcpServer(auth: McpAuthResult, requestId: string): McpServ
           actor: auth.actor,
           apiTokenId: auth.apiTokenId,
           requestId,
-          supabase,
+          db,
         };
 
         try {

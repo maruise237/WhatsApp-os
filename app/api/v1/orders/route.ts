@@ -16,8 +16,8 @@ export async function GET(): Promise<Response> {
   const authz = await requireRole("agent", { requestId, resource: "sales_orders" });
   if (!authz.ok) return authz.response;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("sales_orders")
     .select("*, sales_order_items(*), payment_proofs(*), contacts(id, name, display_name, phone_number)")
     .eq("organization_id", authz.org.orgId)
@@ -52,8 +52,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("fn_create_sales_order", {
+  const db = await createClient();
+  const { data, error } = await db.rpc("fn_create_sales_order", {
     p_contact_id: parsed.data.contact_id,
     p_conversation_id: parsed.data.conversation_id,
     p_created_by: authz.user.id,

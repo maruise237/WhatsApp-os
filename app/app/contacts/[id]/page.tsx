@@ -10,8 +10,8 @@ export default async function ContactDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: contact } = await supabase
+  const db = await createClient();
+  const { data: contact } = await db
     .from("contacts")
     .select("id, organization_id")
     .eq("id", id)

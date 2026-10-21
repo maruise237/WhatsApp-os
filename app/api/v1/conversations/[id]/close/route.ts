@@ -30,7 +30,7 @@ interface RouteCtx {
 export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "conversations" });
@@ -62,7 +62,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // `last_handoff_at`; um humano assumindo não. Então o UPDATE do silêncio é
   // SEPARADO e condicionado — soltar de propósito é o botão "Devolver ao
   // automático", que limpa as três travas de uma vez.
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .update({ status: "closed", status_changed_at: now })
     .eq("id", id)
@@ -81,7 +81,7 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   // A segunda metade: solta só o silêncio que um humano pôs ao assumir. O filtro
   // `.is("last_handoff_at", null)` é o que separa "o episódio acabou" de "a IA
   // escalou e ninguém devolveu" — na segunda, o silêncio fica.
-  const { error: erroSilencio } = await supabase
+  const { error: erroSilencio } = await db
     .from("conversations")
     .update({ bot_silenced_until: null })
     .eq("id", id)

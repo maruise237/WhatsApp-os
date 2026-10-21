@@ -46,7 +46,7 @@ interface RouteCtx {
  * RLS do caller, nunca do body.
  */
 async function withOwnerAgents(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   organizationId: string,
   leads: Lead[],
 ): Promise<{ leads: Lead[]; error: string | null }> {
@@ -59,7 +59,7 @@ async function withOwnerAgents(
   ];
   if (agentIds.length === 0) return { leads, error: null };
 
-  const { data: agents, error: agentsErr } = await supabase
+  const { data: agents, error: agentsErr } = await db
     .from("ai_agents")
     .select("id, name, published_version_id")
     .eq("organization_id", organizationId)
@@ -77,7 +77,7 @@ async function withOwnerAgents(
     .filter((v): v is string => !!v);
   const versionById = new Map<string, number>();
   if (publishedIds.length > 0) {
-    const { data: versions, error: versionsErr } = await supabase
+    const { data: versions, error: versionsErr } = await db
       .from("ai_agent_versions")
       .select("id, version_number")
       .eq("organization_id", organizationId)
@@ -130,13 +130,13 @@ async function withOwnerAgents(
  * do handler — o que não pode é o usuário perder o board por causa do aviso.
  */
 async function avisaAmbiguas(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   organizationId: string,
   ambiguas: PropostaAmbigua[],
 ): Promise<void> {
   if (ambiguas.length === 0) return;
 
-  const { data: jaAbertos } = await supabase
+  const { data: jaAbertos } = await db
     .from("agent_inbox_items")
     .select("ref_id")
     .eq("organization_id", organizationId)
@@ -164,7 +164,7 @@ async function avisaAmbiguas(
     }));
   if (novos.length === 0) return;
 
-  await supabase.from("agent_inbox_items").insert(novos);
+  await db.from("agent_inbox_items").insert(novos);
 }
 
 /**
@@ -179,13 +179,13 @@ async function avisaAmbiguas(
  * lugar onde o CHECK de coerência não alcança.
  */
 async function withScores(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   organizationId: string,
   leads: Lead[],
 ): Promise<{ leads: Lead[]; error: string | null }> {
   if (leads.length === 0) return { leads, error: null };
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("crm_lead_scores")
     .select(
       "lead_id, ai_probability, ai_probability_reason, ai_probability_band, ai_probability_evidence, ai_probability_at",
@@ -244,14 +244,14 @@ async function withScores(
  * conversas já vêm ordenadas, então o primeiro visto é o mais recente.
  */
 async function withConversas(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   organizationId: string,
   leads: Lead[],
 ): Promise<{ leads: Lead[]; error: string | null }> {
   const contactIds = [...new Set(leads.map((l) => l.contact_id).filter((c): c is string => !!c))];
   if (contactIds.length === 0) return { leads, error: null };
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("conversations")
     .select("id, contact_id, last_message_preview, last_message_at, unread_count_for_assignee")
     .eq("organization_id", organizationId)
@@ -287,7 +287,7 @@ async function withConversas(
 }
 
 async function withNextActions(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  db: Awaited<ReturnType<typeof createClient>>,
   organizationId: string,
   leads: Lead[],
   defaultPipelineId: string | null,
@@ -299,13 +299,13 @@ async function withNextActions(
 
   const [{ data: estados, error: estadosErr }, { data: candidatos, error: candErr }] =
     await Promise.all([
-      supabase
+      db
         .from("lead_state")
         .select("contact_id, next_action, next_action_seq, updated_at")
         .eq("organization_id", organizationId)
         .in("contact_id", contactIds)
         .not("next_action", "is", null),
-      supabase
+      db
         .from("crm_leads")
         .select(
           "id, organization_id, pipeline_id, status, last_activity_at, created_at, contact_id",
@@ -330,7 +330,7 @@ async function withNextActions(
   // de negócios abertos AGORA, e é aqui que esse olhar acontece. Fazer no
   // momento da escrita da proposta perderia o caso em que o segundo negócio
   // nasce depois dela.
-  await avisaAmbiguas(supabase, organizationId, ambiguas);
+  await avisaAmbiguas(db, organizationId, ambiguas);
 
   if (porLead.size === 0) return { leads, error: null };
 
@@ -347,11 +347,11 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id: pipelineId } = await ctx.params;
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -361,14 +361,14 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     { data: stages, error: stagesErr },
     { data: leads, error: leadsErr },
   ] = await Promise.all([
-    supabase.from("crm_pipelines").select("*").eq("id", pipelineId).maybeSingle(),
-    supabase
+    db.from("crm_pipelines").select("*").eq("id", pipelineId).maybeSingle(),
+    db
       .from("crm_stages")
       .select("*")
       .eq("pipeline_id", pipelineId)
       .eq("is_archived", false)
       .order("position"),
-    supabase
+    db
       .from("crm_leads")
       .select("*")
       .eq("pipeline_id", pipelineId)
@@ -382,7 +382,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!pipeline) return fail("resource_not_found", "Tableau introuvable.", 404, { requestId });
 
   const leadsWithOwner = await withOwnerAgents(
-    supabase,
+    db,
     (pipeline as Pipeline).organization_id,
     (leads ?? []) as Lead[],
   );
@@ -390,7 +390,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     return fail("internal_error", leadsWithOwner.error, 500, { requestId });
   }
 
-  const { data: pipelinePadrao } = await supabase
+  const { data: pipelinePadrao } = await db
     .from("crm_pipelines")
     .select("id")
     .eq("organization_id", (pipeline as Pipeline).organization_id)
@@ -398,7 +398,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
     .maybeSingle();
 
   const leadsComAcao = await withNextActions(
-    supabase,
+    db,
     (pipeline as Pipeline).organization_id,
     leadsWithOwner.leads,
     (pipelinePadrao as { id: string } | null)?.id ?? null,
@@ -408,7 +408,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
 
   const leadsComScore = await withScores(
-    supabase,
+    db,
     (pipeline as Pipeline).organization_id,
     leadsComAcao.leads,
   );
@@ -417,7 +417,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   }
 
   const leadsComConversa = await withConversas(
-    supabase,
+    db,
     (pipeline as Pipeline).organization_id,
     leadsComScore.leads,
   );

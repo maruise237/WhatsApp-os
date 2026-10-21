@@ -59,9 +59,9 @@ async function ensureChannelSession(
   sessionName: string,
   actor: ChannelReactivationActor,
 ): Promise<string> {
-  const supabase = await createClient();
+  const db = await createClient();
   const buscar = (colunas: string) =>
-    supabase
+    db
       .from("channel_sessions")
       .select(colunas)
       .eq("organization_id", orgId)
@@ -75,7 +75,7 @@ async function ensureChannelSession(
   if (existing?.id) {
     if (!existing.archived_at) return existing.id;
     const { error: reErr } = await reactivateChannelSession(
-      supabase,
+      db,
       {
         organizationId: orgId,
         channelSessionId: existing.id,
@@ -92,7 +92,7 @@ async function ensureChannelSession(
     if (reErr) throw new Error(`channel_session_reactivate_failed: ${reErr.message}`);
     return existing.id;
   }
-  const { data: created, error } = await supabase
+  const { data: created, error } = await db
     .from("channel_sessions")
     .insert({
       organization_id: orgId,

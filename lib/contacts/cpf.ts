@@ -34,10 +34,10 @@ export function hashCpf(raw: string): string {
  * the gap until the migration lands).
  */
 export async function encryptCpfSql(
-  supabase: DbClient,
+  db: DbClient,
   plaintext: string,
 ): Promise<Uint8Array | null> {
-  const { data, error } = await supabase.rpc("encrypt_cpf", { p_plaintext: plaintext });
+  const { data, error } = await db.rpc("encrypt_cpf", { p_plaintext: plaintext });
   if (error) {
     console.warn(
       "[contacts.cpf] encrypt_cpf RPC unavailable — storing cpf_hash only.",

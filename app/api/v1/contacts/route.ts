@@ -25,11 +25,11 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   try {
     const { contacts, cursor, has_more } = await listContactsHandler(
-      supabase,
+      db,
       {
         organization_id: orgId ?? "",
         actor: { type: "user", id: user.id },
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
 export async function POST(req: NextRequest): Promise<Response> {
   const requestId = randomUUID();
-  const supabase = await createClient();
+  const db = await createClient();
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "contacts" });
   if (!authz.ok) return authz.response;
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   try {
     const result = await createContactHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },

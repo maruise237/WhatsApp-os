@@ -49,7 +49,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
   requiresScope: "mcp:write",
   handler: async (input, ctx) => {
     // Conversation must belong to org (defense in depth — service role bypassa RLS).
-    const { data: conv, error: convErr } = await ctx.supabase
+    const { data: conv, error: convErr } = await ctx.db
       .from("conversations")
       .select("id, organization_id, contact_id, last_inbound_at")
       .eq("id", input.conversation_id)
@@ -62,7 +62,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
     // Try to find a lead linked to this contact (best effort for activity insert).
     let leadId: string | null = null;
     if (conv.contact_id) {
-      const { data: leadRow } = await ctx.supabase
+      const { data: leadRow } = await ctx.db
         .from("crm_leads")
         .select("id")
         .eq("organization_id", ctx.organizationId)
@@ -94,7 +94,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
     if (result.triggered) {
       const now = new Date();
       // INB-12: mesmos elegíveis do worker de roteamento (G5) — um algoritmo só.
-      const eligibles = await loadEligibleAttendants(ctx.supabase, ctx.organizationId, now);
+      const eligibles = await loadEligibleAttendants(ctx.db, ctx.organizationId, now);
       const picked =
         input.target_user_id && eligibles.some((e) => e.userId === input.target_user_id)
           ? input.target_user_id
@@ -103,7 +103,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
       if (picked) {
         // G3-02: reassignment auditado — UPDATE (kind ai→'user') + evento
         // reason='handoff' na MESMA transação (fn_conversation_assign, 0031/0032).
-        const { data: rows, error: assignErr } = await ctx.supabase.rpc("fn_conversation_assign", {
+        const { data: rows, error: assignErr } = await ctx.db.rpc("fn_conversation_assign", {
           p_organization_id: ctx.organizationId,
           p_conversation_id: input.conversation_id,
           p_to_user_id: picked,
@@ -123,7 +123,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
       if (!assignedUserId) {
         // Fila (roteamento G5 sem elegível): sem dono, kind sai de 'ai' → null; o
         // handoff continua auditado (evento reason='handoff', from/to null).
-        const { error: kindErr } = await ctx.supabase
+        const { error: kindErr } = await ctx.db
           .from("conversations")
           .update({ assignee_kind: null })
           .eq("id", input.conversation_id)
@@ -134,7 +134,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
             error: kindErr.message,
           });
         }
-        const { error: eventErr } = await ctx.supabase
+        const { error: eventErr } = await ctx.db
           .from("conversation_assignment_events")
           .insert({
             organization_id: ctx.organizationId,
@@ -152,7 +152,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
         }
         queued = true;
         position = await getQueuePosition(
-          ctx.supabase,
+          ctx.db,
           ctx.organizationId,
           conv.last_inbound_at ?? null,
           now,

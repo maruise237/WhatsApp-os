@@ -86,7 +86,7 @@ const SEM_AMBIENTE = { NEON_DATA_API_URL: "http://127.0.0.1:54321" };
 describe("o retrato da instalação", () => {
   it("credencial confirmada é a chave da organização", async () => {
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(tabelas([{ ...CRED, validated_at: "2026-08-13T00:00:00Z" }])),
+      db: clientFalso(tabelas([{ ...CRED, validated_at: "2026-08-13T00:00:00Z" }])),
       orgId: ORG,
       ambiente: SEM_AMBIENTE,
     });
@@ -102,7 +102,7 @@ describe("o retrato da instalação", () => {
     // colapsá-lo em "nenhuma" faz a tela mandar cadastrar de novo o que já está
     // lá.
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(tabelas([{ ...CRED, validated_at: null }])),
+      db: clientFalso(tabelas([{ ...CRED, validated_at: null }])),
       orgId: ORG,
       ambiente: SEM_AMBIENTE,
     });
@@ -114,7 +114,7 @@ describe("o retrato da instalação", () => {
 
   it("sem credencial nenhuma, a chave da instalação vale", async () => {
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(tabelas([])),
+      db: clientFalso(tabelas([])),
       orgId: ORG,
       ambiente: { ...SEM_AMBIENTE, ANTHROPIC_API_KEY: "sk-ant-xxx" },
     });
@@ -124,7 +124,7 @@ describe("o retrato da instalação", () => {
 
   it("sem chave em lugar nenhum, o retrato admite", async () => {
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(tabelas([])),
+      db: clientFalso(tabelas([])),
       orgId: ORG,
       ambiente: SEM_AMBIENTE,
     });
@@ -138,7 +138,7 @@ describe("o retrato da instalação", () => {
     // instalador e tem uma chave OpenAI cadastrada continua sem chave para o
     // provedor que o agente vai usar.
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(
+      db: clientFalso(
         tabelas([{ ...CRED, provider: "openai", validated_at: "2026-08-13T00:00:00Z" }]),
       ),
       orgId: ORG,
@@ -150,7 +150,7 @@ describe("o retrato da instalação", () => {
 
   it("credencial desativada não conta, nem como 'em verificação'", async () => {
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(tabelas([{ ...CRED, is_active: false, validated_at: null }])),
+      db: clientFalso(tabelas([{ ...CRED, is_active: false, validated_at: null }])),
       orgId: ORG,
       ambiente: SEM_AMBIENTE,
     });
@@ -160,7 +160,7 @@ describe("o retrato da instalação", () => {
 
   it("o nome placeholder do instalador é reconhecido como 'ainda sem nome'", async () => {
     const r = await lerRetratoDaInstalacao({
-      supabase: clientFalso(tabelas([])),
+      db: clientFalso(tabelas([])),
       orgId: ORG,
       ambiente: SEM_AMBIENTE,
     });

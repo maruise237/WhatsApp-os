@@ -35,11 +35,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     throw err;
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   try {
     const lead = await createLeadHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: authUser.id },

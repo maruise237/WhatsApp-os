@@ -32,7 +32,7 @@ export interface RuntimeHandoffSignal {
 }
 
 export interface PickToolsInput {
-  supabase: DbClient;
+  db: DbClient;
   ctx: McpContext;
   auth: McpAuthResult;
   toolIds: string[];
@@ -87,7 +87,7 @@ function wrapMcpTool(
           escopo: input.pipelineIds,
           ehEscrita: def.category === "write",
           resolvePipelineDoLead: async (leadId) => {
-            const { data, error } = await input.supabase
+            const { data, error } = await input.db
               .from("crm_leads")
               .select("pipeline_id")
               .eq("organization_id", input.ctx.organizationId)

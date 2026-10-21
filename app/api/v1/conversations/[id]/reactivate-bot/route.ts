@@ -39,11 +39,11 @@ export async function POST(_req: NextRequest, ctx: RouteCtx): Promise<Response> 
   if (!authz.ok) return authz.response;
   const { user: authUser, org: activeOrg } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   const resultado = await devolverAtendimentoAoAgente(
     {
-      supabase,
+      db,
       organizationId: activeOrg.orgId,
       actor: { type: "user", id: authUser.id, role: activeOrg.role },
       requestId,

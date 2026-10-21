@@ -45,13 +45,13 @@ export default async function NewAgentPage() {
     redirect("/403");
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const [credentialsRes, channelSessions] = await Promise.all([
-    supabase
+    db
       .from("ai_provider_credentials_safe")
       .select(CREDENTIAL_COLUMNS)
       .eq("organization_id", activeOrg.orgId),
-    listSelectableChannels(supabase, activeOrg.orgId),
+    listSelectableChannels(db, activeOrg.orgId),
   ]);
 
   const credentials = (credentialsRes.data ?? []) as unknown as CredentialRow[];

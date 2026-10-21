@@ -34,7 +34,7 @@ interface RouteCtx {
 export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only).
   const authz = await requireRole("agent", { requestId, resource: "conversations" });
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   // Optimistic lock (spec 04 §9.2): expected null/omitido = só assume se livre;
   // expected uuid = takeover consciente. UPDATE + evento na mesma transação.
-  const { data, error } = await supabase.rpc("fn_conversation_assign", {
+  const { data, error } = await db.rpc("fn_conversation_assign", {
     p_organization_id: authz.org.orgId,
     p_conversation_id: id,
     p_to_user_id: user.id,
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     requestId,
   });
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "conversation.claimed",
       p_entity_kind: "conversation",
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // nenhum; sem esta chamada, assumir uma conversa era invisível na timeline —
   // grep por atividade nas três rotas de troca de dono devolvia zero.
   await registrarTrocaDeComando({
-    supabase,
+    db,
     organizationId: conv.organization_id,
     conversationId: conv.id,
     contactId: conv.contact_id,

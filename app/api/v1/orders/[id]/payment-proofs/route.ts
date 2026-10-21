@@ -18,8 +18,8 @@ export async function GET(_request: NextRequest, { params }: Context): Promise<R
   if (!authz.ok) return authz.response;
   const { id } = await params;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const db = await createClient();
+  const { data, error } = await db
     .from("payment_proofs")
     .select("*")
     .eq("order_id", id)
@@ -50,8 +50,8 @@ export async function POST(request: NextRequest, { params }: Context): Promise<R
     });
   }
 
-  const supabase = await createClient();
-  const { data: order, error: orderError } = await supabase
+  const db = await createClient();
+  const { data: order, error: orderError } = await db
     .from("sales_orders")
     .select("id, status")
     .eq("id", id)
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest, { params }: Context): Promise<R
     });
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("payment_proofs")
     .insert({
       ...parsed.data,

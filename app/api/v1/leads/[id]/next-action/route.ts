@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { user } = authz;
 
-  const supabase = await createClient();
+  const db = await createClient();
 
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const { decision, approved_seq } = parsed.data;
 
   // O lead vem pela RLS do caller — é ele que prova a org, nunca o body.
-  const { data: lead, error: leadErr } = await supabase
+  const { data: lead, error: leadErr } = await db
     .from("crm_leads")
     .select("id, organization_id, contact_id, status")
     .eq("id", leadId)
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     );
   }
 
-  const { data: estado, error: estadoErr } = await supabase
+  const { data: estado, error: estadoErr } = await db
     .from("lead_state")
     .select("next_action, next_action_seq")
     .eq("organization_id", row.organization_id)
@@ -111,7 +111,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
     );
   }
 
-  const atividade = await emitLeadActivity(supabase, {
+  const atividade = await emitLeadActivity(db, {
     organizationId: row.organization_id,
     leadId: row.id,
     contactId: row.contact_id,
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   // Decidida é decidida: a proposta sai de cena nos dois casos, senão o card
   // continuaria pedindo a mesma decisão que a pessoa acabou de tomar. O que
   // ficou registrado foi a DECISÃO, na timeline.
-  const { error: limpaErr } = await supabase
+  const { error: limpaErr } = await db
     .from("lead_state")
     .update({ next_action: null })
     .eq("organization_id", row.organization_id)

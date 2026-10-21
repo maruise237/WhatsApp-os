@@ -20,7 +20,7 @@
  * Não duplica a REGRA: a elegibilidade é `isAttendantEligible`, a mesma função
  * pura que o worker de roteamento e a rota do painel usam. O que difere é o
  * CLIENTE — a API fala supabase-js e o motor fala `pg` (roda fora do request).
- * É o mesmo par que `emitLeadActivity` (supabase) e `emitAgentActivityForContact`
+ * É o mesmo par que `emitLeadActivity` (db) e `emitAgentActivityForContact`
  * (pg) formam sobre `buildLeadActivityRow`: dois leitores, uma regra.
  */
 import { ROLE_RANK, type Role } from "@/lib/auth/types";

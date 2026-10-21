@@ -47,14 +47,14 @@ export async function updateTenant(input: TenantInput): Promise<UpdateTenantResu
  * filtro por `organization_id` é explícito, como a doutrina exige de todo
  * handler que usa service role.
  */
-  const supabase = createAdminClient();
+  const db = createAdminClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
   const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
   const userAgent = hdrs.get("user-agent") ?? null;
 
   // Read current settings jsonb to merge `lost_reasons_extra` non-destructively.
-  const { data: orgRow, error: readErr } = await supabase
+  const { data: orgRow, error: readErr } = await db
     .from("organizations")
     .select("settings")
     .eq("id", activeOrg.orgId)
@@ -68,7 +68,7 @@ export async function updateTenant(input: TenantInput): Promise<UpdateTenantResu
     phone_country_code: parsed.data.phone_country_code,
   };
 
-  const { error } = await supabase
+  const { error } = await db
     .from("organizations")
     .update({
       display_name: parsed.data.display_name,
@@ -98,7 +98,7 @@ export async function updateTenant(input: TenantInput): Promise<UpdateTenantResu
     },
   });
 
-  await supabase
+  await db
     .rpc("emit_event", {
       p_event_type: "org.updated",
       p_entity_kind: "organization",

@@ -52,10 +52,10 @@ export default async function AcceptInvitePage({ params }: PageProps) {
     );
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
 
   if (!user) {
     const next = encodeURIComponent(`/team/accept-invite/${token}`);

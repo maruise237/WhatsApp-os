@@ -22,12 +22,12 @@ interface RouteCtx {
 export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id: conversationId } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   try {
     const { messages, cursor, has_more } = await listMessagesHandler(
-      supabase,
+      db,
       {
         organization_id: activeOrg.orgId,
         actor: { type: "user", id: user.id },

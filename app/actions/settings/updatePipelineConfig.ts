@@ -36,11 +36,11 @@ export async function updatePipelineConfig(
     return { ok: false, error: "forbidden_role" };
   }
 
-  const supabase = await createClient();
+  const db = await createClient();
   const hdrs = await headers();
   const requestId = hdrs.get("x-request-id");
 
-  const { data: row, error: readErr } = await supabase
+  const { data: row, error: readErr } = await db
     .from("crm_pipelines")
     .select("vocabulary, settings, organization_id")
     .eq("id", pipelineId)
@@ -60,7 +60,7 @@ export async function updatePipelineConfig(
   if (parsed.data.fields !== undefined) nextSettings.fields = parsed.data.fields;
   if (parsed.data.lost_reasons !== undefined) nextSettings.lost_reasons = parsed.data.lost_reasons;
 
-  const { error } = await supabase
+  const { error } = await db
     .from("crm_pipelines")
     .update({ vocabulary: nextVocabulary, settings: nextSettings })
     .eq("id", pipelineId);

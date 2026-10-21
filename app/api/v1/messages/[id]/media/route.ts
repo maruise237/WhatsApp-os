@@ -33,12 +33,12 @@ interface RouteCtx {
 export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id: messageId } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   const {
     data: { user },
     error: authErr,
-  } = await supabase.auth.getUser();
+  } = await db.auth.getUser();
   if (authErr || !user) {
     return fail("unauthenticated", "Auth required.", 401, { requestId });
   }
@@ -50,7 +50,7 @@ export async function GET(_req: NextRequest, ctx: RouteCtx): Promise<Response> {
 
   // Client de sessão: RLS garante que a mensagem pertence a uma org do usuário.
   // Filtro explícito de organization_id por doutrina (defense-in-depth).
-  const { data: msg, error } = await supabase
+  const { data: msg, error } = await db
     .from("messages")
     .select("id, media_url, media_mime, media_storage_path, channel_session_id")
     .eq("id", messageId)

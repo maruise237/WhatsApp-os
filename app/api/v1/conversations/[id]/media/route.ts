@@ -24,7 +24,7 @@ interface RouteCtx {
 export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   const requestId = randomUUID();
   const { id: conversationId } = await ctx.params;
-  const supabase = await createClient();
+  const db = await createClient();
 
   // spec 13 §4: escrita é agent+ (viewer é read-only). Esta rota era a ÚNICA de
   // escrita em conversations/[id]/* sem o gate — e como a policy de SELECT deixa
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<Response> {
   if (!activeOrg) return fail("no_active_org", "No active organization.", 403, { requestId });
 
   // RLS + filtro explícito: a conversa precisa ser da org ativa.
-  const { data: conv, error: convErr } = await supabase
+  const { data: conv, error: convErr } = await db
     .from("conversations")
     .select("id")
     .eq("id", conversationId)

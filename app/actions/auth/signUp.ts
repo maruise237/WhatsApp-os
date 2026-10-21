@@ -83,8 +83,8 @@ export async function signUp(
     convite = inviteToken;
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({
+  const db = await createClient();
+  const { data, error } = await db.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {

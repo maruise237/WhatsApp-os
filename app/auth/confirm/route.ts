@@ -78,11 +78,11 @@ export async function GET(request: NextRequest) {
   // isso antes da chamada é o que permite explicar a recusa depois.
   const viaTokenHash = Boolean(tokenHash && type);
 
-  const supabase = await createClient();
+  const db = await createClient();
   const { data, error } =
     tokenHash && type
-      ? await supabase.auth.verifyOtp({ type, token_hash: tokenHash })
-      : await supabase.auth.exchangeCodeForSession(code as string);
+      ? await db.auth.verifyOtp({ type, token_hash: tokenHash })
+      : await db.auth.exchangeCodeForSession(code as string);
 
   if (error || !data.user) {
     await audit({

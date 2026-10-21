@@ -1,7 +1,7 @@
 /**
  * G3-02 + G6-01 (INB-12) — crm_request_human_handoff v2.
  *
- * Prova, contra a tool REAL (ctx.supabase mockado, triggerHandoff mockado):
+ * Prova, contra a tool REAL (ctx.db mockado, triggerHandoff mockado):
  *  - a escolha do destino usa o roteamento G5 (loadEligibleAttendants +
  *    selectRoundRobin) — DETERMINÍSTICO sobre elegíveis, NÃO o antigo
  *    pickRoundRobinAssignee random sobre user_organizations;
@@ -107,7 +107,7 @@ function makeCtx(state: StubState): McpContext {
     apiTokenId: "tok",
     requestId: "req",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    supabase: makeSupabaseStub(state) as any,
+    db: makeSupabaseStub(state) as any,
   } as McpContext;
 }
 

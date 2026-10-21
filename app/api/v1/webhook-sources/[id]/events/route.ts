@@ -22,8 +22,8 @@ export async function GET(_req: Request, ctx: RouteCtx): Promise<Response> {
   if (!authz.ok) return authz.response;
   const { org: activeOrg } = authz;
 
-  const supabase = await createClient();
-  const { data: source, error: sourceErr } = await supabase
+  const db = await createClient();
+  const { data: source, error: sourceErr } = await db
     .from("webhook_sources")
     .select("path_token")
     .eq("id", id)
@@ -32,7 +32,7 @@ export async function GET(_req: Request, ctx: RouteCtx): Promise<Response> {
   if (sourceErr) return fail("internal_error", sourceErr.message, 500, { requestId });
   if (!source) return fail("not_found", "Source introuvable.", 404, { requestId });
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("webhook_events_log")
     .select("id, created_at:received_at, valid_signature, payload_parsed, status")
     .eq("webhook_path_token", source.path_token)

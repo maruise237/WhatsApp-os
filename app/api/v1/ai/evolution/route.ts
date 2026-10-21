@@ -73,7 +73,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const range = resolveRange(parsed.data);
   const fromIso = range.from.toISOString();
   const toIso = endOfUtcDay(range.to).toISOString();
-  const supabase = await createClient();
+  const db = await createClient();
 
   /**
    * Uma fonte fora do ar não pode apagar o painel inteiro: o bloco dela aparece
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest): Promise<Response> {
    * card, duas respostas diferentes para a mesma pergunta na mesma tela.
    */
   function janela(tabela: string, colunas: string, colunaData: string, apenasContagem = false) {
-    return supabase
+    return db
       .from(tabela)
       .select(colunas, apenasContagem ? { count: "exact", head: true } : undefined)
       .eq("organization_id", orgId)
@@ -197,7 +197,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     contar("event_log", "created_at", ["event_type", "ai.handoff_triggered"]),
     // Mapeamento declarado do funil: quais passos do agente cada pipeline recebe.
     // Sem janela de data — é o estado ATUAL do funil, não um evento do período.
-    supabase
+    db
       .from("crm_stages")
       .select("agent_stage_hint, crm_pipelines!inner(name)")
       .eq("organization_id", orgId)
