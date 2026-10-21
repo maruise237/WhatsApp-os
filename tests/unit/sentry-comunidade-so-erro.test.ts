@@ -35,7 +35,6 @@ import { describe, expect, it } from "vitest";
 import {
   INTEGRACAO_DE_SESSAO,
   integracoesDoCliente,
-  isCommunityDsn,
   resolveSentryDsn,
 } from "@/lib/sentry/dsn";
 
@@ -146,12 +145,12 @@ describe("o init do cliente honra a política", () => {
     expect(trecho).toContain("integracoesDoCliente(");
   });
 
-  it("decide pela mesma pergunta que rege as amostragens", () => {
-    // `community` é o que liga a política das três torneiras. Se o call site passar
-    // um literal, uma instalação que aponta para o próprio Sentry perde release
-    // health sem ter pedido.
-    expect(fonte).toContain("integracoesDoCliente(padraoDoSdk, community)");
-    expect(fonte).toContain("isCommunityDsn(sentryDsn)");
+  it("applique toujours la politique légère côté navigateur", () => {
+    // Pas de Sentry tiers par défaut : quand un DSN est fourni, c'est celui de
+    // l'exploitant, et le navigateur reste léger (ni sessions, ni traces).
+    expect(fonte).toContain("integracoesDoCliente(padraoDoSdk, true)");
+    expect(fonte).toMatch(/tracesSampleRate: 0,/);
+    expect(fonte).toMatch(/replaysSessionSampleRate: 0,/);
   });
 });
 
@@ -180,7 +179,7 @@ describe("o ambiente da suíte desliga a telemetria", () => {
 
   it("e `off` de fato desliga — a guarda acima não vale nada se o valor não desligasse", () => {
     expect(resolveSentryDsn("off")).toBeUndefined();
-    // Controle: o vazio NÃO desliga, e é por isso que a linha acima é obrigatória.
-    expect(isCommunityDsn(resolveSentryDsn(""))).toBe(true);
+    // Le vide désactive aussi : aucun envoi vers un tiers par défaut.
+    expect(resolveSentryDsn("")).toBeUndefined();
   });
 });

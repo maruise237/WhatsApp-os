@@ -3,33 +3,25 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
-import { resolveSentryDsn, isCommunityDsn, DEFAULT_SENTRY_DSN } from "./lib/sentry/dsn";
+import { resolveSentryDsn } from "./lib/sentry/dsn";
 import { sentryScrubHooks } from "./lib/sentry/scrub";
 
 const sentryDsn = resolveSentryDsn(process.env.SENTRY_DSN);
-const community = isCommunityDsn(sentryDsn);
 
 Sentry.init({
   dsn: sentryDsn,
 
-  // No Sentry da comunidade, só erro (issue #100). Ver isCommunityDsn().
-  tracesSampleRate: community ? 0 : 1,
+  // Échantillon léger : 10 % des requêtes tracées, pour ne pas charger le serveur.
+  tracesSampleRate: 0.1,
   enableLogs: true,
   sendDefaultPii: false,
 
   ...sentryScrubHooks,
 });
 
-// Transparência de telemetria: uma linha no boot dizendo o que está ativo e como
-// desligar. Evita "telemetria silenciosa" num projeto open source self-host.
+// Une ligne au démarrage : ce qui est actif et comment le changer.
 if (!sentryDsn) {
-  console.info("[telemetria] Desligada (SENTRY_DSN=off) — nenhum erro é enviado.");
-} else if (sentryDsn === DEFAULT_SENTRY_DSN) {
-  console.info(
-    "[telemetria] Relatórios de erro anonimizados ATIVOS (Sentry da comunidade). " +
-      "Sem rastreamento de performance nem replay de sessão. " +
-      "Desligue com SENTRY_DSN=off, ou envie pro seu com SENTRY_DSN=<seu-dsn>.",
-  );
+  console.info("[télémétrie] Désactivée — aucune erreur n'est envoyée (SENTRY_DSN vide).");
 } else {
-  console.info("[telemetria] Erros sendo enviados ao Sentry configurado em SENTRY_DSN.");
+  console.info("[télémétrie] Erreurs envoyées au Sentry configuré dans SENTRY_DSN.");
 }

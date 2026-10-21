@@ -77,7 +77,12 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=build --chown=nextjs:nodejs /app/public ./public
+# Migrations appliquées au démarrage (verrou consultatif : sûr avec plusieurs
+# conteneurs). Ignorées si NEON_DATABASE_ADMIN_URL n'est pas fourni.
+COPY --from=build --chown=nextjs:nodejs /app/db/migrations ./db/migrations
+COPY --from=build --chown=nextjs:nodejs /app/scripts/db-migrate.mjs ./scripts/db-migrate.mjs
+COPY --chown=nextjs:nodejs docker/app/entrypoint.sh ./entrypoint.sh
 USER nextjs
 EXPOSE 3000
 # server.js est le point d'entrée généré par la sortie standalone.
-CMD ["node", "server.js"]
+CMD ["sh", "entrypoint.sh"]

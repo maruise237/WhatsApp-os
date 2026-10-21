@@ -111,10 +111,8 @@ const schema = z.object({
   LEAD_CAPTURE_RETENTION_DAYS: z.string().optional().default(""),
 
   // Encryption keys (pgcrypto)
-  CPF_ENCRYPTION_KEY: required("CPF_ENCRYPTION_KEY"),
   // Opcional (template genérico) — só necessária ao ligar NUVEMSHOP_ENABLED.
   NUVEMSHOP_OAUTH_ENCRYPTION_KEY: z.string().optional().default(""),
-  WAHA_BYO_ENCRYPTION_KEY: required("WAHA_BYO_ENCRYPTION_KEY"),
   /**
    * AES-256-GCM key (32 bytes em base64) usada pra cifrar API keys em
    * `ai_provider_credentials`. Em produção é obrigatória; em dev a default vazia
