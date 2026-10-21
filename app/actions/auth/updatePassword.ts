@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { resetPasswordSchema, type ResetPasswordInput } from "@/lib/auth/schemas";
 import { audit } from "@/lib/audit";
 

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { moveLeadHandler, updateLeadHandler } from "@/app/api/v1/leads/_handler";
 import { patchContactHandler } from "@/app/api/v1/contacts/_handler";
@@ -23,7 +23,7 @@ import { GOV_MANAGER, GOV_ORG, GOV_PIPELINE, GOV_STAGE, seedGov, sql } from "./g
  * efetivamente usam (.from().select()/.update()/.eq()/.maybeSingle(), .rpc()),
  * traduzido pra SQL via o mesmo `sql()` (docker exec psql) que o resto da
  * suíte usa. `audit()` dentro dos handlers tenta um client Supabase real
- * (admin, via lib/supabase/admin) contra uma URL fake configurada em
+ * (admin, via lib/db/admin) contra uma URL fake configurada em
  * vitest.db.config.ts (`test.env`) — a chamada de rede falha rápido
  * (ECONNREFUSED) e é engolida pelo try/catch interno de `audit()`; não afeta
  * o teste.
@@ -130,7 +130,7 @@ interface EmitEventParams {
   p_organization_id: string;
 }
 
-function fakeAdminClient(): SupabaseClient {
+function fakeAdminClient(): DbClient {
   return {
     from: (table: string) => new FakeQB(table),
     rpc: (name: string, params: Record<string, unknown>): Promise<QResult> => {
@@ -153,7 +153,7 @@ function fakeAdminClient(): SupabaseClient {
         }
       })();
     },
-  } as unknown as SupabaseClient;
+  } as unknown as DbClient;
 }
 
 function eventRows(eventType: string, entityKind: string, entityId: string): Array<{ payload: Record<string, unknown> }> {

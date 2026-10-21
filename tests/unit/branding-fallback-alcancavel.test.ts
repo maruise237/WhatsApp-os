@@ -188,7 +188,7 @@ describe("`fallback_at` pela tela — o caminho que não existe", () => {
 // cliente nenhum. O mock existe para transformar "não gravou" em ASSERÇÃO: sem
 // ele, o caso passaria igual se a função tivesse chamado o Supabase e a chamada
 // tivesse falhado calada.
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => {
     throw new Error("createAdminClient não devia ser chamado sem linha");
   },

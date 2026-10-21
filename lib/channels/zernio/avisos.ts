@@ -25,7 +25,7 @@
  * Marcar tudo como crítico é o mesmo que não marcar nada: o operador aprende a
  * ignorar a cor.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { SaudeObservada } from "../health";
 
@@ -185,7 +185,7 @@ export function saudeDoEvento(payload: unknown): SaudeObservada | null {
  * Central que ninguém lê.
  */
 export async function registrarAviso(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   aviso: AvisoDeCanal,
 ): Promise<"criado" | "ja_aberto"> {
@@ -224,7 +224,7 @@ export async function registrarAviso(
  * consertar.
  */
 export async function atualizarEspelhoDoTemplate(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   payload: unknown,
 ): Promise<boolean> {

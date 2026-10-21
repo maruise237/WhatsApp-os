@@ -28,7 +28,7 @@ function formatDate(iso: string | null): string {
 // string crua do banco.
 //
 // Exportados para o teste conferir a COBERTURA contra o CHECK do
-// `supabase/baseline.sql` (TenantOverview.test.tsx): status novo que uma
+// `db/migrations/0001_schema_initial.sql` (TenantOverview.test.tsx): status novo que uma
 // migration acrescente ao banco sem entrar nestes mapas volta a vazar cru para
 // a tela, e é isso que o teste reprova.
 export const NUVEMSHOP_LABEL: Record<string, string> = {

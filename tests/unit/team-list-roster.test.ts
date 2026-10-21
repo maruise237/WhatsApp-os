@@ -13,7 +13,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { AuthUser } from "@/lib/auth/types";
 
 vi.mock("@/lib/auth/server", () => ({
@@ -23,10 +23,10 @@ vi.mock("@/lib/auth/server", () => ({
   // segundo fator (que tem suíte própria em require-role-mfa.test.ts).
   mfaEmDivida: vi.fn(async () => false),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 // admin.ts valida env no load; a rota só o chama quando isServiceRoleConfigured()
 // (mockado false) — mock evita a validação de env no import.
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
   audit: vi.fn(async () => undefined),
   isServiceRoleConfigured: () => false,

@@ -37,7 +37,7 @@ import {
   fecharArquivoDoWebhook,
 } from "@/lib/channels/arquivo-de-webhook";
 import { acceptsInboundWebhook, handleInboundWebhook } from "@/lib/channels/inbound";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { decryptWebhookSecret } from "@/lib/webhooks/secrets";
 
 export const dynamic = "force-dynamic";

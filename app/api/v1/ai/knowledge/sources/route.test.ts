@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { AuthUser } from "@/lib/auth/types";
 
 /**
@@ -19,8 +19,8 @@ vi.mock("@/lib/auth/server", () => ({
   loadAuthUser: vi.fn(),
   resolveActiveOrg: vi.fn(),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
 
 const ORG_ID = "22222222-2222-4222-8222-222222222222";

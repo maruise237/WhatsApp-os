@@ -19,7 +19,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const fetchMock = vi.fn();
 vi.stubGlobal("fetch", fetchMock);
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => ({}) }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: () => ({}) }));
 
 const credsRef: { current: unknown } = { current: null };
 vi.mock("@/lib/channels/zernio/credentials", () => ({

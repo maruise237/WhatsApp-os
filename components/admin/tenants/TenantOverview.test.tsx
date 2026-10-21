@@ -10,7 +10,7 @@
  *
  * Dois níveis de guarda, de propósito:
  *  - os casos nomeados, que fixam o que o admin lê (rótulo + variante);
- *  - a cobertura contra o CHECK do `supabase/baseline.sql` — o arquivo que o
+ *  - a cobertura contra o CHECK do `db/migrations/0001_schema_initial.sql` — o arquivo que o
  *    self-hoster realmente aplica. Migration que acrescente um status ao banco
  *    sem atualizar os mapas da tela reprova aqui, que é exatamente o modo de
  *    falha que produziu este bug (o TypeScript não enxerga o CHECK).

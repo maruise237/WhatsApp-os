@@ -37,7 +37,7 @@ import {
   hashEmail,
   sendExportEmail,
 } from "@/lib/lgpd/email-delivery";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { marcaDaSaida } from "@/lib/branding/saida";
 
 const MAX_ATTEMPTS = 3;

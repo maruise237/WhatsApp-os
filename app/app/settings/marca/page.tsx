@@ -36,7 +36,7 @@ import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { marcaDaOrganizacaoDeSettings } from "@/lib/branding/organizacao";
 import { env } from "@/lib/env";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { FormularioDaMarcaDaOrganizacao } from "./_form";
 

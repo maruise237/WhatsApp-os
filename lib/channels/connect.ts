@@ -12,7 +12,7 @@
  * descobrir depois é o que faz o operador achar que conectou e só entender que
  * não na primeira mensagem que não sai — com o lead do outro lado esperando.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "./archived";
 import { CHANNEL_PROVIDER_ZERNIO } from "./capabilities";
@@ -162,7 +162,7 @@ function toPartnerSession(row: Record<string, unknown> | null): PartnerSession |
 }
 
 export async function findPartnerSession(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
 ): Promise<PartnerSession | null> {
   const buscar = (colunas: string) =>
@@ -189,7 +189,7 @@ export async function findPartnerSession(
  * filtrados por ela.
  */
 export async function savePartnerSession(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: {
     organizationId: string;
     existingId: string | null;

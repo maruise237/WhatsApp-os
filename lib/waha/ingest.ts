@@ -16,7 +16,7 @@ import { sincronizarSaudeDaConexao } from "@/lib/channels/health";
 import { aplicarEfeitosPosEntrada } from "@/lib/channels/pos-entrada";
 import { estamparAtribuicaoDoContato } from "@/lib/leads/atribuicao-de-anuncio";
 import { extrairAtribuicaoWaha } from "@/lib/waha/atribuicao-de-anuncio";
-import type { createAdminClient } from "@/lib/supabase/admin";
+import type { createAdminClient } from "@/lib/db/admin";
 import { ackToStatus } from "@/lib/types/messaging";
 import type { WahaEnvelope, WahaPayload } from "@/lib/waha/envelope";
 import { bareWaMessageId, chatIdFromWaMessageId } from "@/lib/waha/message-id";

@@ -25,7 +25,7 @@ const consultas: { platformAdmins: unknown; memberships: unknown } = {
 vi.mock("next/headers", () => ({ cookies: async () => ({ getAll: () => [], set: () => {} }) }));
 vi.mock("next/navigation", () => ({ redirect: () => { throw new Error("redirect"); } }));
 
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/lib/db/server", () => ({
   createClient: async () => ({
     auth: {
       getUser: async () => ({

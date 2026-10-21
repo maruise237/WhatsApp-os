@@ -39,7 +39,7 @@
  * imobiliária e um infoprodutor montam funis diferentes, e nenhum nome de funil
  * aparece neste arquivo.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -93,7 +93,7 @@ export interface DadosDoNascimento {
  * e divergir dela.
  */
 export async function funilDeEntrada(
-  db: SupabaseClient,
+  db: DbClient,
   organizationId: string,
 ): Promise<{ pipelineId: string; stageId: string } | { erro: MotivoSemLead }> {
   const { data: funil } = await db
@@ -135,7 +135,7 @@ export async function funilDeEntrada(
  * certo: é uma demanda nova.
  */
 export async function garantirLeadDaConversa(
-  db: SupabaseClient,
+  db: DbClient,
   dados: DadosDoNascimento,
 ): Promise<NascimentoDoLead> {
   const { organizationId, contactId, conversationId } = dados;

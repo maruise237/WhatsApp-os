@@ -26,7 +26,7 @@ const SESSAO = {
 const arquivados: Record<string, unknown>[] = [];
 const despachados: unknown[] = [];
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => ({
       insert: async (linha: Record<string, unknown>) => {

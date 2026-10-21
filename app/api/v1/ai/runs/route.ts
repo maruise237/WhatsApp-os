@@ -16,7 +16,7 @@ import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
 import { PONTO_POR_ID } from "@/lib/ai/pontos/registro";
 import { EXPLICACAO_DA_ORIGEM, type OrigemDaEscolha } from "@/lib/ai/pontos/resolver";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

@@ -9,7 +9,7 @@ import { z } from "zod";
 
 import { audit } from "@/lib/audit";
 import { listSelectableChannels, type SelectableChannel } from "@/lib/channels/selectable";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { aiAgentDefaultSchema, type PromptTemplate } from "@/lib/schemas/onboarding";
 import { capacidadesPadraoDoOnboarding } from "@/lib/ai/agents/capacidades-padrao";
 import { publicarMemoriaDaOrg } from "@/lib/ai/memoria-da-org";

@@ -29,7 +29,7 @@ import { audit } from "@/lib/audit";
 import { logger } from "@/lib/logger";
 import { findContactByExternalId, findLgpdRequest } from "@/lib/lgpd/repository";
 import { cascadeRedactContact } from "@/lib/lgpd/redact-cascade";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 const MAX_ATTEMPTS = 3;
 const TENANT_BATCH_SIZE = 100;

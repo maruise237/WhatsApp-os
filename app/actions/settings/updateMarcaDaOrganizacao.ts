@@ -11,7 +11,7 @@ import {
   marcaDaOrganizacaoSchema,
   type MarcaDaOrganizacaoInput,
 } from "@/lib/schemas/settings";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export type UpdateMarcaDaOrganizacaoResult =
   | { ok: true }

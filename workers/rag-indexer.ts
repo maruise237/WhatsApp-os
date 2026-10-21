@@ -22,7 +22,7 @@ import {
   activateVersion,
 } from "@/lib/ai/rag/version";
 import type { EventRow, HandlerResult } from "@/lib/event-log/dispatcher";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { NuvemshopApiClient } from "@/lib/nuvemshop/api-client";
 
 const DEBOUNCE_TTL_SEC = 30;

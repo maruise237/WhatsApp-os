@@ -11,15 +11,15 @@ import { NextRequest } from "next/server";
 
 import { requireRole } from "@/lib/auth/require-role";
 import { audit } from "@/lib/audit";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { fail } from "@/lib/api/wrappers";
 import { ROLE_RANK, type AuthUser, type Role } from "@/lib/auth/types";
 import type { FlowGraph, FlowNode, FlowEdge } from "@/lib/followup/graph-schema";
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 const USER_ID = "11111111-1111-4111-8111-111111111111";

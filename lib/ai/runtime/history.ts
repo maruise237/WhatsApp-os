@@ -5,7 +5,7 @@
  * oldest-first) and trims to fit `tokenWindow`. Token estimation is the
  * cheap-and-cheerful len/4 heuristic — within the noise of the runtime budget.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 export interface HistoryMessage {
   role: "user" | "assistant";
@@ -26,7 +26,7 @@ export function estimateTokens(text: string): number {
 }
 
 export async function loadHistoryWithBudget(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   input: LoadHistoryInput,
 ): Promise<HistoryMessage[]> {
   const limit = Math.max(input.messageWindow, 1);

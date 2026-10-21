@@ -30,7 +30,7 @@
  * virou positiva ("só `active` e `waiting_reply` avançam") no mesmo commit desta
  * entrega; sem isso, a pausa seria desfeita em silêncio pelo turno atrasado.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import { registraFalhaDeAtividade } from "@/lib/leads/activity-write-failure";
@@ -174,7 +174,7 @@ export function validaAdiamento(iso: string, agora: Date): ValidacaoDoAdiamento 
 
 export interface DepsDaIntervencao {
   /** Client da SESSÃO do humano: a RLS continua valendo sobre o enrollment. */
-  supabase: SupabaseClient;
+  supabase: DbClient;
   /**
    * Service role, e SÓ para a timeline do negócio. `fn_can_view_lead` pode
    * esconder do usuário o negócio dono do contato (visibilidade por dono), e
@@ -183,7 +183,7 @@ export interface DepsDaIntervencao {
    * mais precisa dela. A organização vem do JWT (`requireRole`), nunca do
    * caminho nem do body, e toda query filtra por ela.
    */
-  admin: SupabaseClient;
+  admin: DbClient;
   orgId: string;
   userId: string;
   requestId: string;

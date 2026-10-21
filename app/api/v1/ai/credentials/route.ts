@@ -18,8 +18,8 @@ import { requireRole } from "@/lib/auth/require-role";
 import { type Provider } from "@/lib/ai/provider-validators";
 import { guardarCredencial } from "@/lib/ai/credenciais/guardar";
 import { IDS_DE_PROVEDOR } from "@/lib/ai/pontos/provedores";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

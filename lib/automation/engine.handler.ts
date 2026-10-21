@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { EventHandler } from "@/lib/event-log/dispatcher";
 import { AUTOMATION_CONSUMER_KEY, runAutomationForEvent } from "@/lib/automation/engine";
 // Importa os executores para que se registrem (side-effect imports — Tasks 9-11):

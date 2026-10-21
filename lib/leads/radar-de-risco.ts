@@ -14,7 +14,7 @@
  * Admin client bypassa RLS: TODA query filtra `organization_id`, sempre resolvido
  * de fonte confiável pelo chamador (JWT ou contexto do agente), nunca do body.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import {
   classifyRisk,
@@ -91,7 +91,7 @@ export interface OpcoesDoRadar {
 }
 
 export async function carregaRadarDeRisco(
-  admin: SupabaseClient,
+  admin: DbClient,
   opts: OpcoesDoRadar,
 ): Promise<RadarDeRisco> {
   const organizationId = opts.organizationId;

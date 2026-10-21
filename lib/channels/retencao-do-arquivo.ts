@@ -40,7 +40,7 @@
  * (select ... limit n)`: primeiro escolhe os ids, depois esvazia por id. As
  * duas idas custam menos que a trava que a alternativa pediria.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -69,7 +69,7 @@ function limiteEm(dias: number): string {
  * perder o índice forense cedo ou carregar o corpo por meses.
  */
 export async function podarArquivoDeWebhooks(
-  admin: SupabaseClient,
+  admin: DbClient,
   opcoes: { diasComCorpo: number; diasParaApagar: number; lote?: number },
 ): Promise<ResultadoDaPoda> {
   const lote = opcoes.lote ?? LOTE_PADRAO;

@@ -18,7 +18,7 @@ import { TIPOS_DERIVAVEIS } from "@/lib/messaging/media/derivable";
 import { deriveVideoText } from "@/lib/messaging/media/video-derive";
 import { apiTranscriptionProvider } from "@/lib/messaging/media/transcription";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const MEDIA_DERIVE_CONSUMER_KEY = "media_derive_v1";
 const DRAIN_MAX_ATTEMPTS = 5; // espelho de lib/event-log/drain.ts

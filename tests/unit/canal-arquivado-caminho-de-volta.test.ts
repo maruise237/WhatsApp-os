@@ -32,8 +32,8 @@ import type { AuthUser } from "@/lib/auth/types";
 import { CHANNEL_PROVIDER_META, CHANNEL_PROVIDER_WAHA } from "@/lib/channels/capabilities";
 import { reactivateChannelSession } from "@/lib/channels/reactivate";
 import { validateMetaCredentials } from "@/lib/channels/meta/validate-credentials";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 import { getWahaClient } from "@/lib/waha/client";
 import { encryptWebhookSecret } from "@/lib/webhooks/secrets";
 
@@ -44,8 +44,8 @@ vi.mock("@/lib/auth/server", () => ({
   loadAuthUser: vi.fn(),
   resolveActiveOrg: vi.fn(),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 vi.mock("@/lib/webhooks/secrets", () => ({ encryptWebhookSecret: vi.fn() }));
 vi.mock("@/lib/channels/meta/validate-credentials", () => ({ validateMetaCredentials: vi.fn() }));

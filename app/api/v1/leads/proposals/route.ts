@@ -25,8 +25,8 @@ import type { NextRequest } from "next/server";
 import { fail, ok } from "@/lib/api/wrappers";
 import type { LeadCandidate } from "@/lib/leads/active-lead";
 import { roteiaProximasAcoes, type EstadoDoContato } from "@/lib/leads/next-action";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { isServiceRoleConfigured } from "@/lib/audit";
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 

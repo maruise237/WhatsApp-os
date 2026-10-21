@@ -7,7 +7,7 @@ import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
 import { invalidarMarcaDaInstalacao } from "@/lib/branding/instalacao";
 import { normalizarHex } from "@/lib/branding/rampa";
 import { platformBrandingSchema, type PlatformBrandingInput } from "@/lib/schemas/settings";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export type UpdateBrandingResult =
   | { ok: true }

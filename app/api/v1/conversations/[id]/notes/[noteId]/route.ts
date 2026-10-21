@@ -9,7 +9,7 @@ import { audit } from "@/lib/audit";
 import { fail, noContent } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

@@ -34,7 +34,7 @@ function cadeia(): Record<string, unknown> {
   return alvo;
 }
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => cadeia(),
     rpc: async () => ({ data: sessaoNoBanco.token, error: null }),

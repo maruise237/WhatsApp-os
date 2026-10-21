@@ -32,7 +32,7 @@ import {
   parseCsv,
 } from "@/lib/contacts/csv";
 import { contactCreateSchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { indicatifDeLOrganisation } from "@/lib/telephone/normaliser";
 
 export const dynamic = "force-dynamic";

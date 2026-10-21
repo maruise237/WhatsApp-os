@@ -168,7 +168,7 @@ export async function completeTurnForEnrollment(
 
 // ---------------------------------------------------------------------------
 // Adapter de produção: TurnBridgeAdminClient falado em `pg` puro — o worker
-// 24/7 (workers/agent-worker/main.ts) só tem um pg.Pool, nunca um SupabaseClient
+// 24/7 (workers/agent-worker/main.ts) só tem um pg.Pool, nunca um DbClient
 // (esse é o mundo das rotas Next.js, ver createSupabaseAdminClient em
 // engine.ts). SQL espelha 1:1 o adapter de teste já provado em
 // tests/invariants/followup-engine.test.ts.

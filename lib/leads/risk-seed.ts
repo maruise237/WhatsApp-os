@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { classifyRisk, resolveStageWindow, type RiskBucket } from "@/lib/leads/risk-radar";
 import { sinceDoBucket } from "@/lib/leads/risk-since";
@@ -91,7 +91,7 @@ interface LeadRow {
  * esconderia do radar para sempre — buraco silencioso no lugar de buraco visível.
  */
 export async function calculaBucketsAtuais(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   now: Date = new Date(),
 ): Promise<EstadoCalculado[]> {
@@ -100,7 +100,7 @@ export async function calculaBucketsAtuais(
 }
 
 async function coletaEClassifica(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   now: Date,
 ): Promise<{ estados: EstadoCalculado[]; semRelogio: number }> {
@@ -173,7 +173,7 @@ async function coletaEClassifica(
 }
 
 export async function semeiaEstadosDeRisco(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   now: Date = new Date(),
 ): Promise<ResultadoDoSeed> {

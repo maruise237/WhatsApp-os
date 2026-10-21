@@ -6,7 +6,7 @@
  * fn_publish_ai_agent_version. O gate humano é o clique de aplicar — nada
  * auto-aplica; o rastro fica em applied_at/applied_version_id/applied_by (0053).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { publishAgentVersion } from "@/lib/ai/agents/publish";
 
@@ -34,7 +34,7 @@ const VERSION_COPY_COLUMNS =
   "id, version_number, system_prompt, provider, model, credential_id, tool_ids, trigger_config, channel_session_id, max_steps, token_budget, cost_budget_cents, history_message_window, history_token_window, handoff_keywords, handoff_tool_enabled";
 
 export async function applyProposal(
-  admin: SupabaseClient,
+  admin: DbClient,
   params: { orgId: string; agentId: string; proposalId: string; userId: string },
 ): Promise<ApplyProposalResult> {
   const { orgId, agentId, proposalId, userId } = params;

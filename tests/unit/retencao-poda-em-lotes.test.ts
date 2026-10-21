@@ -33,7 +33,7 @@ let respostaRpc: { data: number | null; error: { message: string } | null } = {
   data: 0,
   error: null,
 };
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({ rpc: async () => respostaRpc }),
 }));
 

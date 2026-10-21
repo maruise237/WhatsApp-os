@@ -10,7 +10,7 @@ import type { NextRequest } from "next/server";
 
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { auditQuerySchema, decodeAuditCursor, encodeAuditCursor } from "@/lib/schemas/audit";
 
 export const dynamic = "force-dynamic";

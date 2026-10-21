@@ -16,7 +16,7 @@
  * organization_id check). The admin client bypasses RLS.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export interface CascadeResult {
   alreadyAnonymized: boolean;

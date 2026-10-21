@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { Button } from "@/components/ui/button";
 import type { SourceRow } from "@/hooks/ai/useKnowledgeSources";
 import { KnowledgeSourcesClient } from "./_client";

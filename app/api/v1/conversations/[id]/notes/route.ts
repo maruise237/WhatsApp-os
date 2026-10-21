@@ -12,7 +12,7 @@ import { audit } from "@/lib/audit";
 import { fail, ok } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { createNoteSchema } from "@/lib/schemas/notes";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 const COLS = "id, conversation_id, body, created_by_user_id, created_by_name, created_at";

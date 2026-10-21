@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { cookieSecure } from "@/lib/supabase/cookie-secure";
+import { cookieSecure } from "@/lib/db/cookie-secure";
 
 export async function toggleSidebar(currentlyCollapsed: boolean): Promise<void> {
   const store = await cookies();

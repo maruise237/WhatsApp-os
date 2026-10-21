@@ -25,7 +25,7 @@
  * `send_ai_message`), e a segunda nasceu depois. Traduzir o desfecho em cada
  * uma seria plantar o mesmo defeito na irmã no dia em que ela foi escrita.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 import type { ActionResultDetail } from "@/lib/automation/types";
@@ -104,7 +104,7 @@ export function desfechoDoEnvio(
  * Central.
  */
 export async function reportarEnvio(
-  ctx: { admin: SupabaseClient; organizationId: string; ruleName: string },
+  ctx: { admin: DbClient; organizationId: string; ruleName: string },
   tipo: string,
   mensagem: MensagemEnviada,
   conversationId: string,
@@ -159,7 +159,7 @@ export async function reportarEnvio(
 const JANELA_DE_SILENCIO_MS = 15 * 60_000;
 
 export async function avisarEnvioQueFalhou(
-  admin: SupabaseClient,
+  admin: DbClient,
   entrada: {
     organizationId: string;
     ruleName: string;

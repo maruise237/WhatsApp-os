@@ -42,13 +42,13 @@ vi.mock("@/lib/env", () => ({
     return envMock;
   },
 }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/logger", () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 import { processMessageReceived } from "@/workers/ai-response-worker";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { EventRow } from "@/lib/event-log/dispatcher";
 
 const ORG_ID = "22222222-2222-4222-8222-222222222222";

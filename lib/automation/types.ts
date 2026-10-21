@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import type { EventRow } from "@/lib/event-log/dispatcher";
 
 export interface ActionResultDetail {
@@ -9,7 +9,7 @@ export interface ActionResultDetail {
 }
 
 export interface ActionCtx {
-  admin: SupabaseClient;
+  admin: DbClient;
   organizationId: string;
   ruleId: string;
   /** Nome da regra como o operador a nomeou — entra nos avisos que ele lê. */

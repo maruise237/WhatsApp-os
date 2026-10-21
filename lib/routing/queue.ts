@@ -5,7 +5,7 @@
  * `unassigned` em /conversations/counts e da aba fila do InboxLayout — o número
  * que o manager vê é o mesmo). Read-only; org-scoping explícita em toda query.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { CONVERSATION_QUEUE_STATUSES } from "@/lib/schemas";
 
@@ -27,7 +27,7 @@ export interface QueueStatus {
 }
 
 export async function getQueueStatus(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   now: Date,
 ): Promise<QueueStatus> {
@@ -67,7 +67,7 @@ export async function getQueueStatus(
  * atendente. Uma query só (a fila é limitada) — evita N+1 numa listagem.
  */
 export async function getQueuePositions(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
 ): Promise<Map<string, number>> {
   const { data } = await supabase
@@ -93,7 +93,7 @@ export async function getQueuePositions(
  * (recém-chegada, vai ao fim).
  */
 export async function getQueuePosition(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   lastInboundAt: string | null,
   now: Date,

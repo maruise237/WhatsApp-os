@@ -28,8 +28,8 @@ import { getAdapter, resolveSessionRef, type ChannelProvider, type ChannelSessio
 import { normalizeChannelTransportStatus } from "@/lib/channels/health";
 import { numeroObservadoDaSessao } from "@/lib/channels/numero-observado";
 import { isChannelStatus } from "@/lib/schemas/channels";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

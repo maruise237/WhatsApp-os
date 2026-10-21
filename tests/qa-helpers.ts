@@ -7,7 +7,7 @@
  */
 
 import type { Locator, Page } from "@playwright/test";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import * as crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
 import * as fs from "node:fs";
@@ -557,7 +557,7 @@ function compartilhadosNaoDeclarados(): string[] {
  * errados voltando, e não existe caminho de produto que ande para trás.
  */
 export async function atividadeDeTeste(
-  admin: SupabaseClient,
+  admin: DbClient,
   leadId: string,
   campos: Record<string, unknown>,
 ): Promise<{ desfazer: () => Promise<void> }> {
@@ -703,7 +703,7 @@ export function carimbar(dependencias: string[]): string {
  * sobreviveram a uma limpeza que "rodou".
  */
 export async function mensagemDeSonda(
-  admin: SupabaseClient,
+  admin: DbClient,
   m: {
     organizationId: string;
     conversationId: string;
@@ -761,7 +761,7 @@ export async function mensagemDeSonda(
  * apareceu na tela do QA como defeito de produto.
  */
 export async function apagaExatamenteUm(
-  admin: SupabaseClient,
+  admin: DbClient,
   tabela: string,
   id: string,
 ): Promise<void> {

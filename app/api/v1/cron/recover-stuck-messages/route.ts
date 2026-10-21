@@ -42,7 +42,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

@@ -12,7 +12,7 @@ import Link from "next/link";
 
 import { verifyInviteToken } from "@/lib/auth/invite-token";
 import { authRateLimited, AUTH_LIMITS } from "@/lib/auth/rate-limit";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { acceptInviteAction } from "@/app/actions/team/acceptInvite";
 
 export const dynamic = "force-dynamic";

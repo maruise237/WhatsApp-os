@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { createClient } from "@/lib/supabase/browser";
+import { createClient } from "@/lib/db/browser";
 import type { AuthUser, ActiveOrg, Role } from "@/lib/auth/types";
 import { ROLE_RANK } from "@/lib/auth/types";
 

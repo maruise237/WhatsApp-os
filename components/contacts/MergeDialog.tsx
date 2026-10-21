@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createClient } from "@/lib/supabase/browser";
+import { createClient } from "@/lib/db/browser";
 import { useT } from "@/hooks/i18n/useT";
 
 interface CandidateSummary {

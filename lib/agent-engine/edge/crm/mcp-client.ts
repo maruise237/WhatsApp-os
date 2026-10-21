@@ -10,12 +10,12 @@
  * O arquivo mantém o nome mcp-client.ts porque é o seam que todos os módulos do
  * engine já importam (CrmEdgeConfig) — o conteúdo é a versão fundida.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { createAdminClient } from "@/lib/neon/admin-client";
 
 export interface CrmEdgeConfig {
   /** Client administrateur PostgreSQL direct — utilisé uniquement côté serveur. */
-  supabase: SupabaseClient;
+  supabase: DbClient;
   /**
    * ai_agents.id do agente PUBLICADO deste turno (Fase 2B) — vira o actor.id do
    * envio (audit/metadata do CRM). Ausente = id genérico do engine.

@@ -18,7 +18,7 @@
  * embuta um código de rastreio na mensagem pré-preenchida, e essa LP ainda não
  * existe.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -54,7 +54,7 @@ export const str = (v: unknown): string | null =>
  * escrita em JS e uma pisar na outra.
  */
 export async function estamparAtribuicaoDoContato(
-  admin: SupabaseClient,
+  admin: DbClient,
   contactId: string,
   atribuicao: AtribuicaoDeAnuncio,
 ): Promise<void> {

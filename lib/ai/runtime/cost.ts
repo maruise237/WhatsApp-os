@@ -8,7 +8,7 @@
  * IMPORTANT: distinct from `lib/ai/cost.ts` which still serves the legacy
  * `ai_pricing` table used by the EPIC-06 RAG worker.
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 interface ModelPricingRow {
   provider: string;

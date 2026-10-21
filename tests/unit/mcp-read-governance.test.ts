@@ -15,8 +15,8 @@ import { describe, expect, it, vi } from "vitest";
 
 // env.ts valida process.env no import; corta os chains client→env (os handlers só
 // recebem o ctx.supabase stub, nunca criam client real).
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
   audit: vi.fn().mockResolvedValue(undefined),
   isServiceRoleConfigured: () => false,

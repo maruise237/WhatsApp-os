@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import type { ActivityType } from "@/lib/leads/activity-vocabulary";
@@ -109,7 +109,7 @@ export function buildLeadActivityRow(input: EmitLeadActivityInput): LeadActivity
 }
 
 export async function emitLeadActivity(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   input: EmitLeadActivityInput,
 ): Promise<{ ok: boolean; error?: string }> {
   const { error } = await supabase

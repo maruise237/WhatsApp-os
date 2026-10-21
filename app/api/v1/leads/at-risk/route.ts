@@ -18,7 +18,7 @@ import { z } from "zod";
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { carregaRadarDeRisco, RADAR_MIN_HOURS_PADRAO } from "@/lib/leads/radar-de-risco";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

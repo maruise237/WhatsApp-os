@@ -5,7 +5,7 @@
  * pra não puxar o registry pra dentro dos testes unit do pipeline puro).
  */
 import type { EventHandler, HandlerResult } from "@/lib/event-log/dispatcher";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { applyReactivityEvent, createSupabaseReactivityClient } from "@/lib/followup/reactivity";
 
 export const FOLLOWUP_REACTIVITY_HANDLER_KEY = "followup-reactivity.v1";

@@ -11,7 +11,7 @@
  * próxima rota copiaria o padrão. Mover a query para cá custa 20 linhas e mantém a
  * regra valendo de verdade — a rota vira transporte puro e não sabe com quem fala.
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { CHANNEL_PROVIDER_META } from "../capabilities";
 

@@ -10,7 +10,7 @@
  * consume asynchronously.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { chunkText } from "@/lib/ai/rag/chunker";
 import { extractPdfText, PdfExtractError } from "@/lib/ai/rag/extractors/pdf";
 import { extractMarkdownText } from "@/lib/ai/rag/extractors/markdown";

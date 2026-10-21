@@ -10,7 +10,7 @@ import {
   type ChannelReactivationActor,
 } from "@/lib/channels/reactivate";
 import { getWahaClient } from "@/lib/waha/client";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 /**
  * Onboarding WhatsApp session orchestration.

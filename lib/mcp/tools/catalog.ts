@@ -2,7 +2,7 @@
  * Catalogo estatico de tools MCP — apenas metadados (id, label, categoria).
  *
  * Este modulo NAO importa handlers nem nada que dependa de `next/headers`,
- * `lib/supabase/server`, ou audit log. Pode ser importado com seguranca por
+ * `lib/db/server`, ou audit log. Pode ser importado com seguranca por
  * Client Components (ex: AgentForm via lib/ai/agents/validation.ts).
  *
  * Runtime de execucao (handlers reais) vive em `lib/mcp/tools/index.ts` e so

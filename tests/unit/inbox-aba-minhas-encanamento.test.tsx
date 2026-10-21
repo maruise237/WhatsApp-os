@@ -20,7 +20,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const getSpy = vi.fn(async (_url: string) => ({ data: [], meta: { has_more: false, cursor: null } }));
 vi.mock("@/lib/api/client", () => ({ apiClient: { get: (url: string) => getSpy(url) } }));
 vi.mock("@/components/feedback/ApiErrorToast", () => ({ showApiError: vi.fn() }));
-vi.mock("@/lib/supabase/browser", () => ({
+vi.mock("@/lib/db/browser", () => ({
   createClient: () => ({
     channel: () => ({ on: () => ({ subscribe: () => ({}) }), subscribe: () => ({}) }),
     removeChannel: () => {},
@@ -70,7 +70,7 @@ vi.mock("@/app/api/v1/conversations/_handler", () => ({
   listConversationsHandler: (sb: unknown, ctx: unknown, q: Record<string, unknown>) =>
     handlerSpy(sb, ctx, q),
 }));
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/lib/db/server", () => ({
   createClient: async () => ({
     auth: { getUser: async () => ({ data: { user: { id: "user-1" } }, error: null }) },
   }),

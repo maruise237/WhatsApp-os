@@ -39,7 +39,7 @@ import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { venceReativacoes } from "@/lib/leads/reactivation";
 import { observaTravessias } from "@/lib/leads/risk-worker";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

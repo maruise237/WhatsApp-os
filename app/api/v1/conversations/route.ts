@@ -8,7 +8,7 @@ import { ApiError } from "@/lib/api/types";
 import { fail, ok } from "@/lib/api/wrappers";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { listConversationsQuerySchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { comNomeDoAtendente } from "@/lib/users/com-nome-do-atendente";
 
 import { listConversationsHandler } from "./_handler";

@@ -41,7 +41,7 @@
 import { audit } from "@/lib/audit";
 import { garantirLeadDaConversa } from "@/lib/leads/nascimento-do-lead";
 import { logger } from "@/lib/logger";
-import type { createAdminClient } from "@/lib/supabase/admin";
+import type { createAdminClient } from "@/lib/db/admin";
 import { ehPedidoDeOptOut } from "@/lib/opt-out/deteccao";
 
 type Admin = ReturnType<typeof createAdminClient>;

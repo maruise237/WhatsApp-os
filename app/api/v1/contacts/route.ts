@@ -17,7 +17,7 @@ import {
   validateRequest,
   type ContactCreate,
 } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { listContactsHandler, createContactHandler } from "./_handler";
 

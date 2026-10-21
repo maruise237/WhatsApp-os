@@ -21,7 +21,7 @@
 import { audit } from "@/lib/audit";
 import { bufToBytea, encryptKey } from "@/lib/crypto/aes_gcm";
 import { validateProviderKey, type Provider } from "@/lib/ai/provider-validators";
-import type { createAdminClient } from "@/lib/supabase/admin";
+import type { createAdminClient } from "@/lib/db/admin";
 
 export type ResultadoDeGuardar =
   | { ok: true; id: string; last4: string }

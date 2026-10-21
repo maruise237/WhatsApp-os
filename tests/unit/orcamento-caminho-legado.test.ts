@@ -31,7 +31,7 @@
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/logger", () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
@@ -56,7 +56,7 @@ vi.mock("ai", () => ({
 
 import { processMessageReceived } from "@/workers/ai-response-worker";
 import { getBudgetStatus, type BudgetStatus } from "@/lib/ai/budget/check";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { LIMIAR_PADRAO_PCT } from "@/lib/agent-engine/edge/llm/orcamento";
 import type { EventRow } from "@/lib/event-log/dispatcher";
 

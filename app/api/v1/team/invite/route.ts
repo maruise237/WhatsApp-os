@@ -17,7 +17,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { ApiError } from "@/lib/api/types";
 import { audit, isServiceRoleConfigured } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { inviteMemberSchema, validateRequest } from "@/lib/schemas";
 import { signInviteToken, INVITE_TTL_SECONDS } from "@/lib/auth/invite-token";
 import { buildInviteEmail } from "@/lib/email/templates/invite";

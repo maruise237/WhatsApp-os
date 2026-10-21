@@ -6,7 +6,7 @@ import { fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 import { ORG_ID, OUTRA_ORG, PIPE, authOk, funilRow, makeDb, negocio } from "@/tests/helpers/stages-db-double";

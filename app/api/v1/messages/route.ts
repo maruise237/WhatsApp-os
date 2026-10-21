@@ -8,7 +8,7 @@ import { ApiError } from "@/lib/api/types";
 import { fail, ok } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { sendMessageSchema, validateRequest, type SendMessageInput } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { sendMessageHandler } from "./_handler";
 

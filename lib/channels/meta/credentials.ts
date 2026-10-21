@@ -36,7 +36,7 @@
  * o invariante `tests/unit/canal-consulta-por-organizacao.test.ts` (o quarto
  * canal não repete).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { decryptWebhookSecret } from "@/lib/webhooks/secrets";
@@ -89,7 +89,7 @@ export function metaCredsFromEnv(): MetaCredentials | null {
  * ação e abrir a informação, não virar caminho feliz de outra conta.
  */
 export async function metaCredsForPhoneNumberId(
-  admin: SupabaseClient,
+  admin: DbClient,
   lookup: MetaCredsLookup,
 ): Promise<MetaCredentials | null> {
   const { organizationId, phoneNumberId } = lookup;
@@ -140,7 +140,7 @@ export async function metaCredsForPhoneNumberId(
  * pelo seu; uma instalação de número único pode continuar no env sem tocar em nada.
  */
 export async function resolveMetaCreds(
-  admin: SupabaseClient,
+  admin: DbClient,
   lookup: MetaCredsLookup,
 ): Promise<MetaCredentials | null> {
   return (await metaCredsForPhoneNumberId(admin, lookup)) ?? metaCredsFromEnv();

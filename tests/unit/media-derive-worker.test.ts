@@ -25,7 +25,7 @@ const messageRow = {
  */
 const bindingDeVisao: { provider: string; model_id: string; credential_id: string | null } | null = null;
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: (tabela: string) => {
       const linha = tabela === "ai_purpose_bindings" ? bindingDeVisao : messageRow;

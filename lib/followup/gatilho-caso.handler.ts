@@ -11,7 +11,7 @@
  * cobra sem nunca parar de cobrar.
  */
 import type { EventHandler, HandlerResult } from "@/lib/event-log/dispatcher";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { createSupabaseFollowupGateDb } from "@/lib/followup/agent-followup-gate";
 import {
   EVENTO_CASO_ABERTO,

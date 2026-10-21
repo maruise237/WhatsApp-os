@@ -20,7 +20,7 @@
  *
  * Um detector que cace o SENTIDO ("etapa", "funil", "marcador") banindo palavra de
  * negócio destrói a conversa — e não é hipótese: `fn_seed_default_pipeline_for_org`
- * (`supabase/baseline.sql`) cria etapas chamadas "Aguardando pagamento", "Em separação",
+ * (`db/migrations/0001_schema_initial.sql`) cria etapas chamadas "Aguardando pagamento", "Em separação",
  * "Entregue"; nome de etapa é vocabulário do CLIENTE, e o tenant renomeia à vontade.
  * Pior: a frase-modelo que este repo documenta como o resultado CORRETO —
  *   «A etapa "Retorno pos-cirurgico" ainda não existe no funil, mas não consigo criá-la
@@ -334,7 +334,7 @@ const RE_NOMES_DE_TOOL = new RegExp(`\\b(?:${NOMES_DE_TOOL.join('|')})\\b`, 'g')
  * medido, e não é heurística de gosto — é uma diferença estrutural entre dois mundos:
  *   - identificador técnico desta base é sempre lowercase. VERIFICADO no HEAD, não
  *     deduzido: 31 nomes de tool no `TOOL_CATALOG`, 12 em `AGENT_TOOL_DEFS`, 343 colunas e
- *     59 tabelas em `supabase/baseline.sql` (65 somando `supabase/migrations/`) — ZERO com
+ *     59 tabelas em `db/migrations/0001_schema_initial.sql` (65 somando `supabase/migrations/`) — ZERO com
  *     maiúscula. Exigir minúsculas não solta nenhuma tool, tabela nem coluna. O que segura
  *     essa premissa contra o futuro é um teste sobre as tools no arquivo de calibração;
  *     tabela/coluna nova em maiúscula quebraria antes o resto do repo.

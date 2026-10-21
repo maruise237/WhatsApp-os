@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { BudgetCard } from "@/components/ai/BudgetCard";
 import { getBudgetStatus } from "@/lib/ai/budget/check";
 import { UsageDashboardClient } from "./_client";

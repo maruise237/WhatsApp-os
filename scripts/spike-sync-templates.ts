@@ -4,7 +4,7 @@
  *
  *   pnpm exec tsx --env-file=.env.local scripts/spike-sync-templates.ts
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { syncTemplates } from "@/lib/channels/meta/template-sync";
 
 async function main() {

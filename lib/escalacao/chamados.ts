@@ -11,7 +11,7 @@
  * `lib/agent-engine/agent/human-cases.ts` (transições sobre `pg`, atômicas) —
  * duplicá-la em PostgREST daria dois donos para a mesma regra.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 export const ESTADOS_ABERTOS = ["awaiting_human", "awaiting_lead"] as const;
 export const ESTADOS_FECHADOS = ["resolved", "escalated", "cancelled"] as const;
@@ -86,7 +86,7 @@ export interface ResultadoDaLista {
 }
 
 export async function listarChamados(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   opts: { estado: "abertos" | "fechados"; limite?: number },
 ): Promise<ResultadoDaLista> {
@@ -116,7 +116,7 @@ export async function listarChamados(
 
 /** null = não existe OU é de outra organização — 404 honesto, sem vazar existência. */
 export async function lerChamado(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   caseId: string,
 ): Promise<ChamadoDetalhado | null> {

@@ -13,7 +13,7 @@
  * salva (a Fase 4b, quando o follow-up guardar um bind), não um envio pedido agora,
  * com o contrato lido no mesmo instante.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { sendTemplate } from "./send-template";
 
@@ -35,7 +35,7 @@ export interface SendTemplateForSessionInput {
  * plataforma) porque é isso que o operador lê em `error_message`.
  */
 export async function sendTemplateForSession(
-  db: SupabaseClient,
+  db: DbClient,
   input: SendTemplateForSessionInput,
 ): Promise<string | null> {
   if (!input.name || !input.language) {

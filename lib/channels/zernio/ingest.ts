@@ -20,7 +20,7 @@
  * do `23505`, exatamente como o canal por QR faz. Sem isso, uma retentativa
  * duplica a mensagem no inbox do cliente.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -63,7 +63,7 @@ export function waIdentityFrom(identity: ZernioIdentity): string | null {
  * sabe de quem é.
  */
 export async function ingestZernioInbound(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: { organizationId: string; channelSessionId: string; payload: unknown },
 ): Promise<ZernioIngestResult> {
   const msg = parseZernioInbound(input.payload);
@@ -191,7 +191,7 @@ export async function ingestZernioInbound(
  * para sair, não abre demanda e não acorda o agente.
  */
 async function efeitosDaEntrada(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: { organizationId: string; channelSessionId: string; requestId?: string },
   msg: ZernioInboundMessage,
   contactId: string,
@@ -246,7 +246,7 @@ async function efeitosDaEntrada(
  * inflaria o contador de não lidas a cada reenvio do provider.
  */
 async function marcarConversa(
-  admin: SupabaseClient,
+  admin: DbClient,
   conversationId: string,
   msg: ZernioInboundMessage,
 ): Promise<void> {
@@ -282,7 +282,7 @@ async function marcarConversa(
  * faltando por uma tempestade de reentregas.
  */
 async function pedirPersistenciaDaMidia(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   conversationId: string,
   messageId: string,
@@ -305,7 +305,7 @@ async function pedirPersistenciaDaMidia(
 
 /** A conversa que o provider já associou a esta thread, se houver. */
 async function conversaPelaThread(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   providerConversationId: string,
 ): Promise<{ id: string; contact_id: string } | null> {
@@ -320,7 +320,7 @@ async function conversaPelaThread(
 }
 
 async function upsertContact(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   msg: ZernioInboundMessage,
   identity: string,
@@ -366,7 +366,7 @@ async function upsertContact(
 }
 
 async function upsertConversation(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: {
     organizationId: string;
     contactId: string;
@@ -408,7 +408,7 @@ async function upsertConversation(
 }
 
 async function insertMessage(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: {
     organizationId: string;
     conversationId: string;
@@ -533,7 +533,7 @@ function tipoDoAnexo(tipo: string | undefined): string {
  * de quem atendeu.
  */
 export async function aplicarEdicaoZernio(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   edicao: { externalId: string; tipo: "edited" | "deleted"; body: string | null },
 ): Promise<"aplicado" | "sem_alvo"> {

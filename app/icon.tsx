@@ -26,7 +26,7 @@ import { marcaDaSaida } from "@/lib/branding/saida";
  * ─── Cor + inicial, NUNCA o `logo_url` ──────────────────────────────────────
  *
  * `platform_branding.logo_url` é `text` livre, sem CHECK de host
- * (`supabase/baseline.sql:11832-11848`). Buscá-la aqui seria uma requisição de
+ * (`db/migrations/0001_schema_initial.sql:11832-11848`). Buscá-la aqui seria uma requisição de
  * saída disparada pelo `<head>` de TODA página, com a URL vinda de um campo que
  * o operador digita — SSRF com gatilho em cada page load. Derivar o ícone de
  * cor + inicial não toca a rede: o accent vem do mesmo resolvedor que pinta os

@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 import { audit } from "@/lib/audit";
 import { fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { AuthUser } from "@/lib/auth/types";
 
 /**
@@ -21,7 +21,7 @@ import type { AuthUser } from "@/lib/auth/types";
  */
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 const ORG_ID = "22222222-2222-4222-8222-222222222222";

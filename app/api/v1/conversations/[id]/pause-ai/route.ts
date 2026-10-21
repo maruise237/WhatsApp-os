@@ -37,7 +37,7 @@ import { audit } from "@/lib/audit";
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { registrarTrocaDeComando } from "@/lib/inbox/atividade-de-comando";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { Conversation } from "@/lib/types/messaging";
 
 export const dynamic = "force-dynamic";

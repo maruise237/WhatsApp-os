@@ -34,7 +34,7 @@ vi.mock("@/lib/env", () => ({
     return envMock;
   },
 }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/logger", () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
@@ -44,7 +44,7 @@ vi.mock("@/lib/ai/cost", () => ({ computeCost: vi.fn(async () => 7) }));
 import { createAnthropic } from "@ai-sdk/anthropic";
 
 import { processMessageReceived } from "@/workers/ai-response-worker";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logInvocation } from "@/lib/ai/log-invocation";
 import { computeCost } from "@/lib/ai/cost";
 import { resolverModeloDoPonto } from "@/lib/ai/gateway-binding";

@@ -28,11 +28,11 @@
  * Fire-and-forget, como todo o resto da timeline: a linha do tempo não pode
  * derrubar a operação que ela descreve.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import { isServiceRoleConfigured } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { resolveActiveLeadForContact, type LeadCandidate } from "@/lib/leads/active-lead";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import type { ActivityType } from "@/lib/leads/activity-vocabulary";
@@ -50,7 +50,7 @@ interface Entrada {
    * Client do REQUEST — usado para ESCREVER a atividade, herdando a RLS de quem
    * clicou.
    */
-  supabase: SupabaseClient;
+  supabase: DbClient;
   organizationId: string;
   conversationId: string;
   contactId: string | null;

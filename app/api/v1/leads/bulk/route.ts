@@ -18,8 +18,8 @@ import { resolveOwnerPatch } from "@/lib/leads/owner-patch";
 import { emitLeadActivity, stageChangeReason } from "@/lib/leads/activity-emitter";
 import { registraFalhaDeAtividade } from "@/lib/leads/activity-write-failure";
 import { bulkLeadActionSchema, validateRequest } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

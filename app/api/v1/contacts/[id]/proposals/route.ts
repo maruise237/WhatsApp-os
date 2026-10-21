@@ -13,7 +13,7 @@ import { type NextRequest } from "next/server";
 
 import { fail, ok } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

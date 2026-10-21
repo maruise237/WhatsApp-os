@@ -3,8 +3,8 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { audit, isServiceRoleConfigured } from "@/lib/audit";
 import { generateRecoveryCodes, hashRecoveryCode } from "@/lib/auth/recovery-codes";
 

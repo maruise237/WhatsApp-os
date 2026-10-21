@@ -17,7 +17,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const bindings = vi.hoisted(() => ({ linha: null as Record<string, unknown> | null }));
 const credenciais = vi.hoisted(() => ({ linha: null as Record<string, unknown> | null }));
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: (tabela: string) => {
       const alvo = tabela === "ai_purpose_bindings" ? bindings : credenciais;
@@ -148,7 +148,7 @@ describe("cada ponto lê o SEU binding", () => {
     // Sem os dois filtros, o binding de um ponto vazaria para todos os outros —
     // e, pior, o de uma organização para outra.
     const chamadas: string[] = [];
-    vi.doMock("@/lib/supabase/admin", () => ({
+    vi.doMock("@/lib/db/admin", () => ({
       createAdminClient: () => ({
         from: (t: string) => {
           chamadas.push(t);

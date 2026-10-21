@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useId, useRef, useState, type RefObject } from "react";
-import { createClient } from "@/lib/supabase/browser";
+import { createClient } from "@/lib/db/browser";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 export type RealtimeStatus =
@@ -44,7 +44,7 @@ export interface UseRealtimeChannelOpts {
  * EFEITO de chamá-lo. Guardar a chamada em vez do comportamento é o que os
  * deixou verdes enquanto o inbox não atualizava.
  *
- * A fonte do token agora é única e mora em `lib/supabase/browser.ts`, na
+ * A fonte do token agora é única e mora em `lib/db/browser.ts`, na
  * callback que o socket chama sozinho — no join, em cada reconexão e a cada
  * heartbeat. Duas fontes de token eram o defeito; não se conserta somando uma
  * terceira.

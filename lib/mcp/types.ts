@@ -6,7 +6,7 @@
  * server core (org, role, actor, supabase admin client).
  */
 import type { z } from "zod";
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import type { Role } from "@/lib/auth/types";
@@ -18,7 +18,7 @@ export interface McpContext {
   apiTokenId: string;
   requestId: string;
   /** Service-role admin client. Tools devem filtrar `organization_id` em toda query. */
-  supabase: SupabaseClient;
+  supabase: DbClient;
 }
 
 export type McpToolCategory = "read" | "write" | "handoff";

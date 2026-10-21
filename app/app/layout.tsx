@@ -10,7 +10,7 @@ import { cssDaMarca, ESCOPO_DA_ORGANIZACAO } from "@/lib/branding/css";
 import { marcaDaInstalacao } from "@/lib/branding/instalacao";
 import { resolverMarcaDaOrganizacao } from "@/lib/branding/organizacao";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import {
   IMPERSONATE_COOKIE_NAME,
   verifyImpersonateCookie,

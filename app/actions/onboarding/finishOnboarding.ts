@@ -8,7 +8,7 @@
 import { redirect } from "next/navigation";
 
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { requireOnboardingCtx, OnboardingError } from "./_shared";
 
 export type FinishOnboardingResult =

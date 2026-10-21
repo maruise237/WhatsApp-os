@@ -5,7 +5,7 @@
  * dedicados (ex. ai_agent.dispatch_requested → agent-dispatcher) não têm
  * handler no registry e ficam intocados.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import {
   dispatchEvent,
   getRegisteredHandlers,
@@ -30,7 +30,7 @@ function backoffAt(attempts: number): string {
 }
 
 export async function drainEventLog(
-  admin: SupabaseClient,
+  admin: DbClient,
   opts: { limit?: number } = {},
 ): Promise<DrainSummary> {
   const limit = opts.limit ?? 50;

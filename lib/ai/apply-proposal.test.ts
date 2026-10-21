@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/ai/agents/publish", () => ({ publishAgentVersion: vi.fn() }));
 
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { publishAgentVersion } from "@/lib/ai/agents/publish";
 import { applyProposal, composeAppliedPrompt } from "./apply-proposal";
@@ -21,7 +21,7 @@ const NEW_VERSION = "66666666-0000-4000-8000-000000000006";
  * resposta programada daquela tabela (FIFO) — o teste declara o cenário como
  * dados, o código real percorre a cadeia .select().eq()...
  */
-function stubAdmin(script: Record<string, unknown[]>): SupabaseClient {
+function stubAdmin(script: Record<string, unknown[]>): DbClient {
   const queues = new Map(Object.entries(script).map(([k, v]) => [k, [...v]]));
   const from = (table: string) => {
     const value = queues.get(table)?.shift() ?? null;
@@ -39,7 +39,7 @@ function stubAdmin(script: Record<string, unknown[]>): SupabaseClient {
     chain["then"] = (resolve: (v: unknown) => unknown) => resolve({ data: value, error: null });
     return chain;
   };
-  return { from } as unknown as SupabaseClient;
+  return { from } as unknown as DbClient;
 }
 
 const BASE_VERSION = {
@@ -183,7 +183,7 @@ describe("applyProposal — guards e fluxo publish-por-ponteiro", () => {
         });
         return chain as unknown;
       },
-    } as unknown as SupabaseClient;
+    } as unknown as DbClient;
 
     const r = await applyProposal(admin, { orgId: ORG, agentId: AGENT, proposalId: PROPOSAL, userId: USER });
     expect(r).toEqual({ ok: true, entryId: ENTRY });

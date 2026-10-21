@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { forgotPasswordSchema, type ForgotPasswordInput } from "@/lib/auth/schemas";
 import { audit, hashEmail } from "@/lib/audit";
 import { authRateLimited, AUTH_LIMITS } from "@/lib/auth/rate-limit";

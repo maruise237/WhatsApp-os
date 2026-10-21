@@ -1,5 +1,5 @@
 /**
- * Um `SupabaseClient` de MENTIRA, feito de `pg` de VERDADE.
+ * Um `DbClient` de MENTIRA, feito de `pg` de VERDADE.
  *
  * ═══ POR QUE ISTO EXISTE ═══
  *
@@ -29,7 +29,7 @@
  * adaptador: filtro que não filtra, ordem que não ordena e `maybeSingle` com
  * duas linhas têm caso próprio. O instrumento é medido antes de medir.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import type pg from "pg";
 
 interface ErroPg {
@@ -354,11 +354,11 @@ async function chamarRpc(
 }
 
 /**
- * O cast para `SupabaseClient` é deliberado e está confinado a esta linha: o
+ * O cast para `DbClient` é deliberado e está confinado a esta linha: o
  * tipo real tem dezenas de membros que este objeto não tem, e listá-los como
  * `undefined` só esconderia a mesma verdade com mais texto.
  */
-export function pgComoSupabase(pool: pg.Pool): SupabaseClient {
+export function pgComoSupabase(pool: pg.Pool): DbClient {
   return {
     from(tabela: string) {
       return {
@@ -370,5 +370,5 @@ export function pgComoSupabase(pool: pg.Pool): SupabaseClient {
       };
     },
     rpc: (nome: string, args: Record<string, unknown> = {}) => chamarRpc(pool, nome, args),
-  } as unknown as SupabaseClient;
+  } as unknown as DbClient;
 }

@@ -11,7 +11,7 @@
  */
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { auditMcpToolCall } from "./audit";
 import { ensureRole, ensureScope, type McpAuthResult } from "./auth";
 import { allTools } from "./tools";

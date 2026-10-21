@@ -45,7 +45,7 @@
  * A fila lê essa timeline; uma coluna `origem` em `followup_enrollments` seria
  * uma segunda verdade sobre o mesmo fato.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { EventRow } from "@/lib/event-log/dispatcher";
 import { flowGraphSchema } from "./graph-schema";
@@ -66,7 +66,7 @@ export interface PointerDeEtapa {
 
 /** Interface estreita de DB — mesma doutrina de `SilenceSweepDb`/`ReactivityAdminClient`:
  *  narrow por consumidor, para o teste rodar contra Postgres cru sem arrastar o
- *  `SupabaseClient` inteiro. */
+ *  `DbClient` inteiro. */
 export interface GatilhoEtapaDb {
   /** Pointers `status='active'` da org com `trigger_config.kind='stage_change'`. */
   carregaPointersDeEtapa(orgId: string): Promise<PointerDeEtapa[]>;
@@ -224,7 +224,7 @@ export async function aplicaGatilhoDeEtapa(
 // Adapter de produção — `GatilhoEtapaDb` sobre o client service-role real.
 // ---------------------------------------------------------------------------
 
-export function createSupabaseGatilhoEtapaDb(admin: SupabaseClient): GatilhoEtapaDb {
+export function createSupabaseGatilhoEtapaDb(admin: DbClient): GatilhoEtapaDb {
   return {
     async carregaPointersDeEtapa(orgId) {
       const { data, error } = await admin

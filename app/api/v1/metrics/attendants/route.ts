@@ -15,8 +15,8 @@ import { z } from "zod";
 import { fail, ok } from "@/lib/api/wrappers";
 import { isServiceRoleConfigured } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

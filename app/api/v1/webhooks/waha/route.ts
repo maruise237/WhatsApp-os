@@ -17,7 +17,7 @@ import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "@/lib/channels/archived";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { conferirContratoWaha, lerRoteamentoWaha } from "@/lib/waha/envelope";
 import { dispatchWahaEvent } from "@/lib/waha/ingest";
 import { authenticateWahaWebhook } from "@/lib/waha/webhook-auth";

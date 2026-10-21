@@ -13,7 +13,7 @@ import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { byteaToBuffer, decryptKey } from "@/lib/crypto/aes_gcm";
 import { validateProviderKey } from "@/lib/ai/provider-validators";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

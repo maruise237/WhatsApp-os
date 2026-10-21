@@ -12,8 +12,8 @@ import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { extFromMime, MAX_MEDIA_BYTES } from "@/lib/messaging/media/types";
 import { validateOutboundMedia } from "@/lib/messaging/media/upload-validation";
 import { transcodificarNotaDeVoz } from "@/lib/messaging/media/voice-transcode";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

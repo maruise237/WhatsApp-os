@@ -309,7 +309,7 @@ export function buildContactConsentGrant(formId: string | null): {
  *
  * Ou seja: TODO contato do produto nasce com exatamente a mesma forma que uma
  * recusa deixaria. "Nunca perguntamos" e "perguntamos e a pessoa disse não"
- * são indistinguíveis no banco de hoje — medido no `supabase/baseline.sql`, na
+ * são indistinguíveis no banco de hoje — medido no `db/migrations/0001_schema_initial.sql`, na
  * definição da coluna. Uma guarda que bloqueie por `granted_at` ausente
  * bloqueia os DOIS, e o segundo é a instalação inteira: fora deste formulário,
  * nada no produto concede consentimento (não há tela para isso).

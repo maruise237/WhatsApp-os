@@ -93,7 +93,7 @@ describe("o token atrasado: o defeito foi eliminado, não afrouxado", () => {
    * anônimo. Os testes não viram porque exercitavam um cliente FAKE e
    * afirmavam que `setAuth` fora CHAMADO — o que morreu foi o EFEITO.
    *
-   * A fonte do token passou a ser a callback, em `lib/supabase/browser.ts`, que
+   * A fonte do token passou a ser a callback, em `lib/db/browser.ts`, que
    * o socket resolve ANTES de emitir o join. Sem corrida, não há teto a vencer
    * nem canal a remontar por atraso: a classe inteira de defeito deixou de ser
    * representável. Quem a vigia agora é `realtime-token-do-socket.test.ts`.

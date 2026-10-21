@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 
 import { BUCKET_DE_LOGOS } from "@/lib/branding/logo";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

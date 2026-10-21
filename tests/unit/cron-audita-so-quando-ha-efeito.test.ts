@@ -177,7 +177,7 @@ vi.mock("@/lib/routing/worker", () => ({ runRoutingWorker: () => rodarRouting() 
 
 /** O que o UPDATE de `attendant_availability` devolve nesta rodada. */
 let varridos: { user_id: string }[] = [];
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => {
       const cadeia: Record<string, unknown> = {};

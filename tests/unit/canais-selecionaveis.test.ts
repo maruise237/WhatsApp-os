@@ -15,7 +15,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { listSelectableChannels } from "@/lib/channels/selectable";
 import type { DbErrorLike } from "@/lib/channels/archived";
@@ -69,7 +69,7 @@ function fakeDb(respostas: Resposta[]) {
   };
 
   const db = { from: (tabela: string) => { void tabela; return build(); } };
-  return { db: db as unknown as SupabaseClient, chamadas };
+  return { db: db as unknown as DbClient, chamadas };
 }
 
 const LINHA = {

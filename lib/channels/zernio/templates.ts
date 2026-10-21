@@ -34,7 +34,7 @@ import type {
 } from "../types";
 
 import { resolveZernioCreds } from "./credentials";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 /** A forma que a API devolve, traduzida para o vocabulário neutro. */
 interface RawTemplate {

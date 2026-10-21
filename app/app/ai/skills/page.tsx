@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { SkillsState } from "@/hooks/ai/useSkills";
 import { SkillsClient } from "./_client";
 

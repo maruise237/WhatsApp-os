@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { AUTOMATION_CONSUMER_KEY, runAutomationForEvent } from "@/lib/automation/engine";
 import { registerAction } from "@/lib/automation/actions";
@@ -137,8 +137,8 @@ class FakeQuery implements PromiseLike<QResult> {
   }
 }
 
-function fakeAdminClient(): SupabaseClient {
-  return { from: (table: string) => new FakeQuery(table) } as unknown as SupabaseClient;
+function fakeAdminClient(): DbClient {
+  return { from: (table: string) => new FakeQuery(table) } as unknown as DbClient;
 }
 
 function emitRealEvent(eventType: string, entityKind: string, entityId: string, org = GOV_ORG): string {

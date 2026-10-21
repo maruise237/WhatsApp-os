@@ -26,8 +26,8 @@ import {
   type DepsDaOperacao,
 } from "@/lib/operacao/entradas-automaticas";
 import { createWebhookSourceSchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { encryptWebhookSecret } from "@/lib/webhooks/secrets";
 
 export const dynamic = "force-dynamic";

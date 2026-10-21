@@ -12,14 +12,14 @@
  * setado (nem o 'infinity' do handoff permanente, que `isLeadInHandoff` também
  * lê — ver `lib/ai/handoff/orchestrator.ts` e `human-handoff.ts:performHumanHandoff`).
  */
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DbClient } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { sendMessageHandler } from '@/app/api/v1/messages/_handler';
 import type { HandlerCtx } from '@/lib/api/handlers/types';
 import type { SendMessageInput } from '@/lib/schemas';
 
-vi.mock('@/lib/supabase/admin', () => ({
+vi.mock('@/lib/db/admin', () => ({
   createAdminClient: () => ({ storage: { from: () => ({ createSignedUrl: vi.fn() }) } }),
 }));
 vi.mock('@/lib/audit', () => ({ audit: vi.fn(async () => {}) }));
@@ -92,7 +92,7 @@ function makeSupabase(botSilencedUntil: string | null) {
     },
     rpc: async () => ({ error: null }),
   };
-  return { supabase: client as unknown as SupabaseClient, patches };
+  return { supabase: client as unknown as DbClient, patches };
 }
 
 const input = { conversation_id: CONV, type: 'text', body: 'oi' } as SendMessageInput;

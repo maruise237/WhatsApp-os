@@ -36,7 +36,7 @@ import {
 } from "@/lib/agent-engine/edge/llm/orcamento";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export interface BudgetStatus {
   organization_id: string;

@@ -20,7 +20,7 @@ import type { NextRequest } from "next/server";
 
 import { ok, fail } from "@/lib/api/wrappers";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { audit } from "@/lib/audit";
 import { triggerSlaAlarm } from "@/lib/lgpd/sla-alarm";
 import { marcaDaSaida, type MarcaDeSaida } from "@/lib/branding/saida";

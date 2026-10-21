@@ -5,7 +5,7 @@
  * the service role bypasses RLS, so we enforce tenancy here (CLAUDE.md §Multi-tenancy).
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { computeDueAt } from "./sla";
 import type { LgpdRequest, LgpdRequestType, LgpdScope } from "./types";
 

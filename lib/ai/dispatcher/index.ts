@@ -24,7 +24,7 @@
 
 import { randomUUID } from "node:crypto";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { aiDispatchModeSchema } from "@/lib/schemas/settings";

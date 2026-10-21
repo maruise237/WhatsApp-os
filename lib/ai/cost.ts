@@ -6,7 +6,7 @@
  * over-billing rather than free usage).
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 interface PricingRow {
   model: string;

@@ -4,7 +4,7 @@ const requireRole = vi.fn();
 vi.mock('@/lib/auth/require-role', () => ({ requireRole: (...a: unknown[]) => requireRole(...a) }));
 
 const from = vi.fn();
-vi.mock('@/lib/supabase/server', () => ({ createClient: async () => ({ from }) }));
+vi.mock('@/lib/db/server', () => ({ createClient: async () => ({ from }) }));
 
 import { GET } from './route';
 import { NextRequest } from 'next/server';

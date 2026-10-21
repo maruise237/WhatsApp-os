@@ -9,12 +9,12 @@
  * o envio automatizado falharia pra sempre. Reabrir é também o comportamento
  * certo de produto: a conversa É o thread com aquele contato naquele número.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 const OPEN_STATUSES = ["open", "pending", "claimed", "ai_handling"];
 
 export async function ensureConversation(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   contactId: string,
   channelSessionId: string,

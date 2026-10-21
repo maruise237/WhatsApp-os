@@ -18,7 +18,7 @@
  * coluna `published_at` (que a tabela não tem por versão publicada) e sem
  * ambiguidade; documentada e testada.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 /** Um agente publicado da org com follow-up habilitado + os pointers que ele arma. */
 export interface EnabledFollowupAgent {
@@ -27,7 +27,7 @@ export interface EnabledFollowupAgent {
 }
 
 /** Interface estreita de DB — mesma doutrina de `AdminClient`/`ReactivityAdminClient`
- *  (narrow por consumidor, não `SupabaseClient` direto, pra ficar testável sem Postgres). */
+ *  (narrow por consumidor, não `DbClient` direto, pra ficar testável sem Postgres). */
 export interface FollowupGateDb {
   /** Agentes publicados da org com `followup.enabled=true`, cada um com seus `flow_pointer_ids`. */
   loadEnabledPublishedFollowupAgents(orgId: string): Promise<EnabledFollowupAgent[]>;
@@ -72,7 +72,7 @@ interface FollowupColumnShape {
 }
 
 /** Production adapter: lê `ai_agent_versions.{agent_id,followup}` via o client service-role real. */
-export function createSupabaseFollowupGateDb(admin: SupabaseClient): FollowupGateDb {
+export function createSupabaseFollowupGateDb(admin: DbClient): FollowupGateDb {
   return {
     async loadEnabledPublishedFollowupAgents(orgId) {
       const { data, error } = await admin

@@ -4,7 +4,7 @@
  * aceitá-los; caso contrário [] e o derivado textual (já no contexto) cobre.
  * Usa signed URL curta do bucket privado — o provider baixa, nunca base64.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { LeadContextMessage } from "@/lib/agent-engine/edge/crm/get-lead-context";
 import { modelCapabilities } from "@/lib/agent-engine/edge/llm/capabilities";
@@ -25,7 +25,7 @@ export interface BuildNativeMediaPartsArgs {
   provider: string;
   model: string;
   multimodalInput: boolean;
-  admin: SupabaseClient;
+  admin: DbClient;
   /** teto de mídias anexadas (default 1: só a inbound mais recente). */
   maxItems?: number;
 }

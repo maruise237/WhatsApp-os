@@ -28,7 +28,7 @@
  * morto; só vigia demora até a próxima rodada. Os dois chamam esta mesma
  * função, então a regra de quando avisar existe uma vez só.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 /** Único estado em que mensagem entra e sai. Contrato do CRM (uppercase). */
 export const STATUS_SAUDAVEL = "WORKING";
@@ -173,7 +173,7 @@ export interface ConexaoCaida {
  * aposentada está parada é o ruído que ensina a ignorar a faixa.
  */
 export async function listarConexoesCaidas(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
 ): Promise<ConexaoCaida[]> {
   const { data } = await admin
@@ -209,7 +209,7 @@ interface SessaoParaVigiar {
  * fechar por organização apagaria o alerta de um outro canal que segue caído.
  */
 export async function sincronizarSaudeDaConexao(
-  admin: SupabaseClient,
+  admin: DbClient,
   sessao: SessaoParaVigiar,
   saude: SaudeObservada,
   apelido: string,
@@ -295,7 +295,7 @@ export async function sincronizarSaudeDaConexao(
  * silenciosamente pararia de funcionar: avisaria de novo a cada rodada.
  */
 async function gravarEpisodio(
-  admin: SupabaseClient,
+  admin: DbClient,
   sessao: SessaoParaVigiar,
   episodio: string | null,
 ): Promise<void> {

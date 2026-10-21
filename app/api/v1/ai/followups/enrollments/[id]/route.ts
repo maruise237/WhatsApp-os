@@ -33,7 +33,7 @@ import {
 } from "@/lib/followup/eventos-legiveis";
 import { leituraDoPlano, type TimingPlan } from "@/lib/followup/plano-de-tempo";
 import { flowGraphSchema } from "@/lib/followup/graph-schema";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 
@@ -94,7 +94,7 @@ function embedded<T>(v: T | T[] | null): T | null {
  * Os nomes de quem interveio, resolvidos uma vez por pessoa.
  *
  * Mesmo caminho de `lib/leads/timeline-query.ts`, inclusive os IMPORTS TARDIOS:
- * `@/lib/audit` e `@/lib/supabase/admin` arrastam `@/lib/env`, que lança se
+ * `@/lib/audit` e `@/lib/db/admin` arrastam `@/lib/env`, que lança se
  * faltar variável — no topo, quebrariam qualquer teste que só importasse este
  * módulo. Sem service role configurado, os nomes simplesmente não vêm e a tela
  * cai em "uma pessoa da equipe": a falta do nome nunca derruba o dossiê.
@@ -111,7 +111,7 @@ async function resolveAutores(eventos: Array<{ payload: unknown }>): Promise<Rec
 
   const { isServiceRoleConfigured } = await import("@/lib/audit");
   if (!isServiceRoleConfigured()) return {};
-  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const { createAdminClient } = await import("@/lib/db/admin");
   const admin = createAdminClient();
 
   const nomes: Record<string, string> = {};

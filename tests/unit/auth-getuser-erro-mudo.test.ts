@@ -55,7 +55,7 @@ vi.mock("@/lib/logger", () => ({
     debug: () => {},
   },
 }));
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/lib/db/server", () => ({
   createClient: async () => ({
     auth: { getUser: async () => resposta.atual },
     from: () => {

@@ -16,7 +16,7 @@
  * que verificasse teria que perguntar de quem é o payload — o `if (provider ===
  * ...)` que a doutrina existe para impedir.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { CHANNEL_PROVIDER_ZERNIO } from "./capabilities";
 import { sincronizarSaudeDaConexao } from "./health";
@@ -74,7 +74,7 @@ export function acceptsInboundWebhook(provider: string): boolean {
 }
 
 export async function handleInboundWebhook(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: InboundWebhookInput,
 ): Promise<InboundWebhookOutcome> {
   const provider = input.session.provider as ChannelProvider;
@@ -90,7 +90,7 @@ export async function handleInboundWebhook(
 }
 
 async function zernioInbound(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: InboundWebhookInput,
 ): Promise<InboundWebhookOutcome> {
   // Fail-closed, sem a exceção que virou regra no canal por QR: lá, "não

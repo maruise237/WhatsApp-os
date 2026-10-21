@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 /**
  * O que fazer quando GRAVAR A ATIVIDADE falha — e o rastro não pode sumir.
@@ -46,7 +46,7 @@ export interface FalhaDeAtividade {
  * que o `console.error` sozinho não tinha.
  */
 export async function registraFalhaDeAtividade(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   f: FalhaDeAtividade,
 ): Promise<void> {
   const { error } = await supabase.rpc("emit_event", {

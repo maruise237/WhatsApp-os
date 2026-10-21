@@ -30,7 +30,7 @@ import { randomUUID } from "node:crypto";
 import { type NextRequest } from "next/server";
 
 import { ok, fail } from "@/lib/api/wrappers";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { nomesDosAtendentes } from "@/lib/users/nome-do-atendente";
 
 export const dynamic = "force-dynamic";

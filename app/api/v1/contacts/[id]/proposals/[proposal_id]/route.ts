@@ -30,7 +30,7 @@ import { ApiError } from "@/lib/api/types";
 import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 import { redirect } from "next/navigation";
 
 import { marcaDaSaida } from "@/lib/branding/saida";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export type EnrollMfaResult =
   | { ok: true; factor_id: string; qr_data_url: string; uri: string; secret: string }

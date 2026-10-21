@@ -65,7 +65,7 @@ vi.mock("@/lib/auth/server", () => ({
   resolveActiveOrg: async () => orgAtiva,
 }));
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => ({ select: () => chain() }),
     storage: { from: () => ({ createSignedUrl }) },

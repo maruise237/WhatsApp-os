@@ -14,7 +14,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { signedMediaUrl } from "@/lib/storage/seaweedfs";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

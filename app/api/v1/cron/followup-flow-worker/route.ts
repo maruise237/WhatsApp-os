@@ -26,7 +26,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { createSupabaseAdminClient, runFollowupTick, type FollowupJobRequest } from "@/lib/followup/engine";
 import { createSupabaseFollowupGateDb } from "@/lib/followup/agent-followup-gate";
 import { createSupabaseSilenceSweepDb, runSilenceSweep } from "@/lib/followup/silence-sweep";

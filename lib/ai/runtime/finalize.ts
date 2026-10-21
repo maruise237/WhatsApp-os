@@ -6,12 +6,12 @@
  * outbound row insert, retry, idempotency_keys) so we never duplicate
  * dispatch logic here.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { sendMessageHandler } from "@/app/api/v1/messages/_handler";
 import type { Actor } from "@/lib/api/handlers/types";
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { SerializedStep } from "./serialize";
 
 export type RunStatus = "completed" | "failed" | "aborted" | "handoff";
@@ -113,7 +113,7 @@ export async function finalizeRun(input: FinalizeRunInput): Promise<void> {
 }
 
 export interface SendFinalResponseInput {
-  supabase: SupabaseClient;
+  supabase: DbClient;
   organizationId: string;
   runId: string;
   /**

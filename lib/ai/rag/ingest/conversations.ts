@@ -30,7 +30,7 @@ import {
   markVersionFailed,
   markVersionReady,
 } from "@/lib/ai/rag/version";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 const CONV_MAX_CHARS = 1600;
 const CONV_OVERLAP_CHARS = 200;

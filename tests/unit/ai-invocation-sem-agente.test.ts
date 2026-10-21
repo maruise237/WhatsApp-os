@@ -30,7 +30,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 
 const inserts: Array<Record<string, unknown>> = [];
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => ({
       insert: (row: Record<string, unknown>) => {

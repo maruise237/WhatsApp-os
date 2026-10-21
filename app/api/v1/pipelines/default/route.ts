@@ -10,7 +10,7 @@ import { randomUUID } from "node:crypto";
 
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { Pipeline, Stage } from "@/lib/kanban/types";
 
 export const dynamic = "force-dynamic";

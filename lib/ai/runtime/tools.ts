@@ -13,7 +13,7 @@
  */
 import { tool, type Tool } from "ai";
 import { z } from "zod";
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { auditMcpToolCall } from "@/lib/mcp/audit";
 import { McpAuthError, ensureRole, ensureScope } from "@/lib/mcp/auth";
@@ -32,7 +32,7 @@ export interface RuntimeHandoffSignal {
 }
 
 export interface PickToolsInput {
-  supabase: SupabaseClient;
+  supabase: DbClient;
   ctx: McpContext;
   auth: McpAuthResult;
   toolIds: string[];

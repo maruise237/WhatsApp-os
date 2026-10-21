@@ -36,8 +36,8 @@ import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { atendimentoConfigPatchSchema, routingConfigSchema, validateRequest } from "@/lib/schemas";
 import { DEFAULT_VISIBILITY_MODE, type VisibilityMode } from "@/lib/auth/types";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

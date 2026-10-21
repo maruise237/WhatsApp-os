@@ -3,8 +3,8 @@
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 import { audit } from "@/lib/audit";
 import { tenantSchema, type TenantInput } from "@/lib/schemas/settings";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";

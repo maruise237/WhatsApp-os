@@ -13,7 +13,7 @@ import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { checkRateLimit } from "@/lib/ai/dispatcher/rate-limit";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { createLeadHandler } from "@/app/api/v1/leads/_handler";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import type { CreateLeadInput } from "@/lib/schemas";

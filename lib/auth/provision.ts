@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { audit } from "@/lib/audit";
 
 /** Normaliza o nome da empresa para um slug candidato (citext unique no DB). */

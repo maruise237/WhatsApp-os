@@ -3,7 +3,7 @@
  * Centralizes channel-name strings so every consumer stays in sync.
  */
 
-import { createClient } from "@/lib/supabase/browser";
+import { createClient } from "@/lib/db/browser";
 
 /**
  * Platform-wide alerts broadcast channel.

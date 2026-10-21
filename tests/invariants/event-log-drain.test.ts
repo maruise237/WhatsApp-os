@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { registerHandler, type EventRow, type HandlerResult } from "@/lib/event-log/dispatcher";
 import { drainEventLog } from "@/lib/event-log/drain";
@@ -9,7 +9,7 @@ import { GOV_ORG, seedGov, sql, lastLine } from "./gov-helpers";
  * Drain genérico do event_log (Task 2, spec webhooks/automação 2026-07-17).
  *
  * Este harness (scripts/test-db.sh) sobe SÓ um Postgres cru — sem PostgREST,
- * sem HTTP — então não existe um `SupabaseClient` real pra passar a
+ * sem HTTP — então não existe um `DbClient` real pra passar a
  * `drainEventLog(admin, ...)` (mesma limitação documentada em
  * webhooks-rls.test.ts). `fakeAdminClient()` abaixo é um double mínimo do
  * shape que `drain.ts` efetivamente usa (`.from().select()/.update()` +
@@ -169,8 +169,8 @@ class FakeQuery implements PromiseLike<{ data: unknown; error: { message: string
   }
 }
 
-function fakeAdminClient(): SupabaseClient {
-  return { from: (table: string) => new FakeQuery(table) } as unknown as SupabaseClient;
+function fakeAdminClient(): DbClient {
+  return { from: (table: string) => new FakeQuery(table) } as unknown as DbClient;
 }
 
 function emitDrainCase(mode: string, eventType = "test.drain_case"): string {

@@ -11,11 +11,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ROLE_RANK, type AuthUser, type Role } from "@/lib/auth/types";
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 vi.mock("@/lib/ai/runtime/agent", () => ({
   runAgent: vi.fn(async () => {

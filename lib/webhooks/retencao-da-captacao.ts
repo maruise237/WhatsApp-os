@@ -39,7 +39,7 @@
  * efeito — falha fechada na ação e fechada também na informação, que é o pior
  * dos dois mundos.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 import {
@@ -60,7 +60,7 @@ export interface ResultadoDaPodaDeCaptacao {
 }
 
 export async function podarHistoricoDeCaptacao(
-  admin: SupabaseClient,
+  admin: DbClient,
   opcoes: { diasBrutos: string | undefined; lote?: number },
 ): Promise<ResultadoDaPodaDeCaptacao> {
   const lote = opcoes.lote ?? LOTE_PADRAO_DA_CAPTACAO;

@@ -16,14 +16,14 @@ import { NextRequest } from "next/server";
 
 import { requireRole } from "@/lib/auth/require-role";
 import { audit, isServiceRoleConfigured } from "@/lib/audit";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { fail } from "@/lib/api/wrappers";
 import { ROLE_RANK, type AuthUser, type Role } from "@/lib/auth/types";
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
   audit: vi.fn(async () => undefined),
   isServiceRoleConfigured: vi.fn(() => false),

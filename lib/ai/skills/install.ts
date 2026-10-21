@@ -10,7 +10,7 @@
  * olha pra dentro do pkg em busca de tenant.
  */
 import type pg from 'pg';
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { insertSkillVersion, setSkillPointer, type SkillMatcher } from '../../agent-engine/agent/skills';
 import type { ParsedSkillPackage } from './package';
@@ -25,7 +25,7 @@ const SKILL_ASSETS_BUCKET = 'skill-assets';
  * nenhum ponteiro aponta pra ela), só logada para investigação.
  */
 export async function importSkillPackage(
-  deps: { db: pg.Pool; admin: SupabaseClient },
+  deps: { db: pg.Pool; admin: DbClient },
   input: { organizationId: string; pkg: ParsedSkillPackage; createdBy: string | null },
 ): Promise<{ versionId: string; name: string }> {
   const { organizationId, pkg } = input;

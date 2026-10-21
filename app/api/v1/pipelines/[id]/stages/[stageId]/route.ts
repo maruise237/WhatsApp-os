@@ -22,7 +22,7 @@ import { respostaDeRecusa } from "@/lib/api/recusa";
 import { fail, ok } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { arquivarEtapa, atualizarEtapa } from "@/lib/leads/stage-operations";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

@@ -36,7 +36,7 @@ const metaCreds = vi.fn(async () => ({ phoneNumberId: "555", token: "tok" }));
 /** A organização atravessa o seam desde a issue #236. */
 const ORG = "00000000-0000-4000-8000-000000000236";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => ({}) as never }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: () => ({}) as never }));
 vi.mock("@/lib/channels/zernio/credentials", async (orig) => ({
   ...(await orig<Record<string, unknown>>()),
   resolveZernioCreds: (...a: unknown[]) => zernioCreds(...(a as [])),

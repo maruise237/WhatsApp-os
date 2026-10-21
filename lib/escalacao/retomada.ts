@@ -29,7 +29,7 @@
  * quem chama isto decide devolver, e a tool que expõe esta função ao modelo é
  * marcada como capacidade de risco crítico — não entra ligada por pacote.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import { audit } from "@/lib/audit";
@@ -41,7 +41,7 @@ import { lerContinuidadeHumana, type ContinuidadeHumana } from "./continuidade";
 
 export interface RetomadaDeps {
   /** Admin client (service role) OU client do request — os dois filtram org aqui. */
-  supabase: SupabaseClient;
+  supabase: DbClient;
   organizationId: string;
   actor: Actor;
   requestId: string;
@@ -231,7 +231,7 @@ export async function devolverAtendimentoAoAgente(
  * histórico da conversa justamente para contar um pedaço dela.
  */
 async function gravarCheckpointDeRetomada(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   contactId: string,
   continuidade: ContinuidadeHumana,

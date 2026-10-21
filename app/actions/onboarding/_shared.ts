@@ -5,7 +5,7 @@
  * session — no body-derived ids ever).
  */
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { OnboardingState } from "@/lib/schemas/onboarding";
 
 export class OnboardingError extends Error {

@@ -15,7 +15,7 @@ import { revalidatePath } from "next/cache";
 import { audit } from "@/lib/audit";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { Role } from "@/lib/auth/types";
 import { duplicateAgentWithVersion } from "@/lib/ai/agents/duplicate";
 

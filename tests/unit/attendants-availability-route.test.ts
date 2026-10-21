@@ -17,16 +17,16 @@ import { NextRequest } from "next/server";
 import { fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { isServiceRoleConfigured } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ROLE_RANK, type AuthUser, type Role } from "@/lib/auth/types";
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
   isServiceRoleConfigured: vi.fn(() => true),
   audit: vi.fn(async () => undefined),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 
 const ORG = "22222222-2222-4222-8222-222222222222";
 const ANA = "11111111-1111-4111-8111-111111111111";
@@ -166,7 +166,7 @@ describe("GET /api/v1/attendants/availability", () => {
   it("sem service role em dev, degrada em vez de estourar", async () => {
     sessao("agent");
     vi.mocked(isServiceRoleConfigured).mockReturnValueOnce(false);
-    const { createClient } = await import("@/lib/supabase/server");
+    const { createClient } = await import("@/lib/db/server");
     vi.mocked(createClient).mockResolvedValue(
       fazerAdmin({
         attendant_availability: EQUIPE.attendant_availability,

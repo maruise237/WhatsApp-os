@@ -17,7 +17,7 @@
  *
  * Run: npx tsx tests/prova-quantos-canais.ts
  */
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type DbClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
 
 import { CREDS, carimbar } from "./qa-helpers";
@@ -43,7 +43,7 @@ async function rodada(quantos: number, leadId: string, semFiltro = false): Promi
   // CLIENTE NOVO A CADA RODADA. Reaproveitar o cliente carregaria o estado da
   // rodada anterior para dentro da próxima medição — e o efeito que eu procuro
   // é justamente de acúmulo.
-  const cli: SupabaseClient = createClient(
+  const cli: DbClient = createClient(
     env.NEON_DATA_API_URL!,
     env.NEON_SERVICE_ROLE_JWT!,
     { auth: { autoRefreshToken: false, persistSession: false } },

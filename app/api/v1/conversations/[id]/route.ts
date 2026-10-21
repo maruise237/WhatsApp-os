@@ -10,7 +10,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { patchConversationSchema, validateRequest } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { comNomeDoAtendente } from "@/lib/users/com-nome-do-atendente";
 
 import { getConversationHandler, patchConversationHandler } from "../_handler";

@@ -10,8 +10,8 @@ import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { autoriaDaMudanca } from "@/lib/operacao/autoria";
 import { updateWebhookSourceSchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { encryptWebhookSecret } from "@/lib/webhooks/secrets";
 
 export const dynamic = "force-dynamic";

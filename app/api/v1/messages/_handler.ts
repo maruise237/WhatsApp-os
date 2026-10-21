@@ -6,7 +6,7 @@
  *  - GET  /api/v1/conversations/[id]/messages (listMessagesHandler)
  *  - MCP tools (S-13.04)
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";
@@ -29,10 +29,10 @@ import {
 } from "@/lib/messaging/contact-card";
 import type { ListMessagesQuery, SendMessageInput } from "@/lib/schemas";
 import { sendTemplateForSession } from "@/lib/channels/meta/send-template-for-session";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { Message } from "@/lib/types/messaging";
 
-type SB = SupabaseClient;
+type SB = DbClient;
 
 /**
  * Remove a linha que o WEBHOOK criou para a mensagem que ESTE envio acabou de

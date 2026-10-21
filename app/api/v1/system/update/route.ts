@@ -11,7 +11,7 @@ import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { loadAuthUser } from "@/lib/auth/server";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { isRunStale } from "@/lib/system/update-run";
 
 export const dynamic = "force-dynamic";

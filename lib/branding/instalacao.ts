@@ -62,7 +62,7 @@
  */
 
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 
 import { ehHexValido, normalizarHex } from "./rampa";

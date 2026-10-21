@@ -18,7 +18,7 @@ import type { NextRequest } from "next/server";
 
 import { fail } from "@/lib/api/wrappers";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

@@ -11,7 +11,7 @@
  * explicitamente, e o id da organização vem sempre de fonte confiável (JWT do
  * humano ou contexto do agente), nunca do payload de quem chamou.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Actor } from "@/lib/api/handlers/types";
 import { resolveActiveLeadForContact, type LeadCandidate } from "@/lib/leads/active-lead";
@@ -73,7 +73,7 @@ function paraRetorno(row: LinhaDeCron): RetornoAgendado {
  * que alcançasse a linha errada desligaria um mecanismo que ninguém pediu para
  * desligar — silenciosamente, porque a tabela é a mesma.
  */
-export function criaRetornoDbSupabase(admin: SupabaseClient): RetornoDb {
+export function criaRetornoDbSupabase(admin: DbClient): RetornoDb {
   const base = () =>
     admin.from("cron_jobs").select(COLUNAS).eq("kind", "at").eq("job_kind", "followup_turn");
 
@@ -180,7 +180,7 @@ export type ResolucaoDoAlvo =
  * ausência dele é a morte que a doutrina proíbe. A perda de rastro vira evento.
  */
 export async function resolveAlvoDoRetorno(
-  admin: SupabaseClient,
+  admin: DbClient,
   orgId: string,
   ref: { leadId?: string | null; contactId?: string | null },
 ): Promise<ResolucaoDoAlvo> {
@@ -278,7 +278,7 @@ interface AtividadeDoRetorno {
  * que resta é registrar que o rastro não coube em lugar nenhum.
  */
 async function registraAtividade(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: AtividadeDoRetorno,
 ): Promise<void> {
   if (!input.alvo.leadId) {
@@ -323,7 +323,7 @@ async function registraAtividade(
 // ---------------------------------------------------------------------------
 
 export interface DepsDoRetorno {
-  admin: SupabaseClient;
+  admin: DbClient;
   orgId: string;
   actor: Actor;
   requestId?: string;

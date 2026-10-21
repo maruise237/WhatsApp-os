@@ -24,7 +24,7 @@
  */
 import { z } from "zod";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { encryptWebhookSecret } from "@/lib/webhooks/secrets";
 import { ApiError } from "@/lib/api/types";
 import {

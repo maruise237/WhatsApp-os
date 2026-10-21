@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import {
   signupSchema,
   signupComConviteSchema,

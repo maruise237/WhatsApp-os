@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { ensureTenantForUser } from "@/lib/auth/provision";
 import { decidirConviteDoSignup } from "@/lib/auth/convite-no-signup";
 import { audit } from "@/lib/audit";
@@ -34,7 +34,7 @@ import { env } from "@/lib/env";
  *   `@supabase/ssr` força `flowType: "pkce"` (createServerClient.js:33) e grava
  *   o verificador num cookie (`<storageKey>-code-verifier`, cookies.js:18) com
  *   as MESMAS `cookieOptions` da sessão (cookies.js:227,232) — isto é, com o
- *   `sameSite: "strict"` de `lib/supabase/server.ts:35`. Clique de link vindo
+ *   `sameSite: "strict"` de `lib/db/server.ts:35`. Clique de link vindo
  *   de webmail é navegação CROSS-SITE: o navegador não manda cookie Strict, o
  *   verificador não chega, e `exchangeCodeForSession` falha. O formato
  *   `token_hash` não depende de cookie nenhum.

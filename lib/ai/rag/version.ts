@@ -5,7 +5,7 @@
  * explicitly — service-role bypasses RLS, so tenant isolation is enforced here.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export interface CreateVersionParams {
   agentId: string;

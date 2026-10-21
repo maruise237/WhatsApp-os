@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 
 import { safeNext } from "@/lib/auth/safe-next";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { audit } from "@/lib/audit";
-import { cookieSecure } from "@/lib/supabase/cookie-secure";
+import { cookieSecure } from "@/lib/db/cookie-secure";
 
 export type VerifyMfaResult =
   | { ok: false; error: "mfa_invalid" }

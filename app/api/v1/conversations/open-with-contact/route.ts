@@ -12,7 +12,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { openSharedContactConversation } from "@/lib/messaging/open-shared-contact-conversation";
 import { openConversationWithContactSchema, validateRequest } from "@/lib/schemas";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

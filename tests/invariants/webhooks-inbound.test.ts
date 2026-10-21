@@ -2,12 +2,12 @@ import { createHmac } from "node:crypto";
 import { readFileSync } from "node:fs";
 
 import { NextRequest } from "next/server";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { POST } from "@/app/api/v1/webhooks/in/[token]/route";
 import { GOV_ORG, GOV_PIPELINE, GOV_STAGE, seedGov, sql } from "./gov-helpers";
 
@@ -17,7 +17,7 @@ import { GOV_ORG, GOV_PIPELINE, GOV_STAGE, seedGov, sql } from "./gov-helpers";
  *
  * Mesma limitação de infra documentada em webhooks-rls.test.ts /
  * event-log-drain.test.ts / webhooks-trigger-events.test.ts: o harness sobe só
- * um Postgres cru (sem PostgREST/HTTP). `@/lib/supabase/admin` é mockado para
+ * um Postgres cru (sem PostgREST/HTTP). `@/lib/db/admin` é mockado para
  * este arquivo inteiro — `createAdminClient()` (chamado pela rota, por
  * createLeadHandler E por audit(), já que isServiceRoleConfigured() é true no
  * env de teste) devolve o double abaixo, que traduz .from().select()/
@@ -200,7 +200,7 @@ interface EmitEventParams {
   p_organization_id: string;
 }
 
-function fakeAdminClient(): SupabaseClient {
+function fakeAdminClient(): DbClient {
   return {
     from: (table: string) => new FakeQuery(table),
     rpc: (name: string, params: Record<string, unknown>): Promise<QResult> => {
@@ -235,7 +235,7 @@ function fakeAdminClient(): SupabaseClient {
         }
       })();
     },
-  } as unknown as SupabaseClient;
+  } as unknown as DbClient;
 }
 
 vi.mocked(createAdminClient).mockReturnValue(fakeAdminClient());

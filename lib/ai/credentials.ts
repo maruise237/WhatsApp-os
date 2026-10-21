@@ -7,7 +7,7 @@
  * término da request.
  */
 import { byteaToBuffer, decryptKey } from "@/lib/crypto/aes_gcm";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 import type { Provider } from "./provider-validators";
 

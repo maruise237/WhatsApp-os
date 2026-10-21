@@ -12,7 +12,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { contactPatchSchema, validateRequest } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { getContactHandler, patchContactHandler } from "../_handler";
 

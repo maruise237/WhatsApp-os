@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";

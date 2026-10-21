@@ -8,7 +8,7 @@ import { describe, it, expect, vi } from "vitest";
 
 // A rota importa server-only helpers no topo; mocka-se pra o import não puxar
 // next/headers em ambiente jsdom. Só a função PURA é exercida.
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
 
 import { enrollmentToQueueRow } from "@/app/api/v1/ai/followups/queue/route";

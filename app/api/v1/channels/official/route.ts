@@ -32,7 +32,7 @@ import { CHANNEL_PROVIDER_META } from "@/lib/channels/capabilities";
 import { validateMetaCredentials } from "@/lib/channels/meta/validate-credentials";
 import { reactivateChannelSession } from "@/lib/channels/reactivate";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { encryptWebhookSecret } from "@/lib/webhooks/secrets";
 
 export const dynamic = "force-dynamic";

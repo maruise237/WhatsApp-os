@@ -57,7 +57,7 @@ const banco = vi.hoisted(() => ({
   portao: null as { liberar: () => void; esperar: Promise<void> } | null,
 }));
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => ({
       select: () => ({

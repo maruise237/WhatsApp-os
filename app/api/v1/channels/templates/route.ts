@@ -19,7 +19,7 @@ import { metaSessionForOrg } from "@/lib/channels/meta/session";
 import { normalizeRejectedReason } from "@/lib/channels/meta/webhook";
 import { deriveTemplateContract, describeAddress } from "@/lib/channels/meta/template-contract";
 import { syncTemplates } from "@/lib/channels/meta/template-sync";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";

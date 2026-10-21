@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { AuthUser } from "@/lib/auth/types";
 import { runAutomationForEvent } from "@/lib/automation/engine";
 import type { EventRow } from "@/lib/event-log/dispatcher";
@@ -29,7 +29,7 @@ import { sql, lastLine } from "./gov-helpers";
  */
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@/lib/audit")>();
   return {
@@ -170,7 +170,7 @@ interface EmitEventParams {
   p_organization_id: string;
 }
 
-function fakeClient(): SupabaseClient {
+function fakeClient(): DbClient {
   return {
     from: (table: string) => new FakeQB(table),
     rpc: (name: string, params: Record<string, unknown>): Promise<QResult> => {
@@ -191,7 +191,7 @@ function fakeClient(): SupabaseClient {
         }
       })();
     },
-  } as unknown as SupabaseClient;
+  } as unknown as DbClient;
 }
 
 function eventRows(

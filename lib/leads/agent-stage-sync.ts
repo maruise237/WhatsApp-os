@@ -74,7 +74,7 @@ export type { RiskBucket };
 
 /* ────────────────────────────────────────────────────────────────────────── */
 
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
@@ -132,7 +132,7 @@ export interface ResultadoDaSincronizacao {
  * como saber por quê.
  */
 export async function sincronizaEstagioDoAgente(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: {
     organizationId: string;
     contactId: string;

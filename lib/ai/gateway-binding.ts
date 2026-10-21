@@ -28,7 +28,7 @@ import type { LanguageModel } from "ai";
 
 import { decryptKey, byteaToBuffer } from "@/lib/crypto/aes_gcm";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 import { OPENROUTER_BASE_URL, resolveLanguageModel, type ModelId } from "./gateway";
 import { iaDeLaPlateformeDepuisProcessEnv, modeleDeLaPlateforme } from "./plateforme";

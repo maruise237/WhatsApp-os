@@ -1,9 +1,9 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { getAction } from "@/lib/automation/actions";
 import { ensureConversation } from "@/lib/automation/start-conversation";
 import type { ActionCtx } from "@/lib/automation/types";
@@ -258,7 +258,7 @@ interface EmitEventParams {
   p_organization_id: string;
 }
 
-function fakeAdminClient(): SupabaseClient {
+function fakeAdminClient(): DbClient {
   return {
     from: (table: string) => new FakeQuery(table),
     rpc: (name: string, params: Record<string, unknown>): Promise<QResult> => {
@@ -279,7 +279,7 @@ function fakeAdminClient(): SupabaseClient {
         }
       })();
     },
-  } as unknown as SupabaseClient;
+  } as unknown as DbClient;
 }
 
 const admin = fakeAdminClient();

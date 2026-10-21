@@ -4,7 +4,7 @@
  * REST cobre: createLeadHandler (POST), updateLeadHandler (PATCH).
  * MCP usa: listLeadsHandler, getLeadHandler além dos acima (S-13.04).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";
@@ -17,7 +17,7 @@ import { registraFalhaDeAtividade } from "@/lib/leads/activity-write-failure";
 import type { CreateLeadInput, UpdateLeadInput } from "@/lib/schemas";
 import { ehCorrecaoDeMovimentoDaIa } from "@/lib/leads/correcao-humana";
 
-type SB = SupabaseClient;
+type SB = DbClient;
 
 const LEAD_COLS = "*";
 

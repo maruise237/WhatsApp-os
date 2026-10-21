@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type pg from 'pg';
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { importSkillPackage, installPlatformSkill } from './install';
 import type { ParsedSkillPackage } from './package';
@@ -22,7 +22,7 @@ function stubAdmin(opts?: { failPath?: string }) {
     return { data: { path }, error: null };
   });
   const remove = vi.fn(async (paths: string[]) => ({ data: paths.map((p) => ({ name: p })), error: null }));
-  const admin = { storage: { from: () => ({ upload, remove }) } } as unknown as SupabaseClient;
+  const admin = { storage: { from: () => ({ upload, remove }) } } as unknown as DbClient;
   return { admin, upload, remove };
 }
 

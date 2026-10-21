@@ -49,7 +49,7 @@
  * conversa: sem esse vínculo o enrollment não sabe dizer de onde veio, e o
  * cancelamento pelo fechamento não teria por onde achar a linha.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { EventRow } from "@/lib/event-log/dispatcher";
 import { flowGraphSchema } from "./graph-schema";
@@ -294,7 +294,7 @@ export async function aplicaGatilhoDeCaso(
 // Adapter de produção — `GatilhoCasoDb` sobre o client service-role real.
 // ---------------------------------------------------------------------------
 
-export function createSupabaseGatilhoCasoDb(admin: SupabaseClient): GatilhoCasoDb {
+export function createSupabaseGatilhoCasoDb(admin: DbClient): GatilhoCasoDb {
   return {
     async carregaPointersDeCaso(orgId) {
       const { data, error } = await admin

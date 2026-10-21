@@ -12,7 +12,7 @@
  * exige que quem chama valide o tenant: aqui `organizationId` SEMPRE vem de
  * fonte confiavel (token/cookie), nunca do corpo da requisicao.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { embedText } from "@/lib/ai/embed";
 import { connaissancesEnTexte, PLAFONDS_CONNAISSANCES, plafonnerExtraits } from "@/lib/ai/plateforme";
@@ -53,7 +53,7 @@ interface LinhaDaRpc {
 }
 
 export async function buscarConhecimento(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   p: ParametrosDaBusca,
   deps?: { embed?: typeof embedText; enTexte?: boolean },
 ): Promise<ResultadoDaBusca> {
@@ -126,7 +126,7 @@ export async function buscarConhecimento(
  * ela precisa dizer por qual assistente quer buscar.
  */
 export async function resolverAcervoDoAgente(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   agentId: string,
 ): Promise<string | null> {

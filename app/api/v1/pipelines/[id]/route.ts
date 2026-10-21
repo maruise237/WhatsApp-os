@@ -30,7 +30,7 @@ import {
   validarNomeDeFunil,
   type FunilEditavel,
 } from "@/lib/pipelines/pipeline-editing";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { conflitoDoBanco, corpo, lerDependencias, lerFunis } from "../_funis";
 

@@ -15,7 +15,7 @@
 import { env } from "@/lib/env";
 import { branding } from "@/lib/branding";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export interface Operador {
   /** Nome do sistema nesta instalação (respeita marca própria). */

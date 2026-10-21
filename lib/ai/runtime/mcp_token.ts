@@ -15,7 +15,7 @@
  */
 import { createHash, randomBytes } from "node:crypto";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const EPHEMERAL_TOKEN_TTL_SEC = 300;
 

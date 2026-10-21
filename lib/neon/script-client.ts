@@ -9,4 +9,4 @@ export function createClient(_url?: string, _key?: string, _options?: unknown) {
   return createAdminClient();
 }
 
-export type SupabaseClient = ReturnType<typeof createAdminClient>;
+export type { DbClient } from "@/lib/db/client";

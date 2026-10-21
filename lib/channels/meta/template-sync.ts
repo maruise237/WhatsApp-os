@@ -13,7 +13,7 @@
  * `fetch`, lê o que existe, escreve. Toda a decisão perigosa (o que desabilitar) mora
  * no lado puro, que é testável contra a fixture real; a casca não decide nada.
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 import { hashContract } from "./contract-hash";
 import { normalizeRejectedReason as rejectedReason } from "./webhook";

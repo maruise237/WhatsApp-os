@@ -19,7 +19,7 @@
  * texto escrito para o dono da clínica e vai inteiro para a tela — e para o
  * modelo, que precisa entender por que não pôde.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor } from "@/lib/api/handlers/types";
@@ -39,7 +39,7 @@ import {
 } from "@/lib/leads/stage-editing";
 import { autoriaDaMudanca } from "@/lib/operacao/autoria";
 
-type SB = SupabaseClient;
+type SB = DbClient;
 
 export interface DepsDeEtapa {
   supabase: SB;

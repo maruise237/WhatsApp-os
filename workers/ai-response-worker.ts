@@ -50,7 +50,7 @@ import type {
 import type { EventRow } from "@/lib/event-log/dispatcher";
 import { resolverModeloDoPonto } from "@/lib/ai/gateway-binding";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 const RECENT_MESSAGES_LIMIT = 20;
 const RAG_TOP_K = 5;

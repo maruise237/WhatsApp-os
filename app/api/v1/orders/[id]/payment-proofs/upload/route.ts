@@ -7,7 +7,7 @@ import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { validateOutboundMedia } from "@/lib/messaging/media/upload-validation";
 import { putPrivateMedia } from "@/lib/storage/seaweedfs";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

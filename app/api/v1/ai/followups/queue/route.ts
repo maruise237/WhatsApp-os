@@ -27,7 +27,7 @@ import type { NextRequest } from "next/server";
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { situacaoDoRetorno } from "@/lib/followup/retorno";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { rotuloDoContato } from "@/lib/contacts/rotulo-do-contato";
 
 export const dynamic = "force-dynamic";

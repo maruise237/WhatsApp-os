@@ -14,7 +14,7 @@ import type { NextRequest } from "next/server";
 
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { collectExportData } from "@/lib/lgpd/export-collector";
 import { maskEmail, maskPhone } from "@/lib/lgpd/mask";
 

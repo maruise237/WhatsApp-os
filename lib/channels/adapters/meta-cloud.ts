@@ -19,7 +19,7 @@
  *    da bolha de voz. E a Meta **não converte** — quem manda mp3 com `voice:true` erra;
  *    o outro canal converte por nós, este não.
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { metaContactsPayload } from "@/lib/channels/meta/contact-card";
 import { resolveMetaCreds } from "../meta/credentials";
 import type {

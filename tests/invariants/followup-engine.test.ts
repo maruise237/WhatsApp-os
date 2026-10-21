@@ -16,7 +16,7 @@ import { relogioAncoradoNoBanco } from "./followup-relogio";
  * Este arquivo roda contra o Postgres cru do test-db.sh (sem PostgREST — ver
  * vitest.db.config.ts, que aponta NEON_DATA_API_URL pra uma porta
  * inalcançável de propósito). `AdminClient` é uma interface própria do
- * engine (não `SupabaseClient`) exatamente pra isso: aqui o adapter fala
+ * engine (não `DbClient`) exatamente pra isso: aqui o adapter fala
  * `pg` puro; em produção, `createSupabaseAdminClient` (engine.ts) fala REST.
  *
  * Congela: (1) tick avança 1 nó por tick; (2) ciclo de wait (start→elapse);

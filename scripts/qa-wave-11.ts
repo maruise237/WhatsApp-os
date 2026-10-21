@@ -4,10 +4,10 @@
  * Run: npx tsx scripts/qa-wave-11.ts
  */
 import { chromium, type BrowserContext } from "@playwright/test";
-import { createClient, type SupabaseClient } from "@/lib/neon/script-client";
+import { createClient, type DbClient } from "@/lib/neon/script-client";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SB = SupabaseClient<any, any, any>;
+type SB = DbClient<any, any, any>;
 import * as fs from "fs";
 import * as path from "path";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";

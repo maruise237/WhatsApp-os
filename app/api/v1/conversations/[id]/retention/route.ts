@@ -10,7 +10,7 @@ import { type NextRequest } from "next/server";
 import { PACING_DEFAULTS } from "@/lib/agent-engine/pacing/defaults";
 import { ok, fail } from "@/lib/api/wrappers";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

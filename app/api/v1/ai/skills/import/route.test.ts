@@ -25,7 +25,7 @@ import type { AuthUser } from "@/lib/auth/types";
  */
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn(() => ({})) }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn(() => ({})) }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 vi.mock("@/lib/ai/skills/db", () => ({ getSkillsPool: vi.fn(() => ({})) }));
 vi.mock("@/lib/ai/skills/install", () => ({ importSkillPackage: vi.fn() }));

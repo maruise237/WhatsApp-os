@@ -40,7 +40,7 @@
  */
 import { isServiceRoleConfigured } from "@/lib/audit";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 /**
  * Custo, medido em 127.0.0.1 contra o GoTrue local: é **uma requisição HTTP por

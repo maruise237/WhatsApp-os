@@ -13,7 +13,7 @@ import { audit } from "@/lib/audit";
 import { fail, ok, noContent } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { updateTemplateSchema } from "@/lib/schemas/templates";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 const COLS = "id, organization_id, owner_user_id, title, body, shortcut, created_by_user_id, created_at, updated_at";

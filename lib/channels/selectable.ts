@@ -17,7 +17,7 @@
  * não existir (código novo, banco sem a migration 0106): aí nada está arquivado,
  * e a lista sem o filtro é a lista exata (ver `./archived`).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { nomeDoCanal } from "@/lib/channels/estado";
 
@@ -49,7 +49,7 @@ interface LinhaCanal {
  * admin já é responsável pelo `organization_id`, que aqui é sempre explícito.
  */
 export async function listSelectableChannels(
-  db: SupabaseClient,
+  db: DbClient,
   organizationId: string,
 ): Promise<SelectableChannel[]> {
   const base = () =>

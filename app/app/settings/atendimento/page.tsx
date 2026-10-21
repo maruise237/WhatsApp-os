@@ -23,7 +23,7 @@ import { DEFAULT_VISIBILITY_MODE, ROLE_RANK, type VisibilityMode } from "@/lib/a
 import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { routingConfigSchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { AtendimentoForm } from "./_form";
 
 export const dynamic = "force-dynamic";

@@ -11,7 +11,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type DbClient } from "@supabase/supabase-js";
 import { test, expect } from "@playwright/test";
 
 import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
@@ -33,7 +33,7 @@ function readServiceEnv(): { url: string; serviceRole: string } {
 
 const creds: Creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8"));
 const { url, serviceRole } = readServiceEnv();
-const admin: SupabaseClient = createClient(url, serviceRole, {
+const admin: DbClient = createClient(url, serviceRole, {
   auth: { persistSession: false },
 });
 

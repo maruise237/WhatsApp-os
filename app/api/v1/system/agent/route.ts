@@ -16,7 +16,7 @@ import { z } from "zod";
 import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { CHANGELOG_MAX_BYTES } from "@/lib/system/changelog";
 import { canTransition, type RunStatus } from "@/lib/system/update-run";
 import { logger } from "@/lib/logger";

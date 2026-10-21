@@ -13,7 +13,7 @@
  */
 import { expect, vi } from "vitest";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { requireRole } from "@/lib/auth/require-role";
 import type { AuthUser } from "@/lib/auth/types";
 import type { EspecieDeAutor } from "@/lib/operacao/autoria";

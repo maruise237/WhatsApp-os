@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { MfaForm } from "@/components/auth/MfaForm";
 
 export const metadata = { title: "Validation en deux étapes" };

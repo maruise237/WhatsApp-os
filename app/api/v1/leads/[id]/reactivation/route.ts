@@ -23,7 +23,7 @@ import { fail, ok } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import { registraFalhaDeAtividade } from "@/lib/leads/activity-write-failure";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

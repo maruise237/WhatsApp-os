@@ -30,7 +30,7 @@ import {
   validatePartnerCredentials,
 } from "@/lib/channels/connect";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { encryptWebhookSecret } from "@/lib/webhooks/secrets";
 
 export const dynamic = "force-dynamic";

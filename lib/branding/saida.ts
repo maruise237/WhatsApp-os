@@ -46,7 +46,7 @@
 import { DEFAULT_APP_NAME } from "@/lib/branding";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 import { melhorFrenteSobre } from "./contraste";
 import { marcaDaInstalacao } from "./instalacao";

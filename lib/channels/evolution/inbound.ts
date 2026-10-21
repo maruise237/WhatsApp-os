@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ingestZernioInbound, type ZernioIngestResult } from "@/lib/channels/zernio/ingest";
 
@@ -94,7 +94,7 @@ export function evolutionPayloadToCrmEnvelope(instance: string, event: string, d
 }
 
 export async function ingestEvolutionGoInbound(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: { organizationId: string; channelSessionId: string; instance: string; event: string; data: EvolutionData },
 ): Promise<ZernioIngestResult> {
   const envelope = evolutionPayloadToCrmEnvelope(input.instance, input.event, input.data);

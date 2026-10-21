@@ -35,7 +35,7 @@
  * como overlap entre `trigger_config.params.segments` e `contacts.tags`.
  * `segments` vazio/ausente = todos os contatos silenciosos da org.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { flowGraphSchema } from "./graph-schema";
 import { triggerConfigSchema } from "./api-schemas";
@@ -145,7 +145,7 @@ export async function runSilenceSweep(deps: SilenceSweepDeps): Promise<SilenceSw
 type ContactEmbed = { tags: string[] | null; is_blocked: boolean | null } | null;
 
 /** Production adapter: `SilenceSweepDb` sobre o client service-role real. */
-export function createSupabaseSilenceSweepDb(admin: SupabaseClient): SilenceSweepDb {
+export function createSupabaseSilenceSweepDb(admin: DbClient): SilenceSweepDb {
   return {
     async loadActiveSilencePointers() {
       const { data, error } = await admin

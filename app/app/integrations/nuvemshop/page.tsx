@@ -14,7 +14,7 @@ import { Storefront } from "@/lib/ui/icons";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { isConfigured } from "@/lib/nuvemshop/config";
 import { ConnectButton, DisconnectButton } from "./_components/ConnectButton";
 import { StatusToast } from "./_components/StatusToast";

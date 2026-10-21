@@ -59,6 +59,8 @@ function bodyToBytes(body: unknown): Uint8Array {
   throw new Error("unsupported_storage_body");
 }
 
+export type StockageObjets = ReturnType<typeof createSeaweedStorage>;
+
 export function createSeaweedStorage() {
   return {
     from(bucket: string) {

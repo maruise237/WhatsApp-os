@@ -10,12 +10,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { runFollowupTick, createSupabaseAdminClient } from "@/lib/followup/engine";
 
 vi.mock("@/lib/env", () => ({ env: { INTERNAL_SECRET: "dev-secret", INTERNAL_CRON_SECRET: "" } }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn(() => ({ from: vi.fn() })) }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn(() => ({ from: vi.fn() })) }));
 vi.mock("@/lib/followup/engine", () => ({
   runFollowupTick: vi.fn(),
   createSupabaseAdminClient: vi.fn(() => ({})),

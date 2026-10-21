@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { PipelinePageClient } from "./_client";
 
 export const dynamic = "force-dynamic";

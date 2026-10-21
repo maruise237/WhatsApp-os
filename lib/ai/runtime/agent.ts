@@ -40,7 +40,7 @@ import {
   iaDeLaPlateformeDepuisProcessEnv,
   modeleDeLaPlateforme,
 } from "@/lib/ai/plateforme";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { audit } from "@/lib/audit";
 import type { McpAuthResult } from "@/lib/mcp/auth";
 import type { McpContext } from "@/lib/mcp/types";

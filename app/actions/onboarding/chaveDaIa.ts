@@ -17,7 +17,7 @@
  */
 import { revalidatePath } from "next/cache";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { guardarCredencial } from "@/lib/ai/credenciais/guardar";
 import { IDS_DE_PROVEDOR } from "@/lib/ai/pontos/provedores";
 import type { Provider } from "@/lib/ai/provider-validators";

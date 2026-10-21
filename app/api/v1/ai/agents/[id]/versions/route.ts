@@ -12,8 +12,8 @@ import { type NextRequest } from "next/server";
 import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { versionCreateSchema } from "@/lib/ai/agents/validation";
 import { lerAmbiente } from "@/lib/instalacao/ambiente";
 

@@ -16,7 +16,7 @@ import { type NextRequest } from "next/server";
 import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { publishSchema, PUBLISH_ERROR_CODES } from "@/lib/ai/agents/validation";
 import { VALID_TOOL_IDS } from "@/lib/mcp/tools";
 import { publishAgentVersion } from "@/lib/ai/agents/publish";

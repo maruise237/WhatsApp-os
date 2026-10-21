@@ -16,7 +16,7 @@ import type { NextRequest } from "next/server";
 
 import { ok, fail } from "@/lib/api/wrappers";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { drainEventLog } from "@/lib/event-log/drain";
 import { ensureHandlersRegistered } from "@/lib/event-log/register-handlers";
 import { logger } from "@/lib/logger";

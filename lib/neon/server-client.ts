@@ -1,7 +1,7 @@
 import { createNeonAuth } from "@neondatabase/auth/next/server";
 import { createClient as createNeonDataClient } from "@neondatabase/neon-js";
 import type { NextRequest } from "next/server";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { cookies } from "next/headers";
 import { env } from "@/lib/env";
 
@@ -203,7 +203,9 @@ function authCompat() {
   };
 }
 
-export async function createClient(): Promise<SupabaseClient> {
+export type AuthSession = ReturnType<typeof authCompat>;
+
+export async function createClient(): Promise<DbClient> {
   const cookieStore = await cookies();
   const dataClient = createNeonDataClient({
     dataApi: {
@@ -218,7 +220,7 @@ export async function createClient(): Promise<SupabaseClient> {
       if (property === "__neonCookies") return cookieStore;
       return Reflect.get(target, property, receiver);
     },
-  }) as unknown as SupabaseClient;
+  }) as unknown as DbClient;
 }
 
 export function createNeonAuthForNextRequest() {

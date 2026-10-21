@@ -16,7 +16,7 @@ import {
   type ChannelSessionRef,
 } from "@/lib/channels";
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "@/lib/channels/archived";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

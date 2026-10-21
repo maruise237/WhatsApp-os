@@ -28,7 +28,7 @@ import {
 import { PAPEIS, PONTOS_DE_IA, PONTO_POR_ID } from "@/lib/ai/pontos/registro";
 import { PROVEDORES, ehProvedorSuportado } from "@/lib/ai/pontos/provedores";
 import { validarBinding } from "@/lib/ai/pontos/validar-binding";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

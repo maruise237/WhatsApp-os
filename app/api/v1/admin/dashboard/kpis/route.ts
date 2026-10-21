@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { normalizarModoDeOrcamento } from "@/lib/agent-engine/edge/llm/orcamento";
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ok, fail } from "@/lib/api/wrappers";
 
 export type AlertSeverity = "critical" | "warning" | "info";

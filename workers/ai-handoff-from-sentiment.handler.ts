@@ -10,7 +10,7 @@
 
 import type { EventHandler, HandlerResult } from "@/lib/event-log/dispatcher";
 import { triggerHandoff } from "@/lib/ai/handoff/orchestrator";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 
 export const AI_HANDOFF_FROM_SENTIMENT_KEY = "ai-handoff-from-sentiment.v1";

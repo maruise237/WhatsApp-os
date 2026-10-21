@@ -72,7 +72,7 @@ import {
 import { extensaoDe, farejarTipo, pareceSvg, podeApagar } from "@/lib/branding/logo-arquivo";
 import { marcaDaOrganizacaoDeSettings } from "@/lib/branding/organizacao";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

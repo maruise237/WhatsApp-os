@@ -17,10 +17,10 @@ import { cookies } from "next/headers";
 import { randomUUID } from "node:crypto";
 
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
-import { cookieSecure } from "@/lib/supabase/cookie-secure";
+import { cookieSecure } from "@/lib/db/cookie-secure";
 import {
   IMPERSONATE_COOKIE_NAME,
   IMPERSONATE_TTL_SECONDS,

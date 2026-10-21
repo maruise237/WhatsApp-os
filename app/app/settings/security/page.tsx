@@ -1,5 +1,5 @@
 import { requireAuth, isMfaEnrolled, resolveActiveOrg, requiresMfa } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { empresaExigeMfa } from "@/lib/auth/politica-mfa";

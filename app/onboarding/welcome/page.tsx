@@ -2,7 +2,7 @@ import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { redirect } from "next/navigation";
 import { WelcomeForm } from "./_form";
 import { branding } from "@/lib/branding";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { lerRetratoDaInstalacao } from "@/lib/instalacao/retrato";
 import { JaEstaPronto } from "../_components/JaEstaPronto";
 

@@ -26,9 +26,9 @@
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/auth/server", () => ({
   loadAuthUser: vi.fn(async () => ({ id: "user-1", email: "u@example.com" })),
   resolveActiveOrg: vi.fn(async () => ({ orgId: ORG, name: "Org", role: "admin" })),

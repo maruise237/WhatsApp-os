@@ -17,7 +17,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 
 import { fail, ok } from "@/lib/api/wrappers";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { requireRole } from "@/lib/auth/require-role";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 

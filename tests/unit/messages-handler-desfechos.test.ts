@@ -13,7 +13,7 @@
  * exige Postgres real — e a pasta `tests/invariants/` está fora do `test:unit` e
  * do CI. Duplicar scaffolding é o preço de uma rede que gateia PR em segundos.
  */
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DbClient } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { sendMessageHandler } from '@/app/api/v1/messages/_handler';
@@ -32,7 +32,7 @@ const WAHA_BASE = 'http://localhost:3030';
 const signedUrl = vi.fn<() => Promise<{ data: { signedUrl: string } | null; error: { message: string } | null }>>(
   async () => ({ data: { signedUrl: 'https://signed.example/a.jpg' }, error: null }),
 );
-vi.mock('@/lib/supabase/admin', () => ({
+vi.mock('@/lib/db/admin', () => ({
   createAdminClient: () => ({ storage: { from: () => ({ createSignedUrl: signedUrl }) } }),
 }));
 // Audit é fire-and-forget e escreve em outra tabela; fora do escopo dos desfechos.
@@ -80,7 +80,7 @@ function conversationRow(shape: ConversationShape = {}): Row {
 }
 
 /**
- * Fake de `SupabaseClient` com o mínimo que o handler encadeia:
+ * Fake de `DbClient` com o mínimo que o handler encadeia:
  *   conversations: select().eq().maybeSingle() · update().eq()
  *   messages:      insert().select().single() · update().eq().select().maybeSingle()
  *   rpc('emit_event')
@@ -173,7 +173,7 @@ function makeSupabase(
     rpc: async () => ({ error: null }),
   };
 
-  return client as unknown as SupabaseClient;
+  return client as unknown as DbClient;
 }
 
 const ctx: HandlerCtx = { organization_id: ORG, actor: { type: 'user', id: USER }, requestId: 'req-1' };

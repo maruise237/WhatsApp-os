@@ -22,7 +22,7 @@ import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { ROLE_RANK } from "@/lib/auth/types";
 import { availabilityPatchSchema, validateRequest } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

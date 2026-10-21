@@ -20,10 +20,10 @@
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor } from "@/lib/api/handlers/types";
@@ -47,7 +47,7 @@ const PESSOA: Actor = { type: "user", id: USER_ID, role: "manager" };
 
 function deps(db: ReturnType<typeof makeDb>, actor: Actor = PESSOA): DepsDaOperacao {
   return {
-    supabase: db.client as unknown as SupabaseClient,
+    supabase: db.client as unknown as DbClient,
     organizationId: ORG_ID,
     actor,
     requestId: "req-1",

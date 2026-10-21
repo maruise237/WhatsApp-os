@@ -2,7 +2,7 @@
  * Envio pelo CRM zera unread_count_for_assignee na conversa — espelha outbound
  * da fn_mark_conversation_message, que o handler não chama.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 /**
@@ -24,7 +24,7 @@ const CONTACT = "33333333-3333-4333-8333-333333333333";
 const SESSION = "44444444-4444-4444-8444-444444444444";
 const USER = "55555555-5555-4555-8555-555555555555";
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({ storage: { from: () => ({ createSignedUrl: async () => ({ data: null, error: null }) }) } }),
 }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => {}) }));
@@ -97,7 +97,7 @@ function makeSupabase(conversation: Record<string, unknown>) {
     getContactFilters: () => contactFilters,
   };
 
-  return client as unknown as SupabaseClient & {
+  return client as unknown as DbClient & {
     getConversationPatch: () => Record<string, unknown> | null;
     getContactPatch: () => Record<string, unknown> | null;
     getContactFilters: () => Record<string, unknown>;

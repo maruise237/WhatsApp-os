@@ -18,7 +18,7 @@
  * só existia em `event_log` e `api_audit_log` — nenhum dos dois aparece na tela.
  * O dossiê de um negócio fechado terminava sem dizer que fechou.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";
 import { ApiError } from "@/lib/api/types";
@@ -70,7 +70,7 @@ function actorAuditPayload(actor: Actor): {
  * segura numa porta e aberta na outra.
  */
 export async function encerraDemanda(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   ctx: HandlerCtx,
   input: EncerraDemandaInput,
 ): Promise<DemandaEncerrada> {

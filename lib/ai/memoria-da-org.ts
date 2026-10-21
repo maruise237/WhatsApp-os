@@ -11,14 +11,14 @@
  * ponteiro. Nada é sobrescrito — é o que permite ver o que a organização
  * ensinou ao funcionário, e quando.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 export type ResultadoDaPublicacao =
   | { ok: true; versionId: string; versionNumber: number }
   | { ok: false; erro: "versao" | "ponteiro"; mensagem: string };
 
 export async function publicarMemoriaDaOrg(
-  admin: SupabaseClient,
+  admin: DbClient,
   orgId: string,
   userId: string,
   content: string,

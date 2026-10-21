@@ -16,14 +16,14 @@
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/logger", () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 import { getBudgetStatus } from "@/lib/ai/budget/check";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 const ORG = "22222222-2222-4222-8222-222222222222";
 

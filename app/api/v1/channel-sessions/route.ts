@@ -21,7 +21,7 @@ import {
   sessionReferenceColumns,
 } from "@/lib/channels/provision";
 import { createChannelSchema } from "@/lib/schemas/channels";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

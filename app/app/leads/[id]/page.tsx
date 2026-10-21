@@ -19,7 +19,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import { requireAuth } from "@/lib/auth/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

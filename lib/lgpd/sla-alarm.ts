@@ -13,7 +13,7 @@
 import * as Sentry from "@sentry/nextjs";
 
 import { NEUTROS_DE_SAIDA, type MarcaDeSaida } from "@/lib/branding/saida";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { sendEmail } from "@/lib/email/resend";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
@@ -30,7 +30,7 @@ export interface TriggerSlaAlarmArgs {
    * `organizations.display_name`, quando o chamador o tem. Aqui o fallback era
    * borda de verdade — ao contrário do irmão em `email-delivery.ts`, o cron
    * SEMPRE passava este campo (`app/api/v1/cron/lgpd-sla-watcher/route.ts`), e
-   * a coluna é `NOT NULL` no schema (`supabase/baseline.sql:1750`). Os dois
+   * a coluna é `NOT NULL` no schema (`db/migrations/0001_schema_initial.sql:1750`). Os dois
    * `?? "DeskcommCRM"` se pareciam e não eram a mesma coisa; tratá-los com a
    * mesma urgência teria errado a prioridade.
    */

@@ -9,7 +9,7 @@
  * O client é injetado (worker passa admin; tools MCP passam ctx.supabase admin),
  * mantendo a org-scoping explícita em toda query (service role bypassa RLS).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { isAttendantEligible, OPEN_LOAD_STATUSES } from "./eligibility";
 import type { RoutingCandidate } from "./decide";
@@ -17,7 +17,7 @@ import { availabilityScheduleSchema } from "@/lib/schemas/routing";
 
 /** Elegíveis = disponíveis ∧ dentro do horário ∧ com folga (carga < capacidade). */
 export async function loadEligibleAttendants(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   organizationId: string,
   now: Date,
 ): Promise<RoutingCandidate[]> {

@@ -3,13 +3,13 @@
  * around the pure decisions in `node-handlers.ts`: claim due enrollments,
  * load the pinned graph + lead facts, run `processNode`, persist the result.
  *
- * `AdminClient` is a narrow interface (not `SupabaseClient` directly) so this
+ * `AdminClient` is a narrow interface (not `DbClient` directly) so this
  * file is testable against the bare-Postgres harness used by
  * `tests/invariants/**` (no PostgREST there — see `pg-admin-client.ts` for
  * the pg-backed adapter used by the DB test) as well as production, where
  * `createSupabaseAdminClient` below adapts the real service-role client.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -68,7 +68,7 @@ export interface FollowupJobRequest {
   };
 }
 
-/** DB surface the engine needs — see file header for why this isn't `SupabaseClient` directly. */
+/** DB surface the engine needs — see file header for why this isn't `DbClient` directly. */
 export interface AdminClient {
   claimDueEnrollments(limit: number, leaseSeconds: number): Promise<EnrollmentRow[]>;
   loadFlowGraph(orgId: string, versionId: string): Promise<FlowGraph | null>;
@@ -483,7 +483,7 @@ export async function runFollowupTick(deps: TickDeps, opts?: { limit?: number })
 }
 
 /** Production adapter: `AdminClient` backed by the real Supabase service-role client. */
-export function createSupabaseAdminClient(admin: SupabaseClient): AdminClient {
+export function createSupabaseAdminClient(admin: DbClient): AdminClient {
   return {
     async claimDueEnrollments(limit, leaseSeconds) {
       const { data, error } = await admin.rpc("fn_claim_due_followup_enrollments", {

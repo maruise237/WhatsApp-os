@@ -4,7 +4,7 @@
  * activate pointer happen atomically inside the SECURITY DEFINER function,
  * called via the admin client since EXECUTE is revoked from authenticated.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import type { FlowGraph } from "./graph-schema";
 
 export interface PublishFlowOk {
@@ -21,7 +21,7 @@ export interface PublishFlowFail {
 export type PublishFlowResult = PublishFlowOk | PublishFlowFail;
 
 export async function publishFollowupFlowVersion(
-  admin: SupabaseClient,
+  admin: DbClient,
   params: { orgId: string; pointerId: string; graph: FlowGraph; createdBy: string },
 ): Promise<PublishFlowResult> {
   const { data, error } = await admin.rpc("fn_publish_followup_flow_version", {

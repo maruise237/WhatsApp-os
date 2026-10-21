@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { safeNext } from "@/lib/auth/safe-next";
 import { z } from "zod";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { audit, isServiceRoleConfigured } from "@/lib/audit";
 import { hashRecoveryCode } from "@/lib/auth/recovery-codes";
 

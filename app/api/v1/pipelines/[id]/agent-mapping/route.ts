@@ -30,7 +30,7 @@ import {
   validarMapeamento,
   type EtapaDoMapa,
 } from "@/lib/leads/agent-mapping";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

@@ -5,7 +5,7 @@
  * Returns a discriminated result so the caller maps validation errors to 422
  * with a stable error code, and unknown errors to 500.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import { PUBLISH_ERROR_CODES, type PublishErrorCode } from "./validation";
 
 export interface PublishOk {
@@ -32,7 +32,7 @@ interface PublishRow {
 }
 
 export async function publishAgentVersion(
-  admin: SupabaseClient,
+  admin: DbClient,
   params: { orgId: string; agentId: string; versionId: string },
 ): Promise<PublishResult> {
   const { data, error } = await admin

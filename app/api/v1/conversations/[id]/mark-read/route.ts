@@ -10,7 +10,7 @@ import { type NextRequest } from "next/server";
 import { ApiError } from "@/lib/api/types";
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { markConversationReadHandler } from "../../_handler";
 

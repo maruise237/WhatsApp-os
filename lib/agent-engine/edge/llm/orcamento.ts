@@ -7,7 +7,7 @@
  * `organizations.settings.llm.monthly_budget_cents`. Dois campos, duas fontes,
  * nenhuma ligação: quem preenchia a tela acreditava estar protegido e não
  * estava. Ligar um no outro, sozinho, estrangularia todo mundo — a coluna nasce
- * com `DEFAULT 5000` (`supabase/baseline.sql:1053`), o que torna "escolhi US$ 50"
+ * com `DEFAULT 5000` (`db/migrations/0001_schema_initial.sql:1053`), o que torna "escolhi US$ 50"
  * indistinguível de "nunca abri a tela".
  *
  * A saída não é adivinhar a intenção a partir do valor herdado: é tornar o valor
@@ -118,7 +118,7 @@ export function corpoDoBloqueio(gastoCents: number, tetoCents: number): string {
 /**
  * Fallback do `alarm_threshold_pct` quando a coluna volta nula — o que só
  * acontece se a organização não tem linha em `ai_budgets`, porque a coluna é
- * `not null default 80` (`supabase/baseline.sql:1055`). Existe como constante
+ * `not null default 80` (`db/migrations/0001_schema_initial.sql:1055`). Existe como constante
  * nomeada, e não como `?? 80` solto, para que o dia em que o DEFAULT do banco
  * mudar haja UM lugar a conferir.
  */

@@ -6,7 +6,7 @@
  *
  *   pnpm exec tsx --env-file=.env.local scripts/spike-send-template-real.ts
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { sendTemplate } from "@/lib/channels/meta/send-template";
 
 const TEMPLATE = "deskcomm_prova_webhook_0088";

@@ -1,7 +1,7 @@
 "use server";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { audit } from "@/lib/audit";
 
 export async function signOut(): Promise<void> {

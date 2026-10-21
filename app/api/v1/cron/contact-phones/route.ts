@@ -47,7 +47,7 @@ import {
 } from "@/lib/channels";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

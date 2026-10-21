@@ -1,11 +1,11 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { DbClient } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { sendMessageHandler } from '@/app/api/v1/messages/_handler';
 import type { HandlerCtx } from '@/lib/api/handlers/types';
 import type { SendMessageInput } from '@/lib/schemas';
 
-vi.mock('@/lib/supabase/admin', () => ({
+vi.mock('@/lib/db/admin', () => ({
   createAdminClient: () => ({ storage: { from: () => ({ createSignedUrl: vi.fn() }) } }),
 }));
 vi.mock('@/lib/audit', () => ({ audit: vi.fn(async () => {}) }));
@@ -154,7 +154,7 @@ function makeSupabase(preexistentes: Row[] = []) {
   };
 
   const client = { from, rpc: async () => ({ error: null }) };
-  return { supabase: client as unknown as SupabaseClient, messages };
+  return { supabase: client as unknown as DbClient, messages };
 }
 
 /** A linha que o webhook cria quando o eco chega antes do envio terminar. */

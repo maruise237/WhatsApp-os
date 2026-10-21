@@ -29,7 +29,7 @@
  * inteiro — quem investigar lê `payload_parsed->>'event'` e tem a mesma
  * resposta, sem que ninguém precise ensinar o formato a este arquivo.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -58,7 +58,7 @@ function cabecalhosSeguros(headers: Headers): Record<string, string> {
  * a mensagem do cliente é pior.
  */
 export async function abrirArquivoDoWebhook(
-  admin: SupabaseClient,
+  admin: DbClient,
   entrada: {
     organizationId: string;
     channelSessionId: string;
@@ -121,7 +121,7 @@ export async function abrirArquivoDoWebhook(
  * fosse mandaria quem investigar procurar um problema de segredo que não existe.
  */
 export async function fecharArquivoDoWebhook(
-  admin: SupabaseClient,
+  admin: DbClient,
   id: string | null,
   desfecho: { status: "processed" | "error"; validSignature: boolean | null; erro?: string | null },
 ): Promise<void> {

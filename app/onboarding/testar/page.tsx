@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { TestarClient } from "./_client";
 
 export const dynamic = "force-dynamic";

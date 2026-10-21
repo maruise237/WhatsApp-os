@@ -16,13 +16,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { requireRole } from "@/lib/auth/require-role";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import type { AuthUser, Role } from "@/lib/auth/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 vi.mock("@/lib/auth/server", async (importOriginal) => {
   const real = await importOriginal<typeof import("@/lib/auth/server")>();
   return { ...real, loadAuthUser: vi.fn(), resolveActiveOrg: vi.fn() };
 });
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
   audit: vi.fn(async () => undefined),
   isServiceRoleConfigured: () => false,

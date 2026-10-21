@@ -46,7 +46,7 @@ const USUARIO = "d194b000-0000-4000-8000-0000000000a1";
  * SÓ o transporte (o mesmo `pgComoSupabase` dos demais) e o `getUser`, que é
  * borda de autenticação e não tem nada a ver com o defeito medido.
  */
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/lib/db/server", () => ({
   createClient: async () => {
     const base = pgComoSupabase(
       new pg.Pool({

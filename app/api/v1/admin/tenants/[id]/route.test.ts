@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 /**
  * GET /api/v1/admin/tenants/[id] — cabeçalho do tenant no painel de plataforma.
@@ -18,7 +18,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 vi.mock("@/lib/auth/requirePlatformAdmin", () => ({
   requirePlatformAdmin: vi.fn(),
 }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 const ADMIN_ID = "11111111-1111-4111-8111-111111111111";

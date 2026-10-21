@@ -7,7 +7,7 @@
  * skipped. Re-runs ignore terminal rows.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 
 export interface DrainStats {

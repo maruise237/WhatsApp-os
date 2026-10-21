@@ -40,7 +40,7 @@
  * ninguém está olhando: o dono da instalação lê "enviada" e conclui que o
  * produto funciona.
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { sendMessageHandler } from "@/app/api/v1/messages/_handler";
@@ -58,7 +58,7 @@ const THREAD = "6a76a2dc4b8fe115e5f6c300";
 // O admin client é usado para assinar mídia e para resolver a credencial de
 // sessão. Aqui a sessão NUNCA tem credencial gravada (é o estado de quem só
 // configurou env), então o `select` devolve linha vazia.
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     storage: {
       from: () => ({
@@ -254,7 +254,7 @@ function makeSupabase(linhaCompleta: Row) {
     },
     rpc: async () => ({ error: null }),
   };
-  return { supabase: client as unknown as SupabaseClient, estado };
+  return { supabase: client as unknown as DbClient, estado };
 }
 
 const ctx: HandlerCtx = {

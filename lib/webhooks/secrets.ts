@@ -9,12 +9,12 @@
  * decide — rotas de escrita respondem 422 com instrução); decrypt que falha
  * retorna null (o caller aplica o precedente WAHA: hmacSkipped, nunca 500).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import { logger } from "@/lib/logger";
 
 /** Cifra um secret. Retorna o bytea (formato hex "\x…" do PostgREST) ou null se a chave estiver ausente/erro. */
 export async function encryptWebhookSecret(
-  admin: SupabaseClient,
+  admin: DbClient,
   plaintext: string,
 ): Promise<string | null> {
   const { data, error } = await admin.rpc("fn_encrypt_oauth", { plaintext });
@@ -29,7 +29,7 @@ export async function encryptWebhookSecret(
 
 /** Decifra um secret cifrado (bytea hex ou hex puro de jsonb). null em falha. */
 export async function decryptWebhookSecret(
-  admin: SupabaseClient,
+  admin: DbClient,
   ciphertext: string,
 ): Promise<string | null> {
   const normalized = ciphertext.startsWith("\\x") ? ciphertext : `\\x${ciphertext}`;
@@ -50,7 +50,7 @@ export interface RuleActionInput {
  * Retorna null se a cifra estiver indisponível (caller responde 422).
  */
 export async function encryptRuleActionSecrets(
-  admin: SupabaseClient,
+  admin: DbClient,
   actions: RuleActionInput[],
 ): Promise<RuleActionInput[] | null> {
   const out: RuleActionInput[] = [];

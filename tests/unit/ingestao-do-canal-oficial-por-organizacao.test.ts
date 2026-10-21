@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { describe, expect, it } from "vitest";
 
 import { ingestMetaInbound } from "@/lib/channels/meta/ingest";
@@ -87,7 +87,7 @@ function adminFalso(responder: (filtros: Record<string, unknown>) => Resposta) {
   };
   return {
     consultas,
-    client: { from, rpc: async () => ({ data: null, error: null }) } as unknown as SupabaseClient,
+    client: { from, rpc: async () => ({ data: null, error: null }) } as unknown as DbClient,
   };
 }
 

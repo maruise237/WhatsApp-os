@@ -27,7 +27,7 @@
  * `.env`. Filtro aqui, índice único parcial na migration 0165, invariante em
  * `tests/unit/canal-consulta-por-organizacao.test.ts`.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { decryptWebhookSecret } from "@/lib/webhooks/secrets";
@@ -79,7 +79,7 @@ export function zernioCredsFromEnv(): ZernioCredentials | null {
  * `PGRST116`, e o `null` mandava as duas organizações para a conta do `.env`.
  */
 export async function zernioCredsForAccountId(
-  admin: SupabaseClient,
+  admin: DbClient,
   lookup: ZernioCredsLookup,
 ): Promise<ZernioCredentials | null> {
   const { organizationId, accountId } = lookup;
@@ -130,7 +130,7 @@ export async function zernioCredsForAccountId(
  * da tela e o operador não entenderia por que nada mudou.
  */
 export async function resolveZernioCreds(
-  admin: SupabaseClient,
+  admin: DbClient,
   lookup: ZernioCredsLookup,
 ): Promise<ZernioCredentials | null> {
   return (await zernioCredsForAccountId(admin, lookup)) ?? zernioCredsFromEnv();

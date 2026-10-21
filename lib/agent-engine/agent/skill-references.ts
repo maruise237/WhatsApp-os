@@ -10,7 +10,7 @@
  *      — path fora do manifesto (ou kind:'asset') é rejeitado antes do download.
  * Erros são sempre de ENSINO ({ ok:false, error }), nunca throw (convenção do run).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import type { LoadedSkill } from './skills';
 
 const SKILL_ASSETS_BUCKET = 'skill-assets';
@@ -45,7 +45,7 @@ export type ReadSkillReferenceResult =
  * que não casou (mesmo que exista no tenant) devolve skill_not_active.
  */
 export async function readSkillReference(
-  deps: { admin: SupabaseClient },
+  deps: { admin: DbClient },
   input: { organizationId: string; matchedSkills: readonly LoadedSkill[]; skillName: string; refPath: string },
 ): Promise<ReadSkillReferenceResult> {
   const skill = input.matchedSkills.find((s) => s.name === input.skillName);

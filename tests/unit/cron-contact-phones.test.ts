@@ -64,7 +64,7 @@ function chain(tabela: string, op: string, payload?: unknown): Record<string, un
   return proxy;
 }
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: (tabela: string) => ({
       select: () => chain(tabela, "select"),

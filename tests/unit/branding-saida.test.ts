@@ -30,7 +30,7 @@ let respostaDaOrganizacao: { data: unknown; error: unknown } = { data: null, err
 /** Quando ligado, `createAdminClient()` explode — a simulação do banco fora. */
 let clienteExplode = false;
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => {
     if (clienteExplode) throw new Error("conexão recusada");
     return {

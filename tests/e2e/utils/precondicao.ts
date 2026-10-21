@@ -62,15 +62,15 @@
  *
  * Chame no `beforeAll`, antes de qualquer login ou medição.
  */
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type DbClient } from "@supabase/supabase-js";
 
 import { credenciaisSupabaseDeTeste } from "../../../scripts/lib/env-de-teste";
 
 const CONSERTO = "pnpm exec tsx scripts/seed-e2e-system-update.ts";
 
-let cliente: SupabaseClient | null = null;
+let cliente: DbClient | null = null;
 
-function servico(): SupabaseClient {
+function servico(): DbClient {
   if (cliente) return cliente;
   const c = credenciaisSupabaseDeTeste();
   cliente = createClient(c.url, c.serviceRole, {

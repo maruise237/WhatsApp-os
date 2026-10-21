@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { audit } from "@/lib/audit";
 import { profileSchema, type ProfileInput } from "@/lib/schemas/settings";
 import { resolveActiveOrg, loadAuthUser } from "@/lib/auth/server";

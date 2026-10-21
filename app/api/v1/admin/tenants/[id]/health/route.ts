@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import {
@@ -90,7 +90,7 @@ interface NuvemshopClassificacao {
  * uma cadeia de `===` logo abaixo), sem guarda nenhuma — enquanto a tela que
  * esta rota alimenta (`components/admin/tenants/TenantOverview.tsx`) já tinha a
  * dela. Exportado para o teste conferir a COBERTURA contra o CHECK
- * `tenant_integrations_status_check` do `supabase/baseline.sql`, que é o arquivo
+ * `tenant_integrations_status_check` do `db/migrations/0001_schema_initial.sql`, que é o arquivo
  * que o self-hoster aplica: status novo que uma migration acrescente ao banco
  * sem entrar aqui reprova em `route.test.ts`.
  *

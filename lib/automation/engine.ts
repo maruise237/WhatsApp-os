@@ -13,7 +13,7 @@
  * entity_kind='crm_lead'. Sem este filtro o motor rodaria a regra 2x por
  * mudança de lead (uma vez por linha de event_log duplicada).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 import type { EventRow, HandlerResult } from "@/lib/event-log/dispatcher";
 import { evaluateConditions, type RuleCondition } from "@/lib/automation/conditions";
 import { getAction } from "@/lib/automation/actions";
@@ -39,7 +39,7 @@ interface RuleRow {
 }
 
 /** Hidrata o contexto avaliado pelas condições/ações a partir do entity do evento. */
-export async function buildContext(admin: SupabaseClient, row: EventRow): Promise<Record<string, unknown>> {
+export async function buildContext(admin: DbClient, row: EventRow): Promise<Record<string, unknown>> {
   const context: Record<string, unknown> = { event: row.payload };
   // Admin client bypassa RLS — todo lookup filtra organization_id do evento
   // (doutrina multi-tenant; um FK cross-org corrompido nunca vaza pro contexto).
@@ -99,7 +99,7 @@ export async function buildContext(admin: SupabaseClient, row: EventRow): Promis
  * adiamento, que é o que protege o número.
  */
 async function registrarAdiamento(
-  admin: SupabaseClient,
+  admin: DbClient,
   row: EventRow,
   rule: RuleRow,
   actionType: string,
@@ -133,7 +133,7 @@ async function registrarAdiamento(
 }
 
 export async function runAutomationForEvent(
-  admin: SupabaseClient,
+  admin: DbClient,
   row: EventRow,
 ): Promise<HandlerResult> {
   const requestId = row.metadata?.request_id;

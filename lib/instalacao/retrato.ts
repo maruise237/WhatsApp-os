@@ -8,7 +8,7 @@
  * como as respostas do produto começaram a divergir em primeiro lugar.
  */
 import { FOURNISSEUR_PLATEFORME, iaDeLaPlateforme } from "@/lib/ai/plateforme";
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { PROVEDOR_POR_ID } from "@/lib/ai/pontos/provedores";
 import { lerAmbiente, nomeAindaEhPlaceholder, type FonteDeAmbiente } from "@/lib/instalacao/ambiente";
@@ -45,7 +45,7 @@ export function provedorDaOrg(settings: unknown): string {
 
 export interface DependenciasDoRetrato {
   /** Client com a sessão do usuário — o RLS faz o escopo. */
-  supabase: SupabaseClient;
+  supabase: DbClient;
   orgId: string;
   /** Injetável para teste; em produção é o `process.env` do servidor. */
   ambiente?: FonteDeAmbiente;

@@ -16,7 +16,7 @@
 import type { NextRequest, NextResponse } from "next/server";
 import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { slugToEvent } from "@/lib/nuvemshop/config";
 import { verifyHmac } from "@/lib/nuvemshop/oauth";
 

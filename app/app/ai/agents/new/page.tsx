@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
 import { listSelectableChannels } from "@/lib/channels/selectable";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { CredentialRow } from "@/hooks/ai/useCredentials";
 
 import { lerAmbiente } from "@/lib/instalacao/ambiente";

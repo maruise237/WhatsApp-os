@@ -13,7 +13,7 @@ import type { NextRequest } from "next/server";
 import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { createFollowupEnrollmentSchema } from "@/lib/followup/api-schemas";
 import { flowGraphSchema } from "@/lib/followup/graph-schema";
 import {

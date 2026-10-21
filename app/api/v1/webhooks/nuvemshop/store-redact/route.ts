@@ -27,7 +27,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { createLgpdRequest } from "@/lib/lgpd/repository";
 
 export const dynamic = "force-dynamic";

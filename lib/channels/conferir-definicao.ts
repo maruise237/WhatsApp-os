@@ -33,7 +33,7 @@
  * momento da configuração, que é outra peça. Está escrito aqui para ninguém ler
  * este arquivo e concluir que a terceira falha da lista acima está coberta.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { missingSlots } from "./meta/build-components";
 import { bindingState } from "./meta/template-binding";
@@ -65,7 +65,7 @@ export interface PedidoDeDefinicao {
  * que deixar o provedor responder — ele é a autoridade, não este espelho.
  */
 export async function conferirDefinicao(
-  db: SupabaseClient,
+  db: DbClient,
   pedido: PedidoDeDefinicao,
 ): Promise<void> {
   if (!pedido.name || !pedido.language) {

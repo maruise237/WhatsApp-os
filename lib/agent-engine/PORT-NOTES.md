@@ -48,7 +48,7 @@ rename for arriscado, mas TODO SQL usa os nomes canônicos. Novos códigos usam 
   reusa `@/lib/crypto/aes_gcm` para o BYOK.
 - Migrations: `supabase/migrations/<YYYYMMDDHHMMSS>_0050_agent_harness.sql`, idempotente,
   sem BEGIN/COMMIT, RLS `tenant_isolation_<tabela>_all` via `fn_user_org_ids()` em toda tabela
-  org-scoped, + apêndice em `supabase/baseline.sql` + linha no `MANIFEST.md`.
+  org-scoped, + apêndice em `db/migrations/0001_schema_initial.sql` + linha no `MANIFEST.md`.
 
 ## Fora do porte (decisão registrada)
 - Canvas/console do Vendaval: descartados (UI do Deskcomm substitui).

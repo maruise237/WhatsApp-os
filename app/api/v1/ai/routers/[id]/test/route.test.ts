@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { loadActiveRouter } from "@/lib/agent-engine/agent/router-config";
 import { classifyIntent } from "@/lib/agent-engine/agent/intent-classifier";
 import { fail } from "@/lib/api/wrappers";
@@ -17,7 +17,7 @@ import type { AuthUser } from "@/lib/auth/types";
  */
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/ai/skills/db", () => ({ getSkillsPool: vi.fn(() => ({})) }));
 vi.mock("@/lib/agent-engine/agent/router-config", () => ({ loadActiveRouter: vi.fn() }));
 vi.mock("@/lib/agent-engine/agent/intent-classifier", () => ({ classifyIntent: vi.fn() }));

@@ -19,7 +19,7 @@ import { llmEdgeConfigFromEnv } from "@/lib/agent-engine/edge/llm/run-model-call
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { env } from "@/lib/env";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

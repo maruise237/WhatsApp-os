@@ -11,7 +11,7 @@ import { randomUUID } from "node:crypto";
 import { fail, ok } from "@/lib/api/wrappers";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { CONVERSATION_QUEUE_STATUSES, CONVERSATION_TERMINAL_STATUSES } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

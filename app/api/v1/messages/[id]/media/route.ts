@@ -19,8 +19,8 @@ import {
   type ChannelProvider,
   type ChannelSessionRef,
 } from "@/lib/channels";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

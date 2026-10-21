@@ -40,7 +40,7 @@
  * já escreve para a marca ("resolvedor NUNCA lança"), aplicada onde também vale:
  * o laço se desliga sozinho, avisa, e o resto do worker sobe.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { Logger } from '@/lib/agent-engine/obs/logger';
 // `import type` e nunca import de valor: em runtime esta linha desaparece, e é
@@ -59,11 +59,11 @@ export interface EventLogDrainKnobs {
 // Assinatura escrita à mão em vez de `typeof import(...)`: a regra
 // `consistent-type-imports` proíbe a anotação `import()`. A atribuição em
 // `carregarDeps` é o que mantém as duas honestas — divergiu, o typecheck acusa.
-type DrainFn = (admin: SupabaseClient, opts?: { limit?: number }) => Promise<DrainSummary>;
+type DrainFn = (admin: DbClient, opts?: { limit?: number }) => Promise<DrainSummary>;
 
 interface Deps {
   drainEventLog: DrainFn;
-  admin: SupabaseClient;
+  admin: DbClient;
 }
 
 /**
@@ -75,7 +75,7 @@ async function carregarDeps(log: Logger): Promise<Deps | null> {
   try {
     const { drainEventLog } = await import('@/lib/event-log/drain');
     const { ensureHandlersRegistered } = await import('@/lib/event-log/register-handlers');
-    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const { createAdminClient } = await import('@/lib/db/admin');
     ensureHandlersRegistered();
     return { drainEventLog, admin: createAdminClient() };
   } catch (err) {

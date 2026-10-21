@@ -59,7 +59,7 @@ vi.mock("@/lib/auth/server", () => ({
   loadAuthUser: vi.fn(async () => ({ id: USER, email: "dono@qa.local", full_name: "Dono" })),
   resolveActiveOrg: vi.fn(async () => ({ orgId: ORG, name: "QA", role: "admin" })),
 }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => clienteFalso() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: () => clienteFalso() }));
 
 import { createDefaultAgent, type CreateAgentResult } from "@/app/actions/onboarding/createDefaultAgent";
 

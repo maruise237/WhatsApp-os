@@ -33,7 +33,7 @@
  *    Ler `res.ok` e não o código exato é o que faz os dois caminhos
  *    conviverem.
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { FetchedMedia } from "@/lib/messaging/media/types";
 
 import { resolveZernioCreds } from "../zernio/credentials";

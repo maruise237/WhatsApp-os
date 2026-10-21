@@ -18,8 +18,8 @@ import { revalidatePath } from "next/cache";
 import { audit } from "@/lib/audit";
 import { loadAuthUser, resolveActiveOrg, sessionAal, isMfaEnrolled } from "@/lib/auth/server";
 import { empresaExigeMfa, exigeCadastroDeMfa } from "@/lib/auth/politica-mfa";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 
 export type ResultadoDaPolitica = { ok: true } | { ok: false; erro: string };
 

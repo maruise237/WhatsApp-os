@@ -22,7 +22,7 @@
  *
  * Este arquivo é a lógica de negócio + interface de DB estreita (mesmo padrão
  * de `engine.ts`/`turn-bridge.ts` — narrow `ReactivityAdminClient`, não
- * `SupabaseClient` direto, pra ficar testável contra o Postgres cru dos
+ * `DbClient` direto, pra ficar testável contra o Postgres cru dos
  * invariantes). `lib/followup/reactivity.handler.ts` é o adapter fino que
  * pluga isso no dispatcher (`EventHandler`), registrado em
  * `lib/event-log/register-handlers.ts`.
@@ -50,7 +50,7 @@
  *      usado em ~30 rotas deste repo). Resume `paused_handoff` → `active` com
  *      grace de 30min (RESUME_GRACE_MS).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import type { EventRow } from "@/lib/event-log/dispatcher";
 import type { EnrollmentPatch } from "./engine";
@@ -357,13 +357,13 @@ export async function applyReactivityEvent(
 }
 
 // ---------------------------------------------------------------------------
-// Adapter de produção: `ReactivityAdminClient` sobre o `SupabaseClient` real
+// Adapter de produção: `ReactivityAdminClient` sobre o `DbClient` real
 // (service role) — usado por `reactivity.handler.ts` dentro da rota de cron
 // `event-log-drain` (Next.js, sempre supabase-js aqui, nunca pg puro — ver
 // header do arquivo).
 // ---------------------------------------------------------------------------
 
-export function createSupabaseReactivityClient(admin: SupabaseClient): ReactivityAdminClient {
+export function createSupabaseReactivityClient(admin: DbClient): ReactivityAdminClient {
   return {
     async loadConversationContactId(orgId, conversationId) {
       const { data, error } = await admin

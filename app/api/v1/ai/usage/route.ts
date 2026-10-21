@@ -16,7 +16,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { ok, fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { aggregateUsage, type InvocationRow } from "@/lib/ai/usage/aggregate";
 
 export const dynamic = "force-dynamic";

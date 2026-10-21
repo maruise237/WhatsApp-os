@@ -4,7 +4,7 @@ import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
 import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import { PipelinesClient, type PipelineRow } from "./_client";
 
 export const dynamic = "force-dynamic";

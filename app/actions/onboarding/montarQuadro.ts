@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 import { generateText } from "ai";
 
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { buildModel, chaveDePlataforma } from "@/lib/ai/runtime/agent";
 import { loadCredential } from "@/lib/ai/credentials";
 import { FOURNISSEUR_PLATEFORME, iaDeLaPlateformeDepuisProcessEnv } from "@/lib/ai/plateforme";

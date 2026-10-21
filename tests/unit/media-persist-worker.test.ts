@@ -13,7 +13,7 @@ const messageRow = {
   metadata: { raw_type: "image" },
 };
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     // Duas consultas agora, e cada uma com um encadeamento diferente: a
     // mensagem casa por `id` + `organization_id` (dois `eq`), a SESSÃO casa só

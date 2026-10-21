@@ -34,7 +34,7 @@
  * detecção é a mesma de `./archived` — estreita, pelo nome da coluna na
  * mensagem de erro.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { audit } from "@/lib/audit";
 
@@ -80,7 +80,7 @@ export interface ChannelReactivationActor {
  * "atualizou uma linha que já estava viva".
  */
 export async function reactivateChannelSession(
-  db: SupabaseClient,
+  db: DbClient,
   target: ChannelSessionTarget,
   patch: Record<string, unknown>,
   actor: ChannelReactivationActor,

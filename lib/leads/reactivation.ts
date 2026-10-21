@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import { registraFalhaDeAtividade } from "@/lib/leads/activity-write-failure";
@@ -40,7 +40,7 @@ export interface PropostaCriada {
  * garante no banco, e aqui a gente evita o erro em vez de tratá-lo.
  */
 export async function propoeReativacao(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: {
     organizationId: string;
     leadId: string;
@@ -125,7 +125,7 @@ interface PropostaVencida {
  * ninguém sabendo. Sem a 2, o dossiê não sabe explicar por que o botão sumiu.
  */
 export async function venceReativacoes(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   now: Date = new Date(),
 ): Promise<ResultadoDoVencimento> {

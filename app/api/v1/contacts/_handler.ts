@@ -6,7 +6,7 @@
  * - Lançam `ApiError` em caso de erro estruturado; sucesso retorna data.
  * - Audit + emit_event são responsabilidade do handler (DRY entre REST e MCP).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";
@@ -21,7 +21,7 @@ import type {
 } from "@/lib/schemas";
 import { contactListQuerySchema } from "@/lib/schemas";
 
-type SB = SupabaseClient;
+type SB = DbClient;
 
 const SELECT_COLS =
   "id, organization_id, name, display_name, email, email_normalized, phone_number, cpf_hash, birthdate, is_blocked, blocked_reason, is_anonymized, anonymized_at, is_merged_into, merged_at, consent, tags, source, source_metadata, created_at, updated_at, last_activity_at";

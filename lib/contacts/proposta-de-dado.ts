@@ -11,7 +11,7 @@
  * nascido custa atenção humana — e atenção gasta com ruído é o que faz uma fila
  * de confirmação virar um botão que todo mundo aprova sem ler.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 /** Os campos que a IA pode propor. Fechado, e igual ao CHECK da 0123. */
 export const CAMPOS_PROPONIVEIS = ["email", "name", "phone_number"] as const;
@@ -84,7 +84,7 @@ function normalizar(campo: CampoProponivel, valor: string): string {
  * Registra a proposta. **Não grava em `contacts`** — esse é o ponto.
  */
 export async function proporDadoDoContato(
-  db: SupabaseClient,
+  db: DbClient,
   dados: DadosDaProposta,
 ): Promise<ResultadoDaProposta> {
   const { organizationId, contactId, campo } = dados;
@@ -178,7 +178,7 @@ export interface ResultadoDoVencimento {
  * num log que só registra sucesso.
  */
 export async function vencePropostasDeDado(
-  db: SupabaseClient,
+  db: DbClient,
   organizationId: string,
   agora: Date,
 ): Promise<ResultadoDoVencimento> {

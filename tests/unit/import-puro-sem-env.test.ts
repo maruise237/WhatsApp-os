@@ -10,7 +10,7 @@ import { describe, expect, it } from "vitest";
  * O defeito que este teste existe para impedir derrubou a main inteira
  * (run 30182066284): `tests/unit/timeline-eixo.test.ts` importava
  * `eixoDoDossie` — função pura, sem I/O nenhum — de um módulo que tinha, no
- * topo, `import { createAdminClient } from "@/lib/supabase/admin"` e
+ * topo, `import { createAdminClient } from "@/lib/db/admin"` e
  * `import { isServiceRoleConfigured } from "@/lib/audit"`. Os dois puxam
  * `@/lib/env`, que VALIDA o ambiente ao carregar e LANÇA se faltar variável.
  *
@@ -101,7 +101,7 @@ describe("o vigiado não regride pelo caminho estático", () => {
     // diferentes — se um for desligado por lentidão, o outro continua.
     const src = readFileSync(join(RAIZ, "lib/leads/timeline-query.ts"), "utf8");
     const topo = src.slice(0, src.indexOf("\nexport "));
-    const proibidos = ["@/lib/supabase/admin", "@/lib/audit", "@/lib/env"];
+    const proibidos = ["@/lib/db/admin", "@/lib/audit", "@/lib/env"];
     const achados = proibidos.filter((m) =>
       new RegExp(`^import\\s+(?!type\\b)[^;]*from\\s+["']${m}["']`, "m").test(topo),
     );

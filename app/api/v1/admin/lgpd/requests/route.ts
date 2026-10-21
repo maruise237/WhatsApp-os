@@ -10,7 +10,7 @@ import { z } from "zod";
 
 import { ok, fail } from "@/lib/api/wrappers";
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { audit } from "@/lib/audit";
 
 export const dynamic = "force-dynamic";

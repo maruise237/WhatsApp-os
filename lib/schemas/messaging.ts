@@ -194,7 +194,7 @@ export const CONVERSATION_TERMINAL_STATUSES = ["closed", "archived"] as const;
  * precisa de um lugar só — e nasce de uma divergência medida: a definição estava
  * copiada em CINCO sítios e eles não concordavam entre si.
  *
- *   `supabase/baseline.sql` (trg_conversation_routing_requested)  open+pending
+ *   `db/migrations/0001_schema_initial.sql` (trg_conversation_routing_requested)  open+pending
  *   `lib/routing/queue.ts` getQueuePosition  (o nº que o CLIENTE ouve)  open+pending
  *   `lib/routing/queue.ts` getQueuePositions (o nº que a TELA mostra)   open
  *   `lib/routing/queue.ts` getQueueStatus    (o painel do gerente)      open

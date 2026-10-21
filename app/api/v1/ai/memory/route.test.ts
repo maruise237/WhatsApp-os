@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 import { requireRole } from "@/lib/auth/require-role";
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { fail } from "@/lib/api/wrappers";
 import type { AuthUser } from "@/lib/auth/types";
 
@@ -16,7 +16,7 @@ import type { AuthUser } from "@/lib/auth/types";
  */
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 const ORG_ID = "22222222-2222-4222-8222-222222222222";

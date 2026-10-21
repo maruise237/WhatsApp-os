@@ -1,5 +1,5 @@
 import pg from "pg";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import { env } from "@/lib/env";
 import { createNeonAuthForNextRequest } from "@/lib/neon/server-client";
 import { createSeaweedStorage } from "@/lib/neon/storage-adapter";
@@ -773,9 +773,9 @@ function createDirectAdminClient(): AdminClient {
   };
 }
 
-export function createAdminClient(): SupabaseClient {
-  if (!adminClient) adminClient = createDirectAdminClient();
-  return adminClient as unknown as SupabaseClient;
-}
+export type AuthAdmin = ReturnType<typeof authAdminSurface>["admin"];
 
-export type NeonAdminClient = SupabaseClient;
+export function createAdminClient(): DbClient {
+  if (!adminClient) adminClient = createDirectAdminClient();
+  return adminClient as unknown as DbClient;
+}

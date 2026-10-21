@@ -23,7 +23,7 @@
  * ═══ Por que ele lê `declined_at`, e NÃO a ausência de `granted_at` ═══
  *
  * Esta é a parte contra-intuitiva, e ela é medida, não opinada. O DEFAULT da
- * coluna `contacts.consent` (ver `supabase/baseline.sql`) já é
+ * coluna `contacts.consent` (ver `db/migrations/0001_schema_initial.sql`) já é
  *
  *     {"marketing": {"granted_at": null, "source": null, "version": null}, …}
  *

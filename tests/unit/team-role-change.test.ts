@@ -13,7 +13,7 @@ import { NextRequest } from "next/server";
 
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { audit } from "@/lib/audit";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { AuthUser } from "@/lib/auth/types";
 
 vi.mock("@/lib/auth/server", () => ({
@@ -23,7 +23,7 @@ vi.mock("@/lib/auth/server", () => ({
   // segundo fator (que tem suíte própria em require-role-mfa.test.ts).
   mfaEmDivida: vi.fn(async () => false),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({
   audit: vi.fn(async () => undefined),
   isServiceRoleConfigured: () => false,

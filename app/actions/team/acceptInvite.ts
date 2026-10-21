@@ -14,8 +14,8 @@ import { redirect } from "next/navigation";
 
 import { audit } from "@/lib/audit";
 import { verifyInviteToken } from "@/lib/auth/invite-token";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export type AcceptInviteResult =
   | { ok: true }

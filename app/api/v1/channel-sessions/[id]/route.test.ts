@@ -18,8 +18,8 @@ import { fail } from "@/lib/api/wrappers";
 import { requireRole } from "@/lib/auth/require-role";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import type { AuthUser } from "@/lib/auth/types";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { getWahaClient } from "@/lib/waha/client";
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
@@ -28,8 +28,8 @@ vi.mock("@/lib/auth/server", () => ({
   resolveActiveOrg: vi.fn(),
   mfaEmDivida: vi.fn(async () => false),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 vi.mock("@/lib/waha/client", () => ({
   getWahaClient: vi.fn(),

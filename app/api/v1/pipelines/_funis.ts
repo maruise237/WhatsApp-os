@@ -15,7 +15,7 @@ import {
   type FunilEditavel,
   type RegraDeAutomacao,
 } from "@/lib/pipelines/pipeline-editing";
-import type { createClient } from "@/lib/supabase/server";
+import type { createClient } from "@/lib/db/server";
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 

@@ -9,10 +9,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { headers } from "next/headers";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 vi.mock("next/headers", () => ({ headers: vi.fn() }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", async (orig) => ({
   ...(await orig<Record<string, unknown>>()),
   audit: vi.fn(async () => undefined),

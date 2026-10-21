@@ -61,7 +61,7 @@ import {
   RETENCAO_FILA_DIAS_PISO,
   interpretarRetencao,
 } from "@/lib/retencao/politica";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

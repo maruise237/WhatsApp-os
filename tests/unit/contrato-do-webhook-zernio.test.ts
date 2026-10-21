@@ -30,7 +30,7 @@ const SECRET = "segredo-longo-o-suficiente";
 const arquivoFechado: { status: string; erro?: string | null; validSignature: boolean | null }[] = [];
 const ingeridos: unknown[] = [];
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: () => ({}) }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: () => ({}) }));
 
 vi.mock("@/lib/channels/archived", () => ({
   ARCHIVED_AT: "archived_at",

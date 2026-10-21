@@ -30,7 +30,7 @@ vi.mock("@/lib/channels/meta/ingest", () => ({
   },
 }));
 
-vi.mock("@/lib/supabase/admin", () => ({
+vi.mock("@/lib/db/admin", () => ({
   createAdminClient: () => ({
     from: () => ({ update: () => ({ eq: () => ({ eq: () => ({ eq: () => ({ eq: async () => ({}) }) }) }) }) }),
   }),

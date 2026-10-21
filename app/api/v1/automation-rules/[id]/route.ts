@@ -10,8 +10,8 @@ import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { autoriaDaMudanca } from "@/lib/operacao/autoria";
 import { updateAutomationRuleSchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/db/server";
+import { createAdminClient } from "@/lib/db/admin";
 import { encryptRuleActionSecrets } from "@/lib/webhooks/secrets";
 
 export const dynamic = "force-dynamic";

@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import { registraFalhaDeAtividade } from "@/lib/leads/activity-write-failure";
@@ -73,7 +73,7 @@ interface EstadoGravado {
 }
 
 export async function observaTravessias(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   now: Date = new Date(),
 ): Promise<ResultadoDaObservacao> {

@@ -18,14 +18,14 @@
  * rota sempre fez: o plaintext aparece uma vez, na resposta de quem o definiu.
  */
 import { randomBytes } from "node:crypto";
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor } from "@/lib/api/handlers/types";
 import { audit } from "@/lib/audit";
 import { autoriaDaMudanca } from "@/lib/operacao/autoria";
 
-type SB = SupabaseClient;
+type SB = DbClient;
 
 export interface DepsDaOperacao {
   supabase: SB;

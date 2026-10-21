@@ -9,7 +9,7 @@
  *  - `token_hash` (nossos templates): o link realmente expirou ou já foi usado.
  *    Pedir outro resolve.
  *  - `code` (template PADRÃO do Supabase): o link chega por PKCE, o verificador
- *    vive num cookie `sameSite: "strict"` (`lib/supabase/server.ts:35`, aplicado
+ *    vive num cookie `sameSite: "strict"` (`lib/db/server.ts:35`, aplicado
  *    a TODO cookie do cliente — `@supabase/ssr/cookies.js:227,232`), e clique
  *    vindo de webmail é navegação cross-site: o cookie não viaja. Pedir outro
  *    link NÃO resolve — cada novo link falha igual. O conserto é configurar os
@@ -28,9 +28,9 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 
 import { audit } from "@/lib/audit";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 vi.mock("@/lib/auth/provision", () => ({ ensureTenantForUser: vi.fn(async () => undefined) }));
 vi.mock("@/lib/env", () => ({ env: { NEXT_PUBLIC_APP_URL: "https://crm.exemplo.com.br" } }));

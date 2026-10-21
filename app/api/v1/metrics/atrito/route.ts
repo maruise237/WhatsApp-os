@@ -35,8 +35,8 @@ import {
   type AtritoRaw,
 } from "@/lib/metrics/atrito";
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/db/admin";
+import { createClient } from "@/lib/db/server";
 
 export const dynamic = "force-dynamic";
 

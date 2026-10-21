@@ -39,7 +39,7 @@ const listConversationsHandler = vi.fn(async () => ({
 }));
 
 vi.mock("@/app/api/v1/conversations/_handler", () => ({ listConversationsHandler }));
-vi.mock("@/lib/supabase/server", () => ({
+vi.mock("@/lib/db/server", () => ({
   createClient: async () => ({
     auth: { getUser: async () => ({ data: { user: { id: "u-1" } }, error: null }) },
   }),

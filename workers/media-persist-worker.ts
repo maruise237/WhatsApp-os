@@ -21,7 +21,7 @@ import {
 } from "@/lib/channels";
 import { storagePathFor } from "@/lib/messaging/media/types";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const MEDIA_PERSIST_CONSUMER_KEY = "media_persist_v1";
 // Espelha MAX_ATTEMPTS de lib/event-log/drain.ts (não exportado de lá).

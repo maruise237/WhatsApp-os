@@ -10,7 +10,7 @@
  *  já dispara via evento `ai.sentiment_alert` emitido pelo sentiment worker.)
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 import {
   G1_REGEX,

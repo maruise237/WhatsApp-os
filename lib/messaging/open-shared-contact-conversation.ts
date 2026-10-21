@@ -2,13 +2,13 @@
  * Abre (ou reabre) a conversa 1:1 com um contato compartilhado no cartão do inbox.
  * Usa a mesma sessão de canal da mensagem onde o cartão apareceu.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ensureConversation } from "@/lib/automation/start-conversation";
 import { phoneLookupVariants } from "@/lib/channels/phone-variants";
 import { parseDialablePhone } from "@/lib/messaging/contact-card";
 
-type Admin = SupabaseClient;
+type Admin = DbClient;
 
 export interface OpenSharedContactInput {
   channel_session_id: string;

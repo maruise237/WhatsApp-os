@@ -12,7 +12,7 @@
  * A lógica de decisão (manual/round_robin/no-eligible/replay) é pura em
  * lib/routing/decide.ts; aqui só há I/O.
  */
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 import { decideRouting } from "@/lib/routing/decide";
 import { loadEligibleAttendants } from "@/lib/routing/eligibles";

@@ -22,7 +22,7 @@ import { fail, type ApiError } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { loadAuthUser, mfaEmDivida, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK, type ActiveOrg, type AuthUser, type Role } from "@/lib/auth/types";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export type RoleCheck =
   | { ok: true; user: AuthUser; org: ActiveOrg }

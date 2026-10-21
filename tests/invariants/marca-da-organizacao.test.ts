@@ -33,7 +33,7 @@ import { motivoDoErro } from "./psql-transporte";
  *
  * ## Por que a prova é aqui, e não no `typecheck`
  *
- * `lib/supabase/admin.ts` devolve `SupabaseClient` **sem** o genérico
+ * `lib/db/admin.ts` devolve `DbClient` **sem** o genérico
  * `<Database>`: nome errado de RPC, de argumento ou de chave jsonb compila igual
  * e só aparece em runtime como `PGRST202`/`42703`. Controle desta afirmação:
  * `platform_branding` tem 0 ocorrências em `lib/database.types.ts` e o produto
@@ -196,7 +196,7 @@ describe("guarda de vacuidade — o que todo caso abaixo supõe", () => {
   it("a função EXISTE com a assinatura exata que os casos chamam", () => {
     // `create or replace` com um parâmetro a mais criaria uma SEGUNDA função, e
     // os casos abaixo passariam chamando a antiga. O `typecheck` não vê nada
-    // disto: o admin client é `SupabaseClient` sem o genérico `<Database>`.
+    // disto: o admin client é `DbClient` sem o genérico `<Database>`.
     expect(
       lastLine(
         sql(`select count(*) from pg_proc p

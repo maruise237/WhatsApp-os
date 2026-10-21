@@ -21,14 +21,14 @@
  *    `unique (organization_id, external_id)` não é higiene, é obrigatória: sem ela a
  *    mesma mensagem aparece N vezes no inbox depois de qualquer instabilidade.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ARCHIVED_AT, queryTolerantToMissingArchived } from "../archived";
 import { phoneLookupVariants } from "../phone-variants";
 import type { ChannelTenantScope } from "../types";
 import type { InboundMessageEvent } from "./webhook";
 
-type Admin = SupabaseClient;
+type Admin = DbClient;
 
 export type IngestOutcome =
   | { status: "ingested"; messageId: string; conversationId: string }

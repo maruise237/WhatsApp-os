@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { loadAuthUser } from "@/lib/auth/server";
-import { cookieSecure } from "@/lib/supabase/cookie-secure";
+import { cookieSecure } from "@/lib/db/cookie-secure";
 
 export async function setActiveOrg(orgId: string): Promise<{ ok: boolean; error?: string }> {
   const user = await loadAuthUser();

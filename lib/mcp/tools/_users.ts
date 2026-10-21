@@ -7,10 +7,10 @@
  * user_metadata completo, tokens ou qualquer outra PII do usuário. Mesmo mínimo
  * que /api/v1/team/assignable já expõe.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 export async function resolveUserNames(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   userIds: Array<string | null | undefined>,
 ): Promise<Map<string, string | null>> {
   const unique = [...new Set(userIds.filter((id): id is string => Boolean(id)))];

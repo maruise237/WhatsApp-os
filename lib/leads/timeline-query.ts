@@ -1,4 +1,4 @@
-import type { createClient } from "@/lib/supabase/server";
+import type { createClient } from "@/lib/db/server";
 import type { TimelineItem, TimelineItemView } from "@/lib/types/contacts";
 
 /**
@@ -130,7 +130,7 @@ export async function comNomeDoAtor(
     // função pura não paga por dependência que ela não tem.
     const { isServiceRoleConfigured } = await import("@/lib/audit");
     if (isServiceRoleConfigured()) {
-      const { createAdminClient } = await import("@/lib/supabase/admin");
+      const { createAdminClient } = await import("@/lib/db/admin");
       const admin = createAdminClient();
       await Promise.all(
         userIds.map(async (id) => {

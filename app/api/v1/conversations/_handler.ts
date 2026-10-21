@@ -3,7 +3,7 @@
  *
  * Reusados pelo Route Handler REST e por MCP tools (S-13.03/04).
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { ApiError } from "@/lib/api/types";
 import type { Actor, HandlerCtx } from "@/lib/api/handlers/types";
@@ -15,7 +15,7 @@ import type {
 } from "@/lib/schemas";
 import type { Conversation } from "@/lib/types/messaging";
 
-type SB = SupabaseClient;
+type SB = DbClient;
 
 const SELECT_COLS = `
   id, organization_id, contact_id, channel_session_id, channel, status,

@@ -7,7 +7,7 @@
  *   - 'tool'             agent invoked crm_request_human_handoff during the loop
  */
 import { triggerHandoff, type HandoffReason } from "@/lib/ai/handoff/orchestrator";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { finalizeRun, type FinalizeRunInput } from "./finalize";
 
 export type HandoffSource = "sentinel" | "tool";

@@ -12,10 +12,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { processMessageReceived } from "@/workers/ai-response-worker";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import type { EventRow } from "@/lib/event-log/dispatcher";
 
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/logger", () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));

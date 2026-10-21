@@ -22,7 +22,7 @@ import {
   type PropostaAmbigua,
 } from "@/lib/leads/next-action";
 import type { LeadCandidate } from "@/lib/leads/active-lead";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { BoardData, Pipeline, Stage } from "@/lib/kanban/types";
 import type { Lead } from "@/lib/types/leads";
 

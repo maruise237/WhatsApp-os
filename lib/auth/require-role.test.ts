@@ -11,7 +11,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { requireRole } from "@/lib/auth/require-role";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { audit } from "@/lib/audit";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 import type { AuthUser, Role } from "@/lib/auth/types";
 
 vi.mock("@/lib/auth/server", () => ({
@@ -21,7 +21,7 @@ vi.mock("@/lib/auth/server", () => ({
   loadAuthUser: vi.fn(),
   resolveActiveOrg: vi.fn(),
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 const USER_ID = "11111111-1111-4111-8111-111111111111";

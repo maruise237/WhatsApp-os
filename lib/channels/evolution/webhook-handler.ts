@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { CHANNEL_PROVIDER_EVOLUTION_GO } from "@/lib/channels/capabilities";
 import { ingestEvolutionGoInbound } from "@/lib/channels/evolution/inbound";
 import type { EventHandler } from "@/lib/event-log/dispatcher";

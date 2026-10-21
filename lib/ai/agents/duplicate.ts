@@ -11,7 +11,7 @@
  * A escolha da versão de origem é a da rota: draft mais recente; sem draft, a
  * published. A cópia nasce sempre como draft v1 — duplicar não publica nada.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 export const DUPLICATE_AGENT_COLUMNS =
   "id, organization_id, name, description, model, system_prompt, is_active, is_default, kind, priority, published_version_id, archived_at, config, guardrails, active_kb_version_id, created_at, updated_at";
@@ -83,7 +83,7 @@ function versionPayloadFrom(src: Record<string, unknown>) {
 
 /** Versão de origem: draft mais recente; sem draft, a published. `null` = agente sem versão. */
 export async function pickSourceVersion(
-  admin: SupabaseClient,
+  admin: DbClient,
   orgId: string,
   agentId: string,
 ): Promise<Record<string, unknown> | null> {
@@ -110,7 +110,7 @@ export async function pickSourceVersion(
 }
 
 export async function duplicateAgentWithVersion(
-  admin: SupabaseClient,
+  admin: DbClient,
   input: { orgId: string; agentId: string; actorUserId: string; requireVersion: boolean },
 ): Promise<DuplicateAgentResult> {
   const { orgId, agentId, actorUserId, requireVersion } = input;

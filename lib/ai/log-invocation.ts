@@ -7,7 +7,7 @@
 
 import { normalizarErro } from "@/lib/agent-engine/edge/llm/run-model-call";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 /** Espelha o CHECK de `ai_invocations.invocation_kind` (ver o invariante). */
 export type InvocationKind =

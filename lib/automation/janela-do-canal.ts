@@ -27,7 +27,7 @@
  * Só a leitura da linha é reescrita, contra a MESMA tabela e com os MESMOS
  * defaults. É a ponte mínima, no mesmo espírito de `lib/ai/gateway-binding.ts`.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { PACING_DEFAULTS, type PacingKnobs } from "@/lib/agent-engine/pacing/defaults";
 import {
@@ -54,7 +54,7 @@ interface LinhaDeKnobs {
  * no fuso certo.
  */
 export async function knobsDoCanal(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   channelSessionId: string,
 ): Promise<PacingKnobs> {
@@ -97,7 +97,7 @@ export async function knobsDoCanal(
  * o que o motor devolve como `retry_at` para adiar o EVENTO inteiro.
  */
 export async function adiarAteAJanelaAbrir(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   channelSessionId: string,
   agora: Date = new Date(),

@@ -11,7 +11,7 @@
 import { revalidatePath } from "next/cache";
 import { audit } from "@/lib/audit";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export type DisconnectResult =
   | { ok: true }

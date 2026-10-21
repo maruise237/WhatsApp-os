@@ -21,7 +21,7 @@
  * Service-role bypassa RLS — filtro `organization_id` programático em toda query.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 
 export type HandoffReason =

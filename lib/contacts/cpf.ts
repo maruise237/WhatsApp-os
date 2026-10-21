@@ -7,7 +7,7 @@
  * is not yet provisioned — see follow-up note in EPIC-05 commit message.
  */
 import { createHash } from "node:crypto";
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 /**
  * Normalise un numéro d'identification pour le hash : garde lettres et chiffres,
@@ -34,7 +34,7 @@ export function hashCpf(raw: string): string {
  * the gap until the migration lands).
  */
 export async function encryptCpfSql(
-  supabase: SupabaseClient,
+  supabase: DbClient,
   plaintext: string,
 ): Promise<Uint8Array | null> {
   const { data, error } = await supabase.rpc("encrypt_cpf", { p_plaintext: plaintext });

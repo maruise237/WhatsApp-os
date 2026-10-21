@@ -10,7 +10,7 @@ import type { NextRequest } from "next/server";
 import { fail, ok } from "@/lib/api/wrappers";
 import { loadAuthUser } from "@/lib/auth/server";
 import { logger } from "@/lib/logger";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { extractChangelogSection } from "@/lib/system/changelog";
 import { isRunStale, type RunStatus, type RunStep } from "@/lib/system/update-run";
 

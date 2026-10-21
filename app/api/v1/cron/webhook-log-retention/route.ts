@@ -19,7 +19,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { LOTE_PADRAO, podarArquivoDeWebhooks } from "@/lib/channels/retencao-do-arquivo";
 import { podarHistoricoDeCaptacao } from "@/lib/webhooks/retencao-da-captacao";
 import { env } from "@/lib/env";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 
 export const dynamic = "force-dynamic";
 

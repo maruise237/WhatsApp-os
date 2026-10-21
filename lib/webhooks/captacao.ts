@@ -11,7 +11,7 @@
  * body. Nunca lança: um erro ao gravar histórico não pode derrubar a captação
  * do lead, que é o que o cliente do outro lado está esperando.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 import { logger } from "@/lib/logger";
 
@@ -141,7 +141,7 @@ export function origemDaPagina(headers: Headers): string | null {
 }
 
 export async function registrarCaptacao(
-  admin: SupabaseClient,
+  admin: DbClient,
   captacao: CaptacaoParaRegistrar,
 ): Promise<void> {
   const { error } = await admin.from("webhook_lead_captures").insert({

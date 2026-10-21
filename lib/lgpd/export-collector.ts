@@ -6,7 +6,7 @@
  * (admin client bypasses RLS). PII is NEVER logged — only ids and counts.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { logger } from "@/lib/logger";
 
 // ---------------------------------------------------------------------------
@@ -102,7 +102,7 @@ export interface ExportPayload {
   organization_id: string;
   /**
    * Razão social do CONTROLADOR (`organizations.legal_name`, `NOT NULL` em
-   * `supabase/baseline.sql:1749`). É o que o rodapé do relatório imprime — e é
+   * `db/migrations/0001_schema_initial.sql:1749`). É o que o rodapé do relatório imprime — e é
    * de propósito que NÃO é a marca: ver `lib/lgpd/pdf-renderer.tsx`.
    */
   organization_legal_name: string;

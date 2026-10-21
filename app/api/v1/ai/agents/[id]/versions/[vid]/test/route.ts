@@ -22,7 +22,7 @@ import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
 import { requireRole } from "@/lib/auth/require-role";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { testRunSchema } from "@/lib/ai/agents/validation";
 import { avaliarRespostaDeTeste } from "@/lib/ai/agents/avaliar-resposta-de-teste";
 

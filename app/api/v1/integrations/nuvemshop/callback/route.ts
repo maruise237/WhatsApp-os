@@ -12,7 +12,7 @@ import { randomBytes, randomUUID } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/lib/env";
 import { audit } from "@/lib/audit";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { getConfig, SUBSCRIBED_EVENTS, eventToSlug } from "@/lib/nuvemshop/config";
 import { exchangeCodeForToken } from "@/lib/nuvemshop/oauth";
 import { NuvemshopApiClient } from "@/lib/nuvemshop/api-client";

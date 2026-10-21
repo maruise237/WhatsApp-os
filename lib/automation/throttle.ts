@@ -20,7 +20,7 @@
  * de `lib/agent-engine/pacing/`. Precisa de janela? Use aquele módulo — não
  * ressuscite uma régua local aqui.
  */
-import type { SupabaseClient } from "@/lib/neon/script-client";
+import type { DbClient } from "@/lib/db/client";
 
 export interface ThrottleVerdict {
   allowed: boolean;
@@ -29,7 +29,7 @@ export interface ThrottleVerdict {
 }
 
 export async function checkDailyLimit(
-  admin: SupabaseClient,
+  admin: DbClient,
   organizationId: string,
   channelSessionId: string,
 ): Promise<ThrottleVerdict> {

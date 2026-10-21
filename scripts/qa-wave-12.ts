@@ -4,7 +4,7 @@
  * Run: npx tsx scripts/qa-wave-12.ts
  */
 import { chromium, type BrowserContext, type Page } from "@playwright/test";
-import { createClient, type SupabaseClient } from "@/lib/neon/script-client";
+import { createClient, type DbClient } from "@/lib/neon/script-client";
 import * as fs from "fs";
 import * as path from "path";
 import { carregarEnvLocal } from "../scripts/lib/env-de-teste";
@@ -57,7 +57,7 @@ async function login(context: BrowserContext, email: string): Promise<void> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SB = SupabaseClient<any, any, any>;
+type SB = DbClient<any, any, any>;
 
 async function ensureChannelSession(sb: SB): Promise<string> {
   const existing = await sb

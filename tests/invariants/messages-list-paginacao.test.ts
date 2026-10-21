@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 import { listMessagesHandler } from "@/app/api/v1/messages/_handler";
 import { ApiError } from "@/lib/api/types";
@@ -157,8 +157,8 @@ class FakeQuery implements PromiseLike<Res> {
   }
 }
 
-function fakeAdminClient(): SupabaseClient {
-  return { from: (t: string) => new FakeQuery(t) } as unknown as SupabaseClient;
+function fakeAdminClient(): DbClient {
+  return { from: (t: string) => new FakeQuery(t) } as unknown as DbClient;
 }
 
 // ---------------------------------------------------------------------------

@@ -9,7 +9,7 @@ import { ApiError } from "@/lib/api/types";
 import { fail, ok } from "@/lib/api/wrappers";
 import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { listMessagesQuerySchema } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 import { listMessagesHandler } from "@/app/api/v1/messages/_handler";
 

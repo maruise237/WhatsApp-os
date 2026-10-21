@@ -6,8 +6,8 @@ import { isServiceRoleConfigured } from "./index";
 vi.mock("@/lib/env", () => ({
   env: { NEON_DATABASE_URL: "postgresql://neon-owner@localhost/neondb" },
 }));
-vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 
 describe("admin Neon — présence de la connexion PostgreSQL privée", () => {
   it("retourne true quand la connexion privée est configurée", () => {

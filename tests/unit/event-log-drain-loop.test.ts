@@ -19,7 +19,7 @@ const createAdminClient = vi.fn(() => ({ marcador: 'admin' }));
 
 vi.mock('@/lib/event-log/drain', () => ({ drainEventLog }));
 vi.mock('@/lib/event-log/register-handlers', () => ({ ensureHandlersRegistered }));
-vi.mock('@/lib/supabase/admin', () => ({ createAdminClient }));
+vi.mock('@/lib/db/admin', () => ({ createAdminClient }));
 
 const { proximaEspera, runEventLogDrainLoop } = await import('@/lib/event-log/drain-loop');
 
@@ -72,7 +72,7 @@ describe('runEventLogDrainLoop', () => {
   });
 
   it('admin client indisponível DESLIGA o laço sem derrubar o worker', async () => {
-    // `@/lib/supabase/admin` importa `@/lib/env`, que faz throw no topo do
+    // `@/lib/db/admin` importa `@/lib/env`, que faz throw no topo do
     // módulo quando falta variável obrigatória. Num `.env` enxuto, um import
     // estático mataria o worker INTEIRO — fila durável, cron e turnos — por
     // causa de um laço acessório. Ele tem que se desligar sozinho e avisar.

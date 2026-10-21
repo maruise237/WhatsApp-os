@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { valoresDoCheckNoBaseline } from "@/tests/helpers/baseline-check";
 
 import { NUVEMSHOP_CLASSIFICACAO, type HealthStatus } from "./route";
@@ -20,7 +20,7 @@ import { NUVEMSHOP_CLASSIFICACAO, type HealthStatus } from "./route";
  * esta rota alimenta tinha a cobertura e a rota não, e é a rota que decide o
  * que a tela recebe:
  *  - os casos nomeados, que fixam a saúde de cada estado que importa;
- *  - a cobertura contra o CHECK do `supabase/baseline.sql`. Status novo que uma
+ *  - a cobertura contra o CHECK do `db/migrations/0001_schema_initial.sql`. Status novo que uma
  *    migration acrescente ao banco sem entrar na classificação da rota reprova
  *    aqui, que é o modo de falha que produziu este bug (o TypeScript não
  *    enxerga o CHECK).
@@ -29,7 +29,7 @@ import { NUVEMSHOP_CLASSIFICACAO, type HealthStatus } from "./route";
 vi.mock("@/lib/auth/requirePlatformAdmin", () => ({
   requirePlatformAdmin: vi.fn(),
 }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn() }));
+vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 
 const ADMIN_ID = "11111111-1111-4111-8111-111111111111";

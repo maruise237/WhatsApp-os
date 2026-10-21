@@ -18,7 +18,7 @@
  */
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export interface PlatformAdminInfo {
   user_id: string;

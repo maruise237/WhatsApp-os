@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { requirePlatformAdmin } from "@/lib/auth/requirePlatformAdmin";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/db/admin";
 import { ok, fail } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
 import { randomUUID } from "node:crypto";

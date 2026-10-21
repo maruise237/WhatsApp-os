@@ -17,7 +17,7 @@ import { ApiError } from "@/lib/api/types";
 import { audit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth/require-role";
 import { changeRoleSchema, validateRequest } from "@/lib/schemas";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/db/server";
 
 export async function changeMemberRole(
   req: NextRequest,
