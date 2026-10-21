@@ -27,16 +27,13 @@ export default async function NotificationsPage() {
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">
-          {traduzir("Notificações", idioma)}
+          {"Notifications"}
         </h1>
         <p className="text-sm text-muted-foreground">{traduzir("Canais e categorias.", idioma)}</p>
       </header>
 
       <Card className="border-amber-500/40 bg-amber-50/40 p-4 text-sm dark:bg-amber-900/10">
-        {traduzir(
-          "Preferências de notificação em breve. Por enquanto, alertas críticos são enviados por email.",
-          idioma,
-        )}
+        {"Les préférences de notification seront bientôt disponibles. Pour l’instant, les alertes critiques sont envoyées par e-mail."}
       </Card>
 
       {/* `overflow-x-auto` isolado nesta tabela — sem ele, categoria + 3 canais

@@ -71,10 +71,7 @@ export default async function MarcaDaOrganizacaoPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Marca", idioma)}</h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          {traduzir(
-            "O nome e a cor que a sua empresa mostra para quem trabalha aqui dentro.",
-            idioma,
-          )}
+          {"Le nom et la couleur que votre entreprise affiche pour les membres de son équipe."}
         </p>
       </header>
 

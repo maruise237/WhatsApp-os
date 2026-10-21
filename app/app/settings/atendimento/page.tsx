@@ -58,13 +58,10 @@ export default async function AtendimentoSettingsPage() {
     <div className="flex h-full flex-col gap-6 overflow-y-auto p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">
-          {traduzir("Distribuição de atendimento", idioma)}
+          {"Répartition des échanges"}
         </h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          {traduzir(
-            "Quem recebe cada cliente novo, e o que cada atendente enxerga. As duas decisões andam juntas: distribuir sem restringir deixa todo mundo vendo a carteira do colega; restringir sem distribuir deixa o funil de cada um vazio.",
-            idioma,
-          )}
+          {"Qui reçoit chaque nouveau client et ce que chaque agent peut voir. Les deux décisions vont ensemble : distribuer sans restreindre laisse chacun voir le portefeuille de ses collègues ; restreindre sans distribuer laisse le pipeline de chacun vide."}
         </p>
       </header>
 

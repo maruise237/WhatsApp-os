@@ -44,10 +44,7 @@ export default async function SecurityPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Segurança", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          {traduzir(
-            "A verificação em duas etapas da sua conta, os códigos de recuperação e as sessões abertas.",
-            idioma,
-          )}
+          {"La validation en deux étapes de votre compte, les codes de récupération et les sessions ouvertes."}
         </p>
       </header>
 

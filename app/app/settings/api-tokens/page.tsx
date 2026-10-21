@@ -21,7 +21,7 @@ export default async function ApiTokensPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{traduzir("API Tokens", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          {traduzir("Tokens server-to-server. Plaintext exibido uma única vez na criação.", idioma)}
+          {"Jetons serveur à serveur. Le texte brut n’est affiché qu’une seule fois lors de la création."}
         </p>
       </header>
       <ApiTokensClient />

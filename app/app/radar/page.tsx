@@ -18,10 +18,7 @@ export default async function RadarPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Radar de risco", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          {traduzir(
-            "Demandas abertas que esfriaram e precisam de você. Se o assistente já agendou um retorno, aparece como “em voo”; sem próximo passo, é risco de perder o cliente.",
-            idioma,
-          )}
+          {"Les demandes ouvertes qui ont refroidi et ont besoin de vous. Si l’assistant a déjà planifié un retour, elle apparaît « en vol » ; sans prochaine étape, c’est un risque de perdre le client."}
         </p>
       </header>
       <RiskRadarList />

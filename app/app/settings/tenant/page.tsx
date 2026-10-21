@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
-import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { createClient } from "@/lib/db/server";
 import { indicatifDeLOrganisation } from "@/lib/telephone/normaliser";
@@ -25,7 +24,6 @@ interface OrgRow {
 export default async function TenantSettingsPage() {
   const user = await requireAuth();
   const activeOrg = await resolveActiveOrg(user);
-  const idioma = normalizarIdioma(user.locale);
   if (!activeOrg) redirect("/app");
   if (!user.is_platform_admin && ROLE_RANK[activeOrg.role] < ROLE_RANK.admin) {
     redirect("/403");
@@ -51,9 +49,9 @@ export default async function TenantSettingsPage() {
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Organização", idioma)}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{"Organisation"}</h1>
         <p className="text-sm text-muted-foreground">
-          {traduzir("Dados da empresa, retenção de mídia, DPO. Admin only.", idioma)}
+          {"Données de l’entreprise, rétention des médias et DPO. Réservé aux administrateurs."}
         </p>
       </header>
       {row && (

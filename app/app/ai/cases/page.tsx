@@ -21,10 +21,7 @@ export default async function CasesPage() {
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Casos", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          {traduzir(
-            "Quando a IA trava em algo que só um humano resolve, ela abre um caso aqui — e continua conversando com o cliente enquanto espera sua resposta.",
-            idioma,
-          )}
+          {"Lorsqu’un blocage ne peut être résolu que par une personne, l’IA ouvre un cas ici et continue d’échanger avec le client en attendant votre réponse."}
         </p>
       </header>
       <CaseList />

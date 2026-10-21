@@ -38,7 +38,7 @@ export default async function BillingPage() {
           {traduzir("Billing entra na Fase 2 do roadmap.", idioma)}{" "}
           {suporte ? (
             <>
-              {traduzir("Para questões de pagamento, contate", idioma)}{" "}
+              {"Pour les questions de paiement, contactez"}{" "}
               <a className="underline" href={`mailto:${suporte}`}>
                 {suporte}
               </a>
@@ -46,10 +46,7 @@ export default async function BillingPage() {
             </>
           ) : (
             <>
-              {traduzir(
-                "Para questões de pagamento, fale com quem administra este sistema.",
-                idioma,
-              )}
+              {"Pour les questions de paiement, contactez la personne qui administre ce système."}
             </>
           )}
         </p>

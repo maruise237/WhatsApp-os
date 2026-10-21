@@ -49,7 +49,7 @@ export default async function PipelinesSettingsPage() {
           {traduzir("Etapas do funil", idioma)}
         </h1>
         <p className="text-sm text-muted-foreground">
-          {traduzir("Para onde o agente leva o card em cada passo do atendimento", idioma)}
+          {"L’étape vers laquelle l’agent déplace l’affaire à chaque étape du traitement"}
           {podeEditarConfig
             ? traduzir(", vocabulário, custom fields e motivos de perda", idioma)
             : ""}
