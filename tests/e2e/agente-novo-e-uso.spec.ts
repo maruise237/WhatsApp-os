@@ -20,7 +20,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 import { loginComoAdmin, lerCreds, type CredsE2E } from "./helpers/login-admin";
 
@@ -49,16 +49,15 @@ test.describe("Créer un agent depuis l’écran", () => {
     const criar = page.getByRole("button", { name: /créer l’agent/i });
     await expect(criar).toBeDisabled();
 
-    // E ela diz o que falta — as três exigências que o servidor também impõe.
-    // Escritas como instrução, não como acusação — um formulário recém-aberto
-    // que já diz "obrigatório" em vermelho trata o usuário como quem errou.
-    for (const exigencia of [
-      /escolha o modelo/i,
-      /escolha a chave de acesso/i,
-      /choisissez le numéro whatsapp utilisé pour répondre/i,
-    ]) {
-      await expect(page.getByText(exigencia).first()).toBeVisible();
-    }
+    // E ela diz o que falta. Modelo e chave de IA saíram do formulário (a IA é
+    // da plataforma), então a única exigência visível é o número de WhatsApp.
+    // Escrita como instrução, não como acusação.
+    await expect(
+      page.getByText(/choisissez le numéro whatsapp utilisé pour répondre/i).first(),
+    ).toBeVisible();
+    // E o que saiu não pode voltar a aparecer: nenhuma escolha de modelo ou chave.
+    await expect(page.locator("#model")).toHaveCount(0);
+    await expect(page.locator("#credential_id")).toHaveCount(0);
 
     await page.screenshot({
       path: path.join(EVIDENCIA, "w1-nova-01-tela-de-criar.png"),
@@ -80,11 +79,11 @@ test.describe("Créer un agent depuis l’écran", () => {
         "Vous êtes l’accueil d’une clinique dentaire. Répondez poliment, répondez aux questions sur les horaires et aidez à prendre rendez-vous.",
       );
 
-    // Os três campos que a tela exige. São comboboxes do Radix, NÃO `<select>`
+    // O campo que a tela exige (modelo e chave saíram: a IA é da plataforma). São comboboxes do Radix, NÃO `<select>`
     // nativo: não existe `<option>` no DOM até o menu abrir, e procurar por
     // `option` devolve zero — que lê como "a tela não tem modelo nenhum" quando
     // na verdade o instrumento é que estava olhando o lugar errado.
-    for (const id of ["model", "credential_id", "channel_session_id"]) {
+    for (const id of ["channel_session_id"]) {
       const gatilho = page.locator(`#${id}`);
       if ((await gatilho.count()) === 0) continue;
       await gatilho.click();
@@ -144,18 +143,18 @@ test.describe("Créer un agent depuis l’écran", () => {
     // por quatro frentes) não tem. Fica como item para quem tiver ambiente
     // fresco; ver o HANDOFF.
     //
-    // O que dá para cobrar sempre: a tela exige credencial e número — então ela
-    // precisa dizer ONDE se consegue cada um. Sem isso, quem não tem trava sem
+    // O que dá para cobrar sempre: a tela exige um número — então ela
+    // precisa dizer ONDE se conecta um. Sem isso, quem não tem trava sem
     // pista, e quem tem mas quer outro também.
     const caminhos = await page.evaluate(() =>
       [...document.querySelectorAll("a[href]")]
         .map((a) => `${(a.textContent ?? "").trim()} -> ${a.getAttribute("href")}`)
-        .filter((t) => /identifiant|clé|connex|whatsapp|numero|numéro|canal/i.test(t)),
+        .filter((t) => /connex|whatsapp|numero|numéro|canal/i.test(t)),
     );
 
     expect(
       caminhos.length,
-      "a tela exige credencial e número de WhatsApp e não oferece nenhum link para conseguir os dois",
+      "a tela exige número de WhatsApp e não oferece nenhum link para conectar um",
     ).toBeGreaterThan(0);
   });
 });

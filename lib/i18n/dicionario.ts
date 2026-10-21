@@ -3553,6 +3553,7 @@ export const DICIONARIO: Traducoes = {
   "Chaves para outro sistema conversar com o seu CRM.": { "fr-FR": "Des clés pour qu’un autre système dialogue avec votre CRM." },
   "Novo": { "fr-FR": "Nouveau" },
   "Nenhum número conectado": { "fr-FR": "Aucun numéro connecté" },
+  "Conectar um número de WhatsApp": { "fr-FR": "Connecter un numéro WhatsApp" },
   "Modelo": { "fr-FR": "Modèle" },
   "Provider:": { "fr-FR": "Fournisseur :" },
   "Modelo:": { "fr-FR": "Modèle :" },

@@ -182,35 +182,23 @@ test.describe("l’assistant de démarrage construit un employé", () => {
     await page.waitForURL(/\/onboarding\/setup-ai/, { timeout: 30_000 });
   });
 
-  test("former montre son cerveau — et sans clé ce n’est pas une impasse", async ({ page }) => {
-    // Vale nos dois mundos pela mesma razão do caso do quadro (ver lá): no CI
-    // não há chave de provedor e o bloco vira o formulário para colar uma; na
-    // máquina de quem desenvolve, `next start` carrega o `.env.local` e ele vira
-    // o veredito sobre a chave que existe.
-    //
-    // O que NÃO varia: a tela nunca deixa a pessoa sabendo que falta a chave sem
-    // dizer o que fazer. Antes o passo 1 escrevia "Falta a chave da inteligência
-    // artificial" e o assunto morria ali — diagnóstico certo, saída nenhuma.
+  test("former ne demande ni clé ni fournisseur, et ne nomme aucun modèle", async ({ page }) => {
+    // A IA é da plataforma: quem instala não escolhe provedor, não cola chave e
+    // não vê nome de modelo. O passo antigo virava formulário de chave quando
+    // faltava uma — hoje esse bloco não pode mais aparecer, em nenhum mundo
+    // (com ou sem DEEPSEEK_API_KEY no servidor sob teste).
     await login(page);
     await page.waitForURL(/\/onboarding\/setup-ai/, { timeout: 30_000 });
+    await expect(page.getByRole("heading", { name: /formez votre assistant/i })).toBeVisible();
 
-    const corpo = page.locator("body");
-    await expect(corpo).toContainText(/cérebro/i);
+    await expect(page.locator("#api_key_da_ia")).toHaveCount(0);
+    await expect(page.locator("#provedor_da_ia")).toHaveCount(0);
 
-    const semChave = await page.locator("#api_key_da_ia").count();
-    if (semChave > 0) {
-      // O beco vira saída: o campo está aqui, no passo em que a chave importa.
-      await expect(page.locator("#provedor_da_ia")).toBeVisible();
-      await expect(page.getByRole("button", { name: /guardar a chave/i })).toBeDisabled();
-      await expect(corpo).toContainText(/guardada cifrada/i);
-    } else {
-      // Com chave, o passo DIZ qual é e confere o crédito — "validada" nunca
-      // significou "funciona": o validador bate num endpoint de listagem, que
-      // responde 200 com a conta zerada.
-      await expect(corpo).toContainText(
-        /Conferindo se a chave tem crédito|Testei agora|não passou|Não consegui testar/i,
-      );
-    }
+    const texto = await page.locator("main, body").first().innerText();
+    expect(
+      texto,
+      "o passo de treinar não pode nomear provedor nem modelo de IA",
+    ).not.toMatch(/\b(anthropic|openai|openrouter|deepseek|claude|gpt-?\d|sonnet|haiku)\b/i);
   });
 
   test("former : demande les règles de la maison et montre ce qu’il sait déjà faire", async ({ page }) => {
@@ -407,8 +395,9 @@ test.describe("l’assistant de démarrage construit un employé", () => {
     }
 
     expect(versao.system_prompt).not.toContain("Ne promettez jamais de remise");
-    // Publicou: então nasceu podendo mexer no CRM, com o provedor da instalação.
-    expect(versao.provider).toBe("anthropic");
+    // Publicou: então nasceu podendo mexer no CRM, com o provedor da plataforma
+    // (DeepSeek quando o servidor tem a chave; senão o da instalação).
+    expect(versao.provider).toMatch(/^(deepseek|anthropic)$/);
     expect((versao.tool_ids as string[])?.length ?? 0).toBeGreaterThan(0);
   });
 

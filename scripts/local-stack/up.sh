@@ -41,7 +41,7 @@ echo "==> schéma neon_auth complet (Better Auth) + rôle authenticator"
 psql_db < scripts/local-stack/neon-auth.sql
 
 echo "==> prélude Supabase (extrait de scripts/test-db.sh, sans copie)"
-awk '/==> prelude:/{f=1} f&&/^psql_install <<.SQL.$/{g=1; next} g&&/^SQL$/{exit} g{print}' scripts/test-db.sh | psql_db
+awk '/==> prélude :/{f=1} f&&/^psql_install <<.SQL.$/{g=1; next} g&&/^SQL$/{exit} g{print}' scripts/test-db.sh | psql_db
 
 echo "==> baseline.sql (mode install, ON_ERROR_STOP=1)"
 psql_db < supabase/baseline.sql

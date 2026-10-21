@@ -691,6 +691,13 @@ export function AgentForm(props: Props) {
               {validation.channel_session_id ? (
                 <p className={dica}>{validation.channel_session_id}</p>
               ) : null}
+              {/* Quem ainda não conectou número trava aqui sem pista: a tela
+                  diz onde se conecta um, em vez de mandar procurar no menu. */}
+              {props.channelSessions.length === 0 ? (
+                <Link href="/app/connections" className="text-xs underline">
+                  {t("Conectar um número de WhatsApp")}
+                </Link>
+              ) : null}
             </div>
           </Card>
 
