@@ -1,4 +1,4 @@
-import type { DbClient } from '@supabase/supabase-js';
+import type { DbClient } from '@/lib/db/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { sendMessageHandler } from '@/app/api/v1/messages/_handler';

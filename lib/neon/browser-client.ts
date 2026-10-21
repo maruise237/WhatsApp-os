@@ -15,6 +15,8 @@ function publicEnv(): RuntimePublicEnv {
   };
 }
 
+export type CanalTempsReel = ReturnType<typeof channel>;
+
 function channel(name: string) {
   const listeners: Array<{ event: string; filter?: { table?: string; filter?: string; event?: string }; callback: (payload: unknown) => void }> = [];
   let source: EventSource | null = null;

@@ -17,7 +17,7 @@
  * runtime, and we have access to AAL state).
  */
 import { redirect } from "next/navigation";
-import type { User } from "@supabase/supabase-js";
+import type { UtilisateurAuth as User } from "@/lib/neon/server-client";
 import { createClient } from "@/lib/db/server";
 
 export interface PlatformAdminInfo {

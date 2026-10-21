@@ -188,7 +188,7 @@ DeskcommCRM é um sistema operacional de vendas open source com agentes de IA na
 | `lib/api/wrappers.ts` | `ok()`, `fail()`, tipos `ApiSuccess<T>` / `ApiError` |
 | `lib/api/errors.ts` | Códigos de erro canônicos |
 | `lib/env.ts` | Validação Zod das env vars (lança no startup se faltar crítica) |
-| `lib/supabase/{browser,server,admin}.ts` | Clients canônicos |
+| `lib/db/{browser,server,admin}.ts` | Clients canônicos |
 | `app/api/v1/health/route.ts` | Health check (Supabase + Redis + WAHA) |
 | `supabase/migrations/` | Schema versionado |
 | `docs/runbooks/deploy.md` | **Deploy em produção — leia ANTES de mexer na VPS** |

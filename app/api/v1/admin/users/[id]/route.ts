@@ -100,7 +100,7 @@ export async function GET(
     last_sign_in_at: authUser.last_sign_in_at ?? null,
     created_at: authUser.created_at,
     email_confirmed_at: authUser.email_confirmed_at ?? null,
-    factors: (authUser.factors ?? []).map((f) => ({
+    factors: ((authUser as { factors?: { id: string; factor_type: string; status: string }[] }).factors ?? []).map((f) => ({
       id: f.id,
       type: f.factor_type,
       status: f.status,

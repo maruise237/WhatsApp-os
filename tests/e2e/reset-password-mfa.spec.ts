@@ -11,11 +11,11 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { createClient, type DbClient } from "@supabase/supabase-js";
+import type { DbClient } from "../../lib/db/client";
+import { createAdminClient } from "../../lib/neon/admin-client";
 import { test, expect } from "@playwright/test";
 
 import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
-import { carregarEnvLocal } from "../../scripts/lib/env-de-teste";
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
 
@@ -25,17 +25,8 @@ interface Creds {
   admin_totp?: { secret: string };
 }
 
-function readServiceEnv(): { url: string; serviceRole: string } {
-  // `process.env` vence o `.env.local` — ver scripts/lib/env-de-teste.ts.
-  const env = carregarEnvLocal();
-  return { url: env.NEON_DATA_API_URL!, serviceRole: env.NEON_SERVICE_ROLE_JWT! };
-}
-
 const creds: Creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8"));
-const { url, serviceRole } = readServiceEnv();
-const admin: DbClient = createClient(url, serviceRole, {
-  auth: { persistSession: false },
-});
+const admin: DbClient = createAdminClient();
 
 async function adminUserId(email: string): Promise<string | null> {
   const { data } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
@@ -44,12 +35,14 @@ async function adminUserId(email: string): Promise<string | null> {
 
 test.afterAll(async () => {
   const id = await adminUserId(creds.users.admin!.email);
+  // @ts-expect-error -- Neon Auth : pas d'API admin de mot de passe équivalente (spec MFA, décision en attente).
   if (id) await admin.auth.admin.updateUserById(id, { password: creds.password });
 });
 
 test("la réinitialisation du mot de passe avec MFA demande le code TOTP et aboutit", async ({ page }) => {
   expect(creds.admin_totp?.secret, "seed deve gravar admin_totp").toBeTruthy();
 
+  // @ts-expect-error -- Neon Auth n'a pas de generateLink (spec MFA, décision en attente).
   const link = await admin.auth.admin.generateLink({
     type: "recovery",
     email: creds.users.admin!.email,

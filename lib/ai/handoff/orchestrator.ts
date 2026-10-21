@@ -172,24 +172,8 @@ export async function triggerHandoff(
       });
     }
 
-    // Step 4 — Realtime broadcast so the agent UI lights up immediately.
-    try {
-      const channel = admin.channel(`org:${input.organizationId}:queue`);
-      await channel.send({
-        type: "broadcast",
-        event: "handoff_pending",
-        payload: {
-          conversation_id: input.conversationId,
-          reason: input.reason,
-        },
-      });
-      await admin.removeChannel(channel);
-    } catch (err) {
-      logger.warn("[handoff-orchestrator] realtime broadcast failed", {
-        conversation_id: input.conversationId,
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
+    // L'écran voit le passage à un humain par le flux SSE (changement de la
+    // conversation) : pas de diffusion séparée.
 
     // Step 5 — audit log (fire-and-forget; never blocks).
     const { error: auditErr } = await admin.from("api_audit_log").insert({

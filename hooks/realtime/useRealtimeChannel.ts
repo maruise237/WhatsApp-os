@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useId, useRef, useState, type RefObject } from "react";
 import { createClient } from "@/lib/db/browser";
-import type { RealtimeChannel } from "@supabase/supabase-js";
+import type { CanalTempsReel as RealtimeChannel } from "@/lib/neon/browser-client";
 
 export type RealtimeStatus =
   | "connecting"

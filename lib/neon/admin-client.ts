@@ -80,7 +80,20 @@ function normalizeDatabaseError(error: unknown): Error {
   return normalized;
 }
 
-type NeonAuthUserRow = { id: string; email: string; name: string | null; image: string | null; createdAt: Date | string };
+type NeonAuthUserRow = {
+  id: string;
+  email: string;
+  name: string | null;
+  image: string | null;
+  emailVerified: boolean | null;
+  createdAt: Date | string;
+  updatedAt: Date | string | null;
+};
+
+type ErreurAdminAuth = Error & { status?: number; code?: string };
+
+const enIso = (v: Date | string | null | undefined) =>
+  v instanceof Date ? v.toISOString() : v ? String(v) : null;
 
 /** Un compte Neon Auth au format `User` de Supabase que les appelants lisent. */
 function utilisateurSupabase(row: NeonAuthUserRow) {
@@ -88,8 +101,11 @@ function utilisateurSupabase(row: NeonAuthUserRow) {
     id: row.id,
     email: row.email,
     user_metadata: { full_name: row.name || null, avatar_url: row.image ?? null },
-    app_metadata: {},
-    created_at: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
+    app_metadata: {} as Record<string, unknown>,
+    phone: null as string | null,
+    last_sign_in_at: null as string | null,
+    created_at: enIso(row.createdAt) ?? "",
+    email_confirmed_at: row.emailVerified ? enIso(row.updatedAt ?? row.createdAt) : null,
   };
 }
 
@@ -116,15 +132,15 @@ function authAdminSurface() {
       getUserById: async (userId: string) => {
         try {
           const { rows } = await getPool().query<NeonAuthUserRow>(
-            `select id, email, name, image, "createdAt" from neon_auth."user" where id = $1`,
+            `select id, email, name, image, "emailVerified", "createdAt", "updatedAt" from neon_auth."user" where id = $1`,
             [userId],
           );
           const row = rows[0];
           return row
             ? { data: { user: utilisateurSupabase(row) }, error: null }
-            : { data: { user: null }, error: Object.assign(new Error("User not found"), { status: 404 }) };
+            : { data: { user: null }, error: Object.assign(new Error("User not found"), { status: 404, code: "user_not_found" }) as ErreurAdminAuth };
         } catch (error) {
-          return { data: { user: null }, error: normalizeDatabaseError(error) };
+          return { data: { user: null }, error: normalizeDatabaseError(error) as ErreurAdminAuth };
         }
       },
       listUsers: async (input?: { page?: number; perPage?: number }) => {
@@ -132,7 +148,7 @@ function authAdminSurface() {
         const page = Math.max(input?.page ?? 1, 1);
         try {
           const { rows } = await getPool().query<NeonAuthUserRow>(
-            `select id, email, name, image, "createdAt" from neon_auth."user"
+            `select id, email, name, image, "emailVerified", "createdAt", "updatedAt" from neon_auth."user"
               order by "createdAt" asc, id asc limit $1 offset $2`,
             [perPage, (page - 1) * perPage],
           );
@@ -146,6 +162,17 @@ function authAdminSurface() {
         invoke("updateUserById", ["updateUser", "updateUserById"], input),
       deleteUser: (userId: string) =>
         invoke("deleteUser", ["removeUser", "deleteUser"], { userId }),
+      // Neon Auth ne gère pas de facteurs de vérification en deux étapes.
+      mfa: {
+        listFactors: async (_input: { userId: string }) => ({
+          data: { factors: [] as { id: string; factor_type: string; status: string }[] },
+          error: null,
+        }),
+        deleteFactor: async (_input: { id: string; userId: string }) => ({
+          data: null,
+          error: { name: "NeonAuthUnsupportedError", code: "neon_auth_mfa_not_supported", message: "Facteurs non gérés par Neon Auth." },
+        }),
+      },
     },
   };
 }

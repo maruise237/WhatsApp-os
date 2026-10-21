@@ -45,7 +45,7 @@ Versão do produto: **1.0.0** (`CHANGELOG.md`, SemVer — mudança que afeta que
 | `lib/agent-engine/`, `lib/ai/` | runtime do agente, guardrails, RAG, dispatcher |
 | `lib/api/wrappers.ts` | `ok()` / `fail()` — **use sempre**, não monte Response na mão |
 | `lib/auth/require-role.ts` | `requireRole()` — guard canônico de RBAC |
-| `lib/supabase/{browser,server,admin}.ts` | clients canônicos |
+| `lib/db/{browser,server,admin}.ts` | clients canônicos |
 | `workers/` | workers de `event_log` + crons |
 | `supabase/migrations/` | schema versionado · `supabase/baseline.sql` = o que o self-host aplica |
 | `proxy.ts` | middleware do Next 16 (auth de borda, `X-Request-Id`) |
@@ -118,7 +118,7 @@ verify, build-and-size, invariants, e2e, imagens-ok
   Toda mudança de schema tem que aparecer aqui **como apêndice idempotente**, senão
   não chega em quem instalou. Ver doutrina de Migrations em `CLAUDE.md`.
 - **`supabase/migrations/*.sql` já aplicadas** — nunca edite. Corrija com migration nova.
-- **`lib/supabase/admin.ts`** — service role **bypassa RLS**. 89 rotas o usam; toda
+- **`lib/db/admin.ts`** — service role **bypassa RLS**. 89 rotas o usam; toda
   query precisa filtrar `organization_id` manualmente, resolvido de fonte confiável
   (cookie/JWT/webhook secret/path token), **nunca do body**.
 - **`lib/auth/public-paths.ts`** — adicionar path aqui remove a checagem de auth de borda.

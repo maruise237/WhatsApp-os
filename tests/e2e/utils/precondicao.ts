@@ -62,9 +62,8 @@
  *
  * Chame no `beforeAll`, antes de qualquer login ou medição.
  */
-import { createClient, type DbClient } from "@supabase/supabase-js";
-
-import { credenciaisSupabaseDeTeste } from "../../../scripts/lib/env-de-teste";
+import type { DbClient } from "../../../lib/db/client";
+import { createAdminClient } from "../../../lib/neon/admin-client";
 
 const CONSERTO = "pnpm exec tsx scripts/seed-e2e-system-update.ts";
 
@@ -72,10 +71,7 @@ let cliente: DbClient | null = null;
 
 function servico(): DbClient {
   if (cliente) return cliente;
-  const c = credenciaisSupabaseDeTeste();
-  cliente = createClient(c.url, c.serviceRole, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
+  cliente = createAdminClient();
   return cliente;
 }
 

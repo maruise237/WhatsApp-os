@@ -29,7 +29,7 @@
  * Bloco de UUID próprio (`0be7a70d-…`): `fileParallelism: false` compartilha o
  * contêiner e o `afterAll` do arquivo vizinho apaga a organização dele inteira.
  */
-import { createClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import pg from "pg";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -76,7 +76,7 @@ function fakeLogger(): Logger {
 
 function fakeDeps(): InboundTurnDeps {
   return {
-    crmCfg: { supabase: createClient("http://127.0.0.1", "test-key") },
+    crmCfg: { supabase: {} as DbClient },
     llmCfg: {},
     knobs: {
       historyLimit: 20,

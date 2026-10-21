@@ -15,19 +15,61 @@ const neonAuth = createNeonAuth({
   logLevel: "silent",
 });
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- métadonnées libres, comme le format attendu par les appelants */
+export type UtilisateurAuth = {
+  id: string;
+  email: string | null;
+  user_metadata: Record<string, any>;
+  app_metadata: Record<string, any>;
+  aud: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
+  last_sign_in_at?: string | null;
+  [champ: string]: unknown;
+};
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export type SessionAuthNeon = {
+  access_token: string;
+  refresh_token: string;
+  expires_at: unknown;
+  expires_in: unknown;
+  token_type: string;
+  user: UtilisateurAuth | null;
+  [champ: string]: unknown;
+};
+
+export type ErreurAuth = { name?: string; code?: string; status?: number; message: string };
+
 type AuthResult = {
-  data?: {
-    user?: Record<string, unknown> | null;
-    session?: Record<string, unknown> | null;
+  data: {
+    user: UtilisateurAuth | null;
+    session: SessionAuthNeon | null;
     access_token?: string;
     expires_at?: number;
     expires_in?: number;
     token_type?: string;
-  } | null;
-  error?: { name?: string; code?: string; status?: number; message?: string } | null;
+  };
+  error: ErreurAuth | null;
 };
 
-function mapUser(user: Record<string, unknown> | null | undefined) {
+/** Facteur de vérification en deux étapes. Neon Auth n'en gère pas : listes toujours vides. */
+export type FacteurMfa = {
+  id: string;
+  factor_type: "totp" | "phone";
+  status: "verified" | "unverified";
+  friendly_name?: string;
+  created_at?: string;
+};
+
+const MFA_INDISPONIBLE: ErreurAuth = {
+  name: "NeonAuthUnsupportedError",
+  code: "neon_auth_mfa_not_supported",
+  message: "La vérification en deux étapes n’est pas disponible avec Neon Auth.",
+};
+
+function mapUser(user: Record<string, unknown> | null | undefined): UtilisateurAuth | null {
   if (!user) return null;
   const metadata = (user.user_metadata ?? {}) as Record<string, unknown>;
   return {
@@ -42,8 +84,8 @@ function mapUser(user: Record<string, unknown> | null | undefined) {
     app_metadata: (user.app_metadata ?? {}) as Record<string, unknown>,
     aud: typeof user.aud === "string" ? user.aud : "authenticated",
     role: typeof user.role === "string" ? user.role : "authenticated",
-    created_at: user.createdAt ?? user.created_at ?? new Date().toISOString(),
-    updated_at: user.updatedAt ?? user.updated_at ?? new Date().toISOString(),
+    created_at: String(user.createdAt ?? user.created_at ?? new Date().toISOString()),
+    updated_at: String(user.updatedAt ?? user.updated_at ?? new Date().toISOString()),
   };
 }
 
@@ -58,14 +100,14 @@ function mapAuthResult(result: unknown): AuthResult {
     rawSession?.access_token ??
     rawSession?.accessToken ??
     rawSession?.token;
-  const session = rawSession
+  const session: SessionAuthNeon | null = rawSession
     ? {
         ...rawSession,
         access_token: typeof token === "string" ? token : "",
         refresh_token: String(rawSession.refresh_token ?? ""),
         expires_at: rawSession.expires_at ?? rawSession.expiresAt ?? null,
         expires_in: rawSession.expires_in ?? rawSession.expiresIn ?? null,
-        token_type: rawSession.token_type ?? "bearer",
+        token_type: String(rawSession.token_type ?? "bearer"),
         user: mapUser(rawUser),
       }
     : null;
@@ -83,7 +125,7 @@ function mapAuthResult(result: unknown): AuthResult {
           name: typeof (raw.error as Record<string, unknown>).name === "string" ? (raw.error as Record<string, unknown>).name as string : undefined,
           code: typeof (raw.error as Record<string, unknown>).code === "string" ? (raw.error as Record<string, unknown>).code as string : undefined,
           status: typeof (raw.error as Record<string, unknown>).status === "number" ? (raw.error as Record<string, unknown>).status as number : undefined,
-          message: typeof (raw.error as Record<string, unknown>).message === "string" ? (raw.error as Record<string, unknown>).message as string : undefined,
+          message: typeof (raw.error as Record<string, unknown>).message === "string" ? (raw.error as Record<string, unknown>).message as string : "erreur d’authentification",
         }
       : null,
   };
@@ -150,7 +192,13 @@ function authCompat() {
         }),
       );
     },
-    async signOut() {
+    async signOut(options?: { scope?: "global" | "local" | "others" }) {
+      // « Partout » : révoque toutes les sessions Better Auth avant de fermer celle-ci.
+      if (options?.scope === "global" || options?.scope === "others") {
+        const api = neonAuth as unknown as { revokeSessions?: () => Promise<unknown> };
+        await api.revokeSessions?.().catch(() => undefined);
+        if (options.scope === "others") return { error: null };
+      }
       return neonAuth.signOut();
     },
     async updateUser(input: { data?: Record<string, unknown>; password?: string }) {
@@ -171,9 +219,13 @@ function authCompat() {
           await neonAuth.signIn.emailOtp({ email: input.email, otp: input.token_hash ?? input.token ?? "" }),
         );
       }
-      return { data: null, error: { name: "NeonAuthUnsupportedError", code: "neon_auth_otp_shape_unsupported", message: "Neon Auth requires an email OTP flow." } };
+      const refus: AuthResult = {
+        data: { user: null, session: null },
+        error: { name: "NeonAuthUnsupportedError", code: "neon_auth_otp_shape_unsupported", message: "Neon Auth exige un code à usage unique envoyé par e-mail." },
+      };
+      return refus;
     },
-    async exchangeCodeForSession() {
+    async exchangeCodeForSession(_code?: string) {
       return mapAuthResult(await neonAuth.getSession());
     },
     async getClaims() {
@@ -181,23 +233,36 @@ function authCompat() {
       return { data: result.data?.user ? { claims: result.data.user } : null, error: result.error ?? null };
     },
     mfa: {
-      async getAuthenticatorAssuranceLevel() {
+      async getAuthenticatorAssuranceLevel(): Promise<{
+        data: {
+          currentLevel: "aal1" | "aal2" | null;
+          nextLevel: "aal1" | "aal2" | null;
+          currentAuthenticationMethods: { method: string; timestamp: number }[];
+        };
+        error: ErreurAuth | null;
+      }> {
         return { data: { currentLevel: "aal1", nextLevel: "aal1", currentAuthenticationMethods: [] }, error: null };
       },
-      async listFactors() {
+      async listFactors(): Promise<{ data: { all: FacteurMfa[]; totp: FacteurMfa[] }; error: ErreurAuth | null }> {
         return { data: { all: [], totp: [] }, error: null };
       },
-      async enroll() {
-        return { data: null, error: { name: "NeonAuthUnsupportedError", code: "neon_auth_mfa_not_supported", message: "Configure MFA in Neon Auth before enabling this flow." } };
+      async enroll(_input?: { factorType: "totp"; friendlyName?: string; issuer?: string }): Promise<{
+        data: { id: string; totp: { qr_code: string; secret: string; uri: string } } | null;
+        error: ErreurAuth | null;
+      }> {
+        return { data: null, error: MFA_INDISPONIBLE };
       },
-      async challenge() {
-        return { data: null, error: { name: "NeonAuthUnsupportedError", code: "neon_auth_mfa_not_supported", message: "Configure MFA in Neon Auth before enabling this flow." } };
+      async challenge(_input?: { factorId: string }): Promise<{ data: { id: string } | null; error: ErreurAuth | null }> {
+        return { data: null, error: MFA_INDISPONIBLE };
       },
-      async verify() {
-        return { data: null, error: { name: "NeonAuthUnsupportedError", code: "neon_auth_mfa_not_supported", message: "Configure MFA in Neon Auth before enabling this flow." } };
+      async verify(_input?: { factorId: string; challengeId: string; code: string }): Promise<{
+        data: null;
+        error: ErreurAuth | null;
+      }> {
+        return { data: null, error: MFA_INDISPONIBLE };
       },
-      async unenroll() {
-        return { data: null, error: { name: "NeonAuthUnsupportedError", code: "neon_auth_mfa_not_supported", message: "Configure MFA in Neon Auth before enabling this flow." } };
+      async unenroll(_input?: { factorId: string }): Promise<{ data: null; error: ErreurAuth | null }> {
+        return { data: null, error: MFA_INDISPONIBLE };
       },
     },
   };

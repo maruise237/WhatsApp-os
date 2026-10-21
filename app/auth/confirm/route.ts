@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import type { EmailOtpType } from "@supabase/supabase-js";
+type EmailOtpType = "signup" | "invite" | "magiclink" | "recovery" | "email_change" | "email";
 
 import { createClient } from "@/lib/db/server";
 import { ensureTenantForUser } from "@/lib/auth/provision";

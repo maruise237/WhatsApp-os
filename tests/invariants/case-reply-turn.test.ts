@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import pg from "pg";
-import { createClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 
 /**
  * Wave 3b (spec 15 §4.3) — handler `case_reply_turn`, o loop de follow-up de
@@ -132,7 +132,7 @@ function fakeLogger(): Logger & { entries: Array<{ level: string; msg: string; f
 
 function fakeDeps(log: Logger): InboundTurnDeps {
   return {
-    crmCfg: { supabase: createClient("http://127.0.0.1", "test-key") },
+    crmCfg: { supabase: {} as DbClient },
     llmCfg: {},
     knobs: {
       historyLimit: 20,

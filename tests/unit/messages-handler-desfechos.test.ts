@@ -13,7 +13,7 @@
  * exige Postgres real — e a pasta `tests/invariants/` está fora do `test:unit` e
  * do CI. Duplicar scaffolding é o preço de uma rede que gateia PR em segundos.
  */
-import type { DbClient } from '@supabase/supabase-js';
+import type { DbClient } from '@/lib/db/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { sendMessageHandler } from '@/app/api/v1/messages/_handler';

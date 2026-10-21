@@ -89,7 +89,7 @@ export async function GET(_req: NextRequest) {
   };
 
   const resolved = await Promise.all(
-    allUserIds.map(async (uid) => {
+    allUserIds.map(async (uid): Promise<AuthUser | { readonly unavailable: string } | null> => {
       const { data, error } = await admin.auth.admin.getUserById(uid);
       if (error) {
         // Só 404/user_not_found é "esse usuário não existe" — aí o grant é

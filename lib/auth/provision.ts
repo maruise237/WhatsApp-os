@@ -15,7 +15,7 @@ function slugify(name: string): string {
 
 type ProvisionUser = {
   id: string;
-  email?: string;
+  email?: string | null;
   user_metadata?: Record<string, unknown>;
 };
 

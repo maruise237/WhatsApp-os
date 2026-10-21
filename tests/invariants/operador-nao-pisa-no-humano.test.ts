@@ -34,7 +34,7 @@
  * não fazer nada — verde por ausência de medição. O caso 1 prova que este mesmo
  * cenário, SEM handoff, escreve na Central; só então "não escreveu" significa algo.
  */
-import { createClient } from "@supabase/supabase-js";
+import type { DbClient } from "@/lib/db/client";
 import pg from "pg";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -98,7 +98,7 @@ function fakeLogger(): Logger & { entries: Array<{ level: string; msg: string; f
 
 function fakeDeps(log: Logger): InboundTurnDeps {
   return {
-    crmCfg: { supabase: createClient("http://127.0.0.1", "test-key") },
+    crmCfg: { supabase: {} as DbClient },
     llmCfg: {},
     knobs: {
       historyLimit: 20,
