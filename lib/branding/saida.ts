@@ -3,7 +3,7 @@
  *
  * ── E na fachada de acesso, que tem DOM e mesmo assim vem aqui ────────────────
  *
- * `app/(public)/layout.tsx` (login, cadastro, recuperação, MFA) também chama
+ * `app/(public)/layout.tsx` (login, cadastro, recuperação) também chama
  * `marcaDaSaida(null)`, e isso não contradiz o nome deste módulo: o que aquela
  * casca precisa é exatamente o que ele entrega — UM nome e UM logo, da pilha
  * instalação → `.env`, de um resolvedor que nunca lança. Cor ela não usa: quem
@@ -166,7 +166,7 @@ async function settingsDaOrganizacao(organizationId: string): Promise<unknown> {
  * atendeu, e no produto do revendedor quem atende é o cliente dele.
  *
  * `organizationId === null` → instalação → `.env` → padrão. É a CLASSE B: as
- * saídas anteriores a qualquer organização (cadastro de MFA, e-mail de auth).
+ * saídas anteriores a qualquer organização (telas de acesso, e-mail de auth).
  * Passar `null` não é omissão — é a declaração de que ainda não há organização.
  *
  * A CLASSE C (não leva marca nenhuma) não chama esta função: é o PDF de LGPD,

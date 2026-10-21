@@ -1,7 +1,7 @@
 /**
  * POST /api/v1/admin/tenants/[id]/reactivate (S-11.08)
  *
- * Reactivates a suspended tenant. Requires platform admin + MFA AAL2.
+ * Reactivates a suspended tenant. Exige un administrateur de plateforme.
  * Clears status back to 'active', nulls suspended_at/reason/by.
  * 404 if tenant not found; 409 if not in 'suspended' state.
  * Emits audit + event_log domain event.

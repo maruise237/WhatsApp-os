@@ -15,11 +15,11 @@
  * (1) sob `Emulation.setCPUThrottlingRate` — 2 reprovações em 18 execuções:
  *
  *   Error: locator.click: Test timeout of 180000ms exceeded.
- *     - waiting for locator('input[aria-label="Dígito 1"]')
+ *     - waiting for locator('input[aria-label="Dígito 1"]')   (desafio TOTP, já retirado)
  *   FIM url=http://localhost:3001/app/inbox
  *
- * A cadeia: `waitForURL(/\/app\//, { timeout: 8_000 })` desiste enquanto o
- * `verifyMfa` ainda está em voo; o código entra depois; a página vira
+ * A cadeia (na época do desafio TOTP, hoje retirado): `waitForURL(/\/app\//,
+ * { timeout: 8_000 })` desistia enquanto a verificação ainda estava em voo; o código entra depois; a página vira
  * `/app/inbox`; a retentativa clica num `Dígito 1` que não existe mais; e como
  * `playwright.config.ts` não define `actionTimeout` (default 0 = SEM teto), esse
  * clique espera até o timeout do caso.
@@ -55,8 +55,8 @@ function corpoDaFuncao(fonte: string, assinatura: string): string {
   return fonte.slice(inicio, fim);
 }
 
-describe("marca-logo.spec.ts: o desafio de MFA espera um estado terminal", () => {
-  const corpo = corpoDaFuncao(SPEC, "async function loginComTotp(");
+describe("marca-logo.spec.ts: o login espera um estado terminal", () => {
+  const corpo = corpoDaFuncao(SPEC, "async function loginComSenha(");
 
   it("decide por corrida entre os DOIS desfechos, e não por relógio", () => {
     expect(
@@ -66,23 +66,9 @@ describe("marca-logo.spec.ts: o desafio de MFA espera um estado terminal", () =>
     ).toContain("Promise.race");
     expect(
       corpo,
-      "a recusa do formulário (`role=alert` do MfaForm) é um dos dois estados terminais; " +
+      "a recusa do formulário (`role=alert` do LoginForm) é um dos dois estados terminais; " +
         "sem ela a corrida tem um lado só e volta a ser um relógio",
     ).toContain('getByRole("alert")');
-  });
-
-  it("não redigita um código antes de a tentativa anterior terminar", () => {
-    // Uma segunda digitação por caminho de exceção é a assinatura exata do
-    // helper antigo: `try { waitForURL } catch { dorme; redigita }`.
-    expect(
-      corpo.match(/page\.keyboard\.type\(/g)?.length ?? 0,
-      "o helper voltou a ter mais de um ponto de digitação fora do laço de tentativas",
-    ).toBe(1);
-    expect(
-      corpo,
-      "o `catch` que engolia o estouro do `waitForURL` voltou: ele é o que permitia " +
-        "digitar por cima de uma tela que já tinha navegado",
-    ).not.toMatch(/}\s*catch\s*(\([^)]*\))?\s*{/);
   });
 
   it("nenhuma espera pela URL aposta num teto curto", () => {
@@ -92,7 +78,7 @@ describe("marca-logo.spec.ts: o desafio de MFA espera um estado terminal", () =>
       expect(
         Number(teto[1]!.replace(/_/g, "")),
         `\`${chamada.replace(/\s+/g, " ")}\` desiste cedo demais: numa máquina carregada ` +
-          "o verifyMfa demora mais que isso e a página navega depois do estouro",
+          "o login demora mais que isso e a página navega depois do estouro",
       ).toBeGreaterThanOrEqual(30_000);
     }
   });

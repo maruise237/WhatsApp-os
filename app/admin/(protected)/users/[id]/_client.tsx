@@ -102,7 +102,6 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
   }
 
   const { user, memberships, recent_audit } = data.data;
-  const hasMfa = user.factors.some((f) => f.status === "verified");
 
   return (
     <div className="space-y-6">
@@ -148,16 +147,6 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
             <div>
               <dt className="text-xs text-muted-foreground mb-0.5">Créé le</dt>
               <dd className="text-sm">{absoluteDate(user.created_at)}</dd>
-            </div>
-            <div>
-              <dt className="text-xs text-muted-foreground mb-0.5">MFA</dt>
-              <dd>
-                {hasMfa ? (
-                  <Badge variant="success">Actif</Badge>
-                ) : (
-                  <Badge variant="neutral">Inactif</Badge>
-                )}
-              </dd>
             </div>
             {user.phone && (
               <div>

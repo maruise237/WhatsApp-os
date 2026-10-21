@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { prefixoDoArquivo } from "@/components/auth/RecoveryCodesPanel";
 import { DEFAULT_APP_NAME, resolveBranding } from "@/lib/branding";
 
 const RAIZ = process.cwd();
@@ -120,30 +119,6 @@ describe("guarda de white-label (self-host)", () => {
     // envolver a árvore, deixaria todo consumidor no padrão do produto).
     expect(layoutRaiz).toMatch(/<MarcaDaInstalacaoProvider\s+marca=\{/);
     expect(layoutRaiz).toMatch(/<MarcaDosClientComponents>\s*\n\s*<ThemeProvider>\{children\}/);
-  });
-});
-
-describe("nome do arquivo de códigos de recuperação", () => {
-  // Este arquivo fica anos na pasta de downloads do usuário: é o artefato de
-  // marca mais duradouro que o produto entrega, e nenhuma atualização conserta
-  // o que já foi baixado. Por isso o prefixo sai da marca da instalação.
-
-  it("deriva o prefixo da marca, sem acento e sem espaço", () => {
-    expect(prefixoDoArquivo("Vendas Turbo")).toBe("vendas-turbo");
-    expect(prefixoDoArquivo("Ótima Gestão")).toBe("otima-gestao");
-    expect(prefixoDoArquivo(DEFAULT_APP_NAME)).toBe("deskcommcrm");
-  });
-
-  it("não devolve hífen pendurado nem repetido", () => {
-    // `-recovery-codes.txt` vem logo depois: sobra de hífen viraria "acme--…".
-    expect(prefixoDoArquivo("  Acme // CRM!  ")).toBe("acme-crm");
-  });
-
-  it("cai em 'crm' quando a marca não tem caractere aproveitável", () => {
-    // Sem isto o `download` sairia vazio e o browser inventaria "download.txt" —
-    // o usuário perderia de vista o arquivo com os códigos de recuperação dele.
-    expect(prefixoDoArquivo("🚀")).toBe("crm");
-    expect(prefixoDoArquivo("")).toBe("crm");
   });
 });
 

@@ -12,8 +12,8 @@
  *     `../platform` vira prefixo e o arquivo de um tenant aterrissa na pasta da
  *     instalação.
  *  2. **gate por escopo** — `platform_admin` para a instalação (é a marca do
- *     LOGIN, comum a todos os clientes do revendedor); `admin` do tenant + MFA
- *     em dia para a organização. Duplicado dos escritores que já existem
+ *     LOGIN, comum a todos os clientes do revendedor); `admin` do tenant para a
+ *     organização. Duplicado dos escritores que já existem
  *     (`updateBranding.ts`, `updateMarcaDaOrganizacao.ts`), de propósito.
  *  3. **rate limit** — depois do gate: quem nem passou no papel não gasta o
  *     orçamento de quem passou.
@@ -56,7 +56,7 @@ import { z } from "zod";
 
 import { fail, ok } from "@/lib/api/wrappers";
 import { audit } from "@/lib/audit";
-import { loadAuthUser, mfaEmDivida, resolveActiveOrg } from "@/lib/auth/server";
+import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { ROLE_RANK } from "@/lib/auth/types";
 import { checkRateLimit } from "@/lib/ai/dispatcher/rate-limit";
 import { invalidarMarcaDaInstalacao } from "@/lib/branding/instalacao";
@@ -111,15 +111,12 @@ type Recusa = { readonly codigo: string; readonly mensagem: string; readonly sta
  * O gate, por escopo. Devolve o contexto JÁ com o prefixo montado de fonte
  * confiável — assim nenhum caminho abaixo tem a oportunidade de montá-lo do body.
  *
- * ── Por que `mfaEmDivida` e não o `requirePlatformAdmin()` das telas ─────────
+ * ── Por que não o `requirePlatformAdmin()` das telas ─────────────────────────
  *
  * `requirePlatformAdmin()` REDIRECIONA (é o gate do layout de `/admin`), e um
  * `307` para `/login` como resposta a um `fetch()` de upload chega ao navegador
  * como HTML no lugar de JSON — a tela mostraria "erro inesperado" para um caso
- * que tem nome. Aqui o predicado é o mesmo que `lib/auth/require-role.ts` aplica
- * em todo `/api/v1`: papel + `mfaEmDivida`. A diferença de comportamento entre os
- * dois é só para quem AINDA NÃO cadastrou fator — e essa pessoa é barrada antes,
- * pelo gate de cadastro do layout, que é onde ela pode resolver.
+ * que tem nome. Aqui a recusa é sempre JSON.
  */
 async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recusa: Recusa }> {
   const user = await loadAuthUser();
@@ -133,20 +130,6 @@ async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recu
         recusa: {
           codigo: "forbidden_role",
           mensagem: "Seul l’administrateur de l’installation peut changer le logo du système.",
-          status: 403,
-        },
-      };
-    }
-    // ⚠️ Sem argumentos desde o merge com a frente que tornou a verificação em
-    // duas etapas opcional — o porquê está por extenso em
-    // `app/actions/settings/updateMarcaDaOrganizacao.ts`. Em uma linha: a função
-    // parou de consultar a política, então quem TEM fator prova sempre. Passar
-    // papel aqui não é só inútil, é o modelo mental errado gravado no código.
-    if (await mfaEmDivida()) {
-      return {
-        recusa: {
-          codigo: "mfa_required",
-          mensagem: "Confirmez la double authentification dans cette session pour changer le logo.",
           status: 403,
         },
       };
@@ -165,17 +148,6 @@ async function abrirContexto(escopo: Escopo): Promise<{ ctx: Contexto } | { recu
       recusa: {
         codigo: "forbidden_role",
         mensagem: "Seul l’administrateur de l’entreprise peut changer son logo.",
-        status: 403,
-      },
-    };
-  }
-  // DEPOIS do papel, de propósito — mesma ordem de `updateMarcaDaOrganizacao.ts`:
-  // quem nem tem o papel recebe `forbidden_role`, que é a verdade sobre ele.
-  if (await mfaEmDivida()) {
-    return {
-      recusa: {
-        codigo: "mfa_required",
-        mensagem: "Confirmez la double authentification dans cette session pour changer le logo.",
         status: 403,
       },
     };

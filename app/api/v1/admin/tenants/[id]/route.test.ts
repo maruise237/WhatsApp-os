@@ -102,7 +102,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(requirePlatformAdmin).mockResolvedValue({
     user: { id: ADMIN_ID },
-    platformAdmin: { user_id: ADMIN_ID, scope: "full", mfa_required: true },
+    platformAdmin: { user_id: ADMIN_ID, scope: "full" },
   } as never);
   vi.mocked(createAdminClient).mockReturnValue(makeAdminStub() as never);
 });

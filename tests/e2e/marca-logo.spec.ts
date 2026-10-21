@@ -27,15 +27,7 @@
  *
  * O dono do servidor é `e2e-dono@deskcomm.test` (dedicado, `platform_admins`), e
  * o admin de tenant é `e2e-admin@deskcomm.test` — a separação e o porquê estão em
- * `tests/e2e/utils/precondicao.ts`. Os dois entram por `/login/mfa`, e a razão é o
- * CADASTRO, não o papel: `signInWithPassword.ts:93-97` desvia para o desafio
- * quando o usuário tem um fator TOTP verificado, e o seed cadastra um para cada um
- * destes dois (`scripts/seed-e2e-credentials.ts`). Desde a MFA opcional,
- * `requiresMfa` (`lib/auth/server.ts:176-206`) consulta duas políticas cujo padrão
- * é NÃO exigir — ela decide quem é obrigado a cadastrar, e não decide nada sobre
- * quem já cadastrou. Uma versão anterior deste cabeçalho dizia que o gate era
- * `platform_admin || role === "admin"`; isso descreve a regra que o produto tinha
- * antes, e quem lesse aqui concluiria que basta despromover para pular o desafio.
+ * `tests/e2e/utils/precondicao.ts`. Os dois entram por senha, em `/login`.
  *
  * ⚠️ Esta spec ESCREVE marca. A restauração (remover os dois logos) é pela ROTA,
  * não por SQL: quem invalida o memo de 30s da marca da instalação é o código do
@@ -50,8 +42,6 @@ import * as zlib from "node:zlib";
 
 import { test, expect, type Page, type Browser, type Locator } from "@playwright/test";
 
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
-
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
 const EVIDENCIA = path.join(process.cwd(), "evidence", "marca-logo");
 
@@ -59,15 +49,13 @@ interface E2ECreds {
   password: string;
   org_id: string;
   users: Record<string, { id: string; email: string; role: string }>;
-  admin_totp?: { factor_id: string; secret: string };
-  dono_totp?: { factor_id: string; secret: string };
 }
 
 function loadCreds(): E2ECreds {
   const precisaSemear = (): boolean => {
     if (!fs.existsSync(CREDS_PATH)) return true;
     const c = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as E2ECreds;
-    return !c.users?.dono || !c.admin_totp?.secret || !c.dono_totp?.secret || !c.org_id;
+    return !c.users?.dono || !c.org_id;
   };
   if (precisaSemear()) {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-credentials.ts"], { stdio: "inherit" });
@@ -141,86 +129,42 @@ const SVG_DISFARCADO = Buffer.from(
 // ── Helpers de tela ─────────────────────────────────────────────────────────
 
 /**
- * Entra com senha + TOTP, e só volta quando a tentativa TERMINOU.
+ * Entra com senha, e só volta quando a tentativa TERMINOU.
  *
- * ⚠️ O LAÇO ANTERIOR DESISTIA NO RELÓGIO E REDIGITAVA EM CIMA DE UMA TELA QUE
- * JÁ TINHA IDO EMBORA. Ele esperava a URL virar `/app/…` por 8s e, no estouro,
- * dormia até a janela do TOTP virar e clicava em `Dígito 1` de novo. Mas 8s é um
- * palpite sobre a MÁQUINA, não sobre o produto: numa máquina carregada o
- * `verifyMfa` demora mais que isso e o código entra DEPOIS do estouro — aí a
- * página já é `/app/inbox`, `input[aria-label="Chiffre 1"]` não existe mais, e
- * como `playwright.config.ts` não define `actionTimeout` (o default do
- * Playwright é 0, ou seja SEM teto) esse clique espera até o timeout do CASO.
- *
- * MEDIDO neste worktree, com o mesmo laço antigo numa sonda que replica o caso
- * (1) sob `Emulation.setCPUThrottlingRate` — 2 reprovações em 18 execuções
- * (rate 8 e rate 4), as duas idênticas:
- *
- *   Error: locator.click: Test timeout of 180000ms exceeded.
- *     - waiting for locator('input[aria-label="Chiffre 1"]')
- *   NAV http://localhost:3001/app/inbox   (+30862ms)
- *   FIM url=http://localhost:3001/app/inbox
- *
- * E a captura do momento da falha é a CASCA DO TENANT (`navigation
- * "Navegação principal"`, "Inbox" sob "Atendimento") — exatamente o
- * `test-failed-1.png` que a issue #274 descreve como "o navegador está no inbox
- * do tenant, não em /admin/marca". Não há desvio de modo no produto: quem larga
- * a página lá é este helper.
- *
- * O conserto não é um teto maior — um relógio maior continua sendo um relógio.
- * É esperar um ESTADO TERMINAL, e só existem dois depois de digitar os 6
- * dígitos: ou a sessão subiu (a URL vira `/app/…`), ou o formulário disse não
- * (`MfaForm.tsx` renderiza um `role="alert"` dentro do `<form>`; o `TOTPInput`
- * fica `disabled` enquanto a ação está em voo, então antes disso NENHUM dos
- * dois é verdade). Os dois são disjuntos: o sucesso redireciona sem nunca
- * escrever o alerta, e a recusa nunca troca a URL.
- *
- * A única espera por relógio que fica é a da JANELA do TOTP, e ela não é aposta
- * na máquina: dentro da mesma janela de 30s o `generateTotp` devolve o MESMO
- * código que o servidor acabou de recusar, então o que muda o próximo código é
- * o relógio do protocolo, e só ele.
+ * Esperar um ESTADO TERMINAL, e não um relógio: depois do envio só existem dois
+ * desfechos — ou a sessão subiu (a URL vira `/app/…`), ou o formulário disse não
+ * (`LoginForm.tsx` renderiza um `role="alert"` dentro do `<form>`). Os dois são
+ * disjuntos: o sucesso redireciona sem nunca escrever o alerta, e a recusa nunca
+ * troca a URL. Um teto curto no `waitForURL` apostaria na máquina (issue #274).
  */
-async function loginComTotp(page: Page, email: string, secret: string): Promise<void> {
+async function loginComSenha(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /se connecter/i }).click({ timeout: 15_000 });
-  await page.waitForURL(/\/login\/mfa/);
-
-  const digito1 = page.locator('input[aria-label="Chiffre 1"]');
   // Escopado no `<form>` de propósito: o `<Toaster/>` do layout raiz também
   // emite elementos com papel de aviso, e um toast de outra tela seria lido
-  // aqui como recusa do desafio.
+  // aqui como recusa.
   const recusa = page.locator("form").getByRole("alert");
+  // Teto EXPLÍCITO no clique: sem `actionTimeout` no config, um controle que
+  // sumiu esperaria até o timeout do caso.
+  await page.getByRole("button", { name: /se connecter/i }).click({ timeout: 15_000 });
 
-  for (let tentativa = 0; tentativa < 2; tentativa++) {
-    if (msUntilNextTotpWindow() < 3_000) await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    // Teto EXPLÍCITO no clique: sem `actionTimeout` no config, um controle que
-    // sumiu esperaria até o timeout do caso e a reprovação sairia como "Test
-    // timeout" apontando para o clique — sem dizer que o login já tinha entrado.
-    await digito1.click({ timeout: 15_000 });
-    await page.keyboard.type(generateTotp(secret), { delay: 40 });
-
-    const desfecho = await Promise.race([
-      page.waitForURL(/\/app\//, { timeout: 60_000 }).then(
-        () => "entrou" as const,
-        () => "sem-desfecho" as const,
-      ),
-      recusa.waitFor({ state: "visible", timeout: 60_000 }).then(
-        () => "recusado" as const,
-        () => "sem-desfecho" as const,
-      ),
-    ]);
-    if (desfecho === "entrou") return;
-    if (desfecho === "sem-desfecho") {
-      throw new Error(
-        `o desafio de MFA de ${email} não terminou em 60s: a URL não virou /app/… ` +
-          `e o formulário não recusou. url=${page.url()}`,
-      );
-    }
-    await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-  }
-  throw new Error(`MFA falhou depois de 2 tentativas para ${email} (url=${page.url()})`);
+  const desfecho = await Promise.race([
+    page.waitForURL(/\/app\//, { timeout: 60_000 }).then(
+      () => "entrou" as const,
+      () => "sem-desfecho" as const,
+    ),
+    recusa.waitFor({ state: "visible", timeout: 60_000 }).then(
+      () => "recusado" as const,
+      () => "sem-desfecho" as const,
+    ),
+  ]);
+  if (desfecho === "entrou") return;
+  throw new Error(
+    desfecho === "recusado"
+      ? `le login de ${email} a été refusé (url=${page.url()})`
+      : `le login de ${email} n’a pas abouti en 60 s (url=${page.url()})`,
+  );
 }
 
 type Escopo = "instalacao" | "organizacao";
@@ -347,7 +291,7 @@ async function logoDaBarra(page: Page): Promise<LogoNaTela | null> {
   await expect(
     page,
     `saiu de /app — ${page.url()}. A barra não sumiu: a PÁGINA é outra ` +
-      `(redirect de auth, onboarding, suspensão, 403 ou o gate de MFA).`,
+      `(redirect de auth, onboarding, suspensão ou 403).`,
   ).toHaveURL(/\/app(\/|$)/, { timeout: 15_000 });
 
   const casca = page.locator("aside").first();
@@ -476,9 +420,7 @@ test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
   test.setTimeout(120_000);
 
   test("(1) le propriétaire du serveur envoie le logo et il apparaît dans la barre latérale", async ({ page }) => {
-    const secret = creds.dono_totp?.secret;
-    expect(secret, "sem `dono_totp` no .e2e-creds.json — rode seed-e2e-credentials.ts").toBeTruthy();
-    await loginComTotp(page, creds.users.dono!.email, secret!);
+    await loginComSenha(page, creds.users.dono!.email);
 
     await page.goto("/admin/marca");
     await expect(page.locator("#logo-instalacao")).toBeVisible();
@@ -552,9 +494,7 @@ test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
     page,
     browser,
   }) => {
-    const secret = creds.admin_totp?.secret;
-    expect(secret, "sem `admin_totp` no .e2e-creds.json").toBeTruthy();
-    await loginComTotp(page, creds.users.admin!.email, secret!);
+    await loginComSenha(page, creds.users.admin!.email);
 
     await page.goto("/app/settings/marca");
     await expect(page.locator("#logo-organizacao")).toBeVisible();
@@ -582,7 +522,7 @@ test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
   });
 
   test("(4) un SVG renommé en .png est refusé par ses OCTETS, avec la raison indiquée", async ({ page }) => {
-    await loginComTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
+    await loginComSenha(page, creds.users.admin!.email);
 
     await page.goto("/app/inbox");
     const antes = await logoDaBarra(page);
@@ -645,7 +585,7 @@ test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
   });
 
   test("(5) supprimer rend le logo de la couche inférieure", async ({ page }) => {
-    await loginComTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
+    await loginComSenha(page, creds.users.admin!.email);
 
     await page.goto("/app/settings/marca");
     // O botão só existe quando ESTA camada tem logo próprio (`CampoDeLogo.tsx:252`):
@@ -672,7 +612,7 @@ test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
   }) => {
     // Este caso é uma ASSERÇÃO (remover devolve a fachada ao estado anterior), não
     // a restauração — quem garante a restauração é o `afterAll` abaixo.
-    await loginComTotp(page, creds.users.dono!.email, creds.dono_totp!.secret);
+    await loginComSenha(page, creds.users.dono!.email);
     await page.goto("/admin/marca");
     const remover = page.locator("[data-campo-de-logo='instalacao']").getByRole("button", {
       name: /^supprimer$/i,
@@ -718,14 +658,14 @@ test.describe("le logo envoyé depuis l’écran arrive à l’écran", () => {
    */
   test.afterAll(async ({ browser }) => {
     // O `test.setTimeout` do topo do `describe` vale para os CASOS; um hook nasce
-    // com o timeout do config (30s). E aqui cabe um login com TOTP, que na
-    // segunda tentativa espera a janela virar (até ~30s em `loginComTotp`) — sem
-    // esta linha a restauração viraria vermelho por relógio, não por defeito.
+    // com o timeout do config (30s). E aqui cabe um login inteiro (até 60s em
+    // `loginComSenha`) — sem esta linha a restauração viraria vermelho por
+    // relógio, não por defeito.
     test.setTimeout(120_000);
     const contexto = await browser.newContext();
     try {
       const pagina = await contexto.newPage();
-      await loginComTotp(pagina, creds.users.dono!.email, creds.dono_totp!.secret);
+      await loginComSenha(pagina, creds.users.dono!.email);
       await removerLogoSeHouver(pagina, "/app/settings/marca", "organizacao");
       await removerLogoSeHouver(pagina, "/admin/marca", "instalacao");
     } finally {

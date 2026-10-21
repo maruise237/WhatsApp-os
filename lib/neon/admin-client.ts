@@ -162,17 +162,6 @@ function authAdminSurface() {
         invoke("updateUserById", ["updateUser", "updateUserById"], input),
       deleteUser: (userId: string) =>
         invoke("deleteUser", ["removeUser", "deleteUser"], { userId }),
-      // Neon Auth ne gère pas de facteurs de vérification en deux étapes.
-      mfa: {
-        listFactors: async (_input: { userId: string }) => ({
-          data: { factors: [] as { id: string; factor_type: string; status: string }[] },
-          error: null,
-        }),
-        deleteFactor: async (_input: { id: string; userId: string }) => ({
-          data: null,
-          error: { name: "NeonAuthUnsupportedError", code: "neon_auth_mfa_not_supported", message: "Facteurs non gérés par Neon Auth." },
-        }),
-      },
     },
   };
 }

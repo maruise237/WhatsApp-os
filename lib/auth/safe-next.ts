@@ -1,8 +1,8 @@
 /**
- * Destino interno seguro para o parâmetro `next` do login/MFA.
+ * Destino interno seguro para o parâmetro `next` do login.
  *
  * Veio de um relatório de segurança da comunidade: `next` chegava cru ao
- * `redirect()` de `signInWithPassword` e `verifyMfa`, e as duas telas são
+ * `redirect()` de `signInWithPassword`, e a tela é
  * públicas (`lib/auth/public-paths.ts`). Um link forjado
  * (`/login?next=https://evil.example`) leva a vítima a digitar a senha no site
  * de verdade e, no sucesso, o servidor a despacha para o site do atacante —

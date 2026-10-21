@@ -49,7 +49,7 @@ export function PlatformAdminsTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["Utilisateur", "Accordé le", "Accordé par", "Scope", "MFA", "Status", "Motif"].map(
+            {["Utilisateur", "Accordé le", "Accordé par", "Portée", "Statut", "Motif"].map(
               (h) => (
                 <TableHead key={h}>{h}</TableHead>
               ),
@@ -59,7 +59,7 @@ export function PlatformAdminsTableSkeleton() {
         <TableBody>
           {Array.from({ length: 4 }).map((_, i) => (
             <TableRow key={i}>
-              {Array.from({ length: 7 }).map((__, j) => (
+              {Array.from({ length: 6 }).map((__, j) => (
                 <TableCell key={j}>
                   <Skeleton className="h-4 w-full" />
                 </TableCell>
@@ -133,7 +133,6 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
             <TableHead className="w-[140px]">Accordé le</TableHead>
             <TableHead className="w-[160px]">Accordé par</TableHead>
             <TableHead className="w-[120px]">Portée</TableHead>
-            <TableHead className="w-[60px]">MFA</TableHead>
             <TableHead className="w-[90px]">Statut</TableHead>
             <TableHead>Motif</TableHead>
           </TableRow>
@@ -174,19 +173,6 @@ export function PlatformAdminsTable({ data }: PlatformAdminsTableProps) {
                   <Badge variant="outline" className="text-[10px] font-mono">
                     {row.scope ?? "platform"}
                   </Badge>
-                </TableCell>
-
-                {/* MFA Required */}
-                <TableCell>
-                  {row.mfa_required ? (
-                    <Badge variant="default" className="text-[10px]">
-                      Oui
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary" className="text-[10px]">
-                      Non
-                    </Badge>
-                  )}
                 </TableCell>
 
                 {/* Status */}

@@ -6,12 +6,6 @@ import { apiClient } from "@/lib/api/client";
 // Types
 // ---------------------------------------------------------------------------
 
-export interface AdminUserFactor {
-  id: string;
-  type: string;
-  status: string;
-}
-
 export interface AdminUserDetail {
   id: string;
   email: string | null;
@@ -20,7 +14,6 @@ export interface AdminUserDetail {
   last_sign_in_at: string | null;
   created_at: string;
   email_confirmed_at: string | null;
-  factors: AdminUserFactor[];
 }
 
 export interface AdminUserMembership {

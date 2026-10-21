@@ -1,7 +1,7 @@
 /**
  * POST /api/v1/admin/tenants/[id]/suspend (S-11.08)
  *
- * Suspends a tenant. Requires platform admin + MFA AAL2.
+ * Suspends a tenant. Exige un administrateur de plateforme.
  * Sets status='suspended', suspended_at=now(), suspended_reason, suspended_by.
  * 404 if tenant not found; 409 if already suspended.
  * Emits audit + event_log domain event.

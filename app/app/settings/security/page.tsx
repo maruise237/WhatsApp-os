@@ -1,59 +1,31 @@
-import { requireAuth, isMfaEnrolled, resolveActiveOrg, requiresMfa } from "@/lib/auth/server";
-import { createAdminClient } from "@/lib/db/admin";
+import { requireAuth } from "@/lib/auth/server";
 import { traduzir } from "@/lib/i18n/dicionario";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
-import { empresaExigeMfa } from "@/lib/auth/politica-mfa";
 import { SecurityClient } from "./_client";
 
 export const dynamic = "force-dynamic";
 
 /**
- * SEGURANÇA — e, desde esta rodada, o lugar ONDE a verificação em duas etapas
- * se liga e se desliga.
+ * SÉCURITÉ — mot de passe et sessions ouvertes.
  *
- * A tela existia e não fazia nem uma coisa nem outra: dizia "Ativado/Não
- * ativado" e, quando não ativado, mandava "Faça login novamente para iniciar o
- * enrolamento" — porque o ÚNICO ponto de cadastro do produto era o bloqueador de
- * tela cheia que aparecia sozinho para todo admin. Com o cadastro virando
- * opcional, essa tela passaria a ser um beco: sem um botão aqui, a verificação
- * ficaria inalcançável para quem quisesse usá-la.
+ * La validation en deux étapes a été retirée : Neon Auth ne la propose pas aux
+ * utilisateurs de l’application, et une politique « obligatoire » impossible à
+ * satisfaire bloquait les administrateurs hors du produit.
  */
 export default async function SecurityPage() {
   const user = await requireAuth();
   const idioma = normalizarIdioma(user.locale);
-  const org = await resolveActiveOrg(user);
-  const enrolled = await isMfaEnrolled();
-
-  let empresaExige = false;
-  if (org) {
-    const { data } = await createAdminClient()
-      .from("organizations")
-      .select("settings")
-      .eq("id", org.orgId)
-      .maybeSingle();
-    empresaExige = empresaExigeMfa(data?.settings);
-  }
-
-  // A mesma função que o layout usa para decidir o bloqueio — a tela não pode
-  // ter uma segunda noção de "é obrigatório", ou ofereceria desligar o que o
-  // layout volta a exigir no próximo carregamento.
-  const obrigatorio = await requiresMfa(org?.role, user.is_platform_admin, user.id, org?.orgId);
 
   return (
     <div className="flex h-full flex-col gap-6 p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{traduzir("Segurança", idioma)}</h1>
         <p className="text-sm text-muted-foreground">
-          {"La validation en deux étapes de votre compte, les codes de récupération et les sessions ouvertes."}
+          {"Le mot de passe de votre compte et les sessions ouvertes."}
         </p>
       </header>
 
-      <SecurityClient
-        mfaEnrolled={enrolled}
-        obrigatorio={obrigatorio}
-        podeExigirDaEquipe={org?.role === "admin"}
-        empresaExige={empresaExige}
-      />
+      <SecurityClient />
     </div>
   );
 }

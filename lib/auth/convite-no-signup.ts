@@ -7,7 +7,7 @@
  * criar uma, e nesse instante `ensureTenantForUser` não encontra vínculo algum
  * e faz o que faria com qualquer visitante novo: cria uma organização e o torna
  * ADMIN dela. A pessoa termina com uma empresa fantasma, um wizard de
- * onboarding que não é dela e o gate de MFA de administrador — e só depois, se
+ * onboarding que não é dela — e só depois, se
  * voltar ao link dentro das 24h, entra na empresa certa, ficando nas duas.
  *
  * Este módulo é o ponto onde essa bifurcação passa a existir. É uma função

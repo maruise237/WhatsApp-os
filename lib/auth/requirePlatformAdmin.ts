@@ -1,20 +1,13 @@
 /**
- * Server guard for /admin/* (Super-Admin Platform sub-product).
+ * Garde serveur de /admin/* (sous-produit Super-Admin de la plateforme).
  *
- * Flow:
- *  1. Validate JWT via getUser() (NEVER getSession on backend per CLAUDE.md).
- *  2. Confirm row in platform_admins (active = no revoked_at).
- *  3. Enforce MFA AAL2 if `mfa_required` (default true for platform admins).
+ * Déroulé :
+ *  1. Valide le JWT via getUser() (JAMAIS getSession côté serveur, cf. CLAUDE.md).
+ *  2. Confirme la ligne dans platform_admins (active = sans revoked_at).
  *
- * Redirects:
- *  - no user        → /login?next=/admin
- *  - no row         → /admin/forbidden
- *  - aal1 + required → /login/mfa?next=/admin
- *
- * The middleware already does an early `fn_is_platform_admin` RPC check;
- * this helper performs the authoritative server-side validation inside the
- * /admin layout (where redirects are cheap, DB calls are allowed in Node
- * runtime, and we have access to AAL state).
+ * Redirections :
+ *  - pas d’utilisateur → /login?next=/admin
+ *  - pas de ligne      → /admin/forbidden
  */
 import { redirect } from "next/navigation";
 import type { UtilisateurAuth as User } from "@/lib/neon/server-client";
@@ -23,7 +16,6 @@ import { createClient } from "@/lib/db/server";
 export interface PlatformAdminInfo {
   user_id: string;
   scope: string;
-  mfa_required: boolean;
 }
 
 export interface PlatformAdminContext {
@@ -41,10 +33,10 @@ export async function requirePlatformAdmin(): Promise<PlatformAdminContext> {
     redirect("/login?next=/admin");
   }
 
-  // platform_admins RLS: only platform admins read; non-admins get null → forbid.
+  // RLS de platform_admins : seuls les admins de plateforme lisent ; les autres reçoivent null → refus.
   const { data: paRow } = await db
     .from("platform_admins")
-    .select("user_id, scope, mfa_required, revoked_at")
+    .select("user_id, scope, revoked_at")
     .eq("user_id", user.id)
     .is("revoked_at", null)
     .maybeSingle();
@@ -53,19 +45,11 @@ export async function requirePlatformAdmin(): Promise<PlatformAdminContext> {
     redirect("/admin/forbidden");
   }
 
-  if (paRow.mfa_required) {
-    const { data: aalData } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
-    if (aalData?.currentLevel !== "aal2") {
-      redirect("/login/mfa?next=/admin");
-    }
-  }
-
   return {
     user,
     platformAdmin: {
       user_id: paRow.user_id,
       scope: paRow.scope,
-      mfa_required: paRow.mfa_required,
     },
   };
 }

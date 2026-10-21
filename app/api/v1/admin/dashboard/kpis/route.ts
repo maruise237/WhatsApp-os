@@ -32,7 +32,7 @@ export interface DashboardKPIs {
 }
 
 // GET /api/v1/admin/dashboard/kpis
-// Requires platform admin gate (MFA-enforced).
+// Exige la garde administrateur de plateforme.
 // Uses service-role client intentionally — cross-tenant read for super-admin.
 export async function GET(_req: NextRequest) {
   try {

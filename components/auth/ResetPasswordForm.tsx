@@ -15,7 +15,6 @@ export function ResetPasswordForm() {
   const t = useT();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [needsMfa, setNeedsMfa] = useState(false);
 
   const {
     register,
@@ -23,7 +22,7 @@ export function ResetPasswordForm() {
     formState: { errors },
   } = useForm<ResetPasswordInput>({
     resolver: zodResolver(resetPasswordSchema),
-    defaultValues: { password: "", password_confirm: "", mfa_code: "" },
+    defaultValues: { password: "", password_confirm: "" },
   });
 
   const onSubmit = (values: ResetPasswordInput) => {
@@ -32,17 +31,7 @@ export function ResetPasswordForm() {
       // Sucesso redireciona server-side para /login?reset=success.
       const res = await updatePassword(values);
       if (!res) return;
-      if (res.error === "mfa_required") {
-        setNeedsMfa(true);
-        setServerError(
-          t(
-            "Votre compte utilise la validation en deux étapes. Saisissez le code à 6 chiffres de votre application d’authentification pour terminer.",
-          ),
-        );
-      } else if (res.error === "mfa_invalid") {
-        setNeedsMfa(true);
-        setServerError(t("Code de validation invalide. Réessayez."));
-      } else if (res.error === "session_expired") {
+      if (res.error === "session_expired") {
         setServerError(t("La session de réinitialisation a expiré. Demandez un nouveau lien via « Mot de passe oublié »."));
       } else if (res.error === "same_password") {
         setServerError(t("Le nouveau mot de passe doit être différent de l’actuel."));
@@ -83,24 +72,10 @@ export function ResetPasswordForm() {
           <p className="text-xs text-destructive">{t(errors.password_confirm.message ?? "")}</p>
         )}
       </div>
-      {needsMfa && (
-        <div className="space-y-1.5">
-          <Label htmlFor="mfa_code">{t("Code de validation (2 étapes)")}</Label>
-          <Input
-            id="mfa_code"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={6}
-            placeholder="000000"
-            autoFocus
-            {...register("mfa_code")}
-          />
-        </div>
-      )}
       {serverError && (
         <div
           className="border-destructive/30 bg-destructive/10 rounded-md border px-3 py-2 text-sm text-destructive"
-          role={needsMfa ? "status" : "alert"}
+          role="alert"
         >
           {serverError}
         </div>

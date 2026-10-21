@@ -90,7 +90,6 @@ const ERRO_EM_PORTUGUES: Record<string, string> = {
   unauthenticated: "Votre session a expiré. Reconnectez-vous pour changer le logo.",
   forbidden_role: "Vous n’avez pas l’autorisation de changer ce logo.",
   forbidden_tenant: "Aucune entreprise active dans cette session.",
-  mfa_required: "Confirmez le second facteur dans cette session, puis réessayez.",
   rate_limited: "Trop de changements successifs. Réessayez dans quelques minutes.",
 };
 
@@ -113,7 +112,7 @@ export function CampoDeLogo({
    * que nunca teve emissor. Medido no run 32404132717 do CI: `load` às
    * 472156ms, `setInputFiles` 46ms depois, e ZERO POST para
    * `/api/v1/marca/logo` no trace inteiro (controle positivo: os POSTs de
-   * `/login` e `/login/mfa` estão lá).
+   * `/login` estão lá).
    *
    * Esperar o input "visível" NÃO resolve — visível é propriedade do SSR.
    *

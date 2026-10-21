@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
   // quem clica no link do convite sem ter conta cria uma, cai aqui sem vínculo
   // nenhum, e `ensureTenantForUser` faz o que faria com qualquer visitante:
   // abre uma empresa e o torna admin dela. A pessoa fica com uma organização
-  // fantasma, um wizard que não é dela e o gate de MFA de administrador.
+  // fantasma e um wizard que não é dela.
   const decisao = decidirConviteDoSignup(data.user);
 
   if (decisao.tipo === "recusar") {

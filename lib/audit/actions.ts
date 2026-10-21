@@ -34,10 +34,6 @@ export const AUDIT_ACTIONS = [
   /** Teto de tentativas barrou antes de chegar ao provedor (issue #64). */
   "auth.login_rate_limited",
   "auth.logout",
-  "auth.mfa_enrolled",
-  "auth.mfa_success",
-  "auth.mfa_failed",
-  "auth.recovery_code_used",
   "nuvemshop.connected",
   "nuvemshop.disconnected",
   "nuvemshop.oauth_failed",
@@ -66,7 +62,6 @@ export const AUDIT_ACTIONS = [
   "profile.updated",
   "org.updated",
   "pipeline.config_updated",
-  "mfa.recovery_codes_regenerated",
   "notification_prefs.changed",
   "onboarding.welcome_completed",
   "onboarding.whatsapp_configured",
@@ -299,9 +294,6 @@ export const AUDIT_ACTIONS = [
   // O passo de ver o funcionário responder antes de terminar o wizard.
   "onboarding.agente_testado",
   "onboarding.agente_teste_pulado",
-  "security.mfa_exigida",
-  "security.mfa_dispensada",
-  "security.mfa_desativada",
   // Havia convite no signup e ele não valia (expirado, ou emitido para outro
   // e-mail). Não é falha de sistema: é a recusa deliberada de abrir organização
   // nova para quem estava tentando entrar numa existente.

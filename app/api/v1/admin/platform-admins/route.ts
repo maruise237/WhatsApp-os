@@ -39,7 +39,7 @@ export async function GET(_req: NextRequest) {
   const { data: paRows, error: paError } = await admin
     .from("platform_admins")
     .select(
-      "user_id, granted_by, granted_at, scope, mfa_required, reason, revoked_at, revoked_by, revoke_reason",
+      "user_id, granted_by, granted_at, scope, reason, revoked_at, revoked_by, revoke_reason",
     )
     .order("granted_at", { ascending: false });
 
@@ -149,7 +149,6 @@ export async function GET(_req: NextRequest) {
       granted_by_email: grantedByUser?.email ?? null,
       granted_at: pa.granted_at,
       scope: pa.scope,
-      mfa_required: pa.mfa_required,
       reason: pa.reason,
       revoked_at: pa.revoked_at,
       revoked_by: pa.revoked_by,

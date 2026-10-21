@@ -6,7 +6,7 @@
  * Audits start + emits cross-tenant `event_log` row.
  *
  * Security:
- *  - requirePlatformAdmin enforces auth + MFA AAL2 + active platform_admins row
+ *  - requirePlatformAdmin vérifie la session et la ligne active de platform_admins
  *  - Cookie is opaque to the client (HttpOnly); only middleware/server can read
  *  - 503 returned if `IMPERSONATE_COOKIE_SECRET` not configured
  *  - Cookie is additive — the platform admin's actual Supabase session is

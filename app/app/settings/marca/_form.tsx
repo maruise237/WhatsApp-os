@@ -79,10 +79,6 @@ const ERRO_EM_PORTUGUES: Record<string, string> = {
   unauthenticated: "Votre session a expiré. Reconnectez-vous pour enregistrer.",
   forbidden_tenant: "Impossible d’identifier votre entreprise. Rechargez la page.",
   forbidden_role: "Seul l’administrateur de cette entreprise peut modifier la marque.",
-  // A sessão está com um fator cadastrado mas não confirmado AGORA. Sem esta
-  // linha o toast mostraria o código cru — a action passou a cobrar o segundo
-  // fator, e o gate de MFA das telas não alcança Server Action.
-  mfa_required: "Confirmez le code de votre application d’authentification à deux facteurs, puis réessayez.",
   // NUNCA "salvo com uma ressalva": este código existe justamente porque a
   // gravação não casou nenhuma linha, e a tela dizer "salvo" quando nada foi
   // gravado é a forma exata do defeito que a função SQL veio fechar.

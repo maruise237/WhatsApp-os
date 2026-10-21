@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { isMfaEnrolled, loadAuthUser, requiresMfa, resolveActiveOrg } from "@/lib/auth/server";
+import { loadAuthUser, resolveActiveOrg } from "@/lib/auth/server";
 import { DEFAULT_VISIBILITY_MODE, type VisibilityMode } from "@/lib/auth/types";
 import { AuthProvider } from "@/hooks/auth/AuthProvider";
 import { AppShell } from "./_components/AppShell";
 import { EstiloDaMarcaDaOrganizacao } from "./_components/EstiloDaMarcaDaOrganizacao";
-import { MfaEnrollGate } from "@/components/auth/MfaEnrollGate";
 import { cssDaMarca, ESCOPO_DA_ORGANIZACAO } from "@/lib/branding/css";
 import { marcaDaInstalacao } from "@/lib/branding/instalacao";
 import { resolverMarcaDaOrganizacao } from "@/lib/branding/organizacao";
@@ -145,15 +144,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     }
   }
 
-  const enrolled = await isMfaEnrolled();
-  // A decisão deixou de ser uma constante de papel: ela lê a política de quem
-  // pode exigir (a plataforma e a empresa). Ver `lib/auth/politica-mfa.ts`.
-  const needsMfaGate = await requiresMfa(
-    activeOrg?.role,
-    user.is_platform_admin,
-    user.id,
-    activeOrg?.orgId,
-  );
   const shell = <AppShell sidebarCollapsed={collapsed}>{children}</AppShell>;
 
   return (
@@ -171,24 +161,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         que este elemento existe para fazer é EXISTIR — e sumir junto com esta
         subárvore quando o logout navega para `/login`.
 
-        Envolve TUDO, e não a div do `AppShell`, porque aquela div é irmã dos dois
-        banners e é SUBSTITUÍDA quando o `MfaEnrollGate` bloqueia (ele renderiza
-        um `fixed inset-0` no lugar dos children). O admin de tenant recém-criado
-        veria a tela de cadastro de MFA — a PRIMEIRA tela dele — com a cor da
-        instalação, e depois o resto do produto com a dele.
+        Il enveloppe TOUT, et pas seulement la div de l’`AppShell` : cette div est
+        sœur des deux bandeaux, et la couleur de l’organisation doit aussi
+        s’appliquer à eux.
       */}
       <div data-marca-org="" className="contents">
         <EstiloDaMarcaDaOrganizacao css={cssDaOrganizacao} />
         <ImpersonateBanner impersonating={impersonating} />
         <ConexaoCaidaBanner caidas={conexoesCaidas} />
-        {needsMfaGate ? (
-          // Gate always mounted for MFA-required roles; it latches the blocking
-          // decision client-side so the enroll Server Action's revalidation
-          // can't tear down the recovery-codes screen mid-flow.
-          <MfaEnrollGate enrolled={enrolled}>{shell}</MfaEnrollGate>
-        ) : (
-          shell
-        )}
+        {shell}
       </div>
     </AuthProvider>
     </IdiomaProvider>

@@ -26,7 +26,6 @@ vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
 vi.mock("@/lib/auth/server", () => ({
   loadAuthUser: vi.fn(),
   resolveActiveOrg: vi.fn(),
-  mfaEmDivida: vi.fn(async () => false),
 }));
 vi.mock("@/lib/db/server", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/db/admin", () => ({ createAdminClient: vi.fn() }));

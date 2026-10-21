@@ -38,13 +38,6 @@ export function LoginForm({ next }: { next?: string }) {
         router.replace(next || "/app/inbox");
         return;
       }
-      if (res.error === "mfa_required") {
-        const params = new URLSearchParams();
-        if (next) params.set("next", next);
-        if (res.challengeId) params.set("factor", res.challengeId);
-        router.replace(`/login/mfa${params.toString() ? `?${params}` : ""}`);
-        return;
-      }
       if (res.error === "invalid_credentials") {
         setServerError(t("E-mail ou mot de passe incorrect."));
       } else if (res.error === "rate_limited") {

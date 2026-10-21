@@ -17,15 +17,14 @@ import {
 
 export type SignInResult = {
   ok: false;
-  error: "invalid_credentials" | "rate_limited" | "validation_error" | "mfa_required";
+  error: "invalid_credentials" | "rate_limited" | "validation_error";
   details?: Record<string, unknown>;
-  challengeId?: string;
 };
 
 /**
  * Sign in with password.
  *
- * On success: redirects server-side to `next` (or /app/inbox / /onboarding/mfa).
+ * On success: redirects server-side to `next` (or /app/inbox).
  * The redirect ensures Set-Cookie headers from db.auth propagate before
  * middleware re-evaluates the session — fixes Next 15 Server Action cookie
  * propagation race.
@@ -87,14 +86,6 @@ export async function signInWithPassword(
       userAgent,
     });
     return { ok: false, error: "invalid_credentials" };
-  }
-
-  // MFA gating — if the user has any verified TOTP factor enrolled, they must
-  // complete the challenge in /login/mfa before reaching the app.
-  const { data: factorsData } = await db.auth.mfa.listFactors();
-  const verifiedTotp = factorsData?.totp?.find((f) => f.status === "verified");
-  if (verifiedTotp) {
-    return { ok: false, error: "mfa_required", challengeId: verifiedTotp.id };
   }
 
   await audit({

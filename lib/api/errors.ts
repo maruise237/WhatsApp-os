@@ -19,7 +19,6 @@ export const ApiErrorCodes = {
   token_expired: "token_expired",
   token_revoked: "token_revoked",
   invalid_credentials: "invalid_credentials",
-  mfa_required: "mfa_required",
   auth_in_query_forbidden: "auth_in_query_forbidden",
 
   // 403 — authz

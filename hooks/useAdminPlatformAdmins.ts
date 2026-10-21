@@ -11,7 +11,6 @@ export interface PlatformAdminEntry {
   granted_by_email: string | null;
   granted_at: string;
   scope: string | null;
-  mfa_required: boolean;
   reason: string | null;
   revoked_at: string | null;
   revoked_by: string | null;

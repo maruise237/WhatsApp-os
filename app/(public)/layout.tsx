@@ -1,15 +1,15 @@
 import { marcaDaSaida } from "@/lib/branding/saida";
 
 /**
- * A casca das telas de acesso — login, cadastro, recuperação, MFA.
+ * A casca das telas de acesso — login, cadastro, recuperação de senha.
  *
  * ── Por que o LOGO mora aqui, e não em `login/page.tsx` ───────────────────────
  *
- * São seis telas no grupo `(public)`, e todas são "antes de entrar": quem instala
+ * São as telas do grupo `(public)`, e todas são "antes de entrar": quem instala
  * o produto para clientes mostra a marca dele exatamente aí. Um `<img>` por
  * página seriam seis cópias que divergem na primeira vez que alguém mexer numa
  * só — e a que ficaria para trás é sempre a que ninguém abre (recuperação de
- * senha, cadastro de MFA), que é justamente onde o cliente do revendedor
+ * senha), que é justamente onde o cliente do revendedor
  * aparece sozinho e sem contexto.
  *
  * ── Por que `marcaDaSaida(null)` ──────────────────────────────────────────────

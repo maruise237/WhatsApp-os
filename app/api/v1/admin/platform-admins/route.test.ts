@@ -29,7 +29,6 @@ function paRow(userId: string, grantedBy: string | null) {
     granted_by: grantedBy,
     granted_at: "2026-01-01T00:00:00Z",
     scope: "full",
-    mfa_required: true,
     reason: "fundador",
     revoked_at: null,
     revoked_by: null,
@@ -93,7 +92,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(requirePlatformAdmin).mockResolvedValue({
     user: { id: ADMIN_ID },
-    platformAdmin: { user_id: ADMIN_ID, scope: "full", mfa_required: true },
+    platformAdmin: { user_id: ADMIN_ID, scope: "full" },
   } as never);
 });
 

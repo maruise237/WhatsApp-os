@@ -14,8 +14,8 @@ import type { MarcaDeSaida } from "@/lib/branding/saida";
  *
  * ── Por que renderizar o LAYOUT, e não a página ───────────────────────────────
  *
- * O `<img>` mora em `app/(public)/layout.tsx` porque são SEIS telas no grupo
- * (login, cadastro, recuperação, redefinição, MFA, códigos de recuperação) e uma
+ * O `<img>` mora em `app/(public)/layout.tsx` porque são várias telas no grupo
+ * (login, cadastro, recuperação, redefinição) e uma
  * cópia por página divergiria na primeira vez que alguém mexesse numa só. O
  * teste segue o código: mede a casca, que é onde a decisão está.
  *

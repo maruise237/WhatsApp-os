@@ -38,7 +38,6 @@ describe("signInWithPassword — teto de tentativas", () => {
     vi.mocked(createClient).mockResolvedValue({
       auth: {
         signInWithPassword: signIn,
-        mfa: { listFactors: vi.fn(async () => ({ data: { totp: [{ id: "f1" }] } })) },
       },
     } as never);
   });
@@ -65,8 +64,8 @@ describe("signInWithPassword — teto de tentativas", () => {
     const { signInWithPassword } = await import("./signInWithPassword");
     const input = { email: "certo@example.com", password: "senha-certa-123" };
 
-    // Provedor aceita, e a conta tem MFA — o retorno é mfa_required, o que
-    // basta: o ponto é que o caminho de SUCESSO não incrementa o contador.
+    // Provedor aceita: o ponto é que o caminho de SUCESSO não incrementa o
+    // contador.
     signIn.mockResolvedValue({
       data: { user: { id: "u1" }, session: {} },
       error: null,

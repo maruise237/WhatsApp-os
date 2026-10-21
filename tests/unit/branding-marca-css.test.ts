@@ -361,12 +361,11 @@ describe("guardas de mecanismo", () => {
     // shell (`flex min-h-screen`) passaria a ter um ancestral a mais no box tree
     // e a altura de tela inteira deixaria de valer.
     const marcador = layout.indexOf("data-marca-org");
-    // ENVOLVE TUDO, e não só o shell: a div do `AppShell` é irmã dos banners e é
-    // SUBSTITUÍDA quando o `MfaEnrollGate` bloqueia. O admin de tenant veria a
-    // tela de cadastro de MFA — a primeira dele — com a cor da instalação.
+    // ENVOLVE TUDO, e não só o shell: a div do `AppShell` é irmã dos banners,
+    // e a cor da organização tem de valer para eles também.
     expect(marcador).toBeGreaterThan(-1);
     expect(marcador).toBeLessThan(layout.indexOf("<ImpersonateBanner"));
-    expect(marcador).toBeLessThan(layout.indexOf("MfaEnrollGate enrolled"));
+    expect(marcador).toBeLessThan(layout.indexOf("{shell}"));
   });
 
   it("o bloco da organização é emitido DENTRO da subárvore, não na raiz", () => {

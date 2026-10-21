@@ -54,21 +54,6 @@ type AuthResult = {
   error: ErreurAuth | null;
 };
 
-/** Facteur de vérification en deux étapes. Neon Auth n'en gère pas : listes toujours vides. */
-export type FacteurMfa = {
-  id: string;
-  factor_type: "totp" | "phone";
-  status: "verified" | "unverified";
-  friendly_name?: string;
-  created_at?: string;
-};
-
-const MFA_INDISPONIBLE: ErreurAuth = {
-  name: "NeonAuthUnsupportedError",
-  code: "neon_auth_mfa_not_supported",
-  message: "La vérification en deux étapes n’est pas disponible avec Neon Auth.",
-};
-
 function mapUser(user: Record<string, unknown> | null | undefined): UtilisateurAuth | null {
   if (!user) return null;
   const metadata = (user.user_metadata ?? {}) as Record<string, unknown>;
@@ -231,39 +216,6 @@ function authCompat() {
     async getClaims() {
       const result = mapAuthResult(await neonAuth.getSession());
       return { data: result.data?.user ? { claims: result.data.user } : null, error: result.error ?? null };
-    },
-    mfa: {
-      async getAuthenticatorAssuranceLevel(): Promise<{
-        data: {
-          currentLevel: "aal1" | "aal2" | null;
-          nextLevel: "aal1" | "aal2" | null;
-          currentAuthenticationMethods: { method: string; timestamp: number }[];
-        };
-        error: ErreurAuth | null;
-      }> {
-        return { data: { currentLevel: "aal1", nextLevel: "aal1", currentAuthenticationMethods: [] }, error: null };
-      },
-      async listFactors(): Promise<{ data: { all: FacteurMfa[]; totp: FacteurMfa[] }; error: ErreurAuth | null }> {
-        return { data: { all: [], totp: [] }, error: null };
-      },
-      async enroll(_input?: { factorType: "totp"; friendlyName?: string; issuer?: string }): Promise<{
-        data: { id: string; totp: { qr_code: string; secret: string; uri: string } } | null;
-        error: ErreurAuth | null;
-      }> {
-        return { data: null, error: MFA_INDISPONIBLE };
-      },
-      async challenge(_input?: { factorId: string }): Promise<{ data: { id: string } | null; error: ErreurAuth | null }> {
-        return { data: null, error: MFA_INDISPONIBLE };
-      },
-      async verify(_input?: { factorId: string; challengeId: string; code: string }): Promise<{
-        data: null;
-        error: ErreurAuth | null;
-      }> {
-        return { data: null, error: MFA_INDISPONIBLE };
-      },
-      async unenroll(_input?: { factorId: string }): Promise<{ data: null; error: ErreurAuth | null }> {
-        return { data: null, error: MFA_INDISPONIBLE };
-      },
     },
   };
 }

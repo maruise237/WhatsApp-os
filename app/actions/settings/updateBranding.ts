@@ -44,20 +44,15 @@ export type UpdateBrandingResult =
  *
  * ── Por que `requirePlatformAdmin()` e não `loadAuthUser()` + a flag ─────────
  *
- * Server Action NÃO é rota: não passa por `requireRole` (cujo `mfaEmDivida` tem
- * um call site só, `lib/auth/require-role.ts`, que serve apenas `/api/v1`) e não
- * passa pelo layout de `/admin` — e não existe `middleware.ts` neste repo para
- * cobrir a diferença. Um POST direto na action, com uma sessão `aal1` de um
- * platform admin, entrava: `is_platform_admin` responde "esta pessoa TEM o
- * papel", que é política de CADASTRO, não de SESSÃO. E, ao contrário da marca
- * por organização, aqui o banco NÃO tem como fechar o buraco — a escrita vai
- * pelo `service_role`, e o Postgres não enxerga o AAL de uma sessão do GoTrue.
+ * Server Action NÃO é rota: não passa por `requireRole` e não passa pelo
+ * layout de `/admin` — e não existe `middleware.ts` neste repo para cobrir a
+ * diferença. E, ao contrário da marca por organização, aqui o banco NÃO tem
+ * como fechar o buraco — a escrita vai pelo `service_role`.
  *
- * `requirePlatformAdmin()` já checa as três coisas (JWT, linha ativa em
- * `platform_admins`, e `aal2` quando `mfa_required`) e é o MESMO gate do layout
- * de `/admin` — então, para quem chega pela tela, nada muda: essa pessoa já
- * passou por ele para ver o formulário. O que muda é o caminho que não passa
- * pela tela. Ele redireciona em vez de devolver `{ ok: false }`, e o formulário
+ * `requirePlatformAdmin()` checa o JWT e a linha ativa em `platform_admins`, e
+ * é o MESMO gate do layout de `/admin` — então, para quem chega pela tela, nada
+ * muda: essa pessoa já passou por ele para ver o formulário. O que muda é o
+ * caminho que não passa pela tela. Ele redireciona em vez de devolver `{ ok: false }`, e o formulário
  * não embrulha a chamada em `try/catch`, então o `NEXT_REDIRECT` sobe para o
  * runtime como deve.
  *
