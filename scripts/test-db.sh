@@ -27,10 +27,10 @@ IMAGE="pgvector/pgvector:pg17"
 # multi-tenant que ele carrega.
 TEMPLATE="inv_baseline"
 
-[ -f "$BASELINE" ] || { echo "FATAL: $BASELINE não encontrado" >&2; exit 1; }
+[ -f "$BASELINE" ] || { echo "FATAL : $BASELINE introuvable" >&2; exit 1; }
 
 cleanup() {
-  echo "==> teardown: removendo container $CONTAINER"
+  echo "==> nettoyage : suppression du conteneur $CONTAINER"
   # `-v` REMOVE OS VOLUMES ANÔNIMOS, e sem ele cada rodada vazava ~68 MB.
   #
   # `pgvector/pgvector:pg17` declara `VOLUME /var/lib/postgresql/data` no
@@ -52,7 +52,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "==> subindo $IMAGE como $CONTAINER (porta local $PORT)"
+echo "==> démarrage de $IMAGE comme $CONTAINER (port local $PORT)"
 docker run -d --rm --name "$CONTAINER" \
   -p "127.0.0.1:${PORT}:5432" \
   -e POSTGRES_PASSWORD=postgres \
@@ -68,7 +68,7 @@ for _ in $(seq 1 60); do
   fi
   sleep 1
 done
-[ "$ready" = 1 ] || { echo "FATAL: postgres não ficou pronto em 60s" >&2; exit 1; }
+[ "$ready" = 1 ] || { echo "FATAL : postgres n'a pas été prêt en 60 s" >&2; exit 1; }
 
 docker exec "$CONTAINER" psql -U postgres -d postgres -q -c "create database $TEMPLATE" >/dev/null
 
@@ -76,7 +76,7 @@ psql_install() {
   docker exec -i "$CONTAINER" psql -U postgres -d "$TEMPLATE" -v ON_ERROR_STOP=1 -q -f - "$@"
 }
 
-echo "==> prelude: stubs mínimos do Supabase (roles, auth.uid(), extensions)"
+echo "==> prélude : stubs minimaux de Supabase (rôles, auth.uid(), extensions)"
 # Um Postgres cru não tem os roles/schemas do Supabase que o baseline (pg_dump) supõe.
 # Criamos os stubs mínimos AQUI — nunca editar o baseline.sql pra isso.
 psql_install <<'SQL'
@@ -207,7 +207,7 @@ grant usage on schema auth, extensions, storage to anon, authenticated, service_
 grant select on auth.users to anon, authenticated, service_role;
 SQL
 
-echo "==> conferindo que o banco efêmero é o do PRODUTO (antes do baseline)"
+echo "==> vérification que la base éphémère est celle du PRODUIT (avant le baseline)"
 # A guarda tem de rodar AQUI e não na suíte de invariantes, e isto foi medido:
 # o próprio baseline traz o `ALTER DEFAULT PRIVILEGES … TO anon` na linha ~3960,
 # então DEPOIS de aplicá-lo a entrada em pg_default_acl existe de qualquer jeito e
@@ -243,18 +243,18 @@ drop function public.fn_sonda_fidelidade_do_harness();
 SQL
 )"
 if [ "$fidelidade" != "t" ]; then
-  echo "FATAL: neste banco uma SECURITY DEFINER nova em public NÃO nasce com grant DIRETO a anon." >&2
-  echo "       Num projeto Supabase de verdade — o que install.sh manda o cliente criar — ela nasce," >&2
-  echo "       porque o bootstrap do Supabase grava um ALTER DEFAULT PRIVILEGES … TO anon em" >&2
-  echo "       pg_default_acl ANTES de qualquer SQL nosso. Sem reproduzir isso aqui, o gate" >&2
-  echo "       hardening-definer-varredura fica VERDE com 6 funções expostas à anon key em" >&2
-  echo "       produção (medido 2026-08-08, baseline 9249e6f2). Restaure as 4 linhas de" >&2
-  echo "       'alter default privileges … on functions' no prelude acima." >&2
+  echo "FATAL : dans cette base, une nouvelle SECURITY DEFINER dans public NE naît PAS avec un grant DIRECT à anon." >&2
+  echo "       Dans un vrai projet Supabase — celui qu'install.sh demande au client de créer — elle naît ainsi," >&2
+  echo "       parce que le bootstrap de Supabase écrit un ALTER DEFAULT PRIVILEGES … TO anon dans" >&2
+  echo "       pg_default_acl AVANT tout SQL à nous. Sans reproduire cela ici, le contrôle" >&2
+  echo "       hardening-definer-varredura reste VERT avec 6 fonctions exposées à l'anon key en" >&2
+  echo "       production (mesuré le 2026-08-08, baseline 9249e6f2). Restaurez les 4 lignes de" >&2
+  echo "       'alter default privileges … on functions' dans le prélude ci-dessus." >&2
   exit 1
 fi
-echo "    ✓ definer nova nasce com grant direto a anon (armadilha do produto reproduzida)"
+echo "    ✓ une nouvelle definer naît avec un grant direct à anon (piège du produit reproduit)"
 
-echo "==> modo INSTALL: aplicando baseline.sql com ON_ERROR_STOP=1"
+echo "==> mode INSTALL : application de baseline.sql avec ON_ERROR_STOP=1"
 psql_install < "$BASELINE"
 echo "    ✓ install ok"
 
@@ -268,16 +268,16 @@ echo "    ✓ install ok"
 # o README dizia "provando idempotência" apontando para cá.
 #
 # A flag é a diferença entre "re-aplicar terminou" e "re-aplicar não errou".
-echo "==> modo UPDATE: re-aplicando baseline.sql COM ON_ERROR_STOP=1 (idempotência de verdade)"
+echo "==> mode UPDATE : réapplication de baseline.sql AVEC ON_ERROR_STOP=1 (vraie idempotence)"
 psql_install < "$BASELINE"
-echo "    ✓ update ok (zero erro na re-aplicação)"
+echo "    ✓ update ok (zéro erreur à la réapplication)"
 
 # O baseline (cutover Neon) deixou FKs MISTAS: parte referencia `auth.users`,
 # parte `neon_auth."user"` (as tabelas novas do Sales OS). Os testes semeiam
 # usuários em `auth.users`; para as FKs novas satisfazerem, espelhamos cada
 # usuário em `neon_auth."user"` — backfill + trigger pós-install (o prelude roda
 # antes do baseline, então o trigger não pode nascer lá).
-echo "==> espelho auth.users → neon_auth.\"user\" (FKs mistas do cutover Neon)"
+echo "==> miroir auth.users → neon_auth.\"user\" (FK mixtes de la bascule Neon)"
 psql_install <<'SQL'
 insert into neon_auth."user" (id, email)
 select id, email from auth.users
@@ -296,9 +296,9 @@ create trigger trg_espelha_auth_users_no_neon
   after insert on auth.users
   for each row execute function neon_auth.espelhar_usuario_do_auth();
 SQL
-echo "    ✓ espelho ok"
+echo "    ✓ miroir ok"
 
-echo "==> banco \`postgres\` a partir do molde (o setupFile o recria a cada arquivo)"
+echo "==> base \`postgres\` à partir du modèle (le setupFile la recrée à chaque fichier)"
 # Criar aqui, ALÉM do reset por arquivo, tem dois motivos medidos:
 #  - `docker exec … psql -d postgres` (o que se digita para depurar o container)
 #    continua funcionando;
@@ -312,11 +312,11 @@ drop database if exists postgres with (force);
 create database postgres template $TEMPLATE;
 SQL
 
-echo "==> invariantes: vitest (tests/invariants) — banco novo por ARQUIVO, ordem sorteada"
+echo "==> invariants : vitest (tests/invariants) — base neuve par FICHIER, ordre aléatoire"
 # `--sequence.shuffle.files`: com o isolamento por arquivo a ordem deixa de ser
 # variável escondida, e sortear é o que impede a próxima colisão de fixture de
 # ficar dormente até alguém renomear um arquivo.
 TEST_DB_CONTAINER="$CONTAINER" TEST_DB_TEMPLATE="$TEMPLATE" \
   vitest run --config vitest.db.config.ts --sequence.shuffle.files=true "$@"
 
-echo "==> test:db verde"
+echo "==> test:db vert"

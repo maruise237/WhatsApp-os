@@ -110,11 +110,7 @@ function Conferencia({
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              {t("Custa")} {t(c.escolha.custo)}. {t("O modelo usado se escolhe em")}{" "}
-              <a className="underline underline-offset-2" href="/app/ai/providers">
-                {t("Provedores de IA")}
-              </a>
-              .
+              {t("Custa")} {t(c.escolha.custo)}.
             </p>
           </div>
         )}

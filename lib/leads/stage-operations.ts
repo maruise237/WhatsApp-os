@@ -548,7 +548,7 @@ export async function arquivarEtapa(
         organizationId: deps.organizationId,
         leadId: (movidos[0] as Record<string, unknown>).id as string,
         tipo: "stage_changed",
-        origem: `pipelines/${pipelineId}/stages/${stageId} arquivar (${movidos.length} negócios)`,
+        origem: `pipelines/${pipelineId}/stages/${stageId} arquivar (${movidos.length} affaires)`,
         erro: ativErr.message,
         requestId: deps.requestId,
       });

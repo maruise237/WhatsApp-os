@@ -57,14 +57,14 @@ export type ScheduleFollowupResult =
     };
 
 const PAYLOAD_TEACHING =
-  'Campos aceitos: reason (por que agendar), promised_at (data ISO 8601 do retorno, no futuro), ' +
-  'promise (o que você prometeu ao lead), context_snapshot (contexto curto para o run futuro) — ' +
-  'nada além. Lead e organização vêm do runtime, nunca do payload da tool.';
+  'Champs acceptés : reason (pourquoi planifier), promised_at (date ISO 8601 du retour, dans le futur), ' +
+  'promise (ce que vous avez promis au lead), context_snapshot (contexte court pour le futur run) — ' +
+  'rien d’autre. Le lead et l’organisation viennent du runtime, jamais du payload de l’outil.';
 
 function teachInvalidPayload(issues: string): ScheduleFollowupResult {
   return {
     ok: false,
-    error: { code: 'invalid_payload', message: `payload inválido em schedule_followup (${issues}). ${PAYLOAD_TEACHING}` },
+    error: { code: 'invalid_payload', message: `payload invalide dans schedule_followup (${issues}). ${PAYLOAD_TEACHING}` },
   };
 }
 
@@ -82,7 +82,7 @@ export async function applyScheduleFollowup(
 ): Promise<ScheduleFollowupResult> {
   const forbidden = findForbiddenKey(rawInput);
   if (forbidden !== null) {
-    return teachInvalidPayload(`campos não reconhecidos: ${forbidden}`);
+    return teachInvalidPayload(`champs non reconnus : ${forbidden}`);
   }
   const parsed = scheduleFollowupInputSchema.safeParse(rawInput);
   if (!parsed.success) {
@@ -115,7 +115,7 @@ export async function applyScheduleFollowup(
     switch (resultado.codigo) {
       case 'instante_invalido':
         return teachInvalidPayload(
-          `promised_at não é uma data ISO 8601 válida. AGORA é ${agoraIso} — some o prazo pedido a este instante e mande o resultado absoluto`,
+          `promised_at n’est pas une date ISO 8601 valide. MAINTENANT, il est ${agoraIso} — ajoutez le délai demandé à cet instant et envoyez le résultat absolu`,
         );
       case 'instante_no_passado':
         return {
@@ -123,8 +123,8 @@ export async function applyScheduleFollowup(
           error: {
             code: 'promised_at_in_past',
             message:
-              `a data prometida (promised_at) já passou: AGORA é ${agoraIso}. Some o prazo ` +
-              `combinado a este instante e mande a data absoluta resultante — não repita a mesma data.`,
+              `la date promise (promised_at) est déjà passée : MAINTENANT, il est ${agoraIso}. Ajoutez le délai ` +
+              `convenu à cet instant et envoyez la date absolue obtenue — ne répétez pas la même date.`,
           },
         };
       case 'instante_fora_da_janela': {
@@ -135,9 +135,9 @@ export async function applyScheduleFollowup(
           error: {
             code: 'promised_at_out_of_window',
             message:
-              `horário fora da janela aceitável de follow-up. AGORA é ${agoraIso}; o retorno tem de ` +
-              `cair entre ${cedoDemais} e ${tardeDemais} ` +
-              `(${duracaoLegivel(resultado.janela.minAheadMs)} a ${duracaoLegivel(resultado.janela.maxAheadMs)} a partir de agora).`,
+              `horaire hors de la plage acceptable de relance. MAINTENANT, il est ${agoraIso}; le retour doit ` +
+              `tomber entre ${cedoDemais} et ${tardeDemais} ` +
+              `(${duracaoLegivel(resultado.janela.minAheadMs)} à ${duracaoLegivel(resultado.janela.maxAheadMs)} à partir de maintenant).`,
           },
         };
       }
@@ -153,11 +153,11 @@ export async function applyScheduleFollowup(
           error: {
             code: 'already_pending',
             message:
-              `este lead JÁ tem um follow-up agendado${quando ? ` para ${quando}` : ''} — ` +
-              `não agende outro (evita bombardear o lead com confirmações repetidas). ` +
-              `Se precisa mudar o horário, encerre o turno; o follow-up existente vai disparar no horário combinado. ` +
-              `Use SEMPRE data ABSOLUTA (ex.: "2026-07-25T13:00:00Z"), nunca relativa como "amanhã" — ` +
-              `a promessa é lida dias depois e "amanhã" fica sem sentido.`,
+              `ce lead a DÉJÀ une relance planifiée${quando ? ` pour le ${quando}` : ''} — ` +
+              `n’en planifiez pas une autre (évite de bombarder le lead de confirmations répétées). ` +
+              `Si l’horaire doit changer, terminez le tour ; la relance existante partira à l’horaire convenu. ` +
+              `Utilisez TOUJOURS une date ABSOLUE (ex. : "2026-07-25T13:00:00Z"), jamais relative comme « demain » — ` +
+              `la promesse est lue des jours plus tard et « demain » n’a alors plus de sens.`,
           },
         };
       }
@@ -174,7 +174,7 @@ export async function applyScheduleFollowup(
     organizationId: ids.tenantId,
     contactId: ids.leadId,
     type: 'followup_scheduled',
-    reason: `Retorno agendado — ${input.reason}`,
+    reason: `Retour planifié — ${input.reason}`,
     sourceModule: 'followup',
     sourceId: null,
     agentId: ids.agentId ?? null,
@@ -190,7 +190,7 @@ export async function applyScheduleFollowup(
     cronJobId: resultado.retorno.id,
     promisedAt: new Date(resultado.retorno.quando),
     message:
-      `retorno agendado para ${input.promised_at}. Encerre o turno agora; ` +
-      `o sistema fará o follow-up com o lead no horário combinado.`,
+      `retour planifié pour le ${input.promised_at}. Terminez le tour maintenant ; ` +
+      `le système fera la relance auprès du lead à l’horaire convenu.`,
   };
 }

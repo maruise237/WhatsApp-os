@@ -41,12 +41,8 @@ function renderPainel(overrides: Partial<React.ComponentProps<typeof PainelDoOpe
   const props: React.ComponentProps<typeof PainelDoOperador> = {
     enabled: false,
     onEnabledChange: vi.fn(),
-    model: "",
-    onModelChange: vi.fn(),
-    provider: "anthropic",
     toolIds: [],
     onToolIdsChange: vi.fn(),
-    modeloDoConversador: "claude-sonnet-4-6",
     ...overrides,
   };
   // O ModelPicker busca modelos por react-query; sem o provider ele estoura.
@@ -105,18 +101,10 @@ describe("painel do Operador — disciplina de informação", () => {
     }
   });
 
-  it("o modelo herdado tem NOME, e o caminho de volta existe", async () => {
-    // Um Select não oferece "nenhum" como item. Sem o botão, escolher um modelo
-    // seria de mão única — e o usuário não teria como saber por quê.
-    const props = renderPainel({ enabled: true, model: "claude-haiku-4-5-20251001" });
-    const voltar = screen.getByTestId("operador-modelo-herdar");
-    await userEvent.click(voltar);
-    expect(props.onModelChange).toHaveBeenCalledWith("");
-  });
-
-  it("sem modelo escolhido, não oferece o botão de voltar — não há para onde voltar", () => {
-    renderPainel({ enabled: true, model: "" });
+  it("aucun choix de modèle : l'IA est celle de la plateforme", () => {
+    renderPainel({ enabled: true });
     expect(screen.queryByTestId("operador-modelo-herdar")).toBeNull();
+    expect(screen.queryByText(/modelo|modèle/i)).toBeNull();
   });
 
   it("ligar e desligar chega a quem salva", async () => {

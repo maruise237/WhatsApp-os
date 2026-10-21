@@ -67,18 +67,18 @@ export async function generateDraftReply(
   const decisao = ctx.context.last_human_decision;
   const blocoDecisao = decisao
     ? decisao.decision === 'dismissed'
-      ? `\n\n[DECISÃO DO VENDEDOR] Ele JÁ DESCARTOU esta próxima ação: "${decisao.action}". ` +
-        `NÃO sugira essa ação nem uma reformulação dela. Se for o único caminho que resta, ` +
-        `escreva uma resposta que avance a conversa por outro lado.`
-      : `\n\n[DECISÃO DO VENDEDOR] Ele JÁ APROVOU esta próxima ação: "${decisao.action}". ` +
-        `A sugestão deve APOIAR essa ação, não propor outra em lugar dela.`
+      ? `\n\n[DÉCISION DU VENDEUR] Il a DÉJÀ ÉCARTÉ cette prochaine action : "${decisao.action}". ` +
+        `NE suggérez PAS cette action ni une reformulation de celle-ci. Si c’est la seule voie restante, ` +
+        `écrivez une réponse qui fait avancer la conversation par un autre angle.`
+      : `\n\n[DÉCISION DU VENDEUR] Il a DÉJÀ APPROUVÉ cette prochaine action : "${decisao.action}". ` +
+        `La suggestion doit SOUTENIR cette action, et non en proposer une autre à la place.`
     : '';
 
   const system =
     `${agent.systemPrompt}\n\n` +
-    `[MODO RASCUNHO] Gere UMA resposta pronta para o vendedor humano enviar ao cliente. ` +
-    `Escreva como o vendedor (NÃO se identifique como assistente/IA, NÃO use disclosure de bot). ` +
-    `Responda só com o texto da mensagem, sem aspas nem comentários.` +
+    `[MODE BROUILLON] Générez UNE réponse prête à être envoyée au client par le vendeur humain. ` +
+    `Écrivez comme le vendeur (NE vous présentez PAS comme assistant/IA, N’utilisez PAS de mention de bot). ` +
+    `Répondez uniquement avec le texte du message, sans guillemets ni commentaires.` +
     blocoDecisao;
 
   const messages: ModelMessage[] = ctx.context.messages.map((m) => ({

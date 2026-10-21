@@ -74,7 +74,7 @@ export function ImpersonateBanner({ impersonating }: Props) {
         disabled={busy}
         aria-label="Terminer l’impersonation et revenir à l’admin"
       >
-        {busy ? "Encerrando…" : "Se déconnecter"}
+        {busy ? "Fermeture…" : "Se déconnecter"}
       </Button>
     </div>
   );

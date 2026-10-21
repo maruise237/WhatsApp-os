@@ -59,7 +59,7 @@ function formSnippet(url: string): string {
   <input name="nome" placeholder="Votre nom" required />
   <input name="telefone" placeholder="Votre WhatsApp" required />
   <input name="email" type="email" placeholder="Votre e-mail" />
-  <button type="submit">Quero receber contato</button>
+  <button type="submit">Je veux être recontacté</button>
 </form>`;
 }
 
@@ -126,7 +126,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
           <div className="flex items-center gap-2">
             <SheetTitle>{source.name}</SheetTitle>
             <Badge variant={source.is_active ? "success" : "neutral"}>
-              {source.is_active ? "Ativa" : "Pausada"}
+              {source.is_active ? "Active" : "En pause"}
             </Badge>
           </div>
           <SheetDescription>
@@ -145,7 +145,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
                 type="button"
                 variant="secondary"
                 size="icon"
-                onClick={() => copy(url, "Endereço copiado.")}
+                onClick={() => copy(url, "Adresse copiée.")}
               >
                 <Copy />
               </Button>
@@ -158,7 +158,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
             <Button
               type="button"
               variant="secondary"
-              onClick={() => copy(formSnippet(url), "Formulário copiado.")}
+              onClick={() => copy(formSnippet(url), "Formulaire copié.")}
             >
               <Copy /> Copier le formulaire
             </Button>
@@ -198,7 +198,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
 
           <section className="space-y-3">
             <Button type="button" onClick={sendTestLead} disabled={testing}>
-              {testing ? "Enviando…" : "Envoyer un lead de test"}
+              {testing ? "Envoi…" : "Envoyer un lead de test"}
             </Button>
             {testOk ? (
               <p className="text-sm">
@@ -246,7 +246,7 @@ export function SourceDetail({ source, open, onOpenChange }: Props) {
                   { id: source.id, is_active: checked },
                   {
                     onSuccess: () =>
-                      toast.success(checked ? "Fonte ativada." : "Fonte pausada."),
+                      toast.success(checked ? "Source activée." : "Source mise en pause."),
                   },
                 )
               }

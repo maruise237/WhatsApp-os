@@ -82,7 +82,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -90,7 +90,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
 
   // Até 2 tentativas: um código pode expirar na borda da janela de 30s.
@@ -99,7 +99,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
       await page.waitForTimeout(msUntilNextTotpWindow() + 200);
     }
     const code = generateTotp(secret);
-    const firstDigit = page.locator('input[aria-label="Dígito 1"]');
+    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
     await firstDigit.click();
     await page.keyboard.type(code, { delay: 40 });
     try {
@@ -178,7 +178,7 @@ function resetEstado(): void {
   execFileSync("npx", ["tsx", "scripts/seed-e2e-system-update.ts"], { stdio: "inherit" });
 }
 
-test("o dono vê a versão nova na sidebar e atualiza pela tela", async ({ page, request }) => {
+test("le propriétaire voit la nouvelle version dans la barre latérale et met à jour depuis l’écran", async ({ page, request }) => {
   const changelog =
     "## [1.1.0] — 2026-08-02\n\n**⚠️ Requer atenção**\n\nReconecte o número depois.\n\n### Adicionado\n\n- Botão de atualizar pela tela.\n";
 
@@ -186,12 +186,12 @@ test("o dono vê a versão nova na sidebar e atualiza pela tela", async ({ page,
   await heartbeat(request, { latest_version: "1.1.0", changelog });
   await page.goto("/app/inbox");
 
-  const aviso = page.getByRole("link", { name: /nova versão/i });
+  const aviso = page.getByRole("link", { name: /nouvelle version/i });
   await expect(aviso).toBeVisible();
   await aviso.click();
   await page.waitForURL(/\/app\/settings\/atualizacao/);
 
-  await expect(page.getByRole("heading", { name: /versão 1\.1\.0 disponível/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /version 1\.1\.0 disponible/i })).toBeVisible();
   await expect(page.getByText(/Reconecte o número depois/)).toBeVisible();
   await expect(page.getByText(/Botão de atualizar pela tela/)).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/task9-1-tem-novidade.png" });
@@ -200,14 +200,14 @@ test("o dono vê a versão nova na sidebar e atualiza pela tela", async ({ page,
   // por ferramenta (boundingBox), nunca a olho: quem precisa agir à mão (ex.:
   // reconectar o número) tem que ver isso ANTES de clicar, não descobrir depois.
   const atencao = await page.getByText(/Reconecte o número depois/).boundingBox();
-  const botao = await page.getByRole("button", { name: /atualizar agora/i }).boundingBox();
+  const botao = await page.getByRole("button", { name: /mettre à jour maintenant/i }).boundingBox();
   expect(atencao).not.toBeNull();
   expect(botao).not.toBeNull();
   expect(atencao!.y).toBeLessThan(botao!.y);
 
-  await page.getByRole("button", { name: /atualizar agora/i }).click();
-  await expect(page.getByRole("heading", { name: /atualizando para a versão 1\.1\.0/i })).toBeVisible();
-  await expect(page.getByText(/Guardando uma cópia de segurança/)).toBeVisible();
+  await page.getByRole("button", { name: /mettre à jour maintenant/i }).click();
+  await expect(page.getByRole("heading", { name: /mise à jour vers la version 1\.1\.0/i })).toBeVisible();
+  await expect(page.getByText(/Sauvegarde de vos données/)).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/task9-2-atualizando.png" });
 
   // O agente do host detecta o pedido no próximo heartbeat...
@@ -228,11 +228,11 @@ test("o dono vê a versão nova na sidebar e atualiza pela tela", async ({ page,
   // "atualizando" e mostrar "você está em dia".
   await heartbeat(request, { current_version: "1.1.0", latest_version: "1.1.0" });
   await page.reload();
-  await expect(page.getByRole("heading", { name: /você está na versão 1\.1\.0/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /vous utilisez la version 1\.1\.0/i })).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/task9-3-em-dia.png" });
 });
 
-test("quando a atualização falha, a tela nomeia a versão certa, mostra o log e dá saída", async ({
+test("quand la mise à jour échoue, l’écran nomme la bonne version, montre le journal et propose une issue", async ({
   page,
   request,
 }) => {
@@ -243,8 +243,8 @@ test("quando a atualização falha, a tela nomeia a versão certa, mostra o log 
   await heartbeat(request, { current_version: "1.0.0", latest_version: "1.1.0" });
   await loginWithTotp(page, creds.users.dono!.email, creds.dono_totp!.secret);
   await page.goto("/app/settings/atualizacao");
-  await page.getByRole("button", { name: /atualizar agora/i }).click();
-  await expect(page.getByRole("heading", { name: /atualizando para a versão 1\.1\.0/i })).toBeVisible();
+  await page.getByRole("button", { name: /mettre à jour maintenant/i }).click();
+  await expect(page.getByRole("heading", { name: /mise à jour vers la version 1\.1\.0/i })).toBeVisible();
 
   // ── Falha COM rollback ─────────────────────────────────────────────────────
   const primeiro = await heartbeat(request, { latest_version: "1.1.0" });
@@ -253,7 +253,7 @@ test("quando a atualização falha, a tela nomeia a versão certa, mostra o log 
     request,
     primeiro.data.run_id!,
     "failed_rolled_back",
-    "▶ Conferindo se o app voltou no ar\n⚠ Atualizei, mas o app não respondeu 'ok'.",
+    "▶ Vérification du retour en ligne de l’app\n⚠ Mise à jour faite, mais l’app n’a pas répondu 'ok'.",
   );
   // O host reporta o `git describe` DEPOIS do checkout: para ele, a versão
   // instalada é a 1.1.0 — a que acabou de quebrar. É esta mentira que a tela
@@ -262,27 +262,27 @@ test("quando a atualização falha, a tela nomeia a versão certa, mostra o log 
   await page.reload();
 
   await expect(
-    page.getByRole("heading", { name: /a atualização para a versão 1\.1\.0 não deu certo/i }),
+    page.getByRole("heading", { name: /la mise à jour vers la version 1\.1\.0 a échoué/i }),
   ).toBeVisible();
-  await expect(page.getByText(/Voltei o sistema para a versão 1\.0\.0/)).toBeVisible();
+  await expect(page.getByText(/Le système a été restauré vers la version 1\.0\.0/)).toBeVisible();
 
   // O log só existe se der pra ler: recolhido, mas presente e abrível.
-  const detalhes = page.getByText(/Detalhes técnicos/);
+  const detalhes = page.getByText(/Détails techniques/);
   await expect(detalhes).toBeVisible();
-  await expect(page.getByText(/o app não respondeu 'ok'/)).toBeHidden();
+  await expect(page.getByText(/l’app n’a pas répondu 'ok'/)).toBeHidden();
   await detalhes.click();
-  await expect(page.getByText(/o app não respondeu 'ok'/)).toBeVisible();
+  await expect(page.getByText(/l’app n’a pas répondu 'ok'/)).toBeVisible();
 
   // O aviso da sidebar só acende porque o app sabe que está rodando a 1.0.0 —
   // se ele tivesse acreditado no "1.1.0" que o host reportou, `update_available`
   // seria falso e o rodapé mostraria "versão 1.1.0" como instalada, que é
   // justamente a versão que quebrou.
-  await expect(page.getByRole("link", { name: /nova versão/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /nouvelle version/i })).toBeVisible();
 
   // Saída garantida: o botão NÃO aparece (um novo pedido faria o servidor
   // responder "já estou na 1.1.0" e reportar sucesso sem trocar imagem
   // nenhuma) — quem resolve ali é o comando com --force, sempre presente.
-  await expect(page.getByRole("button", { name: /atualizar agora/i })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /mettre à jour maintenant/i })).toHaveCount(0);
   // E o comando leva de volta para a versão que FUNCIONAVA — reinstalar a 1.1.0,
   // que acabou de quebrar, não é saída nenhuma se o problema for a release.
   await expect(
@@ -294,21 +294,21 @@ test("quando a atualização falha, a tela nomeia a versão certa, mostra o log 
   resetEstado();
   await heartbeat(request, { current_version: "1.1.0", latest_version: "1.2.0" });
   await page.reload();
-  await page.getByRole("button", { name: /atualizar agora/i }).click();
-  await expect(page.getByRole("heading", { name: /atualizando para a versão 1\.2\.0/i })).toBeVisible();
+  await page.getByRole("button", { name: /mettre à jour maintenant/i }).click();
+  await expect(page.getByRole("heading", { name: /mise à jour vers la version 1\.2\.0/i })).toBeVisible();
 
   const segundo = await heartbeat(request, { current_version: "1.1.0", latest_version: "1.2.0" });
   expect(segundo.data.update_requested).toBe(true);
   await runProgress(request, segundo.data.run_id!, "banco");
-  await runResult(request, segundo.data.run_id!, "failed", "✖ rollback não foi possível");
+  await runResult(request, segundo.data.run_id!, "failed", "✖ le retour arrière n’a pas été possible");
   await heartbeat(request, { current_version: "1.2.0", latest_version: "1.2.0" });
   await page.reload();
 
   await expect(
-    page.getByRole("heading", { name: /a atualização para a versão 1\.2\.0 não deu certo/i }),
+    page.getByRole("heading", { name: /la mise à jour vers la version 1\.2\.0 a échoué/i }),
   ).toBeVisible();
-  await expect(page.getByText(/não consegui/i)).toBeVisible();
-  await expect(page.getByText(/Voltei o sistema para a versão/)).toHaveCount(0);
+  await expect(page.getByText(/je n’ai pas réussi/i)).toBeVisible();
+  await expect(page.getByText(/Le système a été restauré vers la version/)).toHaveCount(0);
   await expect(
     page.getByText("bash hostgator-setup-kit/update.sh --to v1.1.0 --force"),
   ).toBeVisible();
@@ -323,31 +323,31 @@ test("quando a atualização falha, a tela nomeia a versão certa, mostra o log 
   resetEstado();
   await heartbeat(request, { current_version: "1.1.0", latest_version: "1.2.0" });
   await page.reload();
-  await page.getByRole("button", { name: /atualizar agora/i }).click();
+  await page.getByRole("button", { name: /mettre à jour maintenant/i }).click();
   // Espera a tela confirmar o pedido antes de bater o heartbeat: sem isso, o
   // agente simulado corre com o POST do clique e não acha run nenhum.
-  await expect(page.getByRole("heading", { name: /atualizando para a versão 1\.2\.0/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /mise à jour vers la version 1\.2\.0/i })).toBeVisible();
   const terceiro = await heartbeat(request, { current_version: "1.1.0", latest_version: "1.2.0" });
   await runResult(
     request,
     terceiro.data.run_id!,
     "failed",
-    "✖ A versão v1.2.0 é ANTERIOR à que já está instalada neste servidor.",
+    "✖ La version v1.2.0 est ANTÉRIEURE à celle déjà installée sur ce serveur.",
   );
   await page.reload();
 
   await expect(
-    page.getByRole("heading", { name: /a atualização para a versão 1\.2\.0 não deu certo/i }),
+    page.getByRole("heading", { name: /la mise à jour vers la version 1\.2\.0 a échoué/i }),
   ).toBeVisible();
   await expect(
     page.getByText("bash hostgator-setup-kit/update.sh --to v1.1.0 --force"),
   ).toBeVisible();
-  await page.getByText(/Detalhes técnicos/).click();
-  await expect(page.getByText(/é ANTERIOR à que já está instalada/)).toBeVisible();
+  await page.getByText(/Détails techniques/).click();
+  await expect(page.getByText(/est ANTÉRIEURE à celle déjà installée/)).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/final-4-sem-passo-reportado.png" });
 });
 
-test("quando o host não conseguiu comparar, a tela não diz que está em dia", async ({
+test("quand l’hôte n’a pas pu comparer, l’écran ne dit pas que tout est à jour", async ({
   page,
   request,
 }) => {
@@ -365,14 +365,14 @@ test("quando o host não conseguiu comparar, a tela não diz que está em dia", 
   await loginWithTotp(page, creds.users.dono!.email, creds.dono_totp!.secret);
   await page.goto("/app/settings/atualizacao");
 
-  await expect(page.getByRole("heading", { name: /não consegui checar/i })).toBeVisible();
-  await expect(page.getByText(/é a mais recente/i)).toHaveCount(0);
-  await expect(page.getByText(/quer dizer que eu não sei/i)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /impossible de vérifier s’il existe une nouvelle version/i })).toBeVisible();
+  await expect(page.getByText(/la version la plus récente/i)).toHaveCount(0);
+  await expect(page.getByText(/cela signifie que je ne sais pas/i)).toBeVisible();
   await expect(page.getByText("bash hostgator-setup-kit/update.sh")).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/final-5-nao-consegui-checar.png" });
 });
 
-test("instalação à frente da versão publicada não vira tela quebrada nem alarme", async ({
+test("une installation en avance sur la version publiée ne donne ni écran cassé ni alarme", async ({
   page,
   request,
 }) => {
@@ -384,20 +384,20 @@ test("instalação à frente da versão publicada não vira tela quebrada nem al
   await loginWithTotp(page, creds.users.dono!.email, creds.dono_totp!.secret);
 
   await page.goto("/app/inbox");
-  await expect(page.getByRole("link", { name: /nova versão/i })).toHaveCount(0);
-  await expect(page.getByText("versão abc1234")).toBeVisible();
+  await expect(page.getByRole("link", { name: /nouvelle version/i })).toHaveCount(0);
+  await expect(page.getByText("version abc1234")).toBeVisible();
 
   await page.goto("/app/settings/atualizacao");
   await expect(
-    page.getByRole("heading", { name: /você está à frente da versão publicada/i }),
+    page.getByRole("heading", { name: /vous utilisez une version plus récente que la version publiée/i }),
   ).toBeVisible();
-  await expect(page.getByText(/não há nada a atualizar/i)).toBeVisible();
-  await expect(page.getByRole("button", { name: /atualizar agora/i })).toHaveCount(0);
+  await expect(page.getByText(/aucune mise à jour n’est donc nécessaire/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: /mettre à jour maintenant/i })).toHaveCount(0);
   await expect(page.getByText("bash hostgator-setup-kit/update.sh")).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/final-3-a-frente-da-publicada.png" });
 });
 
-test("fork sem nenhuma release publicada não afirma 'à frente' sem base", async ({ page, request }) => {
+test("un fork sans aucune release publiée n’affirme pas « en avance » sans base", async ({ page, request }) => {
   // Mesma combinação bruta do teste anterior (off_release=true, latest_version
   // vazio, compare_failed=false) — a diferença é `has_known_release: false`:
   // o agente NUNCA viu nenhuma tag `v*` neste repositório (fork sem releases),
@@ -414,25 +414,25 @@ test("fork sem nenhuma release publicada não afirma 'à frente' sem base", asyn
 
   await page.goto("/app/settings/atualizacao");
   await expect(
-    page.getByRole("heading", { name: /ainda não há nenhuma versão publicada/i }),
+    page.getByRole("heading", { name: /aucune version n’est encore publiée/i }),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: /à frente da versão publicada/i })).toHaveCount(0);
-  await expect(page.getByText(/não há nada a atualizar agora/i)).toBeVisible();
-  await expect(page.getByRole("button", { name: /atualizar agora/i })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: /plus récente que la version publiée/i })).toHaveCount(0);
+  await expect(page.getByText(/aucune mise à jour n’est nécessaire pour le moment/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: /mettre à jour maintenant/i })).toHaveCount(0);
   await expect(page.getByText("bash hostgator-setup-kit/update.sh")).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/minors-1-sem-release-publicada.png" });
 });
 
-test("quem não é dono do servidor não vê o botão", async ({ page, request }) => {
+test("qui n’est pas propriétaire du serveur ne voit pas le bouton", async ({ page, request }) => {
   // Update disponível de verdade nesse instante — a ausência do aviso tem que
   // vir da falta de is_platform_admin, não de coincidentemente já estar em dia.
   await heartbeat(request, { current_version: "1.0.0", latest_version: "1.1.0" });
 
   await login(page, creds.users.agent!.email);
   await page.goto("/app/inbox");
-  await expect(page.getByRole("link", { name: /nova versão/i })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /nouvelle version/i })).toHaveCount(0);
 
   await page.goto("/app/settings/atualizacao");
-  await expect(page.getByText(/404 — Página não encontrada/i)).toBeVisible();
+  await expect(page.getByText(/404 — Page introuvable/i)).toBeVisible();
   await page.screenshot({ path: ".superpowers/evidence/task9-4-nao-dono-404.png" });
 });

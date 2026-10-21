@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Atualiza o DeskcommCRM na VPS: código novo + banco + app — com BACKUP antes e
-# CHECAGEM DE SAÚDE depois. Um comando só, pensado pra quem não é técnico:
+# Met à jour DeskcommCRM sur le VPS : nouveau code + base + app — avec une SAUVEGARDE avant et
+# une VÉRIFICATION DE SANTÉ après. Une seule commande, pensée pour qui n'est pas technique :
 #
 #   bash hostgator-setup-kit/update.sh
 #
-# Flags:
-#   --force        instala a versão pedida mesmo que ela seja igual ou ANTERIOR
-#                  à que já está aqui (é o jeito explícito de voltar no tempo)
-#   --skip-backup  pula o backup automático (não recomendado)
-#   --to <tag>     instala essa tag em vez da mais recente publicada
-# Absoluto e resolvido ANTES do `enter_project`, que faz `cd`: depois dele um
-# `dirname "$0"` relativo apontaria para o lugar errado, e o único sintoma seria
-# um script do kit "não encontrado" no meio da atualização.
+# Options :
+#   --force        installe la version demandée même si elle est égale ou ANTÉRIEURE
+#                  à celle déjà présente (c'est la façon explicite de revenir en arrière)
+#   --skip-backup  saute la sauvegarde automatique (déconseillé)
+#   --to <tag>     installe cette tag au lieu de la plus récente publiée
+# Absolu et résolu AVANT `enter_project`, qui fait un `cd` : après lui un
+# `dirname "$0"` relatif pointerait au mauvais endroit, et le seul symptôme serait
+# un script du kit « introuvable » au milieu de la mise à jour.
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 source "$KIT_DIR/_common.sh"
 enter_project
@@ -26,42 +26,42 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-# ── 0-. Esta cópia do repo é a dona dos contêineres? ─────────────────────────
-# Antes do cron e antes do git: uma segunda cópia que atualiza por cima recria o
-# parque com o .env DELA. Foi o que deixou o WhatsApp de uma VPS real três dias
-# em 401. Ver `recusar_projeto_de_outra_arvore` em _common.sh.
-recusar_projeto_de_outra_arvore || die "Atualização interrompida para não quebrar a instalação que está no ar."
+# ── 0-. Cette copie du dépôt est-elle propriétaire des conteneurs ? ──────────
+# Avant le cron et avant git : une seconde copie qui met à jour par-dessus recrée le
+# parc avec SON .env. C'est ce qui a laissé le WhatsApp d'un vrai VPS trois jours
+# en 401. Voir `recusar_projeto_de_outra_arvore` dans _common.sh.
+recusar_projeto_de_outra_arvore || die "Mise à jour interrompue pour ne pas casser l'installation en ligne."
 
-# ── 0. Liga o agente da tela ANTES de qualquer decisão de versão ─────────────
-# Instalar o cron aqui, e não no fim, é o que faz o bootstrap ter fim: os
-# caminhos "já está na versão mais recente" e "essa versão é anterior à sua"
-# saem do script mais abaixo, e se o cron dependesse deles a atualização pela
-# tela nunca ligaria justamente em quem já está em dia. É idempotente.
+# ── 0. Active l'agent de l'écran AVANT toute décision de version ─────────────
+# Installer le cron ici, et non à la fin, est ce qui permet au bootstrap de se terminer : les
+# chemins « déjà sur la version la plus récente » et « cette version est antérieure à la vôtre »
+# sortent du script plus bas, et si le cron en dépendait la mise à jour depuis
+# l'écran ne s'activerait jamais justement chez qui est déjà à jour. C'est idempotent.
 setup_update_agent_cron
 
-# ── 1. Tem atualização mesmo? ────────────────────────────────────────────────
-step "Procurando atualizações"
-git fetch --tags --quiet origin 2>/dev/null || c_ylw "⚠ não consegui falar com o GitHub — sigo com o código que já está aqui."
+# ── 1. Y a-t-il vraiment une mise à jour ? ───────────────────────────────────
+step "Recherche de mises à jour"
+git fetch --tags --quiet origin 2>/dev/null || c_ylw "⚠ impossible de joindre GitHub — je continue avec le code déjà présent."
 [ -n "$TARGET_TAG" ] || TARGET_TAG="$(git tag -l 'v*' --sort=-v:refname | head -1)"
-[ -n "$TARGET_TAG" ] || die "Não encontrei nenhuma versão publicada para instalar."
+[ -n "$TARGET_TAG" ] || die "Aucune version publiée à installer n'a été trouvée."
 git rev-parse --verify --quiet "${TARGET_TAG}^{commit}" >/dev/null \
-  || die "Não conheço a versão $TARGET_TAG aqui. Confira o nome (ex.: v1.1.0) ou tente de novo quando o servidor conseguir falar com o GitHub."
+  || die "Je ne connais pas la version $TARGET_TAG ici. Vérifiez le nom (ex. : v1.1.0) ou réessayez quand le serveur pourra joindre GitHub."
 CURRENT_TAG="$(git describe --tags --exact-match HEAD 2>/dev/null || true)"
 
-# O código estar em dia NÃO significa que o app está: quem roda é a imagem.
-# Uma atualização interrompida depois do checkout (queda de rede, falta de
-# memória no meio do docker pull) deixa o repositório novo e a imagem velha — e
-# a partir dali TODO update.sh respondia "já está na versão mais recente",
-# prendendo o CRM na versão antiga sem nenhuma saída visível para o dono.
-# Também cobre imagem republicada sem commit novo (rebuild de segurança).
-# (Veio da `main`; a versão por tag cai exatamente na mesma armadilha, porque a
-# comparação de tags também fica satisfeita com a imagem velha no lugar.)
+# Que le code soit à jour NE signifie PAS que l'app l'est : c'est l'image qui tourne.
+# Une mise à jour interrompue après le checkout (coupure réseau, manque de
+# mémoire au milieu du docker pull) laisse le dépôt neuf et l'image ancienne — et
+# à partir de là TOUT update.sh répondait « déjà sur la version la plus récente »,
+# bloquant le CRM sur l'ancienne version sans aucune issue visible pour le propriétaire.
+# Couvre aussi une image republiée sans nouveau commit (reconstruction de sécurité).
+# (Vient de `main` ; la version par tag tombe exactement dans le même piège, parce que la
+# comparaison de tags est aussi satisfaite avec l'ancienne image en place.)
 image_desatualizada() {
   local img="${APP_IMAGE:-ghcr.io/melgarafael/deskcommcrm:latest}" local_d remote_d
   local_d="$(docker image inspect "$img" --format '{{if .RepoDigests}}{{index .RepoDigests 0}}{{end}}' 2>/dev/null | sed 's/.*@//')"
-  [ -z "$local_d" ] && return 0                 # nem baixada ainda → atualizar
+  [ -z "$local_d" ] && return 0                 # pas encore téléchargée → mettre à jour
   remote_d="$(docker buildx imagetools inspect "$img" 2>/dev/null | awk '/^Digest:/{print $2; exit}')"
-  [ -z "$remote_d" ] && return 1                # sem como consultar → não forçar
+  [ -z "$remote_d" ] && return 1                # aucun moyen de consulter → ne pas forcer
   [ "$local_d" != "$remote_d" ]
 }
 
@@ -69,77 +69,77 @@ MESMA_TAG=""
 [ "$CURRENT_TAG" = "$TARGET_TAG" ] && MESMA_TAG=1
 
 if [ -n "$MESMA_TAG" ] && [ -z "$FORCE" ] && ! image_desatualizada; then
-  c_grn "✓ Você já está na versão mais recente ($TARGET_TAG). Nada a atualizar."
+  c_grn "✓ Vous êtes déjà sur la version la plus récente ($TARGET_TAG). Rien à mettre à jour."
   exit 0
 fi
 
-# Alvo que JÁ está contido no que roda aqui = andar pra trás, não pra frente.
-# Numa instalação que segue a `main`, `git describe --exact-match` é vazio: a
-# comparação de tags acima passa batido e, sem esta guarda, o script instalaria
-# alegremente uma versão MAIS VELHA que a instalada — desligando o que o dono
-# já tem (foi assim que este próprio botão se autodestruiria, voltando pra uma
-# imagem que não conhece o agente de atualização). Recusar é o padrão; voltar
-# no tempo continua possível, mas só quando alguém pede de propósito.
-# Quando o alvo é a MESMA tag já instalada, a guarda não se aplica: não há para
-# onde voltar no tempo — só a imagem é que ficou para trás.
+# Une cible DÉJÀ contenue dans ce qui tourne ici = reculer, pas avancer.
+# Sur une installation qui suit `main`, `git describe --exact-match` est vide : la
+# comparaison de tags ci-dessus passe à côté et, sans ce garde-fou, le script installerait
+# allègrement une version PLUS ANCIENNE que celle installée — désactivant ce que le propriétaire
+# a déjà (c'est ainsi que ce bouton lui-même s'autodétruirait, en revenant à une
+# image qui ne connaît pas l'agent de mise à jour). Refuser est la règle ; revenir
+# en arrière reste possible, mais seulement quand quelqu'un le demande exprès.
+# Quand la cible est la MÊME tag déjà installée, le garde-fou ne s'applique pas : il n'y a nulle
+# part où revenir en arrière — seule l'image est restée derrière.
 if [ -z "$FORCE" ] && [ -z "$MESMA_TAG" ]; then
   is_already_in_head "$TARGET_TAG" && CONTIDA=0 || CONTIDA=$?
   case "$CONTIDA" in
-    0) refuse "A versão $TARGET_TAG é ANTERIOR à que já está instalada neste servidor.
-     Instalar ela seria voltar no tempo e desligar coisas que você já tem.
-     Não mexi em nada: nem no banco, nem no app — está tudo como estava.
-     Se você REALMENTE quer voltar para a $TARGET_TAG, rode:
+    0) refuse "La version $TARGET_TAG est ANTÉRIEURE à celle déjà installée sur ce serveur.
+     L'installer reviendrait à remonter le temps et à désactiver des choses que vous avez déjà.
+     Je n'ai rien touché : ni la base, ni l'app — tout est comme avant.
+     Si vous voulez VRAIMENT revenir à la $TARGET_TAG, lancez :
        bash hostgator-setup-kit/update.sh --to $TARGET_TAG --force" ;;
-    2) refuse "Não consegui ter CERTEZA de que a versão $TARGET_TAG é mais nova que a instalada
-     aqui — a cópia do código neste servidor veio abreviada e eu não consegui completá-la
-     (o servidor precisa conseguir falar com o GitHub para isso).
-     Prefiro não mexer a arriscar te levar para uma versão anterior sem querer.
-     Não mexi em nada. Tente de novo em alguns minutos; se insistir, confira a internet do
-     servidor. Para instalar assim mesmo, por sua conta:
+    2) refuse "Je n'ai pas pu avoir la CERTITUDE que la version $TARGET_TAG est plus récente que celle installée
+     ici — la copie du code sur ce serveur est arrivée abrégée et je n'ai pas pu la compléter
+     (le serveur doit pouvoir joindre GitHub pour cela).
+     Je préfère ne rien toucher plutôt que de risquer de vous ramener à une version antérieure par erreur.
+     Je n'ai rien touché. Réessayez dans quelques minutes ; si cela persiste, vérifiez l'internet du
+     serveur. Pour installer quand même, à vos risques :
        bash hostgator-setup-kit/update.sh --to $TARGET_TAG --force" ;;
   esac
 fi
 if [ -n "$MESMA_TAG" ]; then
-  c_ylw "O código já está na $TARGET_TAG, mas o app está rodando uma imagem antiga. Vou atualizar a imagem."
+  c_ylw "Le code est déjà sur la $TARGET_TAG, mais l'app fait tourner une image ancienne. Je vais mettre à jour l'image."
 else
-  c_ylw "Vou atualizar para a versão $TARGET_TAG com segurança."
+  c_ylw "Je vais mettre à jour vers la version $TARGET_TAG en toute sécurité."
 fi
 
-# ── 2. Backup de segurança ANTES de tocar no banco ───────────────────────────
+# ── 2. Sauvegarde de sécurité AVANT de toucher à la base ─────────────────────
 if [ -z "$SKIP_BACKUP" ]; then
-  step "Backup de segurança (antes de mexer no banco)"
+  step "Sauvegarde de sécurité (avant de toucher à la base)"
   if bash "$(dirname "$0")/backup.sh"; then
-    c_grn "✓ backup feito — se algo der errado, dá pra restaurar (restore.sh)."
+    c_grn "✓ sauvegarde faite — si quelque chose tourne mal, vous pouvez restaurer (restore.sh)."
   else
-    c_ylw "⚠ o backup falhou. A atualização NÃO apaga dados (só reorganiza os contatos),"
-    c_ylw "  mas o ideal é ter backup. Ctrl+C pra parar e investigar; continuo em 8s…"
+    c_ylw "⚠ la sauvegarde a échoué. La mise à jour N'efface PAS de données (elle réorganise seulement les contacts),"
+    c_ylw "  mais l'idéal est d'avoir une sauvegarde. Ctrl+C pour arrêter et enquêter ; je continue dans 8 s…"
     sleep 8
   fi
 fi
-# Avisa o agente do host (se for ele quem está dirigindo) — é o que faz a tela
-# de atualização avançar passo a passo enquanto o app ainda está de pé.
+# Prévient l'agent de l'hôte (si c'est lui qui pilote) — c'est ce qui fait avancer l'écran
+# de mise à jour étape par étape pendant que l'app est encore debout.
 [ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" backup
 
-# ── 3. Código novo ───────────────────────────────────────────────────────────
-step "Baixando o código novo"
+# ── 3. Nouveau code ──────────────────────────────────────────────────────────
+step "Téléchargement du nouveau code"
 if ! git checkout --quiet "$TARGET_TAG" 2>&1; then
-  die "Não consegui trocar para a versão $TARGET_TAG (parece haver mudanças locais que divergem).
-     Rode 'git status' pra ver, ou peça ajuda. NÃO mexi no banco — está tudo como estava."
+  die "Impossible de passer à la version $TARGET_TAG (il semble y avoir des modifications locales divergentes).
+     Lancez 'git status' pour voir, ou demandez de l'aide. Je N'ai PAS touché la base — tout est comme avant."
 fi
 [ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" codigo
 
-# ── 4. Banco: schema + correções de dados (schema ANTES do app) ──────────────
-# O baseline é idempotente e auto-curativo. Re-aplicar numa base que JÁ existe
-# gera erros do tipo "já existe" / "multiple primary keys" — isso é ESPERADO e
-# inofensivo (são objetos que já estavam lá). Filtramos esse ruído e só
-# mostramos problemas de verdade.
-# Re-aplicar o baseline é DDL, então vai por `url_do_schema` (_common.sh) e não
-# pela string do app: numa instalação em Supabase próprio, com a role menor no
-# `.env` como recomendamos, este passo passava a falhar em silêncio a cada
-# atualização — e é o update.sh que entrega migration nova ao clone (issue #192).
-step "Atualizando o banco de dados"
+# ── 4. Base : schéma + corrections de données (schéma AVANT l'app) ───────────
+# Le baseline est idempotent et auto-réparateur. Le réappliquer sur une base qui existe DÉJÀ
+# produit des erreurs du type « existe déjà » / « multiple primary keys » — c'est ATTENDU et
+# inoffensif (ce sont des objets qui étaient déjà là). Nous filtrons ce bruit et ne
+# montrons que les vrais problèmes.
+# Réappliquer le baseline est du DDL, donc il passe par `url_do_schema` (_common.sh) et non
+# par la chaîne de l'app : sur une installation en base auto-hébergée, avec le rôle restreint dans le
+# `.env` comme nous le recommandons, cette étape se mettait à échouer en silence à chaque
+# mise à jour — et c'est update.sh qui livre les nouvelles migrations au clone (issue #192).
+step "Mise à jour de la base de données"
 if [ -f neon/migrations/0001_whatsapp_os_baseline.sql ]; then
-  # Extensões que o schema exige (idempotente; iguais ao install.sh).
+  # Extensions exigées par le schéma (idempotent ; identiques à install.sh).
   docker run --rm postgres:17-alpine psql "$(url_do_schema)" -c \
     "create extension if not exists vector with schema public; create extension if not exists citext with schema public; create extension if not exists pg_trgm with schema public;" \
     >/dev/null 2>&1 || true
@@ -147,24 +147,24 @@ if [ -f neon/migrations/0001_whatsapp_os_baseline.sql ]; then
   raw="$(docker run --rm -i -v "$PROJECT_DIR/neon/migrations/0001_whatsapp_os_baseline.sql:/b.sql:ro" \
         postgres:17-alpine psql "$(url_do_schema)" -f /b.sql 2>&1 || true)"
 
-  # Erros benignos ao re-aplicar sobre uma base existente:
+  # Erreurs bénignes en réappliquant sur une base existante :
   benign='already exists|multiple primary keys|multiple default values|is already a member|already a partition'
   unexpected="$(printf '%s\n' "$raw" | grep -iE 'ERROR|FATAL' | grep -viE "$benign" || true)"
 
   if [ -n "$unexpected" ]; then
-    c_ylw "⚠ Apareceram avisos no banco que NÃO são os esperados:"
+    c_ylw "⚠ Des avertissements de base sont apparus qui NE sont PAS ceux attendus :"
     printf '%s\n' "$unexpected" | head -20
-    c_ylw "  O app pode ainda funcionar. Se algo estiver errado, restaure o backup (restore.sh)."
+    c_ylw "  L'app peut encore fonctionner. Si quelque chose ne va pas, restaurez la sauvegarde (restore.sh)."
     case "$unexpected" in
-      *permission\ denied*|*must\ be\ owner*|*permissão\ negada*)
-        c_ylw "  Os erros são de PERMISSÃO: a conexão do .env não é o dono do banco. Num Supabase"
-        c_ylw "  próprio, declare NEON_DATABASE_ADMIN_URL no .env — é ela que roda o schema." ;;
+      *permission\ denied*|*must\ be\ owner*|*droit\ refusé*)
+        c_ylw "  Les erreurs sont des erreurs de PERMISSION : la connexion du .env n'est pas propriétaire de la base. Sur une base"
+        c_ylw "  auto-hébergée, déclarez NEON_DATABASE_ADMIN_URL dans le .env — c'est elle qui exécute le schéma." ;;
     esac
   else
-    c_grn "✓ banco atualizado (e conversas reorganizadas, se havia bagunça)."
+    c_grn "✓ base mise à jour (et conversations réorganisées, s'il y avait du désordre)."
   fi
 else
-  c_ylw "⚠ neon/migrations/0001_whatsapp_os_baseline.sql não encontrado — pulei a parte do banco."
+  c_ylw "⚠ neon/migrations/0001_whatsapp_os_baseline.sql introuvable — partie base sautée."
 fi
 [ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" banco
 
@@ -173,28 +173,28 @@ fi
 # Auth. Aucune mise à jour ne tente d’appeler une API admin beta non validée.
 c_ylw "⚠ Vérifiez la configuration des emails Neon Auth dans le panneau Neon si elle a changé."
 
-# ── 5. App novo ──────────────────────────────────────────────────────────────
-step "Baixando a versão nova do app e reiniciando"
-# Imagem da TAG publicada (não "latest" solto): garante que o código (checkout
-# acima) e a imagem do container sejam sempre da mesma versão. Gravada no .env,
-# não só exportada: o compose lê a imagem de lá, e um `up -d` rodado à mão
-# depois voltaria pro ":latest" do install — desfazendo a atualização.
+# ── 5. Nouvelle app ──────────────────────────────────────────────────────────
+step "Téléchargement de la nouvelle version de l'app et redémarrage"
+# Image de la TAG publiée (pas un "latest" flottant) : garantit que le code (checkout
+# ci-dessus) et l'image du conteneur sont toujours de la même version. Écrite dans le .env,
+# pas seulement exportée : compose lit l'image depuis là, et un `up -d` lancé à la main
+# ensuite reviendrait au ":latest" de l'installation — défaisant la mise à jour.
 #
-# As TRÊS imagens são gravadas juntas, na mesma versão. O worker e o scheduler
-# passaram a ter imagem publicada porque, antes, eram `build:`-only no compose:
-# `dc pull` os PULAVA ("Skipped - No image to be pulled") e o `dc up -d` abaixo
-# recriava o contêiner sobre a imagem velha, sem `--build`. Resultado: o worker
-# — que é o runtime do agente de IA — ficava congelado no código do dia da
-# instalação e atravessava todas as atualizações. Esta é a linha que conserta
-# isso para o parque já instalado, sem que ninguém precise editar arquivo.
+# Les TROIS images sont écrites ensemble, dans la même version. Le worker et le scheduler
+# ont reçu une image publiée parce qu'avant, ils étaient `build:`-only dans le compose :
+# `dc pull` les SAUTAIT (« Skipped - No image to be pulled ») et le `dc up -d` ci-dessous
+# recréait le conteneur sur l'ancienne image, sans `--build`. Résultat : le worker
+# — qui est le runtime de l'agent IA — restait figé sur le code du jour de
+# l'installation et traversait toutes les mises à jour. C'est la ligne qui corrige
+# cela pour le parc déjà installé, sans que personne n'ait à éditer de fichier.
 #
-# `gravar_imagens` também resolve o pull_policy pela mutabilidade da tag: como
-# aqui o alvo é sempre uma tag de versão (imutável), sai `missing`. Isso além de
-# tudo desfaz o "missing" que um rollback anterior deixava para trás — antes ele
-# ficava no .env para sempre, e o `up -d` manual do dono nunca mais puxava nada.
-# Lido ANTES de `gravar_imagens` corrigir — senão a informação some. Este é o
-# estado que a execução ANTERIOR deixou, e o dono nunca soube: o `update.sh`
-# antigo grava só `APP_IMAGE`, e o worker fica seguindo um canal móvel.
+# `gravar_imagens` résout aussi le pull_policy selon la mutabilité de la tag : comme
+# ici la cible est toujours une tag de version (immuable), cela donne `missing`. En plus de
+# tout, cela défait le "missing" qu'un rollback précédent laissait derrière lui — avant il
+# restait dans le .env pour toujours, et le `up -d` manuel du propriétaire ne tirait plus jamais rien.
+# Lu AVANT que `gravar_imagens` ne corrige — sinon l'information disparaît. C'est l'
+# état que l'exécution PRÉCÉDENTE a laissé, et le propriétaire ne l'a jamais su : l'ancien `update.sh`
+# n'écrit que `APP_IMAGE`, et le worker suit un canal mobile.
 PIN_FALTANDO_ANTES="$(pin_incompleto .env)"
 
 VERSAO_ALVO="${TARGET_TAG#v}"
@@ -203,80 +203,80 @@ export WORKER_IMAGE="${IMG_WORKER}:${VERSAO_ALVO}"
 export SCHEDULER_IMAGE="${IMG_SCHEDULER}:${VERSAO_ALVO}"
 gravar_imagens .env "$VERSAO_ALVO"
 
-# `dc pull` falha se alguma das três imagens ainda não existir no registro — o
-# que acontece numa instalação atualizando para a primeira versão publicada
-# depois desta mudança, ou se um run de publicação quebrou. Nesse caso o compose
-# ainda tem `build:` ao lado do `image:` do worker e do scheduler, então o
-# `up -d` os constrói localmente: pior que puxar, melhor que não atualizar.
+# `dc pull` échoue si l'une des trois images n'existe pas encore dans le registre — ce
+# qui arrive sur une installation qui se met à jour vers la première version publiée
+# après ce changement, ou si une publication a cassé. Dans ce cas le compose
+# a toujours `build:` à côté de l'`image:` du worker et du scheduler, donc le
+# `up -d` les construit localement : pire que tirer, mieux que ne pas mettre à jour.
 if ! dc pull; then
-  # A mensagem distingue os dois casos porque a consequência é oposta, e uma
-  # frase tranquilizadora sobre o caso errado é o pior desfecho possível: o
-  # `worker` e o `scheduler` têm `build:` ao lado do `image:` e o `up -d` os
-  # constrói; o `app` NÃO tem, então se for a imagem dele que falta, o `up -d`
-  # morre logo abaixo — e dizer "sigo assim mesmo" teria sido mentira.
+  # Le message distingue les deux cas parce que la conséquence est opposée, et une
+  # phrase rassurante sur le mauvais cas est la pire issue possible : le
+  # `worker` et le `scheduler` ont `build:` à côté de l'`image:` et le `up -d` les
+  # construit ; l'`app` NON, donc si c'est son image qui manque, le `up -d`
+  # meurt juste en dessous — et dire « je continue quand même » aurait été un mensonge.
   if dc pull app >/dev/null 2>&1; then
-    c_ylw "⚠ Não consegui puxar todas as imagens da versão ${VERSAO_ALVO}."
-    c_ylw "  A do app veio; o que faltar é construído aqui (mais lento, mesmo resultado)."
+    c_ylw "⚠ Impossible de télécharger toutes les images de la version ${VERSAO_ALVO}."
+    c_ylw "  Celle de l'app est arrivée ; ce qui manque est construit ici (plus lent, même résultat)."
   else
-    c_ylw "⚠ Não consegui puxar a imagem do APP na versão ${VERSAO_ALVO}."
-    c_ylw "  Causas comuns: a versão ainda está publicando, ou o pacote está privado no GHCR."
-    c_ylw "  Vou tentar subir mesmo assim — se falhar, rode de novo em alguns minutos."
+    c_ylw "⚠ Impossible de télécharger l'image de l'APP en version ${VERSAO_ALVO}."
+    c_ylw "  Causes courantes : la version est encore en cours de publication, ou le paquet est privé sur GHCR."
+    c_ylw "  Je vais essayer de démarrer quand même — en cas d'échec, relancez dans quelques minutes."
   fi
 fi
-# A rede do proxy externo é declarada como EXTERNA no compose: se ela sumiu
-# (um `docker network prune`, ou o `down -v` que o próprio kit ensina como
-# caminho de recomeço), o `up -d` abaixo morre em "network X declared as
-# external, but could not be found" — e este script roda sozinho pelo agent.sh,
-# então ninguém está lendo a tela para decifrar isso. Mesma função do install.sh.
+# Le réseau du proxy externe est déclaré EXTERNE dans le compose : s'il a disparu
+# (un `docker network prune`, ou le `down -v` que le kit lui-même enseigne comme
+# chemin de redémarrage), le `up -d` ci-dessous meurt sur « network X declared as
+# external, but could not be found » — et ce script tourne seul via agent.sh,
+# donc personne ne lit l'écran pour déchiffrer cela. Même fonction qu'install.sh.
 garantir_rede_do_proxy
 dc up -d
 
-# O Caddyfile entra no container por bind mount de UM ARQUIVO, e bind mount de
-# arquivo fica preso ao inode. O `git pull` não edita o arquivo: escreve outro e
-# renomeia, gerando inode novo — o container continua lendo o antigo, para
-# sempre. Medido nesta VPS: host inode 3283869, container 3271833, com o
-# conteúdo velho lá dentro.
+# Le Caddyfile entre dans le conteneur par un bind mount d'UN FICHIER, et un bind mount de
+# fichier reste attaché à l'inode. Le `git pull` n'édite pas le fichier : il en écrit un autre et
+# renomme, générant un nouvel inode — le conteneur continue de lire l'ancien, pour
+# toujours. Mesuré sur ce VPS : inode hôte 3283869, conteneur 3271833, avec
+# l'ancien contenu à l'intérieur.
 #
-# Sem este force-recreate, TODA mudança de proxy enviada numa atualização
-# (inclusive correção de segurança na borda) some em silêncio: o update diz
-# "concluída" e a configuração antiga segue valendo.
+# Sans ce force-recreate, TOUT changement de proxy envoyé dans une mise à jour
+# (y compris une correction de sécurité en bordure) disparaît en silence : la mise à jour dit
+# « terminée » et l'ancienne configuration reste en vigueur.
 #
-# Com proxy externo não há Caddy para recriar — e não basta o profile inativo
-# do override: nomear o serviço explicitamente (`up -d ... caddy`) ATIVA o
-# profile dele no Compose e sobe o contêiner assim mesmo, indo bater de frente
-# com o Traefik nas portas 80/443. O resultado era um "⚠ não consegui recriar o
-# proxy" em TODA atualização de quem usa proxy externo: alarme falso, num
-# momento em que o dono precisa confiar no que está lendo.
+# Avec un proxy externe il n'y a pas de Caddy à recréer — et le profil inactif
+# de l'override ne suffit pas : nommer le service explicitement (`up -d ... caddy`) ACTIVE son
+# profil dans Compose et démarre quand même le conteneur, en conflit direct
+# avec Traefik sur les ports 80/443. Le résultat était un « ⚠ impossible de recréer le
+# proxy » à CHAQUE mise à jour de qui utilise un proxy externe : fausse alarme, à un
+# moment où le propriétaire doit faire confiance à ce qu'il lit.
 if [ "${REVERSE_PROXY:-caddy}" = "traefik" ]; then
-  c_grn "✓ proxy externo (Traefik): o Caddy não é usado aqui — nada a recarregar"
+  c_grn "✓ proxy externe (Traefik) : Caddy n'est pas utilisé ici — rien à recharger"
 else
   dc up -d --force-recreate --no-deps caddy >/dev/null 2>&1 \
-    && c_grn "✓ proxy recarregado com a configuração desta versão" \
-    || c_ylw "⚠ não consegui recriar o proxy — rode: docker compose $(dc_files) up -d --force-recreate caddy"
+    && c_grn "✓ proxy rechargé avec la configuration de cette version" \
+    || c_ylw "⚠ impossible de recréer le proxy — lancez : docker compose $(dc_files) up -d --force-recreate caddy"
 fi
 
-# ── 6. O app voltou no ar? ───────────────────────────────────────────────────
-step "Conferindo se o app voltou no ar"
+# ── 6. L'app est-elle revenue en ligne ? ─────────────────────────────────────
+step "Vérification du retour en ligne de l'app"
 ok=""
 wait_app_healthy 20 3 >/dev/null && ok=1
 if [ -n "$ok" ]; then
-  c_grn "✓ Atualização concluída — app no ar e saudável."
-  # Dito no fim, e não no início, porque é aqui que o dono lê. Se a execução
-  # anterior deixou o pin pela metade, ele nunca soube — a tela dizia "concluída"
-  # e o worker seguia um canal móvel. Agora ele sabe que existiu e que acabou.
+  c_grn "✓ Mise à jour terminée — app en ligne et en bonne santé."
+  # Dit à la fin, et non au début, parce que c'est ici que le propriétaire lit. Si l'exécution
+  # précédente a laissé l'épinglage à moitié, il ne l'a jamais su — l'écran disait « terminée »
+  # et le worker suivait un canal mobile. Maintenant il sait que cela a existé et que c'est fini.
   if [ -n "$PIN_FALTANDO_ANTES" ]; then
-    c_ylw "  (de quebra: a versão de $PIN_FALTANDO_ANTES estava solta e foi fixada agora)"
+    c_ylw "  (au passage : la version de $PIN_FALTANDO_ANTES était flottante et vient d'être fixée)"
   fi
 else
-  c_ylw "⚠ Atualizei, mas o app não respondeu 'ok'. Veja os logs:"
+  c_ylw "⚠ J'ai mis à jour, mais l'app n'a pas répondu 'ok'. Voir les journaux :"
   c_ylw "  docker compose $(dc_files) logs --tail=50 app"
-  # Código de saída != 0: é o que o agent.sh usa pra saber que precisa voltar
-  # pra imagem anterior (guardada por ele ANTES do pull). Sem isso, não existe
-  # rede de proteção — o app novo, quebrado, ficaria no ar sem ninguém saber.
+  # Code de sortie != 0 : c'est ce qu'agent.sh utilise pour savoir qu'il doit revenir
+  # à l'image précédente (gardée par lui AVANT le pull). Sans cela, il n'existe aucun
+  # filet de protection — la nouvelle app, cassée, resterait en ligne sans que personne ne le sache.
   exit 1
 fi
 
-# ── 7. Automações (cron do drain de eventos; o da tela já subiu no bloco 0) ──
-step "Conferindo as automações"
+# ── 7. Automatisations (cron du drain d'événements ; celui de l'écran est déjà actif depuis le bloc 0) ──
+step "Vérification des automatisations"
 ensure_encryption_key .env
 setup_event_log_drain_cron

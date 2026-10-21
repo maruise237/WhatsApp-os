@@ -256,7 +256,7 @@ describe("PATCH /api/v1/ai/budget", () => {
       expect(res.status).toBe(422);
       const body = await corpo(res);
       expect(body.error?.code).toBe("unprocessable_entity");
-      expect(body.error?.message).toContain("US$ 1,00");
+      expect(body.error?.message).toContain("1,00 $ US");
       expect(escritas).toEqual([]);
     });
 

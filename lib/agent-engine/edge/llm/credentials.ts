@@ -19,6 +19,7 @@ import type pg from 'pg';
 import { z } from 'zod';
 
 import { byteaToBuffer, decryptKey } from '@/lib/crypto/aes_gcm';
+import { FOURNISSEUR_PLATEFORME, iaDeLaPlateforme, type IaDeLaPlateforme } from '@/lib/ai/plateforme';
 import {
   LIMIAR_PADRAO_PCT,
   normalizarChaveDeOrcamento,
@@ -67,6 +68,12 @@ export interface LlmEdgeConfig {
    * exatamente onde a IA gasta.
    */
   budgetEnforcement?: ChaveDeOrcamento;
+  /**
+   * L'IA fournie par la plateforme (`DEEPSEEK_API_KEY`). Présente, elle décide
+   * seule du fournisseur, de la clé et du modèle de TOUTES les organisations —
+   * voir `lib/ai/plateforme.ts`.
+   */
+  plateforme?: IaDeLaPlateforme;
 }
 
 /**
@@ -83,14 +90,20 @@ export function llmEdgeConfigFromEnv(env: {
   ANTHROPIC_API_KEY?: string;
   OPENAI_API_KEY?: string;
   OPENROUTER_API_KEY?: string;
+  DEEPSEEK_API_KEY?: string;
+  DEEPSEEK_BASE_URL?: string;
+  DEEPSEEK_MODEL?: string;
+  DEEPSEEK_REFLEXION?: string;
   LLM_CACHE_TTL?: string;
   AI_BUDGET_ENFORCEMENT?: string;
 }): LlmEdgeConfig {
   const ttl = env.LLM_CACHE_TTL ?? '1h';
   if (ttl !== '5m' && ttl !== '1h') {
-    throw new Error("LLM_CACHE_TTL inválido — use '5m' ou '1h' (default 1h)");
+    throw new Error("LLM_CACHE_TTL invalide — utilisez '5m' ou '1h' (par défaut 1h)");
   }
+  const plateforme = iaDeLaPlateforme(env);
   return {
+    ...(plateforme ? { plateforme } : {}),
     ...(env.ANTHROPIC_API_KEY ? { anthropicApiKey: env.ANTHROPIC_API_KEY } : {}),
     ...(env.OPENAI_API_KEY ? { openaiApiKey: env.OPENAI_API_KEY } : {}),
     ...(env.OPENROUTER_API_KEY ? { openrouterApiKey: env.OPENROUTER_API_KEY } : {}),
@@ -108,7 +121,7 @@ export class LlmNotConfiguredError extends Error {
   override readonly name = 'llm_not_configured';
   constructor() {
     super(
-      'org sem credencial LLM utilizável — cadastre uma chave BYOK ativa/validada em ai_provider_credentials ou defina ANTHROPIC_API_KEY / OPENAI_API_KEY (fallback de plataforma, conforme o provider do modelo)',
+      'organisation sans accès IA utilisable — l’IA de la plateforme n’est pas configurée sur cette installation (clé de plateforme absente du .env)',
     );
   }
 }
@@ -272,11 +285,13 @@ export async function resolveOrgLlmConfig(
     ({ rows } = await db.query<LinhaDeConfig>(SQL_CONFIG_LEGADO, [organizationId]));
   }
   if (rows.length === 0) {
-    throw new Error('organização inexistente ao resolver config LLM');
+    throw new Error('organisation inexistante lors de la résolution de la configuration IA');
   }
   const linha = rows[0];
   const settings = llmSettingsSchema.parse(linha?.llm ?? {});
-  const provider = override?.provider ?? settings.provider;
+  // IA de la plateforme : le réglage de l'organisation et le choix de l'agent
+  // ne désignent plus le fournisseur — un seul fournisseur, une seule clé.
+  const provider = cfg.plateforme ? FOURNISSEUR_PLATEFORME : (override?.provider ?? settings.provider);
 
   // Organização sem linha em `ai_budgets` cai aqui com tudo nulo, e o
   // normalizador resolve `modo` para 'off'. NULO É SEMPRE A RESPOSTA MAIS
@@ -290,6 +305,20 @@ export async function resolveOrgLlmConfig(
           efetivoEm: linha?.efetivo_em ?? null,
           limiarPct: Number(linha?.limiar_pct ?? LIMIAR_PADRAO_PCT),
         };
+
+  if (cfg.plateforme) {
+    return {
+      provider,
+      apiKey: cfg.plateforme.apiKey,
+      defaultModel: cfg.plateforme.model,
+      params: settings.params,
+      // La liste de modèles autorisés date du temps où l'organisation choisissait
+      // son modèle ; l'appliquer refuserait le seul modèle qui existe.
+      enabledModels: [],
+      orcamento,
+      orcamentoIndisponivelPorque,
+    };
+  }
 
   // Credencial: a ESCOLHIDA na versão publicada quando houver (ainda exigindo
   // ativa+validada — publish valida, mas a credencial pode ser revogada depois);

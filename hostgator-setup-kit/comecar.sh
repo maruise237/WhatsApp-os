@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
 #
-# DeskcommCRM — a porta de entrada.
+# DeskcommCRM — la porte d'entrée.
 #
-# Diferente do install.sh, este script roda no SEU computador (macOS, Linux ou
-# WSL), antes de existir servidor. Ele responde a única pergunta que trava quem
-# está começando — "o que eu preciso ter antes de instalar isso?" — e entrega o
-# comando certo para o caso de cada um.
+# Contrairement à install.sh, ce script tourne sur VOTRE ordinateur (macOS, Linux ou
+# WSL), avant que le serveur n'existe. Il répond à l'unique question qui bloque qui
+# débute — « de quoi ai-je besoin avant d'installer ceci ? » — et donne la
+# bonne commande pour le cas de chacun.
 #
-# Uso:
+# Usage :
 #   bash comecar.sh
 #   curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/hostgator-setup-kit/comecar.sh | bash
 #
 set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/melgarafael/DeskcommCRM.git}"
-# Link de parceria com a HostGator. Mesma URL e mesmo rótulo do README: uma
-# promessa só, num lugar só — duas redações da mesma oferta viram duas ofertas.
+# Lien de partenariat avec HostGator. Même URL et même libellé que le README : une
+# seule promesse, à un seul endroit — deux rédactions de la même offre deviennent deux offres.
 VPS_URL="https://www.hostgator.com.br/52708-141-3-52.html"
 COMUNIDADE_URL="https://lp-comunidade.automatiklabs.com.br"
 
-# ── Aparência ───────────────────────────────────────────────────────────────
-# Gêmeas das do install.sh (que por sua vez é standalone porque roda antes do
-# clone). Este aqui roda antes AINDA — pode chegar pela rede sozinho, sem repo
-# e sem o irmão ao lado. Se mexer numa, mexa na outra.
+# ── Apparence ───────────────────────────────────────────────────────────────
+# Jumelles de celles d'install.sh (qui est lui-même autonome parce qu'il tourne avant le
+# clone). Celui-ci tourne ENCORE avant — il peut arriver seul par le réseau, sans dépôt
+# et sans son frère à côté. Si vous modifiez l'une, modifiez l'autre.
 if   [ -n "${NO_COLOR:-}" ];    then COLOR=0
 elif [ -n "${FORCE_COLOR:-}" ]; then COLOR=1
 elif [ -t 1 ];                  then COLOR=1
@@ -58,33 +58,33 @@ banner() {
 LOGO
   fi
   printf '\n'
-  c_dim "  Agentes de IA que atendem no WhatsApp, dentro do seu CRM."
-  c_dim "  Open-source · roda no seu servidor · os dados são seus."
+  c_dim "  Des agents qui vendent sur WhatsApp, au cœur de votre CRM."
+  c_dim "  Open source · tourne sur votre serveur · vos données restent à vous."
 }
 
-# ── Entrada do teclado ──────────────────────────────────────────────────────
-# Este script existe para ser chamado por `curl -fsSL … | bash`, e nesse modo o
-# stdin do processo É O PIPE (o texto do próprio script), não o teclado: um
-# `read` comum consumiria o código-fonte como se fosse resposta, ou veria EOF na
-# primeira pergunta. Reatar em /dev/tty é o que faz o menu existir nesse
-# caminho; sem terminal nenhum (CI, cron), não há o que perguntar.
+# ── Saisie au clavier ───────────────────────────────────────────────────────
+# Ce script existe pour être appelé par `curl -fsSL … | bash`, et dans ce mode le
+# stdin du processus EST LE PIPE (le texte du script lui-même), pas le clavier : un
+# `read` ordinaire consommerait le code source comme s'il s'agissait d'une réponse, ou verrait EOF à la
+# première question. Se rattacher à /dev/tty est ce qui fait exister le menu sur ce
+# chemin ; sans aucun terminal (CI, cron), il n'y a rien à demander.
 TTY_IN=""
 if [ -t 0 ]; then TTY_IN="/dev/stdin"
 elif [ -r /dev/tty ] && { : < /dev/tty; } 2>/dev/null; then TTY_IN="/dev/tty"
 fi
 
-# Devolve != 0 quando a ENTRADA ACABOU, que é diferente de "respondeu vazio"
-# (Enter, que vale o default). Confundir os dois prendia o script: alimentado
-# por um pipe que termina antes das perguntas — `curl … | bash` de quem só
-# responde a primeira —, o processo NÃO terminava (medido: teto de 20s estourado,
-# com o menu parado na tela e nada indicando que só um Ctrl-C sai dali). Com a
-# distinção, o mesmo caso encerra em 0 imprimindo os dois caminhos.
+# Renvoie != 0 quand l'ENTRÉE EST TERMINÉE, ce qui est différent de « a répondu vide »
+# (Entrée, qui vaut la valeur par défaut). Confondre les deux bloquait le script : alimenté
+# par un pipe qui se termine avant les questions — `curl … | bash` de qui ne
+# répond qu'à la première —, le processus NE se terminait PAS (mesuré : plafond de 20 s dépassé,
+# avec le menu figé à l'écran et rien n'indiquant que seul un Ctrl-C en sort). Avec la
+# distinction, le même cas se termine en 0 en affichant les deux chemins.
 #
-# O mecanismo exato ficou em aberto: o consumo de CPU na espera é ~0 (perfil de
-# bloqueio), mas a leitura do código sugeriria reentrada no mesmo ramo. Os dois
-# sinais discordam e não vale fechar a questão aqui — o comportamento que
-# importa (não termina × termina) está medido nas duas versões.
-perguntar() {  # perguntar <variável> <texto> [default]
+# Le mécanisme exact est resté ouvert : la consommation CPU pendant l'attente est ~0 (profil de
+# blocage), mais la lecture du code suggérerait une réentrée dans la même branche. Les deux
+# signaux divergent et il ne vaut pas la peine de trancher ici — le comportement qui
+# compte (ne se termine pas × se termine) est mesuré dans les deux versions.
+perguntar() {  # perguntar <variable> <texte> [défaut]
   local var="$1" texto="$2" padrao="${3:-}" resposta=""
   if [ -z "$TTY_IN" ]; then printf -v "$var" '%s' "$padrao"; return 0; fi
   printf '%s' "$texto"
@@ -92,9 +92,9 @@ perguntar() {  # perguntar <variável> <texto> [default]
   printf -v "$var" '%s' "${resposta:-$padrao}"
 }
 
-# Abre uma URL no navegador — só onde existe navegador. Numa sessão SSH (o caso
-# de quem já está dentro do servidor) não há: aí o link fica na tela e pronto,
-# que é melhor do que um erro de comando não encontrado no meio da conversa.
+# Ouvre une URL dans le navigateur — seulement là où un navigateur existe. Dans une session SSH (le cas
+# de qui est déjà dans le serveur) il n'y en a pas : alors le lien reste à l'écran et c'est tout,
+# ce qui vaut mieux qu'une erreur de commande introuvable au milieu de la conversation.
 tem_navegador() {
   if command -v open >/dev/null 2>&1 && [ "$(uname -s)" = "Darwin" ]; then return 0; fi
   if command -v xdg-open >/dev/null 2>&1 && [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then return 0; fi
@@ -103,67 +103,67 @@ tem_navegador() {
 abrir() {
   tem_navegador || return 0
   local sim=""
-  # EOF aqui não é motivo para abrir nada: na dúvida, não age.
-  perguntar sim "  Abro isso no seu navegador agora? (S/n) " "S" || return 0
+  # EOF ici n'est pas une raison d'ouvrir quoi que ce soit : dans le doute, on n'agit pas.
+  perguntar sim "  J'ouvre ceci dans votre navigateur maintenant ? (O/n) " "O" || return 0
   case "$sim" in [Nn]*) return 0;; esac
   if [ "$(uname -s)" = "Darwin" ]; then open "$1" >/dev/null 2>&1 || true
   else xdg-open "$1" >/dev/null 2>&1 || true; fi
-  c_grn "  ✓ abri no navegador. Volte aqui quando terminar."
+  c_grn "  ✓ ouvert dans le navigateur. Revenez ici quand vous aurez terminé."
 }
 
-# ── O que contratar ─────────────────────────────────────────────────────────
-# Os números não são chute: saem de docs/runbooks/waha-hostgator.md, que é o
-# ambiente onde o CRM é operado de verdade. Nomear o PLANO é o que mais importa
-# aqui — "2 vCPU / 4 GB" ainda deixa a pessoa escolhendo entre seis caixinhas no
-# site, e escolher errado é descobrir o problema semanas depois, com o WhatsApp
-# caindo por falta de memória.
+# ── Quoi louer ──────────────────────────────────────────────────────────────
+# Les chiffres ne sont pas devinés : ils sortent de docs/runbooks/waha-hostgator.md, qui est
+# l'environnement où le CRM est vraiment exploité. Nommer l'OFFRE est ce qui compte le plus
+# ici — « 2 vCPU / 4 Go » laisse encore la personne choisir entre six cases sur le
+# site, et mal choisir, c'est découvrir le problème des semaines plus tard, avec WhatsApp
+# qui tombe faute de mémoire.
 mostrar_requisitos() {
   cat <<REQ
 
-  O CRM roda 24 horas por dia, com o WhatsApp junto. Para isso ele precisa de:
+  Le CRM tourne 24 heures sur 24, avec WhatsApp. Pour cela il a besoin de :
 
-    • Plano VPS Turing (ou superior) — 2 vCPU e 4 GB de RAM
-      O plano Cartesius (1 vCPU / 2 GB) NÃO dá conta: o WhatsApp usa cerca de
-      150 MB por número conectado, e a stack inteira não cabe.
-    • 80 GB de disco
+    • Offre VPS Turing (ou supérieure) — 2 vCPU et 4 Go de RAM
+      L'offre Cartesius (1 vCPU / 2 Go) NE suffit PAS : WhatsApp utilise environ
+      150 Mo par numéro connecté, et la stack entière n'y tient pas.
+    • 80 Go de disque
     • Ubuntu 22.04 LTS ou 24.04 LTS
-    • Datacenter em São Paulo — é o que segura a latência do WhatsApp no Brasil
+    • Un datacenter proche de vos clients — c'est ce qui tient la latence de WhatsApp en Afrique
 
-  Onde contratar:
+  Où louer :
 
        ${VPS_URL}
 
 REQ
-  c_dim "  Esse é um link de parceria: assinar por ele sai com desconto e ajuda a"
-  c_dim "  manter o projeto. O CRM é MIT e roda em qualquer servidor — se você já"
-  c_dim "  tem um, ou prefere outro provedor, funciona igual."
+  c_dim "  C'est un lien de partenariat : souscrire par lui donne une remise et aide à"
+  c_dim "  faire vivre le projet. Le CRM est sous licence MIT et tourne sur n'importe quel serveur — si vous en avez déjà"
+  c_dim "  un, ou préférez un autre fournisseur, cela fonctionne pareil."
   printf '\n'
 }
 
 comando_de_instalacao() {
   cat <<CMD
 
-  Já dentro do servidor, cole isto:
+  Une fois dans le serveur, collez ceci :
 
        git clone ${REPO_URL} deskcommcrm
        cd deskcommcrm
        bash hostgator-setup-kit/install.sh
 
-  O instalador cuida do resto: instala o Docker se faltar, cria o banco,
-  configura o domínio com HTTPS e sobe o CRM. Ele pergunta o que só você sabe
-  (o domínio, as chaves, a senha do primeiro acesso) e valida cada resposta na
-  hora — nada de descobrir um dado errado dez minutos depois.
+  L'installateur s'occupe du reste : il installe Docker s'il manque, crée la base,
+  configure le domaine en HTTPS et démarre le CRM. Il demande ce que vous seul savez
+  (le domaine, les clés, le mot de passe du premier accès) et valide chaque réponse sur le
+  moment — pas question de découvrir une donnée erronée dix minutes plus tard.
 
 CMD
 }
 
-# ── Fluxo ───────────────────────────────────────────────────────────────────
+# ── Déroulé ─────────────────────────────────────────────────────────────────
 banner
 
 if [ -z "$TTY_IN" ]; then
-  # Sem teclado (pipe puro, CI): não dá para conduzir ninguém. Entrega os dois
-  # caminhos de uma vez, em vez de escolher um por conta própria.
-  c_ylw "  (sem terminal interativo — segue o resumo dos dois caminhos)"
+  # Sans clavier (pipe pur, CI) : impossible de guider qui que ce soit. Donne les deux
+  # chemins d'un coup, au lieu d'en choisir un de son propre chef.
+  c_ylw "  (pas de terminal interactif — voici le résumé des deux chemins)"
   mostrar_requisitos
   comando_de_instalacao
   exit 0
@@ -172,18 +172,18 @@ fi
 while :; do
   cat <<MENU
 
-  Onde o seu CRM vai rodar?
+  Où votre CRM va-t-il tourner ?
 
-    1) Ainda não tenho servidor
-    2) Já tenho um servidor (VPS), mas estou no meu computador
-    3) Já estou dentro do servidor agora
+    1) Je n'ai pas encore de serveur
+    2) J'ai déjà un serveur (VPS), mais je suis sur mon ordinateur
+    3) Je suis déjà dans le serveur en ce moment
 
 MENU
-  # Enter cai no 1 de propósito: quem já tem servidor costuma chegar ao produto
-  # pelo README com o SSH aberto e ir direto ao install.sh. Quem chega por AQUI
-  # — um vídeo, a comunidade, um link solto — é, na maioria, quem ainda não tem.
-  if ! perguntar escolha "  Digite 1, 2 ou 3 (Enter = 1): " "1"; then
-    c_ylw "  (a entrada terminou — deixo os dois caminhos aqui)"
+  # Entrée tombe sur 1 exprès : qui a déjà un serveur arrive généralement au produit
+  # par le README avec le SSH ouvert et va directement à install.sh. Qui arrive par ICI
+  # — une vidéo, la communauté, un lien isolé — est, en majorité, qui n'en a pas encore.
+  if ! perguntar escolha "  Tapez 1, 2 ou 3 (Entrée = 1) : " "1"; then
+    c_ylw "  (l'entrée s'est terminée — je laisse les deux chemins ici)"
     mostrar_requisitos
     comando_de_instalacao
     exit 0
@@ -193,16 +193,16 @@ MENU
     1)
       mostrar_requisitos
       abrir "$VPS_URL"
-      c_dim "  Quando o servidor estiver de pé, rode este mesmo comando de novo e"
-      c_dim "  escolha a opção 2 — eu te dou o passo seguinte."
+      c_dim "  Quand le serveur sera debout, relancez cette même commande et"
+      c_dim "  choisissez l'option 2 — je vous donne l'étape suivante."
       ;;
     2)
       cat <<SSH
 
-  Entre no servidor pelo terminal. O provedor te mandou o IP e a senha de root
-  por e-mail quando a VPS ficou pronta:
+  Entrez dans le serveur par le terminal. Le fournisseur vous a envoyé l'IP et le mot de passe root
+  par e-mail quand le VPS a été prêt :
 
-       ssh root@SEU_IP_AQUI
+       ssh root@VOTRE_IP_ICI
 
 SSH
       comando_de_instalacao
@@ -210,41 +210,41 @@ SSH
       ;;
     3)
       if [ -f "$(dirname "$0")/install.sh" ]; then
-        # Confirmação explícita porque este é o único ramo que MUDA a máquina, e
-        # o engano é fácil: quem clonou o repo no próprio notebook para ler o
-        # código está a uma tecla de instalar a stack inteira nele. Mostrar o
-        # hostname é o que faz a pessoa perceber onde ela está de verdade.
+        # Confirmation explicite parce que c'est la seule branche qui MODIFIE la machine, et
+        # l'erreur est facile : qui a cloné le dépôt sur son propre portable pour lire le
+        # code est à une touche d'y installer toute la stack. Montrer le
+        # hostname est ce qui fait réaliser à la personne où elle est vraiment.
         printf '\n'
-        c_ylw "  Atenção: isso instala o CRM NESTA máquina — $(hostname 2>/dev/null || echo 'esta')."
-        c_ylw "  Se você está no seu computador pessoal, e não no servidor, responda n."
-        # EOF aqui cai no ramo de NÃO instalar: este é o único ponto do script
-        # que muda a máquina, e "não consegui perguntar" nunca vira um sim.
-        perguntar ok "  Continuar? (s/N) " "N" || ok="N"
+        c_ylw "  Attention : ceci installe le CRM SUR CETTE machine — $(hostname 2>/dev/null || echo 'celle-ci')."
+        c_ylw "  Si vous êtes sur votre ordinateur personnel, et non sur le serveur, répondez n."
+        # EOF ici tombe dans la branche NE PAS installer : c'est le seul point du script
+        # qui modifie la machine, et « je n'ai pas pu demander » ne devient jamais un oui.
+        perguntar ok "  Continuer ? (o/N) " "N" || ok="N"
         case "$ok" in
-          [Ss]*)
-            c_grn "  ✓ achei o instalador aqui do lado. Começando."
+          [OoSsYy]*)
+            c_grn "  ✓ installateur trouvé juste à côté. On commence."
             printf '\n'
             exec bash "$(dirname "$0")/install.sh"
             ;;
         esac
-        c_dim "  Ok, não instalei nada. Escolha 1 ou 2 se precisar do outro caminho."
+        c_dim "  D'accord, je n'ai rien installé. Choisissez 1 ou 2 si vous avez besoin de l'autre chemin."
         continue
       fi
-      c_ylw "  Você está no servidor, mas o projeto ainda não foi baixado aqui."
+      c_ylw "  Vous êtes sur le serveur, mais le projet n'a pas encore été téléchargé ici."
       comando_de_instalacao
       break
       ;;
     *)
-      c_ylw "  Não entendi '${escolha}'. Digite 1, 2 ou 3."
+      c_ylw "  Je n'ai pas compris '${escolha}'. Tapez 1, 2 ou 3."
       ;;
   esac
 done
 
 cat <<FIM
-  ─── Quando travar ────────────────────────────────────────
+  ─── En cas de blocage ────────────────────────────────────
 
-  Tem gente rodando exatamente este CRM na comunidade, e é lá que saem os
-  avisos de versão nova:
+  Des gens font tourner exactement ce CRM dans la communauté, et c'est là que sortent les
+  annonces de nouvelle version :
 
        ${COMUNIDADE_URL}
 

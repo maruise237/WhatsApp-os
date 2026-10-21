@@ -62,7 +62,7 @@ describe('applyScheduleFollowup — guard anti-empilhamento (1 pendente por lead
     const p = fakePool([{ id: 'x', promised_at: null }]);
     const res = await applyScheduleFollowup(p.db, CFG, IDS, VALID);
     if (res.ok) throw new Error('esperava falha');
-    expect(res.error.message.toLowerCase()).toContain('absoluta');
-    expect(res.error.message).toContain('amanhã');
+    expect(res.error.message.toLowerCase()).toContain('absolue');
+    expect(res.error.message).toContain('demain');
   });
 });

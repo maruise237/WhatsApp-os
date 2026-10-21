@@ -48,7 +48,7 @@ export function InviteForm() {
       setResult(res.data);
       const ok = res.data.sent.length;
       const ko = res.data.failed.length;
-      toast.success(`${ok} convite(s) enviado(s)${ko > 0 ? `, ${ko} falha(s).` : "."}`);
+      toast.success(`${ok} invitation(s) envoyée(s)${ko > 0 ? `, ${ko} échec(s).` : "."}`);
       setEmailsRaw("");
     } catch {
       /* showApiError handled */
@@ -84,7 +84,7 @@ export function InviteForm() {
           </Select>
         </div>
         <Button type="submit" disabled={invite.isPending}>
-          {invite.isPending ? "Enviando…" : "Envoyer les invitations"}
+          {invite.isPending ? "Envoi…" : "Envoyer les invitations"}
         </Button>
       </form>
 
@@ -100,7 +100,7 @@ export function InviteForm() {
                       <div className="font-medium">{s.email}</div>
                       <div className="text-xs text-muted-foreground">
                         {s.email_dispatched
-                          ? "Email enviado."
+                          ? "E-mail envoyé."
                           : "Resend non configuré — lien copiable ci-dessous (DEV)."}
                       </div>
                       {!s.email_dispatched ? (

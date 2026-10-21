@@ -50,6 +50,10 @@ describe("escolher o pacote pelo que o dono escreveu", () => {
     expect(escolherPacotePorTexto("Cabinet d'avocats").id).toBe("servicos");
     expect(escolherPacotePorTexto("Formation en ligne en marketing digital").id).toBe("curso");
     expect(escolherPacotePorTexto("ecole de langues").id).toBe("curso");
+    expect(escolherPacotePorTexto("Maquis et grillades à Abidjan").id).toBe("restaurante");
+    expect(escolherPacotePorTexto("Vente de gâteaux d'anniversaire à Yaoundé").id).toBe("restaurante");
+    expect(escolherPacotePorTexto("Boutique de cosmétiques à Dakar").id).toBe("loja");
+    expect(escolherPacotePorTexto("Vente de téléphones et accessoires").id).toBe("loja");
   });
 
   it("cai no genérico quando não reconhece — nunca em nada", () => {

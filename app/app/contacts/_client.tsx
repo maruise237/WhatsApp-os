@@ -23,10 +23,9 @@ import type { ContactOrderBy } from "@/lib/schemas/contacts";
 
 const SOURCE_OPTIONS = [
   { value: undefined, label: "Toutes les origines" },
-  { value: "manual", label: "Manual" },
+  { value: "manual", label: "Manuel" },
   { value: "whatsapp", label: "WhatsApp" },
-  { value: "nuvemshop", label: "Nuvemshop" },
-  { value: "import_csv", label: "Importado (CSV)" },
+  { value: "import_csv", label: "Importé (CSV)" },
 ];
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;

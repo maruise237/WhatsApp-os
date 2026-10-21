@@ -54,7 +54,7 @@ export async function readSkillReference(
       ok: false,
       error: {
         code: 'skill_not_active',
-        message: `a skill '${input.skillName}' não está ativa neste turno — só é possível ler references de skills já casadas.`,
+        message: `a skill '${input.skillName}' n’est pas active à ce tour — seules les references des compétences déjà déclenchées peuvent être lues.`,
       },
     };
   }
@@ -64,7 +64,7 @@ export async function readSkillReference(
       ok: false,
       error: {
         code: 'reference_not_found',
-        message: `'${input.refPath}' não é uma reference conhecida da skill '${input.skillName}' — confira o caminho exato do manifesto.`,
+        message: `'${input.refPath}' n’est pas une reference connue de la compétence '${input.skillName}' — vérifiez le chemin exact du manifeste.`,
       },
     };
   }
@@ -75,7 +75,7 @@ export async function readSkillReference(
       ok: false,
       error: {
         code: 'reference_download_failed',
-        message: 'a reference existe no manifesto mas não foi possível lê-la agora — siga sem ela ou tente de novo.',
+        message: 'la reference existe dans le manifeste mais n’a pas pu être lue maintenant — continuez sans elle ou réessayez.',
       },
     };
   }

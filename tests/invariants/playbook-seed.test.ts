@@ -66,7 +66,7 @@ afterAll(async () => {
 
 describe("seedPlatformPlaybook (boot do worker, self-host)", () => {
   it("estado limpo: loadPlaybook lança; seed 2x = +1 versão, 1 ponteiro; loadPlaybook para de lançar", async () => {
-    await expect(loadPlaybook(pool, ORG)).rejects.toThrow(/ponteiro da camada plataforma ausente/);
+    await expect(loadPlaybook(pool, ORG)).rejects.toThrow(/pointeur de la couche plateforme absent/);
 
     const before = await platformState();
     expect(before.pointerVersionId).toBeNull();

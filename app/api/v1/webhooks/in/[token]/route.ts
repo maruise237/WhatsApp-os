@@ -18,6 +18,7 @@ import { createLeadHandler } from "@/app/api/v1/leads/_handler";
 import { emitLeadActivity } from "@/lib/leads/activity-emitter";
 import type { CreateLeadInput } from "@/lib/schemas";
 import { mapInboundPayload, verifyInboundSignature, type FieldMap } from "@/lib/webhooks/inbound";
+import { indicatifDeLOrganisation } from "@/lib/telephone/normaliser";
 import {
   buildContactConsentGrant,
   buildContactConsentDenial,
@@ -42,7 +43,7 @@ const RATE_LIMIT_PER_MIN = 60;
 
 // ponytail: mirrors the default phone aliases in lib/webhooks/inbound.ts —
 // duplicated (not exported there) only so the route can flag a phone-looking
-// field that failed normalizePhoneBR, for observability. Keep in sync if that
+// field that failed normalizePhone, for observability. Keep in sync if that
 // list changes.
 const PHONE_ALIASES_FOR_LOGGING = ["phone", "telefone", "whatsapp", "celular", "phone_number", "tel"];
 
@@ -171,8 +172,18 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
   // níveis aninhados que o mapeador genérico descarta por desenho (ele só lê
   // chave de topo). Detecta a forma UMA vez aqui; `respondiMapped` alimenta
   // tanto o idempotency key quanto o mapeamento de campos mais abaixo.
+  //
+  // O telefone sem indicativo recebe o indicativo PADRÃO DA ORGANIZAÇÃO
+  // (`settings.phone_country_code`, 237 se ausente). `organization_id` vem da
+  // fonte resolvida pelo token do path — fonte confiável, nunca o body.
+  const { data: orgDaFonte } = await admin
+    .from("organizations")
+    .select("settings")
+    .eq("id", source.organization_id)
+    .maybeSingle();
+  const indicatif = indicatifDeLOrganisation(orgDaFonte?.settings);
   const respondiMapped: RespondiMapped | null = isRespondiPayload(payload)
-    ? mapRespondiPayload(payload)
+    ? mapRespondiPayload(payload, indicatif)
     : null;
 
   // Idempotência (spec §5): `external_id` é campo reservado do envio — quem
@@ -237,7 +248,8 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
   // O `respondiMapped ??` é do PR #326: sem ele o payload aninhado do Respondi
   // volta a cair no mapeador genérico, que é o defeito que aquele PR conserta.
   const mapped =
-    respondiMapped ?? mapInboundPayload(externalId ? payloadForMapping : payload, fieldMap);
+    respondiMapped ??
+    mapInboundPayload(externalId ? payloadForMapping : payload, fieldMap, indicatif);
   if (!mapped.phone) {
     const rawPhone = findRawPhoneIfUnnormalized(payload, fieldMap);
     if (rawPhone) mapped.source_metadata.raw_phone = rawPhone;
@@ -440,7 +452,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       ? respondiLeadTitle(respondiMapped)
       : (mapped.name ?? mapped.phone ?? mapped.email ?? "Client sans nom"),
     contact_id: contactId,
-    currency: "BRL",
+    currency: "XAF",
     tags: [],
     source: "webhook",
     custom_fields: mapped.custom_fields,
@@ -521,7 +533,7 @@ export async function POST(req: NextRequest, ctx: RouteCtx): Promise<NextRespons
       sourceModule: "webhook",
       sourceId: source.id,
       actor: { type: "webhook_source", id: source.id },
-      reason: "La personne n’a pas donné son consentement pour être contactée dans le formulaire Respondi.",
+      reason: "La personne n’a pas donné son consentement pour être contactée dans le formulaire.",
       payload: {
         webhook_source_id: source.id,
         detected_via: respondiMapped.consent.detectedVia,

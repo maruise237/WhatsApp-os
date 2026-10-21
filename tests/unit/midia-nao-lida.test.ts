@@ -30,10 +30,10 @@ describe("o marcador que o agente recebe", () => {
     expect(MARCADOR_NAO_LIDA.trim().length).toBeGreaterThan(0);
   });
 
-  it("está em português e diz que houve uma mídia", () => {
+  it("está em francês e diz que houve uma mídia", () => {
     // O texto entra no contexto do modelo. Um marcador técnico
     // (`[MEDIA_UNREADABLE]`) faria o agente ecoar jargão ao cliente.
-    expect(MARCADOR_NAO_LIDA.toLowerCase()).toContain("mídia");
+    expect(MARCADOR_NAO_LIDA.toLowerCase()).toContain("média");
     expect(MARCADOR_NAO_LIDA).not.toMatch(/[A-Z_]{6,}/);
   });
 

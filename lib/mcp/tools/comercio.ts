@@ -18,16 +18,16 @@ import type { McpToolDefinition } from "../types";
 // ---------------------------------------------------------------------------
 
 const pedidosInputShape = {
-  contact_id: z.string().uuid().describe("O cliente cujos pedidos se quer ver."),
+  contact_id: z.string().uuid().describe("Le client dont on veut voir les commandes."),
   limite: z.number().int().min(1).max(20).optional().default(10),
 };
 
 export const crmListContactOrders: McpToolDefinition<typeof pedidosInputShape> = {
   name: "crm_list_contact_orders",
   description:
-    "Lista os pedidos de um contato, do mais recente para o mais antigo, com status, valor, " +
-    "forma de pagamento, situação de entrega e código de rastreio. Use antes de prometer prazo " +
-    "ou repetir oferta: o cliente pode já ter comprado.",
+    "Liste les commandes d’un contact, de la plus récente à la plus ancienne, avec statut, montant, " +
+    "moyen de paiement, état de livraison et code de suivi. À utiliser avant de promettre un délai " +
+    "ou de répéter une offre : le client a peut-être déjà acheté.",
   inputSchema: pedidosInputShape,
   category: "read",
   requiresRole: "agent",
@@ -51,7 +51,7 @@ export const crmListContactOrders: McpToolDefinition<typeof pedidosInputShape> =
         // Pedido anonimizado por LGPD continua contando para histórico, mas o
         // conteúdo não volta: dizer isso é melhor que devolver campos vazios e
         // deixar o modelo concluir que o cliente nunca comprou.
-        ...(p.is_anonymized ? { aviso: "pedido anonimizado a pedido do titular" } : {}),
+        ...(p.is_anonymized ? { aviso: "commande anonymisée à la demande de la personne concernée" } : {}),
       })),
     };
   },
@@ -62,7 +62,7 @@ export const crmListContactOrders: McpToolDefinition<typeof pedidosInputShape> =
 // ---------------------------------------------------------------------------
 
 const produtosInputShape = {
-  termo: z.string().trim().min(2).describe("Parte do nome do produto."),
+  termo: z.string().trim().min(2).describe("Partie du nom du produit."),
   limite: z.number().int().min(1).max(20).optional().default(10),
   somente_disponiveis: z.boolean().optional().default(true),
 };
@@ -70,8 +70,8 @@ const produtosInputShape = {
 export const crmSearchProducts: McpToolDefinition<typeof produtosInputShape> = {
   name: "crm_search_products",
   description:
-    "Busca produtos do catálogo da loja por parte do nome. Devolve preço, quantidade disponível " +
-    "e link. Use para responder preço e disponibilidade com o dado da loja em vez de estimar.",
+    "Recherche des produits du catalogue de la boutique par une partie du nom. Renvoie le prix, la quantité disponible " +
+    "et le lien. À utiliser pour répondre sur le prix et la disponibilité avec la donnée de la boutique au lieu d’estimer.",
   inputSchema: produtosInputShape,
   category: "read",
   requiresRole: "agent",
@@ -94,7 +94,7 @@ export const crmSearchProducts: McpToolDefinition<typeof produtosInputShape> = {
     return {
       produtos: data ?? [],
       ...(data && data.length === 0
-        ? { aviso: input.somente_disponiveis ? "nada com esse nome em estoque" : "nada com esse nome no catálogo" }
+        ? { aviso: input.somente_disponiveis ? "rien avec ce nom en stock" : "rien avec ce nom dans le catalogue" }
         : {}),
     };
   },

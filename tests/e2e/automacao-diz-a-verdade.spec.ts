@@ -78,7 +78,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto(`${APP_URL}/login`);
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -93,7 +93,7 @@ async function drenar(request: APIRequestContext, page: Page): Promise<void> {
   }
 }
 
-test.describe("a automação conta o que aconteceu de verdade", () => {
+test.describe("l’automatisation raconte ce qui s’est vraiment passé", () => {
   test.setTimeout(180_000);
   test.use({ actionTimeout: 15_000 });
 
@@ -111,7 +111,7 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-numero-conectado.ts"], { stdio: "inherit" });
   });
 
-  test("envio que morre aparece como FALHOU, com a razão — nunca como sucesso", async ({
+  test("un envoi qui échoue apparaît comme ÉCHEC, avec la raison — jamais comme succès", async ({
     page,
     request,
   }) => {
@@ -123,7 +123,7 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
       await page.goto(`${APP_URL}/app/webhooks`);
 
       // ── A fonte ──────────────────────────────────────────────────────────
-      await page.getByRole("button", { name: /Nova fonte|Criar primeira fonte/ }).click();
+      await page.getByRole("button", { name: /Nouvelle source|Créer la première source/ }).click();
       await page.locator("#src-name").fill(SOURCE_NAME);
       const dialog = page.getByRole("dialog");
       for (const i of [0, 1]) {
@@ -134,25 +134,25 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/webhook-sources") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar fonte" }).click(),
+        page.getByRole("button", { name: "Créer la source" }).click(),
       ]);
       const fonte = (await criacao.json()) as { data: { id: string; path_token: string } };
       sourceId = fonte.data.id;
       await page.keyboard.press("Escape");
 
       // ── A automação, montada pela TELA, igual à do relato ────────────────
-      await page.getByRole("tab", { name: "Automações" }).click();
-      await page.getByRole("button", { name: /Nova automação/ }).click();
+      await page.getByRole("tab", { name: "Automatisations" }).click();
+      await page.getByRole("button", { name: /Nouvelle automatisation/ }).click();
       await page.locator("#rule-name").fill(RULE_NAME);
 
       const editor = page.getByRole("dialog");
       // QUANDO: contato novo por webhook
       await editor.getByRole("combobox").first().click();
-      await page.getByRole("option", { name: /contato novo \(webhook\)/i }).click();
+      await page.getByRole("option", { name: /nouveau contact arrive \(webhook\)/i }).click();
 
       // ENTÃO: enviar mensagem no WhatsApp
-      await editor.getByRole("combobox").filter({ hasText: "Adicionar ação" }).click();
-      await page.getByRole("option", { name: "Enviar mensagem no WhatsApp" }).click();
+      await editor.getByRole("combobox").filter({ hasText: "Ajouter une action" }).click();
+      await page.getByRole("option", { name: "Envoyer un message sur WhatsApp" }).click();
 
       // O número: o seed garante uma sessão WORKING; se não houvesse, o teste
       // não teria o que provar — daí a espera EXPLÍCITA antes de contar.
@@ -162,7 +162,7 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
       // reprova dizendo "nenhum número no seed" com o número lá. Instrumento
       // cego acusando o alvo errado — o `expect(...).toBeVisible()` é que
       // espera de verdade.
-      const seletorDeNumero = editor.getByRole("combobox").filter({ hasText: /Escolha o número/ });
+      const seletorDeNumero = editor.getByRole("combobox").filter({ hasText: /Choisissez le numéro/ });
       await seletorDeNumero.click();
 
       // O primeiro número HABILITADO, não o primeiro da lista.
@@ -182,20 +182,20 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
       ).toBeVisible({ timeout: 10_000 });
       await numeros.first().click();
 
-      await editor.getByRole("textbox").last().fill(`Olá {{nome}}, vi que você se cadastrou.`);
+      await editor.getByRole("textbox").last().fill(`Bonjour {{nome}}, j’ai vu que vous vous êtes inscrit.`);
 
       const [salvo] = await Promise.all([
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/automation-rules") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar automação" }).click(),
+        page.getByRole("button", { name: "Créer l’automatisation" }).click(),
       ]);
       expect(salvo.ok()).toBeTruthy();
       ruleId = ((await salvo.json()) as { data: { id: string } }).data.id;
 
       // Liga a regra (nasce pausada, por desenho).
-      await page.getByLabel(new RegExp(`Ligar ${RULE_NAME}`)).click();
-      await expect(page.getByText("Automação ligada.")).toBeVisible({ timeout: 15_000 });
+      await page.getByLabel(new RegExp(`Activer ${RULE_NAME}`)).click();
+      await expect(page.getByText("Automatisation activée.")).toBeVisible({ timeout: 15_000 });
 
       // ── O lead entra pelo formulário ─────────────────────────────────────
       const envio = await request.post(
@@ -235,7 +235,7 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
       ).toBeGreaterThan(0);
 
       // ── A TELA: o que a aba Atividade diz ────────────────────────────────
-      await page.getByRole("tab", { name: "Atividade" }).click();
+      await page.getByRole("tab", { name: "Activité" }).click();
       const cartao = cardDe(page.getByText(RULE_NAME, { exact: true }).first());
       await expect(
         page.getByText(RULE_NAME, { exact: true }).first(),
@@ -246,12 +246,12 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
       //
       // O WhatsApp está fora do ar neste ambiente, então a mensagem não saiu.
       // A tela tem que dizer isso — e NÃO pode dizer "Sucesso".
-      await expect(cartao.getByText("Sucesso")).toHaveCount(0);
-      await expect(cartao.getByText("Falhou").first()).toBeVisible();
+      await expect(cartao.getByText("Succès")).toHaveCount(0);
+      await expect(cartao.getByText("Échec").first()).toBeVisible();
 
       // E tem que dizer o QUE conferir, em português — não `waha_error`.
       await expect(
-        cartao.getByText(/serviço de WhatsApp|não está conectado/i).first(),
+        cartao.getByText(/service WhatsApp|n’est pas connecté/i).first(),
       ).toBeVisible();
     } finally {
       if (ruleId) {
@@ -267,36 +267,36 @@ test.describe("a automação conta o que aconteceu de verdade", () => {
     }
   });
 
-  test("a ação 'Mensagem escrita pela IA' aparece no ENTÃO e pede agente, número e contexto", async ({
+  test("l’action « Message rédigé par l’IA » apparaît dans le ALORS et demande agent, numéro et contexte", async ({
     page,
   }) => {
     // A configuração é o produto aqui: se a tela não deixa escrever o contexto,
     // a feature inteira vira "manda um JSON e reza".
     await login(page, creds.users.manager!.email);
     await page.goto(`${APP_URL}/app/webhooks`);
-    await page.getByRole("tab", { name: "Automações" }).click();
-    await page.getByRole("button", { name: /Nova automação/ }).click();
+    await page.getByRole("tab", { name: "Automatisations" }).click();
+    await page.getByRole("button", { name: /Nouvelle automatisation/ }).click();
 
     const editor = page.getByRole("dialog");
     await editor.getByRole("combobox").first().click();
-    await page.getByRole("option", { name: /contato novo \(webhook\)/i }).click();
+    await page.getByRole("option", { name: /nouveau contact arrive \(webhook\)/i }).click();
 
-    await editor.getByRole("combobox").filter({ hasText: "Adicionar ação" }).click();
-    await page.getByRole("option", { name: "Mensagem escrita pela IA" }).click();
+    await editor.getByRole("combobox").filter({ hasText: "Ajouter une action" }).click();
+    await page.getByRole("option", { name: "Message rédigé par l’IA" }).click();
 
     // Os três campos, na ordem em que a decisão acontece.
-    await expect(editor.getByText("Qual agente escreve")).toBeVisible();
-    await expect(editor.getByText("Número de WhatsApp")).toBeVisible();
-    await expect(editor.getByText("O que a IA deve fazer com os dados")).toBeVisible();
+    await expect(editor.getByText("Quel agent écrit")).toBeVisible();
+    await expect(editor.getByText("Numéro WhatsApp")).toBeVisible();
+    await expect(editor.getByText("Ce que l’IA doit faire des données")).toBeVisible();
 
     // O campo de contexto é editável e aceita a instrução do dono do negócio.
     const contexto = editor.locator("#ai-instruction");
-    await contexto.fill("Agradeça citando o segmento e pergunte o melhor horário.");
-    await expect(contexto).toHaveValue(/Agradeça citando o segmento/);
+    await contexto.fill("Remerciez en citant le secteur et demandez le meilleur horaire.");
+    await expect(contexto).toHaveValue(/Remerciez en citant le secteur/);
 
     // E a tela diz o que o agente já sabe — para a pessoa não repetir isso na
     // instrução, que é o erro que todo mundo comete na primeira vez.
-    await expect(editor.getByText(/já sabe que é a PRIMEIRA mensagem/i)).toBeVisible();
+    await expect(editor.getByText(/sait déjà qu’il s’agit du PREMIER message/i)).toBeVisible();
 
     await page.keyboard.press("Escape");
   });

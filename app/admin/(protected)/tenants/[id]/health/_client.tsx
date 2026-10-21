@@ -59,7 +59,7 @@ export function TenantHealthClient({ id }: TenantHealthClientProps) {
           {isFetching && (
             <ArrowsClockwise size={13} className="animate-spin" aria-hidden />
           )}
-          {lastChecked && <span>Atualizado às {lastChecked}</span>}
+          {lastChecked && <span>Mis à jour à {lastChecked}</span>}
         </div>
       </div>
 

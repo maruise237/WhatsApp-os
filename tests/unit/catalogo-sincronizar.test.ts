@@ -81,7 +81,7 @@ describe("o piso de sanidade", () => {
       planejarSincronizacao([linha("m0")], noBanco);
       expect.unreachable("deveria ter recusado");
     } catch (e) {
-      expect(String((e as Error).message)).toContain("1 modelos");
+      expect(String((e as Error).message)).toContain("1 modèles");
       expect(String((e as Error).message)).toContain("100");
     }
   });

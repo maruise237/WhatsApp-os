@@ -72,7 +72,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app(\/|$)/);
 }
 
@@ -114,15 +114,15 @@ async function consumo(page: Page): Promise<string> {
  * aceita pelo Zod do servidor (que aplica o mesmo teto que a tela mostra).
  */
 async function salvarRascunho(page: Page): Promise<void> {
-  await page.getByRole("button", { name: /salvar rascunho/i }).click();
-  await expect(page.getByText(/Rascunho v\d+ salvo/)).toBeVisible({ timeout: 20_000 });
+  await page.getByRole("button", { name: /enregistrer le brouillon/i }).click();
+  await expect(page.getByText(/Brouillon v\d+ enregistré/)).toBeVisible({ timeout: 20_000 });
 }
 
 test.beforeEach(() => {
   fs.mkdirSync(EVIDENCIA, { recursive: true });
 });
 
-test.describe("Configurar o que o agente pode fazer", () => {
+test.describe("Configurer ce que l’agent peut faire", () => {
   // 240s e não 120s: o orçamento inclui UMA re-semeadura de credenciais, que o
   // login dispara sozinho quando outra sessão rotaciona o fator TOTP deste banco
   // compartilhado. Medido: o primeiro caso da bateria estourava 120s só nisso.
@@ -132,14 +132,14 @@ test.describe("Configurar o que o agente pode fazer", () => {
     await entrarComoAdmin(page);
   });
 
-  test("as jornadas aparecem em português, com explicação e contagem", async ({ page }) => {
+  test("les parcours apparaissent en français, avec explication et décompte", async ({ page }) => {
     await abrirConfiguracao(page);
 
     // Os 6 pacotes estão na tela, e o texto é o que uma pessoa lê — não id.
-    await expect(page.getByText("Atender e responder")).toBeVisible();
-    await expect(page.getByText("Vender e mover o funil")).toBeVisible();
+    await expect(page.getByText("Accueillir et répondre")).toBeVisible();
+    await expect(page.getByText("Vendre et faire avancer le tableau")).toBeVisible();
     await expect(
-      page.getByText(/O agente lê a conversa, entende o histórico/),
+      page.getByText(/L’assistant lit la conversation, comprend l’historique/),
     ).toBeVisible();
 
     // Medida por ferramenta, não a olho: o card tem área real e cabe na tela.
@@ -166,7 +166,7 @@ test.describe("Configurar o que o agente pode fazer", () => {
     // não há mais como alcançá-lo sem esvaziar o catálogo, e um E2E que depende
     // de catálogo vazio não descreve nenhuma instalação real.
     await expect(page.getByTestId("contagem-reter")).toContainText(
-      /\d+ de \d+ capacidades? ligadas?/,
+      /\d+ sur \d+ capacités? activées?/,
     );
 
     await page
@@ -174,7 +174,7 @@ test.describe("Configurar o que o agente pode fazer", () => {
       .screenshot({ path: path.join(EVIDENCIA, "w1-capacidades-por-jornada.png") });
   });
 
-  test("ligar uma jornada NÃO dá ao agente o direito de mandar WhatsApp", async ({ page }) => {
+  test("activer un parcours NE donne PAS à l’agent le droit d’envoyer un WhatsApp", async ({ page }) => {
     await abrirConfiguracao(page);
 
     const antes = await consumo(page);
@@ -191,7 +191,7 @@ test.describe("Configurar o que o agente pode fazer", () => {
     // não permitia fazer, sem dizer por quê. Agora recusa e diz quantas vagas
     // faltam, e o operador faz o que a própria tela manda.
     await page.getByTestId("switch-pacote-atender").click();
-    await expect(page.getByTestId("aviso-teto")).toContainText(/faltam? 1 vaga/);
+    await expect(page.getByTestId("aviso-teto")).toContainText(/il manque 1 place\b/);
     await expect(
       page.getByTestId("pacote-atender"),
       "recusar significa NÃO aplicar: pacote meio-ligado seria o pior dos dois mundos",
@@ -226,8 +226,8 @@ test.describe("Configurar o que o agente pode fazer", () => {
     // Ela aparece separada, pedindo a marcação individual.
     const bloco = page.getByTestId("criticas-atender");
     await expect(bloco).toBeVisible();
-    await expect(bloco).toContainText(/o pacote não liga por você/i);
-    await expect(bloco).toContainText("Enviar mensagem no WhatsApp");
+    await expect(bloco).toContainText(/le package ne l’active pas pour vous/i);
+    await expect(bloco).toContainText("Envoyer un message WhatsApp");
 
     expect(await consumo(page)).not.toBe(antes);
     await page
@@ -249,7 +249,7 @@ test.describe("Configurar o que o agente pode fazer", () => {
     await expect.poll(() => estaMarcada(page, LEITURA), { timeout: 5_000 }).toBe(false);
   });
 
-  test("o modo avançado revela a ficha e o nome técnico", async ({ page }) => {
+  test("le mode avancé révèle la fiche et le nom technique", async ({ page }) => {
     await abrirConfiguracao(page);
 
     // Antes de abrir, o nome técnico não está na tela do leigo.
@@ -259,8 +259,8 @@ test.describe("Configurar o que o agente pode fazer", () => {
     const lista = page.getByTestId("lista-avancada");
     await expect(lista).toBeVisible();
     await expect(lista).toContainText(ENVIO);
-    await expect(lista).toContainText("Enviar mensagem no WhatsApp");
-    await expect(lista).toContainText("Efeito que não dá para desfazer");
+    await expect(lista).toContainText("Envoyer un message WhatsApp");
+    await expect(lista).toContainText("Action irréversible");
 
     const alturaDaLista = await lista.evaluate((el) => el.getBoundingClientRect().height);
     expect(alturaDaLista).toBeGreaterThan(200);
@@ -268,7 +268,7 @@ test.describe("Configurar o que o agente pode fazer", () => {
     await lista.screenshot({ path: path.join(EVIDENCIA, "w1-modo-avancado.png") });
   });
 
-  test("a escolha sobrevive ao salvar e recarregar", async ({ page }) => {
+  test("le choix survit à l’enregistrement et au rechargement", async ({ page }) => {
     await abrirConfiguracao(page);
 
     // Espera a configuração CARREGAR. Ler o estado antes disso devolve lista
@@ -301,7 +301,7 @@ test.describe("Configurar o que o agente pode fazer", () => {
   });
 });
 
-test.describe("Olhar o agente funcionando", () => {
+test.describe("Observer l’agent en action", () => {
   // 240s e não 120s: o orçamento inclui UMA re-semeadura de credenciais, que o
   // login dispara sozinho quando outra sessão rotaciona o fator TOTP deste banco
   // compartilhado. Medido: o primeiro caso da bateria estourava 120s só nisso.
@@ -311,10 +311,10 @@ test.describe("Olhar o agente funcionando", () => {
   // opera, e a rota `/tool-usage` foi escrita com essa régua. Se a leitura
   // dependesse de admin, o manager veria "0 usos" — indistinguível de "nunca
   // usada", que é a pior mentira que esta tela poderia contar.
-  test("o painel mostra o uso real, e o que fazer com cada número", async ({ page }) => {
+  test("le panneau montre l’usage réel, et quoi faire de chaque chiffre", async ({ page }) => {
     await login(page, creds.users.manager!.email);
     await page.goto(`/app/ai/agents/${AGENTE}`);
-    await page.getByRole("tab", { name: /capacidades/i }).click();
+    await page.getByRole("tab", { name: /capacités/i }).click();
 
     const painel = page.getByTestId("uso-das-capacidades");
     await painel.waitFor({ state: "visible" });
@@ -328,7 +328,7 @@ test.describe("Olhar o agente funcionando", () => {
     // Ligada e falhando em toda tentativa: o que mais pede decisão.
     const moveu = page.getByTestId("uso-crm_move_lead_stage");
     await expect(moveu).toHaveAttribute("data-sinal", "so_falha");
-    await expect(moveu).toContainText(/Todas as 2 tentativas falharam/);
+    await expect(moveu).toContainText(/Les 2 tentatives ont toutes échoué/);
 
     // Ligada, usada, sem falha.
     const leu = page.getByTestId("uso-crm_get_lead");
@@ -338,13 +338,13 @@ test.describe("Olhar o agente funcionando", () => {
     // Ligada e nunca usada: ocupa vaga e concorre na escolha do agente.
     const nunca = page.getByTestId("uso-crm_list_leads");
     await expect(nunca).toHaveAttribute("data-sinal", "nunca_usada");
-    await expect(nunca).toContainText(/nunca usada nos últimos 30 dias/);
+    await expect(nunca).toContainText(/jamais utilisée ces 30 derniers jours/);
 
     // Usada SEM estar na configuração — e o texto não afirma a causa.
     const buscou = page.getByTestId("uso-crm_search_contacts");
     await expect(buscou).toHaveAttribute("data-sinal", "fora_da_configuracao");
-    await expect(buscou).toContainText(/sem ela estar ligada nesta configuração/);
-    await expect(buscou).toContainText("desligada");
+    await expect(buscou).toContainText(/alors qu’elle n’est pas activée dans ce réglage/);
+    await expect(buscou).toContainText("désactivée");
 
     // O que pede ação vem primeiro — a ordem é informação, não estética.
     const sinais = await painel.evaluate((el) =>

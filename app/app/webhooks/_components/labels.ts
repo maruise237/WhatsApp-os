@@ -14,18 +14,18 @@ export type ActionType =
   | "call_webhook";
 
 export const TRIGGER_LABELS: Record<TriggerEvent, string> = {
-  "lead.created": "Quando entrar um contato novo (webhook)",
-  "lead.stage_changed": "Quando um lead mudar de etapa",
-  "message.received": "Quando chegar mensagem no WhatsApp",
-  "lead.tag_added": "Quando um lead ganhar uma tag",
-  "contact.tag_added": "Quando um contato ganhar uma tag",
+  "lead.created": "Lorsqu’un nouveau contact arrive (webhook)",
+  "lead.stage_changed": "Lorsqu’un lead change d’étape",
+  "message.received": "Lorsqu’un message arrive sur WhatsApp",
+  "lead.tag_added": "Lorsqu’un lead reçoit une étiquette",
+  "contact.tag_added": "Lorsqu’un contact reçoit une étiquette",
 };
 
 export const ACTION_LABELS: Record<ActionType, string> = {
-  create_or_move_lead: "Criar/mover lead no funil",
-  send_whatsapp_message: "Enviar mensagem no WhatsApp",
-  send_ai_message: "Mensagem escrita pela IA",
-  add_tag: "Adicionar tag",
-  assign_owner: "Atribuir a um atendente",
-  call_webhook: "Avisar outro sistema (webhook)",
+  create_or_move_lead: "Créer/déplacer un lead dans le tableau",
+  send_whatsapp_message: "Envoyer un message sur WhatsApp",
+  send_ai_message: "Message rédigé par l’IA",
+  add_tag: "Ajouter une étiquette",
+  assign_owner: "Attribuer à un agent",
+  call_webhook: "Prévenir un autre système (webhook)",
 };

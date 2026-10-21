@@ -145,7 +145,7 @@ jobs:
         conversa-vira-lead.spec.ts contato-salva-email.spec.ts
         confirmar-dado-do-contato.spec.ts
         risk-radar.spec.ts invite-lifecycle.spec.ts system-update.spec.ts
-        agente-papeis-operador.spec.ts prova-painel-provedores.spec.ts
+        agente-papeis-operador.spec.ts
         followup-linguagem.spec.ts followup-ramos.spec.ts
         wizard-do-funcionario.spec.ts mfa-opcional.spec.ts inbox-responder-citando.spec.ts
       # ⚠️ A ORDEM DESTA LISTA NÃO DECIDE A ORDEM DE EXECUÇÃO. O Playwright
@@ -447,11 +447,6 @@ jobs:
           pnpm exec tsx scripts/seed-e2e-escalacao.ts
           pnpm exec tsx --env-file=.env.local scripts/seed-e2e-capacidades-ausentes.ts
           pnpm exec tsx scripts/seed-e2e-followup-agent.ts
-          # O catálogo da OpenRouter não existe em banco fresco (o baseline
-          # semeia só anthropic/openai/google; os demais vêm do cron diário, que
-          # busca na internet). Sem esta linha, `prova-painel-provedores` mede a
-          # sorte do ambiente em vez da tela.
-          pnpm exec tsx scripts/seed-e2e-catalogo-openrouter.ts
 
       # O que ficou DE FORA (e por quê) é declarado no passo de summary —
       # cobertura parcial silenciosa se lê como cobertura total.

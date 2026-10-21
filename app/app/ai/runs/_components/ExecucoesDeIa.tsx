@@ -183,9 +183,6 @@ export function ExecucoesDeIa() {
                     </Badge>
                   )}
                 </div>
-                <span className="font-mono text-xs text-muted-foreground">
-                  {e.provider} · {e.model}
-                </span>
               </div>
 
               {e.status === "erro" ? (
@@ -228,7 +225,6 @@ export function ExecucoesDeIa() {
 
               <p className="mt-2 text-xs text-muted-foreground">
                 {new Date(e.created_at).toLocaleString("fr-FR")}
-                {e.porQueEsteModelo ? ` · ${e.porQueEsteModelo}` : ""}
               </p>
             </Card>
           ))}

@@ -268,8 +268,8 @@ export function cssDaMarca(
       codigo: "token_nao_serializado",
       alvo: m.alvo,
       detalhe:
-        `a derivação moveu esta semântica no tema ${m.tema ?? "?"}, mas o CSS desta ` +
-        `fase não a emite: os companheiros -bg/-fg não vêm da régua`,
+        `la dérivation a déplacé cette sémantique dans le thème ${m.tema ?? "?"}, mas o CSS desta ` +
+        `phase ne l’émet pas : les compagnons -bg/-fg ne viennent pas de la règle`,
     });
   }
 
@@ -281,7 +281,7 @@ export function cssDaMarca(
         motivos.push({
           codigo: "nome_de_token_invalido",
           alvo: paraDiagnostico(nome),
-          detalhe: "nome de custom property fora da forma --nome-assim",
+          detalhe: "nom de propriété personnalisée hors de la forme --nom-ainsi",
         });
         return { css: null, motivos };
       }
@@ -289,7 +289,7 @@ export function cssDaMarca(
         motivos.push({
           codigo: "valor_fora_da_allowlist",
           alvo: nome,
-          detalhe: `valor não é #rrggbb, rgb()/rgba() nem var(--…): ${paraDiagnostico(valor)}`,
+          detalhe: `la valeur n’est ni #rrggbb, ni rgb()/rgba(), ni var(--…) : ${paraDiagnostico(valor)}`,
         });
         return { css: null, motivos };
       }
@@ -305,7 +305,7 @@ export function cssDaMarca(
     motivos.push({
       codigo: "saida_suspeita",
       alvo: null,
-      detalhe: `a saída montada contém ${JSON.stringify(suspeita)}`,
+      detalhe: `la sortie assemblée contient ${JSON.stringify(suspeita)}`,
     });
     return { css: null, motivos };
   }

@@ -1,26 +1,26 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("error pages", () => {
-  test("/404 renders PT-BR copy", async ({ page }) => {
+  test("/404 affiche le texte en français", async ({ page }) => {
     const res = await page.goto("/404");
     // Next renders the not-found.tsx component; status may be 404 or 200 depending on routing.
     expect([200, 404]).toContain(res?.status() ?? 0);
-    await expect(page.getByText(/não encontrada/i)).toBeVisible();
+    await expect(page.getByText(/page introuvable/i)).toBeVisible();
   });
 
-  test("/403 renders sem permissão", async ({ page }) => {
+  test("/403 affiche accès refusé", async ({ page }) => {
     await page.goto("/403");
-    await expect(page.getByText(/sem permissão/i)).toBeVisible();
+    await expect(page.getByText(/accès refusé/i)).toBeVisible();
   });
 
-  test("/500 renders erro interno", async ({ page }) => {
+  test("/500 affiche erreur interne", async ({ page }) => {
     await page.goto("/500");
-    await expect(page.getByText(/erro interno/i)).toBeVisible();
+    await expect(page.getByText(/erreur interne/i)).toBeVisible();
   });
 
-  test("/503 renders manutenção", async ({ page }) => {
+  test("/503 affiche maintenance", async ({ page }) => {
     await page.goto("/503");
-    await expect(page.getByText(/manutenção/i)).toBeVisible();
+    await expect(page.getByText(/en maintenance/i)).toBeVisible();
   });
 });
 
@@ -34,26 +34,26 @@ test.describe("error pages", () => {
  * dois endereços, e eles respondiam 404. Um aceite obrigatório apontando para o
  * vazio é o pior defeito de confiança que uma instalação nova pode ter.
  */
-test.describe("documentos legais", () => {
-  test("/legal/terms abre SEM sessão — é o que o aceite do onboarding linka", async ({ page }) => {
+test.describe("documents légaux", () => {
+  test("/legal/terms s’ouvre SANS session — c’est le lien de l’acceptation de l’onboarding", async ({ page }) => {
     const res = await page.goto("/legal/terms");
     expect(res?.status()).toBe(200);
     // E não é o login disfarçado: o proxy manda anônimo para /login?next=...
     expect(new URL(page.url()).pathname).toBe("/legal/terms");
-    await expect(page.getByRole("heading", { name: /termos de uso/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /conditions d’utilisation/i })).toBeVisible();
   });
 
-  test("/legal/privacy abre SEM sessão e nomeia o responsável", async ({ page }) => {
+  test("/legal/privacy s’ouvre SANS session et nomme le responsable", async ({ page }) => {
     const res = await page.goto("/legal/privacy");
     expect(res?.status()).toBe(200);
     expect(new URL(page.url()).pathname).toBe("/legal/privacy");
-    await expect(page.getByRole("heading", { name: /política de privacidade/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /politique de confidentialité/i })).toBeVisible();
     // Sem sessão não dá para saber a razão social, mas o documento não pode
     // fingir que quem responde pelos dados é o projeto de software.
-    await expect(page.getByText(/operador desta instalação/i).first()).toBeVisible();
+    await expect(page.getByText(/exploitant de cette installation/i).first()).toBeVisible();
   });
 
-  test("o vizinho de /legal continua fechado — a liberação é dos dois, não do prefixo", async ({
+  test("le voisin de /legal reste fermé — l’ouverture vaut pour les deux, pas pour le préfixe", async ({
     page,
   }) => {
     await page.goto("/legal/qualquer-outra");

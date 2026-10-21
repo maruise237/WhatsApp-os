@@ -88,17 +88,18 @@ describe("Sidebar agrupado", () => {
     expect(screen.getByRole("link", { name: "Tableaux" })).toHaveAttribute("href", "/app/kanban");
   });
 
-  it("desenterra Nuvemshop e Audit Log", () => {
+  it("desenterra Audit Log e esconde a Nuvemshop (integração brasileira, mercado africano)", () => {
     comoPapel("admin");
     render(
       <IdiomaProvider locale="pt-BR">
         <Sidebar collapsed={false} />
       </IdiomaProvider>,
     );
-    // Nuvemshop não tinha link nenhum no app; Audit Log só existia via card em
+    // A Nuvemshop saiu da navegação (integração brasileira masquée pour le
+    // marché africain); Audit Log só existia via card em
     // Configurações. Canal oficial não está aqui de propósito: virou aba de
     // Conexões no PR #105, e Conexões é a porta.
-    expect(screen.getByRole("link", { name: /Nuvemshop/ })).toBeTruthy();
+    expect(screen.queryByRole("link", { name: /Nuvemshop/ })).toBeNull();
     expect(screen.getByRole("link", { name: /Journal d'audit/ })).toBeTruthy();
   });
 

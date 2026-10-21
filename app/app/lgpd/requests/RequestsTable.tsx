@@ -33,17 +33,17 @@ import { SlaBanner } from "./SlaBanner";
 // ── Label helpers ─────────────────────────────────────────────────────────────
 
 const TYPE_LABELS: Record<LgpdRequestType, string> = {
-  redact: "Anonimização cliente",
-  data_request: "Solicitação dados",
-  store_redact: "Anonimização tenant",
+  redact: "Anonymisation client",
+  data_request: "Demande de données",
+  store_redact: "Anonymisation organisation",
 };
 
 const STATUS_LABELS: Record<LgpdRequestStatus, string> = {
-  received: "Recebido",
-  processing: "Processando",
-  completed: "Concluído",
-  failed: "Falhou",
-  pending_review: "Revisão pendente",
+  received: "Reçue",
+  processing: "En cours",
+  completed: "Terminé",
+  failed: "Échec",
+  pending_review: "Revue en attente",
 };
 
 const STATUS_VARIANT: Record<
@@ -68,9 +68,9 @@ const SLA_VARIANT: Record<
 };
 
 const SLA_LABELS: Record<SlaBucket, string> = {
-  overdue: "Vencido",
-  critical: "Crítico",
-  warning: "Alerta",
+  overdue: "Échue",
+  critical: "Critique",
+  warning: "Alerte",
   ok: "OK",
 };
 
@@ -103,7 +103,7 @@ function fmtDistance(iso: string | null): { label: string; urgent: boolean } {
     if (diffMs < 0) {
       const overMs = Math.abs(diffMs);
       const overD = Math.floor(overMs / 86_400_000);
-      return { label: overD > 0 ? `${overD}d atrasado` : "atrasado hoje", urgent: true };
+      return { label: overD > 0 ? `${overD} j de retard` : "en retard aujourd’hui", urgent: true };
     }
     const diffD = Math.floor(diffMs / 86_400_000);
     if (diffD < 1) {

@@ -67,8 +67,8 @@ const MIN_THRESHOLD_MINUTES = 5;
 const KIND_LABEL: Record<TriggerKind, string> = {
   manual: "Manual",
   silence: "Silêncio",
-  stage_change: "Etapa do funil",
-  case_opened: "Agente pediu ajuda",
+  stage_change: "Étape du tableau",
+  case_opened: "L’agent a demandé de l’aide",
 };
 
 function parseTriggerConfig(raw: Record<string, unknown>): TriggerFormState {
@@ -150,7 +150,7 @@ function summaryLabel(
   if (cfg.kind === "manual" || cfg.kind === undefined) return t("Gatilho: Manual");
   // conversation_end de dados antigos (API crua) — sem UI própria, mas mostrado
   // com transparência em vez de mentir "Manual".
-  return `${t("Gatilho:")} ${String(cfg.kind)} (${t("indisponível")})`;
+  return `${t("Déclencheur :")} ${String(cfg.kind)} (${t("indisponível")})`;
 }
 
 interface Props {

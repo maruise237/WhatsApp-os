@@ -392,23 +392,24 @@ describe("send_whatsapp_message — postponeUntil (Task 11)", () => {
     // PROCESSO, mais `next.getHours()`, idem. Isso casava enquanto a janela era
     // avaliada com `new Date().getHours()` do servidor. Mas essa era justamente
     // a metade errada: a janela passou a ser avaliada no fuso da ORGANIZAÇÃO
-    // (`channel_knobs.timezone`, default America/Sao_Paulo), que é o conserto —
+    // (`channel_knobs.timezone`, default Africa/Douala desde a 0186), que é o conserto —
     // num contêiner em UTC, "7h-22h" do servidor virava 4h-19h de Brasília.
     //
     // Consequência medida no CI (runner em UTC): 23:00 sem `Z` = 20:00 em São
     // Paulo = DENTRO da janela, e `postponeUntil` devolvia null. O teste passava
     // na minha máquina (BRT) e falhava no CI — pelo fuso, não pelo código.
     //
-    // 2026-07-18T02:00:00Z é 23:00 de 17/07 em São Paulo, em qualquer máquina.
-    vi.setSystemTime(new Date("2026-07-18T02:00:00Z"));
+    // 2026-07-17T22:00:00Z é 23:00 de 17/07 em Douala (UTC+1, fuso padrão),
+    // em qualquer máquina.
+    vi.setSystemTime(new Date("2026-07-17T22:00:00Z"));
     const executor = getAction("send_whatsapp_message")!;
     const until = await executor.postponeUntil!(baseCtx(), {
       channel_session_id: SESSION_ID,
       template: "x",
     });
     expect(until).not.toBeNull();
-    const noFusoDoTenant = new Date(until!).toLocaleString("pt-BR", {
-      timeZone: "America/Sao_Paulo",
+    const noFusoDoTenant = new Date(until!).toLocaleString("fr-FR", {
+      timeZone: "Africa/Douala",
       day: "2-digit",
       month: "2-digit",
       hour: "2-digit",

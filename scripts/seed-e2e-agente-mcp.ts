@@ -47,7 +47,7 @@ const env = {
 const NEON_DATA_API_URL = env.NEON_DATA_API_URL!;
 const SERVICE_ROLE = env.NEON_SERVICE_ROLE_JWT!;
 if (!NEON_DATA_API_URL || !SERVICE_ROLE) {
-  throw new Error("Faltam NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT em .env.local");
+  throw new Error("NEON_DATA_API_URL / NEON_SERVICE_ROLE_JWT manquants dans .env.local");
 }
 
 const admin = createClient(NEON_DATA_API_URL, SERVICE_ROLE, {
@@ -65,7 +65,7 @@ async function main(): Promise<void> {
     .maybeSingle();
   if (orgErr) throw new Error(orgErr.message);
   if (!org) {
-    throw new Error(`org "${ORG_SLUG}" não existe — rode scripts/seed-e2e-credentials.ts antes`);
+    throw new Error(`l'org "${ORG_SLUG}" n'existe pas — lancez scripts/seed-e2e-credentials.ts avant`);
   }
   const orgId = (org as { id: string }).id;
 
@@ -78,7 +78,7 @@ async function main(): Promise<void> {
     .limit(1)
     .maybeSingle();
   if (donoErr) throw new Error(donoErr.message);
-  if (!dono) throw new Error("nenhum admin ativo na org de E2E");
+  if (!dono) throw new Error("aucun admin actif dans l'org E2E");
 
   // ⚠️ SÓ O LIXO VELHO MORRE, e a janela existe por um defeito que este seed
   // causou: a versão anterior revogava TODO token vivo do mesmo nome antes de
@@ -115,7 +115,7 @@ async function main(): Promise<void> {
     })
     .select("id")
     .single();
-  if (error || !token) throw new Error(error?.message ?? "insert do token falhou");
+  if (error || !token) throw new Error(error?.message ?? "échec de l'insertion du jeton");
 
   const saida = {
     organization_id: orgId,
@@ -127,7 +127,7 @@ async function main(): Promise<void> {
     path.join(process.cwd(), ".e2e-agente-mcp.json"),
     JSON.stringify(saida, null, 2),
   );
-  console.info(`token MCP de agente emitido para a org ${orgId} (.e2e-agente-mcp.json)`);
+  console.info(`jeton MCP d'agent émis pour l'org ${orgId} (.e2e-agente-mcp.json)`);
 }
 
 void main().catch((err) => {

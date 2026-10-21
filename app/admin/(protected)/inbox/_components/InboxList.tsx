@@ -56,8 +56,8 @@ function contactName(row: AdminConversationRow): string {
 const STATUS_OPTIONS = [
   { value: "all", label: "Tous" },
   { value: "pending", label: "En attente" },
-  { value: "open", label: "Aberto" },
-  { value: "resolved", label: "Resolvido" },
+  { value: "open", label: "Ouverte" },
+  { value: "resolved", label: "Résolue" },
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -208,7 +208,7 @@ export function InboxList() {
               disabled={isFetchingNextPage}
               className="text-xs text-muted-foreground underline-offset-2 hover:underline disabled:opacity-50"
             >
-              {isFetchingNextPage ? "Chargement…" : "Carregar mais"}
+              {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
             </button>
           </div>
         )}

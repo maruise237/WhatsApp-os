@@ -137,6 +137,81 @@ describe("espanhol — a palavra que a plantilla pede", () => {
   }
 });
 
+/**
+ * ─── FRANÇAIS — le produit est francophone (Afrique, XAF) ───────────────────
+ *
+ * Même règle que le portugais : mot ISOLÉ ou verbe de cessation + OBJET DE
+ * COMMUNICATION. Les négatifs sont la moitié de la valeur : « comment arrêter la
+ * douleur ? » bloquerait un patient si l’on chassait le mot au lieu de l’intention.
+ */
+const FRANCAIS_PEDE_PARA_SAIR = [
+  "STOP",
+  "Stop.",
+  "ARRÊT",
+  "Arrêt !",
+  "arrêter",
+  "désinscrire",
+  "Désabonnement",
+  "Arrêtez de m’envoyer des messages",
+  "arrete de m'envoyer ça",
+  "cessez de me contacter svp",
+  "je ne veux plus recevoir vos messages",
+  "Je ne veux plus rien recevoir",
+  "je souhaite ne plus recevoir de messages",
+  "je ne veux plus être contacté",
+  "ne m’envoyez plus rien",
+  "ne m'écrivez plus",
+  "Retirez-moi de la liste",
+  "enlevez moi de votre liste svp",
+  "je veux me désinscrire",
+  "comment me désabonner ?",
+];
+
+const FRANCAIS_NAO_PEDE = [
+  // clinique — l’équivalent du « tem como parar a dor? »
+  "comment arrêter la douleur ?",
+  "il faut arrêter le traitement ?",
+  "je veux arrêter de fumer",
+  "je dois sortir plus tôt de la consultation",
+  "le médicament a fait arrêter la douleur",
+  // commerce et services
+  "je veux annuler la commande",
+  "à quelle heure vous arrêtez de livrer ?",
+  "vous arrêtez le travail pendant les fêtes ?",
+  // changement de canal / autre document : la personne VEUT rester servie
+  "je ne veux plus recevoir d’appels, seulement WhatsApp",
+  "je ne veux plus recevoir la facture ici, envoyez-la par email",
+  // autre liste
+  "retirez-moi de la liste d’attente",
+  // le mot n’est opt-out que SEUL
+  "stop ou encore ? je prends les deux",
+  "l’arrêt de bus est où ?",
+];
+
+describe("français — mot isolé ou verbe de cessation + objet de communication", () => {
+  it.each(FRANCAIS_PEDE_PARA_SAIR)("bloque : %s", (texto) => {
+    expect(ehPedidoDeOptOut(texto), `aurait dû reconnaître "${texto}"`).toBe(true);
+  });
+
+  it.each(FRANCAIS_NAO_PEDE)("NE bloque PAS : %s", (texto) => {
+    expect(ehPedidoDeOptOut(texto), `bloquerait "${texto}" sans demande`).toBe(false);
+  });
+
+  it.each(["laissez-moi tranquille", "fichez-moi la paix", "ça ne m’intéresse plus", "j’ai déjà dit non"])(
+    "signal ambigu (escalade, sans blocage) : %s",
+    (texto) => {
+      expect(ehOptOutProvavel(texto)).toBe(true);
+      expect(ehPedidoDeOptOut(texto)).toBe(false);
+    },
+  );
+
+  it("le runtime de l’agent applique la même règle en français", async () => {
+    const { detectAmbiguousOptOut } = await import("@/lib/agent-engine/agent/human-handoff");
+    expect(detectAmbiguousOptOut("arrêtez de m’envoyer des messages")).toBe(true);
+    expect(detectAmbiguousOptOut("comment arrêter la douleur ?")).toBe(false);
+  });
+});
+
 describe("ehPedidoDeOptOut — pedido INEQUÍVOCO, o que autoriza bloquear", () => {
   it.each(PEDE_PARA_SAIR)("respeita o pedido: %s", (texto) => {
     expect(ehPedidoDeOptOut(texto), `deveria ter reconhecido "${texto}"`).toBe(true);

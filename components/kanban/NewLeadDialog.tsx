@@ -24,7 +24,8 @@ import {
 import { useCreateLead } from "@/hooks/kanban/useCreateLead";
 import type { Stage } from "@/lib/kanban/types";
 import { createLeadSchema, type CreateLeadInput } from "@/lib/schemas/leads";
-import { parseReaisToCents } from "@/lib/money";
+import { DEVISE_PAR_DEFAUT } from "@/lib/marche/defauts";
+import { parseMontantEnCents } from "@/lib/money";
 import { EcoDoValor } from "./EcoDoValor";
 import { useT } from "@/hooks/i18n/useT";
 
@@ -83,7 +84,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     const reais = values.valueReais.trim();
     let valueCents: number | null = null;
     if (reais.length > 0) {
-      valueCents = parseReaisToCents(reais);
+      valueCents = parseMontantEnCents(reais, DEVISE_PAR_DEFAUT);
       if (valueCents === null) {
         form.setError("valueReais", { message: t("Valor inválido") });
         return;
@@ -94,7 +95,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
       pipeline_id: pipelineId,
       stage_id: values.stage_id,
       title: values.title.trim(),
-      currency: "BRL",
+      currency: DEVISE_PAR_DEFAUT,
       source: "manual",
       tags,
     };
@@ -176,14 +177,14 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="valueReais">{t("Valor (R$)")}</Label>
+              <Label htmlFor="valueReais">{t("Montante")}</Label>
               <Input
                 id="valueReais"
                 inputMode="decimal"
-                placeholder="0,00"
+                placeholder="15 000"
                 {...form.register("valueReais")}
               />
-              <EcoDoValor control={form.control} />
+              <EcoDoValor control={form.control} devise={DEVISE_PAR_DEFAUT} />
               {form.formState.errors.valueReais && (
                 <p className="text-xs text-error-fg">{form.formState.errors.valueReais.message}</p>
               )}
@@ -200,7 +201,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
 
           <div className="space-y-2">
             <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
-            <Input id="tagsRaw" placeholder="vip, recompra" {...form.register("tagsRaw")} />
+            <Input id="tagsRaw" placeholder="vip, réachat" {...form.register("tagsRaw")} />
           </div>
 
           <DialogFooter>

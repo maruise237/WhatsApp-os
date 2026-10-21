@@ -199,6 +199,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error("❌ Radar seed falhou:", err);
+  console.error("❌ Échec du seed Radar :", err);
   process.exit(1);
 });

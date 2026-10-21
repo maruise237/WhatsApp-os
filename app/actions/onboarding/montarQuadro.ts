@@ -15,6 +15,7 @@ import { audit } from "@/lib/audit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { buildModel, chaveDePlataforma } from "@/lib/ai/runtime/agent";
 import { loadCredential } from "@/lib/ai/credentials";
+import { FOURNISSEUR_PLATEFORME, iaDeLaPlateformeDepuisProcessEnv } from "@/lib/ai/plateforme";
 import { slugDeNome } from "@/lib/leads/stage-editing";
 import {
   etapasParaGravar,
@@ -64,6 +65,10 @@ async function cerebroDoFuncionario(
     .eq("organization_id", orgId)
     .maybeSingle();
   if (!versao) return { erro: "je n’ai pas trouvé la configuration de votre assistant" };
+
+  // IA de la plateforme : la clé et le modèle sont ceux de l'exploitant.
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  if (ia) return { provider: FOURNISSEUR_PLATEFORME, model: ia.model, apiKey: ia.apiKey };
 
   const provider = String(versao.provider ?? "");
   const model = String(versao.model ?? "");

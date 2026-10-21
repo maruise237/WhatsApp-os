@@ -17,19 +17,19 @@ import { runModelCall, type LlmEdgeConfig } from '../edge/llm/run-model-call';
 import type { LeadContext } from '../edge/crm/get-lead-context';
 
 const CLASSIFY_INSTRUCTION =
-  'Você é um classificador auxiliar de follow-up (NÃO responde ao lead). Classifique a ' +
-  'ÚLTIMA mensagem do lead abaixo em UMA das classes listadas. Responda SOMENTE com JSON, ' +
-  'sem explicação: {"class": "<uma das classes, exatamente como listada>"}.';
+  'Vous êtes un classificateur auxiliaire de relance (vous NE répondez PAS au lead). Classez le ' +
+  'DERNIER message du lead ci-dessous dans UNE des classes listées. Répondez UNIQUEMENT en JSON, ' +
+  'sans explication : {"class": "<une des classes, exactement telle que listée>"}.';
 
 function buildClassifyMessage(candidate: string, classes: string[], hint?: string): string {
   return [
     CLASSIFY_INSTRUCTION,
     '',
-    '## Classes possíveis',
+    '## Classes possibles',
     classes.map((c) => `- ${c}`).join('\n'),
-    ...(hint ? ['', '## Dica adicional do fluxo', hint] : []),
+    ...(hint ? ['', '## Indication supplémentaire du flux', hint] : []),
     '',
-    '## Mensagem do lead a classificar',
+    '## Message du lead à classer',
     candidate,
   ].join('\n');
 }
@@ -85,20 +85,20 @@ export async function classifyFollowupReply(
   const cls = parseFollowupClassification(call.result.text, args.classes);
   if (cls === null) {
     throw new Error(
-      'classificador de follow-up: saída do modelo sem classe reconhecível dentre as configuradas — turno re-tentado pela fila',
+      'classificateur de relance : sortie du modèle sans classe reconnaissable parmi celles configurées — tour relancé par la file',
     );
   }
   return cls;
 }
 
 const PLAN_INSTRUCTION =
-  'Você é um planejador auxiliar de follow-up (NÃO responde ao lead). Abaixo estão as ESPERAS ' +
-  'adaptativas de um fluxo de follow-up, na ordem em que vão acontecer. Escolha quanto tempo ' +
-  'esperar em CADA uma, pensando na sequência inteira — o ritmo entre as esperas importa tanto ' +
-  'quanto cada uma isolada. Respeite o intervalo (mínimo/máximo) de cada espera. ' +
-  'Responda SOMENTE com JSON, sem explicação: ' +
-  '{"esperas": [{"node_id": "<id da espera>", "aguardar_ms": <inteiro em milissegundos>, ' +
-  '"motivo": "<frase curta em pt-br explicando a escolha para um humano ler>"}]}.';
+  'Vous êtes un planificateur auxiliaire de relance (vous NE répondez PAS au lead). Ci-dessous figurent les ATTENTES ' +
+  'adaptatives d’un flux de relance, dans l’ordre où elles vont se produire. Choisissez combien de temps ' +
+  'attendre pour CHACUNE, en pensant à la séquence entière — le rythme entre les attentes compte autant ' +
+  'que chacune prise isolément. Respectez l’intervalle (minimum/maximum) de chaque attente. ' +
+  'Répondez UNIQUEMENT en JSON, sans explication : ' +
+  '{"esperas": [{"node_id": "<id de l’attente>", "aguardar_ms": <entier en millisecondes>, ' +
+  '"motivo": "<phrase courte en français expliquant le choix pour un lecteur humain>"}]}.';
 
 /** Espera adaptativa como o planejador a enxerga (espelha `EsperaAdaptativa` de
  *  lib/followup/timing-plan.ts — agent-engine não importa followup/*). */
@@ -121,19 +121,19 @@ function buildPlanMessage(context: LeadContext, now: Date, esperas: EsperaParaPl
   return [
     PLAN_INSTRUCTION,
     '',
-    '## Agora',
+    '## Maintenant',
     now.toISOString(),
     '',
-    '## Esperas do fluxo, na ordem',
+    '## Attentes du flux, dans l’ordre',
     ...esperas.map((e, i) =>
       [
         `${i + 1}. node_id: ${e.node_id} — "${e.label}"`,
-        `   intervalo permitido: de ${e.min_ms}ms a ${e.max_ms}ms`,
-        ...(e.guidance ? [`   orientação do fluxo: ${e.guidance}`] : []),
+        `   intervalle autorisé : de ${e.min_ms}ms à ${e.max_ms}ms`,
+        ...(e.guidance ? [`   orientation du flux : ${e.guidance}`] : []),
       ].join('\n'),
     ),
     '',
-    '## Contexto do lead (contato + últimas mensagens)',
+    '## Contexte du lead (contact + derniers messages)',
     JSON.stringify(context),
   ].join('\n');
 }
@@ -175,7 +175,7 @@ export function parsePlanoDeEsperas(text: string, nodeIdsDoFluxo: string[]): Pro
       aguardar_ms: ms,
       motivo: typeof linha.motivo === 'string' && linha.motivo.trim() !== ''
         ? linha.motivo.trim()
-        : 'o modelo não explicou a escolha',
+        : 'le modèle n’a pas expliqué son choix',
     });
   }
   return propostas;
@@ -220,7 +220,7 @@ export async function planFollowupTiming(
   const propostas = parsePlanoDeEsperas(call.result.text, args.esperas.map((e) => e.node_id));
   if (propostas.length === 0) {
     throw new Error(
-      'planejador de tempo do follow-up: saída do modelo sem nenhuma espera reconhecível — turno re-tentado pela fila',
+      'planificateur de délai de relance : sortie du modèle sans aucune attente reconnaissable — tour relancé par la file',
     );
   }
   return { propostas, modelo: call.model };

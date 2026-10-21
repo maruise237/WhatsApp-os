@@ -53,8 +53,12 @@ const PISTAS: Record<string, RegExp> = {
     /\b(ag[êe]nci|agence|consultori|conseil|advocac|advogad|avocat|contabil|comptab|arquitet|architect|engenhar|ing[ée]nier|reform|r[ée]novation|obra|chantier|marcenar|menuis|servi[çc]o|service|manuten[çc]|maintenance|instala[çc]|installation|plomb|[ée]lectricit|nettoyage)/i,
   curso:
     /\b(curso|cours|formation|mentori|mentorat|infoprodut|aula|treinament|workshop|atelier|escola|[ée]cole|ensino|enseignement|coach|soutien scolaire)/i,
+  // Avant `loja` : « vente de gâteaux » est une commande de restauration, pas
+  // une boutique, et l'ordre de PISTAS tranche les égalités.
+  restaurante:
+    /\b(restaura|maquis|traiteur|cantine|fast-?food|snack|p[âa]tisseri|boulangeri|g[âa]teau|plats?\b|repas|cuisine|grillade|poulet|poisson brais|livraison de repas)/i,
   loja:
-    /\b(loja|magasin|e-?commerce|commerce|revend|distribuidor|distribut|atacad|grossiste|varej|d[ée]tail|vend[oa] produt|vente|vend|boutique|moda|mode|pagne|wax|tissu|v[êe]tement|habit|chaussure|sac|bijou|cosm[ée]ti|perruque|m[èe]che|[ée]picerie|alimentation)/i,
+    /\b(loja|magasin|e-?commerce|commerce|revend|distribuidor|distribut|atacad|grossiste|varej|d[ée]tail|vend[oa] produt|vente|vend|boutique|moda|mode|pagne|wax|tissu|v[êe]tement|habit|chaussure|sac|bijou|cosm[ée]ti|perruque|m[èe]che|[ée]picerie|alimentation|[ée]lectroni|t[ée]l[ée]phon|smartphone|accessoire|informatique|ordinateur|[ée]lectrom[ée]nager)/i,
 };
 
 /**

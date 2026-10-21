@@ -85,7 +85,7 @@ export function lerAmbiente(source: FonteDeAmbiente = process.env): AmbienteDaIn
  * repetir a string — hoje ela está duplicada entre o `install.sh` e o
  * `scripts/bootstrap-owner.ts`.
  */
-export const NOME_PLACEHOLDER_DA_INSTALACAO = "Minha Empresa";
+export const NOME_PLACEHOLDER_DA_INSTALACAO = "Mon entreprise";
 export const SLUG_PLACEHOLDER_DA_INSTALACAO = "minha-empresa";
 
 /** A organização ainda está com o nome que o instalador deixou? */

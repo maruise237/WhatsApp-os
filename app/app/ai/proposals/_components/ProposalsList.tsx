@@ -104,7 +104,7 @@ function Pendentes({
               size="sm"
               disabled={!canDecide || pending}
               onClick={() => onDecidir(p.lead_id, "approve", p.seq)}
-              aria-label={`Aprovar: ${p.next_action}`}
+              aria-label={`Approuver : ${p.next_action}`}
             >
               <Check size={14} aria-hidden />
               Approuver
@@ -114,7 +114,7 @@ function Pendentes({
               variant="outline"
               disabled={!canDecide || pending}
               onClick={() => onDecidir(p.lead_id, "dismiss", p.seq)}
-              aria-label={`Ignorar: ${p.next_action}`}
+              aria-label={`Ignorer : ${p.next_action}`}
             >
               <X size={14} aria-hidden />
               Ignorer
@@ -145,7 +145,7 @@ function Historico({ itens }: { itens: DecisaoPassada[] }) {
                 aprovar, porque a wave 4 existe exatamente para que a recusa
                 seja uma decisão registrada e não uma ausência. */}
             <Badge variant={d.decision === "approve" ? "success" : "secondary"}>
-              {d.decision === "approve" ? "Aprovada" : "Ignorada"}
+              {d.decision === "approve" ? "Approuvée" : "Ignorée"}
             </Badge>
             <span className="text-sm font-medium">{d.lead_title}</span>
             <span className="text-xs text-muted-foreground">

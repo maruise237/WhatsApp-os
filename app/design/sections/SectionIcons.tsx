@@ -96,7 +96,7 @@ const STYLES = [
 export function SectionIcons() {
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Iconografia</h2>
+      <h2 className="ds-display">Iconographie</h2>
       <p className="ds-lede">
         Quatre styles comparés côte à côte sur les mêmes 7 icônes. Les SVG simulent le style (trait + remplissage) sans installer 4 paquets — la décision porte sur <em>peso visual</em> e <em>l’accord avec la palette</em>.
       </p>

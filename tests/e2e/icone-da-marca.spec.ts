@@ -16,8 +16,8 @@ import { test, expect } from "@playwright/test";
  * aparece exatamente na primeira impressão. E, por não precisar de login, esta
  * spec não consome do teto de 60 logins/IP/300s que a suíte compartilha.
  */
-test.describe("o ícone e o título carregam a marca da instalação", () => {
-  test("GET /icon responde imagem para quem não entrou", async ({ request }) => {
+test.describe("l’icône et le titre portent la marque de l’installation", () => {
+  test("GET /icon renvoie une image à qui n’est pas connecté", async ({ request }) => {
     const res = await request.get("/icon", { maxRedirects: 0 });
 
     // 307 aqui significa que o proxy interceptou: o matcher de `proxy.ts` só
@@ -35,7 +35,7 @@ test.describe("o ícone e o título carregam a marca da instalação", () => {
     expect([...corpo.subarray(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
   });
 
-  test("o <head> do login declara o ícone — é o que mata o pedido a /favicon.ico", async ({
+  test("le <head> de la connexion déclare l’icône — c’est ce qui évite la requête vers /favicon.ico", async ({
     page,
   }) => {
     await page.goto("/login");
@@ -48,7 +48,7 @@ test.describe("o ícone e o título carregam a marca da instalação", () => {
     expect(new URL(href ?? "", "http://x").pathname).toBe("/icon");
   });
 
-  test("o título da aba herda a marca resolvida, e é a MESMA que a tela mostra", async ({
+  test("le titre de l’onglet hérite de la marque résolue, et c’est la MÊME que celle affichée à l’écran", async ({
     page,
   }) => {
     await page.goto("/login");
@@ -57,8 +57,8 @@ test.describe("o ícone e o título carregam a marca da instalação", () => {
     // `template: "%s · ${name}"` no layout raiz: a página filha declara só
     // "Entrar" e herda o sufixo. Um layout que perdesse o template deixaria o
     // título como "Entrar" pelado, e ninguém notaria.
-    const casou = /^Entrar · (.+)$/.exec(titulo);
-    expect(casou, `título fora do formato "Entrar · <marca>": ${titulo}`).not.toBeNull();
+    const casou = /^Se connecter · (.+)$/.exec(titulo);
+    expect(casou, `titre hors du format "Se connecter · <marque>" : ${titulo}`).not.toBeNull();
 
     const marcaNoTitulo = casou?.[1] ?? "";
     expect(marcaNoTitulo.length).toBeGreaterThan(0);

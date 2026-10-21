@@ -50,7 +50,7 @@ function paraRetorno(row: LinhaDeCron, contactIdPadrao: string): RetornoAgendado
       enabled: row.enabled ?? true,
       cancelled_at: iso(row.cancelled_at),
     }),
-    motivo: texto(payload.reason) ?? "Retorno agendado",
+    motivo: texto(payload.reason) ?? "Relance planifiée",
     promessa: texto(payload.promise),
     canceladoEm: iso(row.cancelled_at),
     motivoDoCancelamento: row.cancel_reason ?? null,

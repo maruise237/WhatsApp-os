@@ -76,7 +76,7 @@ async function tentarMfa(page: Page, secret: string, tentativas: number): Promis
     const codigo = generateTotp(secret);
     ultimoCodigoEnviado = codigo;
 
-    const digito = page.locator('input[aria-label="Dígito 1"]');
+    const digito = page.locator('input[aria-label="Chiffre 1"]');
     await digito.waitFor({ state: "visible", timeout: 15_000 });
     // O campo desabilita enquanto o código anterior é verificado.
     for (let espera = 0; espera < 20 && (await digito.isDisabled()); espera++) {
@@ -106,7 +106,7 @@ export async function loginComoAdmin(page: Page, creds: CredsE2E): Promise<Creds
     await page.goto("/login");
     await page.locator("#email").fill(atuais.users.admin!.email);
     await page.locator("#password").fill(atuais.password);
-    await page.getByRole("button", { name: /entrar/i }).click();
+    await page.getByRole("button", { name: /se connecter/i }).click();
     await page.waitForURL(/\/login\/mfa/, { timeout: 30_000 });
 
     if (await tentarMfa(page, atuais.admin_totp!.secret, 3)) return atuais;

@@ -66,11 +66,11 @@ export type ModoDeOrcamento = 'off' | 'avisar' | 'bloquear';
  * `warn` vs `critical` é deliberado: o aviso diz que o gasto passou do ponto que
  * a pessoa escolheu e a IA CONTINUA respondendo; a parada diz que algo parou.
  */
-export const AVISO_TITULO = 'O gasto de IA passou do aviso que você definiu';
+export const AVISO_TITULO = 'La dépense d’IA a dépassé le seuil d’alerte que vous avez défini';
 export const AVISO_CORPO =
-  'A IA continua respondendo normalmente — isto é o aviso, não a parada. ' +
-  'Veja quanto já foi gasto e ajuste o limite em Uso de IA › Orçamento.';
-export const BLOQUEIO_TITULO = 'O limite de gasto com IA foi atingido';
+  'L’IA continue de répondre normalement — ceci est l’alerte, pas l’arrêt. ' +
+  'Consultez la dépense déjà engagée et ajustez la limite dans IA › Utilisation et budget.';
+export const BLOQUEIO_TITULO = 'La limite de dépense d’IA a été atteinte';
 
 /**
  * Razão gravada em `conversations.last_handoff_reason` quando o teto de gasto
@@ -88,7 +88,7 @@ export const HANDOFF_REASON_ORCAMENTO = 'orcamento_de_ia';
 
 /** Escreve dólar, porque o número É dólar (`pricing.ts` calcula em USD). */
 function emDolares(cents: number): string {
-  return `US$ ${(cents / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `${(cents / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $ US`;
 }
 
 /**
@@ -105,13 +105,13 @@ function emDolares(cents: number): string {
 export function corpoDoBloqueio(gastoCents: number, tetoCents: number): string {
   const pct = tetoCents > 0 ? Math.round((gastoCents / tetoCents) * 100) : 0;
   return (
-    `O gasto de IA deste mês chegou a ${emDolares(gastoCents)} de um limite de ${emDolares(tetoCents)} (${pct}%), ` +
-    'e você escolheu que a IA parasse ao chegar nele. ' +
-    'As conversas que estavam sendo atendidas foram para a FILA DE ATENDIMENTO HUMANO — ' +
-    'ninguém ficou sem próximo passo, mas alguém precisa responder. ' +
-    'Aumentar o limite ou desligar a parada em Uso de IA › Orçamento evita paradas NOVAS; ' +
-    'cada conversa já parada volta ao automático pelo botão "Devolver ao automático" ' +
-    'no cabeçalho dela.'
+    `La dépense d’IA de ce mois a atteint ${emDolares(gastoCents)} sur une limite de ${emDolares(tetoCents)} (${pct} %), ` +
+    'et vous avez choisi que l’IA s’arrête en l’atteignant. ' +
+    'Les conversations en cours ont été placées dans la FILE DE TRAITEMENT HUMAIN — ' +
+    'personne n’est resté sans prochaine étape, mais quelqu’un doit répondre. ' +
+    'Augmenter la limite ou désactiver l’arrêt dans IA › Utilisation et budget évite de NOUVEAUX arrêts ; ' +
+    'chaque conversation déjà arrêtée revient à l’automatique avec le bouton « Remettre à l\'automatique » ' +
+    'dans son en-tête.'
   );
 }
 
@@ -281,6 +281,7 @@ const GRAFIAS_DE_DESLIGADO = new Set([
   'no',
   'nao',
   'não',
+  'non',
   'disabled',
 ]);
 

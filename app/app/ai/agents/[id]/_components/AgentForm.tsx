@@ -36,10 +36,8 @@ import { Info } from "@/lib/ui/icons";
 import Link from "next/link";
 
 import { TETO_TOOLS_POR_AGENTE } from "@/lib/mcp/tools/selecao-por-pacote";
-import { PROVEDORES } from "@/lib/ai/pontos/provedores";
 
-import { ModelPicker, useModelMeta } from "./ModelPicker";
-import { CHAVE_DA_INSTALACAO, CredentialPicker, findCredential } from "./CredentialPicker";
+import { CHAVE_DA_INSTALACAO } from "./CredentialPicker";
 import { rotuloDoEstadoDoCanal } from "@/lib/channels/estado";
 import { ToolPicker } from "./ToolPicker";
 import { TriggerEditor, type TriggerValue } from "./TriggerEditor";
@@ -55,8 +53,8 @@ import { versionCreateSchema, agentMcpCreateSchema } from "@/lib/ai/agents/valid
 import type { SelectableChannel as ChannelSessionLite } from "@/lib/channels/selectable";
 import type { AgentRow } from "@/hooks/ai/useAgent";
 import type { AgentVersionRow } from "@/hooks/ai/useAgentVersions";
-import type { CredentialRow, Provider } from "@/hooks/ai/useCredentials";
-import { credentialStatus } from "@/hooks/ai/useCredentials";
+import type { CredentialRow } from "@/hooks/ai/useCredentials";
+import type { Provider } from "@/lib/ai/agents/validation";
 import type { FunilDaResposta } from "@/hooks/pipelines/usePipelines";
 
 /**
@@ -78,6 +76,12 @@ interface BaseProps {
   channelSessions: ChannelSessionLite[];
   routerMembership?: { routerId: string; routerName: string } | null;
   readOnly?: boolean;
+  /**
+   * L'IA fournie par la plateforme (lib/ai/plateforme.ts). Présente, le
+   * fournisseur, le modèle et la clé sont les siens et l'écran n'en montre
+   * rien ; `null` = l'installation n'a pas de clé, et la publication le dit.
+   */
+  iaPlateforme?: { model: string } | null;
 }
 
 interface EditProps extends BaseProps {
@@ -161,8 +165,22 @@ const DEFAULT_TRIGGER: TriggerValue = {
   concurrency: "one_per_conversation",
 };
 
-function buildState(args: { agent?: AgentRow; version: AgentVersionRow | null }): FormState {
-  const { agent, version } = args;
+function buildState(args: {
+  agent?: AgentRow;
+  version: AgentVersionRow | null;
+  iaPlateforme?: { model: string } | null;
+}): FormState {
+  const { agent, version, iaPlateforme } = args;
+  const etat = buildStateBrut(agent, version);
+  // IA de la plateforme : la version enregistrée la désigne toujours, même
+  // quand elle avait été créée avec un autre fournisseur avant le passage en
+  // SaaS — enregistrer à nouveau la remet d'aplomb.
+  return iaPlateforme
+    ? { ...etat, provider: "deepseek", model: iaPlateforme.model, credential_id: CHAVE_DA_INSTALACAO }
+    : etat;
+}
+
+function buildStateBrut(agent: AgentRow | undefined, version: AgentVersionRow | null): FormState {
   return {
     name: agent?.name ?? "",
     description: agent?.description ?? "",
@@ -242,9 +260,9 @@ export function AgentForm(props: Props) {
       // O fallback existe para chamadores que ainda não a passam; sem ele, um
       // agente pausado abriria no texto padrão e o prompt "sumiria".
       const ref = props.base ?? props.draft ?? props.published;
-      return buildState({ agent: props.agent, version: ref });
+      return buildState({ agent: props.agent, version: ref, iaPlateforme: props.iaPlateforme });
     }
-    return buildState({ version: null });
+    return buildState({ version: null, iaPlateforme: props.iaPlateforme });
   }, [isEdit, props]);
 
   const [form, setForm] = React.useState<FormState>(baseline);
@@ -264,15 +282,7 @@ export function AgentForm(props: Props) {
     setForm((prev) => ({ ...prev, ...p }));
   }
 
-  // Quando provider muda, limpa credential e modelo (eles dependem do provider).
-  function changeProvider(p: Provider) {
-    patch({ provider: p, credential_id: "", model: "" });
-  }
-
-  const cred = findCredential(props.credentials, form.credential_id);
-  const credSt = cred ? credentialStatus(cred) : null;
   const channelSession = props.channelSessions.find((c) => c.id === form.channel_session_id);
-  const modelMeta = useModelMeta(form.provider, form.model);
 
   // ---------------------------------------------------------------------
   // Validação (espelha versionCreateSchema, no client; server revalida).
@@ -303,19 +313,6 @@ export function AgentForm(props: Props) {
       )
         .replace("{count}", tamanhoDoPrompt.toLocaleString(idioma))
         .replace("{excesso}", (tamanhoDoPrompt - 20000).toLocaleString(idioma));
-    if (!form.model) errors.model = t("Escolha o modelo de inteligência artificial.");
-    if (!form.credential_id)
-      errors.credential_id = t("Escolha a chave de acesso da empresa de inteligência artificial.");
-    // Escolher "a chave desta instalação" para um provedor que a instalação NÃO
-    // tem seria publicar um agente que morre em toda mensagem. A mesma recusa
-    // existe no servidor (rota de versões); aqui ela chega antes do clique.
-    if (
-      form.credential_id === CHAVE_DA_INSTALACAO &&
-      !(props.provedoresDaInstalacao ?? []).includes(form.provider)
-    )
-      errors.credential_id = t(
-        "Esta instalação não tem chave de {provider}. Escolha outra empresa de IA ou cadastre uma chave.",
-      ).replace("{provider}", form.provider);
     if (!form.channel_session_id)
       errors.channel_session_id = t("Escolha por qual número de WhatsApp ele atende.");
     if (form.tool_ids.length > TETO_TOOLS_POR_AGENTE)
@@ -343,11 +340,7 @@ export function AgentForm(props: Props) {
     if (!props.draft) return t("Sem rascunho para publicar.");
     if (!isValid) return t("Resolva os erros do formulário.");
     if (dirty) return t("Salve o rascunho antes de publicar.");
-    if (!cred) return t("Escolha a chave de acesso da empresa de inteligência artificial.");
-    if (credSt !== "validated")
-      return t("Credencial {provider} {estado}.")
-        .replace("{provider}", form.provider)
-        .replace("{estado}", credSt === "invalid" ? t("invalida") : t("ainda não validada"));
+    if (!props.iaPlateforme) return "L’assistant n’est pas encore activé sur cette installation.";
     if (!channelSession) return t("Escolha por qual número de WhatsApp ele atende.");
     if (channelSession.status !== "working" && channelSession.status !== "WORKING")
       return t("Número WhatsApp não está conectado (status: {status}).").replace(
@@ -355,7 +348,7 @@ export function AgentForm(props: Props) {
         channelSession.status,
       );
     return null;
-  }, [isEdit, props, isValid, dirty, cred, credSt, form.provider, channelSession, t]);
+  }, [isEdit, props, isValid, dirty, channelSession, t]);
 
   // ---------------------------------------------------------------------
   // Handlers
@@ -542,12 +535,12 @@ export function AgentForm(props: Props) {
       >
         {(
           [
-            ["conversa", "Conversa com o cliente"],
+            ["conversa", "Échange avec le client"],
             ["operacao", "Organiza o sistema"],
             // O TERCEIRO PAPEL. O rótulo diz o que ele FAZ, como os outros dois:
             // "Segurança" é o nosso nome; quem configura quer saber o que é
             // conferido antes de a mensagem chegar ao cliente dele.
-            ["seguranca", "Confere antes de enviar"],
+            ["seguranca", "Vérifications avant envoi"],
           ] as const
         ).map(([id, rotulo]) => (
           <button
@@ -574,12 +567,8 @@ export function AgentForm(props: Props) {
         <PainelDoOperador
           enabled={form.operator_enabled}
           onEnabledChange={(v) => patch({ operator_enabled: v })}
-          model={form.operator_model}
-          onModelChange={(v) => patch({ operator_model: v })}
-          provider={form.provider}
           toolIds={form.operator_tool_ids}
           onToolIdsChange={(ids) => patch({ operator_tool_ids: ids })}
-          modeloDoConversador={form.model}
           disabled={disabled}
         />
       ) : null}
@@ -649,69 +638,6 @@ export function AgentForm(props: Props) {
             </div>
           </Card>
 
-          {/* Provider + credential + model */}
-          <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("A inteligência que ele usa")}</h3>
-            <div className="space-y-1">
-              <Label htmlFor="provider">{t("Empresa de inteligência artificial")}</Label>
-              <Select
-                value={form.provider}
-                onValueChange={(v) => changeProvider(v as Provider)}
-                disabled={disabled}
-              >
-                <SelectTrigger id="provider">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {/*
-                    Derivado de PROVEDORES, nunca escrito à mão: esta lista tinha
-                    três itens fixos enquanto o sistema executava quatro, e a
-                    OpenRouter — a opção [1] do instalador — não aparecia. Um
-                    agente publicado nela abria com o campo em BRANCO, porque
-                    nenhum item casava com o valor, e o primeiro save silencioso
-                    trocava o provedor do dono por outro.
-                  */}
-                  {PROVEDORES.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {t(p.rotulo)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <ModelPicker
-              provider={form.provider}
-              value={form.model}
-              onChange={(modelId) => patch({ model: modelId })}
-              disabled={disabled}
-              id="model"
-            />
-            {validation.model ? (
-              <p className={dica}>{validation.model}</p>
-            ) : null}
-
-            <CredentialPicker
-              provider={form.provider}
-              credentials={props.credentials}
-              value={form.credential_id}
-              onChange={(id) => patch({ credential_id: id })}
-              disabled={disabled}
-              id="credential_id"
-              instalacaoTemChave={(props.provedoresDaInstalacao ?? []).includes(form.provider)}
-            />
-            {validation.credential_id ? (
-              <p className={dica}>{validation.credential_id}</p>
-            ) : null}
-            {cred && credSt !== "validated" ? (
-              <p className="text-xs text-amber-600 dark:text-amber-400">
-                {t(
-                  "Credencial selecionada está com status {status}. Publish bloqueado até validar.",
-                ).replace("{status}", credSt ?? "")}
-              </p>
-            ) : null}
-          </Card>
-
           {/* WhatsApp session */}
           <Card className="space-y-3 p-4">
             <h3 className="text-sm font-medium">{t("Por qual número ele atende")}</h3>
@@ -764,6 +690,13 @@ export function AgentForm(props: Props) {
               </Select>
               {validation.channel_session_id ? (
                 <p className={dica}>{validation.channel_session_id}</p>
+              ) : null}
+              {/* Quem ainda não conectou número trava aqui sem pista: a tela
+                  diz onde se conecta um, em vez de mandar procurar no menu. */}
+              {props.channelSessions.length === 0 ? (
+                <Link href="/app/connections" className="text-xs underline">
+                  {t("Conectar um número de WhatsApp")}
+                </Link>
               ) : null}
             </div>
           </Card>
@@ -864,7 +797,7 @@ export function AgentForm(props: Props) {
                 </span>
                 <TokenCounter
                   text={form.system_prompt}
-                  contextWindow={modelMeta?.context_window ?? null}
+                  contextWindow={null}
                   className="text-xs"
                 />
               </div>

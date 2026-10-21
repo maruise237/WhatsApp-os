@@ -332,6 +332,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error("❌ Seed falhou:", err);
+  console.error("❌ Échec du seed :", err);
   process.exit(1);
 });

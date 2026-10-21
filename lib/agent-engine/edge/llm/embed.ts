@@ -44,7 +44,7 @@ export function embedConfigFromEnv(env: {
 }): EmbedConfig {
   if (!env.RAG_EMBEDDING_API_KEY) {
     throw new Error(
-      'RAG não configurado — defina RAG_EMBEDDING_API_KEY no .env (chave OpenAI do embedding, edge-contract §3/§4)',
+      'Base de connaissances non configurée — définissez RAG_EMBEDDING_API_KEY dans le .env (clé du service d’embedding, edge-contract §3/§4)',
     );
   }
   return {
@@ -90,7 +90,7 @@ export async function embedQuery(cfg: EmbedConfig, query: string): Promise<numbe
     );
   } catch (err) {
     const reason = err instanceof Error ? err.name : 'fetch_failed';
-    throw new EmbedError(`embedding falhou no transporte: ${reason}`);
+    throw new EmbedError(`échec de transport de l’embedding : ${reason}`);
   }
   if (!res.ok) {
     const detail = (await res.text()).slice(0, 300);
@@ -99,11 +99,11 @@ export async function embedQuery(cfg: EmbedConfig, query: string): Promise<numbe
   const parsed = (await res.json()) as { data?: Array<{ embedding?: number[] }> };
   const embedding = parsed.data?.[0]?.embedding;
   if (!Array.isArray(embedding)) {
-    throw new EmbedError('resposta de embedding sem vetor — shape da API mudou, re-validar');
+    throw new EmbedError('réponse d’embedding sans vecteur — le format de l’API a changé, à revalider');
   }
   if (embedding.length !== RAG_EMBEDDING_DIMENSIONS) {
     throw new EmbedError(
-      `embedding com ${embedding.length} dims, esperado ${RAG_EMBEDDING_DIMENSIONS} (pin de contrato ${cfg.model}) — recall quebraria em silêncio`,
+      `embedding de ${embedding.length} dimensions, ${RAG_EMBEDDING_DIMENSIONS} attendues (contrat épinglé) — la recherche se dégraderait en silence`,
     );
   }
   return embedding;

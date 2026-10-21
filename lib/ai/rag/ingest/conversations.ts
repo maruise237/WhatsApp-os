@@ -19,7 +19,8 @@
  * (function arg). Service role bypasses RLS so this MUST be explicit.
  */
 
-import { embedText } from "@/lib/ai/embed";
+import { vecteurDExtrait } from "@/lib/ai/embed";
+import { connaissancesEnTexte } from "@/lib/ai/plateforme";
 import { isEmbeddingProviderConfigured } from "@/lib/ai/gateway";
 import { anonymize, detectResidualPii } from "@/lib/ai/anonymize";
 import { chunkText, computeContentHash } from "@/lib/ai/rag/chunker";
@@ -109,7 +110,7 @@ function buildTranscript(messages: MsgRow[]): string {
   for (const m of messages) {
     const body = (m.body ?? "").trim();
     if (!body) continue;
-    const speaker = m.direction === "inbound" ? "Cliente" : "Atendente";
+    const speaker = m.direction === "inbound" ? "Client" : "Conseiller";
     lines.push(`${speaker}: ${body}`);
   }
   return lines.join("\n");
@@ -122,7 +123,8 @@ export async function ingestConversationsBatch(
   const cap = args.cap ?? 50;
   const admin = createAdminClient();
 
-  if (!isEmbeddingProviderConfigured()) {
+  // En plein texte (`connaissancesEnTexte`), il n'y a pas de vecteur à calculer.
+  if (!connaissancesEnTexte() && !isEmbeddingProviderConfigured()) {
     console.warn(
       "[kb-conversations] embedding provider missing; skipping batch for org",
       organizationId,
@@ -273,10 +275,9 @@ export async function ingestConversationsBatch(
       if (!content) continue;
       const contentHash = computeContentHash(content);
 
-      let embedding: number[];
+      let embedding: string | null;
       try {
-        const embedded = await embedText(content, { organizationId });
-        embedding = embedded.embedding;
+        embedding = await vecteurDExtrait(content, organizationId);
       } catch (err) {
         console.error(
           "[kb-conversations] embed failed for conv",
@@ -298,7 +299,7 @@ export async function ingestConversationsBatch(
           content,
           content_hash: contentHash,
           token_count: Math.ceil(content.length / 4),
-          embedding: embedding as unknown as string,
+          embedding,
           metadata: {
             source_type: "conversations",
             conversation_id: conv.id,

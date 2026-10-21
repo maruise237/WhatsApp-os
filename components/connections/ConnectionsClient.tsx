@@ -406,7 +406,7 @@ export function frasesDoImpacto(
   translate: (texto: string) => string = (texto) => texto,
 ): string[] {
   if (impact.outcome === "delete") {
-    return [translate("Este número não tem conversa, mensagem nem configuração ligada a ele.")];
+    return [translate("Ce numéro n’a aucune conversation, aucun message ni aucune configuration associée.")];
   }
 
   const noInbox = enumerar([
@@ -416,8 +416,8 @@ export function frasesDoImpacto(
   const semNumero = enumerar([
     contar(
       impact.history.agent_versions,
-      translate("versão de agente"),
-      translate("versões de agente"),
+      translate("version d’agent"),
+      translate("versions d’agent"),
     ),
     contar(
       impact.configuration.ai_routers,
@@ -426,21 +426,21 @@ export function frasesDoImpacto(
     ),
     contar(
       impact.configuration.channel_knobs,
-      translate("ajuste de proteção de envio"),
-      translate("ajustes de proteção de envio"),
+      translate("réglage de protection des envois"),
+      translate("réglages de protection des envois"),
     ),
   ]);
 
   const frases: string[] = [];
   if (noInbox) frases.push(`${translate("Continua no inbox:")} ${noInbox}.`);
   if (semNumero)
-    frases.push(`${translate("Fica salvo, mas sem número — para de atender:")} ${semNumero}.`);
+    frases.push(`${translate("Reste enregistré, mais sans numéro — il cesse de répondre :")} ${semNumero}.`);
   // Sobra o caso em que só há registro interno (auditoria de envio): nada a
   // listar, mas o canal continua sendo arquivado, e prometer "não tem nada
   // ligado" seria falso.
   if (frases.length === 0) {
     frases.push(
-      translate("Este canal tem registros internos, por isso ele é arquivado em vez de apagado."),
+      translate("Ce canal contient des enregistrements internes ; il est donc archivé au lieu d’être supprimé."),
     );
   }
   return frases;
@@ -662,7 +662,7 @@ function QrDialog({
                     await onForcePair(sessionId);
                     setStatus("STARTING");
                   } catch (err) {
-                    toast.error(errMsg(err, "Não foi possível gerar um novo QR."));
+                    toast.error(errMsg(err, "Impossible de générer un nouveau QR code."));
                   } finally {
                     setPairing(false);
                   }

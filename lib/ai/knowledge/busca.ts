@@ -15,6 +15,7 @@
 import type { SupabaseClient } from "@/lib/neon/script-client";
 
 import { embedText } from "@/lib/ai/embed";
+import { connaissancesEnTexte, PLAFONDS_CONNAISSANCES, plafonnerExtraits } from "@/lib/ai/plateforme";
 
 export interface TrechoEncontrado {
   chunk_id: string;
@@ -54,8 +55,30 @@ interface LinhaDaRpc {
 export async function buscarConhecimento(
   supabase: SupabaseClient,
   p: ParametrosDaBusca,
-  deps?: { embed?: typeof embedText },
+  deps?: { embed?: typeof embedText; enTexte?: boolean },
 ): Promise<ResultadoDaBusca> {
+  // Plein texte (migration 0184) : même recherche que le tour de l'assistant,
+  // mêmes plafonds — l'humain et l'IA voient le même acervo de la même façon.
+  if (deps?.enTexte ?? connaissancesEnTexte()) {
+    const { data, error } = await supabase.rpc("rechercher_chunks_texte", {
+      p_organization_id: p.organizationId,
+      p_kb_version_id: p.kbVersionId,
+      p_requete: p.pergunta,
+      p_k: Math.min(p.topK, PLAFONDS_CONNAISSANCES.extraits),
+    });
+    if (error) throw new Error(`busca_de_conhecimento_falhou: ${error.message}`);
+    const linhas = plafonnerExtraits((data ?? []) as LinhaDaRpc[]);
+    return {
+      trechos: linhas.map((l) => ({
+        chunk_id: l.chunk_id,
+        knowledge_source_id: l.knowledge_source_id,
+        content: l.content,
+        similarity: l.similarity,
+      })),
+      melhorSimilaridade: linhas.length > 0 ? Math.max(...linhas.map((l) => l.similarity)) : null,
+    };
+  }
+
   const embed = deps?.embed ?? embedText;
   const { embedding } = await embed(p.pergunta, { organizationId: p.organizationId });
 

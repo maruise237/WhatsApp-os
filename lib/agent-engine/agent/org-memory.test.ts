@@ -31,7 +31,7 @@ describe('renderOrgMemory', () => {
   });
   it('doc + entries viram bloco determinístico', () => {
     const out = renderOrgMemory({ content: 'Doc.', entries: [{ id: 'e1', title: 'T', body: 'B' }] });
-    expect(out).toContain('=== memória da organização (regras e aprendizados — valem para TODO atendimento) ===');
+    expect(out).toContain('=== mémoire de l’organisation (règles et apprentissages — valables pour TOUT échange) ===');
     expect(out).toContain('Doc.');
     expect(out).toContain('- T: B');
   });
@@ -43,6 +43,6 @@ describe('composeSystemPrompt', () => {
     const full = composeSystemPrompt({ playbookPrompt: 'P', orgMemoryBlock: 'M', skillIndex: 'S' });
     expect(full.indexOf('P')).toBeLessThan(full.indexOf('M'));
     expect(full.indexOf('M')).toBeLessThan(full.indexOf('S'));
-    expect(full).toContain('=== skills (índice — o corpo carrega no turno quando a situação dispara) ===');
+    expect(full).toContain('=== compétences (index — le corps se charge au tour quand la situation le déclenche) ===');
   });
 });

@@ -1092,7 +1092,7 @@ CREATE TABLE IF NOT EXISTS "public"."ai_faq_items" (
     "question" "text" NOT NULL,
     "answer" "text" NOT NULL,
     "tags" "text"[] DEFAULT '{}'::"text"[] NOT NULL,
-    "locale" "text" DEFAULT 'pt-BR'::"text" NOT NULL,
+    "locale" "text" DEFAULT 'fr-FR'::"text" NOT NULL,
     "position" integer DEFAULT 0 NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL
@@ -1471,7 +1471,7 @@ CREATE TABLE IF NOT EXISTS "public"."crm_leads" (
     "lost_reason" "text",
     "position_in_stage" numeric DEFAULT 1000 NOT NULL,
     "value_cents" bigint,
-    "currency" "text" DEFAULT 'BRL'::"text",
+    "currency" "text" DEFAULT 'XAF'::"text",
     "owner_user_id" "uuid",
     "assigned_at" timestamp with time zone,
     "last_activity_at" timestamp with time zone,
@@ -1723,7 +1723,7 @@ CREATE TABLE IF NOT EXISTS "public"."orders" (
     "contact_id" "uuid",
     "status" "text" NOT NULL,
     "total_cents" bigint NOT NULL,
-    "currency" character(3) DEFAULT 'BRL'::"bpchar" NOT NULL,
+    "currency" character(3) DEFAULT 'XAF'::"bpchar" NOT NULL,
     "payment_method" "text",
     "fulfillment_status" "text",
     "tracking_code" "text",
@@ -1750,8 +1750,8 @@ CREATE TABLE IF NOT EXISTS "public"."organizations" (
     "display_name" "text" NOT NULL,
     "cnpj" "text",
     "status" "text" DEFAULT 'active'::"text" NOT NULL,
-    "timezone" "text" DEFAULT 'America/Sao_Paulo'::"text" NOT NULL,
-    "locale" "text" DEFAULT 'pt-BR'::"text" NOT NULL,
+    "timezone" "text" DEFAULT 'Africa/Douala'::"text" NOT NULL,
+    "locale" "text" DEFAULT 'fr-FR'::"text" NOT NULL,
     "rate_limit_rps" integer DEFAULT 100 NOT NULL,
     "ai_budget_cents" bigint,
     "media_retention_days" integer DEFAULT 365 NOT NULL,
@@ -14271,7 +14271,7 @@ create table if not exists public.products (
   title text not null check (length(trim(title)) between 1 and 240),
   description text,
   price_cents bigint not null check (price_cents >= 0),
-  currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
+  currency text not null default 'XAF' check (currency ~ '^[A-Z]{3}$'),
   stock integer not null default 0 check (stock >= 0),
   is_active boolean not null default true,
   metadata jsonb not null default '{}'::jsonb,
@@ -14306,7 +14306,7 @@ create table if not exists public.sales_orders (
   status text not null default 'en_cours'
     check (status in ('en_cours', 'en_attente_paiement', 'payée', 'a_livrer', 'livree', 'refusee', 'annulee')),
   total_cents bigint not null check (total_cents >= 0),
-  currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
+  currency text not null default 'XAF' check (currency ~ '^[A-Z]{3}$'),
   created_by_user_id uuid references neon_auth.user(id) on delete set null,
   paid_at timestamptz,
   paid_by_user_id uuid references neon_auth.user(id) on delete set null,
@@ -14330,7 +14330,7 @@ create table if not exists public.sales_order_items (
   product_title text not null,
   quantity integer not null check (quantity > 0),
   unit_price_cents bigint not null check (unit_price_cents >= 0),
-  currency text not null default 'BRL' check (currency ~ '^[A-Z]{3}$'),
+  currency text not null default 'XAF' check (currency ~ '^[A-Z]{3}$'),
   created_at timestamptz not null default now(),
   foreign key (order_id, organization_id)
     references public.sales_orders(id, organization_id) on delete cascade,
@@ -14663,6 +14663,338 @@ alter table public.sales_orders add constraint sales_orders_paiement_seulement_s
 alter table public.ai_agent_versions
   alter column handoff_keywords
   set default array['parler à un humain', 'conseiller', 'vraie personne']::text[];
+
+-- ---- Base de connaissances en plein texte, sans embeddings (migration 0184) ----
+-- Recherche française pour l'IA de la plateforme ; voir la migration.
+alter table public.ai_chunks alter column embedding drop not null;
+
+alter table public.ai_chunks
+  add column if not exists contenu_recherche tsvector
+  generated always as (
+    to_tsvector(
+      'french'::regconfig,
+      translate(lower(content), 'àâäáãéèêëíîïìóôöõòúùûüçñ', 'aaaaaeeeeiiiiooooouuuucn')
+    )
+  ) stored;
+
+create index if not exists ai_chunks_contenu_recherche_idx
+  on public.ai_chunks using gin (contenu_recherche);
+
+create or replace function public.rechercher_chunks_texte(
+  p_organization_id uuid,
+  p_kb_version_id uuid,
+  p_requete text,
+  p_k integer default 4
+) returns table (
+  chunk_id uuid,
+  knowledge_source_id uuid,
+  content text,
+  similarity real,
+  metadata jsonb
+)
+language sql stable security definer
+set search_path = public, pg_temp
+as $$
+  with q as (
+    -- Les racines de la question, en OU, sans mots vides ni racines d'une ou
+    -- deux lettres (« à » sans accent devient « a », et « a » est partout).
+    select nullif(
+      array_to_string(array(
+        select quote_literal(l)
+          from unnest(tsvector_to_array(to_tsvector(
+                 'french'::regconfig,
+                 translate(lower(coalesce(p_requete, '')), 'àâäáãéèêëíîïìóôöõòúùûüçñ', 'aaaaaeeeeiiiiooooouuuucn')
+               ))) as l
+         where length(l) >= 3
+      ), ' | '),
+      ''
+    )::tsquery as tsq
+  )
+  select c.id,
+         c.knowledge_source_id,
+         c.content,
+         ts_rank_cd(c.contenu_recherche, q.tsq, 32)::real as similarity,
+         c.metadata
+    from public.ai_chunks c, q
+   where c.organization_id = p_organization_id
+     and c.kb_version_id = p_kb_version_id
+     and q.tsq is not null
+     and c.contenu_recherche @@ q.tsq
+   order by similarity desc, c.position asc
+   limit least(greatest(coalesce(p_k, 4), 0), 8);
+$$;
+
+comment on function public.rechercher_chunks_texte(uuid, uuid, text, integer) is
+  'Recherche plein texte (français, sans accents) dans ai_chunks. SECURITY DEFINER + filtre org programmatique : l''appelant valide que p_organization_id est le tenant authentifié. Au plus 8 extraits.';
+
+revoke execute on function public.rechercher_chunks_texte(uuid, uuid, text, integer) from public, anon;
+grant  execute on function public.rechercher_chunks_texte(uuid, uuid, text, integer) to authenticated, service_role;
+
+insert into public.ai_models
+  (provider, model_id, display_name, context_window,
+   input_price_per_million_cents, output_price_per_million_cents,
+   supports_tools, is_default_for_provider)
+values
+  ('deepseek', 'deepseek-flash', 'Assistant', 1000000, 30, 120, true, true)
+on conflict (provider, model_id) do update
+  set input_price_per_million_cents  = excluded.input_price_per_million_cents,
+      output_price_per_million_cents = excluded.output_price_per_million_cents,
+      supports_tools                 = excluded.supports_tools;
+
+-- ---- Valeurs par défaut visibles en français (migration 0185) ----
+-- Nom d'organisation, tableau d'avant 0181 et compétences de plateforme ;
+-- seulement les lignes encore à la valeur portugaise d'origine. Idempotent.
+-- 1. Nom d'organisation par défaut
+update public.organizations
+   set display_name = 'Mon entreprise'
+ where display_name in ('Minha empresa', 'Minha Empresa');
+
+-- 2. Tableau par défaut (slug inchangé, nom seulement s'il est encore d'origine)
+update public.crm_pipelines
+   set name = 'Commandes'
+ where slug = 'pedidos' and name = 'Pedidos';
+
+update public.crm_stages s
+   set name = v.fr
+  from (values
+    ('carrinho_abandonado',  'Carrinho abandonado',  'Panier abandonné'),
+    ('aguardando_pagamento', 'Aguardando pagamento', 'Paiement attendu'),
+    ('pago',                 'Pago',                 'Payée'),
+    ('em_separacao',         'Em separação',         'En préparation'),
+    ('enviado',              'Enviado',              'Expédiée'),
+    ('entregue',             'Entregue',             'Livrée'),
+    ('pos_venda',            'Pós-venda',            'Après-vente'),
+    ('cancelado',            'Cancelado',            'Annulée')
+  ) as v(slug, pt, fr)
+ where s.slug = v.slug and s.name = v.pt;
+
+-- 3. Compétences de plateforme : nouvelle version FR + pointeur déplacé,
+--    uniquement si le pointeur désigne encore la version portugaise d'origine
+--    (`skill_versions` est immuable : on n'écrase jamais une version).
+do $skills$
+declare
+  v_id uuid;
+begin
+  if exists (
+    select 1
+      from skill_pointers p
+      join skill_versions v on v.id = p.version_id
+     where p.organization_id is null and p.name = 'objecao-preco'
+       and v.description like 'Playbook pra contornar objeção de preço%'
+  ) then
+    insert into skill_versions (organization_id, name, description, body, matcher)
+    values (
+      null,
+      'objecao-preco',
+      'Playbook pour traiter l’objection sur le prix sur WhatsApp — identifie la vraie raison derrière le « c’est cher » avant de réagir, sans accorder de remise non autorisée.',
+      $body$# Playbook : traiter l’objection sur le prix
+
+## Quand l’utiliser
+Le lead a réagi au prix avec résistance — directe (« c’est cher ») ou indirecte (il a
+demandé une remise, comparé avec un concurrent, disparu après avoir vu le prix). Objectif :
+comprendre l’objection réelle derrière le « c’est cher » avant de réagir, et ne jamais
+accorder une remise que l’organisation n’a pas autorisée.
+
+## D’abord le diagnostic — « cher » ne concerne presque jamais le chiffre
+Avant de répondre, identifiez QUELLE objection se cache derrière :
+
+1. **Budget réellement insuffisant** — « je n’ai pas ce montant maintenant », « c’est hors de mon budget »
+2. **N’a pas encore perçu la valeur** — « pourquoi ça coûte ça ? », silence après le prix, comparaison vague
+3. **Comparaison avec un concurrent / une option moins chère** — « j’ai vu moins cher chez [X] »
+4. **Tactique de négociation** — demande une remise d’emblée, sans avoir rien demandé sur le produit
+5. **Timing** — « je vais réfléchir », « je dois voir avec [associé/conjoint] » déguisé en objection de prix
+
+Si le message ne permet pas de diagnostiquer, DEMANDEZ avant d’argumenter : « Pour mieux
+vous aider — c’est le montant en lui-même, ou vous attendiez autre chose que ce que je
+vous ai proposé ? »
+
+## Si-alors selon le diagnostic
+
+**SI budget réellement insuffisant :**
+- N’insistez pas sur le prix plein. Proposez : paiement échelonné, offre d’entrée, version
+  réduite — UNIQUEMENT ce qui est documenté comme option légitime dans la base de
+  connaissances.
+- N’inventez JAMAIS un échelonnement ou une remise non documentés — si vous ne connaissez
+  pas la politique, passez la main à un humain.
+- Ne dévalorisez pas le lead parce qu’il n’a pas le budget. C’est une information, pas un refus.
+
+**SI la valeur n’est pas encore perçue :**
+- Ne répétez pas le prix. Mettez en avant le résultat concret pour le client (pas la liste
+  des fonctionnalités).
+- Utilisez un chiffre ou une preuve sociale réelle si la base de connaissances en contient.
+- Question de relance : « Est-ce que ce que cela résout vous parle, ou il reste un doute sur
+  ce qui est inclus ? »
+
+**SI comparaison avec un concurrent :**
+- N’attaquez pas le concurrent. Demandez ce qu’il a vu de différent (« qu’est-ce qu’il y
+  avait dans cette autre option ? ») — cela révèle souvent si c’est vraiment le prix ou un
+  autre critère (délai, assistance, garantie).
+- Mettez en avant le vrai point fort de l’entreprise (ce que la base de connaissances dit de
+  son positionnement), pas un argument générique.
+
+**SI tactique de négociation (remise demandée sans contexte) :**
+- Ne cédez pas automatiquement. Demandez ce qui permettrait de conclure aujourd’hui —
+  cela révèle souvent le montant réel que le lead a en tête.
+- Remise UNIQUEMENT si l’organisation a une politique documentée dans la base de
+  connaissances pour ce cas. Sinon, relais humain — une décision de prix hors script
+  revient à un humain.
+
+**SI c’est un timing déguisé (« je vais réfléchir ») :**
+- Ne mettez pas la pression. Demandez simplement ce qui manque pour décider (« qu’est-ce
+  qui vous aiderait à décider plus sereinement ? »).
+- Planifiez une relance explicite (date/heure), ne laissez pas en suspens — un lead qui « va
+  réfléchir » sans relance planifiée refroidit.
+
+## Règles strictes
+- Ne promettez jamais de remise, de cadeau ou de condition spéciale qui ne figure pas dans la
+  base de connaissances ou dans la configuration de l’agent.
+- Ne mentez jamais sur une « promotion qui se termine aujourd’hui » et ne créez pas de fausse urgence.
+- Si le lead devient hostile, menace d’annuler ou demande à parler à un humain — relais
+  immédiat, sans insister une fois de plus.
+- Si après 2 échanges l’objection n’est pas levée, proposez explicitement le relais :
+  « Voulez-vous que je demande à quelqu’un de l’équipe de finaliser les détails avec vous ? »
+
+## Exemples de réponse (le ton, pas à copier mot pour mot)
+- « Je comprends — avant de vous proposer autre chose, dites-moi : c’est le montant en
+  lui-même ou vous attendiez autre chose que ce que je vous ai montré ? »
+- « C’est entendu. Pour le montant, nous avons aujourd’hui [option documentée]. Est-ce que
+  cela vous conviendrait mieux en ce moment ? »
+- « Très bien, je vérifie avec vous : qu’est-ce qui vous permettrait de conclure aujourd’hui ? »
+
+## Ce qu’il ne faut PAS faire
+- Ne renvoyez pas la liste des prix sans contexte.
+- N’ignorez pas l’objection pour changer de sujet.
+- N’utilisez pas de formules de pression comme « seulement aujourd’hui » si cette condition n’existe pas vraiment.
+$body$,
+      '{"any_keywords": ["cher", "c''est cher", "trop cher", "remise", "réduction", "baisser le prix", "moins cher", "j''ai vu moins cher", "hors de mon budget", "pas dans mon budget", "prix élevé", "promo"], "probe_keywords": ["combien", "quel est le prix", "c''est combien", "paiement en plusieurs fois", "conditions de paiement", "moyen de paiement"]}'::jsonb
+    )
+    returning id into v_id;
+
+    update skill_pointers
+       set version_id = v_id, updated_at = now()
+     where organization_id is null and name = 'objecao-preco';
+  end if;
+
+  if exists (
+    select 1
+      from skill_pointers p
+      join skill_versions v on v.id = p.version_id
+     where p.organization_id is null and p.name = 'agendamento'
+       and v.description like 'Playbook pra marcar/remarcar horário%'
+  ) then
+    insert into skill_versions (organization_id, name, description, body, matcher)
+    values (
+      null,
+      'agendamento',
+      'Playbook pour fixer ou déplacer un rendez-vous (consultation, visite, séance) — propose des créneaux concrets de l’agenda réel, n’invente jamais de disponibilité, confirme par écrit avant de conclure.',
+      $body$# Playbook : prise de rendez-vous
+
+## Quand l’utiliser
+Le lead demande à fixer un rendez-vous, une consultation, une visite, une démonstration ou
+une séance — tout engagement avec une date et une heure. Fréquent dans les cliniques,
+l’immobilier (visites), les services et le conseil.
+
+## Règle d’or : ne jamais inventer de disponibilité
+Si l’agent n’a pas d’accès confirmé à l’agenda réel de l’entreprise (intégration ou
+consultation des disponibilités), NE proposez PAS d’horaire précis. Dites que vous allez
+vérifier et passez la main, ou demandez la préférence du lead en indiquant que la
+confirmation suivra. Promettre un horaire qui n’existe pas casse la confiance et oblige à
+reprogrammer.
+
+## Déroulé standard (si-alors)
+
+**1. Identifiez le service/motif avant de proposer un horaire**
+- SI le lead a seulement dit « je veux un rendez-vous » sans contexte → demandez d’abord le
+  motif/service. Réserver sans savoir quoi crée des erreurs (ex. : une consultation de
+  20 min placée sur un créneau d’1 h de soin).
+
+**2. Proposez des options fermées, pas une question ouverte**
+- SI vous avez accès à l’agenda réel → proposez 2 ou 3 créneaux concrets (« j’ai mardi 14h
+  ou mercredi 10h, lequel vous convient ? »). Une question ouverte comme « quel horaire
+  préférez-vous ? » crée des allers-retours inutiles.
+- SI vous n’avez pas accès à l’agenda → n’inventez pas. Dites par exemple « je vérifie les
+  disponibilités et je reviens vers vous dans un instant », et signalez le relais à la
+  personne qui y a accès.
+
+**3. Recueillez les informations obligatoires avant de confirmer**
+- Nom complet du lead (ou confirmez celui déjà présent dans le CRM).
+- Service/motif précis.
+- Agence/lieu, si l’entreprise en a plusieurs.
+- En cas de report, l’ancien horaire à remplacer.
+
+**4. Confirmez par écrit avant de clôturer**
+- SI le lead accepte un horaire → reformulez par écrit : « Confirmé : [service] le [date]
+  à [heure], à [lieu]. Vous me le confirmez ? »
+- Ne considérez le rendez-vous comme fixé qu’après un « oui » explicite du lead — un
+  silence ou un « ok » vague ne suffit pas quand une absence coûte cher.
+
+**5. Report et annulation**
+- SI le lead demande à déplacer → traitez-le comme un nouveau rendez-vous : demandez le
+  nouvel horaire et annulez/remplacez explicitement l’ancien (ne laissez pas les deux).
+- SI le lead demande à annuler → confirmez l’annulation et proposez de reprogrammer,
+  sans insister.
+
+**6. Risque d’absence**
+- Si l’entreprise a une politique de confirmation la veille documentée dans la base de
+  connaissances, suivez-la. Sinon, n’inventez pas de politique — confirmez simplement le
+  rendez-vous.
+
+## Règles strictes
+- Ne confirmez jamais un horaire sans avoir vérifié la disponibilité réelle (ou sans
+  indiquer que la confirmation reste à venir).
+- Ne fixez jamais deux rendez-vous en conflit pour le même lead sans le signaler.
+- Si le lead demande un horaire hors des heures d’ouverture et que les règles de
+  l’entreprise ne le prévoient pas, ne confirmez pas — expliquez les horaires réels.
+- Une donnée sensible (adresse complète, pièce d’identité) n’est demandée que si le
+  processus de l’entreprise l’exige vraiment.
+
+## Exemples de réponse (le ton, pas à copier mot pour mot)
+- « Pour bien vous placer : c’est pour quel service/motif ? »
+- « J’ai jeudi à 15h ou vendredi à 9h — qu’est-ce qui vous arrange le mieux ? »
+- « Confirmé : consultation le 28/07 à 15h, à l’agence du centre. Vous me le confirmez ? »
+
+## Ce qu’il ne faut PAS faire
+- Ne demandez pas « quel horaire préférez-vous ? » sans proposer d’options concrètes quand
+  vous avez l’agenda.
+- Ne confirmez pas un rendez-vous sans réponse explicite du lead.
+- N’inventez pas une disponibilité que vous n’avez pas vérifiée.
+$body$,
+      '{"any_keywords": ["rendez-vous", "prendre rendez-vous", "réserver", "fixer un rendez-vous", "une visite", "agenda", "à quelle heure", "créneau", "disponibilité", "reporter", "décaler", "annuler le rendez-vous"], "probe_keywords": ["quelle heure", "quel jour", "vous êtes ouverts", "disponible"]}'::jsonb
+    )
+    returning id into v_id;
+
+    update skill_pointers
+       set version_id = v_id, updated_at = now()
+     where organization_id is null and name = 'agendamento';
+  end if;
+end
+$skills$;
+
+-- ---- Défauts du marché africain francophone : XAF / Africa/Douala / fr-FR (migration 0186) ----
+-- Les défauts de colonne supposaient le Brésil : devise `BRL`, fuseau
+-- `America/Sao_Paulo`, langue `pt-BR`. Le marché par défaut est désormais le
+-- Cameroun (XAF / Africa/Douala / fr-FR) ; chaque organisation garde son
+-- propre fuseau, sa langue et la devise de chaque montant.
+--
+-- On ne change QUE le défaut de colonne : aucune ligne existante n'est
+-- réécrite — une commande en BRL d'un clone brésilien reste en BRL, une
+-- organisation réglée sur São Paulo y reste. Le stockage reste en `_cents`
+-- (XAF n'a pas de décimales à l'affichage ; c'est l'affichage qui l'ignore).
+--
+-- `alter column ... set default` est idempotent ; `if exists` garde la
+-- migration applicable sur un clone partiel.
+alter table if exists public.organizations      alter column timezone set default 'Africa/Douala';
+alter table if exists public.organizations      alter column locale   set default 'fr-FR';
+alter table if exists public.ai_faq_items       alter column locale   set default 'fr-FR';
+alter table if exists public.crm_leads          alter column currency set default 'XAF';
+alter table if exists public.orders             alter column currency set default 'XAF';
+alter table if exists public.products           alter column currency set default 'XAF';
+alter table if exists public.sales_orders       alter column currency set default 'XAF';
+alter table if exists public.sales_order_items  alter column currency set default 'XAF';
+
+-- La documentation de colonne citait encore pt-BR comme exemple et repli.
+comment on column public.contacts.locale is
+  'Langue préférée du contact (ex. : fr-FR, en-US). NULL = hérite de la langue de l''organisation (repli : fr-FR).';
 
 -- ---- VARREDURA anon: função nova nasce exposta em quem ATUALIZA (migration 0116) ----
 --

@@ -18,6 +18,7 @@ import { sendEmail } from "@/lib/email/resend";
 import { audit } from "@/lib/audit";
 import { env } from "@/lib/env";
 import type { LgpdRequest } from "./types";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export type AlarmThreshold = "data_request_d5" | "redact_d10";
 
@@ -116,7 +117,7 @@ export async function triggerSlaAlarm(
       const appUrl = env.NEXT_PUBLIC_APP_URL;
       const requestUrl = `${appUrl}/app/lgpd/requests/${request.id}`;
 
-      const subject = `[LGPD] Demande ${shortId} bientôt échue`;
+      const subject = `[Données personnelles] Demande ${shortId} bientôt échue`;
 
       const thresholdLabel =
         threshold === "data_request_d5"
@@ -124,7 +125,7 @@ export async function triggerSlaAlarm(
           : "J+10 (anonymisation/suppression)";
 
       const dueFmt = new Date(request.due_at).toLocaleString("fr-FR", {
-        timeZone: "America/Sao_Paulo",
+        timeZone: FUSEAU_PAR_DEFAUT,
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -141,7 +142,7 @@ export async function triggerSlaAlarm(
       const html = `<!doctype html>
 <html lang="fr">
 <body style="font-family:-apple-system,Helvetica,Arial,sans-serif;color:${NEUTROS_DE_SAIDA.texto};line-height:1.5;max-width:560px;margin:0 auto;padding:24px;">
-  <h2 style="margin:0 0 12px;font-size:18px;">[LGPD] Alerte de délai — Demande #${shortId}</h2>
+  <h2 style="margin:0 0 12px;font-size:18px;">[Données personnelles] Alerte de délai — Demande #${shortId}</h2>
   <p>Bonjour,</p>
   <p>La demande de données personnelles <strong>#${shortId}</strong> de <strong>${orgName}</strong> a atteint le seuil <strong>${thresholdLabel}</strong>.</p>
   ${overdueNote}
@@ -149,12 +150,12 @@ export async function triggerSlaAlarm(
   <p style="margin:24px 0;">
     <a href="${requestUrl}" style="background:${marca.accent};color:${marca.accentFg};padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block;">Voir la demande dans le panneau</a>
   </p>
-  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base légale : LGPD, loi nº 13.709/2018, art. 18. Délai obligatoire selon la réglementation en vigueur.</p>
+  <p style="font-size:12px;color:${NEUTROS_DE_SAIDA.suave};">Base légale : réglementation applicable à la protection des données personnelles (droits de la personne concernée). Délai obligatoire selon la réglementation en vigueur.</p>
 </body>
 </html>`;
 
       // Texto puro não escapa: `&amp;` no corpo de um alarme é ruído.
-      const text = `[LGPD] Alerte de délai — Demande #${shortId}
+      const text = `[Données personnelles] Alerte de délai — Demande #${shortId}
 
 La demande de données personnelles #${shortId} de ${organizationName || marca.nome} a atteint le seuil ${thresholdLabel}.
 ${daysOverdue > 0 ? `Cette demande a ${daysOverdue} jour(s) de retard.` : `Échéance : ${dueFmt}.`}
@@ -163,7 +164,7 @@ Statut : ${request.request_type} / ${request.status}
 
 Accès : ${requestUrl}
 
-Base légale : LGPD, loi nº 13.709/2018, art. 18.`;
+Base légale : réglementation applicable à la protection des données personnelles (droits de la personne concernée).`;
 
       const result = await sendEmail({
         to: recipientEmail,

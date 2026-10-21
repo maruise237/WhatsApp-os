@@ -1,15 +1,15 @@
 # scripts/
 
-CLI utilities pra operação local e de produção.
+Utilitaires en ligne de commande pour l'exploitation locale et de production.
 
-## Lista
+## Liste
 
-- `seed-tenant.ts` — Cria um tenant manualmente (modo BPO). Placeholder; implementação na Spec 01.
+- `seed-tenant.ts` — Crée une organisation manuellement (mode BPO). Placeholder ; implémentation dans la Spec 01.
 
-## Convenções
+## Conventions
 
-- Todos em TypeScript (executar via `npx tsx scripts/<nome>.ts`)
-- Sempre validar input com Zod
-- Logar via `console.error` (stderr) pra mensagens operacionais; `console.log` (stdout) só pra output estruturado consumível por pipe
-- Operações destrutivas exigem flag `--confirm` ou prompt interativo
-- Toda mutação relevante gera entrada em `api_audit_log` com `actor=script:<nome>`
+- Tous en TypeScript (exécuter via `npx tsx scripts/<nom>.ts`)
+- Toujours valider les entrées avec Zod
+- Journaliser via `console.error` (stderr) pour les messages opérationnels ; `console.log` (stdout) seulement pour une sortie structurée consommable par un pipe
+- Les opérations destructives exigent l'option `--confirm` ou une invite interactive
+- Toute mutation pertinente génère une entrée dans `api_audit_log` avec `actor=script:<nom>`

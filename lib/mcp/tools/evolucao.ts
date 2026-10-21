@@ -24,7 +24,7 @@ import type { McpToolDefinition } from "../types";
 // ---------------------------------------------------------------------------
 
 const buscarInputShape = {
-  pergunta: z.string().trim().min(1).describe("O que se quer saber, em linguagem natural."),
+  pergunta: z.string().trim().min(1).describe("Ce que l’on veut savoir, en langage naturel."),
   quantidade: z.number().int().min(1).max(10).optional().default(5),
   /**
    * So e necessario quando quem chama NAO e um agente (ex: cliente MCP externo
@@ -39,9 +39,9 @@ const LIMIAR_PADRAO = 0.72;
 export const crmSearchKnowledge: McpToolDefinition<typeof buscarInputShape> = {
   name: "crm_search_knowledge",
   description:
-    "Busca semantica no acervo de conhecimento da organizacao (RAG). Devolve os trechos mais " +
-    "relevantes com a similaridade de cada um. Quando nada passa do limiar, devolve " +
-    "`melhor_similaridade` para distinguir 'nao ha nada sobre isso' de 'ha algo perto, mas fraco'.",
+    "Recherche sémantique dans la base de connaissances de l’organisation (RAG). Renvoie les passages les plus " +
+    "pertinents avec la similarité de chacun. Quand rien ne dépasse le seuil, renvoie " +
+    "`melhor_similaridade` pour distinguer « il n’y a rien à ce sujet » de « il y a quelque chose de proche, mais faible ».",
   inputSchema: buscarInputShape,
   category: "read",
   requiresRole: "agent",
@@ -54,7 +54,7 @@ export const crmSearchKnowledge: McpToolDefinition<typeof buscarInputShape> = {
       return {
         erro: "assistente_nao_informado",
         mensagem:
-          "Cada assistente consulta o proprio acervo. Informe qual assistente deve responder.",
+          "Chaque assistant consulte sa propre base. Indiquez quel assistant doit répondre.",
       };
     }
 
@@ -96,9 +96,9 @@ const listarMateriaisInputShape = {
 export const crmListKnowledgeSources: McpToolDefinition<typeof listarMateriaisInputShape> = {
   name: "crm_list_knowledge_sources",
   description:
-    "Lista os materiais que compoem o acervo de conhecimento da organizacao, com estado de " +
-    "indexacao e contagem de trechos. Util para saber se uma resposta faltou por ausencia de " +
-    "material ou por falha de indexacao.",
+    "Liste les contenus qui composent la base de connaissances de l’organisation, avec l’état " +
+    "d’indexation et le nombre de passages. Utile pour savoir si une réponse a manqué faute de " +
+    "contenu ou à cause d’un échec d’indexation.",
   inputSchema: listarMateriaisInputShape,
   category: "read",
   requiresRole: "agent",
@@ -134,8 +134,8 @@ const propostasInputShape = {
 export const crmListImprovementProposals: McpToolDefinition<typeof propostasInputShape> = {
   name: "crm_list_improvement_proposals",
   description:
-    "Lista as propostas de melhoria que o ciclo de aprendizado gerou, com tipo, alvo e a " +
-    "evidência que as motivou. LEITURA apenas: aprovar continua sendo decisão de uma pessoa.",
+    "Liste les propositions d’amélioration générées par le cycle d’apprentissage, avec type, cible et la " +
+    "preuve qui les a motivées. LECTURE uniquement : approuver reste une décision humaine.",
   inputSchema: propostasInputShape,
   category: "read",
   requiresRole: "agent",
@@ -164,8 +164,8 @@ const lerMemoriaInputShape = {
 export const crmGetOrgMemory: McpToolDefinition<typeof lerMemoriaInputShape> = {
   name: "crm_get_org_memory",
   description:
-    "Lê o que a empresa registrou sobre si mesma — políticas, combinados e aprendizados que " +
-    "valem para todo atendimento. Use antes de inventar regra de negócio.",
+    "Lit ce que l’entreprise a enregistré sur elle-même — politiques, accords et apprentissages qui " +
+    "valent pour tout échange. À utiliser avant d’inventer une règle métier.",
   inputSchema: lerMemoriaInputShape,
   category: "read",
   requiresRole: "agent",
@@ -192,8 +192,8 @@ const gravarMemoriaInputShape = {
 export const crmSaveOrgMemory: McpToolDefinition<typeof gravarMemoriaInputShape> = {
   name: "crm_save_org_memory",
   description:
-    "Registra um aprendizado que vale para toda a operação, não para um cliente só. Nasce com " +
-    "origem 'agent' para o humano distinguir o que a IA anotou do que ele mesmo escreveu.",
+    "Enregistre un apprentissage qui vaut pour toute l’activité, pas pour un seul client. Il est créé avec " +
+    "l’origine 'agent' pour que l’humain distingue ce que l’IA a noté de ce qu’il a écrit lui-même.",
   inputSchema: gravarMemoriaInputShape,
   category: "write",
   // `ai_operator`: a rota equivalente (`ai/memory/entries` POST) exige `manager`

@@ -65,7 +65,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -79,7 +79,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
 
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -87,7 +87,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
       await page.waitForTimeout(msUntilNextTotpWindow() + 200);
     }
     const code = generateTotp(secret);
-    const firstDigit = page.locator('input[aria-label="Dígito 1"]');
+    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
     await firstDigit.click();
     await page.keyboard.type(code, { delay: 40 });
     try {
@@ -100,36 +100,36 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
   throw new Error("MFA challenge failed after 2 TOTP attempts");
 }
 
-test.describe("followup flows — lista + criação (Task 6.1)", () => {
-  test("manager cria um fluxo e ele aparece na lista com badge Rascunho", async ({ page }) => {
+test.describe("flows de relance — liste + création (Task 6.1)", () => {
+  test("le manager crée un flow et il apparaît dans la liste avec le badge Brouillon", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
-    await expect(page.getByRole("heading", { name: "Follow-ups" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Relances" })).toBeVisible();
     await page.screenshot({ path: "test-results/followup-6.1-01-list.png", fullPage: true });
 
     const flowName = `E2E Follow-up ${Date.now()}`;
 
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await expect(dialog.getByText("Novo fluxo de follow-up")).toBeVisible();
+    await expect(dialog.getByText("Nouveau flow de follow-up")).toBeVisible();
     await page.screenshot({ path: "test-results/followup-6.1-02-dialog-open.png", fullPage: true });
 
-    const nameInput = dialog.getByLabel("Nome");
+    const nameInput = dialog.getByLabel("Nom");
     await expect(nameInput).toBeFocused();
     await nameInput.fill(flowName);
     await page.screenshot({ path: "test-results/followup-6.1-03-name-typed.png", fullPage: true });
 
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
 
     const card = page.locator("li", { hasText: flowName });
     await expect(card).toBeVisible();
-    await expect(card.getByText("Rascunho", { exact: true })).toBeVisible();
+    await expect(card.getByText("Brouillon", { exact: true })).toBeVisible();
     await page.screenshot({ path: "test-results/followup-6.1-04-flow-in-list.png", fullPage: true });
   });
 
-  test("viewer não vê o botão de criar fluxo (RBAC)", async ({ page }) => {
+  test("le viewer ne voit pas le bouton de création de flow (RBAC)", async ({ page }) => {
     // Achado ao rodar a suíte completa desta task: este teste ficou
     // desatualizado pela Task 7.1 (commit 6546271, já na main deste worktree
     // antes desta sessão) — o gate de PÁGINA que redirecionava viewer pra
@@ -140,8 +140,8 @@ test.describe("followup flows — lista + criação (Task 6.1)", () => {
     // botão "Novo fluxo" não aparece pro viewer.
     await login(page, creds.users.viewer!.email);
     await page.goto("/app/ai/followups");
-    await expect(page.getByRole("heading", { name: "Follow-ups" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Novo fluxo" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Relances" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Nouveau flow" })).toHaveCount(0);
   });
 });
 
@@ -186,21 +186,21 @@ async function nodeIdsByPrefix(page: Page, prefix: string): Promise<string[]> {
   return ids;
 }
 
-test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
+test.describe("constructeur de flow — canvas visuel (Task 6.2)", () => {
   // Canvas grande: com 4+ nós o fitView inicial pode chegar a zoom 2x (maxZoom
   // default) — um viewport pequeno deixa nós fora da área visível, e
   // coordenadas de handle fora do viewport quebram os drags de conexão.
   test.use({ viewport: { width: 1600, height: 900 } });
 
-  test("manager cria um fluxo, clica na linha e o canvas React Flow abre", async ({ page }) => {
+  test("le manager crée un flow, clique sur la ligne et le canvas React Flow s’ouvre", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
     const flowName = `E2E Builder ${Date.now()}`;
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Nome").fill(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByLabel("Nom").fill(flowName);
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
 
     const card = page.locator("li", { hasText: flowName });
@@ -216,15 +216,15 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     await page.screenshot({ path: "test-results/followup-6.2-01-canvas-empty.png", fullPage: true });
   });
 
-  test("adiciona os 4 nós via paleta e conecta trigger→wait→action→end", async ({ page }) => {
+  test("ajoute les 4 nœuds via la palette et relie trigger→wait→action→end", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
     const flowName = `E2E Connect ${Date.now()}`;
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Nome").fill(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByLabel("Nom").fill(flowName);
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
     await page.locator("li", { hasText: flowName }).getByRole("link").click();
     await page.waitForURL(/\/app\/ai\/followups\/[0-9a-f-]+$/);
@@ -263,15 +263,15 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     await page.screenshot({ path: "test-results/followup-6.2-02-connected.png", fullPage: true });
   });
 
-  test("clica no nó Aguardar e configura 10min; clica no nó Ação e configura o prompt_hint", async ({ page }) => {
+  test("clique sur le nœud Attendre et configure 10 min ; clique sur le nœud Action et configure le prompt_hint", async ({ page }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
     const flowName = `E2E Config ${Date.now()}`;
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Nome").fill(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByLabel("Nom").fill(flowName);
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
     await page.locator("li", { hasText: flowName }).getByRole("link").click();
     await page.waitForURL(/\/app\/ai\/followups\/[0-9a-f-]+$/);
@@ -284,7 +284,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     await page.locator('[data-testid^="node-card-wait-"]').click();
     const panel = page.getByTestId("node-config-panel");
     await expect(panel).toBeVisible();
-    const durationInput = panel.getByLabel("Duração (minutos)");
+    const durationInput = panel.getByLabel("Durée (minutes)");
     await durationInput.fill("10");
     await durationInput.blur();
     // Subtitle on the card derives straight from committed config — proves the
@@ -294,10 +294,10 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
 
     // Action node → prompt_hint.
     await page.locator('[data-testid^="node-card-action-"]').click();
-    const promptHint = panel.getByLabel("Instrução para a IA");
-    await promptHint.fill("Reforce o benefício e pergunte se ainda tem interesse.");
+    const promptHint = panel.getByLabel("Instruction pour l’IA");
+    await promptHint.fill("Rappelez le bénéfice et demandez s’il est toujours intéressé.");
     await promptHint.blur();
-    await expect(page.locator('[data-testid^="node-card-action-"]')).toContainText("Reforce o benefício");
+    await expect(page.locator('[data-testid^="node-card-action-"]')).toContainText("Rappelez le bénéfice");
     await page.screenshot({ path: "test-results/followup-6.2-04-action-configured.png", fullPage: true });
   });
 
@@ -307,17 +307,17 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
    * a generic banner), fix it, publish for real, reload and prove the graph
    * persisted identically, and confirm Rollback is disabled with 1 version.
    */
-  test("fluxo completo: montar, publicar incompleto (422 ancorado), corrigir, publicar, recarregar, rollback desabilitado", async ({
+  test("parcours complet : monter, publier incomplet (422 ancré), corriger, publier, recharger, rollback désactivé", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
     const flowName = `E2E Acceptance ${Date.now()}`;
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Nome").fill(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByLabel("Nom").fill(flowName);
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
     await page.locator("li", { hasText: flowName }).getByRole("link").click();
     await page.waitForURL(/\/app\/ai\/followups\/([0-9a-f-]+)$/);
@@ -347,14 +347,14 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     // 3. Configure wait=10min + action prompt_hint.
     await page.locator(`[data-testid="node-card-${waitId}"]`).click();
     const panel = page.getByTestId("node-config-panel");
-    await panel.getByLabel("Duração (minutos)").fill("10");
-    await panel.getByLabel("Duração (minutos)").blur();
+    await panel.getByLabel("Durée (minutes)").fill("10");
+    await panel.getByLabel("Durée (minutes)").blur();
     await expect(page.locator(`[data-testid="node-card-${waitId}"]`)).toContainText("10 min");
 
     await page.locator(`[data-testid="node-card-${actionId}"]`).click();
-    await panel.getByLabel("Instrução para a IA").fill("Reforce o benefício e pergunte se ainda tem interesse.");
-    await panel.getByLabel("Instrução para a IA").blur();
-    await expect(page.locator(`[data-testid="node-card-${actionId}"]`)).toContainText("Reforce o benefício");
+    await panel.getByLabel("Instruction pour l’IA").fill("Rappelez le bénéfice et demandez s’il est toujours intéressé.");
+    await panel.getByLabel("Instruction pour l’IA").blur();
+    await expect(page.locator(`[data-testid="node-card-${actionId}"]`)).toContainText("Rappelez le bénéfice");
     // Close the config panel — it's a docked aside that narrows the canvas and
     // can occlude nodes, which would break the next handle-to-handle drag.
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
@@ -363,7 +363,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
 
     // 4. Publish INCOMPLETE — expect 422 anchored to the offending nodes.
     await page.getByTestId("publish-button").click();
-    await expect(page.getByText(/reprovado na validação/i)).toBeVisible();
+    await expect(page.getByText(/rejeté lors de la validation/i)).toBeVisible();
     await expect(page.locator(`[data-testid="node-error-${waitId}"]`)).toBeVisible();
     await expect(page.locator(`[data-testid="node-error-${actionId}"]`)).toBeVisible();
     await expect(page.locator(`[data-testid="node-error-${endId}"]`)).toBeVisible();
@@ -375,8 +375,8 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
 
     // 6. Publish for real — expect success + "Ativo" badge + toast.
     await page.getByTestId("publish-button").click();
-    await expect(page.getByText("Fluxo publicado.")).toBeVisible();
-    await expect(page.locator('[aria-label="status: Ativo"]')).toBeVisible();
+    await expect(page.getByText("Flux publié.")).toBeVisible();
+    await expect(page.locator('[aria-label="statut : Actif"]')).toBeVisible();
     await expect(page.locator(`[data-testid="node-error-${waitId}"]`)).toHaveCount(0);
     await page.screenshot({ path: "test-results/followup-6.2-07-published.png", fullPage: true });
 
@@ -400,11 +400,11 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
     await page.reload();
     await page.waitForURL(flowUrl);
     await expect(page.locator(".react-flow")).toBeVisible();
-    await expect(page.locator('[aria-label="status: Ativo"]')).toBeVisible();
+    await expect(page.locator('[aria-label="statut : Actif"]')).toBeVisible();
     await expect(page.locator(".react-flow__node")).toHaveCount(4);
     await expect(page.locator(".react-flow__edge")).toHaveCount(3);
     await expect(page.locator(`[data-testid="node-card-${waitId}"]`)).toContainText("10 min");
-    await expect(page.locator(`[data-testid="node-card-${actionId}"]`)).toContainText("Reforce o benefício");
+    await expect(page.locator(`[data-testid="node-card-${actionId}"]`)).toContainText("Rappelez le bénéfice");
     // Same settle wait as the "before" capture — the post-reload fitView (on
     // mount) needs the same grace period before its transform is comparable.
     await page.waitForTimeout(400);
@@ -424,7 +424,7 @@ test.describe("followup flow builder — canvas visual (Task 6.2)", () => {
   });
 });
 
-test.describe("followup flow builder — editor de condição de aresta / ai_classify (Task 6.3)", () => {
+test.describe("constructeur de flow — éditeur de condition d’arête / ai_classify (Task 6.3)", () => {
   test.use({ viewport: { width: 1600, height: 900 } });
 
   /**
@@ -479,17 +479,17 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
    * used to set `class_match`/`always` per edge. That flip is the whole point
    * of this task: the editor is what unblocks ai_classify in the canvas.
    */
-  test("ai_classify só publica depois de configurar class_match/no_reply/always nas arestas de saída", async ({
+  test("ai_classify ne se publie qu’après avoir configuré class_match/no_reply/always sur les arêtes de sortie", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
 
     await page.goto("/app/ai/followups");
     const flowName = `E2E Classify ${Date.now()}`;
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByLabel("Nome").fill(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByLabel("Nom").fill(flowName);
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible();
     await page.locator("li", { hasText: flowName }).getByRole("link").click();
     await page.waitForURL(/\/app\/ai\/followups\/[0-9a-f-]+$/);
@@ -538,17 +538,17 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
     // 2. Configure ai_classify classes = positivo, objecao (replacing the hot/cold default).
     await page.locator(`[data-testid="node-card-${classifyId}"]`).click();
     const panel = page.getByTestId("node-config-panel");
-    await panel.getByLabel("Classes (separadas por vírgula)").fill("positivo, objecao");
-    await panel.getByLabel("Classes (separadas por vírgula)").blur();
+    await panel.getByLabel("Classes (séparées par des virgules)").fill("positif, objection");
+    await panel.getByLabel("Classes (séparées par des virgules)").blur();
     await expect(page.locator(`[data-testid="node-card-${classifyId}"]`)).toContainText("2 classes");
 
     // 3. Configure the 2 action nodes' prompt_hint.
     await page.locator(`[data-testid="node-card-${action1Id}"]`).click();
-    await panel.getByLabel("Instrução para a IA").fill("Envie uma oferta especial reforçando o interesse.");
-    await panel.getByLabel("Instrução para a IA").blur();
+    await panel.getByLabel("Instruction pour l’IA").fill("Envoyez une offre spéciale qui renforce l’intérêt.");
+    await panel.getByLabel("Instruction pour l’IA").blur();
     await page.locator(`[data-testid="node-card-${action2Id}"]`).click();
-    await panel.getByLabel("Instrução para a IA").fill("Pergunte com empatia qual é a objeção específica.");
-    await panel.getByLabel("Instrução para a IA").blur();
+    await panel.getByLabel("Instruction pour l’IA").fill("Demandez avec empathie quelle est l’objection précise.");
+    await panel.getByLabel("Instruction pour l’IA").blur();
 
     // Close the config panel — docked aside narrows the canvas, would break the drags below.
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
@@ -574,7 +574,7 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
     // Task 6.2 state, before this task's editor existed). It must fail: `ai_classify`
     // has no `class_match` edge for either declared class and no `no_reply` edge.
     await page.getByTestId("publish-button").click();
-    await expect(page.getByText(/reprovado na validação/i)).toBeVisible();
+    await expect(page.getByText(/rejeté lors de la validation/i)).toBeVisible();
     await expect(page.locator(`[data-testid="node-error-${classifyId}"]`)).toBeVisible();
     // Exactly one node carries an error — proves the failure is scoped to the classify
     // node's edge coverage, not some unrelated structural problem in the graph.
@@ -584,13 +584,13 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
     await page.screenshot({ path: "test-results/followup-6.3-02-publish-422-all-always.png", fullPage: true });
 
     // 6. Fix it: use the new EdgeConfigPanel to set each classify-outgoing edge's condition.
-    await setEdgeCondition(page, "edge-2", "positivo");
-    await setEdgeCondition(page, "edge-3", "objecao");
-    await setEdgeCondition(page, "edge-4", "Sem resposta");
+    await setEdgeCondition(page, "edge-2", "positif");
+    await setEdgeCondition(page, "edge-3", "objection");
+    await setEdgeCondition(page, "edge-4", "Sans réponse");
     // edge-5 is already the "always" fallback by default — open it and confirm rather
     // than change it, proving the option is genuinely selected, not just left untouched.
     await clickEdge(page, "edge-5");
-    await expect(page.getByTestId("edge-config-panel").getByRole("combobox")).toContainText("Sempre");
+    await expect(page.getByTestId("edge-config-panel").getByRole("combobox")).toContainText("Toujours");
 
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
     await expect(page.getByTestId("edge-config-sheet")).toHaveCount(0);
@@ -599,15 +599,15 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
     // 7. Publish for real — expect SUCCESS this time, where the identical graph shape
     // with all-`always` edges failed above.
     await page.getByTestId("publish-button").click();
-    await expect(page.getByText("Fluxo publicado.")).toBeVisible();
-    await expect(page.locator('[aria-label="status: Ativo"]')).toBeVisible();
+    await expect(page.getByText("Flux publié.")).toBeVisible();
+    await expect(page.locator('[aria-label="statut : Actif"]')).toBeVisible();
     await expect(page.locator(`[data-testid="node-error-${classifyId}"]`)).toHaveCount(0);
 
     // 8. Prove the wire labels reflect each condition — the acceptance screenshot.
-    await expect(page.getByTestId("rf__edge-edge-2")).toContainText("positivo");
-    await expect(page.getByTestId("rf__edge-edge-3")).toContainText("objecao");
-    await expect(page.getByTestId("rf__edge-edge-4")).toContainText("Sem resposta");
-    await expect(page.getByTestId("rf__edge-edge-5")).toContainText("Sempre");
+    await expect(page.getByTestId("rf__edge-edge-2")).toContainText("positif");
+    await expect(page.getByTestId("rf__edge-edge-3")).toContainText("objection");
+    await expect(page.getByTestId("rf__edge-edge-4")).toContainText("Sans réponse");
+    await expect(page.getByTestId("rf__edge-edge-5")).toContainText("Toujours");
     await page.locator(".react-flow__controls-fitview").click();
     await page.waitForTimeout(400);
     await page.screenshot({ path: "test-results/followup-6.3-04-published-branching.png", fullPage: true });
@@ -626,7 +626,7 @@ test.describe("followup flow builder — editor de condição de aresta / ai_cla
  * `page.tsx` deixa manager VER o formulário mas `readOnly=true` — só admin
  * salva (achado ao ler o RBAC real antes de escrever o teste).
  */
-test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
+test.describe("sélecteur de flow de relance dans l’éditeur de l’agent (Task 7.2)", () => {
   test.beforeAll(() => {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-followup-agent.ts"], { stdio: "inherit" });
   // O seed ESCREVE em .e2e-creds.json, e `creds` foi lido no carregamento do
@@ -637,7 +637,7 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
     creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
   });
 
-  test("admin vincula um fluxo publicado ao agente, salva, e a persistência é provada via API", async ({
+  test("l’admin lie un flow publié à l’agent, enregistre, et la persistance est prouvée via l’API", async ({
     page,
   }) => {
     expect(creds.admin_totp?.secret, "seed deve gravar admin_totp em .e2e-creds.json").toBeTruthy();
@@ -675,7 +675,7 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
       data: {
         name: agentName,
         version: {
-          system_prompt: "Você é um atendente de teste E2E. Responda de forma clara em pt-BR.",
+          system_prompt: "Vous êtes un agent de test E2E. Répondez clairement en français.",
           provider: "anthropic",
           model: "claude-sonnet-4-6",
           credential_id: fixtures.credential_id,
@@ -702,7 +702,7 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
     await followupHeading.scrollIntoViewIfNeeded();
     await expect(followupHeading).toBeVisible();
 
-    const followupToggle = page.getByLabel("Habilitar gatilhos automáticos de follow-up");
+    const followupToggle = page.getByLabel("Activer les déclencheurs automatiques de suivi");
     await expect(followupToggle).not.toBeChecked();
     await followupToggle.click();
     await expect(followupToggle).toBeChecked();
@@ -717,8 +717,8 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
     });
 
     // --- 4. salva o rascunho ---
-    await page.getByRole("button", { name: "Salvar rascunho" }).click();
-    await expect(page.getByText(/Rascunho v\d+ salvo\./)).toBeVisible();
+    await page.getByRole("button", { name: "Enregistrer le brouillon" }).click();
+    await expect(page.getByText(/Brouillon v\d+ enregistré\./)).toBeVisible();
     await page.screenshot({
       path: path.join(ARTIFACTS_DIR, "followup-7.2-02-saved.png"),
       fullPage: true,
@@ -740,8 +740,8 @@ test.describe("followup flow selector no editor do agente (Task 7.2)", () => {
   });
 });
 
-test.describe("followup flow builder — controle de gatilho na PublishBar (Task 8.5)", () => {
-  test("operador arma o gatilho de Silêncio (threshold) pela UI; oferece só os kinds com motor; PATCH round-trips", async ({
+test.describe("constructeur de flow — contrôle du déclencheur dans la PublishBar (Task 8.5)", () => {
+  test("l’opérateur arme le déclencheur Silence (seuil) via l’UI ; seuls les types avec moteur sont proposés ; PATCH aller-retour", async ({
     page,
   }) => {
     await login(page, creds.users.manager!.email);
@@ -758,7 +758,7 @@ test.describe("followup flow builder — controle de gatilho na PublishBar (Task
 
       // Draft novo nasce trigger_config={kind:'manual'} — o botão mostra isso sem precisar abrir o popover.
       const triggerButton = page.getByTestId("trigger-config-button");
-      await expect(triggerButton).toHaveText("Gatilho: Manual");
+      await expect(triggerButton).toHaveText("Déclencheur : manuel");
 
       await triggerButton.click();
       const panel = page.getByTestId("trigger-config-panel");
@@ -779,17 +779,17 @@ test.describe("followup flow builder — controle de gatilho na PublishBar (Task
       // coisas — e é o que o operador de fato vê.
       const kindSelect = panel.getByRole("combobox");
       await kindSelect.click();
-      const OFERECIDOS = ["Manual", "Silêncio", "Etapa do funil", "Agente pediu ajuda"];
+      const OFERECIDOS = ["Manuel", "Silence", "Étape du tableau", "L’agent a demandé de l’aide"];
       for (const nome of OFERECIDOS) {
         await expect(page.getByRole("option", { name: nome, exact: true })).toBeVisible();
       }
       await expect(page.getByRole("option")).toHaveCount(OFERECIDOS.length);
-      await expect(page.getByRole("option", { name: /conversation_end|fim do atendimento/i })).toHaveCount(0);
+      await expect(page.getByRole("option", { name: /conversation_end|fin de la conversation/i })).toHaveCount(0);
 
-      await page.getByRole("option", { name: "Silêncio", exact: true }).click();
-      await expect(panel.getByLabel("Minutos de silêncio")).toBeVisible();
+      await page.getByRole("option", { name: "Silence", exact: true }).click();
+      await expect(panel.getByLabel("Minutes de silence")).toBeVisible();
 
-      const thresholdInput = panel.getByLabel("Minutos de silêncio");
+      const thresholdInput = panel.getByLabel("Minutes de silence");
       await thresholdInput.fill("45");
 
       const saveButton = panel.getByTestId("trigger-config-save");
@@ -797,13 +797,13 @@ test.describe("followup flow builder — controle de gatilho na PublishBar (Task
       await page.screenshot({ path: "e2e-artifacts/followup-8.5-02-trigger-silence-filled.png", fullPage: true });
       await saveButton.click();
 
-      await expect(page.getByText("Gatilho atualizado.")).toBeVisible();
-      await expect(triggerButton).toHaveText("Gatilho: Silêncio (45 min)");
+      await expect(page.getByText("Déclencheur mis à jour.")).toBeVisible();
+      await expect(triggerButton).toHaveText("Déclencheur : silence (45 min)");
       await page.screenshot({ path: "e2e-artifacts/followup-8.5-03-trigger-saved.png", fullPage: true });
 
       // Reload — o valor persistido (PATCH round-trip) sobrevive, não é só estado local.
       await page.reload();
-      await expect(page.getByTestId("trigger-config-button")).toHaveText("Gatilho: Silêncio (45 min)");
+      await expect(page.getByTestId("trigger-config-button")).toHaveText("Déclencheur : silence (45 min)");
 
       // Prova via API (não só UI): GET devolve o trigger_config exato que foi salvo.
       const getRes = await page.request.get(`/api/v1/ai/followup-flows/${flow.id}`);

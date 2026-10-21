@@ -96,7 +96,7 @@ async function referencia(orgId: string): Promise<{
   // modelo trocou de gpt-4o para outro sem eu escolher, e comparar as duas
   // saídas viraria comparar coisas diferentes. Alvo em movimento não se mede.
   const { data } = await query.order("created_at", { ascending: false }).limit(1).maybeSingle();
-  if (!data) throw new Error("a organização não tem version com credencial e canal");
+  if (!data) throw new Error("l'organisation n'a pas de version avec identifiant et canal");
   const r = data as {
     provider: string;
     model: string;

@@ -54,12 +54,12 @@ async function login(page: Page, password = OWNER_PASSWORD): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(OWNER_EMAIL);
   await page.locator("#password").fill(password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
 }
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 
-test.describe("J1 — onboarding do dono numa instalação fresca", () => {
+test.describe("J1 — onboarding du propriétaire sur une installation fraîche", () => {
   test.beforeAll(async () => {
     // Reset ao estado recém-bootstrapado (re-runs idempotentes): wizard zerado,
     // sem agente, sem canal, sem fatores MFA do dono.
@@ -100,15 +100,15 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     }
   });
 
-  test("J1.2 senha errada → mensagem clara, sem stack", async ({ page }) => {
+  test("J1.2 mauvais mot de passe → message clair, sans stack", async ({ page }) => {
     await login(page, "senha-errada-123");
-    await expect(page.getByText(/email ou senha incorretos/i)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/e-mail ou mot de passe incorrect/i)).toBeVisible({ timeout: 10_000 });
     const body = await page.locator("body").innerText();
     expect(body).not.toMatch(/error:|stack|exception/i);
     await snap(page, "j1.2-senha-errada");
   });
 
-  test("J1.1 login do bootstrap cai no wizard (org sem onboarded_at)", async ({ page }) => {
+  test("J1.1 la connexion du bootstrap arrive dans l’assistant (org sans onboarded_at)", async ({ page }) => {
     const before = await orgRow();
     expect(before.onboarded_at).toBeNull();
     await login(page);
@@ -117,23 +117,23 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     await snap(page, "j1.1-welcome");
   });
 
-  test("J1.12 /app/inbox antes de concluir → volta pro onboarding", async ({ page }) => {
+  test("J1.12 /app/inbox avant d’avoir terminé → retour à l’onboarding", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding/);
     await page.goto("/app/inbox");
     await page.waitForURL(/\/onboarding/, { timeout: 15_000 });
   });
 
-  test("J1.3 + J1.4 welcome: termos obrigatórios; salva nome/timezone e avança", async ({ page }) => {
+  test("J1.3 + J1.4 welcome : conditions obligatoires ; enregistre nom/fuseau et avance", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/welcome/);
 
     // J1.3 — sem aceitar os termos o botão fica desabilitado
-    const continuar = page.getByRole("button", { name: /continuar/i });
+    const continuar = page.getByRole("button", { name: /continuer/i });
     await expect(continuar).toBeDisabled();
 
     // J1.4 — preenche e avança
-    await page.locator("#display_name").fill("Loja QA VPS");
+    await page.locator("#display_name").fill("Boutique QA VPS");
     await page.locator('input[type="checkbox"]').check();
     await expect(continuar).toBeEnabled();
     await continuar.click();
@@ -141,12 +141,12 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     await snap(page, "j1.4-connect-whatsapp");
 
     const org = await orgRow();
-    expect(org.display_name).toBe("Loja QA VPS");
-    expect(org.timezone).toBe("America/Sao_Paulo");
+    expect(org.display_name).toBe("Boutique QA VPS");
+    expect(org.timezone).toBe("Africa/Douala");
     expect((org.onboarding_state as { welcome?: unknown })?.welcome).toBeTruthy();
   });
 
-  test("J1.5 WAHA ativo → QR code aparece de verdade", async ({ page }) => {
+  test("J1.5 WAHA actif → le QR code apparaît vraiment", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/connect-whatsapp/);
 
@@ -159,7 +159,7 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     // sem banner de "WAHA não está configurado"
     // O nome do transporte saiu da tela: o aviso agora fala do "WhatsApp desta
     // instalação", que é como o dono chama a coisa.
-    await expect(page.getByText(/ainda não subiu/i)).toHaveCount(0);
+    await expect(page.getByText(/n’est pas encore démarré/i)).toHaveCount(0);
 
     // QR do proxy (poll de 3s até SCAN_QR_CODE) — imagem carregada de fato
     const qr = page.locator('img[src*="/whatsapp/qr"]');
@@ -172,7 +172,7 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     await snap(page, "j1.5-qr-visivel");
   });
 
-  test("J1.11 + J1.6 abandona e volta → retoma no step pendente; pular WhatsApp avança", async ({ page }) => {
+  test("J1.11 + J1.6 abandonne puis revient → reprend à l’étape en attente ; ignorer WhatsApp fait avancer", async ({ page }) => {
     // sessão nova (simula fechar o browser): retoma exatamente no connect-whatsapp
     await login(page);
     await page.waitForURL(/\/onboarding\/connect-whatsapp/, { timeout: 20_000 });
@@ -180,17 +180,17 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     // Com Nuvemshop desabilitado (VPS fresca), pular o WhatsApp deve cair
     // DIRETO no setup de IA — nunca num step oculto (bug corrigido: as actions
     // redirecionavam hardcoded pro connect-nuvemshop).
-    await page.getByRole("button", { name: /pular por enquanto/i }).click();
+    await page.getByRole("button", { name: /ignorer pour le moment/i }).click();
     await page.waitForURL(/\/onboarding\/setup-ai/, { timeout: 20_000 });
     await snap(page, "j1.6-setup-ai");
   });
 
-  test("J1.7 setup IA: cria agente default e avança", async ({ page }) => {
+  test("J1.7 configuration IA : crée l’agent par défaut et avance", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/setup-ai/);
 
     await page.locator("#name").fill("Tomik QA");
-    await page.getByRole("button", { name: /criar e continuar/i }).click();
+    await page.getByRole("button", { name: /créer et continuer/i }).click();
     // O wizard ganhou um passo entre treinar e chamar o time: ver o
     // funcionário atender. Terminar sem nunca tê-lo visto fazer nada era como
     // o onboarding entregava a pessoa num inbox vazio.
@@ -234,38 +234,38 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     expect(versoes?.[0]?.model).toBe(curado?.model_id);
   });
 
-  test("J1.24 ver ele atender: o wizard não termina sem mostrar o funcionário", async ({ page }) => {
+  test("J1.24 le voir répondre : l’assistant ne se termine pas sans montrer l’employé", async ({ page }) => {
     // O passo que faltava. O onboarding entregava a pessoa num inbox vazio
     // ("Sem conversas por aqui") logo depois de ela montar um funcionário que
     // nunca tinha visto fazer nada — e um erro de chave ou de saldo só
     // apareceria quando um cliente de verdade escrevesse.
     await login(page);
     await page.waitForURL(/\/onboarding\/testar/, { timeout: 20_000 });
-    await expect(page.getByRole("heading", { name: /veja ele atender/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /regardez-le répondre/i })).toBeVisible();
 
     // O agente desta jornada nasceu SEM canal (o WhatsApp foi pulado em J1.6),
     // então ficou rascunho — e rascunho não responde. A tela tem de dizer isso
     // em vez de oferecer um ensaio que nunca funcionaria.
-    await expect(page.getByText(/rascunho/i)).toBeVisible();
+    await expect(page.getByText(/brouillon/i)).toBeVisible();
     await snap(page, "j1.24-testar-rascunho");
 
-    await page.getByRole("button", { name: /^continuar$/i }).click();
+    await page.getByRole("button", { name: /^continuer$/i }).click();
     await page.waitForURL(/\/onboarding\/invite-team/, { timeout: 20_000 });
 
     const org = await orgRow();
     expect((org.onboarding_state as { teste?: unknown })?.teste).toBeTruthy();
   });
 
-  test("J1.8 convite SEM Resend: a UI não pode mentir que enviou email", async ({ page }) => {
+  test("J1.8 invitation SANS Resend : l’interface ne peut pas prétendre avoir envoyé l’e-mail", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/invite-team/);
 
     await page.locator("#emails").fill("atendente@qa.local");
-    await page.getByRole("button", { name: /enviar convites/i }).click();
+    await page.getByRole("button", { name: /envoyer les invitations/i }).click();
 
     // Honestidade: sem RESEND_API_KEY nenhum email sai. A UI deve dizer isso
     // e oferecer o link de aceite copiável (nunca redirecionar em silêncio).
-    await expect(page.getByText(/não está configurado neste servidor/i)).toBeVisible({
+    await expect(page.getByText(/n’envoie pas d’e-mails/i)).toBeVisible({
       timeout: 15_000,
     });
     const acceptUrl = (
@@ -279,23 +279,23 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     await snap(page, "j1.8-convite-sem-resend");
 
     // e o wizard segue em frente conscientemente
-    await page.getByRole("button", { name: /^continuar$/i }).click();
+    await page.getByRole("button", { name: /^continuer$/i }).click();
     await page.waitForURL(/\/onboarding\/done/, { timeout: 20_000 });
   });
 
-  test("J1.9 done → onboarded_at setado e cai no inbox", async ({ page }) => {
+  test("J1.9 done → onboarded_at renseigné et arrivée dans l’inbox", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/onboarding\/done/);
     await snap(page, "j1.9-done-recap");
 
-    await page.getByRole("button", { name: /começar a usar/i }).click();
+    await page.getByRole("button", { name: /commencer à utiliser/i }).click();
     await page.waitForURL(/\/app\/inbox/, { timeout: 30_000 });
 
     const org = await orgRow();
     expect(org.onboarded_at).not.toBeNull();
   });
 
-  test("J1.10 verificação em duas etapas: ativa pela tela e VÊ os códigos de recuperação", async ({ page }) => {
+  test("J1.10 validation en deux étapes : activée depuis l’écran et les codes de récupération sont VISIBLES", async ({ page }) => {
     await login(page);
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 
@@ -309,21 +309,21 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     // enroll leva até os CÓDIGOS DE RECUPERAÇÃO (a regressão que o nome antigo
     // citava). Perder isso seria trocar uma tela por nenhuma.
     await page.goto("/app/settings/security");
-    await expect(page.getByText("Desativada")).toBeVisible({ timeout: 20_000 });
-    await page.getByRole("button", { name: /^ativar$/i }).click();
+    await expect(page.getByText("Désactivée")).toBeVisible({ timeout: 20_000 });
+    await page.getByRole("button", { name: /^activer$/i }).click();
 
     await expect(
-      page.getByRole("heading", { name: /verificação em duas etapas/i }),
+      page.getByRole("heading", { name: /validation en deux étapes/i }),
     ).toBeVisible({ timeout: 20_000 });
     await snap(page, "j1.10-mfa-ativar");
 
-    await page.getByRole("button", { name: /iniciar configuração/i }).click();
+    await page.getByRole("button", { name: /démarrer la configuration/i }).click();
     await expect(
-      page.locator('img[alt="QR code para configurar autenticador"]'),
+      page.locator('img[alt="QR code pour configurer l’application d’authentification"]'),
     ).toBeVisible({ timeout: 20_000 });
 
     // secret manual (o que um leigo digitaria no app autenticador)
-    await page.getByText(/não consegue escanear/i).click();
+    await page.getByText(/impossible de scanner/i).click();
     const secret = (await page.locator("code").innerText()).trim();
     expect(secret.length).toBeGreaterThan(15);
     fs.writeFileSync(
@@ -334,17 +334,17 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     // digita o código com retry na virada da janela TOTP
     for (let attempt = 0; attempt < 3; attempt++) {
       if (msUntilNextTotpWindow() < 4_000) await page.waitForTimeout(msUntilNextTotpWindow() + 300);
-      await page.locator('input[aria-label="Dígito 1"]').click();
+      await page.locator('input[aria-label="Chiffre 1"]').click();
       await page.keyboard.type(generateTotp(secret), { delay: 40 });
       try {
-        await expect(page.getByRole("heading", { name: /códigos de recuperação/i })).toBeVisible({
+        await expect(page.getByRole("heading", { name: /codes de récupération/i })).toBeVisible({
           timeout: 8_000,
         });
         break;
       } catch {
         if (attempt === 2) throw new Error("MFA enroll não chegou aos recovery codes");
         // código recusado (janela virou) → limpa e tenta de novo
-        await page.locator('input[aria-label="Dígito 1"]').click();
+        await page.locator('input[aria-label="Chiffre 1"]').click();
         for (let i = 0; i < 6; i++) await page.keyboard.press("Backspace");
       }
     }
@@ -352,31 +352,31 @@ test.describe("J1 — onboarding do dono numa instalação fresca", () => {
     // O BUG: a revalidação do server action desmontava o gate e o usuário
     // caía no inbox sem ver estes códigos. Prova de que a tela persiste com os
     // 10 códigos + ações de salvar (grid font-mono no RecoveryCodesPanel).
-    await expect(page.getByText(/salve esses 10 códigos/i)).toBeVisible();
+    await expect(page.getByText(/conservez ces 10 codes/i)).toBeVisible();
     const codes = page.locator("div.font-mono");
     await expect(codes).toHaveCount(10);
-    await expect(page.getByRole("button", { name: /copiar todos/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: /baixar \.txt/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /tout copier/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /télécharger le \.txt/i })).toBeVisible();
     await snap(page, "j1.10-recovery-codes");
 
-    await page.getByText(/salvei meus códigos/i).click();
-    await page.getByRole("button", { name: /^concluir$/i }).click();
+    await page.getByText(/j’ai conservé mes codes/i).click();
+    await page.getByRole("button", { name: /^terminer$/i }).click();
 
     // gate some após reload; shell do app visível
     await page.waitForLoadState("networkidle");
     await expect(
-      page.getByRole("heading", { name: /verificação em duas etapas/i }),
+      page.getByRole("heading", { name: /validation en deux étapes/i }),
     ).toHaveCount(0, { timeout: 20_000 });
     await snap(page, "j1.10-inbox-livre");
   });
 
-  test("J1.13 wizard não reabre depois de concluído", async ({ page }) => {
+  test("J1.13 l’assistant ne se rouvre pas une fois terminé", async ({ page }) => {
     // agora o login do dono exige TOTP
     const state = JSON.parse(fs.readFileSync(OWNER_STATE_PATH, "utf8")) as { totp_secret: string };
     await login(page);
     await page.waitForURL(/\/login\/mfa/, { timeout: 20_000 });
     if (msUntilNextTotpWindow() < 4_000) await page.waitForTimeout(msUntilNextTotpWindow() + 300);
-    await page.locator('input[aria-label="Dígito 1"]').click();
+    await page.locator('input[aria-label="Chiffre 1"]').click();
     await page.keyboard.type(generateTotp(state.totp_secret), { delay: 40 });
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 

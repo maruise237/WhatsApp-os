@@ -86,9 +86,9 @@ export async function deriveVideoText(buffer: Buffer, deps: VideoDeriveDeps): Pr
     }
 
     const parts: string[] = [];
-    if (transcript.trim() !== "") parts.push(`Transcrição do áudio do vídeo: ${transcript.trim()}`);
+    if (transcript.trim() !== "") parts.push(`Transcription de l’audio de la vidéo : ${transcript.trim()}`);
     if (frameDescriptions.length > 0)
-      parts.push(`Cenas do vídeo:\n${frameDescriptions.map((d, i) => `- Quadro ${i + 1}: ${d.trim()}`).join("\n")}`);
+      parts.push(`Scènes de la vidéo :\n${frameDescriptions.map((d, i) => `- Image ${i + 1}: ${d.trim()}`).join("\n")}`);
     return parts.join("\n\n");
   } finally {
     await rm(dir, { recursive: true, force: true }).catch(() => undefined);

@@ -34,9 +34,9 @@ import { CapturaDetail } from "./CapturaDetail";
 const TODAS = "__todas__";
 
 export const DESFECHO_LABEL: Record<DesfechoDaCaptacao, string> = {
-  criado: "Virou lead",
-  duplicado: "Reenvio",
-  recusado: "Não entrou",
+  criado: "Devenu lead",
+  duplicado: "Renvoi",
+  recusado: "Non entré",
 };
 
 const DESFECHO_VARIANTE: Record<DesfechoDaCaptacao, "success" | "neutral" | "error"> = {
@@ -116,7 +116,7 @@ export function CapturasTab() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") setBuscaAplicada(busca.trim());
                 }}
-                placeholder="quem você procura"
+                placeholder="qui recherchez-vous ?"
               />
               <Button
                 type="button"
@@ -132,7 +132,7 @@ export function CapturasTab() {
           <div className="space-y-1">
             <label className="text-xs text-muted-foreground">Source</label>
             <Select value={fonte} onValueChange={setFonte}>
-              <SelectTrigger aria-label="Filtrar por fonte">
+              <SelectTrigger aria-label="Filtrer par source">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -148,7 +148,7 @@ export function CapturasTab() {
           <div className="space-y-1">
             <label className="text-xs text-muted-foreground">Résultat</label>
             <Select value={desfecho} onValueChange={setDesfecho}>
-              <SelectTrigger aria-label="Filtrar por resultado">
+              <SelectTrigger aria-label="Filtrer par résultat">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -293,7 +293,7 @@ export function CapturasTab() {
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
               >
-                {isFetchingNextPage ? "Chargement…" : "Carregar mais"}
+                {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
               </Button>
             </div>
           ) : null}

@@ -268,7 +268,7 @@ async function ensurePipeline(orgId: string): Promise<string> {
     .single();
   if (error || !data) throw new Error(`insert pipeline: ${error?.message}`);
   const id = (data as { id: string }).id;
-  console.log(`[seed] pipeline criado: ${id}`);
+  console.log(`[seed] entonnoir créé : ${id}`);
   return id;
 }
 
@@ -309,7 +309,7 @@ async function ensureStages(
     if (error || !data) throw new Error(`insert stage ${s.slug}: ${error?.message}`);
     ids[s.slug] = (data as { id: string }).id;
   }
-  console.log(`[seed] ${STAGES.length} estágios garantidos`);
+  console.log(`[seed] ${STAGES.length} étapes garanties`);
   return ids;
 }
 
@@ -326,11 +326,11 @@ async function resolveAgents(orgId: string, names: string[]): Promise<Map<string
     .select("id,name")
     .eq("organization_id", orgId)
     .in("name", names);
-  if (error) throw new Error(`resolver agentes: ${error.message}`);
+  if (error) throw new Error(`résolution des agents : ${error.message}`);
   for (const a of (data ?? []) as { id: string; name: string }[]) found.set(a.name, a.id);
   for (const n of names) {
     if (!found.has(n)) {
-      console.warn(`[seed] agente "${n}" não existe nesta org — lead ficará sem dono`);
+      console.warn(`[seed] l'agent "${n}" n'existe pas dans cette org — le lead restera sans responsable`);
     }
   }
   return found;
@@ -349,10 +349,10 @@ async function resolveContacts(orgId: string, names: string[]): Promise<Map<stri
     .select("id,name")
     .eq("organization_id", orgId)
     .in("name", names);
-  if (error) throw new Error(`resolver contatos: ${error.message}`);
+  if (error) throw new Error(`résolution des contacts : ${error.message}`);
   for (const c of (data ?? []) as { id: string; name: string }[]) found.set(c.name, c.id);
   for (const n of names) {
-    if (!found.has(n)) console.warn(`[seed] contato "${n}" não existe — lead ficará sem contato`);
+    if (!found.has(n)) console.warn(`[seed] le contact "${n}" n'existe pas — le lead restera sans contact`);
   }
   return found;
 }
@@ -368,7 +368,7 @@ async function upsertLead(
   position: number,
 ): Promise<string> {
   const stageId = stageIds[spec.stage];
-  if (!stageId) throw new Error(`estágio desconhecido: ${spec.stage}`);
+  if (!stageId) throw new Error(`étape inconnue : ${spec.stage}`);
   const lastActivityAt = new Date(Date.now() - spec.staleHours * HOUR).toISOString();
 
   const agentName = "agentOwner" in spec ? spec.agentOwner : undefined;
@@ -425,7 +425,7 @@ async function upsertLead(
     .single();
   if (error || !data) throw new Error(`insert lead "${spec.key}": ${error?.message}`);
   const id = (data as { id: string }).id;
-  console.log(`[seed] lead criado ${spec.key}: ${id}`);
+  console.log(`[seed] lead créé ${spec.key} : ${id}`);
   return id;
 }
 
@@ -483,15 +483,15 @@ async function garantirProximaAcao(
       : await admin
           .from("lead_state")
           .insert({ organization_id: orgId, contact_id: contactId, next_action: acao });
-    if (error) throw new Error(`próxima ação de ${nome}: ${error.message}`);
+    if (error) throw new Error(`prochaine action de ${nome} : ${error.message}`);
     postos += 1;
   }
-  if (postos > 0) console.log(`   próxima ação semeada em ${postos} contato(s) que estavam sem`);
+  if (postos > 0) console.log(`   prochaine action semée dans ${postos} contact(s) qui n'en avaient pas`);
   if (naoResolvidos.length > 0) {
     console.warn(
-      `   ⚠ próxima ação NÃO garantida para: ${naoResolvidos.join(", ")} — ` +
-        `contato inexistente na org. O board pode mostrar a proposta destes por dado VIVO do ` +
-        `agente, que o seed não protege: se sair, a demo encolhe sem ninguém saber.`,
+      `   ⚠ prochaine action NON garantie pour : ${naoResolvidos.join(", ")} — ` +
+        `contact inexistant dans l'org. Le tableau peut montrer leur proposition à partir de données VIVANTES de l'` +
+        `agent, que le seed ne protège pas : si elle disparaît, la démo rétrécit sans que personne ne le sache.`,
     );
   }
 }
@@ -568,12 +568,12 @@ async function main(): Promise<void> {
   fs.writeFileSync(CREDS_PATH, JSON.stringify(creds, null, 2));
 
   console.log(
-    `\n✅ Seed CRM Vivo completo: ${LEADS.length} leads em ${STAGES.length} estágios.` +
-      `\n   Board: /app/pipelines/${pipelineId}`,
+    `\n✅ Seed CRM Vivo terminé : ${LEADS.length} leads dans ${STAGES.length} étapes.` +
+      `\n   Tableau : /app/pipelines/${pipelineId}`,
   );
 }
 
 main().catch((err) => {
-  console.error("❌ Seed CRM Vivo falhou:", err);
+  console.error("❌ Échec du seed CRM Vivo :", err);
   process.exit(1);
 });

@@ -14,7 +14,7 @@ import { test, expect } from "@playwright/test";
 
 import { waitForEmail, extractAuthConfirmLink, uniqueEmail } from "./helpers/auth";
 
-test("criar conta: signup → e-mail de confirmação → onboarding → re-login", async ({
+test("créer un compte : inscription → e-mail de confirmation → onboarding → reconnexion", async ({
   page,
   context,
   baseURL,
@@ -25,16 +25,16 @@ test("criar conta: signup → e-mail de confirmação → onboarding → re-logi
 
   // 1. Login → botão "Criar conta"
   await page.goto("/login");
-  await page.getByRole("link", { name: "Criar conta" }).click();
+  await page.getByRole("link", { name: "Créer un compte" }).click();
   await expect(page).toHaveURL(/\/signup$/);
 
   // 2. Formulário de signup
-  await page.getByLabel("Nome da empresa").fill("Loja E2E Signup");
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Senha", { exact: true }).fill(password);
-  await page.getByLabel("Confirmar senha").fill(password);
-  await page.getByRole("button", { name: "Criar conta" }).click();
-  await expect(page.getByText("Confirme seu e-mail")).toBeVisible();
+  await page.getByLabel("Nom de l’entreprise").fill("Boutique E2E Signup");
+  await page.getByLabel("E-mail").fill(email);
+  await page.getByLabel("Mot de passe", { exact: true }).fill(password);
+  await page.getByLabel("Confirmer le mot de passe").fill(password);
+  await page.getByRole("button", { name: "Créer un compte" }).click();
+  await expect(page.getByText("Confirmez votre e-mail")).toBeVisible();
 
   // 3. Abre o e-mail real no Mailpit e segue o link
   const html = await waitForEmail(email, "Confirme seu e-mail");
@@ -43,15 +43,15 @@ test("criar conta: signup → e-mail de confirmação → onboarding → re-logi
 
   // 4. Autenticado no onboarding — tenant provisionado
   await expect(page).toHaveURL(/\/onboarding\/welcome/);
-  await expect(page.getByText("Boas-vindas ao DeskcommCRM")).toBeVisible();
-  await expect(page.getByText("Loja E2E Signup")).toBeVisible();
+  await expect(page.getByText("Bienvenue sur DeskcommCRM")).toBeVisible();
+  await expect(page.getByText("Boutique E2E Signup")).toBeVisible();
 
   // 5. Sai (limpa sessão) e entra de novo com as credenciais criadas
   await context.clearCookies();
   await page.goto("/login");
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Senha").fill(password);
-  await page.getByRole("button", { name: "Entrar" }).click();
+  await page.getByLabel("E-mail").fill(email);
+  await page.getByLabel("Mot de passe").fill(password);
+  await page.getByRole("button", { name: "Se connecter" }).click();
   await page.waitForURL(/\/(app|onboarding)\//, { timeout: 30_000 });
   await expect(page).not.toHaveURL(/\/login/);
 });

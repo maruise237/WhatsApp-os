@@ -22,10 +22,10 @@ const STATUS_VARIANTS: Record<
 };
 
 const STATUS_LABELS: Record<string, string> = {
-  active: "Ativo",
+  active: "Actif",
   onboarding: "Onboarding",
   suspended: "Suspenso",
-  redacted: "Redigido",
+  redacted: "Anonymisée",
 };
 
 // ---------------------------------------------------------------------------

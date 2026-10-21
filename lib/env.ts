@@ -29,10 +29,10 @@ const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
  */
 const required = (name: string) =>
   isProd
-    ? z.string().min(1, `${name} é obrigatória em produção`)
+    ? z.string().min(1, `${name} est obligatoire en production`)
     : z.string().default("");
 
-const requiredAlways = (name: string) => z.string().min(1, `${name} é obrigatória`);
+const requiredAlways = (name: string) => z.string().min(1, `${name} est obligatoire`);
 
 /**
  * Knob de retenção em dias: NUNCA derruba o app.
@@ -54,9 +54,9 @@ const diasDeRetencao = (nome: string, padrao: number) =>
     .default(padrao)
     .catch(({ error }) => {
       console.warn(
-        `[env] ${nome} inválida (${JSON.stringify(process.env[nome])}) — usando o padrão ${padrao} dias. ` +
-          `Só número inteiro maior que zero vale aqui; "0" não desliga a poda. ` +
-          `(${error.issues[0]?.message ?? "valor recusado"})`,
+        `[env] ${nome} invalide (${JSON.stringify(process.env[nome])}) — utilisation de la valeur par défaut ${padrao} jours. ` +
+          `Seul un entier supérieur à zéro est accepté ici ; "0" ne désactive pas la purge. ` +
+          `(${error.issues[0]?.message ?? "valeur refusée"})`,
       );
       return padrao;
     });
@@ -181,6 +181,13 @@ const schema = z.object({
   VERCEL_AI_GATEWAY_URL: z.string().optional().default(""),
   ANTHROPIC_API_KEY: z.string().optional().default(""),
   OPENAI_API_KEY: z.string().optional().default(""),
+  // IA fournie par la plateforme (lib/ai/plateforme.ts) : une clé pour toutes
+  // les organisations, posée dans l'environnement Dokploy. Présente, elle gagne
+  // sur toute clé ou tout modèle choisi par une organisation.
+  DEEPSEEK_API_KEY: z.string().optional().default(""),
+  DEEPSEEK_BASE_URL: z.string().optional().default(""),
+  DEEPSEEK_MODEL: z.string().optional().default(""),
+  DEEPSEEK_REFLEXION: z.string().optional().default(""),
 
   // Fusão (Fase 4): DONO ÚNICO dos eventos ai_agent.dispatch_requested.
   // 'engine' (default) = o worker agent-engine é o único consumidor (o cron
@@ -348,10 +355,10 @@ if (!parsed.success && isBuildPhase) {
 
 if (!parsed.success) {
   // Log estruturado pra debug. Sentry capturaria via uncaught.
-  console.error("[env] Falha de validação de variáveis de ambiente:");
+  console.error("[env] Échec de validation des variables d’environnement :");
   console.error(parsed.error.flatten().fieldErrors);
   throw new Error(
-    "Variáveis de ambiente inválidas. Veja o erro acima e ajuste .env.local / Vercel.",
+    "Variables d’environnement invalides. Consultez l’erreur ci-dessus et corrigez le fichier .env.",
   );
 }
 
@@ -367,10 +374,10 @@ export const env = parsed.data;
 // cadastrava uma chave da Anthropic que não precisava, só para calar o aviso.
 // O texto era verdadeiro enquanto a Anthropic era a única chave que o
 // instalador pedia; o menu novo o tornou falso.
-if (!env.AI_GATEWAY_API_KEY && !env.ANTHROPIC_API_KEY && !env.OPENROUTER_API_KEY) {
+if (!env.AI_GATEWAY_API_KEY && !env.ANTHROPIC_API_KEY && !env.OPENROUTER_API_KEY && !env.DEEPSEEK_API_KEY) {
   console.warn(
-    "[env] Nenhuma chave de IA configurada (AI_GATEWAY_API_KEY, ANTHROPIC_API_KEY ou OPENROUTER_API_KEY) — " +
-      "o agente vai pular toda resposta com reason='ai_gateway_key_missing'.",
+    "[env] Aucune clé d'IA configurée (DEEPSEEK_API_KEY) — " +
+      "l'assistant ne répondra à aucun message (reason='ai_gateway_key_missing').",
   );
 }
 if (!env.OPENAI_API_KEY) {

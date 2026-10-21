@@ -53,7 +53,7 @@ export function useCreateFollowupFlow() {
       qc.setQueryData<FollowupFlowPointerRow[]>(followupFlowsListQueryKey, (prev) =>
         prev ? [created, ...prev] : [created],
       );
-      toast.success("Fluxo criado.");
+      toast.success("Flux créé.");
     },
     onError: (err) => {
       showApiError(err);

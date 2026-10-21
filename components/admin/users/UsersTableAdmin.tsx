@@ -33,7 +33,7 @@ const ROLE_VARIANTS: Record<
 const ROLE_LABELS: Record<string, string> = {
   admin: "Admin",
   manager: "Manager",
-  agent: "Agente",
+  agent: "Agent",
   viewer: "Viewer",
 };
 
@@ -71,7 +71,7 @@ export function UsersTableAdminSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["Email", "Nome", "Tenant", "Role", "Último acesso", "Status", ""].map(
+            {["Email", "Nom", "Tenant", "Rôle", "Dernier accès", "Statut", ""].map(
               (h) => (
                 <TableHead key={h}>{h}</TableHead>
               ),
@@ -190,7 +190,7 @@ export function UsersTableAdmin({
             onClick={onLoadMore}
             disabled={isFetchingNextPage}
           >
-            {isFetchingNextPage ? "Carregando..." : "Carregar mais"}
+            {isFetchingNextPage ? "Chargement…" : "Charger davantage"}
           </Button>
         </div>
       )}

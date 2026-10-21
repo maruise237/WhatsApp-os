@@ -47,7 +47,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -69,13 +69,13 @@ async function abrirConversaComMensagens(page: Page): Promise<boolean> {
   return (await bolhas.count()) > 0;
 }
 
-test.describe("responder citando", () => {
-  test("o botão de responder revela a faixa, e o × a desfaz", async ({ page }) => {
+test.describe("répondre en citant", () => {
+  test("le bouton répondre révèle le bandeau, et le × l’annule", async ({ page }) => {
     await login(page, creds.users.agent!.email);
     const temMensagens = await abrirConversaComMensagens(page);
     test.skip(!temMensagens, "ambiente sem conversa com mensagens — nada a citar");
 
-    const responder = page.getByRole("button", { name: /Responder a esta mensagem/i }).first();
+    const responder = page.getByRole("button", { name: /Répondre à ce message/i }).first();
 
     // O botão vive em `opacity-0` até o hover. `toBeVisible` do Playwright
     // considera opacidade 0 como visível, então o hover é o que prova de
@@ -85,7 +85,7 @@ test.describe("responder citando", () => {
     await responder.click();
 
     // A faixa aparece acima do campo, com o botão de cancelar.
-    const cancelar = page.getByRole("button", { name: /Cancelar resposta/i });
+    const cancelar = page.getByRole("button", { name: /Annuler la réponse/i });
     await expect(cancelar).toBeVisible();
     await page.screenshot({
       path: path.join(EVIDENCE, "responder-citando-faixa.png"),
@@ -96,7 +96,7 @@ test.describe("responder citando", () => {
     await expect(cancelar).toHaveCount(0);
   });
 
-  test("trocar de conversa LIMPA a citação", async ({ page }) => {
+  test("changer de conversation EFFACE la citation", async ({ page }) => {
     // Sem isto a resposta sairia citando a mensagem de outro cliente — o pior
     // desfecho possível desta feature, e invisível até acontecer com alguém.
     await login(page, creds.users.agent!.email);
@@ -104,16 +104,16 @@ test.describe("responder citando", () => {
     test.skip(!temMensagens, "ambiente sem conversa com mensagens");
 
     await page.locator("[class*='rounded-2xl']").first().hover();
-    const responder = page.getByRole("button", { name: /Responder a esta mensagem/i }).first();
+    const responder = page.getByRole("button", { name: /Répondre à ce message/i }).first();
     await responder.click();
-    await expect(page.getByRole("button", { name: /Cancelar resposta/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /Annuler la réponse/i })).toBeVisible();
 
     // Volta para a lista e entra em OUTRA conversa.
     await page.goto("/app/inbox?filter=all");
     await page.waitForTimeout(1200);
 
     await expect(
-      page.getByRole("button", { name: /Cancelar resposta/i }),
+      page.getByRole("button", { name: /Annuler la réponse/i }),
       "a citação sobreviveu à troca de conversa",
     ).toHaveCount(0);
   });

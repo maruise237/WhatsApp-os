@@ -23,6 +23,7 @@ import { scrubMessage } from '@/lib/sentry/scrub';
 
 import type { Logger } from '../../obs/logger';
 import { decidirParaOSeam } from './binding-do-ponto';
+import type { DecisaoDeBinding } from '../../../ai/pontos/resolver';
 import { resolveOrgLlmConfig, type LlmEdgeConfig, type OrcamentoDaOrg } from './credentials';
 import {
   AVISO_CORPO,
@@ -62,7 +63,7 @@ export class LlmBudgetExceededError extends Error {
    */
   readonly terminal = true;
   constructor() {
-    super('orçamento mensal de IA da organização atingido — chamada recusada antes de sair byte para o provedor; ajuste o teto em Uso de IA › Orçamento, desligue a proteção, ou aguarde a virada do mês (agent_inbox_items kind=budget_exceeded)');
+    super('budget mensuel d’IA de l’organisation atteint — appel refusé avant tout envoi ; ajustez le plafond dans IA › Utilisation et budget, désactivez la protection, ou attendez le changement de mois (agent_inbox_items kind=budget_exceeded)');
   }
 }
 
@@ -70,7 +71,7 @@ export class LlmBudgetExceededError extends Error {
 export class LlmProviderUnknownError extends Error {
   override readonly name = 'llm_provider_unknown';
   constructor(provider: string) {
-    super(`provider LLM desconhecido na config da org: ${provider}`);
+    super(`fournisseur IA inconnu dans la configuration de l’organisation : ${provider}`);
   }
 }
 
@@ -78,7 +79,7 @@ export class LlmProviderUnknownError extends Error {
 export class LlmModelNotEnabledError extends Error {
   override readonly name = 'llm_model_not_enabled';
   constructor(model: string) {
-    super(`modelo não habilitado para a org (enabled_models): ${model}`);
+    super(`modèle non activé pour l’organisation (enabled_models) : ${model}`);
   }
 }
 
@@ -193,7 +194,7 @@ async function aplicarOrcamento(d: {
   const comum = { organization_id: d.organizationId, purpose: d.purpose };
 
   if (d.orcamentoIndisponivelPorque !== null) {
-    d.log?.warn('llm: orçamento não pôde ser lido — a chamada SEGUE sem teto', {
+    d.log?.warn('llm : le budget n’a pas pu être lu — l’appel CONTINUE sans plafond', {
       ...comum,
       causa: d.orcamentoIndisponivelPorque,
     });
@@ -213,7 +214,7 @@ async function aplicarOrcamento(d: {
     ]);
     linha = rows[0];
   } catch (err) {
-    d.log?.warn('llm: consulta de orçamento falhou — a chamada SEGUE sem teto', {
+    d.log?.warn('llm : la lecture du budget a échoué — l’appel CONTINUE sans plafond', {
       ...comum,
       ...normalizarErro(err),
     });
@@ -222,7 +223,7 @@ async function aplicarOrcamento(d: {
   if (linha === undefined) {
     // `select` de CTEs escalares sempre devolve uma linha; zero linhas aqui é
     // um mundo que não deveria existir, e nele a resposta segue sendo a frouxa.
-    d.log?.warn('llm: consulta de orçamento não devolveu linha — a chamada SEGUE', comum);
+    d.log?.warn('llm : la lecture du budget n’a renvoyé aucune ligne — l’appel CONTINUE', comum);
     return;
   }
 
@@ -246,7 +247,7 @@ async function aplicarOrcamento(d: {
   if (veredito.acao === 'avisar_e_seguir') {
     // O item da Central já foi aberto pelo próprio statement (CTE `avisa`), no
     // mesmo snapshot que decidiu — aqui só sobra o log.
-    d.log?.warn('llm: gasto de IA passou do aviso — a chamada SEGUE', {
+    d.log?.warn('llm : la dépense d’IA a dépassé le seuil d’alerte — l’appel CONTINUE', {
       ...comum,
       porque: veredito.porque,
       gasto_cents: gastoCents,
@@ -286,7 +287,7 @@ async function aplicarOrcamento(d: {
   }).catch(() => {
     // Gravar a recusa não pode impedir a recusa.
   });
-  d.log?.warn('llm: chamada recusada por orçamento', {
+  d.log?.warn('llm : appel refusé pour cause de budget', {
     ...comum,
     provider: d.provider,
     model: d.model,
@@ -308,7 +309,20 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
   // só um rótulo de custo e virar decisão. Sem binding configurado, `decisao`
   // reproduz exatamente o comportamento anterior — a origem volta como
   // 'variavel_de_ambiente' ou 'padrao_da_organizacao'.
-  const decisao = await decidirParaOSeam(db, {
+  //
+  // IA de la plateforme : ni panneau, ni agent, ni organisation ne choisissent.
+  // Le modèle est celui de l'exploitant ; la décision est écrite comme venant de
+  // l'environnement, ce qu'elle est.
+  const decisao: DecisaoDeBinding = cfg.plateforme
+    ? {
+        provider: padrao.provider,
+        modelId: cfg.plateforme.model,
+        credentialId: null,
+        baseUrl: cfg.plateforme.baseUrl,
+        origem: 'variavel_de_ambiente',
+        avisos: [],
+      }
+    : await decidirParaOSeam(db, {
     organizationId: input.tenantId,
     purpose,
     modeloDoCallSite: input.model,
@@ -336,8 +350,9 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
   // comparar contra ele é comparar contra o que de fato está carregado.
   const credencialJaCarregada = input.llmOverride?.credentialId ?? null;
   const precisaOutraCredencial =
-    decisao.provider !== padrao.provider ||
-    (decisao.credentialId !== null && decisao.credentialId !== credencialJaCarregada);
+    !cfg.plateforme &&
+    (decisao.provider !== padrao.provider ||
+      (decisao.credentialId !== null && decisao.credentialId !== credencialJaCarregada));
 
   const config = precisaOutraCredencial
     ? await resolveOrgLlmConfig(db, cfg, input.tenantId, {
@@ -349,8 +364,8 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
   const model = decisao.modelId;
   if (model === null || model === undefined) {
     throw new Error(
-      'modelo LLM não definido — configure o ponto no painel de provedores, ' +
-        'organizations.settings.llm.default_model, ou passe input.model',
+      'modèle IA non défini — configurez le point dans le panneau IA, ' +
+        'organizations.settings.llm.default_model, ou passez input.model',
     );
   }
   if (config.enabledModels.length > 0 && !config.enabledModels.includes(model)) {
@@ -362,7 +377,7 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
   }
   const parsedParams = paramsSchema.safeParse(config.params);
   if (!parsedParams.success) {
-    throw new Error('params inválidos em organizations.settings.llm.params — corrija a config da org');
+    throw new Error('paramètres invalides dans organizations.settings.llm.params — corrigez la configuration de l’organisation');
   }
   const { temperature, topP, topK, maxOutputTokens } = parsedParams.data;
 
@@ -503,7 +518,7 @@ export async function runModelCall(db: pg.Pool, cfg: LlmEdgeConfig, input: RunMo
     latency_ms: latencyMs,
   });
   for (const aviso of decisao.avisos) {
-    deps.log?.warn('llm: configuração do ponto tem incoerência', {
+    deps.log?.warn('llm : la configuration du point est incohérente', {
       organization_id: input.tenantId,
       purpose,
       aviso,
@@ -607,8 +622,8 @@ export function redigirMensagemDoProvedor(bruto: string): string {
     .replace(/AIza[A-Za-z0-9_-]{10,}/g, '[CHAVE]')
     // O header inteiro, em qualquer caixa, com ou sem `Authorization:` na
     // frente — é assim que ele costuma aparecer ecoado num corpo de erro.
-    .replace(/[Bb]earer\s+[A-Za-z0-9._-]{8,}/g, 'Bearer [CHAVE]')
-    .replace(/(x-api-key|api[-_]?key|authorization)\s*[:=]\s*\S+/gi, '$1: [CHAVE]');
+    .replace(/[Bb]earer\s+[A-Za-z0-9._-]{8,}/g, 'Bearer [CLÉ]')
+    .replace(/(x-api-key|api[-_]?key|authorization)\s*[:=]\s*\S+/gi, '$1: [CLÉ]');
   return scrubMessage(semSegredo).slice(0, 500);
 }
 

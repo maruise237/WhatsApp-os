@@ -58,7 +58,7 @@ fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
 const MIN_MINUTOS = 10;
 const MAX_MINUTOS = 360; // 6h
 const ORIENTACAO =
-  "O lead pediu retorno ainda hoje, em cerca de meia hora. Volte rápido, dentro do menor prazo possível.";
+  "Le lead a demandé à être recontacté aujourd’hui, dans environ une demi-heure. Revenez vite, dans le délai le plus court possible.";
 
 interface Creds {
   password: string;
@@ -83,7 +83,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -133,13 +133,13 @@ async function connectHandles(page: Page, sourceNodeId: string, targetNodeId: st
  */
 const PRAZO_SOB_CARGA = 60_000;
 
-test.describe("nó de espera — o modo Adaptativo tem de decidir de verdade", () => {
+test.describe("nœud d’attente — le mode adaptatif doit vraiment décider", () => {
   // Canvas grande: com 4 nós o fitView chega ao maxZoom e joga handles pra fora
   // do viewport, o que quebra os arrastes de conexão.
   test.use({ viewport: { width: 1600, height: 900 } });
   test.setTimeout(300_000);
 
-  test("a espera configurada como Adaptativa não pode agendar o máximo", async ({ page }) => {
+  test("l’attente configurée en mode adaptatif ne doit pas planifier le maximum", async ({ page }) => {
     const stamp = Date.now();
     const flowName = `E2E Tempo Adaptativo ${stamp}`;
     const contactName = `Cliente Tempo Adaptativo ${stamp}`;
@@ -148,7 +148,7 @@ test.describe("nó de espera — o modo Adaptativo tem de decidir de verdade", (
 
     // ─── 1. o fluxo, criado pela tela ────────────────────────────────────
     await page.goto("/app/ai/followups");
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialog = page.getByRole("dialog");
     // Esperar o FOCO, não só a visibilidade. O Radix anima a abertura e o
     // `autoFocus` do input chega depois do primeiro paint; um `fill()` disparado
@@ -157,11 +157,11 @@ test.describe("nó de espera — o modo Adaptativo tem de decidir de verdade", (
     // diálogo que nunca vai fechar. Sob carga isso deixa de ser raro. É a mesma
     // guarda que o teste 6.1 de `followup-builder.spec.ts` já usa (e que o 6.2
     // do mesmo arquivo não usa — por isso ele falha nesta máquina).
-    const campoNome = dialog.getByLabel("Nome");
+    const campoNome = dialog.getByLabel("Nom");
     await expect(campoNome).toBeFocused({ timeout: PRAZO_SOB_CARGA });
     await campoNome.fill(flowName);
     await expect(campoNome).toHaveValue(flowName);
-    await dialog.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialog.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialog).not.toBeVisible({ timeout: PRAZO_SOB_CARGA });
 
     await page.locator("li", { hasText: flowName }).getByRole("link").click();
@@ -195,7 +195,7 @@ test.describe("nó de espera — o modo Adaptativo tem de decidir de verdade", (
     await expect(painel).toBeVisible({ timeout: PRAZO_SOB_CARGA });
 
     await painel.locator("#wait-mode").click();
-    await page.getByRole("option", { name: "A IA escolhe a hora" }).click();
+    await page.getByRole("option", { name: "L’IA choisit le moment" }).click();
 
     await painel.locator("#wait-min").fill(String(MIN_MINUTOS));
     await painel.locator("#wait-max").fill(String(MAX_MINUTOS));
@@ -213,17 +213,17 @@ test.describe("nó de espera — o modo Adaptativo tem de decidir de verdade", (
     // A ação do agente precisa de conteúdo para o fluxo publicar.
     await page.locator(`.react-flow__node[data-id="${actionId}"]`).click();
     await page.getByTestId("node-config-panel").locator("#action-prompt-hint").fill(
-      "Retome a conversa com o lead de forma breve e cordial.",
+      "Reprenez la conversation avec le lead de façon brève et cordiale.",
     );
 
     // ─── 4. salvar + publicar, pelos botões ──────────────────────────────
-    await page.getByRole("button", { name: "Salvar" }).click();
+    await page.getByRole("button", { name: "Enregistrer" }).click();
     await expect(page.getByTestId("dirty-indicator")).toHaveCount(0, { timeout: PRAZO_SOB_CARGA });
     await page.getByTestId("publish-button").click();
     // O selo do fluxo passa a "Ativo" (FlowStatusBadge) e a barra confirma
     // "Fluxo publicado." — não existe rótulo "Publicado" em lugar nenhum.
-    await expect(page.getByText("Fluxo publicado.")).toBeVisible({ timeout: PRAZO_SOB_CARGA });
-    await expect(page.getByText("Ativo", { exact: true }).first()).toBeVisible({ timeout: PRAZO_SOB_CARGA });
+    await expect(page.getByText("Flux publié.")).toBeVisible({ timeout: PRAZO_SOB_CARGA });
+    await expect(page.getByText("Actif", { exact: true }).first()).toBeVisible({ timeout: PRAZO_SOB_CARGA });
 
     // ─── 5. um contato entra no fluxo (sem tela própria: via API) ────────
     const contactRes = await page.request.post("/api/v1/contacts", { data: { display_name: contactName } });
@@ -248,8 +248,8 @@ test.describe("nó de espera — o modo Adaptativo tem de decidir de verdade", (
 
     // ─── 7. A CONSEQUÊNCIA, lida na tela da Fila ─────────────────────────
     await page.goto("/app/ai/followups");
-    await page.getByRole("tab", { name: "Fila" }).click();
-    await page.getByLabel("Buscar contato").fill(contactName);
+    await page.getByRole("tab", { name: "File" }).click();
+    await page.getByLabel("Rechercher un contact").fill(contactName);
     const linha = page.locator('[data-testid="queue-row"]', { hasText: contactName });
     await expect(linha).toBeVisible({ timeout: PRAZO_SOB_CARGA });
     await page.screenshot({

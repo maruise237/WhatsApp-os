@@ -74,9 +74,9 @@ const listStagesShape = {
 export const crmListStages: McpToolDefinition<typeof listStagesShape> = {
   name: "crm_list_stages",
   description:
-    "Lista as etapas ativas de um pipeline, na ordem do quadro, com id, name, slug, position, " +
-    "is_won/is_lost e a autoria da última mudança de configuração (last_change_actor_kind: user|ai|system). " +
-    "Use antes de mover um lead ou de criar etapa nova, para não duplicar coluna existente.",
+    "Liste les étapes actives d’un pipeline, dans l’ordre du tableau, avec id, name, slug, position, " +
+    "is_won/is_lost et l’auteur du dernier changement de configuration (last_change_actor_kind : user|ai|system). " +
+    "À utiliser avant de déplacer un lead ou de créer une nouvelle étape, pour ne pas dupliquer une colonne existante.",
   inputSchema: listStagesShape,
   category: "read",
   requiresRole: "agent",
@@ -84,7 +84,7 @@ export const crmListStages: McpToolDefinition<typeof listStagesShape> = {
   handler: async (input, ctx) => {
     const etapas = await lerFunil(ctx.supabase, ctx.organizationId, input.pipeline_id);
     if (!etapas) {
-      throw new ApiError(404, "not_found", undefined, ctx.requestId, "Funil não encontrado.");
+      throw new ApiError(404, "not_found", undefined, ctx.requestId, "Tableau introuvable.");
     }
     return corpoDoFunil(etapas);
   },
@@ -98,9 +98,9 @@ const createStageShape = {
 export const crmCreateStage: McpToolDefinition<typeof createStageShape> = {
   name: "crm_create_stage",
   description:
-    "Cria uma etapa no FIM do pipeline informado. O slug e a position são calculados no servidor. " +
-    "Recusa nome que o usuário leria como duplicado (ignora acento e caixa). Não cria etapa de ganho/perda — " +
-    "para isso use crm_update_stage depois.",
+    "Crée une étape à la FIN du pipeline indiqué. Le slug et la position sont calculés par le serveur. " +
+    "Refuse un nom que l’utilisateur lirait comme un doublon (ignore les accents et la casse). Ne crée pas d’étape de gain/perte — " +
+    "pour cela, utilisez ensuite crm_update_stage.",
   inputSchema: createStageShape,
   category: "write",
   requiresRole: "manager",
@@ -127,10 +127,10 @@ const updateStageShape = {
 export const crmUpdateStage: McpToolDefinition<typeof updateStageShape> = {
   name: "crm_update_stage",
   description:
-    "Renomeia, reordena ou muda o papel de desfecho (is_won/is_lost) de uma etapa. " +
-    "after_stage_id é o id da etapa VIZINHA DA ESQUERDA (null = primeira coluna), não um número de posição. " +
-    "Mover a marcação de ganho/perda para outra etapa é permitido; REMOVÊ-LA sem substituta não é — " +
-    "o pipeline ficaria sem onde fechar negócio.",
+    "Renomme, réordonne ou change le rôle de clôture (is_won/is_lost) d’une étape. " +
+    "after_stage_id est l’id de l’étape VOISINE DE GAUCHE (null = première colonne), pas un numéro de position. " +
+    "Déplacer le marqueur de gain/perte vers une autre étape est autorisé ; le RETIRER sans remplaçante ne l’est pas — " +
+    "le pipeline n’aurait plus où conclure une affaire.",
   inputSchema: updateStageShape,
   category: "write",
   requiresRole: "manager",
@@ -147,7 +147,7 @@ export const crmUpdateStage: McpToolDefinition<typeof updateStageShape> = {
         "unprocessable_entity",
         undefined,
         ctx.requestId,
-        "Diga o que mudar na etapa: o nome, a ordem ou o papel dela no desfecho do negócio.",
+        "Indiquez ce qu’il faut changer dans l’étape : le nom, l’ordre ou son rôle dans la clôture de l’affaire.",
       );
     }
     const { funil } = await atualizarEtapa(deps(ctx), {
@@ -169,9 +169,9 @@ const archiveStageShape = {
 export const crmArchiveStage: McpToolDefinition<typeof archiveStageShape> = {
   name: "crm_archive_stage",
   description:
-    "Arquiva uma etapa (nunca apaga — crm_leads_stage_id_fkey é ON DELETE RESTRICT e o histórico aponta para ela). " +
-    "Exige move_leads_to_stage_id quando a etapa tem leads; o destino não pode ser a etapa de ganho nem a de perda " +
-    "(daria os negócios por encerrados). Cada lead movido ganha uma atividade na própria timeline explicando o porquê.",
+    "Archive une étape (ne supprime jamais — crm_leads_stage_id_fkey est ON DELETE RESTRICT et l’historique pointe vers elle). " +
+    "Exige move_leads_to_stage_id quand l’étape contient des leads ; la destination ne peut être ni l’étape de gain ni celle de perte " +
+    "(cela clôturerait les affaires). Chaque lead déplacé reçoit une activité dans sa propre chronologie expliquant pourquoi.",
   inputSchema: archiveStageShape,
   category: "write",
   requiresRole: "manager",
@@ -197,9 +197,9 @@ const listTagsShape = {
 export const crmListTags: McpToolDefinition<typeof listTagsShape> = {
   name: "crm_list_tags",
   description:
-    "Lista os marcadores (tags) que a organização já usa, com a contagem de conversas de cada um e se ele está no " +
-    "vocabulário canônico da org. Chame ANTES de crm_manage_tags: aplicar 'cliente-vip' quando já existe 'vip' " +
-    "quebra os filtros de quem opera. Ordenado pelos mais usados.",
+    "Liste les marqueurs (tags) que l’organisation utilise déjà, avec le nombre de conversations de chacun et s’il fait partie du " +
+    "vocabulaire canonique de l’org. Appelez-le AVANT crm_manage_tags : appliquer 'client-vip' alors que 'vip' existe déjà " +
+    "casse les filtres de ceux qui travaillent. Trié du plus utilisé au moins utilisé.",
   inputSchema: listTagsShape,
   category: "read",
   requiresRole: "agent",
@@ -218,8 +218,8 @@ const listTemplatesShape = {};
 export const crmListMessageTemplates: McpToolDefinition<typeof listTemplatesShape> = {
   name: "crm_list_message_templates",
   description:
-    "Lista as respostas prontas da organização: título, corpo com as marcações {{...}}, " +
-    "atalho e se é compartilhada ou pessoal. Use quando a empresa já tiver decidido como diz algo, em vez de escrever do zero.",
+    "Liste les réponses rapides de l’organisation : titre, corps avec les balises {{...}}, " +
+    "raccourci et si elle est partagée ou personnelle. À utiliser quand l’entreprise a déjà décidé comment dire quelque chose, au lieu d’écrire de zéro.",
   inputSchema: listTemplatesShape,
   category: "read",
   requiresRole: "agent",
@@ -238,9 +238,9 @@ const renderTemplateShape = {
 export const crmRenderMessageTemplate: McpToolDefinition<typeof renderTemplateShape> = {
   name: "crm_render_message_template",
   description:
-    "Preenche uma resposta pronta com os dados do contato/lead informados e devolve o TEXTO — não envia nada. " +
-    "Devolve também `lacunas`: as marcações que ficaram sem valor. Se vier lacuna, NÃO mande o texto como está: " +
-    "'Olá , tudo bem?' chega assim no cliente.",
+    "Remplit une réponse rapide avec les données du contact/lead indiquées et renvoie le TEXTE — n’envoie rien. " +
+    "Renvoie aussi `lacunas` : les balises restées sans valeur. S’il y a une lacune, N’envoyez PAS le texte tel quel : " +
+    "'Bonjour , comment allez-vous ?' arriverait ainsi chez le client.",
   inputSchema: renderTemplateShape,
   category: "read",
   requiresRole: "agent",
@@ -265,8 +265,8 @@ const listSourcesShape = {
 export const crmListWebhookSources: McpToolDefinition<typeof listSourcesShape> = {
   name: "crm_list_webhook_sources",
   description:
-    "Lista as entradas automáticas de contatos da org: nome, se está ativa, para qual pipeline/stage " +
-    "manda, quando recebeu pela última vez e a autoria da última mudança. O segredo nunca sai — só `has_secret`.",
+    "Liste les entrées automatiques de contacts de l’org : nom, si elle est active, vers quel pipeline/stage " +
+    "elle envoie, quand elle a reçu pour la dernière fois et l’auteur du dernier changement. Le secret ne sort jamais — seulement `has_secret`.",
   inputSchema: listSourcesShape,
   category: "read",
   requiresRole: "agent",
@@ -284,9 +284,9 @@ const sourceEventsShape = {
 export const crmListWebhookSourceEvents: McpToolDefinition<typeof sourceEventsShape> = {
   name: "crm_list_webhook_source_events",
   description:
-    "Últimos recebimentos de uma entrada automática: quando chegou, se a assinatura era válida, o status e os NOMES " +
-    "dos campos que vieram. Os VALORES não são devolvidos (são dados pessoais de quem preencheu o formulário) — " +
-    "para diagnosticar 'o site manda full_name e a entrada espera name', os nomes bastam.",
+    "Dernières réceptions d’une entrée automatique : quand elles sont arrivées, si la signature était valide, le statut et les NOMS " +
+    "des champs reçus. Les VALEURS ne sont pas renvoyées (ce sont des données personnelles de la personne qui a rempli le formulaire) — " +
+    "pour diagnostiquer « le site envoie full_name et l’entrée attend name », les noms suffisent.",
   inputSchema: sourceEventsShape,
   category: "read",
   requiresRole: "agent",
@@ -312,10 +312,10 @@ const createSourceShape = {
 export const crmCreateWebhookSource: McpToolDefinition<typeof createSourceShape> = {
   name: "crm_create_webhook_source",
   description:
-    "Cria uma entrada automática de contatos e devolve o path_token da URL de captação. " +
-    "O pipeline e o stage têm que ser da MESMA organização e o stage têm que pertencer ao pipeline; " +
-    "stage arquivado é recusado (os contatos cairiam numa coluna fora do quadro). " +
-    "A entrada nasce ATIVA: a partir daí, qualquer POST na URL vira contato.",
+    "Crée une entrée automatique de contacts et renvoie le path_token de l’URL de captation. " +
+    "Le pipeline et le stage doivent appartenir à la MÊME organisation et le stage doit appartenir au pipeline ; " +
+    "un stage archivé est refusé (les contacts tomberaient dans une colonne hors du tableau). " +
+    "L’entrée est créée ACTIVE : dès lors, tout POST sur l’URL devient un contact.",
   inputSchema: createSourceShape,
   category: "write",
   requiresRole: "manager",
@@ -332,7 +332,7 @@ export const crmCreateWebhookSource: McpToolDefinition<typeof createSourceShape>
           "encryption_unavailable",
           undefined,
           ctx.requestId,
-          "Não foi possível guardar o segredo com segurança. Crie a entrada sem segredo ou peça para configurarem a chave de cifra do banco.",
+          "Impossible de stocker le secret de façon sécurisée. Créez l’entrée sans secret ou demandez de configurer la clé de chiffrement de la base.",
         );
       }
     }
@@ -354,8 +354,8 @@ const setSourceActiveShape = {
 export const crmSetWebhookSourceActive: McpToolDefinition<typeof setSourceActiveShape> = {
   name: "crm_set_webhook_source_active",
   description:
-    "Liga ou desliga uma entrada automática de contatos. Desligar faz o formulário que já está publicado no site do " +
-    "cliente PARAR de virar contato imediatamente — ninguém é avisado do outro lado. Confirme com um humano antes de desligar.",
+    "Active ou désactive une entrée automatique de contacts. La désactiver fait que le formulaire déjà publié sur le site du " +
+    "client CESSE immédiatement de créer des contacts — personne n’est prévenu de l’autre côté. Confirmez avec un humain avant de désactiver.",
   inputSchema: setSourceActiveShape,
   category: "write",
   requiresRole: "manager",
@@ -376,9 +376,9 @@ const listRulesShape = {
 export const crmListAutomationRules: McpToolDefinition<typeof listRulesShape> = {
   name: "crm_list_automation_rules",
   description:
-    "Lista as regras automáticas da org: nome, se está ligada, qual evento a dispara, os TIPOS de ação que ela executa, " +
-    "quantas condições tem, quando rodou pela última vez e quantas vezes. A configuração das ações (URL de destino, " +
-    "segredo, texto) não é devolvida.",
+    "Liste les règles automatiques de l’org : nom, si elle est active, quel événement la déclenche, les TYPES d’action qu’elle exécute, " +
+    "combien de conditions elle a, quand elle a tourné pour la dernière fois et combien de fois. La configuration des actions (URL de destination, " +
+    "secret, texte) n’est pas renvoyée.",
   inputSchema: listRulesShape,
   category: "read",
   requiresRole: "agent",
@@ -397,9 +397,9 @@ const listRunsShape = {
 export const crmListAutomationRuns: McpToolDefinition<typeof listRunsShape> = {
   name: "crm_list_automation_runs",
   description:
-    "Histórico do que as regras automáticas dispararam (mais recentes primeiro): qual regra, status " +
-    "(success|partial|failed), quando, e o detalhe SÓ das ações que falharam. Use only_failures=true para responder " +
-    "'o que parou de funcionar?'. Sem rule_id, traz a org inteira.",
+    "Historique de ce que les règles automatiques ont déclenché (plus récents d’abord) : quelle règle, statut " +
+    "(success|partial|failed), quand, et le détail UNIQUEMENT des actions en échec. Utilisez only_failures=true pour répondre à " +
+    "« qu’est-ce qui a cessé de fonctionner ? ». Sans rule_id, renvoie toute l’org.",
   inputSchema: listRunsShape,
   category: "read",
   requiresRole: "agent",
@@ -423,10 +423,10 @@ const setRuleActiveShape = {
 export const crmSetAutomationRuleActive: McpToolDefinition<typeof setRuleActiveShape> = {
   name: "crm_set_automation_rule_active",
   description:
-    "Liga ou desliga uma regra automática. LIGAR faz a regra rodar sozinha em TODO evento que casar, indefinidamente, " +
-    "sem ninguém assistindo — e as ações podem enviar mensagem ao cliente ou mandar dados para fora da empresa. " +
-    "Confira as ações com crm_list_automation_rules antes, e confirme com um humano. " +
-    "Criar, editar e apagar regra não é possível por aqui, de propósito.",
+    "Active ou désactive une règle automatique. L’ACTIVER fait tourner la règle toute seule sur CHAQUE événement correspondant, indéfiniment, " +
+    "sans surveillance — et les actions peuvent envoyer un message au client ou envoyer des données hors de l’entreprise. " +
+    "Vérifiez les actions avec crm_list_automation_rules avant, et confirmez avec un humain. " +
+    "Créer, modifier et supprimer une règle n’est pas possible ici, volontairement.",
   inputSchema: setRuleActiveShape,
   category: "write",
   requiresRole: "manager",
@@ -445,9 +445,9 @@ const listTeamShape = {};
 export const crmListTeamMembers: McpToolDefinition<typeof listTeamShape> = {
   name: "crm_list_team_members",
   description:
-    "Lista quem trabalha na organização: user_id, papel (viewer|agent|manager|admin) e se o convite ainda está pendente. " +
-    "É o user_id que crm_assign_conversation consome. Não devolve e-mail nem nome — o agente precisa saber a quem " +
-    "direcionar, não a identidade pessoal de cada um. Somente leitura: mudar papel não é possível por aqui.",
+    "Liste les personnes qui travaillent dans l’organisation : user_id, rôle (viewer|agent|manager|admin) et si l’invitation est encore en attente. " +
+    "C’est le user_id que consomme crm_assign_conversation. Ne renvoie ni e-mail ni nom — l’agent doit savoir à qui " +
+    "s’adresser, pas l’identité personnelle de chacun. Lecture seule : changer de rôle n’est pas possible ici.",
   inputSchema: listTeamShape,
   category: "read",
   requiresRole: "agent",

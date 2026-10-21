@@ -51,7 +51,7 @@ export function useUpdateAvailability() {
       ),
     onError: (err) => showApiError(err),
     onSuccess: () => {
-      toast.success("Atendente atualizado.");
+      toast.success("Agent mis à jour.");
       qc.invalidateQueries({ queryKey: ATTENDANTS_KEY });
     },
   });
@@ -74,7 +74,7 @@ export function useUpdateRouting() {
       apiClient.patch<{ data: RoutingConfig }>("/api/v1/settings/routing", config),
     onError: (err) => showApiError(err),
     onSuccess: () => {
-      toast.success("Roteamento atualizado.");
+      toast.success("Distribution mise à jour.");
       qc.invalidateQueries({ queryKey: ROUTING_KEY });
     },
   });

@@ -15,11 +15,11 @@ const DOT_COLOR: Record<ConnectionHealth, string> = {
 };
 
 const DOT_LABEL: Record<ConnectionHealth, string> = {
-  connected: "Todas as conexões ativas",
+  connected: "Toutes les connexions sont actives",
   connecting: "Conectando…",
-  down: "Uma conexão caiu",
-  none: "Nenhuma conexão",
-  unknown: "Não foi possível verificar as conexões",
+  down: "Une connexion est tombée",
+  none: "Aucune connexion",
+  unknown: "Impossible de vérifier les connexions",
 };
 
 /**

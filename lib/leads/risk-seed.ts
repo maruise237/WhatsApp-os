@@ -109,7 +109,7 @@ async function coletaEClassifica(
     .select("id, stage_id, contact_id, last_activity_at, created_at")
     .eq("organization_id", organizationId)
     .eq("status", "open");
-  if (leadErr) throw new Error(`seed de risco: ${leadErr.message}`);
+  if (leadErr) throw new Error(`seed de risque : ${leadErr.message}`);
   const leads = (leadRows ?? []) as LeadRow[];
 
   const stageIds = [...new Set(leads.map((l) => l.stage_id).filter(Boolean))];
@@ -195,7 +195,7 @@ export async function semeiaEstadosDeRisco(
     const { error } = await admin
       .from("crm_lead_risk_states")
       .upsert(linhas, { onConflict: "lead_id" });
-    if (error) throw new Error(`seed de risco (gravação): ${error.message}`);
+    if (error) throw new Error(`seed de risque (enregistrement) : ${error.message}`);
   }
 
   const emRisco = porBucket.critico + porBucket.em_risco;

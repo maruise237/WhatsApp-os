@@ -99,8 +99,8 @@ export function interpretarRetencao(
     return {
       dias: opcoes.padrao,
       aviso:
-        `${opcoes.chave}="${texto}" não é um número inteiro de dias — ` +
-        `usando o padrão de ${opcoes.padrao} dias.`,
+        `${opcoes.chave}="${texto}" n’est pas un nombre entier de jours — ` +
+        `utilisation de la valeur par défaut de ${opcoes.padrao} jours.`,
     };
   }
 
@@ -108,8 +108,8 @@ export function interpretarRetencao(
     return {
       dias: opcoes.piso,
       aviso:
-        `${opcoes.chave}=${numero} está abaixo do piso de ${opcoes.piso} dias — ` +
-        `usando ${opcoes.piso}.`,
+        `${opcoes.chave}=${numero} est sous le plancher de ${opcoes.piso} jours — ` +
+        `utilisation de ${opcoes.piso}.`,
     };
   }
 

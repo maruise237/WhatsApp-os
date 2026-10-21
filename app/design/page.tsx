@@ -20,12 +20,12 @@ type SectionId =
 const NAV: Array<{ id: SectionId; label: string }> = [
   { id: "tokens",      label: "Tokens" },
   { id: "paletas",     label: "Paletas" },
-  { id: "tipografia",  label: "Tipografia" },
-  { id: "densidade",   label: "Densidade" },
-  { id: "componentes", label: "Componentes" },
+  { id: "tipografia",  label: "Typographie" },
+  { id: "densidade",   label: "Densité" },
+  { id: "componentes", label: "Composants" },
   { id: "padroes",     label: "Modèles" },
   { id: "motion",      label: "Motion" },
-  { id: "icones",      label: "Iconografia" },
+  { id: "icones",      label: "Iconographie" },
 ];
 
 export default function DesignShowcasePage() {
@@ -63,7 +63,7 @@ export default function DesignShowcasePage() {
           </button>
         ))}
 
-        <div className="ds-nav-section">Componentes</div>
+        <div className="ds-nav-section">Composants</div>
         {NAV.slice(4, 6).map((n) => (
           <button
             key={n.id}
@@ -88,11 +88,11 @@ export default function DesignShowcasePage() {
         ))}
 
         <div style={{ marginTop: 32, padding: 12, border: "1px solid var(--ds-border)", borderRadius: 8, fontSize: 11, color: "var(--ds-text-muted)", lineHeight: 1.55 }}>
-          <div style={{ color: "var(--ds-accent)", fontFamily: "var(--ds-font-mono)", marginBottom: 6 }}>SELECIONADO</div>
-          <div>Paleta · <span style={{ color: "var(--ds-text)" }}>{PALETTES[v.palette].name}</span></div>
+          <div style={{ color: "var(--ds-accent)", fontFamily: "var(--ds-font-mono)", marginBottom: 6 }}>SÉLECTION</div>
+          <div>Palette · <span style={{ color: "var(--ds-text)" }}>{PALETTES[v.palette].name}</span></div>
           <div>Type · <span style={{ color: "var(--ds-text)" }}>{TYPOS[v.typo].name}</span></div>
-          <div>Densidade · <span style={{ color: "var(--ds-text)" }}>{DENSITIES[v.density].label}</span></div>
-          <div>Tema · <span style={{ color: "var(--ds-text)" }}>{v.theme}</span></div>
+          <div>Densité · <span style={{ color: "var(--ds-text)" }}>{DENSITIES[v.density].label}</span></div>
+          <div>Thème · <span style={{ color: "var(--ds-text)" }}>{v.theme}</span></div>
         </div>
       </aside>
 
@@ -110,7 +110,7 @@ export default function DesignShowcasePage() {
             <h1>Vitrine du design system — DeskcommCRM</h1>
             <p>
               Utilisez la barre latérale pour parcourir les sections. Utilisez le sélecteur (coin supérieur droit) pour changer
-              <strong> paleta · tipografia · densidade · tema</strong> à l’exécution — les choix sont conservés dans localStorage. Quand vous trouvez le bon réglage, dites-le-moi : <em>palette X + type Y + densité Z</em>.
+              <strong> palette · typographie · densité · thème</strong> à l’exécution — les choix sont conservés dans localStorage. Quand vous trouvez le bon réglage, dites-le-moi : <em>palette X + type Y + densité Z</em>.
             </p>
           </div>
           {content}

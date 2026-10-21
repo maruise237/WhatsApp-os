@@ -40,7 +40,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = reEmit.test(globalInbound);
   const b = reEmit.test(tokenInbound);
   record(
-    "TC-W9-01 ambos routes (global + [token]) emitem ai_agent.dispatch_requested via emit_event RPC",
+    "TC-W9-01 les deux routes (global + [token]) émettent ai_agent.dispatch_requested via emit_event RPC",
     a && b,
     `global=${a} token=${b}`,
   );
@@ -56,7 +56,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = emitAfter23505(globalInbound);
   const b = emitAfter23505(tokenInbound);
   record(
-    "TC-W9-02 emit ocorre APOS o early-return de 23505 (sem duplicacao em retransmissao WAHA)",
+    "TC-W9-02 l'émission a lieu APRÈS l'early-return de 23505 (sans doublon en retransmission WAHA)",
     a && b,
     `global=${a} token=${b}`,
   );
@@ -71,7 +71,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = hasSelectId(globalInbound);
   const b = hasSelectId(tokenInbound);
   record(
-    "TC-W9-03 insert da mensagem inbound captura id via .select(\"id\")",
+    "TC-W9-03 l'insertion du message entrant capture l'id via .select(\"id\")",
     a && b,
     `global=${a} token=${b}`,
   );
@@ -98,7 +98,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = hasAllKeys(globalInbound);
   const b = hasAllKeys(tokenInbound);
   record(
-    "TC-W9-04 payload contem {organization_id, conversation_id, contact_id, channel_session_id, inbound_message_id}",
+    "TC-W9-04 le payload contient {organization_id, conversation_id, contact_id, channel_session_id, inbound_message_id}",
     a.ok && b.ok,
     `global_missing=[${a.missing.join(",")}] token_missing=[${b.missing.join(",")}]`,
   );
@@ -115,7 +115,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = fireAndForget(globalInbound);
   const b = fireAndForget(tokenInbound);
   record(
-    "TC-W9-05 emit fire-and-forget (sem await) + .then() logando erro — webhook segue 200",
+    "TC-W9-05 émission fire-and-forget (sans await) + .then() qui journalise l'erreur — le webhook reste en 200",
     a && b,
     `global=${a} token=${b}`,
   );
@@ -126,7 +126,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = !/ai_agent\.dispatch_requested/.test(globalOutbound);
   const b = !/ai_agent\.dispatch_requested/.test(tokenOutbound);
   record(
-    "TC-W9-06 handleOutboundFromUserPhone (fromMe=true) NAO emite ai_agent.dispatch_requested",
+    "TC-W9-06 handleOutboundFromUserPhone (fromMe=true) N'émet PAS ai_agent.dispatch_requested",
     a && b,
     `global=${a} token=${b}`,
   );
@@ -146,7 +146,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = groupSkipBeforeEmit(globalInbound);
   const b = groupSkipBeforeEmit(tokenInbound);
   record(
-    "TC-W9-07 group inbound (@g.us) early-return ANTES do emit (grupos nao geram dispatch)",
+    "TC-W9-07 groupe entrant (@g.us) early-return AVANT l'émission (les groupes ne génèrent pas de dispatch)",
     a && b,
     `global=${a} token=${b}`,
   );
@@ -164,7 +164,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
     const err = e as { stdout?: Buffer; status?: number };
     evidence = `tsc exit ${err.status} stdout=${(err.stdout ?? Buffer.alloc(0)).toString().slice(-300)}`;
   }
-  record("TC-W9-08 npx tsc --noEmit exits 0 (typecheck clean apos wave 9)", ok, evidence);
+  record("TC-W9-08 npx tsc --noEmit sort 0 (typecheck propre après la vague 9)", ok, evidence);
 }
 
 // TC-W9-09
@@ -177,7 +177,7 @@ const tokenOutbound = extractFn(tokenSrc, "handleOutboundFromUserPhone");
   const a = metadataAndOrg(globalInbound);
   const b = metadataAndOrg(tokenInbound);
   record(
-    "TC-W9-09 emit_event recebe p_metadata={source:'waha_webhook', request_id} + p_organization_id",
+    "TC-W9-09 emit_event reçoit p_metadata={source:'waha_webhook', request_id} + p_organization_id",
     a && b,
     `global=${a} token=${b}`,
   );

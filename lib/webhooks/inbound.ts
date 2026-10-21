@@ -4,6 +4,8 @@
  */
 import { createHmac, timingSafeEqual } from "node:crypto";
 
+import { normaliserTelephone } from "@/lib/telephone/normaliser";
+
 export interface FieldMap {
   name?: string[];
   phone?: string[];
@@ -24,22 +26,13 @@ export interface MappedLead {
   source_metadata: Record<string, string>;
 }
 
-/** Normaliza telefone BR para E.164. ponytail: heurística BR-only (público-alvo); internacional entra quando houver demanda. */
-export function normalizePhoneBR(raw: unknown): string | null {
-  if (typeof raw !== "string" || !raw.trim()) return null;
-  const digits = raw.replace(/\D/g, "");
-  if (raw.trim().startsWith("+")) {
-    return /^\d{8,15}$/.test(digits) ? `+${digits}` : null;
-  }
-  if (digits.length === 12 || digits.length === 13) {
-    // 55 + DDD + numero
-    return digits.startsWith("55") ? `+${digits}` : null;
-  }
-  if (digits.length === 10 || digits.length === 11) {
-    // DDD + numero (fixo ou celular)
-    return `+55${digits}`;
-  }
-  return null;
+/**
+ * Telefone → E.164. A regra mora em `lib/telephone/normaliser.ts` (genérica,
+ * com o indicativo padrão da organização — 237 por padrão); este nome segue
+ * exportado para os chamadores da captação.
+ */
+export function normalizePhone(raw: unknown, indicatif?: string): string | null {
+  return normaliserTelephone(raw, indicatif);
 }
 
 function firstMatch(payload: Record<string, unknown>, aliases: string[]): { key: string; value: string } | null {
@@ -57,6 +50,8 @@ function firstMatch(payload: Record<string, unknown>, aliases: string[]): { key:
 export function mapInboundPayload(
   payload: Record<string, unknown>,
   fieldMap: FieldMap = {},
+  /** Indicativo padrão da organização (sem `+`); ausente ⇒ 237. */
+  indicatif?: string,
 ): MappedLead {
   const map: Required<FieldMap> = {
     name: [...(fieldMap.name ?? []), ...DEFAULT_FIELD_MAP.name],
@@ -82,7 +77,7 @@ export function mapInboundPayload(
 
   return {
     name: nameHit?.value ?? null,
-    phone: normalizePhoneBR(phoneHit?.value),
+    phone: normalizePhone(phoneHit?.value, indicatif),
     email: emailHit?.value ?? null,
     custom_fields,
     source_metadata,

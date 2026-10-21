@@ -200,8 +200,8 @@ export async function sincronizaEstagioDoAgente(
         leadId: lead.id,
         detalhe:
           veredito.motivo === "escopo_vazio"
-            ? "nenhum funil liberado para este assistente"
-            : "o negócio está num funil que este assistente não cuida",
+            ? "aucun tableau autorisé pour cet assistant"
+            : "l’affaire se trouve dans un tableau que cet assistant ne gère pas",
       };
     }
   }

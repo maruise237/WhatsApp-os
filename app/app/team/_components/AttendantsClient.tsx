@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
-import { FUSOS_OFERECIDOS } from "@/lib/tempo/fusos";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
+import { fusosComAtual } from "@/lib/tempo/fusos";
 
 import {
   useAttendants,
@@ -44,11 +45,11 @@ import {
 import { Clock, Plus, Trash } from "@/lib/ui/icons";
 import { useT } from "@/hooks/i18n/useT";
 
-const DOW_LABELS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const DOW_LABELS = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 
 const MODE_LABELS: Record<(typeof ROUTING_MODES)[number], string> = {
-  manual: "Manual (atendente puxa da fila)",
-  round_robin: "Rodízio (distribui automático)",
+  manual: "Manuel (l’agent prend dans la file)",
+  round_robin: "Rotation (distribution automatique)",
 };
 
 interface Attendant {
@@ -92,7 +93,7 @@ function ScheduleDialog({
 }) {
   const t = useT();
   const initial = attendant.availability?.schedule;
-  const [timezone, setTimezone] = useState(initial?.timezone || "America/Sao_Paulo");
+  const [timezone, setTimezone] = useState(initial?.timezone || FUSEAU_PAR_DEFAUT);
   const [windows, setWindows] = useState<ScheduleWindow[]>(initial?.windows ?? []);
 
   return (
@@ -122,7 +123,7 @@ function ScheduleDialog({
               onChange={(e) => setTimezone(e.target.value)}
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
             >
-              {FUSOS_OFERECIDOS.map((f) => (
+              {fusosComAtual(timezone).map((f) => (
                 <option key={f.codigo} value={f.codigo}>
                   {f.rotulo} — {f.codigo}
                 </option>

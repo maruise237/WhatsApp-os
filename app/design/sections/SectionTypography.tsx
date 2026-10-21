@@ -49,7 +49,7 @@ function PairBlock({ id }: { id: TypoId }) {
           onClick={() => v.setTypo(id)}
           disabled={active}
         >
-          Aplicar par
+          Appliquer par
         </button>
       </div>
 
@@ -71,25 +71,25 @@ function PairBlock({ id }: { id: TypoId }) {
           <div>
             <div className="ds-key" style={{ marginBottom: 4 }}>Body · italic + bold</div>
             <p style={{ fontFamily: fonts.body, fontSize: 15, lineHeight: 1.55 }}>
-              <strong>Maria Silva</strong> respondeu <em>&ldquo;j’ai déjà payé par Mobile Money&rdquo;</em> à 14h32. En attente du reçu automatique.
+              <strong>Aïcha Ndiaye</strong> a répondu <em>&ldquo;j’ai déjà payé par Mobile Money&rdquo;</em> à 14h32. En attente du reçu automatique.
             </p>
           </div>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           <div>
-            <div className="ds-key" style={{ marginBottom: 4 }}>Numerais tabulares (financeiro)</div>
+            <div className="ds-key" style={{ marginBottom: 4 }}>Chiffres tabulaires (financier)</div>
             <div style={{ fontFamily: fonts.body, fontVariantNumeric: "tabular-nums lining-nums", fontSize: 15 }}>
-              <div>R$ 1.234,56</div>
-              <div>R$ 9.998,01</div>
-              <div>R$&nbsp;&nbsp;&nbsp;&nbsp;42,00</div>
+              <div>1 234 FCFA</div>
+              <div>9 998 FCFA</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;42 FCFA</div>
             </div>
           </div>
           <div>
-            <div className="ds-key" style={{ marginBottom: 4 }}>Numerais proporcionais (texto)</div>
+            <div className="ds-key" style={{ marginBottom: 4 }}>Chiffres proportionnels (texte)</div>
             <div style={{ fontFamily: fonts.body, fontVariantNumeric: "proportional-nums", fontSize: 15 }}>
               <div>1 234 conversations aujourd’hui</div>
-              <div>98% SLA cumprido</div>
+              <div>98 % du SLA respecté</div>
               <div>14h32 · 16h05 · 18h11</div>
             </div>
           </div>
@@ -118,7 +118,7 @@ function PairBlock({ id }: { id: TypoId }) {
 export function SectionTypography() {
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Tipografia</h2>
+      <h2 className="ds-display">Typographie</h2>
       <p className="ds-lede">
         Quatre associations évaluées. Critères : lisibilité sur des journées de 8 h, chiffres tabulaires, graisses extrêmes disponibles, vraie italique (pas inclinée). Inter / Geist / Space Grotesk ont été écartées car surreprésentées dans les données d’entraînement.
       </p>

@@ -109,7 +109,7 @@ async function main(): Promise<void> {
     }),
   });
   const captBody = await capt.json();
-  console.log("POST no webhook →", capt.status, JSON.stringify(captBody));
+  console.log("POST sur le webhook →", capt.status, JSON.stringify(captBody));
 
   // ── 4. O drain, como o scheduler faz a cada minuto ────────────────────────
   for (let i = 0; i < 3; i++) {
@@ -124,7 +124,7 @@ async function main(): Promise<void> {
   const runs = await pg<
     Array<{ id: string; status: string; actions_result: unknown; error: string | null }>
   >(`automation_rule_runs?rule_id=eq.${rule!.id}&select=id,status,actions_result,error`);
-  console.log("\n=== automation_rule_runs (o que a aba Atividade mostra) ===");
+  console.log("\n=== automation_rule_runs (ce que montre l'onglet Activité) ===");
   console.log(JSON.stringify(runs, null, 2));
 
   const msgs = await pg<
@@ -139,19 +139,19 @@ async function main(): Promise<void> {
   >(
     `messages?channel_session_id=eq.${sessionId}&select=id,status,error_code,error_message,body,metadata`,
   );
-  console.log("\n=== messages (o que o cliente recebeu, de verdade) ===");
+  console.log("\n=== messages (ce que le client a vraiment reçu) ===");
   console.log(JSON.stringify(msgs, null, 2));
 
   console.log("\n=== VEREDITO ===");
   const run = runs[0];
   const msg = msgs[0];
-  console.log("run.status          =", run?.status ?? "(nenhum run)");
-  console.log("mensagem.status     =", msg?.status ?? "(nenhuma mensagem)");
-  console.log("mensagem.error_code =", msg?.error_code ?? "-");
+  console.log("run.status          =", run?.status ?? "(aucun run)");
+  console.log("message.status      =", msg?.status ?? "(aucun message)");
+  console.log("message.error_code  =", msg?.error_code ?? "-");
   if (run?.status === "success" && msg && msg.status !== "sent") {
     console.log(
-      "\n>>> DEFEITO CONFIRMADO: a automação registrou SUCESSO e a mensagem está em",
-      `'${msg.status}'. A tela diz que deu certo; o cliente não recebeu nada.`,
+      "\n>>> DÉFAUT CONFIRMÉ : l'automatisation a enregistré un SUCCÈS et le message est en",
+      `'${msg.status}'. L'écran dit que ça a marché ; le client n'a rien reçu.`,
     );
   }
 
@@ -161,7 +161,7 @@ async function main(): Promise<void> {
     await pg(`automation_rules?id=eq.${rule!.id}`, { method: "DELETE" });
     await pg(`webhook_sources?id=eq.${source!.id}`, { method: "DELETE" });
     for (const m of msgs) await pg(`messages?id=eq.${m.id}`, { method: "DELETE" });
-    console.log("\n(rastros removidos — use MANTER=1 para preservar)");
+    console.log("\n(traces supprimées — utilisez MANTER=1 pour les conserver)");
   }
 }
 

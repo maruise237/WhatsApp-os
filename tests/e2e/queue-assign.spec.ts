@@ -48,11 +48,11 @@ async function login(page: Page, email: string, password: string): Promise<void>
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//, { timeout: 60_000 });
 }
 
-test.describe("G5-03 — fila com posição + atribuição", () => {
+test.describe("G5-03 — file avec position + attribution", () => {
   // Dev server compila /app/* a frio na 1ª visita (pode passar de 30s).
   test.describe.configure({ timeout: 120_000 });
 
@@ -63,7 +63,7 @@ test.describe("G5-03 — fila com posição + atribuição", () => {
     if (!creds.queue) throw new Error("queue seed block ausente em .e2e-creds.json");
   });
 
-  test("conversa aparece na Fila com posição → worker atribui → move para Minhas", async ({
+  test("la conversation apparaît dans la File avec sa position → le worker attribue → passe dans Les miennes", async ({
     page,
   }) => {
     const q = creds.queue!;
@@ -74,7 +74,7 @@ test.describe("G5-03 — fila com posição + atribuição", () => {
     const queueItem = page.getByRole("button").filter({ hasText: q.contact_name });
     await expect(queueItem).toBeVisible({ timeout: 15_000 });
     await expect(queueItem.getByText(/^\d+º$/)).toBeVisible();
-    await expect(queueItem.getByText(/Aguardando/)).toBeVisible();
+    await expect(queueItem.getByText(/En attente/)).toBeVisible();
     await page.screenshot({
       path: path.join(EVIDENCE, "G5-03-queue.png"),
       fullPage: true,
@@ -99,7 +99,7 @@ test.describe("G5-03 — fila com posição + atribuição", () => {
     ).toHaveCount(0, { timeout: 15_000 });
 
     // (4) Aparece em "Minhas" do dono.
-    await page.getByRole("tab", { name: /Minhas/ }).click();
+    await page.getByRole("tab", { name: /Les miennes/ }).click();
     await expect(
       page.getByRole("button").filter({ hasText: q.contact_name }),
     ).toBeVisible({ timeout: 15_000 });

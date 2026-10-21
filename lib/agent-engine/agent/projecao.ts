@@ -54,7 +54,7 @@ export function turnoProjeta(toolNamesDoCatalogo: readonly string[]): boolean {
 
 /** Uma mensagem como o Conversador a lê — sem endereço interno de nada. */
 export interface MensagemProjetada {
-  de: 'cliente' | 'nós';
+  de: 'client' | 'nous';
   texto: string;
   quando: string;
   /** marcador legível quando houve mídia ("[imagem]"); nunca o caminho dela. */
@@ -101,7 +101,7 @@ export function projetarContexto(ctx: LeadContext): ContextoProjetado {
       const base: MensagemProjetada = {
         // 'inbound'/'outbound' é vocabulário de sistema e já apareceu parafraseado
         // em resposta de modelo. Quem fala com uma pessoa pensa "ela disse" / "eu disse".
-        de: m.direction === 'inbound' ? 'cliente' : 'nós',
+        de: m.direction === 'inbound' ? 'client' : 'nous',
         // O corpo passa INTACTO — e isto é decisão, não omissão. A tradução de
         // erro é calibrada para texto que o SISTEMA produziu; aplicá-la à fala
         // reescreveria o cliente. "Meu site tem um webhook quebrado" é frase
@@ -134,15 +134,15 @@ const TRADUCAO_DE_ERRO: ReadonlyArray<{ quando: RegExp; vira: string }> = [
   {
     // O vazamento medido, literal (RELATORIO da medição, cenário 7).
     quando: /unsafe_url|https_required/i,
-    vira: 'o endereço configurado para essa integração não usa conexão segura',
+    vira: 'l’adresse configurée pour cette intégration n’utilise pas de connexion sécurisée',
   },
   {
     quando: /\brole\b.*insufficient|insufficient.*\brole\b|forbidden|not_authorized|unauthorized/i,
-    vira: 'essa alteração precisa de uma pessoa com mais permissão do que eu tenho aqui',
+    vira: 'cette modification nécessite une personne disposant de plus de droits que moi ici',
   },
-  { quando: /not_found|does_not_exist|no_rows/i, vira: 'não encontrei esse registro' },
-  { quando: /timeout|timed_out|econnrefused|unavailable/i, vira: 'o sistema não respondeu a tempo' },
-  { quando: /rate_limit|too_many_requests/i, vira: 'houve tentativas demais em pouco tempo' },
+  { quando: /not_found|does_not_exist|no_rows/i, vira: 'je n’ai pas trouvé cet enregistrement' },
+  { quando: /timeout|timed_out|econnrefused|unavailable/i, vira: 'le système n’a pas répondu à temps' },
+  { quando: /rate_limit|too_many_requests/i, vira: 'il y a eu trop de tentatives en peu de temps' },
 ];
 
 /**
@@ -155,7 +155,7 @@ export function traduzirErroCru(texto: string): string {
   for (const regra of TRADUCAO_DE_ERRO) {
     if (regra.quando.test(texto)) return regra.vira;
   }
-  return detectarVazamentoInterno(texto).achou ? 'não consegui concluir essa verificação' : texto;
+  return detectarVazamentoInterno(texto).achou ? 'je n’ai pas pu terminer cette vérification' : texto;
 }
 
 /**

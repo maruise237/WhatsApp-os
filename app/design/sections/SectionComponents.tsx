@@ -19,7 +19,7 @@ export function SectionComponents() {
 
   return (
     <div className="ds-section">
-      <h2 className="ds-display">Componentes</h2>
+      <h2 className="ds-display">Composants</h2>
       <p className="ds-lede">
         États complets : default, hover, focus, active, disabled, loading, error. Les composants réagissent à l’exécution à la palette, à la typographie et à la densité sélectionnées.
       </p>
@@ -28,13 +28,13 @@ export function SectionComponents() {
       <h3>Buttons</h3>
       <div className="ds-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <Stack label="Variants">
-          <button className="ds-btn ds-btn--primary">Confirmar envio</button>
+          <button className="ds-btn ds-btn--primary">Confirmer l’envoi</button>
           <button className="ds-btn ds-btn--secondary">Annuler</button>
           <button className="ds-btn ds-btn--ghost">Reporter</button>
           <button className="ds-btn ds-btn--destructive">Supprimer la conversation</button>
           <button className="ds-btn ds-btn--link">voir les détails</button>
         </Stack>
-        <Stack label="Estados">
+        <Stack label="États">
           <button className="ds-btn ds-btn--primary">Default</button>
           <button className="ds-btn ds-btn--primary" disabled>Disabled</button>
           <button
@@ -57,7 +57,7 @@ export function SectionComponents() {
         </div>
         <div>
           <label className="ds-label">Nom</label>
-          <input className="ds-input" defaultValue="Maria Silva" />
+          <input className="ds-input" defaultValue="Aïcha Ndiaye" />
         </div>
         <div>
           <label className="ds-label">Rechercher une conversation</label>
@@ -70,16 +70,16 @@ export function SectionComponents() {
           </div>
         </div>
         <div>
-          <label className="ds-label">CPF (avec erreur)</label>
+          <label className="ds-label">N° d’identification (avec erreur)</label>
           <input className="ds-input" defaultValue="000.000.000-00" aria-invalid="true" />
-          <span style={{ color: "var(--ds-error)", fontSize: 11.5, marginTop: 4, display: "block" }}>CPF invalide — vérifiez les chiffres.</span>
+          <span style={{ color: "var(--ds-error)", fontSize: 11.5, marginTop: 4, display: "block" }}>Numéro invalide — vérifiez la saisie.</span>
         </div>
         <div>
           <label className="ds-label">Disabled</label>
-          <input className="ds-input" defaultValue="bloqueado" disabled />
+          <input className="ds-input" defaultValue="bloqué" disabled />
         </div>
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="ds-label">Resposta</label>
+          <label className="ds-label">Réponse</label>
           <textarea className="ds-input" rows={4} placeholder="Saisissez votre réponse…" style={{ height: "auto", padding: 12, resize: "vertical" }} />
         </div>
       </div>
@@ -113,7 +113,7 @@ export function SectionComponents() {
       <div className="ds-grid-3">
         <div className="ds-card">
           <div className="ds-key">Chiffre d’affaires du jour</div>
-          <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>R$ 12.443,00</div>
+          <div className="ds-display" style={{ fontSize: 28, fontWeight: 600, marginTop: 6 }}>12 443 FCFA</div>
           <div style={{ fontSize: 12, color: "var(--ds-success)", marginTop: 4 }}>+8,4 % vs hier</div>
         </div>
         <div className="ds-card ds-card--interactive">
@@ -137,7 +137,7 @@ export function SectionComponents() {
             <div className="ds-list-item">
               <div className="ds-avatar">MS<span className="ds-avatar-status" /></div>
               <div className="body">
-                <div className="title">Maria Silva</div>
+                <div className="title">Aïcha Ndiaye</div>
                 <div className="preview">Confirmation de l’adresse de livraison…</div>
               </div>
               <div className="meta">
@@ -162,12 +162,12 @@ export function SectionComponents() {
           <div className="ds-kanban-card" style={{ background: "var(--ds-surface)" }}>
             <div className="row">
               <span className="title">Commande n° 12 443</span>
-              <span className="value">R$ 1.234,56</span>
+              <span className="value">1 234 FCFA</span>
             </div>
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Marie Ngo · cliente fidèle</div>
             <div className="row">
               <div className="tags">
-                <span className="ds-badge ds-badge--info">pix</span>
+                <span className="ds-badge ds-badge--info">mobile money</span>
                 <span className="ds-badge ds-badge--warning">sla&lt;1h</span>
               </div>
               <span className="ds-avatar ds-avatar--sm">RM</span>
@@ -192,7 +192,7 @@ export function SectionComponents() {
       <h3>Tabs</h3>
       <div className="ds-card">
         <div className="ds-tabs">
-          {([["inbox", "Inbox"], ["pedidos", "Pedidos"], ["clientes", "Clientes"], ["relatorios", "Relatórios"]] as const).map(([id, label]) => (
+          {([["inbox", "Inbox"], ["pedidos", "Commandes"], ["clientes", "Clients"], ["relatorios", "Rapports"]] as const).map(([id, label]) => (
             <button key={id} className="ds-tab" data-active={tab === id} onClick={() => setTab(id)}>
               {label}
             </button>
@@ -267,7 +267,7 @@ export function SectionComponents() {
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--ds-success)", marginTop: 6 }} />
             <div>
               <div style={{ fontWeight: 500, fontSize: 13.5 }}>Message envoyé</div>
-              <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Maria Silva · WhatsApp</div>
+              <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Aïcha Ndiaye · WhatsApp</div>
             </div>
           </div>
         </div>

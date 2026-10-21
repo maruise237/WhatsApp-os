@@ -97,6 +97,17 @@ export const PALAVRAS_DE_OPT_OUT: ReadonlySet<string> = new Set([
   "salir",
   "desuscribir",
   "desuscribirme",
+  // ── français ──────────────────────────────────────────────────────────────
+  // Mesma regra: só a palavra SOZINHA. "Comment arrêter la douleur ?" tem quatro
+  // palavras e não é opt-out — é a mesma proteção do "tem como parar a dor?".
+  // ("stop" já está no topo da lista e vale para o francês também.)
+  "arret",
+  "arreter",
+  "arretez",
+  "desinscrire",
+  "desinscription",
+  "desabonner",
+  "desabonnement",
 ]);
 
 /**
@@ -110,6 +121,16 @@ const VERBOS_DE_COMUNICACAO =
   // espanhol — mesma âncora, outra língua. Sem eles "no quiero recibir mas
   // mensajes" não casa nenhum padrão e o pedido se perde.
   "recibir|recibe|escribir|escribe|escriban|molestar|molesta|llamar|llama|mandes|envien";
+
+/**
+ * Verbos de comunicação em FRANCÊS — a âncora que separa "arrêtez de m'envoyer
+ * des messages" de "comment arrêter la douleur ?" ou "arrêter de fumer".
+ */
+const VERBES_DE_COMMUNICATION =
+  "envoyer|ecrire|appeler|contacter|recontacter|relancer|harceler|deranger|spammer|solliciter|texter";
+
+/** "m'", "m’", "me", "nous" — o pronome objeto opcional antes do verbo francês. */
+const PRONOM_FR = "(?:m['’]\\s*|me\\s+|nous\\s+)?";
 
 /**
  * Pedidos INEQUÍVOCOS de descadastro escritos por extenso. Todos exigem o objeto
@@ -161,6 +182,30 @@ const FRASES_DE_OPT_OUT: readonly RegExp[] = [
   /\b(?:sacame|sacar|quitame|quitar|borrame|borrar|elimina|eliminame)\s+de\s+(?:la\s+)?lista\b(?!\s+de\s+(?:espera|precios|invitados))/u,
   /\bsalir\s+de\s+(?:la\s+)?lista\b(?!\s+de\s+(?:espera|precios|invitados))/u,
   /\bcancelar\s+(?:la\s+)?(?:suscripcion|inscripcion)\b/u,
+  // ── français ──────────────────────────────────────────────────────────────
+  //
+  // Mesma regra: verbo de cessação + OBJETO DE COMUNICAÇÃO, nunca a palavra
+  // solta. "comment arrêter la douleur", "arrêter de fumer" e "je dois sortir
+  // plus tôt" NÃO casam (ver as frases de controle no teste).
+  //
+  // "arrêtez de m'envoyer", "arrête de m'écrire", "cessez de me contacter"
+  new RegExp(
+    `\\b(?:arret(?:e|es|ez|er)|cess(?:e|es|ez|er)|stopp(?:e|ez|er))\\s+de\\s+${PRONOM_FR}(?:${VERBES_DE_COMMUNICATION})\\b`,
+    "u",
+  ),
+  // "je ne veux plus recevoir (de messages)" — mas "je ne veux plus recevoir
+  // d'appels, seulement WhatsApp" é troca de canal, e "… la facture ici" é
+  // pedido de outro documento: quem diz isso QUER continuar sendo atendido.
+  /\bne\s+(?:veux|souhaite|desire|voudrais|veut)\s+plus\s+(?:rien\s+)?recevoir\b(?!\s+(?:la\s+|le\s+|les\s+|ma\s+|mes\s+|mon\s+|d['’]\s*|de\s+|des\s+)?(?:facture|factures|devis|recu|recus|appel|appels|coups?\s+de\s+fil)\b)/u,
+  /\bne\s+plus\s+(?:rien\s+)?recevoir\b(?!\s+(?:la\s+|le\s+|les\s+|ma\s+|mes\s+|mon\s+|d['’]\s*|de\s+|des\s+)?(?:facture|factures|devis|recu|recus|appel|appels|coups?\s+de\s+fil)\b)/u,
+  /\bne\s+(?:(?:veux|souhaite|desire|voudrais|veut)\s+)?plus\s+etre\s+(?:contacte|contactee|sollicite|sollicitee|relance|relancee|derange|derangee)\b/u,
+  /\bne\s+veux\s+plus\s+(?:de\s+)?(?:vos\s+)?(?:messages|message|sms|notifications|promotions|publicites)\b/u,
+  // "ne m'envoyez plus", "ne m'écrivez plus", "ne me contactez plus"
+  /\bne\s+(?:m['’]\s*|me\s+)(?:envoie|envoies|envoyez|ecris|ecrit|ecrivez|contacte|contactes|contactez|appelle|appelles|appelez|relance|relances|relancez|derange|deranges|derangez)\s+plus\b/u,
+  // "retirez-moi de la liste", "enlevez-moi de votre liste" — MENOS a lista de espera.
+  /\b(?:retire|retirez|retirer|enleve|enlevez|enlever|supprime|supprimez|supprimer|sortez|sortir|raye|rayez|rayer)(?:[\s-]+moi)?\s+de\s+(?:la|votre|ta|cette|vos|tes)\s+listes?\b(?!\s+(?:d['’]\s*attente|de\s+(?:prix|invites|attente)))/u,
+  /\b(?:me\s+)?desinscri\w*\b/u,
+  /\b(?:me\s+)?desabonn\w*\b/u,
 ];
 
 /**
@@ -172,6 +217,11 @@ const FRASES_AMBIGUAS_DE_OPT_OUT: readonly RegExp[] = [
   /\bja\s+(?:disse|falei)\s+que\s+nao\s+(?:quero|tenho\s+interesse)\b/u,
   /\bnao\s+(?:me\s+)?interessa\s+mais\b/u,
   /\bpara\s+com\s+isso\b/u,
+  // français
+  /\blaisse[sz]?[\s-]+moi\s+(?:tranquille|en\s+paix)\b/u,
+  /\bfiche[sz]?[\s-]+moi\s+la\s+paix\b/u,
+  /\bne\s+m['’]\s*interesse\s+plus\b/u,
+  /\bj['’]\s*ai\s+deja\s+dit\s+(?:que\s+)?(?:non|ca\s+ne\s+m['’]\s*interesse\s+pas|je\s+ne\s+suis\s+pas\s+interesse)\b/u,
 ];
 
 /** A mensagem inteira é a palavra-chave (ignorando pontuação e emoji de borda). */

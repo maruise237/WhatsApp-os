@@ -17,7 +17,7 @@ export type ScoreBand = "frio" | "morno" | "quente";
 export const SCORE_BAND_LABELS = {
   frio: "Frio",
   morno: "Morno",
-  quente: "Quente",
+  quente: "Chaud",
 } as const satisfies Record<ScoreBand, string>;
 
 /**

@@ -59,7 +59,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -67,7 +67,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
 
   // Até 2 tentativas: um código pode expirar na borda da janela de 30s.
@@ -76,7 +76,7 @@ async function loginWithTotp(page: Page, email: string, secret: string): Promise
       await page.waitForTimeout(msUntilNextTotpWindow() + 200);
     }
     const code = generateTotp(secret);
-    const firstDigit = page.locator('input[aria-label="Dígito 1"]');
+    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
     await firstDigit.click();
     await page.keyboard.type(code, { delay: 40 });
     try {
@@ -100,39 +100,39 @@ async function expectNoBlockingA11y(page: Page, excludeSelector?: string): Promi
   expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
 }
 
-test.describe("rbac role matrix (spec 13 §4)", () => {
-  test("agent é bloqueado em api-tokens e billing (403)", async ({ page }) => {
+test.describe("matrice des rôles RBAC (spec 13 §4)", () => {
+  test("l’agent est bloqué sur api-tokens et billing (403)", async ({ page }) => {
     await login(page, creds.users.agent!.email);
 
     await page.goto("/app/settings/api-tokens");
     await page.waitForURL(/\/403/);
-    await expect(page.getByRole("heading", { name: /403 — Sem permissão/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /403 — Accès refusé/ })).toBeVisible();
 
     await page.goto("/app/settings/billing");
     await page.waitForURL(/\/403/);
-    await expect(page.getByRole("heading", { name: /403 — Sem permissão/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /403 — Accès refusé/ })).toBeVisible();
 
     await expectNoBlockingA11y(page);
   });
 
-  test("admin acessa api-tokens e billing (login com MFA TOTP)", async ({ page }) => {
+  test("l’admin accède à api-tokens et billing (connexion avec MFA TOTP)", async ({ page }) => {
     expect(creds.admin_totp?.secret, "seed deve gravar admin_totp em .e2e-creds.json").toBeTruthy();
     await loginWithTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
 
     await page.goto("/app/settings/api-tokens");
-    await expect(page.getByRole("heading", { name: "API Tokens" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Jetons API" })).toBeVisible();
     await expectNoBlockingA11y(page);
 
     await page.goto("/app/settings/billing");
-    await expect(page.getByRole("heading", { name: "Billing" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Facturation" })).toBeVisible();
     await expectNoBlockingA11y(page);
   });
 
-  test("agent vê inbox e kanban", async ({ page }) => {
+  test("l’agent voit l’inbox et le kanban", async ({ page }) => {
     await login(page, creds.users.agent!.email);
 
     await page.goto("/app/inbox");
-    await expect(page.getByText("Selecione uma conversa", { exact: true })).toBeVisible();
+    await expect(page.getByText("Sélectionnez une conversation", { exact: true })).toBeVisible();
     // Baseline pré-G2-04: as abas Radix de InboxFilters apontam aria-controls
     // para painel não renderizado (aria-valid-attr-value, defeito pré-existente
     // fora do escopo desta feature). Excluímos só o tablist; o resto da tela
@@ -140,11 +140,11 @@ test.describe("rbac role matrix (spec 13 §4)", () => {
     await expectNoBlockingA11y(page, '[role="tablist"]');
 
     await page.goto("/app/kanban");
-    await expect(page.getByRole("heading", { name: "Funis" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Tableaux" })).toBeVisible();
     await expectNoBlockingA11y(page);
   });
 
-  test("viewer não consegue enviar mensagem (403 no POST /api/v1/messages)", async ({ page }) => {
+  test("le viewer ne peut pas envoyer de message (403 sur POST /api/v1/messages)", async ({ page }) => {
     await login(page, creds.users.viewer!.email);
 
     // Enforcement server-side (G2-01): requireRole("agent") roda antes de

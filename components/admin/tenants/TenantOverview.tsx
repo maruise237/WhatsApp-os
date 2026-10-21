@@ -32,12 +32,12 @@ function formatDate(iso: string | null): string {
 // migration acrescente ao banco sem entrar nestes mapas volta a vazar cru para
 // a tela, e é isso que o teste reprova.
 export const NUVEMSHOP_LABEL: Record<string, string> = {
-  connecting: "Conectando",
-  healthy: "Conectado",
-  token_expired: "Token expirado",
-  scope_missing: "Permissão faltando",
-  disconnected: "Desconectado",
-  rate_limited: "Limitado (rate limit)",
+  connecting: "Connexion en cours",
+  healthy: "Connecté",
+  token_expired: "Jeton expiré",
+  scope_missing: "Autorisation manquante",
+  disconnected: "Déconnecté",
+  rate_limited: "Limité (rate limit)",
   error: "En erreur",
 };
 
@@ -112,7 +112,7 @@ export function TenantOverview({ organization, counts, integrations }: TenantOve
         <div>
           <InfoRow label="Offre" value={<Badge variant="neutral" className="capitalize">{plan}</Badge>} />
           <InfoRow label="Raison sociale" value={organization.legal_name} />
-          <InfoRow label="CNPJ" value={organization.cnpj} />
+          <InfoRow label="Identifiant fiscal" value={organization.cnpj} />
           <InfoRow label="Configuration initiale terminée" value={formatDate(organization.onboarded_at)} />
           <InfoRow label="Créé le" value={formatDate(organization.created_at)} />
           {organization.suspended_at && (
@@ -142,13 +142,18 @@ export function TenantOverview({ organization, counts, integrations }: TenantOve
             Intégrations
           </h2>
           <div>
-            <InfoRow
-              label="Nuvemshop"
-              value={
-                <Badge variant={nuvemshopVariant}>{nuvemshopLabel}</Badge>
-              }
-            />
-            {integrations.nuvemshop_connected_at && (
+            {/* Intégration Nuvemshop (brésilienne) : masquée pour le marché
+                africain. La ligne n'apparaît, sous un nom neutre, que pour un
+                clone qui l'a déjà branchée — sinon elle n'existe pas. */}
+            {nuvemshopStatus && (
+              <InfoRow
+                label="Boutique en ligne"
+                value={
+                  <Badge variant={nuvemshopVariant}>{nuvemshopLabel}</Badge>
+                }
+              />
+            )}
+            {nuvemshopStatus && integrations.nuvemshop_connected_at && (
               <InfoRow
                 label="Connecté le"
                 value={formatDate(integrations.nuvemshop_connected_at)}
@@ -165,14 +170,14 @@ export function TenantOverview({ organization, counts, integrations }: TenantOve
           </h2>
           <div>
             <InfoRow
-              label="Demandes RGPD en attente"
+              label="Demandes de protection des données en attente"
               value={
                 <span className="flex items-center gap-1.5">
                   <span className={counts.lgpd_requests_pending > 0 ? "text-amber-600 font-semibold" : ""}>
                     {counts.lgpd_requests_pending}
                   </span>
                   {counts.lgpd_requests_pending > 0 && (
-                    <Warning size={14} weight="fill" className="text-amber-500" aria-label="Pendências LGPD" />
+                    <Warning size={14} weight="fill" className="text-amber-500" aria-label="Demandes de protection des données en attente" />
                   )}
                 </span>
               }

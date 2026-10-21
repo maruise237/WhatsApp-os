@@ -31,7 +31,7 @@ import { loginComoAdmin, lerCreds, type CredsE2E } from "./helpers/login-admin";
 
 let creds: CredsE2E = lerCreds();
 
-test.use({ locale: "pt-BR" });
+test.use({ locale: "fr-FR" });
 
 // Mesmo orçamento dos vizinhos: o login pode disparar uma re-semeadura de
 // credenciais quando outra sessão rotaciona o fator TOTP deste banco.
@@ -53,7 +53,7 @@ test.beforeAll(async ({ browser }: { browser: Browser }) => {
   // a próxima janela TOTP; ambos estouram 30 s com folga, e a falha aparece
   // como "hook timeout", que não diz nada sobre a tela.
   test.setTimeout(180_000);
-  const contexto = await browser.newContext({ locale: "pt-BR" });
+  const contexto = await browser.newContext({ locale: "fr-FR" });
   pagina = await contexto.newPage();
 
   // ⚠️ ORDEM. O login vem PRIMEIRO porque, quando o fator TOTP em disco não
@@ -91,19 +91,19 @@ function agenteDeTeste(): string {
 async function abrirOperacao(): Promise<void> {
   await pagina.goto(`/app/ai/agents/${agenteDeTeste()}`);
   await pagina.getByTestId("papel-operacao").click();
-  await expect(pagina.getByText(/em que neg(ó|o)cios ele pode mexer/i)).toBeVisible({
+  await expect(pagina.getByText(/dans quelles affaires l’agent peut-il intervenir/i)).toBeVisible({
     timeout: 20_000,
   });
 }
 
-test.describe("a marcação de funis do assistente", () => {
-  test("nasce FECHADA e a tela explica o que isso significa", async () => {
+test.describe("la sélection des tableaux de l’assistant", () => {
+  test("elle naît FERMÉE et l’écran explique ce que cela signifie", async () => {
     await abrirOperacao();
 
     // Falha fechada: o agente do seed nunca marcou funil nenhum.
     const semFunil = pagina.getByTestId("agente-sem-funil");
     await expect(semFunil).toBeVisible();
-    await expect(semFunil).toContainText(/não mexe em negócio/i);
+    await expect(semFunil).toContainText(/n’intervient dans aucune affaire/i);
 
     // Controle de que o caso mede o estado vazio, e não uma tela que não
     // carregou: os funis da organização estão listados ao lado do aviso.
@@ -117,7 +117,7 @@ test.describe("a marcação de funis do assistente", () => {
     });
   });
 
-  test("marcar um funil SOBREVIVE ao salvar e recarregar", async () => {
+  test("cocher un tableau SURVIT à l’enregistrement et au rechargement", async () => {
     await abrirOperacao();
 
     const caixas = pagina.getByTestId("agente-funis").locator('input[type="checkbox"]');
@@ -133,7 +133,7 @@ test.describe("a marcação de funis do assistente", () => {
     // O aviso de "nenhum funil" some assim que algo é marcado.
     await expect(pagina.getByTestId("agente-sem-funil")).toHaveCount(0);
 
-    await pagina.getByRole("button", { name: /salvar rascunho/i }).first().click();
+    await pagina.getByRole("button", { name: /enregistrer le brouillon/i }).first().click();
 
     // ⚠️ RECARREGAR é o ponto do teste. O defeito que o gate de colunas existe
     // para pegar aparece exatamente aqui: o campo salva, a tela mostra certo, e
@@ -142,7 +142,7 @@ test.describe("a marcação de funis do assistente", () => {
     // Espera o SUCESSO, não o botão desabilitar: ele desabilita durante o
     // salvamento também, então recarregar nesse sinal correria contra a
     // gravação e o teste falharia como se o campo não persistisse.
-    await expect(pagina.getByText(/rascunho v\d+ salvo/i)).toBeVisible({ timeout: 30_000 });
+    await expect(pagina.getByText(/brouillon v\d+ enregistré/i)).toBeVisible({ timeout: 30_000 });
     await abrirOperacao();
 
     const depois = pagina.getByTestId("agente-funis").locator('input[type="checkbox"]');

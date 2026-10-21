@@ -42,42 +42,42 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
 async function gotoRadar(page: Page): Promise<void> {
   await page.getByRole("link", { name: "Radar" }).click();
   await page.waitForURL(/\/app\/radar/);
-  await expect(page.getByRole("heading", { name: "Radar de risco" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Radar de risque" })).toBeVisible();
 }
 
 function radarItem(page: Page) {
   return page.locator('[data-testid="radar-item"]', { hasText: creds.radar!.at_risk_title });
 }
 
-test("o atendente vê no Radar a demanda aberta que esfriou sem próximo passo", async ({ page }) => {
+test("l’agent voit dans le Radar la demande ouverte qui s’est refroidie sans prochaine étape", async ({ page }) => {
   await login(page, creds.users.manager!.email);
   await gotoRadar(page);
 
   const item = radarItem(page);
   await expect(item).toBeVisible();
   await expect(item).toHaveAttribute("data-risk", "critico");
-  await expect(item.getByText("Crítico")).toBeVisible();
-  await expect(item.getByText(/Sem próximo passo/)).toBeVisible();
+  await expect(item.getByText("Critique")).toBeVisible();
+  await expect(item.getByText(/Aucune prochaine étape/)).toBeVisible();
 });
 
-test("o atendente assume a demanda direto do Radar e vira o responsável", async ({ page }) => {
+test("l’agent prend en charge la demande depuis le Radar et en devient responsable", async ({ page }) => {
   await login(page, creds.users.manager!.email);
   await gotoRadar(page);
 
   const item = radarItem(page);
   await expect(item).toBeVisible();
-  await expect(item.getByTestId("radar-assignee")).toHaveText("Sem dono");
+  await expect(item.getByTestId("radar-assignee")).toHaveText("Sans propriétaire");
 
   await item.getByTestId("radar-claim").click();
 
   // Após assumir, o radar recarrega: a demanda passa a ter atendente e o botão some.
-  await expect(radarItem(page).getByTestId("radar-assignee")).toHaveText("Com atendente");
+  await expect(radarItem(page).getByTestId("radar-assignee")).toHaveText("Avec un agent");
   await expect(radarItem(page).getByTestId("radar-claim")).toHaveCount(0);
 });

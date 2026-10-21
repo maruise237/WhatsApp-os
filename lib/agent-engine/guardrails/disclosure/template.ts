@@ -28,13 +28,13 @@ export async function insertDisclosureTemplateVersion(
   input: { tenantId: string; body: string },
 ): Promise<{ id: string }> {
   const body = input.body.trim();
-  if (body.length === 0) throw new Error('template de disclosure vazio: informe o texto do disclosure');
+  if (body.length === 0) throw new Error('modèle de présentation vide : renseignez le texte de présentation');
   const { rows } = await db.query<{ id: string }>(
     `insert into disclosure_template_versions (organization_id, body) values ($1, $2) returning id`,
     [input.tenantId, body],
   );
   const row = rows[0];
-  if (row === undefined) throw new Error('insert em disclosure_template_versions não devolveu linha');
+  if (row === undefined) throw new Error('l’insertion dans disclosure_template_versions n’a renvoyé aucune ligne');
   return row;
 }
 
@@ -57,7 +57,7 @@ export async function setDisclosureTemplatePointer(
     [input.versionId, input.tenantId],
   );
   if (rowCount === 0) {
-    throw new Error('versão de template de disclosure não encontrada para a org — ponteiro não movido');
+    throw new Error('version du modèle de présentation introuvable pour l’org — pointeur non déplacé');
   }
 }
 

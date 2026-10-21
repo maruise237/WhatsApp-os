@@ -177,11 +177,11 @@ export function textoDaContagem(
   totalDoPacote: number,
   ligadas: number,
 ): string {
-  if (totalDoPacote === 0) return "Nenhuma capacidade disponível ainda para esta jornada.";
+  if (totalDoPacote === 0) return "Aucune capacité n’est encore disponible pour ce parcours.";
   // O particípio concorda junto com o substantivo. Separá-los deixava
   // "1 de 1 capacidade ligadas" — latente hoje (o menor pacote tem 2), visível
   // no dia em que um pacote ficar com uma só, inclusive num fork que remova
   // capacidades.
-  const trecho = totalDoPacote === 1 ? "capacidade ligada" : "capacidades ligadas";
-  return `${ligadas} de ${totalDoPacote} ${trecho}`;
+  const trecho = totalDoPacote === 1 ? "capacité activée" : "capacités activées";
+  return `${ligadas} sur ${totalDoPacote} ${trecho}`;
 }

@@ -10,6 +10,8 @@
  * a cadeia de envio lê por query direta e injeta em `decidePacing` (`crmDailyLimit`).
  */
 
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
+
 /** Degrau de warm-up: a partir de `minAgeDays` de idade do número vale `cap` envios/dia; `cap: null` = formado (sem cap de warm-up — resta só o limite do CRM). */
 export interface WarmupStep {
   minAgeDays: number;
@@ -60,7 +62,7 @@ export const PACING_DEFAULTS: PacingKnobs = {
   windowStartHour: 7, // janela 7h-22h
   windowEndHour: 22,
   allowSunday: true,
-  timezone: 'America/Sao_Paulo',
+  timezone: FUSEAU_PAR_DEFAUT,
   // Número sem linha em channel_knobs é tratado como idade 0 (o degrau mais
   // conservador) até alguém registrar number_activated_at.
   warmupDailyCaps: [

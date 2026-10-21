@@ -29,11 +29,11 @@ export interface LoadedReentryTemplate {
 /** Forma da versão: >= 1 variante, nenhuma em branco (cada variante é copy pt-br pronta para envio). */
 export function validateVariants(variants: string[]): void {
   if (variants.length === 0) {
-    throw new Error('template de re-entrada precisa de ao menos uma variante');
+    throw new Error('le modèle de réentrée a besoin d’au moins une variante');
   }
   for (const v of variants) {
     if (v.trim().length === 0) {
-      throw new Error('variante de template de re-entrada em branco — cada variante é uma copy pt-br pronta para envio');
+      throw new Error('variante de modèle de réentrée vide — chaque variante est un texte en français prêt à être envoyé');
     }
   }
 }
@@ -52,7 +52,7 @@ export async function insertReentryTemplateVersion(
   );
   const row = rows[0];
   if (row === undefined) {
-    throw new Error('insert em reentry_template_versions não devolveu linha');
+    throw new Error('l’insertion dans reentry_template_versions n’a renvoyé aucune ligne');
   }
   return row;
 }
@@ -76,7 +76,7 @@ export async function setReentryTemplatePointer(
     [input.versionId, input.tenantId],
   );
   if (rowCount === 0) {
-    throw new Error('versão de template de re-entrada não encontrada para o tenant — ponteiro não movido');
+    throw new Error('version du modèle de réentrée introuvable pour le tenant — pointeur non déplacé');
   }
 }
 
@@ -107,7 +107,7 @@ export async function loadReentryTemplate(db: pg.Pool, tenantId: string): Promis
  */
 export function pickReentryVariant(leadId: string, variants: string[]): string {
   if (variants.length === 0) {
-    throw new Error('sem variantes para escolher — template de re-entrada vazio');
+    throw new Error('aucune variante à choisir — modèle de réentrée vide');
   }
   const digest = createHash('sha256').update(leadId).digest();
   const index = digest.readUInt32BE(0) % variants.length;

@@ -194,9 +194,9 @@ describe("o que o modelo lê", () => {
     const fora = recusaParaOModelo(podeOperarNoFunil([FUNIL_A], FUNIL_B));
     expect(vazio).not.toBe(fora);
     // Acidente de configuração: aponta para quem resolve.
-    expect(vazio).toMatch(/configuração|cuida do sistema/i);
+    expect(vazio).toMatch(/configuration|gère le système/i);
     // Restrição deliberada: a configuração está certa e funcionou.
-    expect(fora).toMatch(/não é da sua alçada|não alterar/i);
+    expect(fora).toMatch(/pas de votre ressort|pas modifier/i);
   });
 
   it("nenhuma recusa vaza nome de coluna ou de tabela", () => {

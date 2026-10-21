@@ -16,6 +16,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import type { LanguageModel } from "ai";
 
 import { env } from "@/lib/env";
+import { iaDeLaPlateforme, modeleDeLaPlateforme } from "@/lib/ai/plateforme";
 
 /** Endpoint da OpenRouter. Compatível com a API da OpenAI, então o provider
  *  `@ai-sdk/openai` fala com ela sem dependência nova. */
@@ -35,6 +36,7 @@ export const DEFAULT_EMBEDDING_MODEL: ModelId = "openai/text-embedding-3-small";
 
 export function isAiGatewayConfigured(): boolean {
   return (
+    iaDeLaPlateforme(env) !== null ||
     Boolean(env.AI_GATEWAY_API_KEY) ||
     Boolean(env.OPENROUTER_API_KEY) ||
     Boolean(env.ANTHROPIC_API_KEY)
@@ -68,6 +70,10 @@ export function isAiGatewayConfigured(): boolean {
  */
 export function resolveLanguageModel(model: ModelId): LanguageModel | null {
   const id = String(model);
+
+  // IA de la plateforme : elle répond à tous les points, quel que soit l'id demandé.
+  const ia = iaDeLaPlateforme(env);
+  if (ia) return modeleDeLaPlateforme(ia);
 
   if (gatewayConfig()) return id as LanguageModel;
 

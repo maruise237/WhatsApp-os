@@ -113,20 +113,20 @@ export async function quemPodeAssumirAgora(
 export function fraseDeExpectativa(q: QuemPodeAssumir): string {
   if (q.total === 0) {
     return (
-      "ATENÇÃO: esta conta ainda não tem ninguém configurado para receber atendimento. " +
-      "NÃO prometa que alguém entra em contato — diga que o pedido ficou registrado e que " +
-      "a equipe responde assim que possível."
+      "ATTENTION : ce compte n’a encore personne configuré pour recevoir les demandes. " +
+      "NE promettez PAS que quelqu’un va reprendre contact — dites que la demande a été enregistrée et que " +
+      "l’équipe répondra dès que possible."
     );
   }
   if (q.disponiveis === 0) {
     return (
-      "ATENÇÃO: não há ninguém da equipe disponível neste momento. NÃO prometa contato " +
-      "imediato nem dê prazo curto — diga que o pedido ficou registrado e que a equipe " +
-      "retorna assim que possível."
+      "ATTENTION : personne de l’équipe n’est disponible en ce moment. NE promettez PAS de contact " +
+      "immédiat et ne donnez pas de délai court — dites que la demande a été enregistrée et que l’équipe " +
+      "reviendra vers le client dès que possible."
     );
   }
-  const pessoas = q.disponiveis === 1 ? "1 pessoa" : `${q.disponiveis} pessoas`;
-  return `Há ${pessoas} da equipe podendo assumir agora — pode dizer ao cliente que alguém continua o atendimento em seguida.`;
+  const pessoas = q.disponiveis === 1 ? "1 personne" : `${q.disponiveis} personnes`;
+  return `Il y a ${pessoas} de l’équipe pouvant prendre le relais maintenant — vous pouvez dire au client que quelqu’un poursuit l’échange juste après.`;
 }
 
 /**
@@ -149,8 +149,8 @@ export async function expectativaDeAtendimento(
     return {
       quem: null,
       frase:
-        "Não foi possível confirmar quem está disponível agora. NÃO prometa contato imediato " +
-        "nem dê prazo — diga que o pedido ficou registrado.",
+        "Impossible de confirmer qui est disponible maintenant. NE promettez PAS de contact immédiat " +
+        "et ne donnez pas de délai — dites que la demande a été enregistrée.",
     };
   }
 }

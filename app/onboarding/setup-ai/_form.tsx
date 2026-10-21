@@ -11,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { createDefaultAgent, skipAi } from "@/app/actions/onboarding/createDefaultAgent";
 import type { PromptTemplate } from "@/lib/schemas/onboarding";
 import { cn } from "@/lib/utils";
-import { PROVEDOR_POR_ID } from "@/lib/ai/pontos/provedores";
 import { useT } from "@/hooks/i18n/useT";
 
 /**
@@ -22,12 +21,6 @@ import { useT } from "@/hooks/i18n/useT";
  * de adopters roda em clínica, imobiliária e infoproduto. Os identificadores
  * continuam os mesmos porque já existem gravados; só a fala mudou.
  */
-/** "openrouter" no meio de uma frase é identificador vazando para a tela. */
-function provedorLegivel(id: string | null, t: (texto: string) => string): string {
-  if (!id) return t("da inteligência escolhida na instalação");
-  return `de ${t(PROVEDOR_POR_ID.get(id)?.rotulo ?? id)}`;
-}
-
 const JEITOS: { id: PromptTemplate; titulo: string; desc: string }[] = [
   {
     id: "ecommerce_friendly",
@@ -60,10 +53,6 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
   const [regras, setRegras] = useState("");
   const [naoPublicado, setNaoPublicado] = useState<string | null>(null);
   const [causa, setCausa] = useState<"canal" | "modelo" | "chave" | null>(null);
-  const [provedor, setProvedor] = useState<string | null>(null);
-  const [motivoDoModelo, setMotivoDoModelo] = useState<
-    "catalogo_vazio" | "nenhum_com_ferramentas" | null
-  >(null);
   const [regrasNaoSalvas, setRegrasNaoSalvas] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -74,8 +63,6 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         startTransition(async () => {
           setNaoPublicado(null);
           setCausa(null);
-          setProvedor(null);
-          setMotivoDoModelo(null);
           setRegrasNaoSalvas(null);
           const res = await createDefaultAgent(formData);
           if (res && !res.ok) {
@@ -87,14 +74,11 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           // não é esperar o catálogo nem trocar de provedor, é cadastrar a chave.
           if (res?.publish_blocked_by === "chave") {
             setCausa("chave");
-            setProvedor(res.provider ?? null);
             toast.warning(t("Atendente criado, mas ainda não está no ar."));
             return;
           }
           if (res?.publish_blocked_by === "modelo") {
             setCausa("modelo");
-            setProvedor(res.provider ?? null);
-            setMotivoDoModelo(res.motivo_do_modelo ?? null);
             toast.warning(t("Atendente criado, mas ainda não está no ar."));
             return;
           }
@@ -234,12 +218,11 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         >
           <p className="text-sm font-medium">
             Votre assistant a été créé, mais il est resté en <strong>{t("rascunho")}</strong> : il
-            ne dispose pas encore des éléments nécessaires pour réfléchir.
+            n’est pas encore relié à l’intelligence de la plateforme.
           </p>
           <p className="text-sm">
-            Je n’ai trouvé aucune clé {provedorLegivel(provedor, t)}, ni ici ni dans la
-            configuration de l’installation. Collez la clé dans le champ ci-dessus (« son cerveau »)
-            et recréez l’assistant, ou ajoutez-la via <strong>IA › Identifiants</strong>.
+            L’intelligence de l’assistant n’est pas encore activée sur cette installation.
+            Continuez la configuration : il se mettra en ligne dès qu’elle le sera.
           </p>
           {/*
             ⚠️ SEM ESTA SAÍDA O PASSO É UM BECO. O aviso irmão (o de modelo) já
@@ -279,20 +262,10 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
             completo é mandar esperar para sempre. Foi o que a tela fazia, e só
             apareceu percorrendo o wizard num ambiente com 400 modelos baixados.
           */}
-          {motivoDoModelo === "nenhum_com_ferramentas" ? (
-            <p className="text-sm">
-              {t("Os modelos")} {provedorLegivel(provedor, t)} connus de cette installation ne
-              savent pas utiliser les outils : l’agent pourrait converser correctement, mais ne
-              créerait jamais de client ni ne déplacerait de lead dans le pipeline. Choisissez un
-              autre fournisseur IA via <strong>IA › Fournisseurs</strong>.
-            </p>
-          ) : (
-            <p className="text-sm">
-              Cette installation ne possède pas encore la liste des modèles{" "}
-              {provedorLegivel(provedor, t)}. Elle est téléchargée automatiquement une fois par jour
-              ; ensuite, publiez l’agent via <strong>IA › Agents</strong>.
-            </p>
-          )}
+          <p className="text-sm">
+            L’intelligence de l’assistant n’est pas encore prête sur cette installation. Continuez
+            la configuration, puis publiez-le plus tard via <strong>IA › Agents</strong>.
+          </p>
           <div className="flex sm:justify-end">
             <Button
               type="button"

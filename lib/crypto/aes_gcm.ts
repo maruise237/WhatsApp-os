@@ -24,18 +24,18 @@ function getKey(): Buffer {
   const raw = env.AI_CRED_AES_KEY;
   if (!raw) {
     throw new Error(
-      "AI_CRED_AES_KEY não configurada. Defina em .env.local (32 bytes base64).",
+      "AI_CRED_AES_KEY non configurée. Définissez-la dans .env.local (32 octets base64).",
     );
   }
   let buf: Buffer;
   try {
     buf = Buffer.from(raw, "base64");
   } catch {
-    throw new Error("AI_CRED_AES_KEY inválida: base64 malformado.");
+    throw new Error("AI_CRED_AES_KEY invalide : base64 mal formé.");
   }
   if (buf.length !== KEY_LENGTH_BYTES) {
     throw new Error(
-      `AI_CRED_AES_KEY deve ter exatamente 32 bytes (lido: ${buf.length}). Gere com: openssl rand -base64 32`,
+      `AI_CRED_AES_KEY doit faire exactement 32 octets (lu : ${buf.length}). Générez-la avec : openssl rand -base64 32`,
     );
   }
   cachedKey = buf;
@@ -52,7 +52,7 @@ export interface EncryptedSecret {
 
 export function encryptKey(plaintext: string): EncryptedSecret {
   if (!plaintext || typeof plaintext !== "string") {
-    throw new Error("plaintext inválido pra encryptKey()");
+    throw new Error("plaintext invalide pour encryptKey()");
   }
   const key = getKey();
   const iv = randomBytes(IV_LENGTH_BYTES);
@@ -60,7 +60,7 @@ export function encryptKey(plaintext: string): EncryptedSecret {
   const ciphertext = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
   const tag = cipher.getAuthTag();
   if (tag.length !== TAG_LENGTH_BYTES) {
-    throw new Error(`tag length inesperada: ${tag.length}`);
+    throw new Error(`longueur de tag inattendue : ${tag.length}`);
   }
   const last4 = plaintext.slice(-4);
   return { ciphertext, iv, tag, last4 };
@@ -97,5 +97,5 @@ export function byteaToBuffer(value: unknown): Buffer {
     const hex = value.startsWith("\\x") ? value.slice(2) : value;
     return Buffer.from(hex, "hex");
   }
-  throw new Error("byteaToBuffer: formato inesperado");
+  throw new Error("byteaToBuffer : format inattendu");
 }

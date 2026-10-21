@@ -55,14 +55,14 @@ const TYPE_META: Record<
     Icon: MessageSquare,
     description: "Conversations anonymisées pour l’apprentissage.",
     comoSePreenche:
-      "Entra sozinha: conversas resolvidas que alguém marcar como aproveitáveis pela IA são anonimizadas e indexadas em lote. Não há conteúdo para colar aqui.",
+      "Automatique : les conversations résolues marquées comme exploitables par l’IA sont anonymisées et indexées par lots. Aucun contenu à coller ici.",
   },
   catalog: {
     label: "Catalogue",
     Icon: Package,
     description: "Produits synchronisés depuis la boutique en ligne.",
     comoSePreenche:
-      "Os produtos vêm da sincronização com o e-commerce, não de conteúdo digitado aqui.",
+      "Les produits proviennent de la synchronisation avec le commerce en ligne, et non d’un contenu saisi ici.",
   },
 };
 

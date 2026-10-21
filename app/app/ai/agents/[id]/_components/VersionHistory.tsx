@@ -138,9 +138,6 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
               <span className="text-xs text-muted-foreground">
                 {new Date(v.created_at).toLocaleString(idioma)}
               </span>
-              <span className="font-mono text-xs text-muted-foreground">
-                {v.provider}/{v.model}
-              </span>
               {v.published_at ? (
                 <span className="text-xs text-muted-foreground">
                   {t("publicada em")} {new Date(v.published_at).toLocaleString(idioma)}

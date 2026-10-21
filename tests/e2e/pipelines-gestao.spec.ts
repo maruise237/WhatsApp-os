@@ -48,14 +48,14 @@ function loadCreds(): Creds {
 }
 
 const creds = loadCreds();
-const NOME = `Clinica E2E ${Date.now()}`;
-const RENOMEADO = `${NOME} renomeado`;
+const NOME = `Clinique E2E ${Date.now()}`;
+const RENOMEADO = `${NOME} renommé`;
 
 async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app(\/|$)/);
 }
 
@@ -78,23 +78,23 @@ async function idDoFunil(page: Page, nome: string): Promise<string> {
   return testid.replace(/^funil-/, "");
 }
 
-test.describe("gestão de funis", () => {
+test.describe("gestion des tableaux", () => {
   test.beforeEach(async ({ page }) => {
     await login(page, creds.users.manager!.email);
     await page.goto("/app/kanban");
-    await expect(page.getByRole("heading", { name: "Funis" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Tableaux" })).toBeVisible();
   });
 
-  test("a lista mostra só a organização ativa, mesmo com funil homônimo em outra", async ({
+  test("la liste ne montre que l’organisation active, même avec un tableau homonyme dans une autre", async ({
     page,
   }) => {
     // O manager é membro de DUAS organizações, e as duas têm um funil "Pedidos".
     // Sem o filtro por organização, apareceriam as duas linhas — indistinguíveis,
     // cada uma levando a um quadro diferente.
-    await expect(page.getByText("Pedidos", { exact: true })).toHaveCount(1);
+    await expect(page.getByText("Commandes", { exact: true })).toHaveCount(1);
   });
 
-  test("cria funil com colunas, edita, e as recusas aparecem explicadas", async ({ page }) => {
+  test("crée un tableau avec colonnes, le modifie, et les refus apparaissent expliqués", async ({ page }) => {
     // ---- criar ----
     await page.getByTestId("novo-funil").click();
     await page.getByTestId("nome-do-novo-funil").fill(NOME);
@@ -105,7 +105,7 @@ test.describe("gestão de funis", () => {
     // ---- o funil nasce com as quatro colunas (senão o quadro é morto) ----
     await linhaDoFunil(page, NOME).getByRole("link").click();
     await page.waitForURL(/\/app\/pipelines\//);
-    for (const coluna of ["Novo", "Em andamento", "Ganho", "Perdido"]) {
+    for (const coluna of ["Nouveau", "En cours", "Gagné", "Perdu"]) {
       await expect(page.getByText(coluna, { exact: true }).first()).toBeVisible();
     }
     await page.screenshot({ path: path.join(EVIDENCIA, "funis-02-quadro-novo.png"), fullPage: true });
@@ -125,22 +125,22 @@ test.describe("gestão de funis", () => {
 
     // ---- tornar padrão ----
     await page.getByTestId(`padrao-${id}`).click();
-    await expect(linhaDoFunil(page, RENOMEADO).getByText("Padrão")).toBeVisible();
+    await expect(linhaDoFunil(page, RENOMEADO).getByText("Par défaut")).toBeVisible();
     await page.screenshot({ path: path.join(EVIDENCIA, "funis-03-padrao.png"), fullPage: true });
 
     // ---- recusa: arquivar o funil padrão ----
     await page.getByTestId(`arquivar-${id}`).click();
     await page.getByTestId(`arquivar-confirmar-${id}`).click();
-    await expect(page.getByTestId(`arquivar-erro-${id}`)).toContainText(/padrão/i);
+    await expect(page.getByTestId(`arquivar-erro-${id}`)).toContainText(/par défaut/i);
     await page.screenshot({
       path: path.join(EVIDENCIA, "funis-04-recusa-padrao.png"),
       fullPage: true,
     });
 
     // ---- devolve o padrão e arquiva de verdade ----
-    const idPedidos = await idDoFunil(page, "Pedidos");
+    const idPedidos = await idDoFunil(page, "Commandes");
     await page.getByTestId(`padrao-${idPedidos}`).click();
-    await expect(linhaDoFunil(page, "Pedidos").getByText("Padrão")).toBeVisible();
+    await expect(linhaDoFunil(page, "Commandes").getByText("Par défaut")).toBeVisible();
 
     await page.getByTestId(`arquivar-${id}`).click();
     await page.getByTestId(`arquivar-confirmar-${id}`).click();
@@ -149,7 +149,7 @@ test.describe("gestão de funis", () => {
     // ---- recusa: arquivar o último funil ----
     await page.getByTestId(`arquivar-${idPedidos}`).click();
     await page.getByTestId(`arquivar-confirmar-${idPedidos}`).click();
-    await expect(page.getByTestId(`arquivar-erro-${idPedidos}`)).toContainText(/único/i);
+    await expect(page.getByTestId(`arquivar-erro-${idPedidos}`)).toContainText(/seul tableau/i);
     await page.screenshot({
       path: path.join(EVIDENCIA, "funis-05-recusa-ultimo.png"),
       fullPage: true,
@@ -163,13 +163,13 @@ test.describe("gestão de funis", () => {
  * `beforeEach` de lá já teria logado como manager — a sessão do manager mascararia
  * exatamente o que se quer medir.
  */
-test("quem não pode gerenciar vê a lista sem os controles de escrita", async ({ page }) => {
+test("qui ne peut pas gérer voit la liste sans les contrôles d’écriture", async ({ page }) => {
   // Botão que o servidor recusaria é promessa que não se cumpre: `requireRole`
   // cobra manager nas rotas, então agent não vê "Novo funil" nem "Arquivar".
   await login(page, creds.users.agent!.email);
   await page.goto("/app/kanban");
-  await expect(page.getByRole("heading", { name: "Funis" })).toBeVisible();
-  await expect(page.getByText("Pedidos", { exact: true })).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Tableaux" })).toBeVisible();
+  await expect(page.getByText("Commandes", { exact: true })).toHaveCount(1);
   await expect(page.getByTestId("novo-funil")).toHaveCount(0);
   await expect(page.locator('[data-testid^="arquivar-"]')).toHaveCount(0);
 });

@@ -20,6 +20,8 @@ const PROVIDER_DEFAULT: Record<string, ModelCapabilities> = {
   anthropic: NATIVE,
   openai: NATIVE,
   google: NATIVE,
+  // IA de la plateforme : images oui (JPEG, PNG, GIF, WebP), PDF non documenté.
+  deepseek: { image: true, pdf: false },
 };
 
 /**
@@ -51,6 +53,8 @@ export function modelCapabilities(provider: string, modelId: string): ModelCapab
     const fabricante = id.includes("/") ? id.slice(0, id.indexOf("/")) : "";
     return { ...(PROVIDER_DEFAULT[fabricante] ?? NONE) };
   }
+  // Chez DeepSeek, seul le modèle Flash lit les images ; le Pro est texte seul.
+  if (p === "deepseek" && id.includes("pro")) return { ...NONE };
   const base = PROVIDER_DEFAULT[p] ?? NONE;
   return { ...base };
 }

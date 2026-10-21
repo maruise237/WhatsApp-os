@@ -41,8 +41,6 @@ export function PublishConfirmDialog({
   const t = useT();
   const toolsDiff = diffArr(published?.tool_ids ?? [], draft.tool_ids);
   const promptDeltaChars = draft.system_prompt.length - (published?.system_prompt.length ?? 0);
-  const modelChanged = !published || draft.model !== published.model;
-  const providerChanged = !published || draft.provider !== published.provider;
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -59,18 +57,6 @@ export function PublishConfirmDialog({
         </AlertDialogHeader>
 
         <div className="border-border/60 space-y-2 rounded-md border p-3 text-xs">
-          {providerChanged ? (
-            <p>
-              <strong>{t("Provider:")}</strong>{" "}
-              {published ? `${published.provider} → ${draft.provider}` : draft.provider}
-            </p>
-          ) : null}
-          {modelChanged ? (
-            <p>
-              <strong>{t("Modelo:")}</strong>{" "}
-              {published ? `${published.model} → ${draft.model}` : draft.model}
-            </p>
-          ) : null}
           {toolsDiff.added.length > 0 ? (
             <p>
               <strong>{t("Tools adicionadas:")}</strong> {toolsDiff.added.join(", ")}

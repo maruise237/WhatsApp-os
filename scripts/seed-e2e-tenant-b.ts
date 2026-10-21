@@ -88,7 +88,7 @@ async function ensureTotp(
     auth: { autoRefreshToken: false, persistSession: false },
   });
   const { error: signInErr } = await anon.auth.signInWithPassword({ email: EMAIL, password: PASSWORD });
-  if (signInErr) throw new Error(`signIn para enroll: ${signInErr.message}`);
+  if (signInErr) throw new Error(`signIn pour l'enrôlement : ${signInErr.message}`);
   const { data: enrolled, error: enrollErr } = await anon.auth.mfa.enroll({
     factorType: "totp",
     friendlyName: "e2e-tenant-b",
@@ -114,7 +114,7 @@ async function ensureOrg(): Promise<string> {
     .select("id")
     .eq("slug", ORG_SLUG)
     .maybeSingle();
-  if (error) throw new Error(`buscar org: ${error.message}`);
+  if (error) throw new Error(`recherche org : ${error.message}`);
   if (existing) return (existing as { id: string }).id;
 
   const { data, error: insErr } = await admin
@@ -129,8 +129,8 @@ async function ensureOrg(): Promise<string> {
     } as never)
     .select("id")
     .single();
-  if (insErr || !data) throw new Error(`criar org: ${insErr?.message}`);
-  console.info(`[seed-b] org criada: ${(data as { id: string }).id}`);
+  if (insErr || !data) throw new Error(`création org : ${insErr?.message}`);
+  console.info(`[seed-b] org créée : ${(data as { id: string }).id}`);
   return (data as { id: string }).id;
 }
 
@@ -139,7 +139,7 @@ async function ensureUser(): Promise<string> {
   const existing = list.users.find((u) => u.email === EMAIL);
   if (existing) {
     const { error } = await admin.auth.admin.updateUserById(existing.id, { password: PASSWORD });
-    if (error) throw new Error(`resetar senha ${EMAIL}: ${error.message}`);
+    if (error) throw new Error(`réinitialiser le mot de passe ${EMAIL} : ${error.message}`);
     return existing.id;
   }
   const { data, error } = await admin.auth.admin.createUser({
@@ -148,8 +148,8 @@ async function ensureUser(): Promise<string> {
     email_confirm: true,
     user_metadata: { full_name: "E2E B Admin" },
   });
-  if (error || !data?.user) throw new Error(`criar user ${EMAIL}: ${error?.message}`);
-  console.info(`[seed-b] user criado: ${data.user.id}`);
+  if (error || !data?.user) throw new Error(`création utilisateur ${EMAIL} : ${error?.message}`);
+  console.info(`[seed-b] utilisateur créé : ${data.user.id}`);
   return data.user.id;
 }
 
@@ -160,14 +160,14 @@ async function ensureMembership(userId: string, orgId: string): Promise<void> {
     .eq("user_id", userId)
     .eq("organization_id", orgId)
     .maybeSingle();
-  if (error) throw new Error(`buscar membership: ${error.message}`);
+  if (error) throw new Error(`recherche membership : ${error.message}`);
   if (existing) {
     const { error: updErr } = await admin
       .from("user_organizations")
       .update({ role: "admin", revoked_at: null } as never)
       .eq("user_id", userId)
       .eq("organization_id", orgId);
-    if (updErr) throw new Error(`atualizar membership: ${updErr.message}`);
+    if (updErr) throw new Error(`mise à jour membership : ${updErr.message}`);
     return;
   }
   const { error: insErr } = await admin.from("user_organizations").insert({
@@ -176,7 +176,7 @@ async function ensureMembership(userId: string, orgId: string): Promise<void> {
     role: "admin",
     accepted_at: new Date().toISOString(),
   } as never);
-  if (insErr) throw new Error(`inserir membership: ${insErr.message}`);
+  if (insErr) throw new Error(`insertion membership : ${insErr.message}`);
 }
 
 async function ensureBoard(orgId: string): Promise<{ pipelineId: string; leadId: string }> {
@@ -189,8 +189,8 @@ async function ensureBoard(orgId: string): Promise<{ pipelineId: string; leadId:
     .eq("organization_id", orgId)
     .eq("is_default", true)
     .maybeSingle();
-  if (pErr) throw new Error(`buscar pipeline default: ${pErr.message}`);
-  if (!pipe) throw new Error(`org ${orgId} não tem pipeline default provisionado`);
+  if (pErr) throw new Error(`recherche entonnoir par défaut : ${pErr.message}`);
+  if (!pipe) throw new Error(`l'org ${orgId} n'a pas d'entonnoir par défaut provisionné`);
   const pipelineId = (pipe as { id: string }).id;
 
   const { data: stage, error: sErr } = await admin
@@ -201,8 +201,8 @@ async function ensureBoard(orgId: string): Promise<{ pipelineId: string; leadId:
     .order("position")
     .limit(1)
     .maybeSingle();
-  if (sErr) throw new Error(`buscar stage: ${sErr.message}`);
-  if (!stage) throw new Error(`pipeline ${pipelineId} sem estágio utilizável`);
+  if (sErr) throw new Error(`recherche étape : ${sErr.message}`);
+  if (!stage) throw new Error(`entonnoir ${pipelineId} sans étape utilisable`);
   const stageId = (stage as { id: string }).id;
 
   const { data: leadExist, error: lErr } = await admin
@@ -211,7 +211,7 @@ async function ensureBoard(orgId: string): Promise<{ pipelineId: string; leadId:
     .eq("organization_id", orgId)
     .eq("title", LEAD_TITLE)
     .maybeSingle();
-  if (lErr) throw new Error(`buscar lead: ${lErr.message}`);
+  if (lErr) throw new Error(`recherche lead : ${lErr.message}`);
   if (leadExist) return { pipelineId, leadId: (leadExist as { id: string }).id };
 
   const { data, error } = await admin
@@ -230,7 +230,7 @@ async function ensureBoard(orgId: string): Promise<{ pipelineId: string; leadId:
     } as never)
     .select("id")
     .single();
-  if (error || !data) throw new Error(`criar lead: ${error?.message}`);
+  if (error || !data) throw new Error(`création lead : ${error?.message}`);
   return { pipelineId, leadId: (data as { id: string }).id };
 }
 
@@ -256,7 +256,7 @@ async function ensurePegadaLgpd(
     .eq("organization_id", orgId)
     .eq("phone_number", TEL_B)
     .maybeSingle();
-  if (cErr) throw new Error(`buscar contato B: ${cErr.message}`);
+  if (cErr) throw new Error(`recherche du contact B : ${cErr.message}`);
   const contatoLinha = {
     organization_id: orgId,
     name: NOME_B,
@@ -271,10 +271,10 @@ async function ensurePegadaLgpd(
   if (cExist) {
     contactId = (cExist as { id: string }).id;
     const { error } = await admin.from("contacts").update(contatoLinha as never).eq("id", contactId);
-    if (error) throw new Error(`atualizar contato B: ${error.message}`);
+    if (error) throw new Error(`mise à jour du contact B : ${error.message}`);
   } else {
     const { data, error } = await admin.from("contacts").insert(contatoLinha as never).select("id").single();
-    if (error || !data) throw new Error(`criar contato B: ${error?.message}`);
+    if (error || !data) throw new Error(`création du contact B : ${error?.message}`);
     contactId = (data as { id: string }).id;
   }
 
@@ -284,7 +284,7 @@ async function ensurePegadaLgpd(
     .eq("organization_id", orgId)
     .eq("title", "Ensaio LGPD — tenant B")
     .maybeSingle();
-  if (lErr) throw new Error(`buscar lead B: ${lErr.message}`);
+  if (lErr) throw new Error(`recherche lead B : ${lErr.message}`);
   let leadId: string;
   const leadLinha = {
     organization_id: orgId,
@@ -302,10 +302,10 @@ async function ensurePegadaLgpd(
   if (lExist) {
     leadId = (lExist as { id: string }).id;
     const { error } = await admin.from("crm_leads").update(leadLinha as never).eq("id", leadId);
-    if (error) throw new Error(`atualizar lead B: ${error.message}`);
+    if (error) throw new Error(`mise à jour lead B : ${error.message}`);
   } else {
     const { data, error } = await admin.from("crm_leads").insert(leadLinha as never).select("id").single();
-    if (error || !data) throw new Error(`criar lead B: ${error?.message}`);
+    if (error || !data) throw new Error(`création lead B : ${error?.message}`);
     leadId = (data as { id: string }).id;
   }
 
@@ -327,7 +327,7 @@ async function ensurePegadaLgpd(
     .eq("lead_id", leadId)
     .eq("type", "ai_turn")
     .maybeSingle();
-  if (aErr) throw new Error(`buscar atividade B: ${aErr.message}`);
+  if (aErr) throw new Error(`recherche activité B : ${aErr.message}`);
   let activityId: string;
   if (aExist) {
     activityId = (aExist as { id: string }).id;
@@ -335,14 +335,14 @@ async function ensurePegadaLgpd(
       .from("crm_lead_activities")
       .update(atividadeLinha as never)
       .eq("id", activityId);
-    if (error) throw new Error(`atualizar atividade B: ${error.message}`);
+    if (error) throw new Error(`mise à jour activité B : ${error.message}`);
   } else {
     const { data, error } = await admin
       .from("crm_lead_activities")
       .insert(atividadeLinha as never)
       .select("id")
       .single();
-    if (error || !data) throw new Error(`criar atividade B: ${error?.message}`);
+    if (error || !data) throw new Error(`création activité B : ${error?.message}`);
     activityId = (data as { id: string }).id;
   }
 
@@ -363,15 +363,15 @@ async function ensurePegadaLgpd(
     .eq("organization_id", orgId)
     .eq("request_type", "store_redact")
     .maybeSingle();
-  if (rErr) throw new Error(`buscar request B: ${rErr.message}`);
+  if (rErr) throw new Error(`recherche demande B : ${rErr.message}`);
   let requestId: string;
   if (rExist) {
     requestId = (rExist as { id: string }).id;
     const { error } = await admin.from("lgpd_requests").update(reqLinha as never).eq("id", requestId);
-    if (error) throw new Error(`atualizar request B: ${error.message}`);
+    if (error) throw new Error(`mise à jour demande B : ${error.message}`);
   } else {
     const { data, error } = await admin.from("lgpd_requests").insert(reqLinha as never).select("id").single();
-    if (error || !data) throw new Error(`criar request B: ${error?.message}`);
+    if (error || !data) throw new Error(`création demande B : ${error?.message}`);
     requestId = (data as { id: string }).id;
   }
 
@@ -410,11 +410,11 @@ async function main(): Promise<void> {
     lgpd: pegada,
   };
   fs.writeFileSync(CREDS_PATH, JSON.stringify(creds, null, 2));
-  console.info(`\n✅ Tenant B pronto: org=${orgId} pipeline=${pipelineId}`);
+  console.info(`\n✅ Tenant B prêt : org=${orgId} pipeline=${pipelineId}`);
   console.info(`   login: ${EMAIL} / ${PASSWORD}`);
 }
 
 main().catch((err) => {
-  console.error("❌ Seed do tenant B falhou:", err);
+  console.error("❌ Échec du seed du tenant B :", err);
   process.exit(1);
 });

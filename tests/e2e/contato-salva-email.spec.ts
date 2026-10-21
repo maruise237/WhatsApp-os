@@ -52,11 +52,11 @@ async function login(page: Page): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(creds.users.manager!.email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app/, { timeout: 30_000 });
 }
 
-test("o e-mail digitado na tela do contato fica salvo", async ({ page }) => {
+test("l’e-mail saisi sur l’écran du contact reste enregistré", async ({ page }) => {
   await login(page);
 
   // Cria o contato pela API autenticada (a criação não é o que está sob teste;
@@ -79,11 +79,11 @@ test("o e-mail digitado na tela do contato fica salvo", async ({ page }) => {
   // tivesse funcionado.
   await expect(page.getByText(EMAIL)).toHaveCount(0);
 
-  await page.getByRole("button", { name: /editar/i }).first().click();
+  await page.getByRole("button", { name: /modifier/i }).first().click();
   const campo = page.locator("#ec-email");
   await campo.waitFor({ state: "visible", timeout: 10_000 });
   await campo.fill(EMAIL);
-  await page.getByRole("button", { name: /^salvar$/i }).click();
+  await page.getByRole("button", { name: /^enregistrer$/i }).click();
 
   // O defeito aparecia AQUI: o PATCH voltava 500 e a tela não mudava.
   await expect(

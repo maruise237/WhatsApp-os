@@ -88,29 +88,29 @@ function teachInvalidTransition(current: LeadStage, to: LeadStage): LeadStateUpd
   const valid = LEAD_STAGE_TRANSITIONS[current];
   const options =
     valid.length > 0
-      ? `A partir de "${current}" os avanços válidos são: ${valid.map((s) => `"${s}"`).join(', ')}.`
-      : `"${current}" é estágio terminal — não há transições possíveis.`;
+      ? `À partir de "${current}" les avancées valides sont : ${valid.map((s) => `"${s}"`).join(', ')}.`
+      : `"${current}" est une étape terminale — aucune transition possible.`;
   return {
     ok: false,
     error: {
       code: 'invalid_transition',
       message:
-        `transição de estágio inválida: o lead está em "${current}" e "${to}" não é um avanço permitido ` +
-        `(regressão ou salto no funil é proibido). ${options} Marque apenas o próximo avanço real.`,
+        `transition d’étape invalide : le lead est en "${current}" et "${to}" n’est pas une avancée autorisée ` +
+        `(tout retour en arrière ou saut dans le tunnel est interdit). ${options} Marquez uniquement la prochaine avancée réelle.`,
     },
   };
 }
 
 const PAYLOAD_TEACHING =
-  'Campos aceitos: stage, qualification {budget, authority, need, timeline}, next_action, reason — ' +
-  'nada além. Lead e organização vêm do runtime, nunca do payload da tool.';
+  'Champs acceptés : stage, qualification {budget, authority, need, timeline}, next_action, reason — ' +
+  'rien d’autre. Le lead et l’organisation viennent du runtime, jamais du payload de l’outil.';
 
 function teachInvalidPayload(issues: string): LeadStateUpdateResult {
   return {
     ok: false,
     error: {
       code: 'invalid_payload',
-      message: `payload inválido em update_lead_state (${issues}). ${PAYLOAD_TEACHING}`,
+      message: `payload invalide dans update_lead_state (${issues}). ${PAYLOAD_TEACHING}`,
     },
   };
 }
@@ -120,8 +120,8 @@ export function zodIssuesSummary(error: z.ZodError): string {
   return error.issues
     .map((i) =>
       i.code === 'unrecognized_keys'
-        ? `campos não reconhecidos: ${i.keys.join(', ')}`
-        : `${i.path.join('.') || '(raiz)'}: ${i.code}`,
+        ? `champs non reconnus : ${i.keys.join(', ')}`
+        : `${i.path.join('.') || '(racine)'}: ${i.code}`,
     )
     .join('; ');
 }
@@ -176,7 +176,7 @@ export async function applyLeadStateUpdate(
 ): Promise<LeadStateUpdateResult> {
   const forbidden = findForbiddenKey(rawInput);
   if (forbidden !== null) {
-    return teachInvalidPayload(`campos não reconhecidos: ${forbidden}`);
+    return teachInvalidPayload(`champs non reconnus : ${forbidden}`);
   }
   const parsed = updateLeadStateInputSchema.safeParse(rawInput);
   if (!parsed.success) {
@@ -249,9 +249,9 @@ export async function applyLeadStateUpdate(
   }
 
   const message = transition
-    ? `estado atualizado: o lead avançou de "${transition.from}" para "${transition.to}".`
+    ? `état mis à jour : le lead est passé de "${transition.from}" à "${transition.to}".`
     : noop
-      ? `o lead já está em "${currentStage}" — nada a alterar no estágio.`
-      : `estado atualizado (estágio permanece "${currentStage}").`;
+      ? `le lead est déjà en "${currentStage}" — rien à modifier dans l’étape.`
+      : `état mis à jour (l’étape reste "${currentStage}").`;
   return { ok: true, state, transition, message };
 }

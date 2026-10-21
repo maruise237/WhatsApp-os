@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { rotuloDoContato } from "@/lib/contacts/rotulo-do-contato";
+import { DEVISE_PAR_DEFAUT } from "@/lib/marche/defauts";
+import { centsVersSaisie, formatMontant, parseMontantEnCents } from "@/lib/money";
 import { transitionTargetsSalesOrder, type SalesOrderStatus } from "@/lib/sales/order-state";
 
 interface Product {
@@ -113,16 +115,16 @@ function unwrap<T>(body: unknown): T {
 }
 
 function formatMoney(cents: number, currency: string): string {
-  try {
-    return new Intl.NumberFormat("fr-FR", { style: "currency", currency }).format(cents / 100);
-  } catch {
-    return `${(cents / 100).toLocaleString("fr-FR")} ${currency}`;
-  }
+  return formatMontant(cents, currency);
 }
 
-function parseMoney(input: string): number | null {
-  const value = Number(input.replace(/\s/g, "").replace(",", "."));
-  return Number.isFinite(value) && value >= 0 ? Math.round(value * 100) : null;
+/**
+ * « 15 000 », « 15.000 » ou « 15000 » FCFA → 1 500 000 centimes. L'ancienne
+ * lecture (`Number("15.000")`) donnait 15 FCFA : le point de milliers était pris
+ * pour une virgule décimale. La règle commune vit dans `lib/money`.
+ */
+function parseMoney(input: string, currency: string): number | null {
+  return parseMontantEnCents(input, currency);
 }
 
 function contactLabel(order: SalesOrder): string {
@@ -578,13 +580,13 @@ interface ProductDraft {
   currency: string;
 }
 
-const EMPTY_DRAFT: ProductDraft = { title: "", description: "", price: "", stock: "", currency: "XAF" };
+const EMPTY_DRAFT: ProductDraft = { title: "", description: "", price: "", stock: "", currency: DEVISE_PAR_DEFAUT };
 
 function draftOf(product: Product): ProductDraft {
   return {
     title: product.title,
     description: product.description ?? "",
-    price: String(product.price_cents / 100),
+    price: centsVersSaisie(product.price_cents, product.currency),
     stock: String(product.stock),
     currency: product.currency,
   };
@@ -613,7 +615,7 @@ function CatalogView({
 
   async function submit(event: React.FormEvent<HTMLFormElement>, id: string | null) {
     event.preventDefault();
-    const priceCents = parseMoney(draft.price);
+    const priceCents = parseMoney(draft.price, draft.currency);
     const stock = Number(draft.stock);
     if (priceCents === null) return setFormError("Prix invalide.");
     if (!Number.isInteger(stock) || stock < 0) return setFormError("Le stock doit être un nombre entier positif.");

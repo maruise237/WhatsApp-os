@@ -17,19 +17,8 @@ import { updateProfile } from "@/app/actions/settings/updateProfile";
 import { profileSchema, type Locale } from "@/lib/schemas/settings";
 import { normalizarIdioma } from "@/lib/i18n/idiomas";
 import { useT } from "@/hooks/i18n/useT";
-
-const TIMEZONES = [
-  "Africa/Douala",
-  "Africa/Abidjan",
-  "Africa/Lagos",
-  "Europe/Paris",
-  "America/Sao_Paulo",
-  "America/Manaus",
-  "America/Belem",
-  "America/Recife",
-  "America/Fortaleza",
-  "UTC",
-];
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
+import { fusosComAtual } from "@/lib/tempo/fusos";
 
 interface Props {
   email: string;
@@ -42,7 +31,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
   const t = useT();
   const [fullName, setFullName] = useState(initialFullName ?? "");
   const [locale, setLocale] = useState<Locale>(normalizarIdioma(initialLocale));
-  const [timezone, setTimezone] = useState("Africa/Douala");
+  const [timezone, setTimezone] = useState(FUSEAU_PAR_DEFAUT);
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl ?? "");
   const [isPending, startTransition] = useTransition();
 
@@ -102,9 +91,9 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {TIMEZONES.map((tz) => (
-                  <SelectItem key={tz} value={tz}>
-                    {tz}
+                {fusosComAtual(timezone).map((f) => (
+                  <SelectItem key={f.codigo} value={f.codigo}>
+                    {f.rotulo}
                   </SelectItem>
                 ))}
               </SelectContent>

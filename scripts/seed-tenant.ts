@@ -25,7 +25,7 @@
 
 async function main() {
   console.error(
-    "[seed-tenant] Placeholder — implementação virá com Spec 01 (Plataforma Base).",
+    "[seed-tenant] Placeholder — l'implémentation viendra avec la Spec 01 (Plateforme de base).",
   );
   process.exit(1);
 }

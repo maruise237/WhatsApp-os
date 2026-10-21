@@ -185,7 +185,7 @@ export async function listarConexoesCaidas(
 
   return (data ?? []).map((s) => ({
     id: s.id as string,
-    apelido: (s.display_name as string | null) ?? (s.phone_number as string | null) ?? "sem nome",
+    apelido: (s.display_name as string | null) ?? (s.phone_number as string | null) ?? "sans nom",
     status: (s.status as string | null) ?? "",
   }));
 }

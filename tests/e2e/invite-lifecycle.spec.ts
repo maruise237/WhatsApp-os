@@ -91,7 +91,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(base.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -100,12 +100,12 @@ async function loginAdminTotp(page: Page): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(base.users.admin!.email);
   await page.locator("#password").fill(base.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
   for (let attempt = 0; attempt < 3; attempt++) {
     // não digitar em cima da virada da janela TOTP (o código expiraria no envio)
     if (msUntilNextTotpWindow() < 4_000) await page.waitForTimeout(msUntilNextTotpWindow() + 300);
-    await page.locator('input[aria-label="Dígito 1"]').click();
+    await page.locator('input[aria-label="Chiffre 1"]').click();
     await page.keyboard.type(generateTotp(secret), { delay: 40 });
     try {
       // 1ª compilação de /app no dev pode ser lenta → timeout generoso
@@ -136,7 +136,7 @@ function tokenOf(acceptUrl: string): string {
 
 test.describe.configure({ mode: "serial", timeout: 180_000 });
 
-test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
+test.describe("cycle de vie de l’invitation (de bout en bout + adversarial)", () => {
   test.beforeAll(async ({ browser }) => {
     // Dev (webpack) compila cada rota na 1ª visita — 40-80s cada. Aquecemos TODAS
     // as rotas que a suíte toca aqui (orçamento grande, uma vez); com o dev
@@ -150,7 +150,7 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await page.goto("/login");
     await page.locator("#email").fill(base.users.agent!.email);
     await page.locator("#password").fill(base.password);
-    await page.getByRole("button", { name: /entrar/i }).click();
+    await page.getByRole("button", { name: /se connecter/i }).click();
     await page.waitForURL(/\/app\//, { timeout: 150_000 }).catch(() => {});
     for (const r of ["/app/inbox", "/app/kanban", "/app/contacts", "/app/settings/billing", "/app/settings/api-tokens"]) {
       await page.goto(r).catch(() => {});
@@ -169,12 +169,12 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await mp.goto("/login");
     await mp.locator("#email").fill(base.users.admin!.email);
     await mp.locator("#password").fill(base.password);
-    await mp.getByRole("button", { name: /entrar/i }).click();
+    await mp.getByRole("button", { name: /se connecter/i }).click();
     await mp.waitForURL(/\/login\/mfa/, { timeout: 150_000 }).catch(() => {});
     await mctx.close();
   });
 
-  test("1. ciclo feliz: convidar → aceitar → vira agent → cai no inbox", async ({ browser }) => {
+  test("1. cycle nominal : inviter → accepter → devient agent → arrive dans l’inbox", async ({ browser }) => {
     // admin convida
     const adminCtx = await browser.newContext();
     const adminPage = await adminCtx.newPage();
@@ -193,7 +193,7 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await page.goto("/login");
     await page.locator("#email").fill(inv.invitee_email);
     await page.locator("#password").fill(base.password);
-    await page.getByRole("button", { name: /entrar/i }).click();
+    await page.getByRole("button", { name: /se connecter/i }).click();
     // Sem membership ainda: o login não cai em /app. Esperamos a SESSÃO (cookie)
     // se firmar antes de ir ao accept_url — senão a página cai no estado não-logado.
     await expect
@@ -203,8 +203,8 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
       .toBe(true);
     // Vamos direto ao accept_url (fluxo real do link do email).
     await page.goto(tokenPath(acceptUrl));
-    await expect(page.getByRole("heading", { name: /Aceitar convite/i })).toBeVisible();
-    await page.getByRole("button", { name: /Aceitar convite/i }).click();
+    await expect(page.getByRole("heading", { name: /Accepter l’invitation/i })).toBeVisible();
+    await page.getByRole("button", { name: /Accepter l’invitation/i }).click();
     await page.waitForURL(/\/app\/inbox/);
 
     // depois do aceite: membership agent criada
@@ -213,7 +213,7 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await inviteeCtx.close();
   });
 
-  test("2. escopo pós-aceite: agent vê inbox/kanban, bloqueado em billing/api-tokens", async ({ page }) => {
+  test("2. périmètre après acceptation : l’agent voit inbox/kanban, bloqué sur billing/api-tokens", async ({ page }) => {
     await login(page, inv.invitee_email);
 
     await page.goto("/app/settings/billing");
@@ -224,13 +224,13 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await page.waitForURL(/\/403/);
 
     await page.goto("/app/inbox");
-    await expect(page.getByText("Selecione uma conversa", { exact: true })).toBeVisible();
+    await expect(page.getByText("Sélectionnez une conversation", { exact: true })).toBeVisible();
 
     await page.goto("/app/kanban");
-    await expect(page.getByRole("heading", { name: "Funis" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Tableaux" })).toBeVisible();
   });
 
-  test("3. permissão pós-aceite: agent NÃO consegue convidar (403)", async ({ page }) => {
+  test("3. permission après acceptation : l’agent NE peut PAS inviter (403)", async ({ page }) => {
     await login(page, inv.invitee_email);
     const res = await page.request.post("/api/v1/team/invite", {
       data: { invitations: [{ email: "outro.invite@deskcomm.test", role: "agent" }] },
@@ -238,7 +238,7 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     expect(res.status()).toBe(403);
   });
 
-  test("4. reuso do token: aceitar 2x é idempotente (sem membership duplicada)", async ({ browser }) => {
+  test("4. réutilisation du jeton : accepter 2x est idempotent (pas d’adhésion en double)", async ({ browser }) => {
     // Token válido mintado direto: o convidado já é membro (testes anteriores), então
     // reconvidá-lo seria — corretamente — barrado por already_member. Aqui testamos só
     // a IDEMPOTÊNCIA do aceite em si (aceitar o mesmo token 2x não duplica membership).
@@ -254,18 +254,18 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await login(page, inv.invitee_email); // já é membro → cai no /app
     // 1º aceite (reaplica)
     await page.goto(`/team/accept-invite/${token}`);
-    await page.getByRole("button", { name: /Aceitar convite/i }).click();
+    await page.getByRole("button", { name: /Accepter l’invitation/i }).click();
     await page.waitForURL(/\/app\/inbox/);
     // 2º aceite do MESMO token
     await page.goto(`/team/accept-invite/${token}`);
-    await page.getByRole("button", { name: /Aceitar convite/i }).click();
+    await page.getByRole("button", { name: /Accepter l’invitation/i }).click();
     await page.waitForURL(/\/app\/inbox/);
     // sem duplicar membership
     expect(await membershipCount()).toBe(1);
     await ctx.close();
   });
 
-  test("5. already_member: reconvidar quem já é membro → failed already_member", async ({ browser }) => {
+  test("5. already_member : réinviter un membre existant → failed already_member", async ({ browser }) => {
     const ctx = await browser.newContext();
     const page = await ctx.newPage();
     await loginAdminTotp(page);
@@ -274,7 +274,7 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     await ctx.close();
   });
 
-  test("6. token expirado → convite inválido ou expirado", async ({ page }) => {
+  test("6. jeton expiré → invitation invalide ou expirée", async ({ page }) => {
     const expired = signInviteToken({
       invite_id: randomUUID(),
       email: inv.invitee_email,
@@ -283,10 +283,10 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
       exp: Math.floor(Date.now() / 1000) - 60, // 1min no passado
     });
     await page.goto(`/team/accept-invite/${expired}`);
-    await expect(page.getByRole("heading", { name: /inválido ou expirado/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /invalide ou expirée/i })).toBeVisible();
   });
 
-  test("7. token adulterado (HMAC quebrado) → inválido", async ({ page }) => {
+  test("7. jeton altéré (HMAC cassé) → invalide", async ({ page }) => {
     const valid = signInviteToken({
       invite_id: randomUUID(),
       email: inv.invitee_email,
@@ -297,10 +297,10 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     // vira a assinatura: troca o último char por outro
     const flipped = valid.slice(0, -1) + (valid.slice(-1) === "A" ? "B" : "A");
     await page.goto(`/team/accept-invite/${flipped}`);
-    await expect(page.getByRole("heading", { name: /inválido ou expirado/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /invalide ou expirée/i })).toBeVisible();
   });
 
-  test("8. email não corresponde: logado com outra conta → mismatch", async ({ page }) => {
+  test("8. l’e-mail ne correspond pas : connecté avec un autre compte → mismatch", async ({ page }) => {
     const valid = signInviteToken({
       invite_id: randomUUID(),
       email: inv.invitee_email, // convite pro convidado
@@ -311,10 +311,10 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     // mas logamos como o AGENT do seed base (email diferente)
     await login(page, base.users.agent!.email);
     await page.goto(`/team/accept-invite/${valid}`);
-    await expect(page.getByRole("heading", { name: /não corresponde/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /ne correspond pas/i })).toBeVisible();
   });
 
-  test("9. não autenticado → CTA de login, não o formulário de aceite", async ({ page }) => {
+  test("9. non authentifié → CTA de connexion, pas le formulaire d’acceptation", async ({ page }) => {
     const valid = signInviteToken({
       invite_id: randomUUID(),
       email: inv.invitee_email,
@@ -323,8 +323,8 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
       exp: Math.floor(Date.now() / 1000) + 3600,
     });
     await page.goto(`/team/accept-invite/${valid}`);
-    await expect(page.getByRole("heading", { name: /Você foi convidado/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /Fazer login/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Vous avez été invité/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Se connecter/i })).toBeVisible();
   });
 
   /**
@@ -340,7 +340,7 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
    * O suíte inteiro não exercitava esse estado: o seed CRIA a conta do
    * convidado de propósito, que é justamente o que esconde o defeito.
    */
-  test("10. sem conta → o caminho existe e leva o convite junto", async ({ page }) => {
+  test("10. sans compte → le chemin existe et emporte l’invitation", async ({ page }) => {
     const valid = signInviteToken({
       invite_id: randomUUID(),
       email: inv.invitee_email,
@@ -350,14 +350,14 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     });
 
     await page.goto(`/team/accept-invite/${valid}`);
-    await page.getByRole("link", { name: /ainda não tenho conta/i }).click();
+    await page.getByRole("link", { name: /je n’ai pas encore de compte/i }).click();
 
     // O token viaja: é ele que faz a conta nova nascer amarrada a este convite
     // em vez de ganhar uma organização própria.
     await expect(page).toHaveURL(new RegExp(`/signup\\?invite=${encodeURIComponent(valid)}`));
   });
 
-  test("11. o signup com convite não pede empresa, e trava o e-mail", async ({ page }) => {
+  test("11. l’inscription avec invitation ne demande pas d’entreprise et verrouille l’e-mail", async ({ page }) => {
     // Pedir "Nome da empresa" aqui seria mandar a pessoa batizar a organização
     // de outra gente; deixar o e-mail editável levaria a preencher tudo e
     // receber divergência no fim.
@@ -370,13 +370,13 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     });
 
     await page.goto(`/signup?invite=${encodeURIComponent(valid)}`);
-    await expect(page.getByLabel("Nome da empresa")).toHaveCount(0);
-    const email = page.getByLabel("Email");
+    await expect(page.getByLabel("Nom de l’entreprise")).toHaveCount(0);
+    const email = page.getByLabel("E-mail");
     await expect(email).toHaveValue(inv.invitee_email);
     await expect(email).toHaveAttribute("readonly", /.*/);
   });
 
-  test("12. convite expirado no signup avisa, em vez de abrir empresa nova", async ({ page }) => {
+  test("12. une invitation expirée à l’inscription prévient, au lieu d’ouvrir une nouvelle entreprise", async ({ page }) => {
     const expirado = signInviteToken({
       invite_id: randomUUID(),
       email: inv.invitee_email,
@@ -389,9 +389,9 @@ test.describe("ciclo de vida do convite (ponta a ponta + adversarial)", () => {
     // `.first()`: o Next monta um `<div role="alert" id="__next-route-announcer__">`
     // vazio em toda navegação de cliente, então `getByRole("alert")` sozinho casa
     // DOIS elementos e o strict mode reprova — sobre uma tela que está correta.
-    await expect(page.getByRole("alert").first()).toContainText(/expirou|não é mais válido/i);
+    await expect(page.getByRole("alert").first()).toContainText(/a expiré|n’est plus valide/i);
     // E cai no signup COMUM só depois do aviso — nunca em silêncio.
-    await expect(page.getByLabel("Nome da empresa")).toBeVisible();
+    await expect(page.getByLabel("Nom de l’entreprise")).toBeVisible();
   });
 });
 

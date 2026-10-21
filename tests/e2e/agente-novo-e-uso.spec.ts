@@ -20,7 +20,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 import { loginComoAdmin, lerCreds, type CredsE2E } from "./helpers/login-admin";
 
@@ -28,7 +28,7 @@ const EVIDENCIA = path.join(process.cwd(), "evidence", "ia-360-w1");
 
 let creds: CredsE2E = lerCreds();
 
-test.use({ locale: "pt-BR" });
+test.use({ locale: "fr-FR" });
 
 // 240s e não 120s: o orçamento inclui UMA re-semeadura de credenciais, que o
 // login dispara sozinho quando outra sessão rotaciona o fator TOTP deste banco
@@ -40,25 +40,24 @@ test.beforeEach(async ({ page }) => {
   creds = await loginComoAdmin(page, creds);
 });
 
-test.describe("Criar um agente pela tela", () => {
-  test("o formulário abre e diz o que falta antes de deixar criar", async ({ page }) => {
+test.describe("Créer un agent depuis l’écran", () => {
+  test("le formulaire s’ouvre et dit ce qui manque avant de permettre la création", async ({ page }) => {
     await page.goto("/app/ai/agents/new");
-    await expect(page.getByRole("heading", { name: /novo agent/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /nouvel agent/i })).toBeVisible();
 
     // O botão nasce bloqueado: a tela não deixa criar um agente pela metade.
-    const criar = page.getByRole("button", { name: /criar agent/i });
+    const criar = page.getByRole("button", { name: /créer l’agent/i });
     await expect(criar).toBeDisabled();
 
-    // E ela diz o que falta — as três exigências que o servidor também impõe.
-    // Escritas como instrução, não como acusação — um formulário recém-aberto
-    // que já diz "obrigatório" em vermelho trata o usuário como quem errou.
-    for (const exigencia of [
-      /escolha o modelo/i,
-      /escolha a chave de acesso/i,
-      /escolha por qual número de whatsapp/i,
-    ]) {
-      await expect(page.getByText(exigencia).first()).toBeVisible();
-    }
+    // E ela diz o que falta. Modelo e chave de IA saíram do formulário (a IA é
+    // da plataforma), então a única exigência visível é o número de WhatsApp.
+    // Escrita como instrução, não como acusação.
+    await expect(
+      page.getByText(/choisissez le numéro whatsapp utilisé pour répondre/i).first(),
+    ).toBeVisible();
+    // E o que saiu não pode voltar a aparecer: nenhuma escolha de modelo ou chave.
+    await expect(page.locator("#model")).toHaveCount(0);
+    await expect(page.locator("#credential_id")).toHaveCount(0);
 
     await page.screenshot({
       path: path.join(EVIDENCIA, "w1-nova-01-tela-de-criar.png"),
@@ -66,25 +65,25 @@ test.describe("Criar um agente pela tela", () => {
     });
   });
 
-  test("preencho como uma pessoa faria e o agente nasce, com as capacidades que liguei", async ({
+  test("je remplis comme une personne le ferait et l’agent naît, avec les capacités activées", async ({
     page,
   }) => {
     await page.goto("/app/ai/agents/new");
-    const nome = `Recepção da Clínica ${Date.now()}`;
+    const nome = `Accueil de la clinique ${Date.now()}`;
 
     await page.locator("#name").fill(nome);
     await page
       .locator("textarea")
       .first()
       .fill(
-        "Você é a recepção de uma clínica odontológica. Atenda com educação, responda dúvidas sobre horários e ajude a marcar consulta.",
+        "Vous êtes l’accueil d’une clinique dentaire. Répondez poliment, répondez aux questions sur les horaires et aidez à prendre rendez-vous.",
       );
 
-    // Os três campos que a tela exige. São comboboxes do Radix, NÃO `<select>`
+    // O campo que a tela exige (modelo e chave saíram: a IA é da plataforma). São comboboxes do Radix, NÃO `<select>`
     // nativo: não existe `<option>` no DOM até o menu abrir, e procurar por
     // `option` devolve zero — que lê como "a tela não tem modelo nenhum" quando
     // na verdade o instrumento é que estava olhando o lugar errado.
-    for (const id of ["model", "credential_id", "channel_session_id"]) {
+    for (const id of ["channel_session_id"]) {
       const gatilho = page.locator(`#${id}`);
       if ((await gatilho.count()) === 0) continue;
       await gatilho.click();
@@ -92,7 +91,7 @@ test.describe("Criar um agente pela tela", () => {
       const quantas = await opcoes.count();
       expect(quantas, `o campo "${id}" abriu sem nenhuma opção para escolher`).toBeGreaterThan(0);
       await opcoes.first().click();
-      await expect(gatilho).not.toContainText(/^Selecione/);
+      await expect(gatilho).not.toContainText(/^Sélectionnez/);
     }
 
     // Liga uma jornada de trabalho — o caminho que a W1 entregou.
@@ -105,7 +104,7 @@ test.describe("Criar um agente pela tela", () => {
       fullPage: true,
     });
 
-    const criar = page.getByRole("button", { name: /criar agent/i });
+    const criar = page.getByRole("button", { name: /créer l’agent/i });
     await expect(criar).toBeEnabled();
     await criar.click();
 
@@ -129,11 +128,11 @@ test.describe("Criar um agente pela tela", () => {
     await expect(page.getByText(nome).first()).toBeVisible({ timeout: 30_000 });
   });
 
-  test("a tela oferece caminho para o que ela exige, sem exigir que o usuário adivinhe", async ({
+  test("l’écran propose un chemin vers ce qu’il exige, sans obliger l’utilisateur à deviner", async ({
     page,
   }) => {
     await page.goto("/app/ai/agents/new");
-    await expect(page.getByRole("heading", { name: /novo agent/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /nouvel agent/i })).toBeVisible();
 
     // ⚠️ O QUE ESTE CASO NÃO CONSEGUE MEDIR, declarado em vez de fingido: o
     // estado "instalei agora e não tenho credencial nem número". A primeira
@@ -144,29 +143,29 @@ test.describe("Criar um agente pela tela", () => {
     // por quatro frentes) não tem. Fica como item para quem tiver ambiente
     // fresco; ver o HANDOFF.
     //
-    // O que dá para cobrar sempre: a tela exige credencial e número — então ela
-    // precisa dizer ONDE se consegue cada um. Sem isso, quem não tem trava sem
+    // O que dá para cobrar sempre: a tela exige um número — então ela
+    // precisa dizer ONDE se conecta um. Sem isso, quem não tem trava sem
     // pista, e quem tem mas quer outro também.
     const caminhos = await page.evaluate(() =>
       [...document.querySelectorAll("a[href]")]
         .map((a) => `${(a.textContent ?? "").trim()} -> ${a.getAttribute("href")}`)
-        .filter((t) => /credencial|conex|whatsapp|numero|número|canal/i.test(t)),
+        .filter((t) => /connex|whatsapp|numero|numéro|canal/i.test(t)),
     );
 
     expect(
       caminhos.length,
-      "a tela exige credencial e número de WhatsApp e não oferece nenhum link para conseguir os dois",
+      "a tela exige número de WhatsApp e não oferece nenhum link para conectar um",
     ).toBeGreaterThan(0);
   });
 });
 
-test.describe("Olhar o consumo de IA", () => {
-  test("a tela mostra os números do período e nomeia o que eles são", async ({ page }) => {
+test.describe("Consulter la consommation d’IA", () => {
+  test("l’écran montre les chiffres de la période et nomme ce qu’ils sont", async ({ page }) => {
     await page.goto("/app/ai/usage");
-    await expect(page.getByRole("heading", { name: /uso de ia/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /utilisation de l’ia/i })).toBeVisible();
 
     // Os quatro cartões do topo existem e trazem número, não traço.
-    for (const rotulo of [/custo no período/i, /atendimentos com ia/i]) {
+    for (const rotulo of [/coût sur la période/i, /échanges avec l’ia/i]) {
       await expect(page.getByText(rotulo).first()).toBeVisible();
     }
 
@@ -186,9 +185,9 @@ test.describe("Olhar o consumo de IA", () => {
     });
   });
 
-  test("um período sem nenhum dado é explicado, não fica em branco", async ({ page }) => {
+  test("une période sans aucune donnée est expliquée, elle ne reste pas vide", async ({ page }) => {
     await page.goto("/app/ai/usage");
-    await expect(page.getByRole("heading", { name: /uso de ia/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /utilisation de l’ia/i })).toBeVisible();
 
     // Uma janela no passado onde não houve uso nenhum.
     const de = page.locator('input[type="date"]').first();
@@ -199,7 +198,7 @@ test.describe("Olhar o consumo de IA", () => {
 
     const corpo = await page.locator("main").innerText();
     expect(
-      /sem dados|nenhum|0/i.test(corpo),
+      /aucune donnée|aucun|0/i.test(corpo),
       "período vazio não disse nada ao usuário",
     ).toBe(true);
 

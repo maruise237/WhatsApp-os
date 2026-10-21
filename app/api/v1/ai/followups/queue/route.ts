@@ -69,7 +69,7 @@ interface ContactRow {
 }
 
 function resolveContactName(c: ContactRow | null): string {
-  if (!c) return "Contato removido";
+  if (!c) return "Contact supprimé";
   return rotuloDoContato(c);
 }
 

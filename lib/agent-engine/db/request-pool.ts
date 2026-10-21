@@ -13,7 +13,7 @@ let _pool: pg.Pool | null = null;
 
 export function getRequestPool(): pg.Pool {
   const url = process.env.NEON_DATABASE_URL;
-  if (!url) throw new Error('NEON_DATABASE_URL ausente — rascunho da IA indisponível');
+  if (!url) throw new Error('NEON_DATABASE_URL absent — brouillon de l’IA indisponible');
   if (!_pool) _pool = createPool(url);
   return _pool;
 }

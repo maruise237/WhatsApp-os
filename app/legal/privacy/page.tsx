@@ -31,7 +31,7 @@ export default async function PrivacyPage() {
         <h2 className="text-base font-semibold">1. Qui est le responsable du traitement</h2>
         <p>
           Le responsable du traitement des données traitées ici est <strong>{operador}</strong>
-          {op.cnpj ? ` (CNPJ ${op.cnpj})` : ""} — la personne qui a installé et exploite ce système. Les auteurs du logiciel n’ont accès ni à ce serveur ni aux données qui y sont stockées, et ne sont ni responsables ni sous-traitants de ces données.
+          {op.cnpj ? ` (identifiant fiscal ${op.cnpj})` : ""} — la personne qui a installé et exploite ce système. Les auteurs du logiciel n’ont accès ni à ce serveur ni aux données qui y sont stockées, et ne sont ni responsables ni sous-traitants de ces données.
         </p>
       </section>
 

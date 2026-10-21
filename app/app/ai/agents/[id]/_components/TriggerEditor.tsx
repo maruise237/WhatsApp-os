@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export interface BusinessHoursValue {
   timezone: string;
@@ -38,12 +39,12 @@ interface Props {
 }
 
 const WEEKDAYS = [
-  { id: 0, label: "Dom" },
-  { id: 1, label: "Seg" },
-  { id: 2, label: "Ter" },
-  { id: 3, label: "Qua" },
-  { id: 4, label: "Qui" },
-  { id: 5, label: "Sex" },
+  { id: 0, label: "Dim" },
+  { id: 1, label: "Lun" },
+  { id: 2, label: "Mar" },
+  { id: 3, label: "Mer" },
+  { id: 4, label: "Jeu" },
+  { id: 5, label: "Ven" },
   { id: 6, label: "Sam" },
 ];
 
@@ -60,7 +61,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
     patchFilters({
       business_hours: enabled
         ? (bh ?? {
-            timezone: "America/Sao_Paulo",
+            timezone: FUSEAU_PAR_DEFAUT,
             start: "08:00",
             end: "20:00",
             weekdays: [1, 2, 3, 4, 5],

@@ -36,7 +36,7 @@ export function createPool(
     ((err: Error): void => {
       // mesma disciplina de errMsg do main.ts: 1ª linha truncada, PII fora
       const error = (err.message.split('\n', 1)[0] ?? '').slice(0, 300);
-      createLogger().error('pool: conexão caiu — recria no próximo uso', { error });
+      createLogger().error('pool : connexion perdue — recréée à la prochaine utilisation', { error });
     });
   pool.on('connect', (client) => client.on('error', handler));
   // Guarda contra crash na re-emissão do Pool (forma 1). NÃO loga: o mesmo erro

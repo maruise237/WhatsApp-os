@@ -40,6 +40,7 @@ import {
   TITULO_DO_HANDOFF_POR_ORCAMENTO,
 } from "@/lib/agent-engine/agent/inbound-turn";
 import { corpoDoBloqueio } from "@/lib/agent-engine/edge/llm/orcamento";
+import { traduzir } from "@/lib/i18n/dicionario";
 import { LlmBudgetExceededError } from "@/lib/agent-engine/edge/llm/run-model-call";
 
 const RAIZ = process.cwd();
@@ -175,7 +176,7 @@ describe("a escolta do orçamento", () => {
     expect(
       RESUMO_DO_HANDOFF_POR_ORCAMENTO,
       "o resumo precisa dizer que o lead NÃO pediu humano — senão quem assume responde a um pedido que não houve",
-    ).toMatch(/não pediu atendimento humano/iu);
+    ).toMatch(/n’a PAS demandé d’assistance humaine/iu);
   });
 
   it("handoff que falha deixa SUBIR o erro dele, não o de orçamento", async () => {
@@ -433,11 +434,13 @@ describe("os textos do orçamento nomeiam botões que existem", () => {
     expect(
       corpoDoBloqueio(15_000, 10_000),
       "a IA parou e o texto manda procurar um botão que não está na tela",
-    ).toContain(rotuloDoBotaoDeVolta());
+      // O aviso da Central é lido em francês: ele cita o rótulo TRADUZIDO que a tela mostra.
+    ).toContain(traduzir(rotuloDoBotaoDeVolta(), "fr-FR"));
   });
 
   it("o resumo entregue ao humano que assume também", () => {
-    expect(RESUMO_DO_HANDOFF_POR_ORCAMENTO).toContain(rotuloDoBotaoDeVolta());
+    // O resumo é lido em francês: ele cita o rótulo TRADUZIDO que a tela mostra.
+    expect(RESUMO_DO_HANDOFF_POR_ORCAMENTO).toContain(traduzir(rotuloDoBotaoDeVolta(), "fr-FR"));
   });
 
   it("controle negativo: o detector acusa o rótulo renomeado", () => {
@@ -452,6 +455,6 @@ describe("os textos do orçamento nomeiam botões que existem", () => {
       renomeado.slice(renomeado.indexOf('data-testid="devolver-ao-automatico"')),
     )?.[1];
     expect(novo).toBe("Voltar para a IA");
-    expect(corpoDoBloqueio(15_000, 10_000)).not.toContain(novo as string);
+    expect(corpoDoBloqueio(15_000, 10_000)).not.toContain(traduzir(novo as string, "fr-FR"));
   });
 });

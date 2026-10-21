@@ -98,7 +98,7 @@ function envLocal(): Record<string, string> {
  * alguma coisa sobre estar desatualizada", não "a tela diz do meu jeito".
  */
 const AVISO =
-  /(offline|sem conex|desconect|reconect|desatualiz|atualiz(ando|e a p)|tempo real|ao vivo|pausad|erro de conex|sem sinal|parad)/i;
+  /(hors ligne|offline|sans connex|déconnect|reconnect|pas à jour|obsolète|actualis(ation en cours|ez la p)|temps réel|en direct|en pause|erreur de connex|sans signal|à l’arrêt)/i;
 
 /** Entrega de verdade num quadro do Phoenix: `[join_ref, ref, topic, event, payload]`.
  *  O `phx_reply` que confirma a assinatura carrega as mesmas palavras no corpo —
@@ -113,8 +113,8 @@ function ehEntrega(bruto: string): boolean {
   }
 }
 
-test.describe("degradação silenciosa do tempo real", () => {
-  test("com a entrega morta, a tela avisa que pode estar desatualizada", async ({ page }) => {
+test.describe("dégradation silencieuse du temps réel", () => {
+  test("avec la livraison coupée, l’écran prévient qu’il peut ne pas être à jour", async ({ page }) => {
     // O padrão de 30s da suíte não cabe: só a janela de observação depois da
     // mudança são 12s, e observar por menos tempo transformaria "a tela não
     // avisa" em "eu não esperei o aviso".
@@ -158,8 +158,8 @@ test.describe("degradação silenciosa do tempo real", () => {
 
     await page.goto("/login");
     await page.getByLabel(/e-?mail/i).fill(creds.users.manager!.email);
-    await page.getByLabel(/senha/i).fill(creds.password);
-    await page.getByRole("button", { name: /entrar|acessar/i }).click();
+    await page.getByLabel(/mot de passe/i).fill(creds.password);
+    await page.getByRole("button", { name: /se connecter/i }).click();
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 
     const { data: pipes } = await admin

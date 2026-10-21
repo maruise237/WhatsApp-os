@@ -64,7 +64,8 @@ const COUNTS: TenantCounts = {
 };
 
 /**
- * O badge que a linha "Nuvemshop" exibe — o pedaço de tela em disputa.
+ * O badge que a linha "Boutique en ligne" (integração Nuvemshop) exibe — o
+ * pedaço de tela em disputa.
  *
  * Ancora no rótulo da linha (e não numa classe) porque há outro badge no
  * cartão, o do plano. Se a marcação mudar a ponto de a linha não ter badge,
@@ -78,10 +79,10 @@ function badgeNuvemshop(status: string | null): HTMLElement {
       integrations={{ nuvemshop_status: status, nuvemshop_connected_at: null }}
     />,
   );
-  const badge = within(container).getByText("Nuvemshop").nextElementSibling
+  const badge = within(container).getByText("Boutique en ligne").nextElementSibling
     ?.firstElementChild;
   if (!(badge instanceof HTMLElement)) {
-    throw new Error("a linha 'Nuvemshop' não renderizou um badge");
+    throw new Error("a linha 'Boutique en ligne' não renderizou um badge");
   }
   return badge;
 }
@@ -94,26 +95,34 @@ function classeDaVariante(
 }
 
 describe("TenantOverview — status da Nuvemshop", () => {
-  it("integração saudável lê 'Conectado', não a string do banco", () => {
+  it("integração saudável lê 'Connecté', não a string do banco", () => {
     const badge = badgeNuvemshop("healthy");
-    expect(badge).toHaveTextContent("Conectado");
+    expect(badge).toHaveTextContent("Connecté");
     expect(badge.textContent).not.toContain("healthy");
     expect(badge.className).toBe(classeDaVariante("success"));
   });
 
   it("token vencido é erro visível, o ramo que era inalcançável", () => {
     const badge = badgeNuvemshop("token_expired");
-    expect(badge).toHaveTextContent("Token expirado");
+    expect(badge).toHaveTextContent("Jeton expiré");
     expect(badge.className).toBe(classeDaVariante("error"));
     // Antes do conserto, TODO status conhecido caía no ramo final e saía com
     // cara de alerta genérico.
     expect(badge.className).not.toBe(classeDaVariante("warning"));
   });
 
-  it("tenant sem integração diz 'Não integrado' em tom neutro", () => {
-    const badge = badgeNuvemshop(null);
-    expect(badge).toHaveTextContent("Non intégré");
-    expect(badge.className).toBe(classeDaVariante("neutral"));
+  it("tenant sem integração não mostra a linha — nada de Nuvemshop na tela", () => {
+    // Integração brasileira masquée pour le marché africain : sem status, a
+    // linha simplesmente não existe (antes: badge neutro "Non intégré").
+    const { container } = render(
+      <TenantOverview
+        organization={ORG}
+        counts={COUNTS}
+        integrations={{ nuvemshop_status: null, nuvemshop_connected_at: null }}
+      />,
+    );
+    expect(within(container).queryByText("Boutique en ligne")).toBeNull();
+    expect(container.textContent).not.toMatch(/Nuvemshop/i);
   });
 
   it("nenhum status que o banco aceita vaza cru para a tela", () => {

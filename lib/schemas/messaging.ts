@@ -246,7 +246,7 @@ export const listConversationsQuerySchema = z.object({
           // resposta, não erro.
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `status inválido: ${item}`,
+            message: `statut invalide : ${item}`,
           });
           return z.NEVER;
         }

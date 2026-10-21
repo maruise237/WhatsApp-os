@@ -30,7 +30,7 @@ interface Props {
 }
 
 const ROLE_LABEL: Record<string, string> = {
-  agent: "Atendente",
+  agent: "Agent",
   manager: "Gestor",
   admin: "Admin",
 };

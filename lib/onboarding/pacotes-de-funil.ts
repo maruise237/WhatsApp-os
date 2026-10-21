@@ -97,8 +97,24 @@ export const PACOTES: readonly PacoteDeFunil[] = [
     },
   },
   {
+    id: "restaurante",
+    comoSeApresenta: "Restaurant, maquis, traiteur ou pâtisserie",
+    proposta: {
+      nome: "Commandes",
+      etapas: [
+        { nome: "Nouveau contact", passo: "new" },
+        { nome: "Déjà répondu", passo: "contacted" },
+        { nome: "Choisit son menu", passo: "qualifying" },
+        { nome: "Commande à confirmer", passo: "qualified" },
+        { nome: "Paiement ou livraison à régler", passo: "negotiating" },
+        { nome: "Commande payée", passo: "won" },
+        { nome: "N’a pas commandé", passo: "lost" },
+      ],
+    },
+  },
+  {
     id: "loja",
-    comoSeApresenta: "Boutique — en ligne ou physique",
+    comoSeApresenta: "Boutique de mode, cosmétiques ou électronique — en ligne ou physique",
     proposta: {
       nome: "Ventes",
       etapas: [
@@ -143,5 +159,5 @@ export const PACOTES: readonly PacoteDeFunil[] = [
 export const PACOTE_PADRAO: PacoteDeFunil =
   PACOTES.find((p) => p.id === "generico") ??
   (() => {
-    throw new Error("PACOTES sem o pacote genérico — ele é o último recurso do passo do funil");
+    throw new Error("PACOTES sans le paquet générique — c’est le dernier recours de l’étape du tableau");
   })();

@@ -103,7 +103,7 @@ function wrapMcpTool(
         });
 
         if (!veredito.permitido) {
-          const explicacao = recusaParaOModelo(veredito) ?? "ação não permitida.";
+          const explicacao = recusaParaOModelo(veredito) ?? "action non autorisée.";
           void auditMcpToolCall({
             ctx: input.ctx,
             toolName: def.name,
@@ -151,7 +151,7 @@ function wrapMcpTool(
         // alarme (o modelo le o erro, segue conversando, e ninguem fica
         // sabendo). Emite sinal proprio para que apareca na observabilidade.
         if (err instanceof McpAuthError) {
-          logger.error("capacidade ligada na tela e inalcancavel em execucao", {
+          logger.error("capacité activée à l’écran mais inaccessible à l’exécution", {
             tool_name: def.name,
             requires_role: def.requiresRole,
             requires_scope: def.requiresScope,

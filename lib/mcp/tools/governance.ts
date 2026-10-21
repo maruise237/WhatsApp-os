@@ -54,10 +54,10 @@ const assignObject = z
 export const crmAssignConversation: McpToolDefinition<typeof assignInputShape> = {
   name: "crm_assign_conversation",
   description:
-    "Atribui/transfere uma conversa a um atendente (reason='transfer', to_user_id preenchido) " +
-    "ou libera de volta à fila (reason='release', to_user_id null). Grava assignment event " +
-    "auditado. Recusa destino de outra org (guard de membership). Idempotente: se a conversa " +
-    "já está no estado alvo, retorna sucesso sem duplicar evento.",
+    "Attribue/transfère une conversation à un conseiller (reason='transfer', to_user_id renseigné) " +
+    "ou la remet dans la file (reason='release', to_user_id null). Enregistre un assignment event " +
+    "audité. Refuse une destination d’une autre org (contrôle d’appartenance). Idempotent : si la conversation " +
+    "est déjà dans l’état cible, renvoie un succès sans dupliquer l’événement.",
   inputSchema: assignInputShape,
   category: "write",
   requiresRole: "agent",
@@ -174,9 +174,9 @@ const tagsInputShape = {
 export const crmManageTags: McpToolDefinition<typeof tagsInputShape> = {
   name: "crm_manage_tags",
   description:
-    "Adiciona/remove tags em uma conversation, contact ou lead. Tags são normalizadas " +
-    "(lowercase, trim, ≤40 chars cada, ≤20 no total). Informe ao menos um de add/remove. " +
-    "Recusa alvo de outra org.",
+    "Ajoute/retire des tags sur une conversation, un contact ou un lead. Les tags sont normalisés " +
+    "(lowercase, trim, ≤40 caractères chacun, ≤20 au total). Indiquez au moins un add/remove. " +
+    "Refuse une cible d’une autre org.",
   inputSchema: tagsInputShape,
   category: "write",
   requiresRole: "agent",
@@ -185,7 +185,7 @@ export const crmManageTags: McpToolDefinition<typeof tagsInputShape> = {
     const addTags = (input.add ?? []).map((t) => conversationTagSchema.parse(t));
     const removeTags = new Set((input.remove ?? []).map((t) => conversationTagSchema.parse(t)));
     if (addTags.length === 0 && removeTags.size === 0) {
-      throw new Error("informe ao menos uma tag em add ou remove");
+      throw new Error("indiquez au moins un tag dans add ou remove");
     }
 
     const table = TAG_TARGET_TABLE[input.target_kind];
@@ -236,9 +236,9 @@ const queueInputShape = {};
 export const crmGetQueueStatus: McpToolDefinition<typeof queueInputShape> = {
   name: "crm_get_queue_status",
   description:
-    "Snapshot da fila de atendimento da org: queue_size (conversas sem dono e abertas), " +
-    "avg_wait_seconds (espera média desde a última mensagem do cliente) e " +
-    "online_eligible_count (atendentes que podem puxar da fila agora). Read-only.",
+    "Instantané de la file d’attente de l’org : queue_size (conversations sans responsable et ouvertes), " +
+    "avg_wait_seconds (attente moyenne depuis le dernier message du client) et " +
+    "online_eligible_count (conseillers pouvant prendre dans la file maintenant). Lecture seule.",
   inputSchema: queueInputShape,
   category: "read",
   requiresRole: "agent",

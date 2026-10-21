@@ -43,29 +43,29 @@ async function login(page: Page, email: string, senha: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(senha);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app/, { timeout: 60_000 });
 }
 
-test.describe("Central de avisos — o atendimento que saiu sem as ferramentas", () => {
+test.describe("Centre d’alertes — l’échange qui s’est fait sans les outils", () => {
   test.describe.configure({ timeout: 120_000 });
 
   test.beforeAll(() => {
     creds = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
   });
 
-  test("o aviso aparece, em português de gente, com o motivo técnico junto", async ({ page }) => {
+  test("l’alerte apparaît, en français compréhensible, avec le motif technique à côté", async ({ page }) => {
     await login(page, creds.users.agent!.email, creds.password);
     await page.goto("/app/ai/inbox");
 
-    await expect(page.getByRole("heading", { name: "Central de avisos" })).toBeVisible({
+    await expect(page.getByRole("heading", { name: "Centre d’alertes" })).toBeVisible({
       timeout: 30_000,
     });
 
     // (1) O RÓTULO. Diz o que aconteceu com o CLIENTE, não o que quebrou por
     // dentro — `kindLabel` cai em "Aviso do assistente" para kind desconhecido,
     // então este texto também prova que o kind chegou ao mapa de tradução.
-    const aviso = page.getByText("Um atendimento saiu sem as ferramentas que você ligou").first();
+    const aviso = page.getByText("Une conversation s’est faite sans les outils que vous avez activés").first();
     await expect(
       aviso,
       "kind sem rótulo cairia no genérico 'Aviso do assistente' — o item existiria e não diria nada",
@@ -75,9 +75,9 @@ test.describe("Central de avisos — o atendimento que saiu sem as ferramentas",
     // informativo: o cliente foi atendido a menos e ninguém decidiu isso.
     const cartao = page
       .getByTestId("inbox-item")
-      .filter({ hasText: "Um atendimento saiu sem as ferramentas" })
+      .filter({ hasText: "Une conversation s’est faite sans les outils" })
       .first();
-    await expect(cartao.getByText("crítico", { exact: false }).first()).toBeVisible();
+    await expect(cartao.getByText("critique", { exact: false }).first()).toBeVisible();
 
     // (3) O MOTIVO TÉCNICO no corpo — quem for investigar precisa dele, e ele
     // não pode estar no lugar do rótulo.
@@ -88,7 +88,7 @@ test.describe("Central de avisos — o atendimento que saiu sem as ferramentas",
 
     // (4) E a frase que explica ao dono do negócio o que NÃO aconteceu: a
     // conversa do cliente não foi interrompida.
-    await expect(page.getByText(/A conversa não foi interrompida/).first()).toBeVisible();
+    await expect(page.getByText(/La conversation n’a pas été interrompue/).first()).toBeVisible();
 
     fs.mkdirSync(EVIDENCIA, { recursive: true });
     await page.screenshot({
@@ -97,25 +97,25 @@ test.describe("Central de avisos — o atendimento que saiu sem as ferramentas",
     });
   });
 
-  test("o aviso é acionável: dá para resolver e ele sai da lista de abertos", async ({ page }) => {
+  test("l’alerte est actionnable : on peut la résoudre et elle sort de la liste des ouvertes", async ({ page }) => {
     // Aviso que não some depois de tratado vira ruído permanente, e ruído
     // permanente é a forma mais rápida de a Central deixar de ser lida.
     await login(page, creds.users.agent!.email, creds.password);
     await page.goto("/app/ai/inbox");
 
-    const aviso = page.getByText("Um atendimento saiu sem as ferramentas que você ligou").first();
+    const aviso = page.getByText("Une conversation s’est faite sans les outils que vous avez activés").first();
     await expect(aviso).toBeVisible({ timeout: 30_000 });
 
     const cartao = page
       .getByTestId("inbox-item")
-      .filter({ hasText: "Um atendimento saiu sem as ferramentas" })
+      .filter({ hasText: "Une conversation s’est faite sans les outils" })
       .first();
     // O rótulo é lido da tela, não inventado: se ele mudar, o teste reprova —
     // é a palavra que o atendente vê.
-    await cartao.getByRole("button", { name: /Marcar resolvido/i }).click();
+    await cartao.getByRole("button", { name: /Marquer comme résolu/i }).click();
 
     await expect(
-      page.getByText("Um atendimento saiu sem as ferramentas que você ligou"),
+      page.getByText("Une conversation s’est faite sans les outils que vous avez activés"),
     ).toHaveCount(0, { timeout: 30_000 });
 
     await page.screenshot({

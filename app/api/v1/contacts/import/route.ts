@@ -31,8 +31,9 @@ import {
   mapLinha,
   parseCsv,
 } from "@/lib/contacts/csv";
-import { contactCreateSchema, isValidCpf } from "@/lib/schemas";
+import { contactCreateSchema } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
+import { indicatifDeLOrganisation } from "@/lib/telephone/normaliser";
 
 export const dynamic = "force-dynamic";
 
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   try {
     const form = await req.formData();
     const f = form.get("file");
-    if (!(f instanceof File)) throw new Error("sem arquivo");
+    if (!(f instanceof File)) throw new Error("aucun fichier");
     file = f;
   } catch {
     return fail("validation_failed", "Envoyez le fichier en multipart/form-data dans le champ « file ».", 422, {
@@ -116,19 +117,24 @@ export async function POST(req: NextRequest): Promise<Response> {
     );
   }
 
+  // Numéro sans indicatif ⇒ indicatif par défaut de l'organisation
+  // (`settings.phone_country_code`, 237 si absent). Lecture qui échoue ⇒ défaut.
+  const { data: orgDoImport } = await supabase
+    .from("organizations")
+    .select("settings")
+    .eq("id", orgId)
+    .maybeSingle();
+  const indicatif = indicatifDeLOrganisation(orgDoImport?.settings);
+
   const candidatos: Array<{ linha: number; contato: Record<string, unknown> }> = [];
   const errors: LinhaErro[] = [];
   const vistosNoArquivo = new Set<string>();
 
   for (let i = 0; i < dataRows.length; i++) {
     const linha = i + 2; // 1-based contando o cabeçalho — bate com o editor de planilhas.
-    const { contato, motivo } = mapLinha(dataRows[i]!, indices);
+    const { contato, motivo } = mapLinha(dataRows[i]!, indices, indicatif);
     if (motivo !== null) {
       errors.push({ linha, motivo });
-      continue;
-    }
-    if (contato.cpf && !isValidCpf(contato.cpf)) {
-      errors.push({ linha, motivo: `Numéro d’identification invalide : « ${contato.cpf} »` });
       continue;
     }
     const chave = contato.phone_number ?? `email:${(contato.email as string).toLowerCase()}`;

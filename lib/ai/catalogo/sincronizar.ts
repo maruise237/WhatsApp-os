@@ -63,8 +63,8 @@ export class CatalogoSuspeitoError extends Error {
     readonly conhecidos: number,
   ) {
     super(
-      `origem devolveu ${recebidos} modelos contra ${conhecidos} já conhecidos — ` +
-        `abaixo do piso de ${Math.round(PISO_DE_SANIDADE * 100)}%; rodada abortada para não depreciar o catálogo em massa`,
+      `la source a renvoyé ${recebidos} modèles contre ${conhecidos} déjà connus — ` +
+        `sous le seuil de ${Math.round(PISO_DE_SANIDADE * 100)} % ; passage interrompu pour ne pas déprécier le catalogue en masse`,
     );
     this.name = "CatalogoSuspeitoError";
   }

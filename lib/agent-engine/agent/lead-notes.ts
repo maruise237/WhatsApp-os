@@ -55,14 +55,14 @@ export type SaveLeadNoteResult =
     };
 
 const PAYLOAD_TEACHING =
-  'Campos aceitos: headline (linha curta do índice, sempre visível), body (corpo completo, ' +
-  'lido sob demanda por get_lead_note) e supersedes (ids de notas que esta substitui) — nada além. ' +
-  'Lead e organização vêm do runtime, nunca do payload da tool.';
+  'Champs acceptés : headline (ligne courte de l’index, toujours visible), body (corps complet, ' +
+  'lu à la demande par get_lead_note) et supersedes (ids des notes que celle-ci remplace) — rien d’autre. ' +
+  'Le lead et l’organisation viennent du runtime, jamais du payload de l’outil.';
 
 function teachInvalidPayload(issues: string): SaveLeadNoteResult {
   return {
     ok: false,
-    error: { code: 'invalid_payload', message: `payload inválido em save_lead_note (${issues}). ${PAYLOAD_TEACHING}` },
+    error: { code: 'invalid_payload', message: `payload invalide dans save_lead_note (${issues}). ${PAYLOAD_TEACHING}` },
   };
 }
 
@@ -72,7 +72,7 @@ function teachInvalidPayload(issues: string): SaveLeadNoteResult {
  */
 export function renderNotesIndex(entries: LeadNoteIndexEntry[]): string {
   if (entries.length === 0) {
-    return '— sem notas registradas para este lead.';
+    return '— aucune note enregistrée pour ce lead.';
   }
   return entries.map((e) => `- [${e.id}] ${e.headline}`).join('\n');
 }
@@ -129,8 +129,8 @@ export async function buildNotesIndexBlock(
   const rendered = renderNotesIndex(entries);
   if (entries.length > 0 && estimateIndexTokens(entries) > budgetTokens) {
     return (
-      'ATENÇÃO: o índice de notas excedeu o orçamento de tokens. Consolide as notas ' +
-      '(use save_lead_note com supersedes para fundir/substituir as antigas) antes de adicionar novas.\n' +
+      'ATTENTION : l’index des notes a dépassé le budget de tokens. Consolidez les notes ' +
+      '(utilisez save_lead_note avec supersedes pour fusionner/remplacer les anciennes) avant d’en ajouter de nouvelles.\n' +
       rendered
     );
   }
@@ -153,7 +153,7 @@ export async function applySaveLeadNote(
 ): Promise<SaveLeadNoteResult> {
   const forbidden = findForbiddenKey(rawInput);
   if (forbidden !== null) {
-    return teachInvalidPayload(`campos não reconhecidos: ${forbidden}`);
+    return teachInvalidPayload(`champs non reconnus : ${forbidden}`);
   }
   const parsed = saveLeadNoteInputSchema.safeParse(rawInput);
   if (!parsed.success) {
@@ -181,9 +181,9 @@ export async function applySaveLeadNote(
       error: {
         code: 'index_budget_exceeded',
         message:
-          `o índice de notas deste lead excederia o orçamento de ${cfg.budgetTokens} tokens. ` +
-          'Consolide antes de adicionar: escreva UMA nota que resuma as antigas e liste os ids delas em ' +
-          '"supersedes" (para removê-las), ou deixe de fora o que não é essencial. Não é possível apenas acumular.',
+          `l’index des notes de ce lead dépasserait le budget de ${cfg.budgetTokens} tokens. ` +
+          'Consolidez avant d’ajouter : écrivez UNE note qui résume les anciennes et listez leurs ids dans ' +
+          '"supersedes" (pour les supprimer), ou laissez de côté ce qui n’est pas essentiel. Il n’est pas possible de simplement accumuler.',
       },
     };
   }
@@ -212,7 +212,7 @@ export async function applySaveLeadNote(
     superseded: supersededCount,
     message:
       supersededCount > 0
-        ? `nota salva; ${supersededCount} nota(s) antiga(s) consolidada(s)/removida(s).`
-        : 'nota salva na memória do lead.',
+        ? `note enregistrée ; ${supersededCount} ancienne(s) note(s) consolidée(s)/supprimée(s).`
+        : 'note enregistrée dans la mémoire du lead.',
   };
 }

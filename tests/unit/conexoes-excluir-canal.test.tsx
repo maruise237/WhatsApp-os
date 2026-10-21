@@ -129,13 +129,13 @@ describe("listagem que falhou não vira 'primeira instalação'", () => {
     expect(screen.getByText(/continuera d’apparaître dans cette liste/)).toBeInTheDocument();
   });
 
-  it("bolinha da sidebar não diz 'Nenhuma conexão' quando a lista falhou", () => {
+  it("bolinha da sidebar não diz 'Aucune connexion' quando a lista falhou", () => {
     listagem.data = undefined;
     listagem.isError = true;
 
     render(wrap(<ConnectionHealthDot />));
 
-    expect(screen.getByLabelText("Não foi possível verificar as conexões")).toBeInTheDocument();
+    expect(screen.getByLabelText("Impossible de vérifier les connexions")).toBeInTheDocument();
   });
 });
 
@@ -254,7 +254,7 @@ describe("frasesDoImpacto", () => {
         history: { conversations: 0, messages: 0, agent_versions: 0 },
         configuration: { ai_routers: 0, channel_knobs: 0, before_send_traces: 0 },
       }),
-    ).toEqual(["Este número não tem conversa, mensagem nem configuração ligada a ele."]);
+    ).toEqual(["Ce numéro n’a aucune conversation, aucun message ni aucune configuration associée."]);
   });
 
   it("contagem zero não vira frase", () => {
@@ -263,7 +263,7 @@ describe("frasesDoImpacto", () => {
       history: { conversations: 0, messages: 0, agent_versions: 2 },
       configuration: { ai_routers: 0, channel_knobs: 0, before_send_traces: 0 },
     });
-    expect(frases).toEqual(["Fica salvo, mas sem número — para de atender: 2 versões de agente."]);
+    expect(frases).toEqual(["Reste enregistré, mais sans numéro — il cesse de répondre : 2 versions d’agent."]);
   });
 
   it("só auditoria pendurada: explica o arquivamento em vez de prometer que não há nada", () => {
@@ -273,7 +273,7 @@ describe("frasesDoImpacto", () => {
       configuration: { ai_routers: 0, channel_knobs: 0, before_send_traces: 4 },
     });
     expect(frases).toEqual([
-      "Este canal tem registros internos, por isso ele é arquivado em vez de apagado.",
+      "Ce canal contient des enregistrements internes ; il est donc archivé au lieu d’être supprimé.",
     ]);
   });
 });

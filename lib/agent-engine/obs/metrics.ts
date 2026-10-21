@@ -134,7 +134,7 @@ export async function evaluateCacheHitAlert(
   const res = await db.query(
     `insert into agent_inbox_items (organization_id, kind, severity, title, body, ref_kind)
      select $1, 'other', 'warn',
-            'Cache hit de prompt abaixo do alvo — custo por run acima do esperado',
+            'Cache hit du prompt sous la cible — coût par run supérieur aux attentes',
             $2,
             $3
      where not exists (
@@ -143,10 +143,10 @@ export async function evaluateCacheHitAlert(
      )`,
     [
       tenantId,
-      `média de cache_read/input nos últimos ${runs} runs da janela = ` +
-        `${(avgRatio * 100).toFixed(1)}% (alvo ≥ ${(knobs.cacheHitAlertThreshold * 100).toFixed(0)}%). ` +
-        'Prefixo do prompt possivelmente abaixo do mínimo cacheável do modelo ou com conteúdo ' +
-        'volátil antes do último breakpoint — ver CLAUDE.md regra 15 e o smoke de caching.',
+      `moyenne de cache_read/input sur les ${runs} derniers runs de la fenêtre = ` +
+        `${(avgRatio * 100).toFixed(1)}% (cible ≥ ${(knobs.cacheHitAlertThreshold * 100).toFixed(0)}%). ` +
+        'Préfixe du prompt peut-être sous le minimum mis en cache par le modèle ou avec du contenu ' +
+        'volatil avant le dernier breakpoint — voir CLAUDE.md règle 15 et le smoke de caching.',
       CACHE_ALERT_REF_KIND,
     ],
   );

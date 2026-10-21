@@ -76,6 +76,25 @@ describe("mapHeader", () => {
     expect(indices.birthdate).toBe(3);
   });
 
+  it("mapeia cabeçalhos em francês, inclusive o n° de identificação (CNI)", () => {
+    const { indices, motivo } = mapHeader([
+      "Nom",
+      "Téléphone",
+      "Courriel",
+      "Numéro d'identification",
+      "Date de naissance",
+      "Étiquettes",
+    ]);
+    expect(motivo).toBeNull();
+    expect(indices.name).toBe(0);
+    expect(indices.phone_number).toBe(1);
+    expect(indices.email).toBe(2);
+    expect(indices.cpf).toBe(3);
+    expect(indices.birthdate).toBe(4);
+    expect(indices.tags).toBe(5);
+    expect(mapHeader(["Nom", "Tel", "CNI"]).indices.cpf).toBe(2);
+  });
+
   it("sem identificador (telefone/e-mail) falha aberto com motivo", () => {
     const { motivo } = mapHeader(["Nome", "Idade"]);
     expect(motivo).toMatch(/sans colonne téléphone ni e-mail/);
@@ -84,20 +103,31 @@ describe("mapHeader", () => {
 
 describe("normalizaTelefone", () => {
   it.each([
+    // Défaut : Cameroun (237). Numéro local ⇒ indicatif ajouté.
+    ["699998888", "+237699998888"],
+    ["6 99 99 88 88", "+237699998888"],
+    ["699 99 88 88", "+237699998888"],
+    // Indicatif présent (avec ou sans +, ou 00) ⇒ gardé.
+    ["237699998888", "+237699998888"],
+    ["+237 6 99 99 88 88", "+237699998888"],
+    ["00237699998888", "+237699998888"],
     ["+5511999998888", "+5511999998888"],
     ["+55 11 99999-8888", "+5511999998888"],
-    // ⚠️ ERA `+11999998888` — número quebrado: o `11` é DDD e estava ocupando o
-    // lugar do DDI (`+11` são os Estados Unidos). Decisão do dono, 2026-08-24:
-    // planilha sem DDI é brasileira, e a regra é a mesma da ingestão de webhook.
-    ["(11) 99999-8888", "+5511999998888"],
-    ["11999998888", "+5511999998888"],
-    ["(11) 3333-4444", "+551133334444"],
     ["5511999998888", "+5511999998888"],
   ])("%s → %s", (raw, esperado) => {
     expect(normalizaTelefone(raw)).toBe(esperado);
   });
 
-  it.each(["123", "abc", "+5511", "999998888"])("recusa %s", (raw) => {
+  it("indicatif de l'organisation : un clone brésilien (55) garde l'ancienne règle", () => {
+    expect(normalizaTelefone("(11) 99999-8888", "55")).toBe("+5511999998888");
+    expect(normalizaTelefone("(11) 3333-4444", "55")).toBe("+551133334444");
+  });
+
+  it("indicatif de l'organisation : Sénégal (221)", () => {
+    expect(normalizaTelefone("77 123 45 67", "221")).toBe("+221771234567");
+  });
+
+  it.each(["123", "abc", "+5511", "12345"])("recusa %s", (raw) => {
     expect(normalizaTelefone(raw)).toBeNull();
   });
 
@@ -132,6 +162,13 @@ describe("mapLinha", () => {
     expect(contato.tags).toEqual(["vip", "newsletter"]);
   });
 
+  it("n° de identificação é texto livre — sem validação de formato brasileira", () => {
+    const comCni = mapHeader(["Nom", "Téléphone", "CNI"]).indices;
+    const { contato, motivo } = mapLinha(["Aïcha", "+237699998888", "  M0123 45678X "], comCni);
+    expect(motivo).toBeNull();
+    expect(contato.cpf).toBe("M0123 45678X");
+  });
+
   it("linha sem telefone e sem e-mail é pulada com motivo", () => {
     const { motivo } = mapLinha(["Só Nome", "", "", ""], indices);
     expect(motivo).toMatch(/sans téléphone ni e-mail/);
@@ -139,12 +176,12 @@ describe("mapLinha", () => {
 
   it("telefone malformado gera erro nominal da linha", () => {
     const { motivo } = mapLinha(["Ana", "123", "", ""], indices);
-    expect(motivo).toMatch(/telefone inválido/);
+    expect(motivo).toMatch(/téléphone invalide/);
   });
 
   it("e-mail malformado gera erro nominal da linha", () => {
     const { motivo } = mapLinha(["Ana", "", "nao-e-email", ""], indices);
-    expect(motivo).toMatch(/e-mail inválido/);
+    expect(motivo).toMatch(/e-mail invalide/);
   });
 
   it("células faltando no fim da linha não derrubam o mapeamento", () => {

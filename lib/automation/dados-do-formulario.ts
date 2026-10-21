@@ -42,9 +42,9 @@ export interface DadosParaAbordagem {
  * horário de `created_at` ou a palavra "webhook" ao cliente.
  */
 const CAMPOS_DO_CONTATO: Record<string, string> = {
-  name: "Nome",
-  display_name: "Nome",
-  phone_number: "Telefone",
+  name: "Nom",
+  display_name: "Nom",
+  phone_number: "Téléphone",
   email: "E-mail",
 };
 

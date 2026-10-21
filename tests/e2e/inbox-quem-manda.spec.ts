@@ -50,7 +50,7 @@ async function login(page: Page, email: string, senha: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(senha);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app/, { timeout: 60_000 });
 }
 
@@ -70,7 +70,7 @@ async function silencioNoBanco(): Promise<string> {
   return (data as { bot_silenced_until: string | null } | null)?.bot_silenced_until ?? "(null)";
 }
 
-test.describe("Inbox — quem manda nesta conversa", () => {
+test.describe("Inbox — qui pilote cette conversation", () => {
   test.describe.configure({ timeout: 180_000 });
 
   test.beforeAll(async () => {
@@ -125,7 +125,7 @@ test.describe("Inbox — quem manda nesta conversa", () => {
         contact_id: contatoId,
         channel_session_id: sessaoId,
         status: "open",
-        last_message_preview: "Oi, queria saber o preço",
+        last_message_preview: "Bonjour, je voudrais connaître le prix",
         last_message_at: new Date().toISOString(),
         last_inbound_at: new Date().toISOString(),
       })
@@ -162,7 +162,7 @@ test.describe("Inbox — quem manda nesta conversa", () => {
     if (erroLead) throw new Error(`crm_leads: ${erroLead.message}`);
   });
 
-  test("o automático atende, a pessoa assume, o automático PARA, e a volta existe", async ({
+  test("l’automatique répond, la personne prend la main, l’automatique S’ARRÊTE, et le retour existe", async ({
     page,
   }) => {
     const atendente = creds.users.agent!;
@@ -185,7 +185,7 @@ test.describe("Inbox — quem manda nesta conversa", () => {
     // -----------------------------------------------------------------
     // (2) A pessoa assume — pelo botão, como ela faria.
     // -----------------------------------------------------------------
-    await page.getByRole("button", { name: /^Assumir$/i }).click();
+    await page.getByRole("button", { name: /^Prendre en charge$/i }).click();
 
     // -----------------------------------------------------------------
     // (3) A tela passa a dizer QUEM manda, e o selo explica o porquê.
@@ -200,8 +200,8 @@ test.describe("Inbox — quem manda nesta conversa", () => {
     await expect(comando).toContainText("E2E Agent", { timeout: 30_000 });
     // …e recusa o genérico. Sem esta metade, um dia em que o nome voltasse null e
     // a tela caísse no fallback passaria despercebido.
-    await expect(comando).not.toContainText(/^Atendente$/);
-    await expect(page.getByTestId("badge-atendimento-humano")).toContainText(/assumiu/i);
+    await expect(comando).not.toContainText(/^Agent$/);
+    await expect(page.getByTestId("badge-atendimento-humano")).toContainText(/a pris le relais/i);
     await captura(page, "2-pessoa-no-comando");
 
     // -----------------------------------------------------------------
@@ -220,15 +220,15 @@ test.describe("Inbox — quem manda nesta conversa", () => {
     // Sem `if`: com o negócio semeado a linha TEM de aparecer. Uma asserção
     // condicional aqui passaria calada justamente no caso em que a feature não
     // funciona — que é o modo de falha que esta entrega existe para acabar.
-    await expect(page.getByText("Atividade", { exact: true }).first()).toBeVisible({
+    await expect(page.getByText("Activité", { exact: true }).first()).toBeVisible({
       timeout: 30_000,
     });
-    await expect(page.getByText(/Assumiu a conversa/i).first()).toBeVisible({
+    await expect(page.getByText(/A pris la conversation/i).first()).toBeVisible({
       timeout: 30_000,
     });
     // E com o NOME de quem agiu, não "Você/time" — é a diferença entre saber que
     // uma pessoa mexeu e saber QUAL pessoa.
-    await expect(page.getByText(/Você\/time/).first()).toHaveCount(0);
+    await expect(page.getByText(/Vous\/équipe/).first()).toHaveCount(0);
 
     // -----------------------------------------------------------------
     // (6) A VOLTA existe e funciona — o interruptor tem os dois lados.
@@ -245,7 +245,7 @@ test.describe("Inbox — quem manda nesta conversa", () => {
     await captura(page, "3-devolvido-ao-automatico");
   });
 
-  test("a conversa que o automático escalou APARECE na Fila", async ({ page }) => {
+  test("la conversation que l’automatique a escaladée APPARAÎT dans la File", async ({ page }) => {
     // ESTE CASO É A ÚLTIMA PONTA DA RECLAMAÇÃO Nº 1, e ela não era de tela.
     //
     // `performHumanHandoff` deixa a conversa em `status='pending'` sem dono, e a
@@ -278,12 +278,12 @@ test.describe("Inbox — quem manda nesta conversa", () => {
 
     // E o BADGE da aba a conta — badge que não bate com a lista manda o atendente
     // procurar um trabalho que a aba não mostra (ou o contrário, que é este caso).
-    const abaFila = page.getByRole("tab", { name: /Fila/i }).first();
+    const abaFila = page.getByRole("tab", { name: /File/i }).first();
     await expect(abaFila).toContainText(/[1-9]/, { timeout: 30_000 });
 
     // Abrindo, a tela diz que ninguém está no comando — nem pessoa, nem automático.
     await naFila.click();
-    await expect(page.getByTestId("comando-da-conversa")).toContainText(/sem respons/i, {
+    await expect(page.getByTestId("comando-da-conversa")).toContainText(/aucun respons/i, {
       timeout: 30_000,
     });
   });

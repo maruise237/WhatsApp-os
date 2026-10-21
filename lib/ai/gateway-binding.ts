@@ -31,6 +31,7 @@ import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 import { OPENROUTER_BASE_URL, resolveLanguageModel, type ModelId } from "./gateway";
+import { iaDeLaPlateformeDepuisProcessEnv, modeleDeLaPlateforme } from "./plateforme";
 
 export interface ModeloResolvido {
   model: LanguageModel;
@@ -54,6 +55,10 @@ export async function resolverModeloDoPonto(
   organizationId: string,
   padrao: ModelId,
 ): Promise<ModeloResolvido | null> {
+  // IA de la plateforme : le panneau des fournisseurs ne décide plus rien.
+  const ia = iaDeLaPlateformeDepuisProcessEnv();
+  if (ia) return { model: modeleDeLaPlateforme(ia), modelId: ia.model, origem: "padrao" };
+
   const binding = await lerBinding(purpose, organizationId);
 
   if (binding === null) {

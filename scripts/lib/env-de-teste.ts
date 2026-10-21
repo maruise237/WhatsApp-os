@@ -96,8 +96,8 @@ export function credenciaisSupabaseDeTeste(): CredenciaisSupabase {
   const serviceRole = arquivo.NEON_SERVICE_ROLE_JWT ?? "";
   if (url === "" || serviceRole === "") {
     throw new Error(
-      "Sem credenciais do Supabase: defina NEON_DATA_API_URL e NEON_SERVICE_ROLE_JWT " +
-        "no ambiente (ex.: `set -a; . ./.env.e2e; set +a`) ou no .env.local.",
+      "Sans identifiants de la base : définissez NEON_DATA_API_URL et NEON_SERVICE_ROLE_JWT " +
+        "dans l'environnement (ex. : `set -a; . ./.env.e2e; set +a`) ou dans le .env.local.",
     );
   }
   return {
@@ -112,12 +112,12 @@ export function credenciaisSupabaseDeTeste(): CredenciaisSupabase {
 
 /** O host de um destino, sem a senha — `dbUrl` carrega credencial e não vai a log. */
 function hostDe(alvo: string): string {
-  if (alvo === "") return "(vazio)";
+  if (alvo === "") return "(vide)";
   try {
     const u = new URL(alvo);
     return u.port === "" ? u.hostname : `${u.hostname}:${u.port}`;
   } catch {
-    return "(ilegível)";
+    return "(illisible)";
   }
 }
 
@@ -169,17 +169,17 @@ export function anunciarDestino(script: string, c: CredenciaisSupabase): void {
   // Formato preservado no caso são-todos-locais: é o que o operador já conhece e
   // o que a prova dos 16 seeds registrou no handoff.
   if (apiLocal && bancoLocal) {
-    console.info(`[${script}] escrevendo em LOCAL: ${c.url} (origem: ${c.origem})`);
+    console.info(`[${script}] écriture en LOCAL : ${c.url} (origine : ${c.origem})`);
     return;
   }
   if (!apiLocal && !bancoLocal) {
-    console.warn(`[${script}] escrevendo em ⚠️  REMOTO: ${c.url} (origem: ${c.origem})`);
+    console.warn(`[${script}] écriture en ⚠️  DISTANT : ${c.url} (origine : ${c.origem})`);
     return;
   }
   console.warn(
-    `[${script}] ⚠️  DESTINO MISTO — a API vai para ${apiLocal ? "LOCAL" : "REMOTO"} ` +
-      `(${c.url}) e o Postgres para ${bancoLocal ? "LOCAL" : "REMOTO"} (${hostDe(c.dbUrl)}). ` +
-      `Quem abre pg.Pool escreve no SEGUNDO. (origem: ${c.origem})`,
+    `[${script}] ⚠️  DESTINATION MIXTE — l'API va en ${apiLocal ? "LOCAL" : "DISTANT"} ` +
+      `(${c.url}) et Postgres en ${bancoLocal ? "LOCAL" : "DISTANT"} (${hostDe(c.dbUrl)}). ` +
+      `Qui ouvre pg.Pool écrit dans le SECOND. (origine : ${c.origem})`,
   );
 }
 

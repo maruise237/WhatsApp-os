@@ -86,9 +86,9 @@ export async function extractPdfText(buffer: Buffer): Promise<string> {
     // 4 linhas; a caçada custa uma tarde.
     if (err instanceof Error && /DOMMatrix|@napi-rs\/canvas/.test(err.message)) {
       throw new PdfExtractError(
-        "Extração de PDF indisponível: o binário nativo @napi-rs/canvas não foi instalado " +
-          "nesta plataforma. Reinstale as dependências SEM podar as opcionais " +
-          "(`pnpm install`, não `--no-optional`). Até lá, PDFs não são lidos.",
+        "Extraction PDF indisponible : le binaire natif @napi-rs/canvas n’est pas installé " +
+          "sur cette plateforme. Réinstallez les dépendances SANS retirer les optionnelles " +
+          "(`pnpm install`, pas `--no-optional`). D’ici là, les PDF ne sont pas lus.",
         err,
       );
     }

@@ -224,15 +224,15 @@ function buildDeriveDeps(
       // enxerga imagens" seria gravar uma alegação que ninguém verificou (e
       // era o que acontecia com todo modelo da OpenRouter).
       const motivo = capacidadeEhConhecida(llm.provider, llm.defaultModel ?? "")
-        ? `o modelo ${llm.defaultModel ?? "configurado"} não enxerga imagens`
-        : `não sei se o modelo ${llm.defaultModel ?? "configurado"} enxerga imagens, ` +
-          `então não arrisquei enviar a foto — escolha um modelo do catálogo em Agente de IA → Provedores`;
-      await avisarMidiaNaoLida(orgId, "imagem", motivo);
+        ? `le modèle ${llm.defaultModel ?? "configuré"} ne lit pas les images`
+        : `je ne sais pas si le modèle ${llm.defaultModel ?? "configuré"} lit les images, ` +
+          `je n’ai donc pas envoyé la photo — choisissez un modèle du catalogue dans Agent IA → Fournisseurs`;
+      await avisarMidiaNaoLida(orgId, "l’image", motivo);
       return MARCADOR_NAO_LIDA;
     }
     const factory = registry[llm.provider];
     if (!factory) {
-      await avisarMidiaNaoLida(orgId, "imagem", `o provedor ${llm.provider} não está disponível nesta instalação`);
+      await avisarMidiaNaoLida(orgId, "l’image", `le fournisseur ${llm.provider} n’est pas disponible sur cette installation`);
       return MARCADOR_NAO_LIDA;
     }
     const res = await generateText({
@@ -241,7 +241,7 @@ function buildDeriveDeps(
         {
           role: "user",
           content: [
-            { type: "text", text: "Descreva objetivamente esta imagem em 1-2 frases, em português, para um atendente de vendas entender o que o cliente enviou." },
+            { type: "text", text: "Décrivez objectivement cette image en 1 à 2 phrases, en français, pour qu’un vendeur comprenne ce que le client a envoyé." },
             // AI SDK v7: file part com mediaType (o antigo image part é deprecated).
             { type: "file", data: buffer, mediaType: mime.split(";")[0]! },
           ],
@@ -261,7 +261,7 @@ function buildDeriveDeps(
           // como se ele não existisse. O aviso é o que dá ao operador a chance
           // de cadastrar a chave — sem ele, o sintoma é indistinguível de "o
           // agente é ruim".
-          await avisarMidiaNaoLida(orgId, "áudio", "falta uma chave da OpenAI para transcrever");
+          await avisarMidiaNaoLida(orgId, "l’audio", "il manque une clé OpenAI pour transcrire");
           return MARCADOR_NAO_LIDA;
         },
       };
@@ -283,7 +283,7 @@ function buildDeriveDeps(
  * cliente — "não consegui abrir sua foto, pode me dizer o que é?" no lugar de
  * um silêncio que parece descaso.
  */
-export const MARCADOR_NAO_LIDA = "[o cliente enviou uma mídia que não consegui interpretar]";
+export const MARCADOR_NAO_LIDA = "[le client a envoyé un média que je n’ai pas pu interpréter]";
 
 /**
  * Abre UM aviso na Central por organização enquanto o problema durar.
@@ -320,10 +320,10 @@ async function avisarMidiaNaoLida(
       organization_id: organizationId,
       kind: "midia_nao_lida",
       severity: "warn",
-      title: `O agente não conseguiu ler ${tipo} que o cliente enviou`,
+      title: `L’agent n’a pas pu lire ${tipo} envoyé par le client`,
       body:
-        `Motivo: ${motivo}. Enquanto isso, o agente responde avisando que não conseguiu abrir o arquivo. ` +
-        `Para resolver, ajuste o modelo desse ponto em Agente de IA → Provedores, ou cadastre a chave necessária em Credenciais.`,
+        `Motif : ${motivo}. En attendant, l’agent répond en indiquant qu’il n’a pas pu ouvrir le fichier. ` +
+        `Pour corriger, ajustez le modèle de ce point dans Agent IA → Fournisseurs, ou enregistrez la clé nécessaire dans Identifiants.`,
     });
     // E o retorno é CONFERIDO. O supabase-js devolve `{ error }` em vez de
     // lançar, então o `catch` abaixo era inalcançável para erro de banco: a

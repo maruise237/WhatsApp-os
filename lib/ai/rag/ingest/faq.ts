@@ -1,8 +1,10 @@
 /**
  * FAQ markdown ingestion helpers.
  *
- * Supports two section marker styles (case-insensitive):
- *   ## Pergunta: / ## Resposta:
+ * Supports these section marker styles (case-insensitive):
+ *   ## Question: / ## Réponse:   (français — défaut du produit)
+ *   ## Q: / ## R:
+ *   ## Pergunta: / ## Resposta:  (historique, clones lusophones)
  *   ## P: / ## R:
  *
  * Optional YAML frontmatter (---) applies locale/tags defaults to all items
@@ -10,12 +12,14 @@
  *
  * Example markdown:
  *   ---
- *   locale: pt-BR
- *   tags: [envio, prazo]
+ *   locale: fr-FR
+ *   tags: [livraison, delai]
  *   ---
- *   ## Pergunta: Qual o prazo de entrega?
- *   ## Resposta: Entregamos em até 7 dias úteis.
+ *   ## Question: Quel est le délai de livraison ?
+ *   ## Réponse: Nous livrons à Douala en 48 h.
  */
+
+import { LOCALE_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export interface FaqItem {
   question: string;
@@ -24,12 +28,12 @@ export interface FaqItem {
   locale: string;
 }
 
-const DEFAULT_LOCALE = "pt-BR";
+const DEFAULT_LOCALE = LOCALE_PAR_DEFAUT;
 
 /** Regex matching both `## Pergunta:` and `## P:` (case-insensitive). */
-const QUESTION_RE = /^##\s+(?:pergunta|p)\s*:/i;
+const QUESTION_RE = /^##\s+(?:question|pergunta|q|p)\s*:/i;
 /** Regex matching both `## Resposta:` and `## R:` (case-insensitive). */
-const ANSWER_RE = /^##\s+(?:resposta|r)\s*:/i;
+const ANSWER_RE = /^##\s+(?:r[ée]ponse|resposta|r)\s*:/i;
 
 interface Frontmatter {
   locale: string;
@@ -137,5 +141,5 @@ export function parseFaqMarkdown(md: string): FaqItem[] {
  */
 export function formatFaqChunk(item: FaqItem): string {
   const tagsStr = item.tags.length > 0 ? item.tags.join(", ") : "";
-  return `Pergunta: ${item.question}\nResposta: ${item.answer}${tagsStr ? `\nTags: ${tagsStr}` : ""}`;
+  return `Question : ${item.question}\nRéponse : ${item.answer}${tagsStr ? `\nTags : ${tagsStr}` : ""}`;
 }

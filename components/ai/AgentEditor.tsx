@@ -7,13 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { GuardrailsEditor } from "@/components/ai/GuardrailsEditor";
 import { SystemPromptEditor } from "@/components/ai/SystemPromptEditor";
@@ -191,7 +184,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
       <Tabs defaultValue="general">
         <TabsList>
           <TabsTrigger value="general">{t("Geral")}</TabsTrigger>
-          <TabsTrigger value="model">{t("Modelo")}</TabsTrigger>
+          <TabsTrigger value="consignes">Consignes</TabsTrigger>
           <TabsTrigger value="rag">{t("RAG")}</TabsTrigger>
           <TabsTrigger value="guardrails">{t("Guardrails")}</TabsTrigger>
         </TabsList>
@@ -236,28 +229,8 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
           </Card>
         </TabsContent>
 
-        <TabsContent value="model">
+        <TabsContent value="consignes">
           <Card className="space-y-4 p-4">
-            <div className="space-y-1">
-              <Label>{t("Modelo")}</Label>
-              <Select
-                value={formState.model}
-                onValueChange={(v) => patchForm({ model: v as AgentModel })}
-                disabled={disabled}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {AGENT_MODELS.map((m) => (
-                    <SelectItem key={m} value={m}>
-                      {m}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
             <SystemPromptEditor
               value={formState.system_prompt}
               onChange={(v) => patchForm({ system_prompt: v })}

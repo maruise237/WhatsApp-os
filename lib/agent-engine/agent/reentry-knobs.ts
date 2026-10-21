@@ -50,7 +50,7 @@ export async function insertReentryKnobVersion(
   );
   const row = rows[0];
   if (row === undefined) {
-    throw new Error('insert em reentry_knob_versions não devolveu linha');
+    throw new Error('l’insertion dans reentry_knob_versions n’a renvoyé aucune ligne');
   }
   return row;
 }
@@ -74,7 +74,7 @@ export async function setReentryKnobPointer(
     [input.versionId, input.tenantId],
   );
   if (rowCount === 0) {
-    throw new Error('versão de knobs de re-entrada não encontrada para o tenant — ponteiro não movido');
+    throw new Error('version des réglages de réentrée introuvable pour le tenant — pointeur non déplacé');
   }
 }
 

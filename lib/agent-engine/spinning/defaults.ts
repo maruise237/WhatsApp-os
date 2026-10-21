@@ -31,5 +31,6 @@ export const SPINNING_DEFAULTS: SpinningKnobs = {
   // Links de pagamento/checkout/agenda são repetidos legitimamente (o mesmo link
   // vai a vários leads) — isentos por default. Normalizado é lowercase; 'cobranc'
   // cobre 'cobrança'/'cobranca' antes do 'ç'. É ponto de partida: o operador ajusta.
-  allowlistPatterns: ['https?://\\S*(pay|pag|checkout|pix|boleto|cobranc)'],
+  // Mobile Money (Orange Money, MTN MoMo, Wave) et agrégateurs africains en tête.
+  allowlistPatterns: ['https?://\\S*(pay|pag|checkout|momo|wave|orange-?money|cinetpay|fedapay|flutterwave|paystack|pix|boleto|cobranc)'],
 };

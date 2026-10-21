@@ -144,7 +144,7 @@ describe("o negócio de um funil que o assistente NÃO cuida", () => {
       escopoDeFunis: [],
     });
     expect(r.motivo).toBe("fora_do_escopo");
-    expect(r.detalhe).toMatch(/nenhum funil liberado/i);
+    expect(r.detalhe).toMatch(/aucun tableau autorisé/i);
   });
 });
 

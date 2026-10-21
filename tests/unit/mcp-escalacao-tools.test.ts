@@ -218,7 +218,7 @@ describe("crm_list_available_attendants", () => {
       fazerCtx(semNinguem),
     )) as { available_count: number; next_action: string };
     expect(res.available_count).toBe(0);
-    expect(res.next_action).toMatch(/Ninguém pode assumir agora/);
+    expect(res.next_action).toMatch(/Personne ne peut prendre en charge maintenant/);
   });
 });
 

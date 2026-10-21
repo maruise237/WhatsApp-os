@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-export const metadata = { title: "Acesso negado — Admin Plataforma" };
+export const metadata = { title: "Accès refusé — Administration de la plateforme" };
 
 export default function AdminForbiddenPage() {
   return (

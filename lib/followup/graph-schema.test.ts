@@ -1007,12 +1007,12 @@ describe('graph-schema', () => {
         { id: 'frio', label: 'frio', check: null, kind: 'match', condition: { type: 'class_match', value: 'frio' } },
         {
           id: NO_REPLY_BRANCH_ID,
-          label: 'Sem resposta',
+          label: 'Sans réponse',
           check: null,
           kind: 'match',
           condition: { type: 'class_match', value: 'no_reply' },
         },
-        { id: FALLBACK_BRANCH_ID, label: 'Sempre', check: null, kind: 'fallback', condition: { type: 'always' } },
+        { id: FALLBACK_BRANCH_ID, label: 'Toujours', check: null, kind: 'fallback', condition: { type: 'always' } },
       ]);
     });
 
@@ -1021,19 +1021,19 @@ describe('graph-schema', () => {
       expect(nodeBranches(node)).toStrictEqual([
         {
           id: CONDITION_TRUE_BRANCH_ID,
-          label: 'Sim',
+          label: 'Oui',
           check: null,
           kind: 'match',
           condition: { type: 'cond_result', value: true },
         },
         {
           id: CONDITION_FALSE_BRANCH_ID,
-          label: 'Não',
+          label: 'Non',
           check: null,
           kind: 'match',
           condition: { type: 'cond_result', value: false },
         },
-        { id: FALLBACK_BRANCH_ID, label: 'Sempre', check: null, kind: 'fallback', condition: { type: 'always' } },
+        { id: FALLBACK_BRANCH_ID, label: 'Toujours', check: null, kind: 'fallback', condition: { type: 'always' } },
       ]);
     });
 
@@ -1052,7 +1052,7 @@ describe('graph-schema', () => {
       for (const id of ['t1', 'a1', 'e1']) {
         const branches = nodeBranches(graph.nodes.find((n) => n.id === id)!);
         expect(branches).toStrictEqual([
-          { id: FALLBACK_BRANCH_ID, label: 'Sempre', check: null, kind: 'fallback', condition: { type: 'always' } },
+          { id: FALLBACK_BRANCH_ID, label: 'Toujours', check: null, kind: 'fallback', condition: { type: 'always' } },
         ]);
       }
     });
@@ -1222,7 +1222,7 @@ describe('graph-schema', () => {
           },
           {
             id: FALLBACK_BRANCH_ID,
-            label: 'Nenhuma delas',
+            label: 'Aucune d’entre elles',
             check: null,
             kind: 'fallback',
             condition: { type: 'always' },

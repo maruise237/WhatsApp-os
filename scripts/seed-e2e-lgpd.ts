@@ -62,11 +62,11 @@ async function upsert<T extends Record<string, unknown>>(
   let q = admin.from(tabela).select("id");
   for (const [k, v] of Object.entries(busca)) q = q.eq(k, v as never);
   const { data: existente, error: selErr } = await q.maybeSingle();
-  if (selErr) throw new Error(`buscar ${tabela}: ${selErr.message}`);
+  if (selErr) throw new Error(`recherche ${tabela} : ${selErr.message}`);
   if (existente) {
     const id = (existente as { id: string }).id;
     const { error } = await admin.from(tabela).update(linha as never).eq("id", id);
-    if (error) throw new Error(`atualizar ${tabela}: ${error.message}`);
+    if (error) throw new Error(`mise à jour ${tabela} : ${error.message}`);
     return id;
   }
   const { data, error } = await admin
@@ -74,7 +74,7 @@ async function upsert<T extends Record<string, unknown>>(
     .insert(linha as never)
     .select("id")
     .single();
-  if (error || !data) throw new Error(`inserir ${tabela}: ${error?.message}`);
+  if (error || !data) throw new Error(`insertion ${tabela} : ${error?.message}`);
   return (data as { id: string }).id;
 }
 
@@ -108,8 +108,8 @@ async function main(): Promise<void> {
     .eq("organization_id", orgId)
     .limit(1)
     .maybeSingle();
-  if (sErr) throw new Error(`buscar channel_session: ${sErr.message}`);
-  if (!sessao) throw new Error("org sem channel_session — rode o seed de credenciais antes");
+  if (sErr) throw new Error(`recherche channel_session : ${sErr.message}`);
+  if (!sessao) throw new Error("org sans channel_session — lancez le seed des identifiants avant");
 
   const conversationId = await upsert(
     "conversations",
@@ -239,14 +239,14 @@ async function main(): Promise<void> {
   };
   fs.writeFileSync(CREDS_PATH, JSON.stringify(creds, null, 2));
 
-  console.info(`✅ Caso LGPD pronto:`);
-  console.info(`   contato   ${contactId} (${NOME})`);
-  console.info(`   conversa  ${conversationId} com ${messageIds.length} mensagens`);
-  console.info(`   lead      ${leadId} com 2 atividades (ai + user)`);
+  console.info(`✅ Cas protection des données prêt :`);
+  console.info(`   contact       ${contactId} (${NOME})`);
+  console.info(`   conversation  ${conversationId} avec ${messageIds.length} messages`);
+  console.info(`   lead          ${leadId} avec 2 activités (ai + user)`);
   console.info(`   request   ${requestId} status=received  → /app/lgpd/requests/${requestId}`);
 }
 
 main().catch((err) => {
-  console.error("❌ Seed LGPD falhou:", err);
+  console.error("❌ Échec du seed protection des données :", err);
   process.exit(1);
 });

@@ -241,7 +241,7 @@ export async function completeJob<T = void>(
     );
     if (done.rowCount !== 1) {
       throw new Error(
-        `lease do job ${jobId} perdido no complete (re-claim pós visibility timeout?) — efeitos descartados`,
+        `lease du job ${jobId} perdu au complete (re-claim après visibility timeout ?) — effets ignorés`,
       );
     }
     await client.query('commit');
@@ -276,14 +276,14 @@ export async function failJob(
      alert as (
        insert into agent_inbox_items (organization_id, kind, severity, title, body, ref_kind, ref_id)
        select organization_id, 'job_dead', 'critical',
-              'Job descartado após esgotar tentativas',
+              'Job abandonné après épuisement des tentatives',
               -- O erro que matou o job vai JUNTO. Antes o corpo era só
               -- 'kind=...; attempts=5' e jogava fora a única informação que
               -- resolveria: o aviso existia, e não dizia nada. Caso real desta
               -- VPS: 16 alertas críticos idênticos enquanto o erro guardado em
               -- last_error dizia exatamente o que configurar.
               'kind=' || kind || '; attempts=' || attempts
-                || coalesce(chr(10) || 'Motivo: ' || left(last_error, 400), ''),
+                || coalesce(chr(10) || 'Motif : ' || left(last_error, 400), ''),
               'job_queue', id
        from updated
        where status = 'dead'
@@ -356,7 +356,7 @@ export async function reapExpiredJobs(
        update job_queue
        set status = case when attempts >= max_attempts then 'dead' else 'pending' end,
            locked_by = null, locked_at = null,
-           last_error = coalesce(last_error, 'visibility timeout excedido (worker morto?)')
+           last_error = coalesce(last_error, 'visibility timeout dépassé (worker arrêté ?)')
        where status = 'running' and locked_at < now() - ($1 * interval '1 millisecond')
        -- last_error PRECISA sair no returning: a CTE do alerta abaixo só
        -- enxerga as colunas devolvidas aqui, não as da tabela. Faltando ela, a
@@ -367,14 +367,14 @@ export async function reapExpiredJobs(
      alert as (
        insert into agent_inbox_items (organization_id, kind, severity, title, body, ref_kind, ref_id)
        select organization_id, 'job_dead', 'critical',
-              'Job descartado após esgotar tentativas',
+              'Job abandonné après épuisement des tentatives',
               -- O erro que matou o job vai JUNTO. Antes o corpo era só
               -- 'kind=...; attempts=5' e jogava fora a única informação que
               -- resolveria: o aviso existia, e não dizia nada. Caso real desta
               -- VPS: 16 alertas críticos idênticos enquanto o erro guardado em
               -- last_error dizia exatamente o que configurar.
               'kind=' || kind || '; attempts=' || attempts
-                || coalesce(chr(10) || 'Motivo: ' || left(last_error, 400), ''),
+                || coalesce(chr(10) || 'Motif : ' || left(last_error, 400), ''),
               'job_queue', id
        from expired
        where status = 'dead'
@@ -400,7 +400,7 @@ function normalizeError(error: unknown): string {
 function mustRow<T>(rows: T[], what: string): T {
   const row = rows[0];
   if (row === undefined) {
-    throw new Error(`esperava uma linha de ${what}, veio nenhuma`);
+    throw new Error(`une ligne de ${what}était attendue, aucune reçue`);
   }
   return row;
 }
@@ -409,7 +409,7 @@ async function rollback(client: PoolClient, cause: unknown): Promise<void> {
   try {
     await client.query('rollback');
   } catch (rollbackErr) {
-    throw new AggregateError([cause, rollbackErr], 'rollback falhou após erro na transação da fila');
+    throw new AggregateError([cause, rollbackErr], 'rollback échoué après une erreur dans la transaction de la file');
   }
 }
 

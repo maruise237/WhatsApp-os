@@ -24,7 +24,7 @@ export default async function TermsPage() {
         <p>
           {op.sistema} est un logiciel open source installé et exploité par{" "}
           <strong>{operador}</strong>
-          {op.cnpj ? ` (CNPJ ${op.cnpj})` : ""}, ci-après <strong>l’exploitant</strong>. C’est l’exploitant qui maintient ce serveur, décide de l’usage du système et répond des données traitées ici.
+          {op.cnpj ? ` (identifiant fiscal ${op.cnpj})` : ""}, ci-après <strong>l’exploitant</strong>. C’est l’exploitant qui maintient ce serveur, décide de l’usage du système et répond des données traitées ici.
         </p>
         <p>
           Les auteurs et mainteneurs du logiciel n’exploitent pas cette installation, n’ont accès ni à ce serveur ni aux données qui y sont stockées, et ne sont pas partie à la relation entre l’exploitant et vous. Toute demande concernant l’usage, la facturation, le support ou les données doit être adressée à l’exploitant.
@@ -106,7 +106,7 @@ export default async function TermsPage() {
               </a>
             </>
           ) : (
-            " pelos canais de atendimento da própria organização"
+            " par les canaux d’assistance de l’organisation elle-même"
           )}
           .
         </p>

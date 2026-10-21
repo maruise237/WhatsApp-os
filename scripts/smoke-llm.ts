@@ -73,9 +73,9 @@ function bigSystem(): string {
 }
 
 async function main(): Promise<void> {
-  if (!process.env.ANTHROPIC_API_KEY) fail('ANTHROPIC_API_KEY ausente no env — o smoke exige o modelo real');
+  if (!process.env.ANTHROPIC_API_KEY) fail('ANTHROPIC_API_KEY absente de l’env — le smoke exige le vrai modèle');
   const min = MIN_CACHEABLE[MODEL];
-  if (min === undefined) fail(`modelo ${MODEL} sem entrada em MIN_CACHEABLE — adicione o mínimo cacheável dele`);
+  if (min === undefined) fail(`modèle ${MODEL} sans entrée dans MIN_CACHEABLE — ajoutez son minimum cachable`);
 
   const db = new pg.Pool({ connectionString: DB_URL, max: 3 });
   await db.query(
@@ -103,9 +103,9 @@ async function main(): Promise<void> {
 
   const hashA = await stablePrefixHash({ system, tools });
   const hashB = await stablePrefixHash({ system, tools });
-  check(hashA === hashB, `prefixo byte-idêntico entre builds (hash ${hashA.slice(0, 12)}…)`);
+  check(hashA === hashB, `préfixe identique à l’octet près entre builds (hash ${hashA.slice(0, 12)}…)`);
 
-  console.log(`→ chamada 1 (${MODEL}, esperado: cache WRITE)…`);
+  console.log(`→ appel 1 (${MODEL}, attendu : cache WRITE)…`);
   const call1 = await runModelCall(db, cfg, {
     tenantId: ORG,
     purpose: 'connection_test',
@@ -117,21 +117,21 @@ async function main(): Promise<void> {
 
   // 1. shape do usage (regra 16): os paths que o seam lê existem no SDK instalado
   const raw = call1.result.usage as Record<string, unknown>;
-  console.log(`  usage cru do SDK: ${JSON.stringify(raw)}`);
-  check(typeof raw['inputTokens'] === 'number', 'usage.inputTokens é número no SDK instalado');
-  check(typeof raw['outputTokens'] === 'number', 'usage.outputTokens é número no SDK instalado');
+  console.log(`  usage brut du SDK : ${JSON.stringify(raw)}`);
+  check(typeof raw['inputTokens'] === 'number', 'usage.inputTokens est un nombre dans le SDK installé');
+  check(typeof raw['outputTokens'] === 'number', 'usage.outputTokens est un nombre dans le SDK installé');
   const details = raw['inputTokenDetails'] as Record<string, unknown> | undefined;
-  check(details !== undefined && details !== null, 'usage.inputTokenDetails existe no SDK instalado');
+  check(details !== undefined && details !== null, 'usage.inputTokenDetails existe dans le SDK installé');
   check(
     'cacheReadTokens' in (details ?? {}) && 'cacheWriteTokens' in (details ?? {}),
     'usage.inputTokenDetails.{cacheReadTokens,cacheWriteTokens} presentes',
   );
 
   // 2 + 4. cache WRITE real e prefixo ≥ mínimo do modelo
-  check(call1.usage.cacheWriteTokens > 0, `chamada 1 escreveu cache (${call1.usage.cacheWriteTokens} tokens)`);
+  check(call1.usage.cacheWriteTokens > 0, `l’appel 1 a écrit le cache (${call1.usage.cacheWriteTokens} jetons)`);
   check(
     call1.usage.cacheWriteTokens >= min,
-    `prefixo medido (${call1.usage.cacheWriteTokens}) ≥ mínimo cacheável do ${MODEL} (${min})`,
+    `préfixe mesuré (${call1.usage.cacheWriteTokens}) ≥ minimum cachable de ${MODEL} (${min})`,
   );
 
   console.log(`→ chamada 2 (mesmo prefixo, esperado: cache READ)…`);
@@ -238,7 +238,7 @@ async function main(): Promise<void> {
       where organization_id = $1 and kind = 'budget_warning' and status = 'open'`,
     [ORG],
   );
-  check(aviso[0]!.n === '1', 'gasto acima do teto: 1ª chamada AVISA e segue (budget_warning aberto)');
+  check(aviso[0]!.n === '1', 'dépense au-dessus du plafond : le 1er appel AVERTIT et continue (budget_warning ouvert)');
 
   const { rows: antes } = await db.query<{ n: string }>(
     `select count(*)::text as n from llm_calls where organization_id = $1`,
@@ -255,7 +255,7 @@ async function main(): Promise<void> {
   } catch (err) {
     budgetErr = err;
   }
-  check(budgetErr instanceof LlmBudgetExceededError, 'já avisado: 2ª chamada → LlmBudgetExceededError');
+  check(budgetErr instanceof LlmBudgetExceededError, 'déjà averti : 2e appel → LlmBudgetExceededError');
   const { rows: after } = await db.query<{ n: string; recusas: string }>(
     `select count(*)::text as n,
             count(*) filter (where status = 'erro' and error_code = 'orcamento_esgotado')::text as recusas
@@ -267,13 +267,13 @@ async function main(): Promise<void> {
   // uma linha a mais que antes da recusa, e ela é a recusa por orçamento.
   check(
     Number(after[0]!.n) === Number(antes[0]!.n) + 1 && after[0]!.recusas === '1',
-    'recusa por teto: nenhuma chamada ao provedor, e a recusa virou linha orcamento_esgotado em llm_calls',
+    'refus par plafond : aucun appel au fournisseur, et le refus est devenu une ligne orcamento_esgotado dans llm_calls',
   );
   const { rows: inbox } = await db.query<{ n: string }>(
     `select count(*)::text as n from agent_inbox_items where organization_id = $1 and kind = 'budget_exceeded'`,
     [ORG],
   );
-  check(inbox[0]!.n === '1', 'alerta humano budget_exceeded criado (1x, sem duplicar)');
+  check(inbox[0]!.n === '1', 'alerte humaine budget_exceeded créée (1x, sans doublon)');
 
   // RESTAURA. Sem isto, um smoke rodado por engano contra um banco que não é o
   // efêmero deixa a organização PARADA para sempre — a mesma família de defeito
@@ -304,12 +304,12 @@ async function main(): Promise<void> {
 
   console.log(
     `\nSMOKE LLM PASS — ai@7: modelo=${call1.model} custo_total=${agg.cost.toFixed(4)}c ` +
-      `write=${call1.usage.cacheWriteTokens} read=${call2.usage.cacheReadTokens} (mínimo ${MODEL}=${min})`,
+      `write=${call1.usage.cacheWriteTokens} read=${call2.usage.cacheReadTokens} (minimum ${MODEL}=${min})`,
   );
   await db.end();
 }
 
 main().catch((err) => {
-  console.error('✗ SMOKE FAIL (exceção):', err);
+  console.error('✗ SMOKE FAIL (exception) :', err);
   process.exit(1);
 });

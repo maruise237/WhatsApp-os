@@ -57,7 +57,7 @@ function loadInternalSecret(): string {
 const creds = loadCreds();
 const ts = Date.now();
 const SOURCE_NAME = `E2E Landing ${ts}`;
-const RULE_NAME = `E2E Automação ${ts}`;
+const RULE_NAME = `E2E Automatisation ${ts}`;
 const LEAD_NAME = `Ana E2E ${ts}`;
 const TAG = "e2e-tag";
 
@@ -73,7 +73,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto(`${APP_URL}/login`);
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
@@ -89,7 +89,7 @@ async function expectToast(page: Page, text: string): Promise<void> {
   await expect(page.getByText(text)).toBeVisible({ timeout: 15_000 });
 }
 
-test.describe("webhooks & automações — fluxo completo", () => {
+test.describe("webhooks & automatisations — parcours complet", () => {
   // Fluxo longo e sequencial (2 logins, múltiplos diálogos, POST direto,
   // drain com esperas deliberadas, polling da timeline, limpeza no final) —
   // 120s não sobrou margem no primeiro run real (chegou até o último passo
@@ -100,7 +100,7 @@ test.describe("webhooks & automações — fluxo completo", () => {
   // com diagnóstico.
   test.use({ actionTimeout: 10_000 });
 
-  test("cria fonte, cria automação, dispara lead real, confere atividade e kanban; agent sem acesso", async ({
+  test("crée une source, crée une automatisation, envoie un vrai lead, vérifie l’activité et le kanban ; agent sans accès", async ({
     page,
     request,
     browser,
@@ -117,11 +117,11 @@ test.describe("webhooks & automações — fluxo completo", () => {
       await page.waitForURL(/\/app\/webhooks/);
 
       // --- Step 2: aba "Receber dados" — criar fonte ---
-      await expect(page.getByRole("tab", { name: "Receber dados" })).toHaveAttribute(
+      await expect(page.getByRole("tab", { name: "Recevoir des données" })).toHaveAttribute(
         "data-state",
         "active",
       );
-      await page.getByRole("button", { name: /Nova fonte|Criar primeira fonte/ }).click();
+      await page.getByRole("button", { name: /Nouvelle source|Créer la première source/ }).click();
       await expect(page.getByRole("dialog")).toBeVisible();
       await page.locator("#src-name").fill(SOURCE_NAME);
 
@@ -133,7 +133,7 @@ test.describe("webhooks & automações — fluxo completo", () => {
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/webhook-sources") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar fonte" }).click(),
+        page.getByRole("button", { name: "Créer la source" }).click(),
       ]);
       expect(createRes.ok()).toBeTruthy();
       const createBody = (await createRes.json()) as {
@@ -144,47 +144,47 @@ test.describe("webhooks & automações — fluxo completo", () => {
       const pathToken = createBody.data.path_token;
       const sourceUrl = `${APP_URL}/api/v1/webhooks/in/${pathToken}`;
 
-      await expectToast(page, "Fonte criada. Agora é só conectar seu site.");
+      await expectToast(page, "Source créée. Il ne reste plus qu’à connecter votre site.");
 
       // --- Step 3: sheet da fonte abre sozinho; URL visível + lead de teste ---
       const sheet = page.getByRole("dialog").filter({ hasText: SOURCE_NAME });
       await expect(sheet.locator("code", { hasText: "/api/v1/webhooks/in/" }).first()).toBeVisible();
-      await sheet.getByRole("button", { name: "Enviar lead de teste" }).click();
-      await expectToast(page, "Funcionou! Um lead de teste entrou no seu funil.");
+      await sheet.getByRole("button", { name: "Envoyer un lead de test" }).click();
+      await expectToast(page, "Ça fonctionne ! Un lead de test est entré dans votre tableau.");
       await page.keyboard.press("Escape");
 
       // --- Step 4: aba Automações — criar regra + ligar ---
-      await page.getByRole("tab", { name: "Automações" }).click();
-      await page.getByRole("button", { name: /Nova automação|Criar primeira automação/ }).click();
+      await page.getByRole("tab", { name: "Automatisations" }).click();
+      await page.getByRole("button", { name: /Nouvelle automatisation/ }).click();
       const ruleSheet = page.getByRole("dialog");
       await expect(ruleSheet).toBeVisible();
       await ruleSheet.locator("#rule-name").fill(RULE_NAME);
 
       await ruleSheet.getByRole("combobox").first().click();
       await page
-        .getByRole("option", { name: "Quando entrar um contato novo (webhook)" })
+        .getByRole("option", { name: "Lorsqu’un nouveau contact arrive (webhook)" })
         .click();
 
-      await ruleSheet.getByRole("combobox").filter({ hasText: "Adicionar ação" }).click();
-      await page.getByRole("option", { name: "Adicionar tag" }).click();
-      await page.getByPlaceholder("boas-vindas, novo-lead").fill(TAG);
+      await ruleSheet.getByRole("combobox").filter({ hasText: "Ajouter une action" }).click();
+      await page.getByRole("option", { name: "Ajouter une étiquette" }).click();
+      await page.getByPlaceholder("bienvenue, nouveau-lead").fill(TAG);
 
       await Promise.all([
         page.waitForResponse(
           (r) => r.url().includes("/api/v1/automation-rules") && r.request().method() === "POST",
         ),
-        page.getByRole("button", { name: "Criar automação" }).click(),
+        page.getByRole("button", { name: "Créer l’automatisation" }).click(),
       ]);
       ruleCreated = true;
-      await expectToast(page, "Automação criada — ligue quando estiver pronta.");
+      await expectToast(page, "Automatisation créée — activez-la lorsqu’elle est prête.");
 
       const ruleTitle = page.getByText(RULE_NAME, { exact: true });
       const ruleCard = cardOf(ruleTitle);
-      await expect(ruleCard.getByText("Pausada")).toBeVisible();
+      await expect(ruleCard.getByText("En pause")).toBeVisible();
 
-      await page.getByRole("switch", { name: `Ligar ${RULE_NAME}` }).click();
-      await expectToast(page, "Automação ligada.");
-      await expect(ruleCard.getByText("Ativa")).toBeVisible();
+      await page.getByRole("switch", { name: `Activer ${RULE_NAME}` }).click();
+      await expectToast(page, "Automatisation activée.");
+      await expect(ruleCard.getByText("Active")).toBeVisible();
 
       // --- Step 5: dispara lead real direto na URL da fonte ---
       const directRes = await request.post(sourceUrl, {
@@ -212,22 +212,22 @@ test.describe("webhooks & automações — fluxo completo", () => {
       // A regra não tem condição — dispara tanto pro "Lead de Teste" (passo 3)
       // quanto pro lead real (passo 5), logo pode haver 2 cards com esse nome;
       // .first() basta pra confirmar que a automação rodou com sucesso.
-      await page.getByRole("tab", { name: "Atividade" }).click();
+      await page.getByRole("tab", { name: "Activité" }).click();
       const runTitle = page.getByText(RULE_NAME, { exact: true }).first();
       const runCard = cardOf(runTitle);
       let found = false;
       for (let attempt = 0; attempt < 12; attempt++) {
-        if ((await runCard.count()) > 0 && (await runCard.getByText("Sucesso").count()) > 0) {
+        if ((await runCard.count()) > 0 && (await runCard.getByText("Succès").count()) > 0) {
           found = true;
           break;
         }
-        await page.getByRole("button", { name: "Atualizar" }).click();
+        await page.getByRole("button", { name: "Actualiser" }).click();
         await page.waitForTimeout(1000);
       }
       expect(found, "run da automação não apareceu com status Sucesso na aba Atividade").toBe(
         true,
       );
-      await expect(runCard.getByText("Sucesso")).toBeVisible();
+      await expect(runCard.getByText("Succès")).toBeVisible();
 
       // --- Step 8: /app/pipelines/{pipelineId} mostra o card com a tag ---
       await page.goto(`${APP_URL}/app/pipelines/${pipelineId}`);
@@ -265,7 +265,7 @@ test.describe("webhooks & automações — fluxo completo", () => {
       try {
         if (ruleCreated) {
           await page.goto(`${APP_URL}/app/webhooks`);
-          await page.getByRole("tab", { name: "Automações" }).click();
+          await page.getByRole("tab", { name: "Automatisations" }).click();
           const ruleTitle = page.getByText(RULE_NAME, { exact: true });
           // waitFor (não .count() imediato): a lista busca via rede após a
           // troca de aba — um count() síncrono aqui pegava 0 e pulava o
@@ -275,13 +275,13 @@ test.describe("webhooks & automações — fluxo completo", () => {
             .then(() => true)
             .catch(() => false);
           if (ruleVisible) {
-            await cardOf(ruleTitle).getByRole("button", { name: "Excluir automação" }).click();
-            await page.getByRole("button", { name: "Excluir", exact: true }).click();
-            await expectToast(page, "Automação excluída.");
+            await cardOf(ruleTitle).getByRole("button", { name: "Supprimer l’automatisation" }).click();
+            await page.getByRole("button", { name: "Supprimer", exact: true }).click();
+            await expectToast(page, "Automatisation supprimée.");
           }
         }
         if (sourceId) {
-          await page.getByRole("tab", { name: "Receber dados" }).click();
+          await page.getByRole("tab", { name: "Recevoir des données" }).click();
           const sourceTitle = page.getByText(SOURCE_NAME, { exact: true });
           const sourceVisible = await sourceTitle
             .waitFor({ state: "visible", timeout: 10_000 })
@@ -289,9 +289,9 @@ test.describe("webhooks & automações — fluxo completo", () => {
             .catch(() => false);
           if (sourceVisible) {
             await cardOf(sourceTitle).click();
-            await page.getByRole("button", { name: "Excluir fonte" }).click();
-            await page.getByRole("button", { name: "Excluir", exact: true }).click();
-            await expectToast(page, "Fonte excluída.");
+            await page.getByRole("button", { name: "Supprimer la source" }).click();
+            await page.getByRole("button", { name: "Supprimer", exact: true }).click();
+            await expectToast(page, "Source supprimée.");
           }
         }
       } catch (cleanupErr) {

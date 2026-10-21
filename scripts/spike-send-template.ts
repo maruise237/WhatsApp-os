@@ -22,7 +22,7 @@ const TO = process.env.META_TEST_RECIPIENT ?? "5531998966398";
 
 function env(name: string): string {
   const v = process.env[name];
-  if (!v) throw new Error(`env ausente: ${name}`);
+  if (!v) throw new Error(`env absente : ${name}`);
   return v;
 }
 
@@ -44,7 +44,7 @@ async function main(): Promise<void> {
     `${env("META_WABA_ID")}/message_templates?limit=50`,
   )) as { data?: { name: string; language: string; parameter_format?: string }[] };
   const raw = lista.data?.find((t) => t.name === TEMPLATE);
-  if (!raw) throw new Error(`template ${TEMPLATE} não está na WABA`);
+  if (!raw) throw new Error(`le modèle ${TEMPLATE} n'est pas dans la WABA`);
 
   const contract = deriveTemplateContract(raw as Parameters<typeof deriveTemplateContract>[0]);
   console.info(`\n━━ contrato derivado de ${contract.name} (${contract.language})`);
@@ -53,7 +53,7 @@ async function main(): Promise<void> {
   }
 
   const values = { "1": "Rafael", "2": "DESK-001", "3": "30/07" };
-  console.info(`   missingSlots com os 3 valores: ${missingSlots(contract, values).length}`);
+  console.info(`   missingSlots avec les 3 valeurs : ${missingSlots(contract, values).length}`);
 
   const components = buildComponents(contract, values);
   console.info(`\n   components[] montado:\n${JSON.stringify(components, null, 2)}`);
@@ -67,7 +67,7 @@ async function main(): Promise<void> {
   const phone = env("META_PHONE_NUMBER_ID");
 
   // ── ENVIO 1 ──────────────────────────────────────────────────────────────────
-  console.info(`\n━━ ENVIO 1 — payload de buildComponents (3 de 3 parâmetros)`);
+  console.info(`\n━━ ENVOI 1 — payload de buildComponents (3 paramètres sur 3)`);
   const ok = await graph(`${phone}/messages`, {
     method: "POST",
     body: JSON.stringify(envelope),
@@ -78,13 +78,13 @@ async function main(): Promise<void> {
   // O payload de quem redigita a contagem: mesmo template, um parâmetro a menos.
   const capenga = structuredClone(envelope);
   const body = capenga.template.components.find((c) => c.type === "body");
-  if (!body || !("parameters" in body)) throw new Error("componente body sumiu");
+  if (!body || !("parameters" in body)) throw new Error("le composant body a disparu");
   const removido = body.parameters.pop();
   console.info(
-    `\n━━ ENVIO 2 — o MESMO payload com 1 parâmetro removido à mão: ${JSON.stringify(removido)}`,
+    `\n━━ ENVOI 2 — le MÊME payload avec 1 paramètre retiré à la main : ${JSON.stringify(removido)}`,
   );
   console.info(
-    `   (buildComponents se recusaria: missingSlots aponta ` +
+    `   (buildComponents refuserait : missingSlots signale ` +
       `${missingSlots(contract, { "1": values["1"], "2": values["2"] }).map((s) => `{{${s.key}}}`).join(", ")})`,
   );
   const erro = await graph(`${phone}/messages`, {

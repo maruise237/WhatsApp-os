@@ -79,7 +79,7 @@ describe("loadAuthUser — falha de permissão não vira 'sem organização'", (
     // Quem lê o erro precisa saber, na primeira linha, que não é permissão — senão
     // procura no lugar errado, como aconteceu.
     consultas.memberships = { data: null, error: { code: "X", message: "boom" } };
-    await expect(loadAuthUser()).rejects.toThrow(/NÃO foi rebaixada por decisão de autorização/);
+    await expect(loadAuthUser()).rejects.toThrow(/n’a PAS été rétrogradée par décision d’autorisation/);
   });
 
   it("usuário que REALMENTE não tem organização segue funcionando, sem erro", async () => {

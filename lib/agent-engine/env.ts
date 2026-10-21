@@ -37,6 +37,13 @@ const envSchema = z.object({
   // Consertar a irmã da OpenAI e deixar esta é o modo de falha desta família:
   // ao mexer aqui, confira as três de uma vez.
   OPENROUTER_API_KEY: z.string().min(1).optional(),
+  // IA fournie par la plateforme (lib/ai/plateforme.ts). Présente, elle gagne sur
+  // toute clé ou tout modèle choisi par une organisation. Déclarée ici sinon le
+  // Zod la retire au boot du worker et chaque tour tombe en « IA non configurée ».
+  DEEPSEEK_API_KEY: z.string().min(1).optional(),
+  DEEPSEEK_BASE_URL: z.string().url().optional(),
+  DEEPSEEK_MODEL: z.string().min(1).optional(),
+  DEEPSEEK_REFLEXION: z.enum(['off', 'low', 'high', 'max']).optional(),
   // Modelo default do agente quando a org não define o dela (knob, nunca constante).
   AGENT_DEFAULT_MODEL: z.string().min(1).default('claude-sonnet-4-5'),
   // Teto de conexões por pool do pg. Sem valor = pg decide (default 10).
@@ -213,7 +220,7 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   const parsed = envSchema.safeParse(cleaned);
   if (!parsed.success) {
     const names = [...new Set(parsed.error.issues.map((issue) => issue.path.join('.')))];
-    throw new Error(`env inválido — verifique no .env: ${names.join(', ')}`);
+    throw new Error(`env invalide — vérifiez dans le .env : ${names.join(', ')}`);
   }
   return parsed.data;
 }

@@ -1,10 +1,10 @@
 "use client";
 
 const inboxList = [
-  { name: "Maria Silva",  preview: "Confirma o endereço…", ts: "14h32", initial: "MS", active: true },
-  { name: "Jean Mbarga", preview: "Comprovante anexo",     ts: "14h28", initial: "JP" },
-  { name: "Ana Beatriz",  preview: "Trocar tamanho?",       ts: "13h51", initial: "AB" },
-  { name: "Carlos Lima",  preview: "Produto chegou…",       ts: "12h17", initial: "CL" },
+  { name: "Aïcha Ndiaye", preview: "Je confirme l’adresse…", ts: "14h32", initial: "AN", active: true },
+  { name: "Jean Mbarga", preview: "Preuve jointe",     ts: "14h28", initial: "JP" },
+  { name: "Fatou Diallo", preview: "Changer de taille ?",       ts: "13h51", initial: "FD" },
+  { name: "Paul Essomba", preview: "Produit arrivé…",       ts: "12h17", initial: "PE" },
 ];
 
 export function SectionPatterns() {
@@ -16,7 +16,7 @@ export function SectionPatterns() {
       </p>
 
       {/* Inbox 3 colunas */}
-      <h3>Inbox · 3 colunas</h3>
+      <h3>Inbox · 3 colonnes</h3>
       <div
         className="ds-card"
         style={{
@@ -51,7 +51,7 @@ export function SectionPatterns() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ padding: "12px 18px", borderBottom: "1px solid var(--ds-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <div style={{ fontWeight: 600, fontSize: 14 }}>Maria Silva</div>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Aïcha Ndiaye</div>
               <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>+237 6 99 43 11 02 · Commande n° 12 443</div>
             </div>
             <span className="ds-badge ds-badge--success">resolvendo</span>
@@ -70,11 +70,11 @@ export function SectionPatterns() {
         <div style={{ borderLeft: "1px solid var(--ds-border)", padding: 18, display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
             <div className="ds-avatar ds-avatar--lg">MS<span className="ds-avatar-status" /></div>
-            <div style={{ fontWeight: 600 }}>Maria Silva</div>
+            <div style={{ fontWeight: 600 }}>Aïcha Ndiaye</div>
             <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Cliente depuis mars 2024</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <span className="ds-key">LTV</span><span className="ds-display" style={{ fontSize: 22, fontWeight: 600 }}>R$ 4.882,40</span>
+            <span className="ds-key">LTV</span><span className="ds-display" style={{ fontSize: 22, fontWeight: 600 }}>4 882 FCFA</span>
             <span className="ds-key">Commandes</span><span style={{ fontSize: 14 }}>12 (3 sur les 90 derniers jours)</span>
           </div>
         </div>
@@ -95,11 +95,11 @@ export function SectionPatterns() {
               <div className="ds-kanban-card" key={i}>
                 <div className="row">
                   <span className="title">Commande n°{(12440 + i + col.n).toString()}</span>
-                  <span className="value">R$ {(150 + i * 88).toFixed(2).replace(".", ",")}</span>
+                  <span className="value">{150 + i * 88} FCFA</span>
                 </div>
-                <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Client {i + 1} · pix</div>
+                <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Client {i + 1} · mobile money</div>
                 <div className="row">
-                  <span className="ds-badge ds-badge--neutral">2 itens</span>
+                  <span className="ds-badge ds-badge--neutral">2 articles</span>
                   <span className="ds-avatar ds-avatar--sm">RM</span>
                 </div>
               </div>
@@ -112,12 +112,12 @@ export function SectionPatterns() {
       <h3>Settings · layout sidebar + form</h3>
       <div className="ds-card" style={{ padding: 0, display: "grid", gridTemplateColumns: "200px 1fr" }}>
         <nav style={{ borderRight: "1px solid var(--ds-border)", padding: 16, display: "flex", flexDirection: "column", gap: 2 }}>
-          {["Conta", "Time", "Canais", "WhatsApp", "Faturamento", "API & Webhooks"].map((n, i) => (
+          {["Compte", "Équipe", "Canaux", "WhatsApp", "Facturation", "API et webhooks"].map((n, i) => (
             <button key={n} className="ds-nav-link" data-active={i === 2}>{n}</button>
           ))}
         </nav>
         <div style={{ padding: 24 }}>
-          <h3 style={{ marginTop: 0 }}>Canais conectados</h3>
+          <h3 style={{ marginTop: 0 }}>Canaux connectés</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, border: "1px solid var(--ds-border)", borderRadius: 8 }}>
               <div>
@@ -131,7 +131,7 @@ export function SectionPatterns() {
                 <div style={{ fontWeight: 500 }}>Instagram Direct</div>
                 <div style={{ fontSize: 12, color: "var(--ds-text-muted)" }}>Token expirou — reconecte</div>
               </div>
-              <button className="ds-btn ds-btn--secondary">Reconectar</button>
+              <button className="ds-btn ds-btn--secondary">Reconnecter</button>
             </div>
           </div>
         </div>

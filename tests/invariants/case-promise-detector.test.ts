@@ -27,6 +27,17 @@ const PROMISES: readonly string[] = [
   // PRONOME em vez do substantivo — "Já passo o número do pedido (#48291) para eles
   // resolverem junto com a reativação da assinatura."
   "já passo o número do pedido para eles resolverem junto com a reativação",
+  // ── français (produit francophone) ──
+  "Je vais vous passer un conseiller.",
+  "Un humain va vous répondre très vite.",
+  "Une vraie personne va vous recontacter",
+  "Je vais vérifier avec l’équipe et je reviens vers vous",
+  "Je transmets votre demande au service client",
+  "Notre équipe va vous rappeler cet après-midi",
+  "Un conseiller vous rappellera demain matin",
+  "Je vous mets en relation avec un conseiller",
+  "Je vais demander à mon responsable",
+  "Dès qu’ils auront validé, je vous préviens",
 ];
 
 // NÃO detectar: ação própria do bot / frase institucional / checar SISTEMA (≠ humano).
@@ -41,6 +52,15 @@ const NON_PROMISES: readonly string[] = [
   "vou anotar aqui",
   // pronome sem verbo de resolução depois — só "passar pra eles" não é promessa de AÇÃO.
   "vou passar o recado pra eles mais tarde",
+  // ── français : action propre de l’assistant / phrase institutionnelle / système ──
+  "Je vous envoie le lien tout de suite",
+  "Je vais vérifier votre commande dans le système",
+  "Notre équipe est toujours à votre disposition",
+  "Je vous passe le lien du catalogue",
+  "Je prépare votre devis",
+  "Le service de livraison est gratuit à Douala",
+  "Personne ne vous a oublié, votre commande est en route",
+  "Je vous confirme le prix de 15 000 FCFA",
 ];
 
 describe("detectHumanPromise — calibração (spec 15 §10.2)", () => {

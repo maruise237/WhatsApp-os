@@ -96,7 +96,7 @@ export function OrgMemoryClient({ initialState }: Props) {
       { title: title.trim(), body: body.trim() },
       {
         onSuccess: () => {
-          toast.success("Aprendizado adicionado.");
+          toast.success("Apprentissage ajouté.");
           setTitle("");
           setBody("");
           setFormOpen(false);
@@ -111,7 +111,7 @@ export function OrgMemoryClient({ initialState }: Props) {
       { id, status: next },
       {
         onSuccess: () => {
-          toast.success(next === "archived" ? "Aprendizado arquivado." : "Aprendizado reativado.");
+          toast.success(next === "archived" ? "Apprentissage archivé." : "Apprentissage réactivé.");
         },
         onError: showApiError,
       },
@@ -157,7 +157,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                 onClick={handlePublish}
                 disabled={!canSubmitPublish || publish.isPending}
               >
-                {publish.isPending ? "Publicando…" : "Publier la version"}
+                {publish.isPending ? "Publication…" : "Publier la version"}
               </Button>
             </div>
           </div>
@@ -234,7 +234,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                   Annuler
                 </Button>
                 <Button type="submit" size="sm" disabled={createEntry.isPending}>
-                  {createEntry.isPending ? "Salvando…" : "Enregistrer l’apprentissage"}
+                  {createEntry.isPending ? "Enregistrement…" : "Enregistrer l’apprentissage"}
                 </Button>
               </div>
             </form>
@@ -246,7 +246,7 @@ export function OrgMemoryClient({ initialState }: Props) {
               onClick={() => setShowArchived((v) => !v)}
               className="self-start text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
             >
-              {showArchived ? "Ver aprendizados ativos" : "Ver aprendizados arquivados"}
+              {showArchived ? "Voir les apprentissages actifs" : "Voir les apprentissages archivés"}
             </button>
           )}
 
@@ -266,7 +266,7 @@ export function OrgMemoryClient({ initialState }: Props) {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="font-medium">{entry.title}</span>
                     <Badge variant={entry.source === "flywheel" ? "info" : "neutral"} className="text-[10px]">
-                      {entry.source === "flywheel" ? "aprendido automaticamente" : "manual"}
+                      {entry.source === "flywheel" ? "appris automatiquement" : "manual"}
                     </Badge>
                     <span className="ml-auto text-xs text-muted-foreground">{formatDate(entry.created_at)}</span>
                   </div>

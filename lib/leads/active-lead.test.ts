@@ -170,7 +170,7 @@ describe("resolveActiveLeadForContact — tenancy", () => {
   // então o tipo obriga e a lista mistura é recusada. Uma lista de duas orgs
   // rotearia a atividade de um tenant para o negócio de outro, e o vazamento
   // pareceria decisão correta — a função "decidiu certo" com o que recebeu.
-  it("recusa candidatos de organizações diferentes — estoura, não roteia", () => {
+  it("recusa candidatos de organisations différentes — estoura, não roteia", () => {
     expect(() =>
       resolveActiveLeadForContact(
         [
@@ -179,7 +179,7 @@ describe("resolveActiveLeadForContact — tenancy", () => {
         ],
         { defaultPipelineId: DEFAULT_PIPE },
       ),
-    ).toThrow(/organizações diferentes/);
+    ).toThrow(/organisations différentes/);
   });
 
   // Estourar é para BUG DE CHAMADOR. Ambiguidade de negócio dentro da mesma org

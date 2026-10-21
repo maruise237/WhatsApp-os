@@ -60,9 +60,9 @@ async function main() {
           ? ["kind", "priority", "published_version_id", "archived_at"].every((k) => k in sample)
           : true;
         evidence += `, items=${arr.length}, hasExtFields=${hasFields}`;
-        record("TC-01: GET /ai/agents lista com colunas estendidas", ok && hasFields, evidence);
+        record("TC-01: GET /ai/agents liste avec colonnes étendues", ok && hasFields, evidence);
       } else {
-        record("TC-01: GET /ai/agents lista com colunas estendidas", false, evidence);
+        record("TC-01: GET /ai/agents liste avec colonnes étendues", false, evidence);
       }
     }
 
@@ -90,7 +90,7 @@ async function main() {
         createdVersionId = body.data?.draft_version?.id ?? body.data?.versions?.[0]?.id ?? null;
         evidence += `, agentId=${createdAgentId}, versionId=${createdVersionId}`;
       }
-      record("TC-02: POST /ai/agents (kind=mcp_agent + version) reconhecido", accepted, evidence);
+      record("TC-02: POST /ai/agents (kind=mcp_agent + version) reconnu", accepted, evidence);
     }
 
     // TC-03: GET /ai/agents/:id/versions exige id válido — 404 esperado pra UUID fake
@@ -98,7 +98,7 @@ async function main() {
       const fake = "00000000-0000-0000-0000-000000000000";
       const r = await api.get(`${BASE_URL}/api/v1/ai/agents/${fake}/versions`);
       const status = r.status();
-      record("TC-03: GET /ai/agents/:id/versions com id inválido", status === 404 || status === 400, `status=${status}`);
+      record("TC-03: GET /ai/agents/:id/versions avec id invalide", status === 404 || status === 400, `status=${status}`);
     }
 
     // TC-04: POST /ai/agents/:id/publish em agent inexistente retorna 404
@@ -108,7 +108,7 @@ async function main() {
         data: { version_id: fake },
       });
       const status = r.status();
-      record("TC-04: POST /ai/agents/:id/publish 404 em agent fake", status === 404 || status === 400 || status === 422, `status=${status}`);
+      record("TC-04: POST /ai/agents/:id/publish 404 sur agent fictif", status === 404 || status === 400 || status === 422, `status=${status}`);
     }
 
     // TC-05: POST /ai/agents/:id/duplicate em agent inexistente retorna 404
@@ -118,7 +118,7 @@ async function main() {
         data: { name: "qa-dup" },
       });
       const status = r.status();
-      record("TC-05: POST /ai/agents/:id/duplicate 404 em agent fake", status === 404 || status === 400, `status=${status}`);
+      record("TC-05: POST /ai/agents/:id/duplicate 404 sur agent fictif", status === 404 || status === 400, `status=${status}`);
     }
 
     // TC-06: POST /ai/agents/:id/pause em agent inexistente retorna 404
@@ -126,7 +126,7 @@ async function main() {
       const fake = "00000000-0000-0000-0000-000000000000";
       const r = await api.post(`${BASE_URL}/api/v1/ai/agents/${fake}/pause`);
       const status = r.status();
-      record("TC-06: POST /ai/agents/:id/pause 404 em agent fake", status === 404 || status === 400, `status=${status}`);
+      record("TC-06: POST /ai/agents/:id/pause 404 sur agent fictif", status === 404 || status === 400, `status=${status}`);
     }
 
     // TC-07: GET /ai/agents/:id/runs em agent inexistente
@@ -134,7 +134,7 @@ async function main() {
       const fake = "00000000-0000-0000-0000-000000000000";
       const r = await api.get(`${BASE_URL}/api/v1/ai/agents/${fake}/runs`);
       const status = r.status();
-      record("TC-07: GET /ai/agents/:id/runs em agent fake", status === 404 || status === 400 || status === 200, `status=${status}`);
+      record("TC-07: GET /ai/agents/:id/runs sur agent fictif", status === 404 || status === 400 || status === 200, `status=${status}`);
     }
 
     // TC-08: POST /ai/agents/:id/versions/:vid/test em ids inexistentes
@@ -144,7 +144,7 @@ async function main() {
         data: { input_text: "olá" },
       });
       const status = r.status();
-      record("TC-08: POST /versions/:vid/test em ids fake", status === 404 || status === 400 || status === 422, `status=${status}`);
+      record("TC-08: POST /versions/:vid/test sur ids fictifs", status === 404 || status === 400 || status === 422, `status=${status}`);
     }
 
     // TC-09: Auth — chamar sem cookie deve retornar 401/redirect
@@ -154,7 +154,7 @@ async function main() {
       const r = await ctx.request.get(`${BASE_URL}/api/v1/ai/agents`);
       const status = r.status();
       await naked.close();
-      record("TC-09: GET /ai/agents sem auth retorna 401/4xx", status === 401 || status === 403 || status === 307, `status=${status}`);
+      record("TC-09: GET /ai/agents sans auth renvoie 401/4xx", status === 401 || status === 403 || status === 307, `status=${status}`);
     }
 
     // TC-10: Cleanup — DELETE soft-archive do agent criado em TC-02 (se houver)
@@ -163,7 +163,7 @@ async function main() {
       const status = r.status();
       record("TC-10: DELETE /ai/agents/:id soft-archive", status === 200 || status === 204, `status=${status}`);
     } else {
-      record("TC-10: DELETE /ai/agents/:id soft-archive", true, "skipped (nenhum agent criado em TC-02)");
+      record("TC-10: DELETE /ai/agents/:id soft-archive", true, "skipped (aucun agent créé en TC-02)");
     }
   } finally {
     await close();

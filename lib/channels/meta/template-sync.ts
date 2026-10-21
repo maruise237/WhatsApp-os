@@ -128,7 +128,7 @@ export function templatesToRows(
   const data = (payload as { data?: unknown } | null)?.data;
   if (!Array.isArray(data)) {
     throw new Error(
-      `templatesToRows: resposta da Graph API sem \`data\` — ${JSON.stringify(payload)?.slice(0, 200)}`,
+      `templatesToRows : réponse de la Graph API sans \`data\` — ${JSON.stringify(payload)?.slice(0, 200)}`,
     );
   }
 
@@ -137,7 +137,7 @@ export function templatesToRows(
     const language = str(raw.language);
     if (!name || !language) {
       throw new Error(
-        `templatesToRows: template sem name/language — a chave do espelho é o par (name, language)`,
+        `templatesToRows : modèle sans name/language — la clé du miroir est la paire (name, language)`,
       );
     }
     // POSITIONAL quando ausente: é o que a Meta assume, e o campo só vem quando
@@ -261,7 +261,7 @@ export async function syncTemplates(input: SyncInput): Promise<SyncCounts> {
     .select("name, language, status, contract_hash")
     .eq("organization_id", input.organizationId)
     .eq("waba_id", input.wabaId);
-  if (readError) throw new Error(`syncTemplates: leitura do espelho falhou — ${readError.message}`);
+  if (readError) throw new Error(`syncTemplates : la lecture du miroir a échoué — ${readError.message}`);
 
   const plano = planSync(rows, (existing ?? []) as LocalTemplate[]);
   const now = new Date().toISOString();
@@ -273,7 +273,7 @@ export async function syncTemplates(input: SyncInput): Promise<SyncCounts> {
         rows.map((r) => ({ ...r, synced_at: now, updated_at: now })),
         { onConflict: "organization_id,waba_id,name,language" },
       );
-    if (error) throw new Error(`syncTemplates: upsert falhou — ${error.message}`);
+    if (error) throw new Error(`syncTemplates : l’upsert a échoué — ${error.message}`);
   }
 
   for (const alvo of plano.disable) {
@@ -284,7 +284,7 @@ export async function syncTemplates(input: SyncInput): Promise<SyncCounts> {
       .eq("waba_id", input.wabaId)
       .eq("name", alvo.name)
       .eq("language", alvo.language);
-    if (error) throw new Error(`syncTemplates: marcação DISABLED falhou — ${error.message}`);
+    if (error) throw new Error(`syncTemplates : le marquage DISABLED a échoué — ${error.message}`);
   }
 
   return plano.counts;

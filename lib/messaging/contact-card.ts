@@ -8,6 +8,8 @@
  * o `pnpm lint:channels` reprova.
  */
 
+import { normaliserTelephone } from "@/lib/telephone/normaliser";
+
 export interface SharedContact {
   contact_id?: string;
   name: string;
@@ -66,7 +68,11 @@ export function parseDialablePhone(raw: string): string | null {
   if (!trimmed) return null;
   const digits = phoneToWhatsappId(trimmed);
   if (digits.length < 8 || digits.length > 15) return null;
-  return normalizePhoneForDisplay(trimmed.startsWith("+") ? trimmed : `+${digits}`);
+  if (trimmed.startsWith("+")) return normalizePhoneForDisplay(trimmed);
+  // Sans `+` : numéro local (`699 99 88 88`) ⇒ indicatif par défaut (237) ;
+  // indicatif écrit sans `+` (`237699998888`) ⇒ gardé. Avant, `699998888`
+  // devenait `+699998888` — un numéro qui n'existe nulle part.
+  return normaliserTelephone(trimmed);
 }
 
 /** Só dígitos: é assim que os transportes endereçam o número. */

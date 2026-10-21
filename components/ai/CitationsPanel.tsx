@@ -13,11 +13,11 @@ interface Props {
 
 const SOURCE_LABEL: Record<string, string> = {
   faq: "FAQ",
-  policy: "Política",
-  conversation: "Conversa",
-  conversations: "Conversa",
-  catalog: "Catálogo",
-  nuvemshop_catalog: "Catálogo",
+  policy: "Politique",
+  conversation: "Conversation",
+  conversations: "Conversation",
+  catalog: "Catalogue",
+  nuvemshop_catalog: "Catalogue",
 };
 
 export function CitationsPanel({ open, onOpenChange, citations, messageId }: Props) {

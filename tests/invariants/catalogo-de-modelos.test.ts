@@ -62,7 +62,8 @@ describe("catálogo de modelos", () => {
         where is_default_for_provider group by provider order by provider;`,
     );
     const padroes = out.split("\n").map((l) => l.trim()).filter(Boolean);
-    expect(padroes.sort()).toEqual(["anthropic=1", "google=1", "openai=1"]);
+    // deepseek : le modèle de la plateforme, ajouté par la 0184.
+    expect(padroes.sort()).toEqual(["anthropic=1", "deepseek=1", "google=1", "openai=1"]);
   });
 
   it("o padrão de cada provedor não está depreciado", () => {

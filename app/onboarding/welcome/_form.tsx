@@ -15,31 +15,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useT } from "@/hooks/i18n/useT";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
+import { FUSOS_OFERECIDOS } from "@/lib/tempo/fusos";
 
 /**
  * Cidade, não identificador de fuso. A lista mostrava "America/Bahia" e
  * "America/Fortaleza" e esperava que a pessoa soubesse em qual delas mora — o
  * identificador é do sistema, o que ela reconhece é a cidade.
+ *
+ * A lista é a MESMA das configurações (`FUSOS_OFERECIDOS`), África francófona
+ * em primeiro: duas listas divergiam (esta chegou a rotular `America/Sao_Paulo`
+ * como « Douala, Yaoundé, Abidjan » — quem escolhia isso ficava 4h atrasado).
  */
-const FUSOS: { id: string; cidade: string }[] = [
-  { id: "Africa/Douala", cidade: "Douala, Yaoundé, Libreville, Kinshasa (heure d’Afrique centrale)" },
-  { id: "Africa/Abidjan", cidade: "Abidjan, Dakar, Bamako, Lomé, Ouagadougou" },
-  { id: "Africa/Lagos", cidade: "Lagos, Cotonou, Niamey, N’Djamena" },
-  { id: "Africa/Casablanca", cidade: "Casablanca, Rabat" },
-  { id: "Africa/Tunis", cidade: "Tunis, Alger" },
-  { id: "Africa/Johannesburg", cidade: "Lubumbashi, Kigali, Bujumbura, Johannesburg" },
-  { id: "Indian/Antananarivo", cidade: "Antananarivo, Nairobi, Djibouti" },
-  { id: "Europe/Paris", cidade: "Paris, Bruxelles, Genève" },
-  { id: "America/Montreal", cidade: "Montréal, Québec" },
-  { id: "America/Sao_Paulo", cidade: "São Paulo, Rio, Brasília" },
-  { id: "UTC", cidade: "Autre (temps universel)" },
-];
+const FUSOS = FUSOS_OFERECIDOS.map((f) => ({ id: f.codigo, cidade: f.rotulo }));
 
 export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
   const t = useT();
   const [displayName, setDisplayName] = useState(defaultOrgName);
   const [oQueFaz, setOQueFaz] = useState("");
-  const [timezone, setTimezone] = useState("Africa/Douala");
+  const [timezone, setTimezone] = useState(FUSEAU_PAR_DEFAUT);
   const [accepted, setAccepted] = useState(false);
   const [pending, startTransition] = useTransition();
 

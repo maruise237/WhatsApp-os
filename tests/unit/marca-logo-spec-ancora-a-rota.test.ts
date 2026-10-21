@@ -115,7 +115,7 @@ describe("marca-logo.spec.ts: a prévia só é medida depois de a rota ser prova
     const iPrevia = SPEC.indexOf("[data-previa-do-logo='claro'] img");
     expect(iPrevia, "não achei a medição da prévia clara").toBeGreaterThan(-1);
 
-    const iToast = SPEC.lastIndexOf("logo atualizado", iPrevia);
+    const iToast = SPEC.lastIndexOf("logo mis à jour", iPrevia);
     expect(iToast, "não achei a asserção do toast antes da prévia").toBeGreaterThan(-1);
 
     const iAncora = SPEC.lastIndexOf("aindaNaTelaDeMarca(page", iPrevia);
@@ -123,7 +123,7 @@ describe("marca-logo.spec.ts: a prévia só é medida depois de a rota ser prova
       iAncora,
       "a prévia é medida sem provar a rota antes. O toast NÃO serve de âncora: o " +
         "`<Toaster/>` mora no layout raiz e sobrevive à troca de rota, então " +
-        '"Logo atualizado" verde + prévia ausente é o que se vê quando a página já é outra',
+        '"Logo mis à jour" verde + prévia ausente é o que se vê quando a página já é outra',
     ).toBeGreaterThan(iToast);
   });
 

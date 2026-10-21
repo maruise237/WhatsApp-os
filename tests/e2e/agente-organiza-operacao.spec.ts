@@ -147,8 +147,8 @@ function cardDe(locator: Locator): Locator {
 async function login(page: Page, quem: "manager"): Promise<void> {
   await page.goto(`${APP_URL}/login`);
   await page.getByLabel(/e-?mail/i).fill(creds.users[quem]!.email);
-  await page.getByLabel(/senha/i).fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByLabel(/mot de passe/i).fill(creds.password);
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app(\/|$)/, { timeout: 20_000 });
 }
 
@@ -170,8 +170,8 @@ async function drenar(): Promise<void> {
   }
 }
 
-test.describe("o agente organiza a operação e a tela conta quem foi", () => {
-  test("cria etapa, liga automação, e o egress externo continua barrado", async ({ page }) => {
+test.describe("l’agent organise l’opération et l’écran indique qui l’a fait", () => {
+  test("crée une étape, active une automatisation, et la sortie externe reste bloquée", async ({ page }) => {
     // O default de 30s do config é para uma jornada de tela. Este teste espera o
     // worker de automação: são três drenagens com folga (o `lead.created` só
     // nasce depois que a captação é consumida), mais duas navegações e um
@@ -230,7 +230,7 @@ test.describe("o agente organiza a operação e a tela conta quem foi", () => {
       // e não tem como saber de onde ela veio.
       const seloDaEtapa = linhaDaEtapa.locator('[data-autoria="ai"]');
       await expect(seloDaEtapa).toBeVisible();
-      await expect(seloDaEtapa).toContainText(/alterado pelo assistente/i);
+      await expect(seloDaEtapa).toContainText(/modifié par l’assistant/i);
       await page.screenshot({
         path: path.join(EVIDENCIA, "w4-etapa-criada-pelo-agente.png"),
         fullPage: true,
@@ -267,14 +267,14 @@ test.describe("o agente organiza a operação e a tela conta quem foi", () => {
 
       // ---- a tela mostra "Ativa" COM a autoria do assistente ----
       await page.goto(`${APP_URL}/app/webhooks`);
-      await page.getByRole("tab", { name: "Automações" }).click();
+      await page.getByRole("tab", { name: "Automatisations" }).click();
       const tituloDaRegra = page.getByText(REGRA, { exact: true }).first();
       await expect(tituloDaRegra).toBeVisible({ timeout: 15_000 });
       const cardDaRegra = cardDe(tituloDaRegra);
-      await expect(cardDaRegra).toContainText("Ativa", { timeout: 15_000 });
+      await expect(cardDaRegra).toContainText("Active", { timeout: 15_000 });
       const seloDaRegra = cardDaRegra.locator('[data-autoria="ai"]').first();
       await expect(seloDaRegra).toBeVisible();
-      await expect(seloDaRegra).toContainText(/alterado pelo assistente/i);
+      await expect(seloDaRegra).toContainText(/modifié par l’assistant/i);
       await page.screenshot({
         path: path.join(EVIDENCIA, "w4-regra-ligada-pelo-agente.png"),
         fullPage: true,
@@ -307,12 +307,12 @@ test.describe("o agente organiza a operação e a tela conta quem foi", () => {
 
       // E a tentativa TEM que estar registrada: barrar em silêncio seria pior.
       await page.goto(`${APP_URL}/app/webhooks`);
-      await page.getByRole("tab", { name: "Atividade" }).click();
+      await page.getByRole("tab", { name: "Activité" }).click();
       const execucao = page.getByText(REGRA, { exact: true }).first();
       await expect(execucao).toBeVisible({ timeout: 20_000 });
       // A tentativa barrada TEM que aparecer como falha: barrar em silêncio
       // deixaria o dono achando que o outro sistema recebeu.
-      await expect(cardDe(execucao)).toContainText(/falhou|parcial/i, { timeout: 20_000 });
+      await expect(cardDe(execucao)).toContainText(/échec|partiel/i, { timeout: 20_000 });
       await page.screenshot({
         path: path.join(EVIDENCIA, "w4-egress-barrado-com-registro.png"),
         fullPage: true,

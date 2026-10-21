@@ -16,7 +16,7 @@ for (const t of fixture.data) {
   const contract = deriveTemplateContract(t as Parameters<typeof deriveTemplateContract>[0]);
   console.info(`\n━━ ${contract.name} (${contract.language}) — ${contract.slots.length} slot(s)`);
   if (contract.slots.length === 0) {
-    console.info("   (sem parâmetros — envio não precisa de components[])");
+    console.info("   (sans paramètres — l'envoi n'a pas besoin de components[])");
     continue;
   }
   for (const s of contract.slots) {

@@ -84,7 +84,7 @@ export const esquemaDaCorDaMarca = z
       // O validador de hex é o do domínio (`lib/branding/rampa.ts`), não um
       // regex recém-escrito aqui: duas definições de "hex válido" divergem, e a
       // que perde é sempre a que ninguém está olhando.
-      .refine(ehHexValido, { message: "semente_hex não é um hex de cor" }),
+      .refine(ehHexValido, { message: "semente_hex n’est pas un hex de couleur" }),
     papel_da_semente: z.string().min(1).default("accent"),
   })
   .catchall(z.unknown());

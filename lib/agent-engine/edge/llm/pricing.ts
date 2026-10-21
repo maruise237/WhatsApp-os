@@ -16,6 +16,13 @@ const USD_PER_MTOK: Record<string, { input: number; output: number; cacheRead: n
   'claude-sonnet-4': { input: 3, output: 15, cacheRead: 0.3, cacheWrite1h: 6 },
   'claude-haiku-4': { input: 1, output: 5, cacheRead: 0.1, cacheWrite1h: 2 },
   'claude-opus-4': { input: 15, output: 75, cacheRead: 1.5, cacheWrite1h: 30 },
+  // IA de la plateforme — https://api-docs.deepseek.com/quick_start/pricing
+  // (vérifié 2026-10-20). Tarif HEURE DE POINTE : le tarif creux est la moitié,
+  // et un plafond calculé au tarif creux laisserait passer le double. DeepSeek
+  // ne facture pas d'écriture de cache à part : elle coûte une entrée normale.
+  'deepseek-flash': { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite1h: 0.3 },
+  'deepseek-v4-flash': { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite1h: 0.3 },
+  'deepseek-v4-pro': { input: 1.32, output: 3.96, cacheRead: 0.044, cacheWrite1h: 1.32 },
 };
 
 export interface TokenUsage {

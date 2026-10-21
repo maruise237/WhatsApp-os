@@ -53,7 +53,7 @@ describe("ApiErrorToast", () => {
     showApiError(new ApiError(409, "conversation_already_claimed", undefined, "req-1"));
     expect(toast.warning).toHaveBeenCalledTimes(1);
     expect(toast.warning).toHaveBeenCalledWith(
-      "Outro atendente já assumiu.",
+      "Un autre agent a déjà pris en charge.",
       expect.objectContaining({ description: "ID: req-1" }),
     );
   });
@@ -62,7 +62,7 @@ describe("ApiErrorToast", () => {
     showApiError(new ApiError(409, "invalid_state", undefined, "req-3"));
     expect(toast.warning).toHaveBeenCalledTimes(1);
     expect(toast.warning).toHaveBeenCalledWith(
-      "Este caso já foi respondido ou fechado.",
+      "Ce dossier a déjà reçu une réponse ou a été clôturé.",
       expect.objectContaining({ description: "ID: req-3" }),
     );
   });

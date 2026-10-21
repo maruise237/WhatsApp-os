@@ -24,28 +24,28 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
-test.describe("G4-02 — inbox com escopo", () => {
-  test("agent em modo own*: vê Minhas e Fila, NÃO vê Todas", async ({ page }) => {
+test.describe("G4-02 — inbox avec périmètre", () => {
+  test("agent en mode own* : voit Les miennes et File, NE voit PAS Toutes", async ({ page }) => {
     await login(page, creds.users.agent!.email);
     await page.goto("/app/inbox");
-    await expect(page.getByRole("tab", { name: /Minhas/ })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Fila/ })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Todas/ })).toHaveCount(0);
+    await expect(page.getByRole("tab", { name: /Les miennes/ })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /File/ })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /Toutes/ })).toHaveCount(0);
     await page.screenshot({ path: path.join(EVIDENCE, "G4-02-inbox-scope-agent.png"), fullPage: true });
   });
 
-  test("manager: vê a visão Todas", async ({ page }) => {
+  test("manager : voit la vue Toutes", async ({ page }) => {
     await login(page, creds.users.manager!.email);
     await page.goto("/app/inbox");
-    await expect(page.getByRole("tab", { name: /Todas/ })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /Toutes/ })).toBeVisible();
     await page.screenshot({ path: path.join(EVIDENCE, "G4-02-inbox-scope-manager.png"), fullPage: true });
   });
 
-  test("deep-link para conversa fora do escopo → estado vazio claro (sem stack trace)", async ({
+  test("lien direct vers une conversation hors périmètre → état vide clair (sans stack trace)", async ({
     page,
   }) => {
     await login(page, creds.users.agent!.email);
@@ -53,6 +53,6 @@ test.describe("G4-02 — inbox com escopo", () => {
     await page.request.get("/api/v1/conversations/00000000-0000-4000-8000-0000000000ff");
     // UUID inexistente → RLS/404 → estado vazio claro (GAP D).
     await page.goto("/app/inbox/00000000-0000-4000-8000-0000000000ff");
-    await expect(page.getByText(/fora do seu acesso/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/hors de votre accès/i)).toBeVisible({ timeout: 15_000 });
   });
 });

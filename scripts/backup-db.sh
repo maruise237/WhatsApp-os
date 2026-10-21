@@ -18,14 +18,14 @@ if [ -z "$URL" ]; then
     fi
   done
 fi
-[ -n "$URL" ] || { echo "FATAL: NEON_DATABASE_URL ausente (env ou .env/.env.local)" >&2; exit 1; }
+[ -n "$URL" ] || { echo "FATAL : NEON_DATABASE_URL absent (env ou .env/.env.local)" >&2; exit 1; }
 
 mkdir -p "$DIR"
 STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 OUT="$DIR/deskcomm-$STAMP.dump"
 pg_dump "$URL" --format=custom --schema=public --no-owner --no-privileges --file="$OUT"
-echo "backup ok: $OUT ($(du -h "$OUT" | cut -f1))"
+echo "sauvegarde ok : $OUT ($(du -h "$OUT" | cut -f1))"
 
 # retenção: apaga dumps mais velhos que RETENTION_DAYS
 find "$DIR" -name 'deskcomm-*.dump' -mtime +"$RETENTION_DAYS" -delete
-echo "retenção aplicada (${RETENTION_DAYS}d)"
+echo "rétention appliquée (${RETENTION_DAYS} j)"

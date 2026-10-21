@@ -15,6 +15,7 @@
  *    ninguém consegue escolher pela tela — trabalho feito e inalcançável, que é
  *    a forma como funcionalidade morre neste produto.
  */
+import { FOURNISSEUR_PLATEFORME } from "@/lib/ai/plateforme";
 import { describe, expect, it } from "vitest";
 
 import { createDefaultRegistry } from "@/lib/agent-engine/edge/llm/providers";
@@ -42,7 +43,11 @@ describe("lista de provedores × registry", () => {
   });
 
   it("todo provedor executável é oferecido na tela", () => {
-    const semPorta = Object.keys(registry).filter((id) => !ehProvedorSuportado(id));
+    // L'IA de la plateforme n'a pas de porte À DESSEIN : la clé est celle de
+    // l'exploitant (DEEPSEEK_API_KEY), et aucune vendeuse ne la choisit.
+    const semPorta = Object.keys(registry).filter(
+      (id) => id !== FOURNISSEUR_PLATEFORME && !ehProvedorSuportado(id),
+    );
     expect(
       semPorta,
       "o sistema saberia usar um provedor que ninguém consegue escolher — trabalho inalcançável",
@@ -129,7 +134,7 @@ describe("lista de provedores × os pontos de ESCRITA", () => {
   it("o schema de versão de agente aceita a lista inteira", async () => {
     const { PROVIDERS } = await import("@/lib/ai/agents/validation");
     expect(
-      [...PROVIDERS].sort(),
+      [...PROVIDERS].filter((p) => p !== FOURNISSEUR_PLATEFORME).sort(),
       "um provedor fora daqui não pode ser publicado num agente — os dois pontos que respondem o cliente ficam fora do alcance dele",
     ).toEqual(ids);
   });
@@ -279,6 +284,8 @@ describe("a corrente inteira: lista × execução × tela", () => {
       literais,
       "o seletor voltou a listar provedores à mão — o próximo provedor da lista nasce invisível na tela",
     ).toEqual([]);
-    expect(fonte).toMatch(/from "@\/lib\/ai\/pontos\/provedores"/);
+    // L'IA est fournie par la plateforme : l'écran ne propose plus AUCUN
+    // fournisseur, ni dérivé ni à la main.
+    expect(fonte).not.toMatch(/PROVEDORES\.map/);
   });
 });

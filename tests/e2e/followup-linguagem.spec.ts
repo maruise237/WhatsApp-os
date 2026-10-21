@@ -46,7 +46,7 @@ async function login(page: Page, email: string, senha: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(senha);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//, { timeout: PRAZO_SOB_CARGA });
 }
 
@@ -70,7 +70,7 @@ async function oQuePainelMostra(painel: Locator): Promise<{ texto: string; valor
   return { texto, valoresDeCampo };
 }
 
-test.describe("construtor de follow-up — a tela não fala em código (W2-LINGUAGEM)", () => {
+test.describe("constructeur de relance — l’écran ne parle pas en code (W2-LINGUAGEM)", () => {
   test.use({ viewport: { width: 1600, height: 900 } });
   /**
    * O teto do teste precisa caber as esperas de 60s do protocolo, senão elas
@@ -81,7 +81,7 @@ test.describe("construtor de follow-up — a tela não fala em código (W2-LINGU
    */
   test.describe.configure({ timeout: 240_000 });
 
-  test("nenhum valor de wire e nenhum UUID aparecem no painel de nenhum tipo de nó", async ({ page }) => {
+  test("aucune valeur technique ni aucun UUID n’apparaît dans le panneau d’aucun type de nœud", async ({ page }) => {
     const c = creds();
 
     // Guarda de vacuidade: uma derivação quebrada devolveria lista vazia, e aí
@@ -107,20 +107,20 @@ test.describe("construtor de follow-up — a tela não fala em código (W2-LINGU
     // um `reload`, e o custo dele estourou o teto de 240s desta spec, que já
     // abre seis painéis e tira seis capturas.
     const criaModelo = await page.request.post("/api/v1/message-templates", {
-      data: { title: `E2E Linguagem ${Date.now()}`, body: "Oi {{nome}}, tudo bem?" },
+      data: { title: `E2E Linguagem ${Date.now()}`, body: "Bonjour {{nome}}, comment allez-vous ?" },
     });
     expect(criaModelo.status(), "o seletor de modelo só existe se houver ao menos um").toBe(201);
 
     await page.goto("/app/ai/followups");
     const nomeDoFluxo = `E2E Linguagem ${Date.now()}`;
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialogo = page.getByRole("dialog");
-    const campoNome = dialogo.getByLabel("Nome");
+    const campoNome = dialogo.getByLabel("Nom");
     // O Radix anima a abertura; um fill() antes do foco é engolido.
     await expect(campoNome).toBeFocused({ timeout: PRAZO_SOB_CARGA });
     await campoNome.fill(nomeDoFluxo);
     await expect(campoNome).toHaveValue(nomeDoFluxo);
-    await dialogo.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialogo.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialogo).not.toBeVisible({ timeout: PRAZO_SOB_CARGA });
 
     await page.locator("li", { hasText: nomeDoFluxo }).getByRole("link").click();

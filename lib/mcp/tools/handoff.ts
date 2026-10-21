@@ -38,11 +38,11 @@ const inputShape = {
 export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
   name: "crm_request_human_handoff",
   description:
-    "Aciona handoff bot→humano. Marca a conversa como pending, silencia o bot e escolhe o " +
-    "destino pelo roteamento G5: atende o target_user_id se elegível agora, senão rodízio " +
-    "entre os disponíveis; sem ninguém elegível vai para a fila. Registra activity + " +
-    "event_log + audit. Retorna assigned_to OU queued+position. Use quando o cliente pedir " +
-    "atendente humano ou o agente identificar limite da automação.",
+    "Déclenche le relais bot→humain. Marque la conversation comme pending, rend le bot silencieux et choisit la " +
+    "destination via la distribution G5 : le target_user_id s’il est éligible maintenant, sinon rotation " +
+    "entre les disponibles ; sans personne d’éligible, elle part en file. Enregistre activity + " +
+    "event_log + audit. Renvoie assigned_to OU queued+position. À utiliser quand le client demande " +
+    "un conseiller humain ou que l’agent identifie la limite de l’automatisation.",
   inputSchema: inputShape,
   category: "handoff",
   requiresRole: "agent",
@@ -171,7 +171,7 @@ export const crmRequestHumanHandoff: McpToolDefinition<typeof inputShape> = {
       assigned_to_user_id: assignedUserId,
       idempotent: !result.triggered && result.reason === "idempotent_5s",
       next_action:
-        "Avise o cliente em tom acolhedor que um atendente humano vai assumir em instantes.",
+        "Prévenez le client sur un ton chaleureux qu’un conseiller humain va prendre le relais dans un instant.",
     };
   },
 };

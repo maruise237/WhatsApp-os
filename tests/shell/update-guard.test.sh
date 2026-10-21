@@ -160,7 +160,7 @@ run_update() {  # run_update <args...> → saída em $OUTFILE, status em $RC
 echo "── 1. Alvo anterior ao instalado é recusado antes do backup"
 run_update --to v0.9.0
 check "aborta com status != 0" test "$RC" -ne 0
-check "explica em português que é retrocesso" grep -q "ANTERIOR à que já está instalada" "$OUTFILE"
+check "explique en français que c’est un recul" grep -q "ANTÉRIEURE à celle déjà installée" "$OUTFILE"
 check "não chegou a rodar o backup" test ! -f "$BACKUP_MARK"
 
 echo "── 2. Sem --to, a última tag publicada também é recusada se já está no HEAD"
@@ -265,7 +265,7 @@ check "o fixture é mesmo um clone raso (senão esta prova não vale nada)" \
 HEAD_ANTES="$(git rev-parse HEAD)"
 run_update
 check "aborta com o código de recusa (3), não com falha genérica" test "$RC" -eq 3
-check "explica em português que é retrocesso" grep -q "ANTERIOR à que já está instalada" "$OUTFILE"
+check "explique en français que c’est un recul" grep -q "ANTÉRIEURE à celle déjà installée" "$OUTFILE"
 check "não chegou a rodar o backup" test ! -f "$BACKUP_MARK"
 check "NÃO rebobinou: o HEAD é o mesmo de antes" test "$(git rev-parse HEAD)" = "$HEAD_ANTES"
 check "a imagem do .env continua intacta" grep -q '^APP_IMAGE=ghcr.io/melgarafael/deskcommcrm:latest$' .env
@@ -281,7 +281,7 @@ git remote set-url origin "$WORK/nao-existe"  # …mas perdeu o caminho de volta
 HEAD_ANTES="$(git rev-parse HEAD)"
 run_update
 check "aborta com o código de recusa (3)" test "$RC" -eq 3
-check "diz que não teve CERTEZA, em vez de agir" grep -q "consegui ter CERTEZA" "$OUTFILE"
+check "dit qu’il n’a pas eu de CERTITUDE, au lieu d’agir" grep -q "pu avoir la CERTITUDE" "$OUTFILE"
 check "não chegou a rodar o backup" test ! -f "$BACKUP_MARK"
 check "NÃO rebobinou: o HEAD é o mesmo de antes" test "$(git rev-parse HEAD)" = "$HEAD_ANTES"
 
@@ -302,7 +302,7 @@ check "reportou 'failed', não 'failed_rolled_back'" \
   test -n "$(grep -F '"status":"failed"' "$CURL_LOG" || true)"
 check "não reportou rollback nenhum" test -z "$(grep -F 'failed_rolled_back' "$CURL_LOG" || true)"
 check "o motivo em português chegou no log que a tela mostra" \
-  grep -qi 'anterior' "$CURL_LOG"
+  grep -qiE 'ant(é|É)rieure' "$CURL_LOG"
 
 echo "── 8. CONTIDA=2 (unshallow falhou) SOZINHO já acende compare_failed, mesmo com fetch --tags OK"
 # Isola a linha `[ "$CONTIDA" = 2 ] && COMPARE_FAILED=true`. O modo de falha

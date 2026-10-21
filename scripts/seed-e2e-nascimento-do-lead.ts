@@ -40,7 +40,7 @@ interface Creds {
 
 function lerCreds(): Creds {
   if (!fs.existsSync(CREDS_PATH)) {
-    throw new Error(".e2e-creds.json ausente — rode scripts/seed-e2e-credentials.ts primeiro");
+    throw new Error(".e2e-creds.json absent — lancez d'abord scripts/seed-e2e-credentials.ts");
   }
   return JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
 }
@@ -87,7 +87,7 @@ async function funilPadrao(orgId: string): Promise<string> {
   if (error) throw new Error(`select pipeline default: ${error.message}`);
   if (!data) {
     throw new Error(
-      "a organização de e2e não tem funil is_default — sem ele o lead não nasce, e o spec mediria o produto errado",
+      "l'organisation e2e n'a pas d'entonnoir is_default — sans lui le lead ne naît pas, et la spec mesurerait le mauvais produit",
     );
   }
   return (data as { id: string }).id;
@@ -104,7 +104,7 @@ async function main(): Promise<void> {
     pipeline_default_id: pipelineDefaultId,
   };
   fs.writeFileSync(CREDS_PATH, `${JSON.stringify(creds, null, 2)}\n`);
-  console.info(`seed-e2e-nascimento-do-lead: ok (funil de entrada ${pipelineDefaultId})`);
+  console.info(`seed-e2e-nascimento-do-lead : ok (entonnoir d'entrée ${pipelineDefaultId})`);
 }
 
 void main();

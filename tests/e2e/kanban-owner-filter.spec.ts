@@ -44,24 +44,24 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//);
 }
 
-test("filtro por responsável reflete na URL e esconde leads com dono", async ({ page }) => {
+test("le filtre par responsable se reflète dans l’URL et masque les leads avec propriétaire", async ({ page }) => {
   await login(page, creds.users.manager!.email);
   await page.goto(`/app/pipelines/${creds.kanban!.pipeline_id}`);
 
-  const owned = page.getByRole("heading", { name: "Pedido E2E com responsavel" });
-  const unowned = page.getByRole("heading", { name: "Pedido E2E sem responsavel" });
+  const owned = page.getByRole("heading", { name: "Commande E2E avec responsable" });
+  const unowned = page.getByRole("heading", { name: "Commande E2E sans responsable" });
   await expect(owned).toBeVisible();
   await expect(unowned).toBeVisible();
   // A badge de ausência de dono está presente em ao menos um card.
-  await expect(page.getByText("Sem responsável").first()).toBeVisible();
+  await expect(page.getByText("Aucun responsable").first()).toBeVisible();
 
   // Abre o filtro de responsável e escolhe "Sem responsável".
-  await page.getByRole("button", { name: /^Responsável:/ }).click();
-  await page.getByRole("menuitem", { name: "Sem responsável" }).click();
+  await page.getByRole("button", { name: /^Responsable :/ }).click();
+  await page.getByRole("menuitem", { name: "Aucun responsable" }).click();
 
   await expect(page).toHaveURL(/owner=unassigned/);
   await expect(unowned).toBeVisible();

@@ -50,8 +50,8 @@ function statusBadgeLabel(status: AutomationRuleRunRow["status"]): string {
   // desconectado, transporte não configurado), o rótulo antigo afirmava uma
   // causa — o relógio — que muitas vezes não é a certa. A causa exata aparece
   // na linha da ação, logo abaixo, onde ela pode ser específica.
-  if (status === "adiado") return "Aguardando envio";
-  return "Parcial";
+  if (status === "adiado") return "En attente d’envoi";
+  return "Partiel";
 }
 
 /**
@@ -65,18 +65,18 @@ function statusBadgeLabel(status: AutomationRuleRunRow["status"]): string {
  * que nascem no próprio executor.
  */
 const MOTIVO_DA_PARADA: Record<string, string> = {
-  no_contact: "Esse lead entrou sem contato vinculado, então não havia para quem escrever.",
-  contact_blocked: "O contato pediu para não receber mensagens (opt-out).",
-  no_phone: "O contato não tem telefone cadastrado.",
-  missing_config: "Falta preencher alguma configuração desta ação — abra a automação e revise.",
+  no_contact: "Ce lead est arrivé sans contact associé : il n’y avait personne à qui écrire.",
+  contact_blocked: "Le contact a demandé à ne plus recevoir de messages (désinscription).",
+  no_phone: "Le contact n’a pas de numéro de téléphone enregistré.",
+  missing_config: "Un réglage de cette action n’est pas rempli — ouvrez l’automatisation et vérifiez-la.",
   fora_da_janela_de_envio:
-    "Está fora da janela de envio configurada para esse número. A mensagem sai sozinha quando ela reabrir.",
-  aguardando_o_canal: "A mensagem está na fila e sai assim que o canal aceitar.",
+    "Hors de la plage d’envoi configurée pour ce numéro. Le message partira automatiquement à sa réouverture.",
+  aguardando_o_canal: "Le message est en file d’attente et partira dès que le canal l’acceptera.",
   sem_agente_publicado:
-    "O agente escolhido não tem versão publicada. Publique-o em Agentes de IA para a automação poder usá-lo.",
+    "L’agent choisi n’a pas de version publiée. Publiez-le dans Agents IA pour que l’automatisation puisse l’utiliser.",
   ia_indisponivel:
-    "A IA não está configurada nesta instalação — cadastre uma chave em Provedores de IA.",
-  texto_vazio: "A IA não devolveu texto. Revise o contexto que você escreveu para ela.",
+    "L’IA n’est pas configurée sur cette installation — enregistrez une clé dans Fournisseurs d’IA.",
+  texto_vazio: "L’IA n’a renvoyé aucun texte. Revoyez le contexte que vous lui avez fourni.",
 };
 
 function explicacaoDe(action: AutomationRuleRunActionResult): string | null {
@@ -145,7 +145,7 @@ function ActionLine({ action, run }: { action: AutomationRuleRunActionResult; ru
               disabled={resend.isPending}
               onClick={() =>
                 resend.mutate(run.id, {
-                  onSuccess: () => toast.success("Reenviado."),
+                  onSuccess: () => toast.success("Renvoyé."),
                 })
               }
             >

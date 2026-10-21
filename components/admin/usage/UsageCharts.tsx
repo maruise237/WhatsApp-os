@@ -89,7 +89,7 @@ export function UsageCharts({ series }: UsageChartsProps) {
                 width={45}
               />
               <Tooltip
-                formatter={(value) => [formatNumber(Number(value)), "Mensagens"]}
+                formatter={(value) => [formatNumber(Number(value)), "Messages"]}
                 labelFormatter={(label) => formatDateTick(String(label))}
                 contentStyle={{
                   borderRadius: "8px",
@@ -110,7 +110,7 @@ export function UsageCharts({ series }: UsageChartsProps) {
       </ChartCard>
 
       {/* AI Cost per day */}
-      <ChartCard title="Custo AI / dia (R$)">
+      <ChartCard title="Coût IA / jour">
         {!hasCost ? (
           <EmptyChart />
         ) : (
@@ -144,7 +144,7 @@ export function UsageCharts({ series }: UsageChartsProps) {
                 width={70}
               />
               <Tooltip
-                formatter={(value) => [formatCurrency(Number(value)), "Custo"]}
+                formatter={(value) => [formatCurrency(Number(value)), "Coût"]}
                 labelFormatter={(label) => formatDateTick(String(label))}
                 contentStyle={{
                   borderRadius: "8px",
@@ -166,7 +166,7 @@ export function UsageCharts({ series }: UsageChartsProps) {
 
       {/* AI Tokens per day — full width */}
       <div className="md:col-span-2">
-        <ChartCard title="AI Tokens / dia">
+        <ChartCard title="Tokens IA / jour">
           {!hasTokens ? (
             <EmptyChart />
           ) : (

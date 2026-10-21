@@ -116,7 +116,7 @@ export async function unpauseAgentAction(id: string): Promise<ActionResult> {
 
   // mcp_agent não pode ser despausado por aqui — precisa ir em /publish escolhendo versão.
   if (existing.kind === "mcp_agent") {
-    return { ok: false, error: "publish_required", message: "Publique uma versão para reativar." };
+    return { ok: false, error: "publish_required", message: "Publiez une version pour réactiver." };
   }
 
   const { error } = await admin
@@ -199,7 +199,7 @@ export async function renameAgentAction(id: string, name: string): Promise<Actio
   if (!UUID_RX.test(id)) return { ok: false, error: "invalid_request" };
   const trimmed = (name ?? "").trim();
   if (trimmed.length < 1 || trimmed.length > 120) {
-    return { ok: false, error: "validation_failed", message: "Nome entre 1 e 120 caracteres." };
+    return { ok: false, error: "validation_failed", message: "Le nom doit contenir entre 1 et 120 caractères." };
   }
   const guard = await ensureAdmin();
   if (guard.kind === "fail") return guard.result;

@@ -1,6 +1,6 @@
 import { PlatformAdminsClient } from "./_client";
 
-export const metadata = { title: "Platform Admins — Admin Plataforma" };
+export const metadata = { title: "Administrateurs de la plateforme — Administration de la plateforme" };
 
 export default function AdminPlatformAdminsPage() {
   return <PlatformAdminsClient />;

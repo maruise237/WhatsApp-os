@@ -108,8 +108,8 @@ function numeroDoRotulo(texto: string, rotulo: string): number {
   const achado = re.exec(texto);
   if (!achado?.[1]) {
     throw new Error(
-      `inventário: o Resumo não tem o rótulo "${rotulo}". O parser mede pelo rótulo; ` +
-        `sem ele a comparação seria 0 === 0 e passaria sobre nada.`,
+      `inventaire : le Résumé n'a pas l'étiquette "${rotulo}". Le parseur mesure par l'étiquette ; ` +
+        `sans elle la comparaison serait 0 === 0 et passerait sur rien.`,
     );
   }
   return Number(achado[1]);
@@ -120,8 +120,8 @@ function listaEntreMarcadores(texto: string, marcador: string): string[] {
   const fim = texto.indexOf(`<!-- ${marcador}:fim -->`);
   if (inicio === -1 || fim === -1 || fim < inicio) {
     throw new Error(
-      `inventário: marcadores de "${marcador}" ausentes ou fora de ordem. ` +
-        `Sem eles a lista é lida como vazia e a catraca deixa de vigiar.`,
+      `inventaire : marqueurs de "${marcador}" absents ou dans le désordre. ` +
+        `Sans eux la liste est lue comme vide et le cliquet cesse de surveiller.`,
     );
   }
   const bloco = texto.slice(inicio, fim);
@@ -219,7 +219,7 @@ export function lerInventario(markdown: string): Inventario {
   const intro = /Total (\d+) telas/.exec(markdown);
   if (!intro?.[1]) {
     throw new Error(
-      'inventário: a abertura não declara "Total N telas". O parser mede por essa frase.',
+      'inventaire : l’ouverture ne déclare pas "Total N telas". Le parseur mesure par cette phrase.',
     );
   }
 
@@ -329,23 +329,23 @@ export function conferirVacuidade(
 ): void {
   const problemas: string[] = [];
   if (inventario.linhas.length < 80) {
-    problemas.push(`só ${inventario.linhas.length} linhas numeradas lidas do doc (esperado ≥80)`);
+    problemas.push(`seulement ${inventario.linhas.length} lignes numérotées lues dans le doc (attendu ≥80)`);
   }
   if (inventario.secoes.length < 10) {
-    problemas.push(`só ${inventario.secoes.length} seções lidas (esperado ≥10)`);
+    problemas.push(`seulement ${inventario.secoes.length} sections lues (attendu ≥10)`);
   }
   if (rotasDoDisco.length < 20) {
-    problemas.push(`só ${rotasDoDisco.length} páginas achadas no disco (esperado ≥20)`);
+    problemas.push(`seulement ${rotasDoDisco.length} pages trouvées sur le disque (attendu ≥20)`);
   }
   if (inventario.naoConstruido.length === 0) {
-    problemas.push("a lista de não-construído veio vazia — a catraca não vigiaria nada");
+    problemas.push("la liste du non-construit est vide — le cliquet ne surveillerait rien");
   }
   if (inventario.outroMecanismo.length === 0) {
-    problemas.push("a lista de outro-mecanismo veio vazia");
+    problemas.push("la liste de l'autre-mécanisme est vide");
   }
   if (problemas.length > 0) {
     throw new Error(
-      `inventário de telas: o instrumento não mediu nada.\n  - ${problemas.join("\n  - ")}`,
+      `inventaire des écrans : l'instrument n'a rien mesuré.\n  - ${problemas.join("\n  - ")}`,
     );
   }
 }

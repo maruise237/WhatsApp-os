@@ -102,7 +102,7 @@ export function SectionTokens() {
         </table>
       </div>
 
-      <h3>Motion (referência rápida)</h3>
+      <h3>Animation (référence rapide)</h3>
       <div className="ds-card" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
         {Object.entries(MOTION).map(([k, m]) => (
           <div key={k} style={{ display: "flex", flexDirection: "column", gap: 6 }}>

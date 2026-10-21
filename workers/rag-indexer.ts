@@ -10,8 +10,7 @@
  * `organization_id` from the trusted event row, never from user input.
  */
 
-import { isEmbeddingProviderConfigured } from "@/lib/ai/gateway";
-import { embedText } from "@/lib/ai/embed";
+import { vecteurDExtrait } from "@/lib/ai/embed";
 import { acquireDebounce } from "@/lib/ai/rag/debounce";
 import { chunkText, computeContentHash } from "@/lib/ai/rag/chunker";
 import { estimateTokens } from "@/lib/ai/runtime/history";
@@ -199,10 +198,9 @@ async function handleProductSynced(
     if (!content) continue;
     const contentHash = computeContentHash(content);
 
-    let embedding: number[];
+    let embedding: string | null;
     try {
-      const result = await embedText(content, { organizationId: row.organization_id });
-      embedding = result.embedding;
+      embedding = await vecteurDExtrait(content, row.organization_id);
     } catch (err) {
       // If embedding fails mid-way, abort and fail the version.
       const detail = err instanceof Error ? err.message : String(err);
@@ -223,7 +221,7 @@ async function handleProductSynced(
           // NOT NULL no banco. Nenhum dos dois caminhos preenchia, e todo
           // insert morria com "null value in column token_count".
           token_count: estimateTokens(content),
-          embedding: embedding as unknown as string,
+          embedding,
           metadata: {
             source_type: "nuvemshop_product",
             product_id: productId,
@@ -258,7 +256,7 @@ async function handleProductSynced(
   // perde o RAG em silêncio, que é pior que a indexação ter falhado. Falhando
   // aqui, a versão anterior continua ativa.
   if (successCount === 0) {
-    await markVersionFailed(versionId, row.organization_id, "nenhum chunk gravado");
+    await markVersionFailed(versionId, row.organization_id, "aucun chunk enregistré");
     return { type: "error", detail: "no_chunks_written" };
   }
 
@@ -332,7 +330,7 @@ async function handleKnowledgeSourceUpdated(
   for (const it of items) {
     const fonte = porFonte.get(it.knowledge_source_id);
     if (!fonte) continue;
-    const texto = `Pergunta: ${it.question}\nResposta: ${it.answer}`;
+    const texto = `Question : ${it.question}\nRéponse : ${it.answer}`;
     for (const c of chunkText(texto)) {
       pedacos.push({ content: c, sourceId: fonte.id, sourceType: fonte.source_type });
     }
@@ -354,10 +352,9 @@ async function handleKnowledgeSourceUpdated(
   for (let i = 0; i < pedacos.length; i++) {
     const p = pedacos[i]!;
     const contentHash = computeContentHash(p.content);
-    let embedding: number[];
+    let embedding: string | null;
     try {
-      const r = await embedText(p.content, { organizationId: row.organization_id });
-      embedding = r.embedding;
+      embedding = await vecteurDExtrait(p.content, row.organization_id);
     } catch (err) {
       const detail = err instanceof Error ? err.message : String(err);
       await markVersionFailed(versionId, row.organization_id, `embed_failed@${i}: ${detail}`);
@@ -372,7 +369,7 @@ async function handleKnowledgeSourceUpdated(
         content: p.content,
         content_hash: contentHash,
         token_count: estimateTokens(p.content),
-        embedding: embedding as unknown as string,
+        embedding,
         metadata: { source_type: p.sourceType },
       },
       // Ver comentario no caminho de produto: esta e a constraint que existe.
@@ -391,7 +388,7 @@ async function handleKnowledgeSourceUpdated(
   // perde o RAG em silêncio, que é pior que a indexação ter falhado. Falhando
   // aqui, a versão anterior continua ativa.
   if (gravados === 0) {
-    await markVersionFailed(versionId, row.organization_id, "nenhum chunk gravado");
+    await markVersionFailed(versionId, row.organization_id, "aucun chunk enregistré");
     return { type: "error", detail: "no_chunks_written" };
   }
 
@@ -408,7 +405,7 @@ async function handleKnowledgeSourceUpdated(
       .from("ai_knowledge_sources")
       .update({
         last_index_status: doFonte > 0 ? "success" : "failed",
-        last_index_error: doFonte > 0 ? null : "nenhum chunk foi gravado nesta indexação",
+        last_index_error: doFonte > 0 ? null : "aucun chunk n’a été enregistré lors de cette indexation",
         last_indexed_at: agora,
         chunks_count: doFonte,
       })
@@ -434,10 +431,9 @@ export async function processRagIndexer(row: EventRow): Promise<HandlerResult> {
     );
   }
 
-  // Guard: embedding provider must be configured.
-  if (!isEmbeddingProviderConfigured()) {
-    return { consumer_key: consumerKey, status: "skipped", detail: "openai_key_missing" };
-  }
+  // Plus de garde « clé OpenAI absente » : sans fournisseur d'embeddings, la
+  // base s'indexe en plein texte (`connaissancesEnTexte`, migration 0184).
+  // Sauter ici rendait la FAQ de la vendeuse invisible, sans un mot.
 
   // Resolve the active agent for this org.
   let agentId: string;

@@ -59,10 +59,10 @@ test.beforeAll(async () => {
   await afirmarAdminDeTenantPuro(creds.users.admin!.email);
 });
 
-test.describe("as telas do épico abrem para uma pessoa", () => {
+test.describe("les écrans de l’épique s’ouvrent pour une personne", () => {
   test.describe.configure({ timeout: 180_000 });
 
-  test("cada tela abre, tem conteúdo e não cospe erro no console", async ({ page }) => {
+  test("chaque écran s’ouvre, a du contenu et ne crache pas d’erreur dans la console", async ({ page }) => {
     const erros: string[] = [];
     // A URL entra no registro porque sem ela o achado é indiagnosticável: a
     // mensagem do browser para uma requisição barrada é "Failed to load resource:
@@ -80,12 +80,12 @@ test.describe("as telas do épico abrem para uma pessoa", () => {
     await page.goto("/login");
     await page.locator("#email").fill(creds.users.admin!.email);
     await page.locator("#password").fill(creds.password);
-    await page.getByRole("button", { name: /entrar/i }).click();
+    await page.getByRole("button", { name: /se connecter/i }).click();
     await page.waitForURL(/\/login\/mfa/, { timeout: 30_000 });
     // Espera a janela virar: um código gerado no fim da janela expira durante a
     // digitação e o sintoma é "MFA falhou", que não parece o que é.
     await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    await page.locator('input[aria-label="Dígito 1"]').click();
+    await page.locator('input[aria-label="Chiffre 1"]').click();
     await page.keyboard.type(generateTotp(creds.admin_totp!.secret), { delay: 60 });
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 

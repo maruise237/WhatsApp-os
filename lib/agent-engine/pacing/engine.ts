@@ -66,9 +66,9 @@ export function decidePacing(input: PacingInput): PacingDecision {
       code: 'outside_window',
       nextAllowedAt,
       reason:
-        `fora da janela de envio (${knobs.windowStartHour}h-${knobs.windowEndHour}h` +
-        `${knobs.allowSunday ? '' : ', sem domingo'}, ${knobs.timezone}); ` +
-        `agende para ${formatInTz(nextAllowedAt, knobs.timezone)} (abertura da janela + jitter)`,
+        `hors de la plage d’envoi (${knobs.windowStartHour}h-${knobs.windowEndHour}h` +
+        `${knobs.allowSunday ? '' : ', sans le dimanche'}, ${knobs.timezone}); ` +
+        `planifiez pour ${formatInTz(nextAllowedAt, knobs.timezone)} (ouverture de la plage + jitter)`,
     };
   }
 
@@ -93,10 +93,10 @@ export function decidePacing(input: PacingInput): PacingDecision {
       code: isWarmup ? 'warmup_cap' : 'daily_cap',
       nextAllowedAt,
       reason: isWarmup
-        ? `cap de warm-up atingido (${wCap}/dia para número com ${ageDays} dia(s) de idade); ` +
-          `agende para ${formatInTz(nextAllowedAt, knobs.timezone)} (próxima abertura + jitter)`
-        : `cap diário do número atingido (${effectiveCap}/dia, limite do CRM); ` +
-          `agende para ${formatInTz(nextAllowedAt, knobs.timezone)} (próxima abertura + jitter)`,
+        ? `plafond de warm-up atteint (${wCap}/jour pour un numéro de ${ageDays} jour(s)) ; ` +
+          `planifiez pour ${formatInTz(nextAllowedAt, knobs.timezone)} (prochaine ouverture + jitter)`
+        : `plafond quotidien du numéro atteint (${effectiveCap}/jour, limite du CRM) ; ` +
+          `planifiez pour ${formatInTz(nextAllowedAt, knobs.timezone)} (prochaine ouverture + jitter)`,
     };
   }
 

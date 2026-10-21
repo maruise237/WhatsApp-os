@@ -2,6 +2,7 @@
 import { Droppable } from "@hello-pangea/dnd";
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
+import { formatMontant } from "@/lib/money";
 import type { Lead } from "@/lib/types/leads";
 import type { Stage } from "@/lib/kanban/types";
 import { buildCardInput } from "@/lib/kanban/card-state";
@@ -27,16 +28,14 @@ interface StageColumnProps {
   onOpen?: (leadId: string) => void;
 }
 
-function formatBRL(cents: number): string {
-  try {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "BRL",
-      maximumFractionDigits: 0,
-    }).format(cents / 100);
-  } catch {
-    return `R$ ${(cents / 100).toFixed(0)}`;
-  }
+/**
+ * Le total de la colonne, dans la devise de ses leads. Une seule devise ⇒ elle ;
+ * aucune ou un mélange ⇒ la devise par défaut (XAF) — additionner des FCFA et
+ * des euros n'a pas de sens, mais le cas est marginal et le total reste lisible.
+ */
+function deviseDaColuna(leads: Lead[]): string | null {
+  const devises = new Set(leads.filter((l) => l.value_cents != null).map((l) => l.currency ?? null));
+  return devises.size === 1 ? [...devises][0]! : null;
 }
 
 export function StageColumn({
@@ -78,7 +77,7 @@ export function StageColumn({
 
       {totalCents > 0 && (
         <div className="border-b border-border px-3 py-1.5 text-[11px] tabular-nums text-text-muted">
-          {formatBRL(totalCents)}
+          {formatMontant(totalCents, deviseDaColuna(leads))}
         </div>
       )}
 

@@ -304,7 +304,7 @@ async function login(page: Page): Promise<void> {
   await page.goto(`${APP_URL}/login`);
   await page.locator("#email").fill(creds.users.admin!.email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/login\/mfa/);
 
   for (let tentativa = 0; tentativa < 2; tentativa++) {
@@ -312,7 +312,7 @@ async function login(page: Page): Promise<void> {
     if (msUntilNextTotpWindow() < 3_000) {
       await page.waitForTimeout(msUntilNextTotpWindow() + 200);
     }
-    await page.locator('input[aria-label="Dígito 1"]').click();
+    await page.locator('input[aria-label="Chiffre 1"]').click();
     await page.keyboard.type(generateTotp(secret!), { delay: 40 });
     try {
       await page.waitForURL(/\/app\//, { timeout: 8_000 });
@@ -410,8 +410,8 @@ async function criarVersao(
   return (JSON.parse(corpo) as { data: { id: string } }).data.id;
 }
 
-test.describe("QA — o agente usa as mãos que a W4 entregou?", () => {
-  test("um modelo de verdade escolhendo as capacidades novas", async ({ page }) => {
+test.describe("QA — l’agent utilise-t-il les mains livrées par la W4 ?", () => {
+  test("un vrai modèle qui choisit les nouvelles capacités", async ({ page }) => {
     test.setTimeout(600_000);
     fs.mkdirSync(SAIDA, { recursive: true });
     fs.mkdirSync(TURNOS, { recursive: true });

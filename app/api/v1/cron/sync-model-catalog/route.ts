@@ -121,7 +121,7 @@ async function buscarDaOpenRouter(): Promise<ModeloDaOpenRouter[]> {
   if (!res.ok) throw new Error(`catalogo_origem_status_${res.status}`);
   const json = (await res.json()) as { data?: ModeloDaOpenRouter[] };
   if (!Array.isArray(json.data)) {
-    throw new Error("catalogo_origem_shape_inesperado — a resposta não trouxe `data` como lista");
+    throw new Error("catalogo_origem_shape_inesperado — la réponse ne contient pas `data` sous forme de liste");
   }
   return json.data;
 }

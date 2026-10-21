@@ -1,6 +1,9 @@
 /**
  * Brazilian national holidays 2026-2030.
- * Used by the LGPD SLA calculator to skip non-business days.
+ *
+ * N'est PLUS appliqué par défaut au calcul de SLA (`lib/lgpd/sla.ts`) : le
+ * marché par défaut est le Cameroun. Gardé comme liste opt-in pour un clone
+ * brésilien, qui peut la passer à `computeDueAt(…, new Set(HOLIDAYS_BR_ISO))`.
  *
  * Fixed holidays are the same date each year.
  * Moveable holidays (Carnival Mon/Tue, Good Friday, Corpus Christi)
@@ -58,20 +61,3 @@ const MOVEABLE_HOLIDAYS: string[] = [
 ];
 
 export const HOLIDAYS_BR_ISO: string[] = [...FIXED_HOLIDAYS, ...MOVEABLE_HOLIDAYS];
-
-const _holidaySet = new Set(HOLIDAYS_BR_ISO);
-
-/**
- * Returns true if the given date falls on a Brazilian national holiday.
- * Comparison is done in America/Sao_Paulo timezone.
- */
-export function isHolidayBR(date: Date): boolean {
-  // Format: YYYY-MM-DD in São Paulo timezone
-  const isoDate = new Intl.DateTimeFormat("sv-SE", {
-    timeZone: "America/Sao_Paulo",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-  return _holidaySet.has(isoDate);
-}

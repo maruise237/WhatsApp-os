@@ -89,7 +89,7 @@ function semSufixoDeChat(chatId: string): string {
 
 /**
  * Resolve um chatId WAHA em identidade canônica:
- *  - `{number}@c.us` | `@s.whatsapp.net` -> phone E.164 ("+55...")
+ *  - `{number}@c.us` | `@s.whatsapp.net` -> phone E.164 ("+237...")
  *  - `{lid}@lid` -> lid (somente dígitos; número protegido pelo WhatsApp)
  *  - `@g.us` -> group (skip binding CRM — descarte ESPERADO, por doutrina)
  *  - qualquer outra coisa -> unknown (descarte que DEIXA RASTRO)
@@ -135,7 +135,7 @@ function ehEnderecavel(parsed: ChatIdentity): boolean {
 function sufixoDeChatId(chatId: string): string {
   const at = chatId.lastIndexOf("@");
   if (at !== -1) return chatId.slice(at);
-  return chatId === "" ? "(vazio)" : "(sem @)";
+  return chatId === "" ? "(vazio)" : "(sans @)";
 }
 
 /**
@@ -290,7 +290,7 @@ function bodyOf(p: WahaPayload): string | null {
  * `from` vem opaco (`70192801575156@lid`), mas `_data.key.remoteJidAlt` traz
  * `558183647258@s.whatsapp.net`. Em grupo, o equivalente é `participantAlt`.
  *
- * Devolve E.164 (`+55…`) ou null. **Só aceita o que parece telefone**: o campo é
+ * Devolve E.164 (`+237…`) ou null. **Só aceita o que parece telefone**: o campo é
  * de fora, e um valor estranho aqui viraria `phone_number` — que é chave de
  * reencontro de contato e endereço de envio. Na dúvida, nulo: contato sem
  * telefone é incômodo, contato com telefone ERRADO manda mensagem para
@@ -842,7 +842,7 @@ async function handleSessionStatus(
     { reachable: true, status, detail: null },
     (apelidoRow?.display_name as string | null) ??
       (apelidoRow?.phone_number as string | null) ??
-      "sem nome",
+      "sans nom",
   );
 }
 

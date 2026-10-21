@@ -18,12 +18,12 @@ interface PreviewPanelProps {
 }
 
 const COUNT_LABELS: Record<keyof LgpdPreviewCounts, string> = {
-  conversations: "Conversas",
-  messages_total: "Mensagens (total)",
+  conversations: "Conversations",
+  messages_total: "Messages (total)",
   leads: "Leads",
-  orders: "Pedidos",
+  orders: "Commandes",
   activities: "Atividades",
-  audit_entries: "Entradas de auditoria",
+  audit_entries: "Entrées du journal d’audit",
   consents: "Consentimentos",
 };
 
@@ -93,7 +93,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
                     <p className="text-muted-foreground">{preview.contact.phone_number}</p>
                   )}
                   {preview.contact.cpf_present && (
-                    <p className="text-xs text-muted-foreground">CPF : présent (valeur masquée)</p>
+                    <p className="text-xs text-muted-foreground">N° d’identification : présent (valeur masquée)</p>
                   )}
                 </div>
               )}
@@ -144,7 +144,7 @@ export function PreviewPanel({ requestId }: PreviewPanelProps) {
               )}
 
               <p className="text-center text-xs text-muted-foreground">
-                Généré le {new Date(preview.generated_at).toLocaleString("fr-FR")} · Données personnelles masquées · CPF non affiché
+                Généré le {new Date(preview.generated_at).toLocaleString("fr-FR")} · Données personnelles masquées · n° d’identification non affiché
               </p>
             </div>
           )}

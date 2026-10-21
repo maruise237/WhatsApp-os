@@ -186,7 +186,7 @@ describe("devolver o atendimento: as três travas", () => {
       [GOV_ORG, ESC_CONTATO],
     );
     expect(rows.length).toBeGreaterThan(0);
-    expect(rows[0]!.reason).toBe("Atendimento passado para uma pessoa");
+    expect(rows[0]!.reason).toBe("Échange transmis à une personne");
     // O texto que o atendente escreveu ao escalar NÃO entra aqui: esta linha
     // aparece na tela e no export de LGPD.
     expect(rows[0]!.reason).not.toContain("requested_human");

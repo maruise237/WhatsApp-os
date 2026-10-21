@@ -56,7 +56,7 @@ async function login(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app\//, { timeout: PRAZO });
 }
 
@@ -113,26 +113,26 @@ async function alturaDoCard(page: Page, nodeId: string): Promise<number> {
   return page.locator(`[data-testid="node-card-${nodeId}"]`).evaluate((el) => el.getBoundingClientRect().height);
 }
 
-test.describe("condição com várias regras — uma bolinha por regra", () => {
+test.describe("condition à plusieurs règles — une poignée par règle", () => {
   test.use({ viewport: { width: 1600, height: 1000 } });
   test.setTimeout(420_000);
 
-  test("duas regras dão duas saídas separadas, e dois leads seguem caminhos diferentes", async ({ page }) => {
+  test("deux règles donnent deux sorties distinctes, et deux leads suivent des chemins différents", async ({ page }) => {
     fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
     await login(page, creds.users.manager!.email);
 
     // ─── 1. fluxo novo ───────────────────────────────────────────────────
     const nomeDoFluxo = `E2E Ramos ${Date.now()}`;
     await page.goto("/app/ai/followups");
-    await page.getByRole("button", { name: "Novo fluxo" }).click();
+    await page.getByRole("button", { name: "Nouveau flow" }).click();
     const dialogo = page.getByRole("dialog");
-    const campoNome = dialogo.getByLabel("Nome");
+    const campoNome = dialogo.getByLabel("Nom");
     // O Radix anima a abertura e o autoFocus chega DEPOIS do primeiro paint: um
     // fill no meio disso é engolido e o botão nasce desabilitado.
     await expect(campoNome).toBeFocused({ timeout: PRAZO });
     await campoNome.fill(nomeDoFluxo);
     await expect(campoNome).toHaveValue(nomeDoFluxo);
-    await dialogo.getByRole("button", { name: "Criar fluxo" }).click();
+    await dialogo.getByRole("button", { name: "Créer le flow" }).click();
     await expect(dialogo).not.toBeVisible({ timeout: PRAZO });
     await page.locator("li", { hasText: nomeDoFluxo }).getByRole("link").click();
     await page.waitForURL(/\/app\/ai\/followups\/[0-9a-f-]+$/, { timeout: PRAZO });
@@ -175,11 +175,11 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
     const painel = page.getByTestId("node-config-panel");
     await expect(painel).toBeVisible({ timeout: PRAZO });
 
-    await painel.getByRole("combobox", { name: "Como as regras decidem o caminho" }).click();
-    await page.getByRole("option", { name: "Uma saída por regra" }).click();
+    await painel.getByRole("combobox", { name: "Comment les règles déterminent le chemin" }).click();
+    await page.getByRole("option", { name: "Une sortie par règle" }).click();
 
     async function preencherRegra(idx: number, nome: string, valor: string): Promise<void> {
-      await painel.getByLabel(`Nome da saída ${idx + 1}`).fill(nome);
+      await painel.getByLabel(`Nom de la sortie ${idx + 1}`).fill(nome);
       const bloco = painel.getByTestId(`condition-check-${idx}`);
       // ⚠️ PELO RÓTULO EM PORTUGUÊS, e não pelo valor de wire. Esta spec pedia
       // `"tag"` e `"contains"` — os nomes internos —, e ficou 7 MINUTOS clicando
@@ -192,17 +192,17 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
       // E `contains` não é só outro nome: ele foi TIRADO do seletor de propósito
       // (`oferecido: false`), por ser duplicata de `eq` para etiqueta. O que o
       // usuário escolhe é "tem a etiqueta".
-      await bloco.getByRole("combobox", { name: "Campo" }).click();
-      await page.getByRole("option", { name: "Etiqueta do contato", exact: true }).click();
-      await bloco.getByRole("combobox", { name: "Operador" }).click();
-      await page.getByRole("option", { name: "tem a etiqueta", exact: true }).click();
-      await bloco.getByLabel("Valor").fill(valor);
-      await bloco.getByLabel("Valor").blur();
+      await bloco.getByRole("combobox", { name: "Champ" }).click();
+      await page.getByRole("option", { name: "Étiquette du contact", exact: true }).click();
+      await bloco.getByRole("combobox", { name: "Opérateur" }).click();
+      await page.getByRole("option", { name: "a l’étiquette", exact: true }).click();
+      await bloco.getByLabel("Valeur").fill(valor);
+      await bloco.getByLabel("Valeur").blur();
     }
 
-    await preencherRegra(0, "Tem a etiqueta VIP", "vip");
-    await painel.getByRole("button", { name: "Condição", exact: true }).click();
-    await preencherRegra(1, "Tem a etiqueta atrasado", "atrasado");
+    await preencherRegra(0, "Client VIP", "vip");
+    await painel.getByRole("button", { name: "Condition", exact: true }).click();
+    await preencherRegra(1, "Client en retard", "atrasado");
 
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
     await expect(page.getByTestId("node-config-sheet")).toHaveCount(0);
@@ -210,9 +210,9 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
     // ─── 4. A QUEIXA, respondida na tela ─────────────────────────────────
     const saidas = page.locator(`[data-testid^="node-branch-${condicaoId}-"]`);
     await expect(saidas).toHaveCount(3); // duas regras + "nenhuma delas"
-    await expect(page.getByTestId(`node-branch-${condicaoId}-regra-1`)).toHaveText("Tem a etiqueta VIP");
-    await expect(page.getByTestId(`node-branch-${condicaoId}-regra-2`)).toHaveText("Tem a etiqueta atrasado");
-    await expect(page.getByTestId(`node-branch-${condicaoId}-else`)).toHaveText("Nenhuma delas");
+    await expect(page.getByTestId(`node-branch-${condicaoId}-regra-1`)).toHaveText("Client VIP");
+    await expect(page.getByTestId(`node-branch-${condicaoId}-regra-2`)).toHaveText("Client en retard");
+    await expect(page.getByTestId(`node-branch-${condicaoId}-else`)).toHaveText("Aucune d’entre elles");
 
     // Cada saída tem a SUA bolinha, e são bolinhas distintas — não uma redesenhada.
     const bolinhas = page.locator(`.react-flow__node[data-id="${condicaoId}"] .react-flow__handle.source`);
@@ -229,7 +229,7 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
     await page.locator(`[data-testid="node-card-${condicaoId}"]`).click();
     await expect(painel).toBeVisible({ timeout: PRAZO });
     for (let i = 2; i < 5; i++) {
-      await painel.getByRole("button", { name: "Condição", exact: true }).click();
+      await painel.getByRole("button", { name: "Condition", exact: true }).click();
     }
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
     await expect(saidas).toHaveCount(6); // 5 regras + "nenhuma delas"
@@ -247,7 +247,7 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
     await page.locator(`[data-testid="node-card-${condicaoId}"]`).click();
     await expect(painel).toBeVisible({ timeout: PRAZO });
     for (let i = 0; i < 3; i++) {
-      await painel.getByRole("button", { name: "Remover condição" }).last().click();
+      await painel.getByRole("button", { name: "Supprimer la condition" }).last().click();
     }
     await page.locator(".react-flow__pane").click({ position: { x: 20, y: 20 } });
     await expect(saidas).toHaveCount(3);
@@ -261,14 +261,14 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
 
     // A aresta mostra o NOME do ramo de onde saiu — é isso que responde
     // "qual aresta sai de qual regra" quando o fluxo tem dez delas.
-    await expect(page.locator(".react-flow__edge", { hasText: "Tem a etiqueta VIP" })).toHaveCount(1);
-    await expect(page.locator(".react-flow__edge", { hasText: "Tem a etiqueta atrasado" })).toHaveCount(1);
+    await expect(page.locator(".react-flow__edge", { hasText: "Client VIP" })).toHaveCount(1);
+    await expect(page.locator(".react-flow__edge", { hasText: "Client en retard" })).toHaveCount(1);
 
     // ─── 7. publica ──────────────────────────────────────────────────────
-    await page.getByRole("button", { name: "Salvar" }).click();
+    await page.getByRole("button", { name: "Enregistrer" }).click();
     await expect(page.getByTestId("dirty-indicator")).toHaveCount(0, { timeout: PRAZO });
     await page.getByTestId("publish-button").click();
-    await expect(page.getByText("Fluxo publicado.")).toBeVisible({ timeout: PRAZO });
+    await expect(page.getByText("Flux publié.")).toBeVisible({ timeout: PRAZO });
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "ramos-03-publicado.png"), fullPage: true });
 
     // ─── 8. A CONSEQUÊNCIA: dois leads, dois caminhos ────────────────────
@@ -341,7 +341,7 @@ test.describe("condição com várias regras — uma bolinha por regra", () => {
     expect(doVip.current_node_id).not.toBe(doAtrasado.current_node_id);
 
     await page.goto("/app/ai/followups");
-    await page.getByRole("tab", { name: "Fila" }).click();
+    await page.getByRole("tab", { name: "File" }).click();
     await page.screenshot({ path: path.join(ARTIFACTS_DIR, "ramos-04-dois-leads-dois-caminhos.png"), fullPage: true });
   });
 });

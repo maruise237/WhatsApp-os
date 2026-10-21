@@ -28,7 +28,7 @@ const inputShape = {
     .min(1)
     .max(200)
     .optional()
-    .describe("Chave para deduplicação (24h TTL). Recomendado run_id+step."),
+    .describe("Clé de déduplication (TTL 24 h). Recommandé : run_id+step."),
 };
 
 function hashRequest(input: Record<string, unknown>): string {
@@ -38,7 +38,7 @@ function hashRequest(input: Record<string, unknown>): string {
 export const crmSendWhatsappMessage: McpToolDefinition<typeof inputShape> = {
   name: "crm_send_whatsapp_message",
   description:
-    "Envia uma mensagem WhatsApp outbound para uma conversa existente. Forneça `idempotency_key` para evitar duplicação em retries (TTL 24h).",
+    "Envoie un message WhatsApp outbound dans une conversation existante. Fournissez `idempotency_key` pour éviter les doublons lors des nouvelles tentatives (TTL 24 h).",
   inputSchema: inputShape,
   category: "write",
   requiresRole: "agent",

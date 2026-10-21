@@ -112,13 +112,13 @@ export interface FollowupTurnDeps extends InboundTurnDeps {
 function humanizeElapsed(ms: number): string {
   if (ms >= DAY_MS) {
     const days = Math.floor(ms / DAY_MS);
-    return days === 1 ? '1 dia' : `${days} dias`;
+    return days === 1 ? '1 jour' : `${days} jours`;
   }
   if (ms >= HOUR_MS) {
     const hours = Math.floor(ms / HOUR_MS);
-    return hours === 1 ? '1 hora' : `${hours} horas`;
+    return hours === 1 ? '1 heure' : `${hours} heures`;
   }
-  return 'menos de uma hora';
+  return 'moins d’une heure';
 }
 
 /**
@@ -140,27 +140,27 @@ export function buildTemporalBlock(input: {
     const elapsedMs = input.now.getTime() - Date.parse(input.lastInbound.sentAt);
     parts.push(
       Number.isNaN(elapsedMs)
-        ? 'Você está retomando o contato com o lead após o intervalo combinado.'
-        : `Passaram ${humanizeElapsed(Math.max(0, elapsedMs))} desde a última resposta do lead.`,
+        ? 'Vous reprenez contact avec le lead après l’intervalle convenu.'
+        : `Il s’est écoulé ${humanizeElapsed(Math.max(0, elapsedMs))} depuis la dernière réponse du lead.`,
     );
   } else {
-    parts.push('Você está retomando o contato com o lead; não há resposta recente registrada na conversa.');
+    parts.push('Vous reprenez contact avec le lead ; aucune réponse récente n’est enregistrée dans la conversation.');
   }
 
   const promise = input.promise?.trim();
   if (promise) {
     parts.push(
-      input.promisedAt ? `Você prometeu: ${promise} (para ${input.promisedAt}).` : `Você prometeu: ${promise}.`,
+      input.promisedAt ? `Vous avez promis : ${promise} (pour le ${input.promisedAt}).` : `Vous avez promis : ${promise}.`,
     );
   }
 
   const reason = input.reason?.trim();
   if (reason) {
-    parts.push(`Motivo do follow-up: ${reason}.`);
+    parts.push(`Motif de la relance : ${reason}.`);
   }
 
   if (input.lastInbound !== null) {
-    parts.push(`A última coisa que o lead disse foi: "${input.lastInbound.body}".`);
+    parts.push(`La dernière chose que le lead a dite était : "${input.lastInbound.body}".`);
   }
 
   return parts.join(' ');
@@ -176,17 +176,17 @@ function buildFollowupOpeningMessage(
   projeta = false,
 ): string {
   return [
-    'Follow-up agendado: você havia combinado retornar a este lead — NÃO houve nova mensagem dele desde então.',
+    'Relance planifiée : vous aviez convenu de revenir vers ce lead — il n’a envoyé AUCUN nouveau message depuis.',
     '',
-    '## Contexto temporal do follow-up',
+    '## Contexte temporel de la relance',
     temporalBlock,
     '',
     ...ritualBlocks(previous, leadState, context, notesIndexBlock, projeta),
     '',
-    'Retome a conversa com naturalidade usando a tool send_message — NUNCA escreva a resposta como texto direto',
-    '(texto fora de tool é descartado pelo runtime). Use get_lead_context se precisar reler o contexto.',
-    'Houve avanço REAL no funil neste turno? Marque-o com update_lead_state (só o próximo estágio válido).',
-    'Aprendeu algo durável sobre o lead? Salve com save_lead_note (a headline entra no índice de memória).',
+    'Reprenez la conversation avec naturel en utilisant l’outil send_message — n’écrivez JAMAIS la réponse en texte direct',
+    '(un texte hors outil est ignoré par le runtime). Utilisez get_lead_context si vous devez relire le contexte.',
+    'Y a-t-il eu une avancée RÉELLE dans le tunnel à ce tour ? Marquez-la avec update_lead_state (uniquement l’étape suivante valide).',
+    'Avez-vous appris quelque chose de durable sur le lead ? Enregistrez-le avec save_lead_note (la headline entre dans l’index de mémoire).',
   ].join('\n');
 }
 
@@ -231,7 +231,7 @@ export function createFollowupTurnHandler(deps: FollowupTurnDeps) {
     const tenantId = job.organization_id;
     const leadId = job.contact_id;
     if (leadId === null) {
-      throw new Error('job followup_turn sem contact_id — o CHECK da fila deveria impedir');
+      throw new Error('job followup_turn sans contact_id — le CHECK de la file aurait dû l’empêcher');
     }
     const payload = followupTurnPayloadSchema.parse(job.payload);
 
@@ -261,14 +261,14 @@ export function createFollowupTurnHandler(deps: FollowupTurnDeps) {
     );
     const conv = rows[0];
     if (conv === undefined || conv.channel_session_id === null) {
-      throw new Error('followup_turn sem conversa/número do contato — impossível retomar o contato');
+      throw new Error('followup_turn sans conversation/numéro du contact — impossible de reprendre contact');
     }
     // Canal excluído pelo usuário: o número já foi deslogado no transporte. O envio
     // seria recusado lá na frente pelo handler, mas o turno inteiro (chamada de
     // modelo inclusive) já teria sido pago para produzir um texto que não sai.
     // Dead-letter com o motivo escrito, em vez de fila retentando contra o vazio.
     if (conv.channel_archived_at !== null) {
-      throw new Error('followup_turn para canal arquivado — o número foi excluído da Central de Conexões');
+      throw new Error('followup_turn pour un canal archivé — le numéro a été supprimé de la Centrale des connexions');
     }
 
     const clock = deps.clock ?? ((): Date => new Date());
@@ -351,12 +351,12 @@ async function runFlowDrivenTurn(
   },
 ): Promise<void> {
   if (input.nodeId === undefined || input.purpose === undefined) {
-    throw new Error('followup_turn dirigido por fluxo sem node_id/purpose no payload — payload do engine incompleto');
+    throw new Error('followup_turn piloté par un flux sans node_id/purpose dans le payload — payload du moteur incomplet');
   }
   const complete = deps.completeFollowupTurn;
   if (!complete) {
     throw new Error(
-      'followup_turn dirigido por fluxo sem completeFollowupTurn nos deps do handler — a ponte não foi injetada na wiring (workers/agent-worker/main.ts)',
+      'followup_turn piloté par un flux sans completeFollowupTurn dans les deps du handler — le pont n’a pas été injecté dans le câblage (workers/agent-worker/main.ts)',
     );
   }
   const { enrollmentId, nodeId } = input;
@@ -370,7 +370,7 @@ async function runFlowDrivenTurn(
         const temporalBlock = buildTemporalBlock({ now: clock(), lastInbound: lastInboundOf(context) });
         const opening = buildFollowupOpeningMessage(temporalBlock, previous, leadState, context, notesIndexBlock, projeta);
         if (!input.promptHint) return opening;
-        return `${opening}\n\n## Orientação do passo do fluxo\n${input.promptHint}`;
+        return `${opening}\n\n## Orientation de l’étape du flux\n${input.promptHint}`;
       },
     });
     await complete(pool, { organizationId: target.tenantId, enrollmentId, nodeId, result: { kind: 'sent' } });
@@ -384,7 +384,7 @@ async function runFlowDrivenTurn(
       maxTokens: deps.knobs.maxContextTokens,
     });
     if (!context.ok) {
-      throw new Error(`turno de classificação do fluxo falhou em get_lead_context (${context.error.code})`);
+      throw new Error(`tour de classification du flux échoué dans get_lead_context (${context.error.code})`);
     }
     const cls = await classifyFollowupReply(
       pool,
@@ -407,14 +407,14 @@ async function runFlowDrivenTurn(
   // para devolver um plano vazio seria pagar por nada.
   const esperas = input.waits ?? [];
   if (esperas.length === 0) {
-    throw new Error('turno de planejamento de tempo sem esperas no payload — o engine só o enfileira quando há espera adaptativa');
+    throw new Error('tour de planification du délai sans attentes dans le payload — le moteur ne le met en file que s’il y a une attente adaptative');
   }
   const context = await getLeadContext(pool, deps.crmCfg, { tenantId: target.tenantId, leadId: target.leadId }, {
     historyLimit: deps.knobs.historyLimit,
     maxTokens: deps.knobs.maxContextTokens,
   });
   if (!context.ok) {
-    throw new Error(`turno de planejamento de tempo do fluxo falhou em get_lead_context (${context.error.code})`);
+    throw new Error(`tour de planification du délai du flux échoué dans get_lead_context (${context.error.code})`);
   }
   const plano = await planFollowupTiming(
     pool,
@@ -458,7 +458,7 @@ async function runDeterministicReentry(
   // caminho do agente (runAgentTurn). Fecha o caso em que o STOP ambíguo silenciou o lead
   // mas o CRM ainda não marcou is_blocked (o stopGate por si não pega esse estado).
   if (await isLeadInHandoff(pool, tenantId, leadId)) {
-    runLog.info('re-entrada determinística pulada — lead silenciado (handoff/opt-out)', { kind: job.kind });
+    runLog.info('réentrée déterministe ignorée — lead silencieux (relais humain/désinscription)', { kind: job.kind });
     return;
   }
 
@@ -473,7 +473,7 @@ async function runDeterministicReentry(
   // configuração (permanente): o job vira dead-letter + inbox pela fila, nunca envio mudo.
   const template = await loadReentryTemplate(pool, tenantId);
   if (template === null) {
-    throw new Error('re-entrada determinística sem template apontado para o tenant — publique um template e mova o ponteiro');
+    throw new Error('réentrée déterministe sans modèle désigné pour le tenant — publiez un modèle et déplacez le pointeur');
   }
   const body = pickReentryVariant(leadId, template.variants);
 
@@ -484,7 +484,7 @@ async function runDeterministicReentry(
     maxTokens: deps.knobs.maxContextTokens,
   });
   if (!context.ok) {
-    throw new Error(`re-entrada determinística falhou em get_lead_context (${context.error.code})`);
+    throw new Error(`réentrée déterministe échouée dans get_lead_context (${context.error.code})`);
   }
   const optedOutThisTurn = context.context.contact.is_blocked;
 
@@ -539,13 +539,13 @@ async function runDeterministicReentry(
         at: chain.nextAllowedAt,
         payload: job.payload,
       });
-      runLog.info('re-entrada re-agendada por janela anti-ban', {
+      runLog.info('réentrée replanifiée par la plage anti-blocage', {
         code: chain.code,
         next_run_at: chain.nextAllowedAt.toISOString(),
       });
       return;
     }
-    runLog.info('re-entrada determinística vetada pela cadeia — não re-agendada', { code: chain.code });
+    runLog.info('réentrée déterministe refusée par la chaîne — non replanifiée', { code: chain.code });
     return;
   }
 
@@ -556,7 +556,7 @@ async function runDeterministicReentry(
     case 'queued':
       // 'queued' = o canal aceitou e segura (sessão fora) — sob custódia do CRM, não
       // re-agenda (mesma disposição do caminho do agente).
-      runLog.info('re-entrada determinística concluída', { kind: outcome.kind });
+      runLog.info('réentrée déterministe terminée', { kind: outcome.kind });
       return;
     case 'blocked':
       // veto permanente do sink (is_blocked): cancela o job e cacheia o opt-out — a
@@ -564,11 +564,11 @@ async function runDeterministicReentry(
       await applySendOutcome(pool, outcome, { jobId: job.id, workerId: ctx.workerId, tenantId, leadId }, {
         queuedRetryDelayMs: deps.knobs.queuedRetryDelayMs,
       });
-      throw new JobSettledError('re-entrada determinística vetada pelo sink (is_blocked) — job cancelado em definitivo');
+      throw new JobSettledError('réentrée déterministe refusée par le sink (is_blocked) — job annulé définitivement');
     case 'failed':
-      throw new Error('re-entrada determinística: CRM marcou o envio como failed — run re-tentado pela fila');
+      throw new Error('réentrée déterministe : le CRM a marqué l’envoi comme failed — run relancé par la file');
     case 'unavailable':
-      throw new Error(`re-entrada determinística: canal indisponível (${outcome.reason}) — run re-tentado pela fila`);
+      throw new Error(`réentrée déterministe : canal indisponible (${outcome.reason}) — run relancé par la file`);
   }
 }
 

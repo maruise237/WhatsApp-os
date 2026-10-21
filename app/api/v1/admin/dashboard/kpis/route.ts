@@ -193,8 +193,8 @@ export async function GET(_req: NextRequest) {
       tenant_id: row.organization_id,
       tenant_name: (org as { display_name?: string })?.display_name ?? row.organization_id,
       message: isOverdue
-        ? `Demande de données personnelles échue le ${new Date(row.due_at).toLocaleDateString("pt-BR")}`
-        : `Délai de protection des données expirant le ${new Date(row.due_at).toLocaleDateString("pt-BR")}`,
+        ? `Demande de données personnelles échue le ${new Date(row.due_at).toLocaleDateString("fr-FR")}`
+        : `Délai de protection des données expirant le ${new Date(row.due_at).toLocaleDateString("fr-FR")}`,
       link: "/admin/lgpd",
       created_at: row.created_at,
     });

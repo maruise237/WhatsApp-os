@@ -88,7 +88,7 @@ export function useCancelFollowupEnrollment() {
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["followup", "queue"] });
-      toast.success("Follow-up cancelado.");
+      toast.success("Relance annulée.");
     },
     onError: (err) => {
       showApiError(err);
@@ -118,7 +118,7 @@ export function useCancelFollowupPromise() {
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["followup", "queue"] });
-      toast.success("Retorno cancelado.");
+      toast.success("Relance annulée.");
     },
     onError: (err) => {
       showApiError(err);

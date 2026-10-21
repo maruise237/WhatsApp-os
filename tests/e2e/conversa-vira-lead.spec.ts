@@ -66,7 +66,7 @@ async function login(page: Page): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(creds.users.manager!.email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app/, { timeout: 30_000 });
 }
 
@@ -89,9 +89,9 @@ async function mandarMensagem(page: Page, texto: string, id: string): Promise<nu
   return r.status();
 }
 
-test.describe("a conversa vira lead", () => {
-  test("mensagem de quem nunca escreveu vira card no funil de entrada", async ({ page }) => {
-    const status = await mandarMensagem(page, "Oi, vi o anúncio de vocês. Como funciona?", `e2e-nasc-${sufixo}-1`);
+test.describe("la conversation devient un lead", () => {
+  test("le message de quelqu’un qui n’a jamais écrit devient une carte dans le tableau d’entrée", async ({ page }) => {
+    const status = await mandarMensagem(page, "Bonjour, j’ai vu votre annonce. Comment ça marche ?", `e2e-nasc-${sufixo}-1`);
     expect(status, "o webhook precisa ACEITAR — 4xx aqui e o resto do teste mede o vazio").toBe(200);
 
     await login(page);
@@ -111,7 +111,7 @@ test.describe("a conversa vira lead", () => {
     await page.screenshot({ path: "evidence/spec-17/card-nascido-da-conversa.png", fullPage: true });
   });
 
-  test("a timeline explica de onde o card veio", async ({ page }) => {
+  test("la chronologie explique d’où vient la carte", async ({ page }) => {
     await login(page);
     await page.goto(`/app/pipelines/${creds.nascimento!.pipeline_default_id}`);
 
@@ -120,11 +120,11 @@ test.describe("a conversa vira lead", () => {
     // "Entrou pelo WhatsApp" é o rótulo de `lead_created`. Card que aparece sem
     // explicação é como se perde a confiança num automatismo — o dono não sabe
     // se foi ele, a IA, ou um erro.
-    await expect(page.getByText(/entrou pelo whatsapp/i).first()).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText(/arrivé par whatsapp/i).first()).toBeVisible({ timeout: 20_000 });
   });
 
-  test("a segunda mensagem do mesmo contato NÃO abre um segundo card", async ({ page }) => {
-    const status = await mandarMensagem(page, "Ainda estou aguardando, pode me ajudar?", `e2e-nasc-${sufixo}-2`);
+  test("le deuxième message du même contact N’ouvre PAS une deuxième carte", async ({ page }) => {
+    const status = await mandarMensagem(page, "J’attends toujours, vous pouvez m’aider ?", `e2e-nasc-${sufixo}-2`);
     expect(status).toBe(200);
 
     await login(page);

@@ -87,8 +87,8 @@ function parameterFor(slot: ParamSlot, value: string, named: boolean): MetaSendP
       // 132012. Falhar aqui avisa quem estender a derivação que este lado precisa
       // acompanhar — silêncio deixaria o defeito sair pelo fio.
       throw new Error(
-        `buildComponents: slot ${describeAddress(slot.address)} espera '${expects}', ` +
-          `que este montador ainda não sabe montar`,
+        `buildComponents: slot ${describeAddress(slot.address)} attend '${expects}', ` +
+          `que ce module ne sait pas encore assembler`,
       );
   }
 }
@@ -136,7 +136,7 @@ export function buildComponents(
   const faltando = missingSlots(contract, values);
   if (faltando.length > 0) {
     throw new Error(
-      `buildComponents: ${faltando.length} parâmetro(s) sem valor — ` +
+      `buildComponents: ${faltando.length} paramètre(s) sans valeur — ` +
         faltando.map((s) => `${describeAddress(s.address)} {{${s.key}}}`).join(", "),
     );
   }

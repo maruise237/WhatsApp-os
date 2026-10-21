@@ -7,6 +7,7 @@
  * in `validateVersionReferences` and run BEFORE save AND inside the publish
  * Postgres function (defense in depth).
  */
+import { FOURNISSEUR_PLATEFORME } from "@/lib/ai/plateforme";
 import { z } from "zod";
 import { VALID_TOOL_IDS } from "@/lib/mcp/tools/catalog";
 import { TETO_TOOLS_POR_AGENTE } from "@/lib/mcp/tools/selecao-por-pacote";
@@ -18,7 +19,11 @@ import { IDS_DE_PROVEDOR } from "@/lib/ai/pontos/provedores";
  * alcance da OpenRouter — justamente os dois pontos que a abertura do
  * vocabulário existia para atender.
  */
-export const PROVIDERS = IDS_DE_PROVEDOR;
+//
+// Plus le fournisseur de la plateforme : toute version enregistrée l'est avec
+// lui quand DEEPSEEK_API_KEY est posée (lib/ai/plateforme.ts). Il n'est pas
+// dans PROVEDORES parce qu'aucun écran ne le propose — personne ne le choisit.
+export const PROVIDERS = [...IDS_DE_PROVEDOR, FOURNISSEUR_PLATEFORME] as const;
 export type Provider = (typeof PROVIDERS)[number];
 
 const UUID = z.string().uuid();

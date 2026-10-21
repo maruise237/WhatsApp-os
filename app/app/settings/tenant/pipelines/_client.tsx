@@ -92,8 +92,8 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
   const v = pipeline.vocabulary ?? {};
   const [lead, setLead] = useState(v.lead ?? "Lead");
   const [deal, setDeal] = useState(v.deal ?? "Deal");
-  const [won, setWon] = useState(v.won ?? "Ganho");
-  const [lost, setLost] = useState(v.lost ?? "Perdido");
+  const [won, setWon] = useState(v.won ?? "Gagné");
+  const [lost, setLost] = useState(v.lost ?? "Perdu");
   const [reasonsText, setReasonsText] = useState(readLostReasons(pipeline.settings).join(", "));
   const [fieldsJson, setFieldsJson] = useState(
     JSON.stringify(readFields(pipeline.settings), null, 2),
@@ -123,7 +123,7 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
     startTransition(async () => {
       const r = await updatePipelineConfig(pipeline.id, patch);
       if (r.ok) toast.success(t("{name} atualizado.").replace("{name}", pipeline.name));
-      else toast.error(`Erro: ${r.error}`);
+      else toast.error(`Erreur : ${r.error}`);
     });
   }
 
@@ -164,7 +164,7 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
           spellCheck={false}
         />
         <p className="text-xs text-muted-foreground">
-          {t('Ex: [{ "key": "size", "label": "Tamanho", "type": "text" }]')}
+          {t('Ex: [{ "key": "size", "label": "Taille", "type": "text" }]')}
         </p>
       </div>
 

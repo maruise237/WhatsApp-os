@@ -49,7 +49,7 @@ export function PlatformAdminsTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {["Usuário", "Concedido em", "Concedido por", "Scope", "MFA", "Status", "Motivo"].map(
+            {["Utilisateur", "Accordé le", "Accordé par", "Scope", "MFA", "Status", "Motif"].map(
               (h) => (
                 <TableHead key={h}>{h}</TableHead>
               ),

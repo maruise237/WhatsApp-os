@@ -43,7 +43,7 @@ async function login(page: Page): Promise<void> {
   await page.goto("/login");
   await page.locator("#email").fill(creds.users.manager!.email);
   await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.getByRole("button", { name: /se connecter/i }).click();
   await page.waitForURL(/\/app/, { timeout: 30_000 });
 }
 
@@ -87,28 +87,28 @@ async function cenario(page: Page, nome: string, valor: string, trecho: string):
   return contatoId;
 }
 
-test.describe("o dado que o cliente disse espera confirmação", () => {
-  test("aparece na ficha com o trecho, e CONFIRMAR grava", async ({ page }) => {
+test.describe("la donnée dite par le client attend une confirmation", () => {
+  test("elle apparaît sur la fiche avec l’extrait, et CONFIRMER l’enregistre", async ({ page }) => {
     await login(page);
     const email = `disse.${sufixo}@exemplo.com.br`;
     const contatoId = await cenario(
       page,
       `Cliente Proposta ${sufixo}`,
       email,
-      `pode anotar meu email: ${email}`,
+      `vous pouvez noter mon e-mail : ${email}`,
     );
 
     await page.goto(`/app/contacts/${contatoId}`);
 
     // A pendência aparece — e diz que nada foi salvo ainda.
-    await expect(page.getByText(/o assistente ouviu isto na conversa/i)).toBeVisible({
+    await expect(page.getByText(/l’assistant a relevé ceci dans la conversation/i)).toBeVisible({
       timeout: 20_000,
     });
-    await expect(page.getByText(/nada foi salvo ainda/i)).toBeVisible();
+    await expect(page.getByText(/rien n’a encore été enregistré/i)).toBeVisible();
 
     // O TRECHO está à vista: confirmar sem ver o que a pessoa escreveu seria
     // um ato de fé, e o botão ficaria mais fácil de clicar do que de conferir.
-    await expect(page.getByText(`pode anotar meu email: ${email}`)).toBeVisible();
+    await expect(page.getByText(`vous pouvez noter mon e-mail : ${email}`)).toBeVisible();
 
     // Controle: o e-mail AINDA NÃO está na ficha. Sem esta linha, a asserção
     // final passaria mesmo que a IA tivesse gravado sozinha — que é justamente
@@ -117,10 +117,10 @@ test.describe("o dado que o cliente disse espera confirmação", () => {
     const antes = (await fichaAntes.json()) as { data: { email?: string | null } };
     expect(antes.data.email, "a IA não pode ter gravado").toBeFalsy();
 
-    await page.getByRole("button", { name: /está certo, salvar/i }).click();
+    await page.getByRole("button", { name: /c’est correct, enregistrer/i }).click();
 
     // A pendência some — não fica botão para o que já foi decidido.
-    await expect(page.getByText(/o assistente ouviu isto na conversa/i)).toHaveCount(0, {
+    await expect(page.getByText(/l’assistant a relevé ceci dans la conversation/i)).toHaveCount(0, {
       timeout: 20_000,
     });
 
@@ -143,23 +143,23 @@ test.describe("o dado que o cliente disse espera confirmação", () => {
     await page.screenshot({ path: "evidence/spec-17/proposta-confirmada.png", fullPage: true });
   });
 
-  test("DESCARTAR tira da tela sem gravar", async ({ page }) => {
+  test("REJETER la retire de l’écran sans l’enregistrer", async ({ page }) => {
     await login(page);
     const email = `errado.${sufixo}@exemplo.com.br`;
     const contatoId = await cenario(
       page,
       `Cliente Descarte ${sufixo}`,
       email,
-      `acho que era ${email}, mas não tenho certeza`,
+      `je crois que c’était ${email}, mais je ne suis pas sûr`,
     );
 
     await page.goto(`/app/contacts/${contatoId}`);
-    await expect(page.getByText(/o assistente ouviu isto na conversa/i)).toBeVisible({
+    await expect(page.getByText(/l’assistant a relevé ceci dans la conversation/i)).toBeVisible({
       timeout: 20_000,
     });
 
-    await page.getByRole("button", { name: /descartar/i }).click();
-    await expect(page.getByText(/o assistente ouviu isto na conversa/i)).toHaveCount(0, {
+    await page.getByRole("button", { name: /rejeter/i }).click();
+    await expect(page.getByText(/l’assistant a relevé ceci dans la conversation/i)).toHaveCount(0, {
       timeout: 20_000,
     });
 

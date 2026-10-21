@@ -47,36 +47,36 @@ try {
 
 const r = reconciliar(inventario, rotas);
 
-console.info(`Inventário: ${inventario.linhas.length} linhas numeradas em ${inventario.secoes.length} seções`);
-console.info(`Disco: ${rotas.length} páginas (${join(RAIZ_DAS_PAGINAS, "**/page.tsx")})\n`);
+console.info(`Inventaire : ${inventario.linhas.length} lignes numérotées dans ${inventario.secoes.length} sections`);
+console.info(`Disque : ${rotas.length} pages (${join(RAIZ_DAS_PAGINAS, "**/page.tsx")})\n`);
 
 for (const s of inventario.secoes) {
-  const marca = s.declarado === s.contadas ? "ok" : `DIVERGE (cabeçalho ${s.declarado})`;
-  console.info(`  ${s.letra}. ${s.contadas} linhas — ${marca}`);
+  const marca = s.declarado === s.contadas ? "ok" : `DIVERGE (en-tête ${s.declarado})`;
+  console.info(`  ${s.letra}. ${s.contadas} lignes — ${marca}`);
 }
 
-console.info(`\nPlanejadas e ainda não construídas: ${r.fantasmas.length} linhas`);
+console.info(`\nPrévues et pas encore construites : ${r.fantasmas.length} lignes`);
 for (const l of r.fantasmas) console.info(`  #${l.numero} ${l.rota}`);
 
-console.info(`\nConstruídas fora deste plano: ${r.foraDoInventario.length} páginas`);
+console.info(`\nConstruites hors de ce plan : ${r.foraDoInventario.length} pages`);
 for (const rota of r.foraDoInventario) console.info(`  ${rota}`);
 
 const falhas: string[] = [];
 if (r.curadas.length > 0) {
   falhas.push(
-    `A lista de não-construído tem rota que JÁ existe no disco — ela só encolhe:\n    ` +
+    `La liste du non-construit contient une route qui existe DÉJÀ sur le disque — elle ne fait que rétrécir :\n    ` +
       r.curadas.join("\n    ") +
-      `\n  Apague a linha da lista em ${DOC}.`,
+      `\n  Supprimez la ligne de la liste dans ${DOC}.`,
   );
 }
 if (r.naoDeclarados.length > 0) {
   falhas.push(
-    `Linha do doc sem rota no disco e sem declaração:\n    ` +
+    `Ligne du doc sans route sur le disque et sans déclaration :\n    ` +
       r.naoDeclarados.map((l) => `#${l.numero} ${l.rota}`).join("\n    "),
   );
 }
 if (r.inventadas.length > 0) {
-  falhas.push(`Rota declarada que não tem linha numerada:\n    ` + r.inventadas.join("\n    "));
+  falhas.push(`Route déclarée qui n'a pas de ligne numérotée :\n    ` + r.inventadas.join("\n    "));
 }
 
 if (falhas.length > 0) {

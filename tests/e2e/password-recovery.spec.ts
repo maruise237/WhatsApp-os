@@ -44,8 +44,8 @@ test.beforeAll(async () => {
     .from("organizations")
     .insert({
       slug,
-      display_name: "Loja E2E Recovery",
-      legal_name: "Loja E2E Recovery",
+      display_name: "Boutique E2E Recovery",
+      legal_name: "Boutique E2E Recovery",
       status: "active",
       created_by: data.user.id,
     })
@@ -62,7 +62,7 @@ test.beforeAll(async () => {
   if (memberError) throw new Error(`seed membership: ${memberError.message}`);
 });
 
-test("recuperar senha: forgot → e-mail → nova senha → login com a nova", async ({
+test("récupérer le mot de passe : forgot → e-mail → nouveau mot de passe → connexion avec le nouveau", async ({
   page,
   baseURL,
 }) => {
@@ -70,11 +70,11 @@ test("recuperar senha: forgot → e-mail → nova senha → login com a nova", a
 
   // 2. Login → link "Esqueci minha senha"
   await page.goto("/login");
-  await page.getByRole("link", { name: "Esqueci minha senha" }).click();
+  await page.getByRole("link", { name: "Mot de passe oublié" }).click();
   await expect(page).toHaveURL(/\/login\/forgot$/);
-  await page.getByLabel("Email").fill(email);
-  await page.getByRole("button", { name: "Enviar link de redefinição" }).click();
-  await expect(page.getByText("Verifique seu e-mail")).toBeVisible();
+  await page.getByLabel("E-mail").fill(email);
+  await page.getByRole("button", { name: "Envoyer le lien de réinitialisation" }).click();
+  await expect(page.getByText("Vérifiez votre e-mail")).toBeVisible();
 
   // 3. Abre o e-mail real e segue o link de recovery
   const html = await waitForEmail(email, "Redefinir senha");
@@ -83,21 +83,21 @@ test("recuperar senha: forgot → e-mail → nova senha → login com a nova", a
   await expect(page).toHaveURL(/\/login\/reset/);
 
   // 4. Define a senha nova
-  await page.getByLabel("Nova senha", { exact: true }).fill(newPassword);
-  await page.getByLabel("Confirmar nova senha").fill(newPassword);
-  await page.getByRole("button", { name: "Definir nova senha" }).click();
+  await page.getByLabel("Nouveau mot de passe", { exact: true }).fill(newPassword);
+  await page.getByLabel("Confirmer le nouveau mot de passe").fill(newPassword);
+  await page.getByRole("button", { name: "Définir le nouveau mot de passe" }).click();
   await expect(page).toHaveURL(/\/login\?reset=success/);
-  await expect(page.getByText("Senha redefinida com sucesso")).toBeVisible();
+  await expect(page.getByText("Mot de passe réinitialisé avec succès")).toBeVisible();
 
   // 5a. Senha ANTIGA tem que falhar
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Senha").fill(oldPassword);
-  await page.getByRole("button", { name: "Entrar" }).click();
-  await expect(page.getByText("Email ou senha incorretos.")).toBeVisible();
+  await page.getByLabel("E-mail").fill(email);
+  await page.getByLabel("Mot de passe").fill(oldPassword);
+  await page.getByRole("button", { name: "Se connecter" }).click();
+  await expect(page.getByText("E-mail ou mot de passe incorrect.")).toBeVisible();
 
   // 5b. Senha NOVA entra
-  await page.getByLabel("Senha").fill(newPassword);
-  await page.getByRole("button", { name: "Entrar" }).click();
+  await page.getByLabel("Mot de passe").fill(newPassword);
+  await page.getByRole("button", { name: "Se connecter" }).click();
   await page.waitForURL(/\/(app|onboarding)\//, { timeout: 30_000 });
   await expect(page).not.toHaveURL(/\/login/);
 });

@@ -12,7 +12,7 @@ import type { TimelineItem } from "@/lib/ai/evolution/aggregate";
 const TIPOS: Record<TimelineItem["kind"], { rotulo: string; Icone: typeof Brain; cor: string }> = {
   memory: { rotulo: "Règle que vous avez enseignée", Icone: Brain, cor: "text-accent" },
   proposal: { rotulo: "Amélioration que vous avez approuvée", Icone: Lightbulb, cor: "text-warning-fg" },
-  skill: { rotulo: "Habilidade instalada", Icone: PuzzlePiece, cor: "text-info-fg" },
+  skill: { rotulo: "Compétence installée", Icone: PuzzlePiece, cor: "text-info-fg" },
 };
 
 /**

@@ -190,7 +190,7 @@ describe("o gate de orçamento lê ai_budgets e executa o veredito", () => {
     it("o texto do aviso fala com um leigo, não com o schema", async () => {
       const r = await chamar({});
       const [, titulo, corpo] = r.inboxInserts[0] as [string, string, string];
-      expect(titulo).toBe("O limite de gasto com IA foi atingido");
+      expect(titulo).toBe("La limite de dépense d’IA a été atteinte");
       // O corpo anterior era, verbatim: "o teto configurado em
       // organizations.settings.llm.monthly_budget_cents; aumente o teto ou
       // aguarde a virada do mês" — um caminho de coluna jsonb renderizado CRU
@@ -198,9 +198,9 @@ describe("o gate de orçamento lê ai_budgets e executa o veredito", () => {
       // tela que edita OUTRO campo.
       expect(corpo).not.toMatch(/settings|jsonb|monthly_budget_cents|org\b/i);
       // E diz os números, na unidade real: `cost_cents` é centavo de DÓLAR.
-      expect(corpo).toContain("US$ 15,00");
-      expect(corpo).toContain("US$ 10,00");
-      expect(corpo).toContain("Uso de IA");
+      expect(corpo).toContain("15,00 $ US");
+      expect(corpo).toContain("10,00 $ US");
+      expect(corpo).toContain("Utilisation et budget");
     });
 
     it("a recusa vira linha de ERRO em llm_calls — a tela de Execuções a mostra", async () => {
@@ -250,7 +250,7 @@ describe("o gate de orçamento lê ai_budgets e executa o veredito", () => {
     it("modo 'avisar' no banco NUNCA bloqueia, por mais que o gasto passe", async () => {
       const r = await chamar({ config: { modo: "avisar" }, gate: { modo: "avisar" } });
       expect(r.lancou).toBe(SENTINELA);
-      expect(r.linhas.some((l) => l.nivel === "warn" && l.msg.includes("passou do aviso"))).toBe(true);
+      expect(r.linhas.some((l) => l.nivel === "warn" && l.msg.includes("dépassé le seuil d’alerte"))).toBe(true);
     });
 
     it("teto 0 SEGUE — 0 é 'sem limite' na tela, e era 'bloqueia tudo' no gate", async () => {
@@ -271,7 +271,7 @@ describe("o gate de orçamento lê ai_budgets e executa o veredito", () => {
     it("sem aviso neste mês, o primeiro cruzamento avisa e SEGUE", async () => {
       const r = await chamar({ gate: { avisado_antes: false } });
       expect(r.lancou).toBe(SENTINELA);
-      expect(r.linhas.some((l) => l.nivel === "warn" && l.msg.includes("passou do aviso"))).toBe(true);
+      expect(r.linhas.some((l) => l.nivel === "warn" && l.msg.includes("dépassé le seuil d’alerte"))).toBe(true);
     });
 
     it("purpose isento SEGUE — bloquear diagnóstico ou guardrail é o corte errado", async () => {
@@ -305,7 +305,7 @@ describe("o gate de orçamento lê ai_budgets e executa o veredito", () => {
       const r = await chamar({ gate: "erro" });
       // O cliente não pode perder o agente porque uma query deu erro.
       expect(r.lancou).toBe(SENTINELA);
-      const aviso = r.linhas.find((l) => l.nivel === "warn" && l.msg.includes("orçamento"));
+      const aviso = r.linhas.find((l) => l.nivel === "warn" && l.msg.includes("budget"));
       expect(aviso, "seguiu em SILÊNCIO — a frase tranquilizadora sem a causa").toBeDefined();
       // A causa NOMEADA, não "algo deu errado": sem ela a próxima pessoa
       // investiga do zero.

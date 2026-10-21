@@ -74,7 +74,7 @@ export function LgpdAdminClient() {
         <h1 className="text-2xl font-semibold tracking-tight">RGPD — Multi-organisations</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {isLoading
-            ? "Carregando..."
+            ? "Chargement…"
             : `${total} demande${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
         </p>
       </div>

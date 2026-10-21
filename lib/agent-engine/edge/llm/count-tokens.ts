@@ -69,7 +69,7 @@ async function countTokens(
   }
   const parsed = (await res.json()) as { input_tokens?: number };
   if (typeof parsed.input_tokens !== 'number') {
-    throw new Error('count_tokens sem input_tokens na resposta — shape da API mudou, re-validar');
+    throw new Error('count_tokens sans input_tokens dans la réponse — le format de l’API a changé, à revalider');
   }
   return parsed.input_tokens;
 }

@@ -32,7 +32,7 @@ export function AuditClient() {
         <h1 className="text-2xl font-semibold tracking-tight">Journal d’audit</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {isLoading
-            ? "Carregando..."
+            ? "Chargement…"
             : `${total} evento${total !== 1 ? "s" : ""}${hasNextPage ? "+" : ""}`}
         </p>
       </div>

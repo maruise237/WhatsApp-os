@@ -11,6 +11,7 @@
  * `/api/v1/cron/attendant-heartbeat` faz o UPDATE a partir do cutoff.
  */
 import type { AvailabilitySchedule } from "@/lib/schemas/routing";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 /** AT-08: atendente sem heartbeat há mais que isto ⇒ auto-offline (config, não mágica). */
 export const HEARTBEAT_TIMEOUT_MINUTES = 15;
@@ -63,7 +64,7 @@ export function isWithinSchedule(
 ): boolean {
   const windows = schedule?.windows ?? [];
   if (windows.length === 0) return true;
-  const timezone = schedule?.timezone || "America/Sao_Paulo";
+  const timezone = schedule?.timezone || FUSEAU_PAR_DEFAUT;
   const { dow, hhmm } = localMoment(now, timezone);
   return windows.some((w) => w.dow === dow && hhmm >= w.start && hhmm < w.end);
 }

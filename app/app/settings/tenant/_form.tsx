@@ -16,23 +16,11 @@ import {
 } from "@/components/ui/select";
 import { updateTenant } from "@/app/actions/settings/updateTenant";
 import { tenantSchema, type Locale, type TenantInput } from "@/lib/schemas/settings";
+import { fusosComAtual } from "@/lib/tempo/fusos";
 
 interface Props {
   initial: TenantInput;
 }
-
-const TIMEZONES = [
-  "Africa/Douala",
-  "Africa/Abidjan",
-  "Africa/Lagos",
-  "Europe/Paris",
-  "America/Sao_Paulo",
-  "America/Manaus",
-  "America/Belem",
-  "America/Recife",
-  "America/Fortaleza",
-  "UTC",
-];
 
 export function TenantForm({ initial }: Props) {
   const t = useT();
@@ -86,9 +74,11 @@ export function TenantForm({ initial }: Props) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cnpj">CNPJ</Label>
+            <Label htmlFor="cnpj">{t("Identificador fiscal (NIU)")}</Label>
             <Input
               id="cnpj"
+              placeholder="Ex. : M012345678901X"
+              maxLength={20}
               value={form.cnpj ?? ""}
               onChange={(e) => set("cnpj", e.target.value || null)}
             />
@@ -109,13 +99,26 @@ export function TenantForm({ initial }: Props) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {TIMEZONES.map((tz) => (
-                  <SelectItem key={tz} value={tz}>
-                    {tz}
+                {fusosComAtual(form.timezone).map((f) => (
+                  <SelectItem key={f.codigo} value={f.codigo}>
+                    {f.rotulo}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="phone_country_code">{t("Indicativo telefônico padrão")}</Label>
+            <Input
+              id="phone_country_code"
+              inputMode="tel"
+              value={form.phone_country_code ? `+${form.phone_country_code.replace(/^\+/, "")}` : ""}
+              onChange={(e) => set("phone_country_code", e.target.value.replace(/[^\d]/g, "").slice(0, 3))}
+              placeholder="+237"
+            />
+            <p className="text-xs text-muted-foreground">
+              {t("Adicionado aos números digitados sem indicativo (ex.: 6XX XX XX XX → +237 6XX XX XX XX).")}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="locale">{t("Idioma")}</Label>

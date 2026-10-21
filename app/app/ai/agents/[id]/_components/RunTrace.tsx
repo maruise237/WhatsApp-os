@@ -50,7 +50,7 @@ function clip(text: string, max: number, truncatedLabel: string): string {
   return `${text.slice(0, max)}\n\n… (${truncatedLabel})`;
 }
 
-export function RunTrace({ toolCalls, finalText, emptyMessage = "Sem trace disponível." }: Props) {
+export function RunTrace({ toolCalls, finalText, emptyMessage = "Aucune trace disponible." }: Props) {
   const t = useT();
   const steps = asArray(toolCalls);
 

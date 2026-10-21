@@ -71,7 +71,7 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
                 .map((m) => (
                   <SelectItem key={m.user_id} value={m.user_id}>
                     {m.full_name ?? m.email ?? m.user_id.slice(0, 8)}
-                    {m.user_id === currentUserId ? " (você)" : ""}
+                    {m.user_id === currentUserId ? " (vous)" : ""}
                   </SelectItem>
                 ))}
             </SelectContent>
@@ -140,7 +140,7 @@ export function MetricsClient({ canCompare, currentUserId }: Props) {
                     <TableCell className="font-medium">
                       {attendantLabel(a)}
                       {a.user_id === currentUserId ? (
-                        <span className="text-muted-foreground"> (você)</span>
+                        <span className="text-muted-foreground"> (vous)</span>
                       ) : null}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">{a.won}</TableCell>

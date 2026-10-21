@@ -16,6 +16,7 @@
  * ter visto qualquer tela do produto.
  */
 import { NEUTROS_DE_SAIDA, type MarcaDeSaida } from "@/lib/branding/saida";
+import { FUSEAU_PAR_DEFAUT } from "@/lib/marche/defauts";
 
 export interface InviteEmailOptions {
   inviterName: string;
@@ -33,7 +34,7 @@ export function buildInviteEmail(opts: InviteEmailOptions): {
   text: string;
 } {
   const expiresStr = opts.expiresAt.toLocaleString("fr-FR", {
-    timeZone: "America/Sao_Paulo",
+    timeZone: FUSEAU_PAR_DEFAUT,
   });
   const marca = opts.marca.nome;
   const subject = `${opts.inviterName} vous invite à rejoindre ${opts.orgName} sur ${marca}`;

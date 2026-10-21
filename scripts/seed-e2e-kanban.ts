@@ -132,7 +132,7 @@ async function main(): Promise<void> {
     orgId,
     pipelineId,
     stageId,
-    "Pedido E2E com responsavel",
+    "Commande E2E avec responsable",
     agentId,
     1000,
   );
@@ -140,7 +140,7 @@ async function main(): Promise<void> {
     orgId,
     pipelineId,
     stageId,
-    "Pedido E2E sem responsavel",
+    "Commande E2E sans responsable",
     null,
     2000,
   );
@@ -157,6 +157,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  console.error("❌ Kanban seed falhou:", err);
+  console.error("❌ Échec du seed Kanban :", err);
   process.exit(1);
 });
