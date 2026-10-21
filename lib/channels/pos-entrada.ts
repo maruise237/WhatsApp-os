@@ -139,7 +139,7 @@ async function aplicarOptOut(admin: Admin, entrada: EntradaDeMensagem): Promise<
       // Falhar em silêncio aqui é o pior desfecho possível do arquivo inteiro:
       // o cliente pediu para sair, o sistema não gravou, e a campanha segue
       // escrevendo. Por isso é `error` e não `warn`.
-      logger.error("pos-entrada: opt-out NAO gravado — o contato segue recebendo", {
+      logger.error("pos-entrada : désinscription NON enregistrée — le contact continue de recevoir des messages", {
         organization_id: entrada.organizationId,
         contact_id: entrada.contactId,
         origem: entrada.origem,
@@ -156,7 +156,7 @@ async function aplicarOptOut(admin: Admin, entrada: EntradaDeMensagem): Promise<
       metadata: { reason: "stop_keyword", contact_id: entrada.contactId, origem: entrada.origem },
     });
   } catch (err) {
-    logger.error("pos-entrada: opt-out NAO gravado — o contato segue recebendo", {
+    logger.error("pos-entrada : désinscription NON enregistrée — le contact continue de recevoir des messages", {
       organization_id: entrada.organizationId,
       contact_id: entrada.contactId,
       origem: entrada.origem,
@@ -183,14 +183,14 @@ async function abrirDemanda(admin: Admin, entrada: EntradaDeMensagem): Promise<v
     // Os DOIS desfechos viram log. Sem a linha do "não criou", o silêncio de
     // "já existia" e o de "a organização não tem funil configurado" têm a mesma
     // cara — e o segundo é falha de configuração que alguém precisa ver.
-    logger.info(nascimento.criado ? "pos-entrada: lead criado" : "pos-entrada: lead nao criado", {
+    logger.info(nascimento.criado ? "pos-entrada : prospect créé" : "pos-entrada : prospect non créé", {
       organization_id: entrada.organizationId,
       conversation_id: entrada.conversationId,
       origem: entrada.origem,
       ...(nascimento.criado ? { lead_id: nascimento.leadId } : { motivo: nascimento.motivo }),
     });
   } catch (err) {
-    logger.error("pos-entrada: nascimento do lead falhou (a mensagem entra assim mesmo)", {
+    logger.error("pos-entrada : échec de création du prospect (le message est quand même enregistré)", {
       organization_id: entrada.organizationId,
       conversation_id: entrada.conversationId,
       origem: entrada.origem,
@@ -230,7 +230,7 @@ async function pedirDespachoDoAgente(admin: Admin, entrada: EntradaDeMensagem): 
   } as never);
 
   if (error) {
-    logger.warn("pos-entrada: emit ai_agent.dispatch_requested falhou", {
+    logger.warn("pos-entrada : échec de l’émission ai_agent.dispatch_requested", {
       organization_id: entrada.organizationId,
       message_id: entrada.messageId,
       origem: entrada.origem,

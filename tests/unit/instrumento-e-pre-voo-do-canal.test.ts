@@ -276,7 +276,7 @@ describe("o resgate de presas não toca canal que não alcança", () => {
   });
 
   it("mas CONTA as que ficaram de fora — silêncio é o que fez isso durar", () => {
-    expect(WATCHDOG).toMatch(/mensagens presas em canal que este resgate não alcança/);
+    expect(WATCHDOG).toMatch(/messages bloquées sur un canal que ce rattrapage ne couvre pas/);
   });
 
   it("e não as reenvia daqui", () => {

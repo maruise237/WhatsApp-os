@@ -35,7 +35,7 @@ describe("a edição humana na timeline", () => {
   });
 
   it("lista vazia não vira frase quebrada", () => {
-    expect(listaLegivel([])).toBe("nada");
+    expect(listaLegivel([])).toBe("rien");
   });
 
   it("nenhum nome legível é igual ao nome da coluna", () => {

@@ -168,7 +168,7 @@ export async function registrarCaptacao(
   // silêncio seria indistinguível de "não chegou nada", que é justamente a
   // pergunta que esta tabela veio responder.
   if (error) {
-    logger.error("[webhooks.captacao] não foi possível registrar o histórico da captação", {
+    logger.error("[webhooks.captacao] impossible d’enregistrer l’historique de la capture", {
       organizationId: captacao.organizationId,
       webhookSourceId: captacao.webhookSourceId,
       outcome: captacao.outcome,

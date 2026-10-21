@@ -216,7 +216,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         { onConflict: "organization_id,waba_id,name,language" },
       );
       if (error) {
-        logger.warn("[partner/templates] upsert falhou", { name: t.name, detail: error.message });
+        logger.warn("[partner/templates] échec de l’upsert", { name: t.name, detail: error.message });
         continue;
       }
       gravadas++;
@@ -224,8 +224,8 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     return ok({ sincronizadas: gravadas, total: remotas.length }, { requestId });
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "erro";
-    logger.error("[partner/templates] falhou", { detail: msg, requestId });
+    const msg = err instanceof Error ? err.message : "erreur";
+    logger.error("[partner/templates] échec", { detail: msg, requestId });
     // A mensagem do provider CHEGA ao operador: é ela que distingue "nome
     // inválido" de "conta sem permissão", e sem ela a tela diz só "falhou".
     return fail("upstream_error", msg, 502, { requestId });

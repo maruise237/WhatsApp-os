@@ -94,7 +94,7 @@ export async function loadAuthUser(): Promise<AuthUser | null> {
     // (rede, GoTrue fora do ar) de `AuthApiError` (token ilegível). Ambas podem
     // chegar com o mesmo `status`, e a mensagem vem em inglês do upstream — sem o
     // nome, distinguir as duas viraria regex sobre texto que muda entre versões.
-    logger.error("[auth] getUser falhou — tratando como não autenticado", {
+    logger.error("[auth] échec de getUser — traité comme non authentifié", {
       name: error.name,
       code: error.code ?? null,
       status: error.status ?? null,
@@ -142,7 +142,7 @@ export async function loadAuthUser(): Promise<AuthUser | null> {
    */
   if (paErro || membErro) {
     const detalhe = (paErro ?? membErro)!;
-    logger.error("[auth] não foi possível resolver permissões do usuário", {
+    logger.error("[auth] impossible de résoudre les permissions de l’utilisateur", {
       user_id: user.id,
       onde: paErro ? "platform_admins" : "user_organizations",
       code: detalhe.code,

@@ -67,7 +67,7 @@ export function AnonymizeDialog({ contactId, open, onOpenChange }: Props) {
           <DialogTitle className="text-error-fg">{t("Anonymiser le contact (données personnelles)")}</DialogTitle>
           <DialogDescription>
             {t(
-              'Esta ação é irreversível. O nome será substituído por "Contato Anonimizado #N", email/telefone/CPF serão limpos, e atividades terão conteúdo redigido.',
+              "Cette action est irréversible. Le nom sera remplacé par « Client Anonymisé #N », l’e-mail, le téléphone et le numéro d’identité seront effacés, et le contenu des activités sera masqué.",
             )}
           </DialogDescription>
         </DialogHeader>

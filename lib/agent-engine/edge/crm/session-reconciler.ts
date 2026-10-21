@@ -94,7 +94,7 @@ export async function reconcileSessions(
 ): Promise<number> {
   const sessions = await fetchWahaSessions(cfg);
   if (sessions === null) {
-    log.warn('watchdog: WAHA indisponível — tick de reconciliação pulado', {});
+    log.warn('watchdog : WAHA indisponible — cycle de réconciliation ignoré', {});
     return 0;
   }
   let fixed = 0;
@@ -138,7 +138,7 @@ export async function reconcileSessions(
     );
     for (const row of rows) {
       fixed += 1;
-      log.warn('watchdog: espelho de sessão reconciliado com o WAHA real', {
+      log.warn('watchdog : miroir de session réconcilié avec le WAHA réel', {
         channel_session_id: row.id,
         waha_session: s.name,
         status: nextStatus,
@@ -229,7 +229,7 @@ export async function redriveQueued(
   );
   const presas = Number(foraDoAlcance[0]?.n ?? '0');
   if (presas > 0) {
-    log.warn('watchdog: mensagens presas em canal que este resgate não alcança', {
+    log.warn('watchdog : messages bloquées sur un canal que ce rattrapage ne couvre pas', {
       quantidade: presas,
     });
   }
@@ -238,7 +238,7 @@ export async function redriveQueued(
   for (const m of rows) {
     const chatId = chatIdOf(m);
     if (chatId === null || m.body === null) {
-      log.warn('watchdog: queued sem destino/corpo — pulada', { message_id: m.id });
+      log.warn('watchdog : message en file sans destinataire/contenu — ignorée', { message_id: m.id });
       continue;
     }
     try {
@@ -249,7 +249,7 @@ export async function redriveQueued(
         signal: AbortSignal.timeout(15_000),
       });
       if (!res.ok) {
-        log.warn('watchdog: redrive falhou no WAHA — mantida queued para o próximo tick', {
+        log.warn('watchdog : échec du renvoi via WAHA — maintenue en file pour le prochain cycle', {
           message_id: m.id,
           status_code: res.status,
         });
@@ -266,9 +266,9 @@ export async function redriveQueued(
         [m.id, externalId],
       );
       sent += 1;
-      log.info('watchdog: mensagem presa reenviada', { message_id: m.id, has_external_id: externalId !== null });
+      log.info('watchdog : message bloquée renvoyée', { message_id: m.id, has_external_id: externalId !== null });
     } catch (err) {
-      log.warn('watchdog: redrive com erro transiente — mantida queued', {
+      log.warn('watchdog : erreur transitoire au renvoi — maintenue en file', {
         message_id: m.id,
         error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
       });
@@ -291,10 +291,10 @@ export async function runSessionWatchdogLoop(
       const fixed = await reconcileSessions(pool, cfg, log);
       const redriven = await redriveQueued(pool, cfg, log);
       if (fixed + redriven > 0) {
-        log.info('watchdog: tick com ação', { reconciled: fixed, redriven });
+        log.info('watchdog : cycle avec action', { reconciled: fixed, redriven });
       }
     } catch (err) {
-      log.error('watchdog: tick falhou', {
+      log.error('watchdog : échec du cycle', {
         error: (err instanceof Error ? err.message : String(err)).slice(0, 200),
       });
     }

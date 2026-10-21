@@ -159,7 +159,7 @@ export async function devolverAtendimentoAoAgente(
       .eq("id", conv.contact_id)
       .eq("organization_id", organizationId);
     if (contatoErr) {
-      logger.error("[escalacao.retomada] force_human não foi limpo", {
+      logger.error("[escalacao.retomada] force_human n’a pas été réinitialisé", {
         conversation_id: input.conversationId,
         error: contatoErr.message,
       });
@@ -266,7 +266,7 @@ async function gravarCheckpointDeRetomada(
   if (error) {
     // Sem o checkpoint o agente volta CEGO — isso é degradação de verdade, e
     // silenciar aqui reproduziria o defeito que este arquivo conserta.
-    logger.error("[escalacao.retomada] checkpoint de retomada não foi gravado", {
+    logger.error("[escalacao.retomada] point de reprise non enregistré", {
       contact_id: contactId,
       error: error.message,
     });
@@ -317,7 +317,7 @@ async function emitirAtividadeDeRetomada(
     },
   });
   if (!resultado.ok) {
-    logger.warn("[escalacao.retomada] atividade da volta não foi gravada", {
+    logger.warn("[escalacao.retomada] activité de reprise non enregistrée", {
       conversation_id: conversationId,
       error: resultado.error,
     });

@@ -256,7 +256,7 @@ export async function garantirLeadDaConversa(
   if (!registro.ok) {
     // O lead existe e é o que importa; a linha da timeline falhou. Devolver erro
     // aqui faria o chamador achar que o card não nasceu — e ele nasceu.
-    logger.warn("nascimento-do-lead: atividade não registrada", {
+    logger.warn("nascimento-do-lead : activité non enregistrée", {
       organization_id: organizationId,
       lead_id: lead.id as string,
       error: registro.error?.slice(0, 120),

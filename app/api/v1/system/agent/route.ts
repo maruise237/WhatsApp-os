@@ -103,7 +103,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       })
       .eq("id", 1);
     if (error) {
-      logger.error("[system/agent] heartbeat falhou", { error: error.message });
+      logger.error("[system/agent] échec du heartbeat", { error: error.message });
       return fail("internal_error", "Impossible d’enregistrer l’état.", 500);
     }
 
@@ -129,7 +129,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       .maybeSingle();
 
     if (runLookupError) {
-      logger.error("[system/agent] heartbeat não conseguiu achar o run pendente", {
+      logger.error("[system/agent] heartbeat : impossible de trouver la mise à jour en attente", {
         error: runLookupError.message,
       });
       return fail("internal_error", "Impossible de vérifier la demande de mise à jour.", 500);
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .maybeSingle();
 
   if (runReadError) {
-    logger.error("[system/agent] leitura do run falhou", {
+    logger.error("[system/agent] échec de la lecture de la mise à jour", {
       error: runReadError.message,
       runId: payload.run_id,
     });
@@ -166,7 +166,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       .update({ last_step: payload.step })
       .eq("id", payload.run_id);
     if (error) {
-      logger.error("[system/agent] run_progress falhou", { error: error.message, runId: payload.run_id });
+      logger.error("[system/agent] échec de run_progress", { error: error.message, runId: payload.run_id });
       return fail("internal_error", "Impossible d’enregistrer l’étape.", 500);
     }
     return ok({ update_requested: false, run_id: payload.run_id });
@@ -187,7 +187,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     .eq("id", payload.run_id);
 
   if (runUpdateError) {
-    logger.error("[system/agent] run_result falhou ao finalizar o run", {
+    logger.error("[system/agent] échec de run_result à la finalisation", {
       error: runUpdateError.message,
       runId: payload.run_id,
     });

@@ -64,7 +64,7 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
   cor_ausente: {
     modo: "silencio",
     porque:
-      "não é ajuste nem recusa — significa que aquela fonte não declara cor. A tela já diz 'nenhuma cor definida' no lugar certo, e repetir isso como aviso ensina a ignorar avisos",
+      "ce n’est ni un ajustement ni un refus — cela signifie que cette source ne déclare pas de couleur. L’écran affiche déjà « aucune couleur définie » au bon endroit, et le répéter en avertissement apprend à ignorer les avertissements",
   },
   envelope_malformado: {
     modo: "frase",
@@ -116,7 +116,7 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
   accent_deslocado: {
     modo: "com_contexto",
     porque:
-      "a frase muda com o modo (claro ou escuro) e com o sentido do ajuste — 'um tom mais escuro' e 'um tom mais claro' são as duas respostas certas, em situações opostas",
+      "la phrase change selon le mode (clair ou sombre) et le sens de l’ajustement — « une nuance plus foncée » et « une nuance plus claire » sont les deux bonnes réponses, dans des situations opposées",
   },
   accent_sem_contraste_possivel: {
     modo: "frase",
@@ -128,12 +128,12 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
   semantica_deslocada: {
     modo: "com_contexto",
     porque:
-      "as cores de alerta afetadas entram numa frase só; uma linha por cor e por modo daria até oito avisos dizendo o mesmo",
+      "les couleurs d’alerte concernées tiennent en une seule phrase ; une ligne par couleur et par mode donnerait jusqu’à huit avertissements disant la même chose",
   },
   redundancia_nao_cromatica_necessaria: {
     modo: "com_contexto",
     porque:
-      "é o caso extremo do anterior (não há afastamento possível) e entra na mesma frase agrupada",
+      "c’est le cas extrême du précédent (aucun écart possible) et il entre dans la même phrase groupée",
   },
 
   // ── serialização: a última porta antes de a cor virar pixel ──
@@ -143,7 +143,7 @@ export const TRADUCOES: Record<CodigoDaMarca, Traducao> = {
   token_nao_serializado: {
     modo: "silencio",
     porque:
-      "é o outro lado do aviso sobre as cores de alerta, que já aparece agrupado; dizer o mesmo fato duas vezes só faz a lista crescer até ninguém ler",
+      "c’est l’autre face de l’avertissement sur les couleurs d’alerte, déjà affiché groupé ; dire deux fois la même chose ne fait qu’allonger la liste jusqu’à ce que personne ne la lise",
   },
 };
 

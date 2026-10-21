@@ -331,7 +331,7 @@ async function registraEvento(
     payload: { ...payload, actor_user_id: deps.userId },
   });
   if (error) {
-    logger.error("[followup.intervencao] evento não gravado", {
+    logger.error("[followup.intervencao] événement non enregistré", {
       erro: error.message,
       requestId: deps.requestId,
       enrollmentId: alvo.id,
@@ -395,7 +395,7 @@ async function registraNaTimeline(
       });
     }
   } catch (err) {
-    logger.error("[followup.intervencao] timeline do negócio falhou", {
+    logger.error("[followup.intervencao] échec de la chronologie de l’affaire", {
       erro: err instanceof Error ? err.message : String(err),
       requestId: deps.requestId,
       enrollmentId: alvo.id,

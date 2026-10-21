@@ -211,7 +211,7 @@ function alternacao(palavras: ReadonlyArray<string>): RegExp {
 
 /** `nome.ts|tsx|sql` — só com barra de caminho antes, ou com palavra de erro por perto. */
 const ARQ = '[a-z0-9_-]+\\.(?:ts|tsx|sql)';
-const CTX_ERRO = '(?:erro\\w*|error|falh\\w*|exception|stack|trace)';
+const CTX_ERRO = '(?:erro\\w*|erreur\\w*|error|falh\\w*|echec\\w*|exception|stack|trace)';
 const RE_ARQUIVO_DE_CODIGO = new RegExp(
   [
     `[a-z0-9_.-]*\\/[a-z0-9_./-]*${ARQ}\\b`,

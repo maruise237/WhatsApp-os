@@ -70,7 +70,7 @@ export async function knobsDoCanal(
   // Falha ABERTA na ação (a automação segue com os defaults) e nomeada no log:
   // uma leitura que falha não pode calar o envio, mas também não pode sumir.
   if (error) {
-    logger.warn("[automation.janela] não foi possível ler os knobs do número — usando os padrões", {
+    logger.warn("[automation.janela] impossible de lire les réglages du numéro — valeurs par défaut utilisées", {
       organizationId,
       channelSessionId,
       causa: error.message,

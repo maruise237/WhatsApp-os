@@ -198,7 +198,7 @@ async function handle(req: NextRequest): Promise<Response> {
     });
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
-    logger.error("[data-retention] poda falhou", { error: detail, requestId });
+    logger.error("[data-retention] échec de la purge", { error: detail, requestId });
     // A falha ENTRA na trilha, e é o único caso em que uma rodada que não apagou
     // nada audita. É o laço de retorno desta peça: sem esta linha, uma poda que
     // parou de funcionar — grants que não vieram no `update.sh` de um clone,
@@ -216,7 +216,7 @@ async function handle(req: NextRequest): Promise<Response> {
   }
 
   for (const aviso of resultado.avisos) {
-    logger.warn("[data-retention] configuração de retenção ajustada", { aviso, requestId });
+    logger.warn("[data-retention] configuration de rétention ajustée", { aviso, requestId });
   }
 
   // Ver o cabeçalho: rodada que não apagou nada não é mutação. E rodada que

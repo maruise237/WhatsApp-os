@@ -49,8 +49,8 @@ export function juntarCatalogoComHandlers(
     const entrada = porNome.get(handler.name);
     if (!entrada) {
       throw new Error(
-        `mcp/tools: handler "${handler.name}" nao tem entrada em lib/mcp/tools/catalogo/ — ` +
-          `a tela mostraria a capacidade sem rotulo nem explicacao`,
+        `mcp/tools: handler "${handler.name}" n’a pas d’entrée dans lib/mcp/tools/catalogo/ — ` +
+          `l’écran afficherait la capacité sans libellé ni explication`,
       );
     }
     return {
