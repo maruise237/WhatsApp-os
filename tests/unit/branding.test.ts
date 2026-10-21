@@ -286,12 +286,6 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     motivo: "nome de agente numa fixture de teste ('Bot Deskcomm'); não sai da suíte",
     marcas: ["deskcomm"],
   },
-  "lib/system/changelog.test.ts": {
-    categoria: "DEV",
-    motivo:
-      "fixture que reproduz o CHANGELOG real, incluindo as URLs do repositório no GitHub. A marca aqui é o nome do repositório upstream, que o clone não renomeia",
-    marcas: ["deskcommcrm", "deskcommcrm", "deskcommcrm"],
-  },
 
   // ─── PADRAO — a marca padrão precisa existir em algum lugar. ───
   "lib/branding.ts": {

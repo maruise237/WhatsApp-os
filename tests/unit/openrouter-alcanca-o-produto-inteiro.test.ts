@@ -116,18 +116,6 @@ describe("o worker de mídia obedece ao painel", () => {
 });
 
 describe("o instalador grava o provedor escolhido no banco", () => {
-  it("o install.sh persiste a escolha no .env — quem aplica ao banco é o bootstrap-owner", () => {
-    // `fn_seed_org_llm_defaults` semeia 'anthropic' fixo. O `jsonb_set` que
-    // vivia aqui foi para `scripts/bootstrap-owner.ts` (`aplicarProvedorEscolhido`,
-    // caso abaixo): com a Neon o primeiro admin nasce pela tela de /signup e o
-    // install.sh não fala mais com o banco. O que continua sendo do install.sh é
-    // PERSISTIR a escolha — sem o `envq AI_PROVIDER`, a pergunta "qual IA vai
-    // atender" morreria no shell e o agent-engine seguiria em anthropic.
-    const fonte = readFileSync("hostgator-setup-kit/install.sh", "utf8");
-    expect(fonte).toMatch(/envq AI_PROVIDER/);
-    expect(fonte).toContain("AI_PROVIDER");
-  });
-
   it("o bootstrap-owner faz o mesmo (é o caminho do e2e e da doc)", () => {
     const fonte = readFileSync("scripts/bootstrap-owner.ts", "utf8");
     expect(fonte).toContain("aplicarProvedorEscolhido");

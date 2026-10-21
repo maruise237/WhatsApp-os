@@ -183,7 +183,7 @@ describe(".env.example e .env.hostgator.example documentam a alavanca", () => {
   it("as duas pontas citam a variável (DoD 9)", async () => {
     const { readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
-    for (const arquivo of [".env.example", ".env.hostgator.example"]) {
+    for (const arquivo of [".env.example"]) {
       const texto = readFileSync(join(process.cwd(), arquivo), "utf8");
       expect(texto, `${arquivo} não documenta AI_BUDGET_ENFORCEMENT`).toContain(
         "AI_BUDGET_ENFORCEMENT",

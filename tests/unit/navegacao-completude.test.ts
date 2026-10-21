@@ -42,8 +42,6 @@ const NAV_ALLOWLIST: Record<string, string> = {
     "redirect para /app/connections?aba=oficial&sub=templates — template da Meta só existe por causa do canal oficial, e vive como sub-aba dele",
   "/app/integrations/nuvemshop":
     "intégration brésilienne masquée pour le marché africain : la Nuvemshop n'opère pas en Afrique francophone. La page et les routes API restent pour les clones existants, mais aucune porte ne doit y mener",
-  "/app/settings/atualizacao":
-    "porta é o rodapé de versão (VersionFooter), que aparece justamente quando há versão nova — melhor que um card fixo. Além disso é só do dono do servidor (is_platform_admin), papel que o registro não modela",
 };
 
 /** Deriva as rotas estáticas a partir dos arquivos de página que existem. */

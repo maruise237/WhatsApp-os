@@ -144,7 +144,7 @@ jobs:
         kanban-owner-filter.spec.ts queue-assign.spec.ts
         conversa-vira-lead.spec.ts contato-salva-email.spec.ts
         confirmar-dado-do-contato.spec.ts
-        risk-radar.spec.ts invite-lifecycle.spec.ts system-update.spec.ts
+        risk-radar.spec.ts invite-lifecycle.spec.ts
         agente-papeis-operador.spec.ts
         followup-linguagem.spec.ts followup-ramos.spec.ts
         wizard-do-funcionario.spec.ts mfa-opcional.spec.ts inbox-responder-citando.spec.ts

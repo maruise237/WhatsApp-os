@@ -233,7 +233,8 @@ describe("nenhum seed E2E promove o admin de tenant compartilhado", () => {
     // Sem este caso, quebrar `concede()`/`funcoesQueConcedem()` deixaria o gate
     // verde por não achar nada — o modo de falha exato que ele existe para
     // impedir. `seed-e2e-system-update.ts` É o arquivo que concede (ao `dono`).
-    const texto = fs.readFileSync(path.join(DIR, "seed-e2e-system-update.ts"), "utf8");
+    // Fixture : les deux fonctions de l'ancien seed (une concède, l'autre révoque).
+    const texto = fs.readFileSync(path.join(process.cwd(), "tests/fixtures/seed-concede-platform-admin.ts.txt"), "utf8");
     expect(funcoesQueConcedem(texto)).toContain("ensurePlatformAdmin");
     // E a revogação NÃO pode ser lida como concessão, senão o arquivo corrigido
     // reprovaria e a única saída seria afrouxar o gate.
