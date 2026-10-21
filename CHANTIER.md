@@ -28,9 +28,9 @@ ressources, tout fusionné sur `main`.
 - [x] `db/migrations/0001_schema_initial.sql` (schéma complet régénéré) + `scripts/db-migrate.mjs` + `db/local/emulation-neon.sql`
 - [ ] Supprimer le dossier `supabase/` (après CI/e2e/kit)
 - [ ] Supprimer `supabase/config.toml`, `supabase/templates`, variables d'env `SUPABASE_*`
-- [ ] Noms de variables `supabase` → `db` dans le code
+- [x] Noms de variables `supabase` → `db` dans le code
 - [x] `test:db` sur le schéma Neon : 908/908
-- [ ] CI (ci.yml / e2e.yml) sur le schéma Neon
+- [x] ci.yml sur le schéma Neon (e2e.yml : phase C)
 
 ### C. Ménage
 - [ ] Supprimer : `evidence/`, `loop/`, `triagem/`, `plan/`, `tasks/`, `.codex/`, `.agents/`, agents/skills `.claude` obsolètes, `vercel.ts`, kit HostGator si remplacé par Dokploy
@@ -64,8 +64,10 @@ ressources, tout fusionné sur `main`.
   utilisateurs de l'app ; les écrans MFA ne peuvent pas marcher (et activer la
   politique « MFA obligatoire » bloquerait les admins). Proposition : retirer la
   fonctionnalité. Le classifieur de sécurité refuse de le faire sans accord
-  explicite → NE PAS retirer tant que le propriétaire n'a pas dit oui.
+  explicite. Le propriétaire a dit oui (2026-10-21) pour : MFA, kit HostGator +
+  mise à jour intégrée, dossiers morts. Reste à obtenir la permission de l'outil.
 
 ## Journal
 - 2026-10-21 : plan posé ; tests e2e agent/onboarding réécrits (94e2d52).
 - 2026-10-21 : schéma Neon unique et complet (faille grant-all-to-anon et commande inter-boutiques corrigées), test:db 908/908, DbClient typé, typecheck/lint/unit verts (74c1e01).
+- 2026-10-21 : interface en français dans le code (≈1950 libellés), Sentry tiers coupé, migrations au démarrage, README neuf ; unit 5566/5566.
