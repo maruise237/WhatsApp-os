@@ -43,7 +43,7 @@ export function NodeConfigPanel({ node, onChange, ramosLigados }: Props) {
   const commitLabel = (value: string) => {
     setLabel(value);
     if (value.trim().length < 1 || value.length > 60) {
-      setLabelError(t("Rótulo precisa ter 1 a 60 caracteres."));
+      setLabelError(t("Le libellé doit contenir entre 1 et 60 caractères."));
       return;
     }
     setLabelError(null);
@@ -62,12 +62,12 @@ export function NodeConfigPanel({ node, onChange, ramosLigados }: Props) {
           {t(visual.paletteLabel)}
         </h2>
         <p className="text-sm text-text-muted">
-          {t("Alterações aplicam no rascunho ao digitar — salve na barra de publicação.")}
+          {t("Les modifications s’appliquent au brouillon pendant la saisie — enregistrez-les dans la barre de publication.")}
         </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="node-label">{t("Rótulo")}</Label>
+        <Label htmlFor="node-label">{t("Libellé")}</Label>
         <Input
           id="node-label"
           value={label}

@@ -96,14 +96,14 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
       <TableHeader>
         <TableRow>
           <SortableHead
-            label={t("Nome")}
+            label={t("Nom")}
             column="display_name"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
           />
           <SortableHead
-            label={t("Email")}
+            label={t("E-mail")}
             column="email"
             orderBy={orderBy}
             orderDir={orderDir}
@@ -111,7 +111,7 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
             className="hidden md:table-cell"
           />
           <SortableHead
-            label={t("Telefone")}
+            label={t("Téléphone")}
             column="phone_number"
             orderBy={orderBy}
             orderDir={orderDir}
@@ -119,16 +119,16 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
           />
           <TableHead className="hidden md:table-cell">{t("Tags")}</TableHead>
           <SortableHead
-            label={t("Última atividade")}
+            label={t("Dernière activité")}
             column="last_activity_at"
             orderBy={orderBy}
             orderDir={orderDir}
             onSort={onSort}
             className="hidden md:table-cell"
           />
-          <TableHead className="hidden md:table-cell">{t("Status")}</TableHead>
+          <TableHead className="hidden md:table-cell">{t("Statut")}</TableHead>
           <TableHead className="w-[52px]">
-            <span className="sr-only">{t("Conversa")}</span>
+            <span className="sr-only">{t("Conversation")}</span>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -163,10 +163,10 @@ export function ContactsTable({ contacts, orderBy, orderDir, onSort }: Props) {
             </TableCell>
             <TableCell className="hidden md:table-cell">
               <div className="flex flex-wrap gap-1">
-                {c.is_anonymized && <Badge variant="destructive">{t("Anonimizado")}</Badge>}
-                {c.is_blocked && <Badge variant="warning">{t("Bloqueado")}</Badge>}
+                {c.is_anonymized && <Badge variant="destructive">{t("Anonymisé")}</Badge>}
+                {c.is_blocked && <Badge variant="warning">{t("Bloqué")}</Badge>}
                 {!c.is_anonymized && !c.is_blocked && (
-                  <Badge variant="success">{t("Ativo")}</Badge>
+                  <Badge variant="success">{t("Actif")}</Badge>
                 )}
               </div>
             </TableCell>

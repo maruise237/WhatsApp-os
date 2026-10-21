@@ -28,7 +28,7 @@ export function NodePalette({ onAdd, variant = "desktop" }: Props) {
       data-testid="node-palette"
     >
       <h2 className="px-1 pb-1 text-xs font-medium uppercase tracking-wide text-text-muted">
-        {t("Adicionar nó")}
+        {t("Ajouter un nœud")}
       </h2>
       {NODE_VISUAL_LIST.map((visual) => {
         const Icon = visual.icon;

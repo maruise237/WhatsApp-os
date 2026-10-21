@@ -41,15 +41,15 @@ export function ResetPasswordForm() {
         );
       } else if (res.error === "mfa_invalid") {
         setNeedsMfa(true);
-        setServerError(t("Código de verificação inválido. Tente de novo."));
+        setServerError(t("Code de validation invalide. Réessayez."));
       } else if (res.error === "session_expired") {
-        setServerError(t("Sessão de redefinição expirada. Peça um novo link em Recuperar senha."));
+        setServerError(t("La session de réinitialisation a expiré. Demandez un nouveau lien via « Mot de passe oublié »."));
       } else if (res.error === "same_password") {
-        setServerError(t("A nova senha precisa ser diferente da atual."));
+        setServerError(t("Le nouveau mot de passe doit être différent de l’actuel."));
       } else if (res.error === "validation_error") {
-        setServerError(t("Dados inválidos. Confira os campos."));
+        setServerError(t("Données invalides. Vérifiez les champs."));
       } else {
-        setServerError(t("Não foi possível redefinir a senha. Tente novamente."));
+        setServerError(t("Impossible de réinitialiser le mot de passe. Réessayez."));
       }
     });
   };
@@ -57,7 +57,7 @@ export function ResetPasswordForm() {
   return (
     <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <Label htmlFor="password">{t("Nova senha")}</Label>
+        <Label htmlFor="password">{t("Nouveau mot de passe")}</Label>
         <Input
           id="password"
           type="password"
@@ -71,7 +71,7 @@ export function ResetPasswordForm() {
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="password_confirm">{t("Confirmar nova senha")}</Label>
+        <Label htmlFor="password_confirm">{t("Confirmer le nouveau mot de passe")}</Label>
         <Input
           id="password_confirm"
           type="password"
@@ -85,7 +85,7 @@ export function ResetPasswordForm() {
       </div>
       {needsMfa && (
         <div className="space-y-1.5">
-          <Label htmlFor="mfa_code">{t("Código de verificação (2 etapas)")}</Label>
+          <Label htmlFor="mfa_code">{t("Code de validation (2 étapes)")}</Label>
           <Input
             id="mfa_code"
             inputMode="numeric"
@@ -106,7 +106,7 @@ export function ResetPasswordForm() {
         </div>
       )}
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? t("Salvando...") : t("Definir nova senha")}
+        {isPending ? t("Enregistrement…") : t("Définir le nouveau mot de passe")}
       </Button>
     </form>
   );

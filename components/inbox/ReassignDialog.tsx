@@ -62,7 +62,7 @@ export function ReassignDialog({ conversationId, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={close}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{t("Transferir conversa")}</DialogTitle>
+          <DialogTitle>{t("Transférer la conversation")}</DialogTitle>
           <DialogDescription>
             {t(
               "A transferência é imediata: o atendente escolhido vira o responsável agora e a mudança fica registrada no histórico.",
@@ -72,19 +72,19 @@ export function ReassignDialog({ conversationId, open, onOpenChange }: Props) {
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="reassign-target">{t("Transferir para")}</Label>
+            <Label htmlFor="reassign-target">{t("Transférer à")}</Label>
             <Select value={toUserId} onValueChange={setToUserId}>
               <SelectTrigger id="reassign-target" className="w-full">
                 <SelectValue
                   placeholder={
-                    members.isLoading ? t("Carregando atendentes…") : t("Escolha o atendente")
+                    members.isLoading ? t("Chargement des agents…") : t("Choisissez l’agent")
                   }
                 />
               </SelectTrigger>
               <SelectContent>
                 {options.map((m) => (
                   <SelectItem key={m.user_id} value={m.user_id}>
-                    {m.full_name ?? `${t("Atendente")} ${m.user_id.slice(0, 8)}`}
+                    {m.full_name ?? `${t("Agent")} ${m.user_id.slice(0, 8)}`}
                     <span className="ml-1 text-muted-foreground">
                       · {t(ROLE_LABEL[m.role] ?? m.role)}
                     </span>
@@ -94,18 +94,18 @@ export function ReassignDialog({ conversationId, open, onOpenChange }: Props) {
             </Select>
             {!members.isLoading && options.length === 0 && (
               <p className="text-xs text-muted-foreground">
-                {t("Nenhum outro atendente disponível nesta organização.")}
+                {t("Aucun autre agent n’est disponible dans cette organisation.")}
               </p>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="reassign-reason">{t("Motivo (opcional)")}</Label>
+            <Label htmlFor="reassign-reason">{t("Motif (facultatif)")}</Label>
             <Textarea
               id="reassign-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder={t("Ex.: cliente pediu falar com o financeiro")}
+              placeholder={t("Ex. : le client souhaite parler au service financier")}
               maxLength={500}
               rows={2}
             />
@@ -114,7 +114,7 @@ export function ReassignDialog({ conversationId, open, onOpenChange }: Props) {
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => close(false)}>
-            {t("Cancelar")}
+            {t("Annuler")}
           </Button>
           <Button
             disabled={!toUserId || transfer.isPending}
@@ -129,7 +129,7 @@ export function ReassignDialog({ conversationId, open, onOpenChange }: Props) {
               )
             }
           >
-            {transfer.isPending ? t("Transferindo…") : t("Transferir")}
+            {transfer.isPending ? t("Transfert…") : t("Transférer")}
           </Button>
         </DialogFooter>
       </DialogContent>

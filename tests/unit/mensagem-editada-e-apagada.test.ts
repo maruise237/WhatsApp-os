@@ -192,7 +192,7 @@ describe("os elos que somem sem barulho", () => {
   it("a bolha DIZ que foi editada, e esconde o texto da apagada", () => {
     const fonte = readFileSync("components/inbox/MessageBubble.tsx", "utf8");
     expect(fonte).toMatch(/revoked_at/);
-    expect(fonte).toMatch(/Esta mensagem foi apagada/);
+    expect(fonte).toMatch(/Ce message a été supprimé/);
     expect(fonte).toMatch(/editada/);
   });
 });

@@ -27,8 +27,8 @@ const ICON_MAP: Record<string, PhosphorIcon> = {
 };
 
 function dayHeader(d: Date, t: (texto: string) => string): string {
-  if (isToday(d)) return t("Hoje");
-  if (isYesterday(d)) return t("Ontem");
+  if (isToday(d)) return t("Aujourd’hui");
+  if (isYesterday(d)) return t("Hier");
   return format(d, "dd/MM/yyyy", { locale: fr });
 }
 
@@ -78,9 +78,9 @@ export function TimelineView({ contactId, types }: Props) {
   if (q.isError) {
     return (
       <Card className="p-4">
-        <p className="text-sm text-error-fg">{t("Erro ao carregar timeline.")}</p>
+        <p className="text-sm text-error-fg">{t("Erreur lors du chargement de la chronologie.")}</p>
         <Button size="sm" variant="outline" className="mt-2" onClick={() => q.refetch()}>
-          {t("Tentar novamente")}
+          {t("Réessayer")}
         </Button>
       </Card>
     );
@@ -89,7 +89,7 @@ export function TimelineView({ contactId, types }: Props) {
   if (grouped.length === 0) {
     return (
       <Card className="p-6 text-center text-sm text-muted-foreground">
-        {t("Nenhuma atividade registrada ainda.")}
+        {t("Aucune activité enregistrée pour le moment.")}
       </Card>
     );
   }
@@ -176,7 +176,7 @@ export function TimelineView({ contactId, types }: Props) {
             onClick={() => q.fetchNextPage()}
             disabled={q.isFetchingNextPage}
           >
-            {q.isFetchingNextPage ? t("Carregando…") : t("Carregar mais")}
+            {q.isFetchingNextPage ? t("Chargement…") : t("Charger davantage")}
           </Button>
         </div>
       )}

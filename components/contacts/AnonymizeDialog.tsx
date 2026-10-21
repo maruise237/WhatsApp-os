@@ -44,9 +44,9 @@ export function AnonymizeDialog({ contactId, open, onOpenChange }: Props) {
         justification: justification.trim(),
       });
       if (res.data.action === "already_anonymized") {
-        toast.info(t("Contato já estava anonimizado."));
+        toast.info(t("Le contact était déjà anonymisé."));
       } else {
-        toast.success(t("Contato anonimizado."));
+        toast.success(t("Contact anonymisé."));
       }
       reset();
       onOpenChange(false);
@@ -64,7 +64,7 @@ export function AnonymizeDialog({ contactId, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-error-fg">{t("Anonimizar contato (LGPD)")}</DialogTitle>
+          <DialogTitle className="text-error-fg">{t("Anonymiser le contact (données personnelles)")}</DialogTitle>
           <DialogDescription>
             {t(
               'Esta ação é irreversível. O nome será substituído por "Contato Anonimizado #N", email/telefone/CPF serão limpos, e atividades terão conteúdo redigido.',
@@ -75,38 +75,38 @@ export function AnonymizeDialog({ contactId, open, onOpenChange }: Props) {
         {step === 1 ? (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="anon-justif">{t("Justificativa (mínimo 10 caracteres)")}</Label>
+              <Label htmlFor="anon-justif">{t("Justification (10 caractères minimum)")}</Label>
               <Textarea
                 id="anon-justif"
                 value={justification}
                 onChange={(e) => setJustification(e.target.value)}
-                placeholder={t("Ex.: Solicitação formal do titular via email em DD/MM/YYYY")}
+                placeholder={t("Ex. : Demande formelle de la personne concernée par e-mail le JJ/MM/AAAA")}
                 rows={4}
               />
               <p className="text-xs text-muted-foreground">
-                {justification.trim().length}/10 {t("caracteres mínimos")}
+                {justification.trim().length}/10 {t("caractères minimum")}
               </p>
             </div>
             <DialogFooter>
               <Button variant="ghost" onClick={() => handleOpenChange(false)}>
-                {t("Cancelar")}
+                {t("Annuler")}
               </Button>
               <Button
                 variant="destructive"
                 onClick={() => setStep(2)}
                 disabled={justification.trim().length < 10}
               >
-                {t("Continuar")}
+                {t("Continuer")}
               </Button>
             </DialogFooter>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="border-error-fg/30 rounded-md border bg-error-bg p-3 text-sm text-error-fg">
-              {t("Para confirmar, digite")} <strong>{CONFIRM_TEXT}</strong> ci-dessous.
+              {t("Pour confirmer, saisissez")} <strong>{CONFIRM_TEXT}</strong> ci-dessous.
             </div>
             <div className="space-y-2">
-              <Label htmlFor="anon-confirm">{t("Confirmação")}</Label>
+              <Label htmlFor="anon-confirm">{t("Confirmation")}</Label>
               <Input
                 id="anon-confirm"
                 value={confirm}
@@ -117,14 +117,14 @@ export function AnonymizeDialog({ contactId, open, onOpenChange }: Props) {
             </div>
             <DialogFooter>
               <Button variant="ghost" onClick={() => setStep(1)} disabled={anon.isPending}>
-                {t("Voltar")}
+                {t("Retour")}
               </Button>
               <Button
                 variant="destructive"
                 onClick={handleSubmit}
                 disabled={confirm !== CONFIRM_TEXT || anon.isPending}
               >
-                {anon.isPending ? t("Anonimizando…") : t("Anonimizar permanentemente")}
+                {anon.isPending ? t("Anonymisation…") : t("Anonymiser définitivement")}
               </Button>
             </DialogFooter>
           </div>

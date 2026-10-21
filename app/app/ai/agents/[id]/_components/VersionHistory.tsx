@@ -83,13 +83,13 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
   );
 
   if (sorted.length === 0) {
-    return <p className="text-sm text-muted-foreground">{t("Nenhuma versão criada ainda.")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Aucune version créée pour le moment.")}</p>;
   }
 
   function openDiff(target: AgentVersionRow) {
     const counterpart = pickCounterpart(sorted, target);
     if (!counterpart) {
-      toast.info(t("Não há outra versão para comparar."));
+      toast.info(t("Aucune autre version à comparer."));
       return;
     }
     // a = mais antiga, b = mais nova
@@ -108,11 +108,11 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
     try {
       const res = await revertToVersionAction(agentId, revertTarget.id);
       if (!res.ok) {
-        toast.error(res.message ?? `${t("Erro:")} ${res.error}`);
+        toast.error(res.message ?? `${t("Erreur :")} ${res.error}`);
         return;
       }
       toast.success(
-        `${t("Revertido para versão equivalente a v")}${targetNum} (${t("publicada como v")}${res.data!.new_version_number}).`,
+        `${t("Rétabli vers une version équivalente à v")}${targetNum} (${t("publiée comme v")}${res.data!.new_version_number}).`,
       );
       setRevertTarget(null);
       router.refresh();
@@ -140,16 +140,16 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
               </span>
               {v.published_at ? (
                 <span className="text-xs text-muted-foreground">
-                  {t("publicada em")} {new Date(v.published_at).toLocaleString(idioma)}
+                  {t("publiée le")} {new Date(v.published_at).toLocaleString(idioma)}
                 </span>
               ) : null}
               <div className="ml-auto flex gap-2">
                 <Button variant="ghost" size="sm" onClick={() => openDiff(v)}>
-                  {t("Diff")}
+                  {t("Différence")}
                 </Button>
                 {canRevert ? (
                   <Button variant="outline" size="sm" onClick={() => setRevertTarget(v)}>
-                    {t("Reverter")}
+                    {t("Rétablir")}
                   </Button>
                 ) : null}
               </div>
@@ -163,8 +163,8 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
           <DialogHeader>
             <DialogTitle>
               {diffPair
-                ? `${t("Diff")} v${diffPair.a.version_number} ↔ v${diffPair.b.version_number}`
-                : t("Diff")}
+                ? `${t("Différence")} v${diffPair.a.version_number} ↔ v${diffPair.b.version_number}`
+                : t("Différence")}
             </DialogTitle>
           </DialogHeader>
           {diffPair ? <VersionDiff versionA={diffPair.a} versionB={diffPair.b} /> : null}
@@ -175,19 +175,19 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t("Reverter para v")} {revertTarget?.version_number}?
+              {t("Rétablir vers v")} {revertTarget?.version_number}?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t("Uma nova versão idêntica a v")} {revertTarget?.version_number}{" "}
+              {t("Une nouvelle version identique à v")} {revertTarget?.version_number}{" "}
               {t(
                 "será criada e publicada imediatamente. A versão atualmente publicada vira superseded.",
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={reverting}>{t("Cancelar")}</AlertDialogCancel>
+            <AlertDialogCancel disabled={reverting}>{t("Annuler")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleRevert} disabled={reverting}>
-              {reverting ? t("Revertendo…") : t("Confirmar revert")}
+              {reverting ? t("Rétablissement…") : t("Confirmer le rétablissement")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

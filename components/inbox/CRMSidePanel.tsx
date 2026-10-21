@@ -122,7 +122,7 @@ function MarcarProximoPasso({ demandaId, onPronto }: { demandaId: string; onPron
     } catch {
       // Falha NÃO fecha o campo: fechar devolveria a tela ao estado de sucesso
       // e o texto se perderia sem que ninguém tivesse gravado nada.
-      toast.error(t("Não consegui salvar o próximo passo. Tente de novo."));
+      toast.error(t("Impossible d’enregistrer la prochaine étape. Réessayez."));
     } finally {
       setSalvando(false);
     }
@@ -137,7 +137,7 @@ function MarcarProximoPasso({ demandaId, onPronto }: { demandaId: string; onPron
         data-testid="marcar-proximo-passo"
         onClick={() => setAberto(true)}
       >
-        {t("Marcar próximo passo")}
+        {t("Définir la prochaine étape")}
       </Button>
     );
   }
@@ -153,8 +153,8 @@ function MarcarProximoPasso({ demandaId, onPronto }: { demandaId: string; onPron
           if (e.key === "Escape") setAberto(false);
         }}
         maxLength={500}
-        placeholder={t("O que acontece a seguir?")}
-        aria-label={t("Próximo passo desta demanda")}
+        placeholder={t("Que se passe-t-il ensuite ?")}
+        aria-label={t("Prochaine étape de cette demande")}
         data-testid="campo-proximo-passo"
         className="w-full rounded-md border border-input bg-background px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
       />
@@ -166,10 +166,10 @@ function MarcarProximoPasso({ demandaId, onPronto }: { demandaId: string; onPron
           data-testid="salvar-proximo-passo"
           onClick={() => void salvar()}
         >
-          {salvando ? t("Salvando…") : t("Salvar")}
+          {salvando ? t("Enregistrement…") : t("Enregistrer")}
         </Button>
         <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => setAberto(false)}>
-          {t("Cancelar")}
+          {t("Annuler")}
         </Button>
       </div>
     </div>
@@ -215,9 +215,9 @@ function SemLista({
   if (!erro) return <p className="mt-2 text-xs text-muted-foreground">{t(vazio)}</p>;
   return (
     <div className="mt-2 space-y-1">
-      <p className="text-xs text-error-fg">{t("Não consegui ler estes dados.")}</p>
+      <p className="text-xs text-error-fg">{t("Impossible de lire ces données.")}</p>
       <Button size="sm" variant="outline" onClick={onTentarDeNovo}>
-        {t("Tentar de novo")}
+        {t("Réessayer")}
       </Button>
     </div>
   );
@@ -248,7 +248,7 @@ export function CRMSidePanel({ conversation }: Props) {
 
   useEffect(() => {
     if (leadDialogOpen && defaultPipeline.isError) {
-      toast.error(t("Nenhum funil configurado nesta organização."));
+      toast.error(t("Aucun pipeline n’est configuré dans cette organisation."));
       setLeadDialogOpen(false);
     }
   }, [leadDialogOpen, defaultPipeline.isError]);
@@ -344,7 +344,7 @@ export function CRMSidePanel({ conversation }: Props) {
   if (!conversation) {
     return (
       <aside className="flex h-full items-center justify-center border-l border-border p-4 text-center text-xs text-muted-foreground">
-        {t("Selecione uma conversa para ver detalhes do contato.")}
+        {t("Sélectionnez une conversation pour voir les détails du contact.")}
       </aside>
     );
   }
@@ -353,7 +353,7 @@ export function CRMSidePanel({ conversation }: Props) {
     <aside className="flex h-full flex-col gap-4 overflow-y-auto border-l border-border bg-background p-4">
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("Contato")}
+          {t("Contact")}
         </h3>
         <Card className="mt-2 space-y-2 p-3 text-sm">
           <div className="font-medium">{displayName}</div>
@@ -378,7 +378,7 @@ export function CRMSidePanel({ conversation }: Props) {
               aria-pressed={tagEditorOpen}
               onClick={() => setTagEditorOpen((v) => !v)}
             >
-              <Tag size={12} className="mr-1" weight="regular" aria-hidden /> {t("Tag")}
+              <Tag size={12} className="mr-1" weight="regular" aria-hidden /> {t("Étiquette")}
             </Button>
             <Button
               size="sm"
@@ -388,12 +388,12 @@ export function CRMSidePanel({ conversation }: Props) {
               onClick={() => setLeadDialogOpen(true)}
             >
               <Users size={12} className="mr-1" weight="regular" aria-hidden />
-              {leadDialogOpen && defaultPipeline.isLoading ? t("Carregando…") : t("Lead")}
+              {leadDialogOpen && defaultPipeline.isLoading ? t("Chargement…") : t("Lead")}
             </Button>
             {contactId && (
               <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-xs">
                 <Link href={`/app/contacts/${contactId}`}>
-                  {t("Ver contato")}
+                  {t("Voir le contact")}
                   <ArrowRight size={12} className="ml-1" weight="regular" aria-hidden />
                 </Link>
               </Button>
@@ -429,7 +429,7 @@ export function CRMSidePanel({ conversation }: Props) {
           pergunta a responder é o que ainda está pendente, não quanto vale. */}
       <section data-testid="inbox-demandas">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("Demandas abertas")}
+          {t("Demandes ouvertes")}
         </h3>
         {sectionsLoading ? (
           <Skeleton className="mt-2 h-14 w-full" />
@@ -451,13 +451,13 @@ export function CRMSidePanel({ conversation }: Props) {
                       {t(ESTADO_LEGIVEL[d.estado] ?? d.estado)}
                     </span>
                     <span className="shrink-0 tabular-nums text-muted-foreground">
-                      {t("há")} {horasDesde(d.aberta_em)}h
+                      {t("il y a")} {horasDesde(d.aberta_em)}h
                     </span>
                   </div>
                   {/* O invariante 4 na frase, não só na cor: quem enxerga mal
                       cor precisa ler a mesma informação. */}
                   <div className={cn("mt-0.5", semPasso ? "font-medium" : "text-muted-foreground")}>
-                    {d.proximo_passo ?? t("Sem próximo passo definido")}
+                    {d.proximo_passo ?? t("Aucune prochaine étape définie")}
                   </div>
                   {/* A SAÍDA. Sem ela esta seção só denunciava: o atendente via o
                       vazamento e tinha de sair da tela para resolver — peça que
@@ -481,7 +481,7 @@ export function CRMSidePanel({ conversation }: Props) {
 
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("Leads recentes")}
+          {t("Leads récents")}
         </h3>
         {sectionsLoading ? (
           <Skeleton className="mt-2 h-14 w-full" />
@@ -514,7 +514,7 @@ export function CRMSidePanel({ conversation }: Props) {
 
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("Pedidos recentes")}
+          {t("Commandes récentes")}
         </h3>
         {sectionsLoading ? (
           <Skeleton className="mt-2 h-14 w-full" />
@@ -550,7 +550,7 @@ export function CRMSidePanel({ conversation }: Props) {
 
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("Atividade")}
+          {t("Activité")}
         </h3>
         {sectionsLoading ? (
           <Skeleton className="mt-2 h-14 w-full" />

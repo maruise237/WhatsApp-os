@@ -189,14 +189,14 @@ export function AgentMappingSection({
   if (consulta.isError) {
     return (
       <p className="text-sm text-text-muted" data-testid="mapeamento-erro-leitura">
-        {t("Não foi possível carregar as etapas deste funil agora. Recarregue a página.")}
+        {t("Impossible de charger les étapes de ce pipeline pour le moment. Rechargez la page.")}
       </p>
     );
   }
   if (!data || !rascunho) {
     return (
       <p className="text-sm text-text-muted" data-testid="mapeamento-carregando">
-        {t("Carregando as etapas deste funil…")}
+        {t("Chargement des étapes de ce pipeline…")}
       </p>
     );
   }
@@ -221,7 +221,7 @@ export function AgentMappingSection({
       // Sucesso em toast, igual ao resto da tela (e do app). O ERRO fica inline
       // e persistente de propósito: ele explica por que as escolhas na frente do
       // usuário mudaram sozinhas, e um toast some antes de ele ler.
-      onSuccess: () => toast.success(t("Escolhas salvas.")),
+      onSuccess: () => toast.success(t("Choix enregistrés.")),
       onError: (e) => setErro(t(mensagemDeErro(e))),
     });
   }
@@ -237,7 +237,7 @@ export function AgentMappingSection({
             se chama Funis e trata dos funis do tenant. Duas coisas diferentes
             com o mesmo nome, na mesma tela, fazem o dono da clínica procurar um
             segundo funil que não existe. O título diz o que a seção FAZ. */}
-        <h3 className="text-sm font-semibold">{t("Para onde o card vai em cada passo")}</h3>
+        <h3 className="text-sm font-semibold">{t("Où va le card à chaque étape")}</h3>
         <p className="max-w-3xl text-sm leading-relaxed text-text-muted">
           {t(
             "Quando o agente avança no atendimento, o card do cliente pode andar sozinho no seu funil. Escolha para qual etapa ele vai em cada momento. Deixar em «não mover» é uma escolha válida — o card fica onde está e o agente segue trabalhando.",
@@ -287,7 +287,7 @@ export function AgentMappingSection({
                           href={`#${ancoraEtapas}`}
                           data-testid={`ir-para-etapas-${passo}`}
                         >
-                          {t("Ir para as etapas do funil")}
+                          {t("Accéder aux étapes du pipeline")}
                         </a>
                         .
                       </>
@@ -296,7 +296,7 @@ export function AgentMappingSection({
                 ) : (
                   <Select value={escolhida ?? SEM_ETAPA} onValueChange={(v) => escolher(passo, v)}>
                     <SelectTrigger
-                      aria-label={t("Etapa para «{step}»").replace(
+                      aria-label={t("Étape pour « {step} »").replace(
                         "{step}",
                         t(ROTULO_DO_PASSO[passo]),
                       )}
@@ -305,7 +305,7 @@ export function AgentMappingSection({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={SEM_ETAPA}>{t("Não mover o card")}</SelectItem>
+                      <SelectItem value={SEM_ETAPA}>{t("Ne pas déplacer le card")}</SelectItem>
                       {opcoes.map((e) => (
                         <SelectItem key={e.id} value={e.id}>
                           {e.name}
@@ -328,14 +328,14 @@ export function AgentMappingSection({
           <Warning size={18} className="mt-0.5 shrink-0 text-warning-fg" aria-hidden />
           <p className="text-sm leading-relaxed">
             {erro}{" "}
-            {t("As escolhas voltaram para o que está gravado agora — confira e escolha de novo.")}
+            {t("Les choix ont été rétablis selon les données actuellement enregistrées : vérifiez-les et choisissez à nouveau.")}
           </p>
         </Card>
       )}
 
       <div className="flex items-center justify-end gap-3">
         <Button onClick={enviar} disabled={!mudou || gravando} data-testid="salvar-mapeamento">
-          {gravando ? t("Salvando…") : t("Salvar estas escolhas")}
+          {gravando ? t("Enregistrement…") : t("Enregistrer ces choix")}
         </Button>
       </div>
     </div>

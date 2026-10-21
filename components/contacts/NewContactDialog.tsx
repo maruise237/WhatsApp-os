@@ -67,7 +67,7 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
 
     try {
       await create.mutateAsync(parsed.data as ContactCreate);
-      toast.success(t("Contato criado"));
+      toast.success(t("Contact créé"));
       form.reset();
       onOpenChange(false);
     } catch {
@@ -79,22 +79,22 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Novo contato")}</DialogTitle>
+          <DialogTitle>{t("Nouveau contact")}</DialogTitle>
           <DialogDescription>
-            {t("Preencha pelo menos um identificador (email ou telefone).")}
+            {t("Renseignez au moins un identifiant (e-mail ou téléphone).")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">{t("Nome")}</Label>
+            <Label htmlFor="name">{t("Nom")}</Label>
             <Input id="name" {...form.register("name")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">{t("Email")}</Label>
+            <Label htmlFor="email">{t("E-mail")}</Label>
             <Input id="email" type="email" {...form.register("email")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone_number">{t("Telefone (E.164)")}</Label>
+            <Label htmlFor="phone_number">{t("Téléphone (E.164)")}</Label>
             <Input
               id="phone_number"
               placeholder="+237 6XX XX XX XX"
@@ -102,11 +102,11 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cpf">{t("CPF (opcional)")}</Label>
+            <Label htmlFor="cpf">{t("Numéro d’identification (CNI) — facultatif")}</Label>
             <Input id="cpf" placeholder="00000000000" {...form.register("cpf")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
+            <Label htmlFor="tagsRaw">{t("Étiquettes (séparées par des virgules)")}</Label>
             <Input id="tagsRaw" placeholder="vip, réachat" {...form.register("tagsRaw")} />
           </div>
           {serverError && <p className="text-sm text-error-fg">{serverError}</p>}
@@ -117,10 +117,10 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               disabled={create.isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={create.isPending}>
-              {create.isPending ? t("Criando…") : t("Criar contato")}
+              {create.isPending ? t("Création…") : t("Créer le contact")}
             </Button>
           </DialogFooter>
         </form>

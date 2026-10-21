@@ -26,12 +26,12 @@ export function CitationsPanel({ open, onOpenChange, citations, messageId }: Pro
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-md">
         <SheetHeader>
-          <SheetTitle>{t("Citações da resposta IA")}</SheetTitle>
+          <SheetTitle>{t("Citations de la réponse IA")}</SheetTitle>
         </SheetHeader>
         <div className="mt-4 space-y-4 overflow-y-auto pr-2">
           {citations.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              {t("Resposta sem RAG hits — modelo respondeu sem usar a base de conhecimento.")}
+              {t("Réponse sans résultats RAG : le modèle a répondu sans utiliser la base de connaissances.")}
             </p>
           ) : (
             citations.map((c, i) => (
@@ -40,7 +40,7 @@ export function CitationsPanel({ open, onOpenChange, citations, messageId }: Pro
                   <Badge variant="secondary">
                     {(() => {
                       const label = SOURCE_LABEL[c.source_type ?? ""];
-                      return label ? t(label) : (c.source_type ?? t("Fonte"));
+                      return label ? t(label) : (c.source_type ?? t("Source"));
                     })()}
                   </Badge>
                   {typeof c.score === "number" && (

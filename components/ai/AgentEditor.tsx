@@ -104,7 +104,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
   }, [agent]);
 
   if (!agent || !formState || !baselineState) {
-    return <p className="text-sm text-muted-foreground">{t("Carregando agent…")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Chargement de l’agent…")}</p>;
   }
 
   const dirty = JSON.stringify(formState) !== JSON.stringify(baselineState);
@@ -126,13 +126,13 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
       const flat = grCheck.error.flatten();
       const firstErr =
         Object.values(flat.fieldErrors)[0]?.[0] ?? flat.formErrors[0] ?? "Garde-fous invalides.";
-      toast.error(`${t("Guardrails inválidos.")} ${firstErr}`);
+      toast.error(`${t("Guardrails invalides.")} ${firstErr}`);
       return;
     }
 
     const patch = diffPatch(baselineState, formState);
     if (Object.keys(patch).length === 0) {
-      toast.info(t("Nada para salvar."));
+      toast.info(t("Rien à enregistrer."));
       return;
     }
 
@@ -141,7 +141,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
       const flat = validated.error.flatten();
       const firstErr =
         Object.values(flat.fieldErrors)[0]?.[0] ?? flat.formErrors[0] ?? "Champs invalides.";
-      toast.error(`${t("Erro ao salvar:")} ${firstErr}`);
+      toast.error(`${t("Erreur lors de l’enregistrement :")} ${firstErr}`);
       return;
     }
 
@@ -167,26 +167,26 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
         <div>
           <h2 className="text-xl font-semibold tracking-tight">{agent.name}</h2>
           <p className="text-xs text-muted-foreground">
-            {agent.is_default ? t("Agent default · ") : ""}
-            {t("Criado em")} {new Date(agent.created_at).toLocaleDateString(idioma)}
+            {agent.is_default ? t("Agent par défaut · ") : ""}
+            {t("Créé le")} {new Date(agent.created_at).toLocaleDateString(idioma)}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleReset} disabled={!dirty || disabled}>
-            {t("Descartar")}
+            {t("Rejeter")}
           </Button>
           <Button onClick={handleSave} disabled={!dirty || disabled}>
-            {update.isPending ? t("Salvando…") : t("Salvar")}
+            {update.isPending ? t("Enregistrement…") : t("Enregistrer")}
           </Button>
         </div>
       </div>
 
       <Tabs defaultValue="general">
         <TabsList>
-          <TabsTrigger value="general">{t("Geral")}</TabsTrigger>
+          <TabsTrigger value="general">{t("Général")}</TabsTrigger>
           <TabsTrigger value="consignes">Consignes</TabsTrigger>
           <TabsTrigger value="rag">{t("RAG")}</TabsTrigger>
-          <TabsTrigger value="guardrails">{t("Guardrails")}</TabsTrigger>
+          <TabsTrigger value="guardrails">{t("Garde-fous")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
@@ -202,7 +202,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="description">{t("Descrição")}</Label>
+              <Label htmlFor="description">{t("Description")}</Label>
               <Textarea
                 id="description"
                 value={formState.description}
@@ -210,7 +210,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
                 disabled={disabled}
                 rows={3}
                 maxLength={500}
-                placeholder={t("Descrição interna do agent")}
+                placeholder={t("Description interne de l’agent")}
               />
             </div>
             <div className="flex items-center gap-3">
@@ -220,11 +220,11 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
                 disabled={disabled}
                 id="is_active"
               />
-              <Label htmlFor="is_active">{t("Agent ativo")}</Label>
+              <Label htmlFor="is_active">{t("Agent actif")}</Label>
             </div>
             <div className="bg-muted/40 rounded-md p-3 text-xs text-muted-foreground">
-              <strong>{t("Default:")}</strong> {agent.is_default ? t("Sim") : t("Não")} (lecture seule —{" "}
-              {t("gerenciado pelo backend")}).
+              <strong>{t("Par défaut :")}</strong> {agent.is_default ? t("Oui") : t("Non")} (lecture seule —{" "}
+              {t("géré par le backend")}).
             </div>
           </Card>
         </TabsContent>
@@ -239,7 +239,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
               <div className="space-y-1">
-                <Label>{t("Temperature (0–2)")}</Label>
+                <Label>{t("Température (0–2)")}</Label>
                 <Input
                   type="number"
                   step="0.05"
@@ -251,7 +251,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label>{t("Max tokens (64–4096)")}</Label>
+                <Label>{t("Nombre maximal de tokens (64–4096)")}</Label>
                 <Input
                   type="number"
                   step="1"
@@ -263,7 +263,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label>{t("Janela de contexto (msgs, 1–50)")}</Label>
+                <Label>{t("Fenêtre de contexte (messages, 1–50)")}</Label>
                 <Input
                   type="number"
                   step="1"
@@ -294,7 +294,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label>{t("Similarity threshold (0–1)")}</Label>
+                <Label>{t("Seuil de similarité (0–1)")}</Label>
                 <Input
                   type="number"
                   step="0.01"
@@ -308,7 +308,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label>{t("Confidence threshold (0–1)")}</Label>
+                <Label>{t("Seuil de confiance (0–1)")}</Label>
                 <Input
                   type="number"
                   step="0.01"

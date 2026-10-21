@@ -299,10 +299,10 @@ export function AgentForm(props: Props) {
     // salvar, então são escritas como INSTRUÇÃO ("dê um nome") e não como
     // acusação ("nome obrigatório") — um formulário recém-aberto acusando o
     // usuário de errar é a primeira coisa que ele vê nesta tela.
-    if (form.name.trim().length === 0) errors.name = t("Dê um nome para este agente.");
-    if (form.name.length > 120) errors.name = t("O nome pode ter até 120 caracteres.");
+    if (form.name.trim().length === 0) errors.name = t("Donnez un nom à cet agent.");
+    if (form.name.length > 120) errors.name = t("Le nom peut contenir jusqu’à 120 caractères.");
     if (form.system_prompt.trim().length < 10)
-      errors.system_prompt = t("Escreva as instruções do agente (pelo menos uma frase).");
+      errors.system_prompt = t("Écrivez les instructions de l’agent (au moins une phrase).");
     // `.trim()` porque é o que o servidor mede: `z.string().trim().max(20000)`
     // em lib/ai/agents/validation.ts — o trim roda ANTES do max. Duas réguas
     // diferentes barrariam aqui um texto que o servidor aceitaria.
@@ -314,9 +314,9 @@ export function AgentForm(props: Props) {
         .replace("{count}", tamanhoDoPrompt.toLocaleString(idioma))
         .replace("{excesso}", (tamanhoDoPrompt - 20000).toLocaleString(idioma));
     if (!form.channel_session_id)
-      errors.channel_session_id = t("Escolha por qual número de WhatsApp ele atende.");
+      errors.channel_session_id = t("Choisissez le numéro WhatsApp utilisé pour répondre.");
     if (form.tool_ids.length > TETO_TOOLS_POR_AGENTE)
-      errors.tool_ids = t("Máximo de {count} capacidades por agente.").replace(
+      errors.tool_ids = t("Maximum de {count} capacités par agent.").replace(
         "{count}",
         String(TETO_TOOLS_POR_AGENTE),
       );
@@ -327,7 +327,7 @@ export function AgentForm(props: Props) {
       if (!parsed.success) {
         const flat = parsed.error.flatten();
         const first = Object.entries(flat.fieldErrors)[0];
-        if (first) errors[first[0]] = first[1]?.[0] ?? t("Campo inválido.");
+        if (first) errors[first[0]] = first[1]?.[0] ?? t("Champ invalide.");
       }
     }
     return errors;
@@ -336,14 +336,14 @@ export function AgentForm(props: Props) {
   const isValid = Object.keys(validation).length === 0;
 
   const publishBlockReason = React.useMemo(() => {
-    if (!isEdit) return t("Salve o agent antes de publicar.");
-    if (!props.draft) return t("Sem rascunho para publicar.");
-    if (!isValid) return t("Resolva os erros do formulário.");
-    if (dirty) return t("Salve o rascunho antes de publicar.");
+    if (!isEdit) return t("Enregistrez l’agent avant de le publier.");
+    if (!props.draft) return t("Aucun brouillon à publier.");
+    if (!isValid) return t("Corrigez les erreurs du formulaire.");
+    if (dirty) return t("Enregistrez le brouillon avant de le publier.");
     if (!props.iaPlateforme) return "L’assistant n’est pas encore activé sur cette installation.";
-    if (!channelSession) return t("Escolha por qual número de WhatsApp ele atende.");
+    if (!channelSession) return t("Choisissez le numéro WhatsApp utilisé pour répondre.");
     if (channelSession.status !== "working" && channelSession.status !== "WORKING")
-      return t("Número WhatsApp não está conectado (status: {status}).").replace(
+      return t("Le numéro WhatsApp n’est pas connecté (statut : {status}).").replace(
         "{status}",
         channelSession.status,
       );
@@ -358,7 +358,7 @@ export function AgentForm(props: Props) {
     setTentouSalvar(true);
     if (!isValid) {
       const first = Object.values(validation)[0];
-      toast.error(first ?? t("Formulário inválido."));
+      toast.error(first ?? t("Formulaire invalide."));
       return;
     }
     setSaving(true);
@@ -370,7 +370,7 @@ export function AgentForm(props: Props) {
           return;
         }
         toast.success(
-          t("Rascunho v{version} salvo.").replace("{version}", String(res.data!.version_number)),
+          t("Brouillon v{version} enregistré.").replace("{version}", String(res.data!.version_number)),
         );
         router.refresh();
       } else {
@@ -382,7 +382,7 @@ export function AgentForm(props: Props) {
         };
         const validated = agentMcpCreateSchema.safeParse(payload);
         if (!validated.success) {
-          toast.error(t("Validação falhou."));
+          toast.error(t("La validation a échoué."));
           return;
         }
         const res = await createMcpAgentAction(validated.data);
@@ -390,7 +390,7 @@ export function AgentForm(props: Props) {
           toast.error(res.message ?? `Erreur : ${res.error}`);
           return;
         }
-        toast.success(t("Agent criado."));
+        toast.success(t("Agent créé."));
         router.push(`/app/ai/agents/${res.data!.agent_id}`);
       }
     } finally {
@@ -404,11 +404,11 @@ export function AgentForm(props: Props) {
     try {
       const res = await publishAgentAction(props.agent.id, props.draft.id);
       if (!res.ok) {
-        toast.error(`${t("Falha ao publicar:")} ${res.error}`);
+        toast.error(`${t("Échec de la publication :")} ${res.error}`);
         return;
       }
       toast.success(
-        t("v{version} publicada e ativa.").replace("{version}", String(props.draft.version_number)),
+        t("v{version} publiée et active.").replace("{version}", String(props.draft.version_number)),
       );
       setConfirmOpen(false);
       router.refresh();
@@ -425,13 +425,13 @@ export function AgentForm(props: Props) {
 
   // Status badge
   const statusBadge = (() => {
-    if (!isEdit) return <Badge variant="secondary">{t("Novo")}</Badge>;
+    if (!isEdit) return <Badge variant="secondary">{t("Nouveau")}</Badge>;
     const pubN = props.published?.version_number;
     const draftN = props.draft?.version_number;
     if (pubN && draftN) {
       return (
         <Badge variant="secondary">
-          {t("Publicado")} v{pubN} + {t("Rascunho")} v{draftN}
+          {t("Publié")} v{pubN} + {t("Brouillon")} v{draftN}
         </Badge>
       );
     }
@@ -451,15 +451,15 @@ export function AgentForm(props: Props) {
               : undefined
           }
         >
-          {t("Publicado")} v{pubN}
-          {obsoleta ? ` (${t("rascunho")} v${obsoleta} ${t("superado")})` : ""}
+          {t("Publié")} v{pubN}
+          {obsoleta ? ` (${t("brouillon")} v${obsoleta} ${t("dépassé")})` : ""}
         </Badge>
       );
     }
     if (draftN)
       return (
         <Badge variant="outline">
-          {t("Rascunho")} v{draftN}
+          {t("Brouillon")} v{draftN}
         </Badge>
       );
     // Sem rascunho e sem publicada: o formulário abriu da última versão que
@@ -468,11 +468,11 @@ export function AgentForm(props: Props) {
     if (props.base) {
       return (
         <Badge variant="outline">
-          {t("Pausado · editando a v")} {props.base.version_number}
+          {t("En pause · modification de la v")} {props.base.version_number}
         </Badge>
       );
     }
-    return <Badge variant="outline">{t("Sem versão")}</Badge>;
+    return <Badge variant="outline">{t("Aucune version")}</Badge>;
   })();
 
   return (
@@ -482,7 +482,7 @@ export function AgentForm(props: Props) {
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-semibold tracking-tight">
-              {isEdit ? props.agent.name : t("Novo agente")}
+              {isEdit ? props.agent.name : t("Nouvel agent")}
             </h2>
             {statusBadge}
           </div>
@@ -494,11 +494,11 @@ export function AgentForm(props: Props) {
         <div className="flex flex-wrap items-center gap-2">
           {isEdit ? (
             <Button variant="outline" onClick={handleReset} disabled={!dirty || disabled}>
-              {t("Descartar alterações")}
+              {t("Annuler les modifications")}
             </Button>
           ) : null}
           <Button onClick={handleSave} disabled={(!dirty && isEdit) || disabled || !isValid}>
-            {saving ? t("Salvando…") : isEdit ? t("Salvar rascunho") : t("Criar agente")}
+            {saving ? t("Enregistrement…") : isEdit ? t("Enregistrer le brouillon") : t("Créer l’agent")}
           </Button>
           {isEdit ? (
             <span title={publishBlockReason ?? undefined}>
@@ -508,10 +508,10 @@ export function AgentForm(props: Props) {
                 disabled={disabled || publishBlockReason !== null}
               >
                 {publishing
-                  ? t("Publicando…")
+                  ? t("Publication…")
                   : props.draft
-                    ? `${t("Publicar")} v${props.draft.version_number}`
-                    : t("Publicar")}
+                    ? `${t("Publier")} v${props.draft.version_number}`
+                    : t("Publier")}
               </Button>
             </span>
           ) : null}
@@ -531,7 +531,7 @@ export function AgentForm(props: Props) {
       <div
         className="flex flex-wrap gap-1 border-b"
         role="tablist"
-        aria-label={t("Papéis do agente")}
+        aria-label={t("Rôles de l’agent")}
       >
         {(
           [
@@ -592,9 +592,9 @@ export function AgentForm(props: Props) {
         <div className="space-y-4">
           {/* Identification */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("Quem é este agente")}</h3>
+            <h3 className="text-sm font-medium">{t("Présentation de l’agent")}</h3>
             <div className="space-y-1">
-              <Label htmlFor="name">{t("Nome")}</Label>
+              <Label htmlFor="name">{t("Nom")}</Label>
               <Input
                 id="name"
                 value={form.name}
@@ -608,7 +608,7 @@ export function AgentForm(props: Props) {
               ) : null}
             </div>
             <div className="space-y-1">
-              <Label htmlFor="description">{t("Descrição")}</Label>
+              <Label htmlFor="description">{t("Description")}</Label>
               <Textarea
                 id="description"
                 value={form.description}
@@ -619,7 +619,7 @@ export function AgentForm(props: Props) {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="priority">{t("Ordem de preferência (0 a 1000)")}</Label>
+              <Label htmlFor="priority">{t("Ordre de priorité (de 0 à 1000)")}</Label>
               <Input
                 id="priority"
                 type="number"
@@ -640,31 +640,31 @@ export function AgentForm(props: Props) {
 
           {/* WhatsApp session */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("Por qual número ele atende")}</h3>
+            <h3 className="text-sm font-medium">{t("Numéro utilisé pour répondre")}</h3>
             {props.routerMembership && (
               <div className="flex items-start gap-2 rounded-md bg-accent-soft p-3 text-xs text-text-muted">
                 <Info className="mt-0.5 shrink-0" aria-hidden />
                 <p>
-                  {t("Este agente é acionado pelo roteador")}{" "}
+                  {t("Cet agent est déclenché par le routeur")}{" "}
                   <Link
                     href={`/app/ai/routers/${props.routerMembership.routerId}`}
                     className="font-medium underline underline-offset-2"
                   >
                     «{props.routerMembership.routerName}»
                   </Link>{" "}
-                  {t("— o campo de número abaixo não se aplica.")}
+                  {t("— le champ de numéro ci-dessous ne s’applique pas.")}
                 </p>
               </div>
             )}
             <div className="space-y-1">
-              <Label htmlFor="channel_session_id">{t("Número conectado")}</Label>
+              <Label htmlFor="channel_session_id">{t("Numéro connecté")}</Label>
               <Select
                 value={form.channel_session_id || undefined}
                 onValueChange={(v) => patch({ channel_session_id: v })}
                 disabled={disabled}
               >
                 <SelectTrigger id="channel_session_id">
-                  <SelectValue placeholder={t("Selecione um número")} />
+                  <SelectValue placeholder={t("Sélectionnez un numéro")} />
                 </SelectTrigger>
                 <SelectContent>
                   {props.channelSessions.map((s) => (
@@ -683,7 +683,7 @@ export function AgentForm(props: Props) {
                   ))}
                   {props.channelSessions.length === 0 ? (
                     <SelectItem value="__none__" disabled>
-                      {t("Nenhum número conectado")}
+                      {t("Aucun numéro connecté")}
                     </SelectItem>
                   ) : null}
                 </SelectContent>
@@ -695,7 +695,7 @@ export function AgentForm(props: Props) {
                   diz onde se conecta um, em vez de mandar procurar no menu. */}
               {props.channelSessions.length === 0 ? (
                 <Link href="/app/connections" className="text-xs underline">
-                  {t("Conectar um número de WhatsApp")}
+                  {t("Connecter un numéro WhatsApp")}
                 </Link>
               ) : null}
             </div>
@@ -703,10 +703,10 @@ export function AgentForm(props: Props) {
 
           {/* Limits */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("Freios de segurança")}</h3>
+            <h3 className="text-sm font-medium">{t("Garde-fous de sécurité")}</h3>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label htmlFor="max_steps">{t("Ações por atendimento (1 a 25)")}</Label>
+                <Label htmlFor="max_steps">{t("Actions par conversation (de 1 à 25)")}</Label>
                 <Input
                   id="max_steps"
                   type="number"
@@ -718,7 +718,7 @@ export function AgentForm(props: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="token_budget">{t("Volume de texto por atendimento")}</Label>
+                <Label htmlFor="token_budget">{t("Volume de texte par conversation")}</Label>
                 <Input
                   id="token_budget"
                   type="number"
@@ -732,7 +732,7 @@ export function AgentForm(props: Props) {
               </div>
               <div className="space-y-1">
                 <Label htmlFor="cost_budget_cents">
-                  {t("Custo máximo por atendimento (centavos)")}
+                  {t("Coût maximal par conversation (centimes)")}
                 </Label>
                 <Input
                   id="cost_budget_cents"
@@ -746,7 +746,7 @@ export function AgentForm(props: Props) {
               </div>
               <div className="space-y-1">
                 <Label htmlFor="history_message_window">
-                  {t("Mensagens anteriores que ele lê")}
+                  {t("Messages précédents lus par l’agent")}
                 </Label>
                 <Input
                   id="history_message_window"
@@ -759,7 +759,7 @@ export function AgentForm(props: Props) {
                 />
               </div>
               <div className="col-span-2 space-y-1">
-                <Label htmlFor="history_token_window">{t("Tamanho máximo desse histórico")}</Label>
+                <Label htmlFor="history_token_window">{t("Taille maximale de cet historique")}</Label>
                 <Input
                   id="history_token_window"
                   type="number"
@@ -780,7 +780,7 @@ export function AgentForm(props: Props) {
           {/* Prompt */}
           <Card className="space-y-2 p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">{t("As instruções dele")}</h3>
+              <h3 className="text-sm font-medium">{t("Ses instructions")}</h3>
               <div className="flex items-center gap-2">
                 {/* O contador é o aviso que chega ANTES do erro: quem cola um
                     texto grande vê na hora que ele não vai caber, em vez de
@@ -832,7 +832,7 @@ export function AgentForm(props: Props) {
 
           {/* Estilo de resposta (split de mensagens — Onda 4) */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("Estilo de resposta")}</h3>
+            <h3 className="text-sm font-medium">{t("Style de réponse")}</h3>
             <div className="flex items-center gap-2">
               <Switch
                 id="split_messages"
@@ -841,7 +841,7 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="split_messages">
-                {t("Responder em várias mensagens curtas (como uma pessoa digita)")}
+                {t("Répondre en plusieurs messages courts (comme une personne qui écrit)")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -851,7 +851,7 @@ export function AgentForm(props: Props) {
             </p>
             {form.split_messages ? (
               <div className="space-y-1">
-                <Label htmlFor="split_max_chars">{t("Tamanho máximo por bolha (80–4000)")}</Label>
+                <Label htmlFor="split_max_chars">{t("Taille maximale d’une bulle (80–4000)")}</Label>
                 <Input
                   id="split_max_chars"
                   type="number"
@@ -872,7 +872,7 @@ export function AgentForm(props: Props) {
 
           {/* Capacidades */}
           <Card className="space-y-2 p-4">
-            <h3 className="text-sm font-medium">{t("O que o agente pode fazer")}</h3>
+            <h3 className="text-sm font-medium">{t("Ce que l’agent peut faire")}</h3>
             <p className="text-xs text-muted-foreground">
               {t(
                 "Ligue por jornada de trabalho. O agente só consegue fazer o que estiver ligado aqui — e o que estiver ligado, ele fará sozinho durante o atendimento.",
@@ -890,7 +890,7 @@ export function AgentForm(props: Props) {
 
           {/* Triggers */}
           <Card className="space-y-2 p-4">
-            <h3 className="text-sm font-medium">{t("Quando ele entra em ação")}</h3>
+            <h3 className="text-sm font-medium">{t("Quand il intervient")}</h3>
             <TriggerEditor
               value={form.trigger_config}
               onChange={(v) => patch({ trigger_config: v })}
@@ -900,7 +900,7 @@ export function AgentForm(props: Props) {
 
           {/* Handoff */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("Passar para uma pessoa")}</h3>
+            <h3 className="text-sm font-medium">{t("Transmettre à une personne")}</h3>
             <div className="flex items-center gap-2">
               <Switch
                 id="handoff_tool_enabled"
@@ -909,7 +909,7 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="handoff_tool_enabled">
-                {t("Deixar o agente chamar uma pessoa quando perceber que não é caso dele")}
+                {t("Autoriser l’agent à appeler une personne lorsqu’il comprend que la situation dépasse son rôle")}
               </Label>
             </div>
             <HandoffKeywordsInput
@@ -921,7 +921,7 @@ export function AgentForm(props: Props) {
 
           {/* Casos humanos */}
           <Card className="space-y-3 p-4">
-            <h3 className="text-sm font-medium">{t("Pedir ajuda sem sair da conversa")}</h3>
+            <h3 className="text-sm font-medium">{t("Demander de l’aide sans quitter la conversation")}</h3>
             <div className="flex items-center gap-2">
               <Switch
                 id="cases_enabled"
@@ -930,7 +930,7 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="cases_enabled">
-                {t("Deixar o agente pedir uma tarefa a alguém e seguir conversando")}
+                {t("Autoriser l’agent à demander une tâche à quelqu’un tout en poursuivant la conversation")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -956,7 +956,7 @@ export function AgentForm(props: Props) {
                 disabled={disabled}
               />
               <Label htmlFor="followup_enabled">
-                {t("Habilitar gatilhos automáticos de follow-up")}
+                {t("Activer les déclencheurs automatiques de suivi")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">

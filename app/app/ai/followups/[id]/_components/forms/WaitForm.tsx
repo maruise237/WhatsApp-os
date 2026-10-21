@@ -63,7 +63,7 @@ export function WaitForm({
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label htmlFor="wait-mode">{t("Como calcular a espera")}</Label>
+        <Label htmlFor="wait-mode">{t("Comment calculer l’attente")}</Label>
         <Select
           value={mode}
           onValueChange={(v) => {
@@ -87,7 +87,7 @@ export function WaitForm({
 
       {mode === "fixed" ? (
         <div className="space-y-2">
-          <Label htmlFor="wait-duration">{t("Duração (minutos)")}</Label>
+          <Label htmlFor="wait-duration">{t("Durée (minutes)")}</Label>
           <Input
             id="wait-duration"
             type="number"
@@ -104,7 +104,7 @@ export function WaitForm({
         <>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="wait-min">{t("Mínimo (min)")}</Label>
+              <Label htmlFor="wait-min">{t("Minimum (min)")}</Label>
               <Input
                 id="wait-min"
                 type="number"
@@ -118,7 +118,7 @@ export function WaitForm({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="wait-max">{t("Máximo (min)")}</Label>
+              <Label htmlFor="wait-max">{t("Maximum (min)")}</Label>
               <Input
                 id="wait-max"
                 type="number"
@@ -133,7 +133,7 @@ export function WaitForm({
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="wait-guidance">{t("Orientação (opcional)")}</Label>
+            <Label htmlFor="wait-guidance">{t("Consigne (facultatif)")}</Label>
             <Textarea
               id="wait-guidance"
               maxLength={500}

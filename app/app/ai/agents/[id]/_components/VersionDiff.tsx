@@ -115,9 +115,9 @@ export function VersionDiff({ versionA, versionB }: Props) {
         <Badge variant="outline">v{versionB.version_number}</Badge>
       </div>
 
-      <Section title={t("Configuração")}>
+      <Section title={t("Configuration")}>
         {fields.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{t("Sem mudanças.")}</p>
+          <p className="text-xs text-muted-foreground">{t("Aucune modification.")}</p>
         ) : (
           // `overflow-x-auto` isolado: campos como `channel_session_id`
           // (uuid, monoespaçado) em 3 colunas passavam da largura de um
@@ -126,7 +126,7 @@ export function VersionDiff({ versionA, versionB }: Props) {
             <table className="w-full text-xs">
               <thead>
                 <tr className="text-left text-muted-foreground">
-                  <th className="py-1 pr-3">{t("Campo")}</th>
+                  <th className="py-1 pr-3">{t("Champ")}</th>
                   <th className="py-1 pr-3">v{versionA.version_number}</th>
                   <th className="py-1">v{versionB.version_number}</th>
                 </tr>
@@ -149,26 +149,26 @@ export function VersionDiff({ versionA, versionB }: Props) {
         )}
       </Section>
 
-      <Section title={t("Tools")}>
-        <Pills label={t("Adicionadas")} tone="add" items={tools.added} />
-        <Pills label={t("Removidas")} tone="del" items={tools.removed} />
+      <Section title={t("Outils")}>
+        <Pills label={t("Ajoutées")} tone="add" items={tools.added} />
+        <Pills label={t("Supprimées")} tone="del" items={tools.removed} />
         {tools.added.length === 0 && tools.removed.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{t("Sem mudanças.")}</p>
+          <p className="text-xs text-muted-foreground">{t("Aucune modification.")}</p>
         ) : null}
       </Section>
 
-      <Section title={t("Handoff keywords")}>
-        <Pills label={t("Adicionadas")} tone="add" items={handoffKw.added} />
-        <Pills label={t("Removidas")} tone="del" items={handoffKw.removed} />
+      <Section title={t("Mots-clés de relais humain")}>
+        <Pills label={t("Ajoutées")} tone="add" items={handoffKw.added} />
+        <Pills label={t("Supprimées")} tone="del" items={handoffKw.removed} />
         {handoffKw.added.length === 0 && handoffKw.removed.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{t("Sem mudanças.")}</p>
+          <p className="text-xs text-muted-foreground">{t("Aucune modification.")}</p>
         ) : null}
       </Section>
 
       <Section title={t("Follow-up")}>
         {followupEnabledChanged ? (
           <p className="text-xs">
-            {t("Habilitado")}:{" "}
+            {t("Activé")}:{" "}
             <span className="font-mono text-destructive">
               {String(versionA.followup?.enabled ?? false)}
             </span>{" "}
@@ -178,16 +178,16 @@ export function VersionDiff({ versionA, versionB }: Props) {
             </span>
           </p>
         ) : null}
-        <Pills label={t("Fluxos adicionados")} tone="add" items={followupFlows.added} />
-        <Pills label={t("Fluxos removidos")} tone="del" items={followupFlows.removed} />
+        <Pills label={t("Flows ajoutés")} tone="add" items={followupFlows.added} />
+        <Pills label={t("Flows supprimés")} tone="del" items={followupFlows.removed} />
         {!followupEnabledChanged &&
         followupFlows.added.length === 0 &&
         followupFlows.removed.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{t("Sem mudanças.")}</p>
+          <p className="text-xs text-muted-foreground">{t("Aucune modification.")}</p>
         ) : null}
       </Section>
 
-      <Section title={t("System prompt")}>
+      <Section title={t("Prompt système")}>
         <pre className="border-border/60 bg-muted/30 max-h-96 overflow-auto rounded-md border p-2 font-mono text-xs leading-relaxed">
           {lines.map((l, idx) => {
             const cls =

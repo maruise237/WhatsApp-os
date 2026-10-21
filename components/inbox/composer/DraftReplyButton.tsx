@@ -21,7 +21,7 @@ export function DraftReplyButton({ conversationId, onDraft, disabled }: Props) {
       size="icon"
       variant="ghost"
       className="h-9 w-9 shrink-0"
-      aria-label={t("Sugerir resposta")}
+      aria-label={t("Suggérer une réponse")}
       aria-busy={mutation.isPending}
       disabled={disabled || mutation.isPending}
       onClick={() => {

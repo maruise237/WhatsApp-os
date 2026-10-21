@@ -90,7 +90,7 @@ function podeCancelar(row: FollowupQueueRow): boolean {
 function QueueStatusBadge({ status, t }: { status: string; t: (text: string) => string }) {
   const label = t(rotuloDoStatus(status));
   return (
-    <Badge variant={tomDoStatus(status)} aria-label={`${t("status:")} ${label}`}>
+    <Badge variant={tomDoStatus(status)} aria-label={`${t("statut :")} ${label}`}>
       {label}
     </Badge>
   );
@@ -164,9 +164,9 @@ export function QueueTab({ canWrite }: Props) {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder={t("Buscar contato…")}
+            placeholder={t("Rechercher un contact…")}
             className="h-9 w-full pl-8 text-sm"
-            aria-label={t("Buscar contato")}
+            aria-label={t("Rechercher un contact")}
           />
         </div>
 
@@ -174,11 +174,11 @@ export function QueueTab({ canWrite }: Props) {
           value={status}
           onValueChange={(v) => setStatus(v as FollowupEnrollmentStatus | "all")}
         >
-          <SelectTrigger className="h-9 w-48 text-sm" aria-label={t("Filtrar por status")}>
-            <SelectValue placeholder={t("Todos os status")} />
+          <SelectTrigger className="h-9 w-48 text-sm" aria-label={t("Filtrer par statut")}>
+            <SelectValue placeholder={t("Tous les statuts")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("Todos os status")}</SelectItem>
+            <SelectItem value="all">{t("Tous les statuts")}</SelectItem>
             {STATUS_OPTIONS.map((s) => (
               <SelectItem key={s} value={s}>
                 {t(rotuloDoStatus(s))}
@@ -188,11 +188,11 @@ export function QueueTab({ canWrite }: Props) {
         </Select>
 
         <Select value={pointerId} onValueChange={setPointerId}>
-          <SelectTrigger className="h-9 w-48 text-sm" aria-label={t("Filtrar por fluxo")}>
-            <SelectValue placeholder={t("Todos os fluxos")} />
+          <SelectTrigger className="h-9 w-48 text-sm" aria-label={t("Filtrer par flow")}>
+            <SelectValue placeholder={t("Tous les flows")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("Todos os fluxos")}</SelectItem>
+            <SelectItem value="all">{t("Tous les flows")}</SelectItem>
             {(flows ?? []).map((f) => (
               <SelectItem key={f.id} value={f.id}>
                 {f.name}
@@ -205,9 +205,9 @@ export function QueueTab({ canWrite }: Props) {
       {!isLoading && rows.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-md border border-border py-16 text-center">
           <Clock size={36} className="text-text-muted" aria-hidden />
-          <h2 className="font-medium">{t("Nenhum item na fila")}</h2>
+          <h2 className="font-medium">{t("Aucun élément dans la file")}</h2>
           <p className="max-w-sm text-sm text-text-muted">
-            {t("Enrollments ativos e promessas de retorno agendadas pela IA aparecem aqui.")}
+            {t("Les enrôlements actifs et les relances planifiées par l’IA apparaissent ici.")}
           </p>
         </div>
       ) : (
@@ -215,11 +215,11 @@ export function QueueTab({ canWrite }: Props) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("Contato")}</TableHead>
-                <TableHead>{t("Fluxo / Promessa")}</TableHead>
-                <TableHead>{t("Nó atual / Motivo")}</TableHead>
-                <TableHead>{t("Próximo disparo")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
+                <TableHead>{t("Contact")}</TableHead>
+                <TableHead>{t("Flow / Relance")}</TableHead>
+                <TableHead>{t("Nœud actuel / Motif")}</TableHead>
+                <TableHead>{t("Prochaine exécution")}</TableHead>
+                <TableHead>{t("Statut")}</TableHead>
                 {canWrite && <TableHead className="w-[100px]" />}
               </TableRow>
             </TableHeader>
@@ -251,12 +251,12 @@ export function QueueTab({ canWrite }: Props) {
                       <div className="flex flex-col">
                         <span>
                           {row.flow_name ?? (
-                            <span className="text-text-muted">{t("Promessa")}</span>
+                            <span className="text-text-muted">{t("Relance")}</span>
                           )}
                         </span>
                         {row.agent_name && (
                           <span className="text-xs text-text-muted">
-                            {t("agente")} {row.agent_name}
+                            {t("agent")} {row.agent_name}
                           </span>
                         )}
                       </div>
@@ -282,13 +282,13 @@ export function QueueTab({ canWrite }: Props) {
                             data-testid="cancelar-item-da-fila"
                             aria-label={
                               row.source === "promise"
-                                ? t("Cancelar retorno")
-                                : t("Cancelar follow-up")
+                                ? t("Annuler la relance")
+                                : t("Annuler le follow-up")
                             }
                             onClick={() => setPendingCancel(row)}
                           >
                             <Trash size={14} aria-hidden className="mr-1 text-error" />{" "}
-                            {t("Cancelar")}
+                            {t("Annuler")}
                           </Button>
                         )}
                       </TableCell>
@@ -309,7 +309,7 @@ export function QueueTab({ canWrite }: Props) {
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
           >
-            {isFetchingNextPage ? t("Carregando...") : t("Carregar mais")}
+            {isFetchingNextPage ? t("Chargement…") : t("Charger davantage")}
           </Button>
         </div>
       )}
@@ -322,8 +322,8 @@ export function QueueTab({ canWrite }: Props) {
           <AlertDialogHeader>
             <AlertDialogTitle>
               {pendingCancel?.source === "promise"
-                ? t("Cancelar este retorno?")
-                : t("Cancelar este follow-up?")}
+                ? t("Annuler cette relance ?")
+                : t("Annuler ce follow-up ?")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {pendingCancel?.source === "promise"
@@ -336,7 +336,7 @@ export function QueueTab({ canWrite }: Props) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("Voltar")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("Retour")}</AlertDialogCancel>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
               onClick={() => {
@@ -346,8 +346,8 @@ export function QueueTab({ canWrite }: Props) {
               }}
             >
               {pendingCancel?.source === "promise"
-                ? t("Cancelar retorno")
-                : t("Cancelar follow-up")}
+                ? t("Annuler la relance")
+                : t("Annuler le follow-up")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

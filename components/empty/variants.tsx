@@ -25,8 +25,8 @@ export function EmptyInbox({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={ChatCircle}
-      headline={t("Sem conversas por aqui")}
-      subcopy={t("Quando chegarem mensagens, elas aparecem aqui em tempo real.")}
+      headline={t("Aucune conversation ici")}
+      subcopy={t("Lorsque des messages arriveront, ils apparaîtront ici en temps réel.")}
       primary={primary}
       secondary={secondary}
     />
@@ -38,7 +38,7 @@ export function EmptyKanban({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={Kanban}
-      headline={t("Quadro vazio")}
+      headline={t("Tableau vide")}
       subcopy={t(
         "Ainda não há nenhum cliente aqui. Assim que a primeira conversa começar, o cartão aparece nesta coluna.",
       )}
@@ -53,8 +53,8 @@ export function EmptyContacts({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={UsersThree}
-      headline={t("Nenhum contato ainda")}
-      subcopy={t("Contatos chegam automaticamente via WhatsApp ou Nuvemshop.")}
+      headline={t("Aucun contact pour le moment")}
+      subcopy={t("Les contacts arrivent automatiquement via WhatsApp ou vos formulaires.")}
       primary={primary}
       secondary={secondary}
     />
@@ -66,8 +66,8 @@ export function EmptyAudit({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={ListMagnifyingGlass}
-      headline={t("Sem eventos no período")}
-      subcopy={t("Ajuste o filtro de datas ou a busca pra ver eventos.")}
+      headline={t("Aucun événement sur la période")}
+      subcopy={t("Ajustez le filtre de dates ou la recherche pour afficher des événements.")}
       primary={primary}
       secondary={secondary}
     />
@@ -79,7 +79,7 @@ export function EmptyPipeline({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={GitBranch}
-      headline={t("Nenhum funil ainda")}
+      headline={t("Aucun pipeline pour le moment")}
       subcopy={t(
         "Um funil é o caminho que o cliente percorre até fechar. Crie o primeiro para ter um quadro.",
       )}
@@ -94,8 +94,8 @@ export function EmptyTeam({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={Users}
-      headline={t("Sem membros no time")}
-      subcopy={t("Convide colegas pra atender em conjunto.")}
+      headline={t("Aucun membre dans l’équipe")}
+      subcopy={t("Invitez des collègues à répondre ensemble.")}
       primary={primary}
       secondary={secondary}
     />
@@ -107,8 +107,8 @@ export function EmptyApiTokens({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={Key}
-      headline={t("Nenhum token criado")}
-      subcopy={t("Tokens permitem integrações server-to-server.")}
+      headline={t("Aucun jeton créé")}
+      subcopy={t("Les jetons permettent les intégrations de serveur à serveur.")}
       primary={primary}
       secondary={secondary}
     />
@@ -120,8 +120,8 @@ export function EmptyTimeline({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={ClockCounterClockwise}
-      headline={t("Sem atividades registradas")}
-      subcopy={t("A timeline mostra mensagens, mudanças de stage e notas.")}
+      headline={t("Aucune activité enregistrée")}
+      subcopy={t("La chronologie affiche les messages, les changements d’étape et les notes.")}
       primary={primary}
       secondary={secondary}
     />
@@ -133,8 +133,8 @@ export function EmptyMergeQueue({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={ArrowsLeftRight}
-      headline={t("Sem candidatos a merge")}
-      subcopy={t("Contatos duplicados aparecerão aqui pra revisão.")}
+      headline={t("Aucun candidat à la fusion")}
+      subcopy={t("Les contacts en double apparaîtront ici pour vérification.")}
       primary={primary}
       secondary={secondary}
     />
@@ -146,8 +146,8 @@ export function EmptyFilterResults({ primary, secondary }: VariantProps = {}) {
   return (
     <EmptyState
       icon={Funnel}
-      headline={t("Nenhum resultado")}
-      subcopy={t("Tente ajustar os filtros ou a busca.")}
+      headline={t("Aucun résultat")}
+      subcopy={t("Essayez d’ajuster les filtres ou la recherche.")}
       primary={primary}
       secondary={secondary}
     />

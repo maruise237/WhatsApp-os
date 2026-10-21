@@ -21,7 +21,7 @@ function ParaColar({ rotulo, valor }: { rotulo: string; valor: string | null }) 
           {rotulo}
         </span>
         <span className="text-sm text-destructive">
-          {t("não configurado nesta instalação — defina no servidor antes de continuar")}
+          {t("non configuré dans cette installation — définissez-le sur le serveur avant de continuer")}
         </span>
       </div>
     );
@@ -38,10 +38,10 @@ function ParaColar({ rotulo, valor }: { rotulo: string; valor: string | null }) 
           variant="outline"
           onClick={async () => {
             await copyToClipboard(valor);
-            toast.success(t("Copiado."));
+            toast.success(t("Copié."));
           }}
         >
-          {t("Copiar")}
+          {t("Copier")}
         </Button>
       </div>
     </div>
@@ -59,13 +59,13 @@ export function CanalOficialClient() {
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
     const r = await conectar.mutateAsync(form);
-    toast.success(`${t("Conectado:")} ${r.data.displayName} ${r.data.phoneNumber ?? ""}`.trim());
+    toast.success(`${t("Connecté :")} ${r.data.displayName} ${r.data.phoneNumber ?? ""}`.trim());
     // O token some do formulário assim que grava — deixá-lo na tela seria mantê-lo
     // em memória do navegador sem motivo, e ele não volta em nenhum GET.
     setForm((f) => ({ ...f, token: "" }));
   }
 
-  if (isPending) return <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>;
+  if (isPending) return <p className="text-sm text-muted-foreground">{t("Chargement…")}</p>;
 
   return (
     <div className="flex flex-col gap-4" data-testid="canal-oficial-root">
@@ -81,11 +81,11 @@ export function CanalOficialClient() {
             <Badge>{estado.status ?? "—"}</Badge>
             {/* Mostra que o token EXISTE, nunca qual é. */}
             <Badge variant={estado.hasToken ? "outline" : "destructive"}>
-              {estado.hasToken ? t("credencial guardada") : t("sem credencial")}
+              {estado.hasToken ? t("identifiant enregistré") : t("sans identifiant")}
             </Badge>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            WABA <span className="font-mono">{estado.wabaId}</span> · {t("número")}{" "}
+            WABA <span className="font-mono">{estado.wabaId}</span> · {t("numéro")}{" "}
             <span className="font-mono">{estado.phoneNumberId}</span>
           </p>
         </Card>
@@ -94,19 +94,19 @@ export function CanalOficialClient() {
       {estado?.webhook ? (
         <Card className="flex flex-col gap-3 p-4">
           <div>
-            <h2 className="font-medium">{t("Cole isto no painel da Meta")}</h2>
+            <h2 className="font-medium">{t("Collez ceci dans le panneau Meta")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Dans <strong>WhatsApp → {t("Configuração")}</strong>,{" "}
+              Dans <strong>WhatsApp → {t("Configuration")}</strong>,{" "}
               {t(
                 "na seção de Webhook. Sem esse passo o canal envia, mas não recebe — as respostas do cliente não chegam e a janela de 24 horas nunca abre.",
               )}
             </p>
           </div>
-          <ParaColar rotulo={t("URL de callback")} valor={estado.webhook.callbackUrl} />
-          <ParaColar rotulo={t("Token de verificação")} valor={estado.webhook.verifyToken} />
+          <ParaColar rotulo={t("URL de rappel")} valor={estado.webhook.callbackUrl} />
+          <ParaColar rotulo={t("Jeton de vérification")} valor={estado.webhook.verifyToken} />
           <div className="flex flex-col gap-1">
             <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {t("Campos a assinar")}
+              {t("Champs à signer")}
             </span>
             <div className="flex flex-wrap gap-1">
               {estado.webhook.fields.map((f) => (
@@ -121,7 +121,7 @@ export function CanalOficialClient() {
 
       <Card className="p-4">
         <h2 className="font-medium">
-          {estado?.connected ? t("Trocar credencial") : t("Conectar canal oficial")}
+          {estado?.connected ? t("Remplacer l’identifiant") : t("Connecter le canal officiel")}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {t(
@@ -131,7 +131,7 @@ export function CanalOficialClient() {
 
         <form onSubmit={enviar} className="mt-4 flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="pnid">{t("ID do número de telefone")}</Label>
+            <Label htmlFor="pnid">{t("ID du numéro de téléphone")}</Label>
             <Input
               id="pnid"
               value={form.phone_number_id}
@@ -141,7 +141,7 @@ export function CanalOficialClient() {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="waba">{t("ID da conta do WhatsApp Business")}</Label>
+            <Label htmlFor="waba">{t("ID du compte WhatsApp Business")}</Label>
             <Input
               id="waba"
               value={form.waba_id}
@@ -151,23 +151,23 @@ export function CanalOficialClient() {
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="tok">{t("Token de acesso")}</Label>
+            <Label htmlFor="tok">{t("Jeton d’accès")}</Label>
             <Input
               id="tok"
               type="password"
               value={form.token}
               onChange={(e) => setForm((f) => ({ ...f, token: e.target.value }))}
               placeholder={
-                estado?.hasToken ? t("•••• (já guardado — preencha para trocar)") : "EAAG…"
+                estado?.hasToken ? t("•••• (déjà enregistré — remplissez pour remplacer)") : "EAAG…"
               }
               required
             />
             <span className="text-xs text-muted-foreground">
-              {t("Guardado cifrado. Não é exibido de volta em nenhum momento.")}
+              {t("Enregistré chiffré. Il n’est jamais réaffiché.")}
             </span>
           </div>
           <Button type="submit" disabled={conectar.isPending} data-testid="btn-conectar">
-            {conectar.isPending ? t("Validando com a Meta…") : t("Validar e conectar")}
+            {conectar.isPending ? t("Validation auprès de Meta…") : t("Valider et connecter")}
           </Button>
         </form>
       </Card>

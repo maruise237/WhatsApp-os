@@ -60,10 +60,10 @@ export function AgentRowMenu({ agent }: Props) {
           toast.success(label);
           router.refresh();
         } else {
-          toast.error(res.message ?? `${t("Falha:")} ${res.error ?? "unknown"}`);
+          toast.error(res.message ?? `${t("Échec :")} ${res.error ?? "unknown"}`);
         }
       } catch {
-        toast.error(t("Erro ao executar ação."));
+        toast.error(t("Erreur lors de l’exécution de l’action."));
       }
     });
   };
@@ -75,7 +75,7 @@ export function AgentRowMenu({ agent }: Props) {
           <Button
             variant="ghost"
             size="icon"
-            aria-label={t("Menu de ações")}
+            aria-label={t("Menu des actions")}
             disabled={isPending}
             className="size-8"
           >
@@ -85,14 +85,14 @@ export function AgentRowMenu({ agent }: Props) {
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem asChild>
             <Link href={`/app/ai/agents/${agent.id}`} className="flex items-center gap-2">
-              <PencilSimple size={14} aria-hidden /> {t("Editar")}
+              <PencilSimple size={14} aria-hidden /> {t("Modifier")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isArchived}
-            onSelect={() => run(t("Agent duplicado."), () => duplicateAgentAction(agent.id))}
+            onSelect={() => run(t("Agent dupliqué."), () => duplicateAgentAction(agent.id))}
           >
-            <Copy size={14} aria-hidden className="mr-2" /> {t("Duplicar")}
+            <Copy size={14} aria-hidden className="mr-2" /> {t("Dupliquer")}
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={isArchived}
@@ -101,21 +101,21 @@ export function AgentRowMenu({ agent }: Props) {
               setRenameOpen(true);
             }}
           >
-            <PencilSimple size={14} aria-hidden className="mr-2" /> {t("Renomear")}
+            <PencilSimple size={14} aria-hidden className="mr-2" /> {t("Renommer")}
           </DropdownMenuItem>
           {isPaused ? (
             <DropdownMenuItem
               disabled={isArchived || agent.kind === "mcp_agent"}
-              onSelect={() => run(t("Agent reativado."), () => unpauseAgentAction(agent.id))}
+              onSelect={() => run(t("Agent réactivé."), () => unpauseAgentAction(agent.id))}
             >
-              <Play size={14} aria-hidden className="mr-2" /> {t("Despausar")}
+              <Play size={14} aria-hidden className="mr-2" /> {t("Reprendre")}
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem
               disabled={isArchived}
-              onSelect={() => run(t("Agent pausado."), () => pauseAgentAction(agent.id))}
+              onSelect={() => run(t("Agent mis en pause."), () => pauseAgentAction(agent.id))}
             >
-              <Pause size={14} aria-hidden className="mr-2" /> {t("Pausar")}
+              <Pause size={14} aria-hidden className="mr-2" /> {t("Mettre en pause")}
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -127,7 +127,7 @@ export function AgentRowMenu({ agent }: Props) {
             }}
             className="text-destructive focus:text-destructive"
           >
-            <Archive size={14} aria-hidden className="mr-2" /> {t("Arquivar")}
+            <Archive size={14} aria-hidden className="mr-2" /> {t("Archiver")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -138,7 +138,7 @@ export function AgentRowMenu({ agent }: Props) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t("Arquivar “{name}”?").replace("{name}", agent.name)}
+              {t("Archiver « {name} » ?").replace("{name}", agent.name)}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {t(
@@ -147,11 +147,11 @@ export function AgentRowMenu({ agent }: Props) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("Cancelar")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("Annuler")}</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => run(t("Agent arquivado."), () => archiveAgentAction(agent.id))}
+              onClick={() => run(t("Agent archivé."), () => archiveAgentAction(agent.id))}
             >
-              {t("Arquivar")}
+              {t("Archiver")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -48,7 +48,7 @@ describe("MediaRenderer", () => {
   });
   it("audio → AudioPlayer", () => {
     render(<MediaRenderer message={msg({ type: "audio" })} />);
-    expect(screen.getByRole("button", { name: /reproduzir/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /lire/i })).toBeInTheDocument();
   });
   it("video → VideoMedia", () => {
     const { container } = render(<MediaRenderer message={msg({ type: "video" })} />);
@@ -56,7 +56,7 @@ describe("MediaRenderer", () => {
   });
   it("document (e tipos desconhecidos) → DocumentCard", () => {
     render(<MediaRenderer message={msg({ type: "document", media_mime: "application/pdf" })} />);
-    expect(screen.getByRole("link", { name: /baixar pdf/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /télécharger/i })).toBeInTheDocument();
   });
 });
 

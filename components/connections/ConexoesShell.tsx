@@ -64,13 +64,13 @@ export function ConexoesShell({ wahaConfigured }: { wahaConfigured: boolean }) {
             a frase custou menos que abrir exceção no gate, e o gate continua
             estrito: o dia em que alguém escrever o nome do provider aqui DE VERDADE,
             ele reprova igual. */}
-        <TabsTrigger value="numeros">{t("Números por QR")}</TabsTrigger>
-        <TabsTrigger value="oficial">{t("API Oficial (Meta)")}</TabsTrigger>
+        <TabsTrigger value="numeros">{t("Numéros via QR")}</TabsTrigger>
+        <TabsTrigger value="oficial">{t("API Officielle (Meta)")}</TabsTrigger>
         {/* "Provedor parceiro" e não a marca: o rótulo da marca vem do servidor
             (`lib/channels/connect`), porque a tela não pode nomear provider — e
             porque no dia em que houver um segundo parceiro esta aba não muda.
             Aqui fica o CONCEITO; lá dentro o cartão diz de quem se trata. */}
-        <TabsTrigger value="parceiro">{t("Provedor parceiro")}</TabsTrigger>
+        <TabsTrigger value="parceiro">{t("Fournisseur partenaire")}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="numeros" className="mt-0">
@@ -89,8 +89,8 @@ export function ConexoesShell({ wahaConfigured }: { wahaConfigured: boolean }) {
           className="flex flex-col gap-4"
         >
           <TabsList>
-            <TabsTrigger value="conexao">{t("Conexão")}</TabsTrigger>
-            <TabsTrigger value="templates">{t("Modelos do parceiro")}</TabsTrigger>
+            <TabsTrigger value="conexao">{t("Connexion")}</TabsTrigger>
+            <TabsTrigger value="templates">{t("Modèles du partenaire")}</TabsTrigger>
           </TabsList>
           <TabsContent value="conexao" className="mt-0">
             <CanalParceiroClient />
@@ -108,14 +108,14 @@ export function ConexoesShell({ wahaConfigured }: { wahaConfigured: boolean }) {
           className="flex flex-col gap-4"
         >
           <TabsList>
-            <TabsTrigger value="conexao">{t("Conexão")}</TabsTrigger>
+            <TabsTrigger value="conexao">{t("Connexion")}</TabsTrigger>
             {/* "Templates da Meta", não "Templates": a barra lateral já tem um item
                 com esse nome que significa OUTRA coisa — respostas rápidas salvas
                 pelo atendente (`/app/templates`). Dois conceitos com o mesmo rótulo
                 fazem o operador clicar no errado e concluir que a tela está quebrada.
                 A colisão é anterior a esta mudança; o que dá para fazer aqui é não
                 agravá-la. */}
-            <TabsTrigger value="templates">{t("Templates da Meta")}</TabsTrigger>
+            <TabsTrigger value="templates">{t("Modèles de Meta")}</TabsTrigger>
           </TabsList>
           <TabsContent value="conexao" className="mt-0">
             <CanalOficialClient />

@@ -73,7 +73,7 @@ function Verificacoes({ g }: { g: NonNullable<TestResponse["data"]["guardrails"]
           data-testid="teste-vazamento-limpo"
           className="border-border/60 bg-muted/40 rounded-md border p-2 text-xs"
         >
-          {t("A resposta não usa palavras internas do sistema.")}
+          {t("La réponse n’utilise pas de termes internes au système.")}
         </p>
       ) : (
         <div
@@ -81,10 +81,10 @@ function Verificacoes({ g }: { g: NonNullable<TestResponse["data"]["guardrails"]
           className="border-destructive/50 bg-destructive/5 rounded-md border p-2 text-xs"
         >
           <p className="font-medium text-destructive">
-            {t("Esta resposta usa palavras que o cliente não deveria ver.")}
+            {t("Cette réponse contient des termes que le client ne devrait pas voir.")}
           </p>
           <p className="mt-1 text-muted-foreground">
-            {t("Em produção ela seria barrada e o assistente teria que reescrever. Encontrado:")}{" "}
+            {t("En production, elle serait bloquée et l’assistant devrait la réécrire. Termes trouvés :")}{" "}
             <span className="font-mono">{g.termos.join(", ")}</span>
           </p>
         </div>
@@ -108,8 +108,8 @@ function Verificacoes({ g }: { g: NonNullable<TestResponse["data"]["guardrails"]
       */}
       <details className="text-xs text-muted-foreground">
         <summary className="cursor-pointer" data-testid="teste-nao-verificado">
-          {t("O teste não consegue verificar tudo")} ({g.naoAvaliados.length}{" "}
-          {t("verificações ficam de fora")})
+          {t("Le test ne peut pas tout vérifier")} ({g.naoAvaliados.length}{" "}
+          {t("vérifications ne sont pas évaluées")})
         </summary>
         <ul className="mt-2 space-y-1 pl-4">
           {g.naoAvaliados.map((n) => (
@@ -117,10 +117,10 @@ function Verificacoes({ g }: { g: NonNullable<TestResponse["data"]["guardrails"]
           ))}
         </ul>
         <p className="mt-2">
-          {t("Estas só acontecem numa conversa real, com um cliente de verdade do outro lado.")}{" "}
-          {t("Para ver a lista inteira do que é conferido — e o que cada verificação protege —")}{" "}
-          {t("abra a aba")}{" "}
-          <span className="font-medium text-foreground">{t("Confere antes de enviar")}</span>.
+          {t("Ces vérifications n’ont lieu que dans une conversation réelle, avec un vrai client à l’autre bout.")}{" "}
+          {t("Pour voir la liste complète de ce qui est vérifié — et ce que protège chaque vérification —")}{" "}
+          {t("ouvrez l’onglet")}{" "}
+          <span className="font-medium text-foreground">{t("Vérifications avant envoi")}</span>.
         </p>
       </details>
     </div>
@@ -142,19 +142,19 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
   if (!target) {
     return (
       <p className="text-sm text-muted-foreground">
-        {t("Configure e salve uma versão antes de testar.")}
+        {t("Configurez et enregistrez une version avant de la tester.")}
       </p>
     );
   }
 
   const versionLabel =
     target.status === "published"
-      ? `v${target.version_number} (${t("publicada")})`
-      : `v${target.version_number} (${t("rascunho")})`;
+      ? `v${target.version_number} (${t("publiée")})`
+      : `v${target.version_number} (${t("brouillon")})`;
 
   async function handleRun() {
     if (!message.trim()) {
-      toast.error(t("Informe uma mensagem de teste."));
+      toast.error(t("Saisissez un message de test."));
       return;
     }
     if (!target) return;
@@ -174,12 +174,12 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
       );
       setResult(res.data);
       qc.invalidateQueries({ queryKey: agentRunsKey(agent.id) });
-      toast.success(t("Teste executado."));
+      toast.success(t("Test exécuté."));
     } catch (err) {
       if (err instanceof ApiError) {
         toast.error(err.message ?? `Erreur : ${err.code}`);
       } else {
-        toast.error(t("Erro inesperado."));
+        toast.error(t("Erreur inattendue."));
       }
     } finally {
       setPending(false);
@@ -191,7 +191,7 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
       <div className="flex flex-col gap-4">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("Versão alvo")}
+            {t("Version cible")}
           </p>
           <div className="flex items-center gap-2 text-sm">
             <Badge variant="outline">{versionLabel}</Badge>
@@ -203,17 +203,17 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
             ⚠ Les essais comptent dans la consommation IA de votre boutique.
           </p>
           <p className="mt-1 text-muted-foreground">
-            {t("Nenhuma mensagem é enviada via WhatsApp. O run é registrado como dry-run.")}
+            {t("Aucun message n’est envoyé via WhatsApp. L’exécution est enregistrée comme dry-run.")}
           </p>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="test-message">{t("Mensagem do cliente (sample)")}</Label>
+          <Label htmlFor="test-message">{t("Message du client (exemple)")}</Label>
           <Textarea
             id="test-message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder={t("Oi, quanto custa X?")}
+            placeholder={t("Bonjour, combien coûte X ?")}
             rows={4}
             disabled={pending || readOnly}
           />
@@ -221,7 +221,7 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
 
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-2">
-            <Label htmlFor="test-name">{t("Nome (opcional)")}</Label>
+            <Label htmlFor="test-name">{t("Nom (facultatif)")}</Label>
             <Input
               id="test-name"
               value={contactName}
@@ -231,7 +231,7 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="test-phone">{t("Telefone (opcional)")}</Label>
+            <Label htmlFor="test-phone">{t("Téléphone (facultatif)")}</Label>
             <Input
               id="test-phone"
               value={contactPhone}
@@ -243,47 +243,47 @@ export function TestPanel({ agent, draft, published, readOnly }: Props) {
         </div>
 
         <Button onClick={handleRun} disabled={pending || readOnly} className="self-start">
-          {pending ? t("Executando…") : t("Executar teste")}
+          {pending ? t("Exécution…") : t("Exécuter le test")}
         </Button>
       </div>
 
       <div className="flex flex-col gap-3">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          {t("Resultado")}
+          {t("Résultat")}
         </p>
 
         {!result && !pending ? (
-          <p className="text-sm text-muted-foreground">{t("Nenhum teste executado ainda.")}</p>
+          <p className="text-sm text-muted-foreground">{t("Aucun test exécuté pour le moment.")}</p>
         ) : null}
 
         {pending ? (
-          <p className="text-sm text-muted-foreground">{t("Executando dry-run…")}</p>
+          <p className="text-sm text-muted-foreground">{t("Exécution du dry-run…")}</p>
         ) : null}
 
         {result ? (
           <>
             {result.stub ? (
               <p className="border-border/60 bg-muted/40 rounded-md border p-2 text-xs text-muted-foreground">
-                {t("Stub: o runtime real é entregue na S-13.08. O trace abaixo é simulado.")}
+                {t("Stub : le runtime réel sera livré dans S-13.08. La trace ci-dessous est simulée.")}
               </p>
             ) : null}
 
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <Cell label={t("Status")}>{result.status}</Cell>
-              <Cell label={t("Latência")}>
+              <Cell label={t("Statut")}>{result.status}</Cell>
+              <Cell label={t("Latence")}>
                 {typeof result.latency_ms === "number" ? `${result.latency_ms}ms` : "—"}
               </Cell>
-              <Cell label={t("Tokens in/out")}>
+              <Cell label={t("Tokens entrée/sortie")}>
                 {(result.tokens_in ?? 0).toLocaleString(idioma)} /{" "}
                 {(result.tokens_out ?? 0).toLocaleString(idioma)}
               </Cell>
-              <Cell label={t("Custo (cents)")}>{result.cost_cents ?? 0}</Cell>
+              <Cell label={t("Coût (centimes)")}>{result.cost_cents ?? 0}</Cell>
             </div>
 
             <RunTrace
               toolCalls={result.tool_calls}
               finalText={result.final_text ?? null}
-              emptyMessage={t("Sem tool calls (resposta direta do LLM).")}
+              emptyMessage={t("Aucun appel d’outil (réponse directe du LLM).")}
             />
 
             {result.guardrails ? <Verificacoes g={result.guardrails} /> : null}

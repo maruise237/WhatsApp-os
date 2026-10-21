@@ -223,14 +223,14 @@ export function StagesSection({
   if (consulta.isError) {
     return (
       <p className="text-sm text-text-muted" data-testid="etapas-erro-leitura">
-        {t("Não foi possível carregar as etapas deste funil agora. Recarregue a página.")}
+        {t("Impossible de charger les étapes de ce pipeline pour le moment. Rechargez la page.")}
       </p>
     );
   }
   if (!consulta.data) {
     return (
       <p className="text-sm text-text-muted" data-testid="etapas-carregando">
-        {t("Carregando as etapas deste funil…")}
+        {t("Chargement des étapes de ce pipeline…")}
       </p>
     );
   }
@@ -252,7 +252,7 @@ export function StagesSection({
     editar.mutate(
       { stageId: etapaId, patch },
       {
-        onSuccess: () => toast.success(t("Etapa atualizada.")),
+        onSuccess: () => toast.success(t("Étape mise à jour.")),
         onError: (e) => setErro({ etapaId, texto: t(mensagemDeErro(e)), sobrePapel }),
       },
     );
@@ -273,11 +273,11 @@ export function StagesSection({
         papel,
         texto:
           papel === "won"
-            ? t("Só uma etapa pode ser a de fechamento. Marcar esta desmarca «{name}».").replace(
+            ? t("Une seule étape peut correspondre à la clôture. Marquer celle-ci retirera ce rôle à « {name} ».").replace(
                 "{name}",
                 atual.name,
               )
-            : t("Só uma etapa pode ser a de perda. Marcar esta desmarca «{name}».").replace(
+            : t("Une seule étape peut correspondre à une perte. Marquer celle-ci retirera ce rôle à « {name} ».").replace(
                 "{name}",
                 atual.name,
               ),
@@ -294,7 +294,7 @@ export function StagesSection({
       {
         onSuccess: () => {
           setArquivamento(null);
-          toast.success(`«${etapa.name}» ${t("saiu do quadro.")}`);
+          toast.success(`«${etapa.name}» ${t("a quitté le tableau.")}`);
         },
         onError: (e) => {
           // Negócios parados na etapa não é recusa final: é a pergunta "para
@@ -319,7 +319,7 @@ export function StagesSection({
     criar.mutate(nome, {
       onSuccess: () => {
         setNova(null);
-        toast.success(`«${nome}» ${t("entrou no fim do funil.")}`);
+        toast.success(`«${nome}» ${t("a été ajoutée à la fin du pipeline.")}`);
       },
       onError: (e) => setErro({ etapaId: null, texto: t(mensagemDeErro(e)) }),
     });
@@ -332,7 +332,7 @@ export function StagesSection({
       data-testid={`etapas-${pipelineId}`}
     >
       <div className="space-y-1">
-        <h3 className="text-sm font-semibold">{t("Etapas deste funil")}</h3>
+        <h3 className="text-sm font-semibold">{t("Étapes de ce pipeline")}</h3>
         <p className="max-w-3xl text-sm leading-relaxed text-text-muted">
           {t(
             "Estas são as colunas do seu quadro, na ordem em que o cliente avança. Você pode renomear, criar, reordenar e arquivar.",
@@ -410,7 +410,7 @@ export function StagesSection({
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`${t("Mover")} «${etapa.name}» ${t("uma coluna para trás")}`}
+                      aria-label={`${t("Déplacer")} «${etapa.name}» ${t("d’une colonne vers l’arrière")}`}
                       data-testid={`subir-${etapa.id}`}
                       disabled={i === 0 || ocupado}
                       onClick={() =>
@@ -422,7 +422,7 @@ export function StagesSection({
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label={`${t("Mover")} «${etapa.name}» ${t("uma coluna para frente")}`}
+                      aria-label={`${t("Déplacer")} «${etapa.name}» ${t("d’une colonne vers l’avant")}`}
                       data-testid={`descer-${etapa.id}`}
                       disabled={i === etapas.length - 1 || ocupado}
                       onClick={() =>
@@ -444,7 +444,7 @@ export function StagesSection({
                     disabled={ocupado}
                   >
                     <SelectTrigger
-                      aria-label={`${t("Papel de «")}${etapa.name}${t("» no funil")}`}
+                      aria-label={`${t("Rôle de «")}${etapa.name}${t(" » dans le pipeline")}`}
                       data-testid={`papel-${etapa.id}`}
                     >
                       <SelectValue />
@@ -476,7 +476,7 @@ export function StagesSection({
                   }}
                 >
                   <Archive size={16} className="mr-1" aria-hidden />
-                  {t("Arquivar")}
+                  {t("Archiver")}
                 </Button>
               </div>
 
@@ -491,11 +491,11 @@ export function StagesSection({
 
               {passo && (
                 <p className="text-xs text-text-muted" data-testid={`passo-de-${etapa.id}`}>
-                  {t("O assistente usa esta etapa para «")}
+                  {t("L’assistant utilise cette étape pour «")}
                   {t(ROTULO_DO_PASSO[passo])}
-                  {t("». ")}
+                  {t(" ». ")}
                   <a className="underline underline-offset-2" href={`#${ancoraMapeamento}`}>
-                    {t("Mudar isso")}
+                    {t("Modifier cela")}
                   </a>
                 </p>
               )}
@@ -512,10 +512,10 @@ export function StagesSection({
                       data-testid={`confirmar-papel-sim-${etapa.id}`}
                       onClick={() => aplicar(etapa.id, patchDePapel(etapa, confirmandoAqui.papel))}
                     >
-                      {t("Marcar mesmo assim")}
+                      {t("Marquer quand même")}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={() => setConfirmacao(null)}>
-                      {t("Cancelar")}
+                      {t("Annuler")}
                     </Button>
                   </div>
                 </Card>
@@ -535,11 +535,11 @@ export function StagesSection({
                     </p>
                   ) : arquivandoAqui.negocios === null ? (
                     <p className="text-sm leading-relaxed">
-                      {t("Arquivar")} «{etapa.name}»?{" "}
+                      {t("Archiver")} «{etapa.name}»?{" "}
                       {t(
                         "A coluna sai do quadro e para de receber negócios novos. Nada é apagado — o histórico de quem passou por ela continua guardado —, mas",
                       )}{" "}
-                      <strong>{t("não dá para trazer a coluna de volta por aqui")}</strong>.
+                      <strong>{t("la colonne ne peut pas être restaurée ici")}</strong>.
                     </p>
                   ) : destinos.length === 0 ? (
                     // Sem destino possível não há pergunta a fazer — e mandar
@@ -551,9 +551,9 @@ export function StagesSection({
                       {arquivandoAqui.negocios}{" "}
                       {t(arquivandoAqui.negocios === 1 ? "negócio" : "negócios")}{" "}
                       {t(arquivandoAqui.negocios === 1 ? "está" : "estão")}{" "}
-                      {t("nesta etapa e não há outra coluna em aberto para recebê-")}{" "}
+                      {t("à cette étape et aucune autre colonne ouverte n’est disponible pour")}{" "}
                       {t(arquivandoAqui.negocios === 1 ? "lo" : "los")}.
-                      {t("Crie uma etapa antes de arquivar")} «{etapa.name}».
+                      {t("Créez une étape avant d’archiver")} «{etapa.name}».
                     </p>
                   ) : (
                     <>
@@ -575,10 +575,10 @@ export function StagesSection({
                           onValueChange={(v) => setArquivamento({ ...arquivandoAqui, destino: v })}
                         >
                           <SelectTrigger
-                            aria-label={`${t("Para onde vão os negócios de")} «${etapa.name}»`}
+                            aria-label={`${t("Où vont les opportunités de")} «${etapa.name}»`}
                             data-testid={`destino-${etapa.id}`}
                           >
-                            <SelectValue placeholder={t("Escolha a etapa")} />
+                            <SelectValue placeholder={t("Choisissez l’étape")} />
                           </SelectTrigger>
                           <SelectContent>
                             {destinos.map((d) => (
@@ -606,14 +606,14 @@ export function StagesSection({
                       className="text-sm leading-relaxed text-warning-fg"
                       data-testid={`arquivar-perde-passo-${etapa.id}`}
                     >
-                      {t("Esta etapa é a que o assistente usa para «")}
+                      {t("Cette étape est celle que l’assistant utilise pour «")}
                       {t(ROTULO_DO_PASSO[passo])}
-                      {t("». ")}
+                      {t(" ». ")}
                       {t(
                         "Arquivando, ele para de mover o card nesse passo até você escolher outra etapa em",
                       )}{" "}
                       <a className="underline underline-offset-2" href={`#${ancoraMapeamento}`}>
-                        {t("«Para onde o card vai em cada passo»")}
+                        {t("« Où va le card à chaque étape »")}
                       </a>
                       .
                     </p>
@@ -634,12 +634,12 @@ export function StagesSection({
                           onClick={() => pedirArquivamento(etapa, arquivandoAqui.destino)}
                         >
                           {arquivandoAqui.negocios === null
-                            ? t("Arquivar")
-                            : t("Mover os negócios e arquivar")}
+                            ? t("Archiver")
+                            : t("Déplacer les opportunités et archiver")}
                         </Button>
                       )}
                     <Button size="sm" variant="ghost" onClick={() => setArquivamento(null)}>
-                      {arquivandoAqui.erro ? t("Fechar") : t("Cancelar")}
+                      {arquivandoAqui.erro ? t("Fermer") : t("Annuler")}
                     </Button>
                   </div>
                 </Card>
@@ -657,7 +657,7 @@ export function StagesSection({
                       <>
                         {" "}
                         <a className="underline underline-offset-2" href={`#${ancoraMapeamento}`}>
-                          {t("Ir para o mapeamento do assistente")}
+                          {t("Accéder au mappage de l’assistant")}
                         </a>
                         .
                       </>
@@ -673,7 +673,7 @@ export function StagesSection({
       {nova === null ? (
         <Button variant="ghost" size="sm" data-testid="nova-etapa" onClick={() => setNova("")}>
           <Plus size={16} className="mr-1" aria-hidden />
-          {t("Acrescentar etapa ao fim")}
+          {t("Ajouter une étape à la fin")}
         </Button>
       ) : (
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -681,8 +681,8 @@ export function StagesSection({
             autoFocus
             value={nova}
             maxLength={80}
-            placeholder={t("Nome da nova coluna")}
-            aria-label={t("Nome da nova etapa")}
+            placeholder={t("Nom de la nouvelle colonne")}
+            aria-label={t("Nom de la nouvelle étape")}
             data-testid="nova-etapa-nome"
             onChange={(e) => setNova(e.target.value)}
             onKeyDown={(e) => {
@@ -697,10 +697,10 @@ export function StagesSection({
             disabled={ocupado || nova.trim().length === 0}
             onClick={criarEtapa}
           >
-            {t("Criar")}
+            {t("Créer")}
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setNova(null)}>
-            {t("Cancelar")}
+            {t("Annuler")}
           </Button>
         </div>
       )}
@@ -754,7 +754,7 @@ function NomeDaEtapa({
       value={rascunho}
       maxLength={80}
       disabled={desabilitado}
-      aria-label={`${t("Nome da etapa")} «${etapa.name}»`}
+      aria-label={`${t("Nom de l’étape")} «${etapa.name}»`}
       data-testid={`nome-${etapa.id}`}
       onChange={(e) => setRascunho(e.target.value)}
       onBlur={confirmar}

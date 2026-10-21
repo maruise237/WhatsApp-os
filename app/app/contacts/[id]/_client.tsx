@@ -43,7 +43,7 @@ export function ContactDetailClient({ contactId }: Props) {
     return (
       <div className="p-6">
         <Card className="p-6 text-center text-sm text-error-fg">
-          {t("Erro ao carregar contato.")}
+          {t("Erreur lors du chargement du contact.")}
         </Card>
       </div>
     );
@@ -67,10 +67,10 @@ export function ContactDetailClient({ contactId }: Props) {
         >
           <ShieldCheck size={18} weight="duotone" aria-hidden />
           <span>
-            {t("Contato anonimizado (LGPD)")}
+            {t("Contact anonymisé (protection des données)")}
             {contact.anonymized_at &&
               ` le ${format(new Date(contact.anonymized_at), "dd/MM/yyyy", { locale: fr })}`}
-            {` — ${t("edição bloqueada.")}`}
+            {` — ${t("modification bloquée.")}`}
           </span>
         </div>
       )}
@@ -92,14 +92,14 @@ export function ContactDetailClient({ contactId }: Props) {
                 {t}
               </Badge>
             ))}
-            {contact.is_blocked && <Badge variant="warning">{t("Bloqueado")}</Badge>}
-            {contact.is_anonymized && <Badge variant="destructive">{t("Anonimizado")}</Badge>}
+            {contact.is_blocked && <Badge variant="warning">{t("Bloqué")}</Badge>}
+            {contact.is_anonymized && <Badge variant="destructive">{t("Anonymisé")}</Badge>}
           </div>
         </div>
         {!contact.is_anonymized && (
           <Button variant="outline" onClick={() => setEditOpen(true)} className="shrink-0">
             <PencilSimple size={16} weight="bold" aria-hidden />
-            <span>{t("Editar")}</span>
+            <span>{t("Modifier")}</span>
           </Button>
         )}
       </header>
@@ -120,36 +120,36 @@ export function ContactDetailClient({ contactId }: Props) {
 
       <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="overview">{t("Visão geral")}</TabsTrigger>
-          <TabsTrigger value="timeline">{t("Timeline")}</TabsTrigger>
-          {isAdmin && <TabsTrigger value="lgpd">{t("LGPD")}</TabsTrigger>}
+          <TabsTrigger value="overview">{t("Vue d’ensemble")}</TabsTrigger>
+          <TabsTrigger value="timeline">{t("Chronologie")}</TabsTrigger>
+          {isAdmin && <TabsTrigger value="lgpd">{t("Protection des données")}</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="overview" className="mt-4">
           <Card className="p-4">
             <dl className="grid grid-cols-1 gap-4 text-sm md:grid-cols-2">
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Nome")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Nom")}</dt>
                 <dd className="mt-1">{contact.name ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Display name")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Nom d’affichage")}</dt>
                 <dd className="mt-1">{contact.display_name ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Email")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("E-mail")}</dt>
                 <dd className="mt-1">{contact.email ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Telefone")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Téléphone")}</dt>
                 <dd className="mt-1">{contact.phone_number ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Origem")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Origine")}</dt>
                 <dd className="mt-1">{contact.source}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Última atividade")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Dernière activité")}</dt>
                 <dd className="mt-1">
                   {contact.last_activity_at
                     ? format(new Date(contact.last_activity_at), "dd/MM/yyyy HH:mm", {
@@ -159,7 +159,7 @@ export function ContactDetailClient({ contactId }: Props) {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Criado em")}</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Créé le")}</dt>
                 <dd className="mt-1">
                   {format(new Date(contact.created_at), "dd/MM/yyyy", { locale: fr })}
                 </dd>
@@ -188,7 +188,7 @@ export function ContactDetailClient({ contactId }: Props) {
           <TabsContent value="lgpd" className="mt-4">
             <Card className="space-y-4 p-4">
               <div>
-                <h2 className="text-lg font-semibold">{t("Direito ao esquecimento (LGPD)")}</h2>
+                <h2 className="text-lg font-semibold">{t("Droit à l’effacement (données personnelles)")}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {t(
                     "A anonimização é irreversível. Use somente após confirmação formal do titular ou ordem judicial.",
@@ -197,14 +197,14 @@ export function ContactDetailClient({ contactId }: Props) {
               </div>
               {contact.is_anonymized ? (
                 <p className="text-sm text-muted-foreground">
-                  {t("Este contato já foi anonimizado")}
+                  {t("Ce contact a déjà été anonymisé")}
                   {contact.anonymized_at &&
                     ` le ${format(new Date(contact.anonymized_at), "dd/MM/yyyy HH:mm", { locale: fr })}`}
                   .
                 </p>
               ) : (
                 <Button variant="destructive" onClick={() => setAnonOpen(true)}>
-                  {t("Anonimizar contato")}
+                  {t("Anonymiser le contact")}
                 </Button>
               )}
             </Card>

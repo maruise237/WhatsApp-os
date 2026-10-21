@@ -21,7 +21,7 @@ export function DocumentCard({ messageId, mime, sizeBytes, storagePath, isOutbou
       href={mediaSrc(messageId)}
       target="_blank"
       rel="noreferrer"
-      aria-label={`${t("Baixar")} ${label} (${formatBytes(sizeBytes)})`}
+      aria-label={`${t("Télécharger")} ${label} (${formatBytes(sizeBytes)})`}
       className={cn(
         "flex w-60 items-center gap-3 rounded-lg p-2 transition-colors",
         isOutbound

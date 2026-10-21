@@ -37,10 +37,10 @@ export function WebhooksClient() {
   return (
     <Tabs defaultValue="sources" className="flex-1">
       <TabsList>
-        <TabsTrigger value="sources">{t("Receber dados")}</TabsTrigger>
-        <TabsTrigger value="capturas">{t("Leads recebidos")}</TabsTrigger>
-        <TabsTrigger value="rules">{t("Automações")}</TabsTrigger>
-        <TabsTrigger value="activity">{t("Atividade")}</TabsTrigger>
+        <TabsTrigger value="sources">{t("Recevoir des données")}</TabsTrigger>
+        <TabsTrigger value="capturas">{t("Leads reçus")}</TabsTrigger>
+        <TabsTrigger value="rules">{t("Automatisations")}</TabsTrigger>
+        <TabsTrigger value="activity">{t("Activité")}</TabsTrigger>
       </TabsList>
       <TabsContent value="sources">
         <SourcesTab />

@@ -86,7 +86,7 @@ function Conferencia({
         <p className="text-xs text-muted-foreground">{t(c.oQueProtege)}</p>
         {c.escolha === null ? (
           <p data-testid={`conferencia-${c.nome}-fixa`} className="text-xs text-muted-foreground">
-            <span className="font-medium text-foreground">{t("Isto não se desliga.")}</span>{" "}
+            <span className="font-medium text-foreground">{t("Cette vérification ne peut pas être désactivée.")}</span>{" "}
             {t(c.porQueNaoSeDesliga)}
           </p>
         ) : (
@@ -101,16 +101,16 @@ function Conferencia({
               />
               <span className="text-xs text-muted-foreground">
                 {estado === undefined
-                  ? t("carregando…")
+                  ? t("chargement…")
                   : estado.escolha === null
-                    ? `${estado.efetivo ? t("Ligada") : t("Desligada")} — ${t("vem da configuração do servidor")}`
+                    ? `${estado.efetivo ? t("Activée") : t("Désactivée")} — ${t("provient de la configuration du serveur")}`
                     : estado.escolha
-                      ? t("Ligada por você")
-                      : t("Desligada por você")}
+                      ? t("Activée par vous")
+                      : t("Désactivée par vous")}
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              {t("Custa")} {t(c.escolha.custo)}.
+              {t("Coût")} {t(c.escolha.custo)}.
             </p>
           </div>
         )}
@@ -137,10 +137,10 @@ export function PainelDeSeguranca() {
   return (
     <div className="space-y-4" data-testid="painel-de-seguranca">
       <Card className="space-y-2 p-4">
-        <h3 className="text-sm font-medium">{t("Antes de cada mensagem sair")}</h3>
+        <h3 className="text-sm font-medium">{t("Avant l’envoi de chaque message")}</h3>
         <p className="text-xs text-muted-foreground">
-          L’assistant rédige, et le système vérifie. {t("São")} {CONFERENCIAS_DE_SAIDA.length}{" "}
-          {t("verificações")},{" "}
+          L’assistant rédige, et le système vérifie. {t("Il y a")} {CONFERENCIAS_DE_SAIDA.length}{" "}
+          {t("vérifications")},{" "}
           {t(
             "nesta ordem — a primeira que barra interrompe as seguintes, e o assistente recebe de volta o motivo para reescrever.",
           )}
@@ -153,9 +153,9 @@ export function PainelDeSeguranca() {
       </Card>
 
       <Card className="space-y-2 p-4">
-        <h3 className="text-sm font-medium">{t("Antes de o assistente ler")}</h3>
+        <h3 className="text-sm font-medium">{t("Avant que l’assistant ne lise")}</h3>
         <p className="text-xs text-muted-foreground">
-          {t("Esta roda sobre a mensagem que chega, antes das outras — por isso aparece separada.")}
+          {t("Elle s’applique au message reçu, avant les autres — c’est pourquoi elle apparaît séparément.")}
         </p>
         <ul className="divide-y">
           <Conferencia

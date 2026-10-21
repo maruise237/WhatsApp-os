@@ -66,10 +66,10 @@ function ParaColar({ rotulo, valor }: { rotulo: string; valor: string }) {
           variant="outline"
           onClick={async () => {
             await copyToClipboard(valor);
-            toast.success(t("Copiado."));
+            toast.success(t("Copié."));
           }}
         >
-          {t("Copiar")}
+          {t("Copier")}
         </Button>
       </div>
     </div>
@@ -110,10 +110,10 @@ export function CanalParceiroClient() {
       // A chave sai da memória da tela assim que é gravada: ela não volta num
       // GET, e deixá-la no input só cria uma cópia a mais de um segredo.
       setApiKey("");
-      toast.success(t("Canal conectado."));
+      toast.success(t("Canal connecté."));
       await carregar();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : t("Não foi possível conectar."));
+      toast.error(e instanceof Error ? e.message : t("Impossible de connecter le canal."));
     } finally {
       setSalvando(false);
     }
@@ -128,7 +128,7 @@ export function CanalParceiroClient() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="text-sm font-semibold">
-              {t("Conectar por")} {rotulo}
+              {t("Connecter via")} {rotulo}
             </h3>
             <p className="text-xs text-muted-foreground">
               {t(
@@ -137,45 +137,45 @@ export function CanalParceiroClient() {
             </p>
           </div>
           {conectado ? (
-            <Badge variant="secondary">{t("Conectado")}</Badge>
+            <Badge variant="secondary">{t("Connecté")}</Badge>
           ) : (
-            <Badge variant="outline">{t("Não conectado")}</Badge>
+            <Badge variant="outline">{t("Non connecté")}</Badge>
           )}
         </div>
 
         {conectado && (
           <div className="bg-muted/40 rounded-md border border-border p-3 text-sm">
-            <p className="font-medium">{estado?.display_name ?? t("Número conectado")}</p>
+            <p className="font-medium">{estado?.display_name ?? t("Numéro connecté")}</p>
             <p className="text-xs text-muted-foreground">
-              {estado?.phone_number ?? t("sem número informado")} · {estado?.status ?? "—"}
+              {estado?.phone_number ?? t("aucun numéro renseigné")} · {estado?.status ?? "—"}
             </p>
           </div>
         )}
 
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="parceiro-conta">{t("Conta")}</Label>
+            <Label htmlFor="parceiro-conta">{t("Compte")}</Label>
             <Input
               id="parceiro-conta"
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
-              placeholder={t("id da conta conectada no provedor")}
+              placeholder={t("identifiant du compte connecté chez le fournisseur")}
               autoComplete="off"
             />
             <p className="text-xs text-muted-foreground">
-              {t("É o identificador do número no painel do provedor — não o da Meta.")}
+              {t("Il s’agit de l’identifiant du numéro dans le panneau du fournisseur, et non de celui de Meta.")}
             </p>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="parceiro-chave">{t("Chave de API")}</Label>
+            <Label htmlFor="parceiro-chave">{t("Clé API")}</Label>
             <Input
               id="parceiro-chave"
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               placeholder={
-                estado?.has_api_key ? t("gravada — preencha para trocar") : t("cole a chave")
+                estado?.has_api_key ? t("enregistrée — remplissez pour la remplacer") : t("collez la clé")
               }
               autoComplete="off"
             />
@@ -188,10 +188,10 @@ export function CanalParceiroClient() {
 
           <div>
             <Button onClick={conectar} disabled={salvando || !accountId || !apiKey}>
-              {salvando ? t("Verificando…") : conectado ? t("Reconectar") : t("Conectar")}
+              {salvando ? t("Vérification…") : conectado ? t("Reconnecter") : t("Connecter")}
             </Button>
             <p className="mt-1.5 text-xs text-muted-foreground">
-              {t("A credencial é testada contra o provedor antes de ser gravada.")}
+              {t("L’identifiant est testé auprès du fournisseur avant d’être enregistré.")}
             </p>
           </div>
         </div>
@@ -202,21 +202,21 @@ export function CanalParceiroClient() {
       {recemConectado && (
         <Card className="border-warning/40 flex flex-col gap-4 bg-warning-bg p-4">
           <div>
-            <h3 className="text-sm font-semibold">{t("Falta ligar a volta")}</h3>
+            <h3 className="text-sm font-semibold">{t("Il reste à connecter le retour")}</h3>
             <p className="text-xs text-muted-foreground">
-              {t("Cole os dois valores abaixo no webhook do seu provedor. Sem isso o CRM")}{" "}
-              <strong>{t("envia mas não recebe")}</strong>
+              {t("Collez les deux valeurs ci-dessous dans le webhook de votre fournisseur. Sans cela, le CRM")}{" "}
+              <strong>{t("envoie mais ne reçoit pas")}</strong>
               {": "}
-              {t("a resposta do cliente não chega, e nada na tela avisa. O segredo aparece")}{" "}
-              <strong>{t("uma única vez")}</strong> —{" "}
-              {t("se sair desta tela sem copiá-lo, reconecte para gerar outro.")}
+              {t("la réponse du client n’arrive pas et rien à l’écran ne l’indique. Le secret s’affiche")}{" "}
+              <strong>{t("une seule fois")}</strong> —{" "}
+              {t("une seule fois ; si vous quittez cet écran sans le copier, reconnectez-vous pour en générer un autre.")}
             </p>
           </div>
-          <ParaColar rotulo={t("URL do webhook")} valor={recemConectado.webhook_url} />
-          <ParaColar rotulo={t("Segredo (assinatura)")} valor={recemConectado.webhook_secret} />
+          <ParaColar rotulo={t("URL du webhook")} valor={recemConectado.webhook_url} />
+          <ParaColar rotulo={t("Secret (signature)")} valor={recemConectado.webhook_secret} />
           {recemConectado.quality_rating && (
             <p className="text-xs text-muted-foreground">
-              {t("Qualidade do número segundo a plataforma:")} {recemConectado.quality_rating}
+              {t("Qualité du numéro selon la plateforme :")} {recemConectado.quality_rating}
             </p>
           )}
         </Card>
@@ -232,7 +232,7 @@ export function CanalParceiroClient() {
               )}
             </p>
           </div>
-          <ParaColar rotulo={t("URL do webhook")} valor={estado.webhook_url} />
+          <ParaColar rotulo={t("URL du webhook")} valor={estado.webhook_url} />
         </Card>
       )}
     </div>

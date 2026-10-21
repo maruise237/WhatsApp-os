@@ -42,19 +42,19 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
       className="space-y-5 rounded-lg border bg-background p-6"
       action={(formData) => {
         if (!accepted) {
-          toast.error(t("Aceite os termos para continuar."));
+          toast.error(t("Acceptez les conditions pour continuer."));
           return;
         }
         startTransition(async () => {
           const res = await acceptWelcome(formData);
           if (res && !res.ok) {
-            toast.error(`${t("Falha")}: ${res.error}`);
+            toast.error(`${t("Échec")}: ${res.error}`);
           }
         });
       }}
     >
       <div className="space-y-2">
-        <Label htmlFor="display_name">{t("Como se chama o seu negócio?")}</Label>
+        <Label htmlFor="display_name">{t("Comment s’appelle votre entreprise ?")}</Label>
         <Input
           id="display_name"
           name="display_name"
@@ -79,14 +79,14 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
         uma instalação que nunca pergunta em que ramo entrou.
       */}
       <div className="space-y-2">
-        <Label htmlFor="o_que_faz">{t("O que vocês fazem?")}</Label>
+        <Label htmlFor="o_que_faz">{t("Que fait votre entreprise ?")}</Label>
         <Input
           id="o_que_faz"
           name="o_que_faz"
           value={oQueFaz}
           onChange={(e) => setOQueFaz(e.target.value)}
           maxLength={280}
-          placeholder={t("Ex.: clínica odontológica, ou venda de roupa fitness pelo WhatsApp")}
+          placeholder={t("Ex. : vente de pagnes, salon de coiffure")}
         />
         <p className="text-xs text-muted-foreground">
           {t(
@@ -96,7 +96,7 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="timezone">{t("Onde você atende")}</Label>
+        <Label htmlFor="timezone">{t("Où exercez-vous votre activité ?")}</Label>
         <Select value={timezone} onValueChange={setTimezone}>
           <SelectTrigger id="timezone">
             <SelectValue />
@@ -111,7 +111,7 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
         </Select>
         <input type="hidden" name="timezone" value={timezone} />
         <p className="text-xs text-muted-foreground">
-          {t("Decide o horário em que seu funcionário pode falar com clientes.")}
+          {t("Détermine les horaires pendant lesquels votre assistant peut échanger avec les clients.")}
         </p>
       </div>
 
@@ -124,13 +124,13 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
           required
         />
         <span>
-          {t("Li e aceito os")}{" "}
+          {t("J’ai lu et j’accepte les")}{" "}
           <a className="underline" href="/legal/terms" target="_blank" rel="noreferrer">
-            {t("Termos de Uso")}
+            {t("Conditions d’utilisation")}
           </a>{" "}
-          {t("e a")}{" "}
+          {t("et la")}{" "}
           <a className="underline" href="/legal/privacy" target="_blank" rel="noreferrer">
-            {t("Política de Privacidade")}
+            {t("Politique de confidentialité")}
           </a>
           .
         </span>
@@ -138,7 +138,7 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
 
       <div className="onb-acoes flex sm:justify-end">
         <Button type="submit" disabled={pending || !accepted} className="w-full sm:w-auto">
-          {pending ? t("Salvando...") : t("Continuar")}
+          {pending ? t("Enregistrement…") : t("Continuer")}
         </Button>
       </div>
     </form>

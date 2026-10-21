@@ -44,7 +44,7 @@ export function NewFlowDialog({ open, onOpenChange }: Props) {
         setErro(
           err instanceof Error && err.message
             ? err.message
-            : t("Não consegui criar o fluxo. Tente de novo."),
+            : t("Impossible de créer le flow. Réessayez."),
         );
       },
     });
@@ -63,19 +63,19 @@ export function NewFlowDialog({ open, onOpenChange }: Props) {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Novo fluxo de follow-up")}</DialogTitle>
+          <DialogTitle>{t("Nouveau flow de follow-up")}</DialogTitle>
           <DialogDescription>
-            {t("Nasce como rascunho. Você monta as etapas no editor visual em seguida.")}
+            {t("Le flow est créé comme brouillon. Vous pourrez ensuite construire ses étapes dans l’éditeur visuel.")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="flow-name">{t("Nome")}</Label>
+            <Label htmlFor="flow-name">{t("Nom")}</Label>
             <Input
               id="flow-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t("Ex: Recuperação de carrinho abandonado")}
+              placeholder={t("Ex. : Récupération d’un panier abandonné")}
               maxLength={80}
               required
               autoFocus
@@ -93,10 +93,10 @@ export function NewFlowDialog({ open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               disabled={create.isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={create.isPending || name.trim().length === 0}>
-              {create.isPending ? t("Criando…") : t("Criar fluxo")}
+              {create.isPending ? t("Création…") : t("Créer le flow")}
             </Button>
           </DialogFooter>
         </form>

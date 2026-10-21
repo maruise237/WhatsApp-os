@@ -90,7 +90,7 @@ export function GuardrailsEditor({ value, onChange, disabled }: Props) {
     <div className="space-y-4">
       <div className="flex items-end gap-2">
         <div className="flex-1 space-y-1">
-          <Label className="text-xs">{t("Tipo do novo guardrail")}</Label>
+          <Label className="text-xs">{t("Type du nouveau guardrail")}</Label>
           <Select
             value={pendingKind}
             onValueChange={(v) => setPendingKind(v as GuardrailKind)}
@@ -109,13 +109,13 @@ export function GuardrailsEditor({ value, onChange, disabled }: Props) {
           </Select>
         </div>
         <Button type="button" onClick={add} disabled={disabled}>
-          {t("Adicionar guardrail")}
+          {t("Ajouter un guardrail")}
         </Button>
       </div>
 
       {value.length === 0 ? (
         <p className="rounded-md border border-dashed p-6 text-center text-sm text-muted-foreground">
-          {t("Nenhum guardrail definido. O agent responde sem restrições adicionais.")}
+          {t("Aucun guardrail défini. L’agent répond sans restrictions supplémentaires.")}
         </p>
       ) : (
         <ul className="space-y-3">
@@ -138,13 +138,13 @@ export function GuardrailsEditor({ value, onChange, disabled }: Props) {
                     onClick={() => remove(idx)}
                     disabled={disabled}
                   >
-                    {t("Remover")}
+                    {t("Supprimer")}
                   </Button>
                 </div>
                 <GuardrailFields item={item} onPatch={(p) => update(idx, p)} disabled={disabled} />
                 {invalid && (
                   <p className="mt-2 text-xs text-destructive">
-                    {t("Campos inválidos. Ajuste antes de salvar.")}
+                    {t("Champs invalides. Corrigez-les avant l’enregistrement.")}
                   </p>
                 )}
               </li>
@@ -168,7 +168,7 @@ function GuardrailFields({
   const t = useT();
   const reasonField = (
     <div className="space-y-1">
-      <Label className="text-xs">{t("Motivo")}</Label>
+      <Label className="text-xs">{t("Motif")}</Label>
       <Input
         value={item.reason}
         onChange={(e) => onPatch({ reason: e.target.value } as Partial<GuardrailItem>)}
@@ -181,7 +181,7 @@ function GuardrailFields({
     return (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="space-y-1 md:col-span-2">
-          <Label className="text-xs">{t("Pattern (regex)")}</Label>
+          <Label className="text-xs">{t("Motif (regex)")}</Label>
           <Input
             value={item.pattern}
             onChange={(e) => onPatch({ pattern: e.target.value } as Partial<GuardrailItem>)}
@@ -190,7 +190,7 @@ function GuardrailFields({
           />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">{t("Flags")}</Label>
+          <Label className="text-xs">{t("Options")}</Label>
           <Input
             value={item.flags ?? "i"}
             onChange={(e) => onPatch({ flags: e.target.value } as Partial<GuardrailItem>)}
@@ -207,7 +207,7 @@ function GuardrailFields({
     return (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         <div className="space-y-1">
-          <Label className="text-xs">{t("Citações mínimas")}</Label>
+          <Label className="text-xs">{t("Citations minimales")}</Label>
           <Input
             type="number"
             min={1}
@@ -230,7 +230,7 @@ function GuardrailFields({
     return (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
         <div className="space-y-1">
-          <Label className="text-xs">{t("Hora início (0-23)")}</Label>
+          <Label className="text-xs">{t("Heure de début (0–23)")}</Label>
           <Input
             type="number"
             min={0}
@@ -243,7 +243,7 @@ function GuardrailFields({
           />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">{t("Hora fim (0-23)")}</Label>
+          <Label className="text-xs">{t("Heure de fin (0–23)")}</Label>
           <Input
             type="number"
             min={0}
@@ -256,7 +256,7 @@ function GuardrailFields({
           />
         </div>
         <div className="space-y-1 md:col-span-2">
-          <Label className="text-xs">{t("Timezone")}</Label>
+          <Label className="text-xs">{t("Fuseau horaire")}</Label>
           <Input
             value={item.timezone ?? FUSEAU_PAR_DEFAUT}
             onChange={(e) => onPatch({ timezone: e.target.value } as Partial<GuardrailItem>)}
@@ -272,7 +272,7 @@ function GuardrailFields({
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
       <div className="space-y-1">
-        <Label className="text-xs">{t("Campo")}</Label>
+        <Label className="text-xs">{t("Champ")}</Label>
         <Select
           value={item.field}
           onValueChange={(v) =>
@@ -299,7 +299,7 @@ function GuardrailFields({
           disabled={disabled}
         />
         <Label className="text-xs">
-          {t("Valor esperado")}: {item.expected ? "true" : "false"}
+          {t("Valeur attendue")}: {item.expected ? "true" : "false"}
         </Label>
       </div>
       <div className="md:col-span-3">{reasonField}</div>

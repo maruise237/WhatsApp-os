@@ -18,9 +18,9 @@ export function CaseDetail({ caseId }: { caseId: string | null }) {
   if (caseId === null) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-1 py-16 text-center">
-        <p className="text-sm font-medium">{t("Selecione um caso à esquerda")}</p>
+        <p className="text-sm font-medium">{t("Sélectionnez un cas à gauche")}</p>
         <p className="text-xs text-muted-foreground">
-          {t("Os detalhes e a resposta aparecem aqui.")}
+          {t("Les détails et la réponse apparaîtront ici.")}
         </p>
       </div>
     );
@@ -40,8 +40,8 @@ export function CaseDetail({ caseId }: { caseId: string | null }) {
     <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
       <header className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="text-base font-semibold">{data.contact_name ?? t("Contato sem nome")}</h2>
-          <p className="text-xs text-muted-foreground">{data.contact_phone ?? t("Sem telefone")}</p>
+          <h2 className="text-base font-semibold">{data.contact_name ?? t("Contact sans nom")}</h2>
+          <p className="text-xs text-muted-foreground">{data.contact_phone ?? t("Aucun téléphone")}</p>
         </div>
         <div className="flex items-center gap-2">
           {data.source === "guardrail_autofallback" ? (
@@ -51,7 +51,7 @@ export function CaseDetail({ caseId }: { caseId: string | null }) {
                 "Aberto automaticamente pelo sistema — a IA prometeu passar pra humano mas não abriu o caso, então o sistema abriu por ela.",
               )}
             >
-              {t("Aberto automaticamente")}
+              {t("Ouvert automatiquement")}
             </Badge>
           ) : null}
           <Badge variant={STATUS_BADGE_VARIANT[data.status]}>{t(STATUS_LABEL[data.status])}</Badge>
@@ -61,12 +61,12 @@ export function CaseDetail({ caseId }: { caseId: string | null }) {
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-lg border border-border p-3">
           <p className="text-xs font-medium text-muted-foreground">
-            {t("O que o cliente precisa")}
+            {t("Ce dont le client a besoin")}
           </p>
           <p className="mt-1 text-sm">{data.summary}</p>
         </div>
         <div className="rounded-lg border border-border p-3">
-          <p className="text-xs font-medium text-muted-foreground">{t("Por que a IA travou")}</p>
+          <p className="text-xs font-medium text-muted-foreground">{t("Pourquoi l’IA s’est interrompue")}</p>
           <p className="mt-1 text-sm">{data.blocker}</p>
         </div>
       </div>
@@ -74,7 +74,7 @@ export function CaseDetail({ caseId }: { caseId: string | null }) {
       <CaseReplyPanel caseId={data.id} status={data.status} />
 
       <div>
-        <h3 className="mb-2 text-sm font-semibold">{t("Linha do tempo")}</h3>
+        <h3 className="mb-2 text-sm font-semibold">{t("Chronologie")}</h3>
         <ul className="space-y-2">
           {data.events.map((ev) => (
             <li key={ev.id} className="text-xs text-muted-foreground">

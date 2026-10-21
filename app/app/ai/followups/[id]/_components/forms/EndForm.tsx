@@ -43,7 +43,7 @@ export function EndForm({
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label htmlFor="end-outcome">{t("Resultado")}</Label>
+        <Label htmlFor="end-outcome">{t("Résultat")}</Label>
         <Select
           value={outcome}
           onValueChange={(v) => {
@@ -65,7 +65,7 @@ export function EndForm({
         </Select>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="end-note">{t("Nota (opcional)")}</Label>
+        <Label htmlFor="end-note">{t("Note (facultatif)")}</Label>
         <Textarea
           id="end-note"
           maxLength={200}

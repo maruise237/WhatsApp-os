@@ -65,12 +65,12 @@ export function TemplatesClient() {
     const res = await sync.mutateAsync();
     const { inserted, updated, disabled } = res.data;
     toast.success(
-      `${t("Sincronizado:")} ${inserted} ${t("novo(s)")}, ${updated} ${t("atualizado(s)")}, ${disabled} ${t("desativado(s)")}.`,
+      `${t("Synchronisé :")} ${inserted} ${t("nouveau(x)")}, ${updated} ${t("mis à jour")}, ${disabled} ${t("désactivé(s)")}.`,
     );
   }
 
   if (isPending || templates === null) {
-    return <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Chargement…")}</p>;
   }
 
   // Estado vazio que ENSINA — distinguir "canal não conectado" de "conectado sem
@@ -78,7 +78,7 @@ export function TemplatesClient() {
   if (!waba) {
     return (
       <Card className="p-6">
-        <h2 className="font-medium">{t("Canal oficial não conectado")}</h2>
+        <h2 className="font-medium">{t("Canal officiel non connecté")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {t(
             "Os templates vivem na sua conta do WhatsApp Business (Meta) — esta tela é um espelho deles. Conecte o canal oficial em Conexões WhatsApp para começar a sincronizar.",
@@ -92,21 +92,21 @@ export function TemplatesClient() {
     <div className="flex flex-col gap-4" data-testid="templates-root">
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
-          {t("Espelho da conta")} <span className="font-mono text-xs">{waba}</span> ·{" "}
+          {t("Miroir du compte")} <span className="font-mono text-xs">{waba}</span> ·{" "}
           {templates.length} {t("template(s)")}
         </p>
         <Button onClick={sincronizar} disabled={sync.isPending} data-testid="btn-sync">
-          {sync.isPending ? t("Sincronizando…") : t("Sincronizar com a Meta")}
+          {sync.isPending ? t("Synchronisation…") : t("Synchroniser avec Meta")}
         </Button>
       </div>
 
       {templates.length === 0 ? (
         <Card className="p-6">
-          <h2 className="font-medium">{t("Nenhum template ainda")}</h2>
+          <h2 className="font-medium">{t("Aucun template pour l’instant")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {t("Crie templates no Gerenciador do WhatsApp e clique em")}{" "}
-            <strong>{t("Sincronizar com a Meta")}</strong>.{" "}
-            {t("Só templates aprovados podem ser enviados fora da janela de 24 horas.")}
+            {t("Créez des templates dans le Gestionnaire WhatsApp et cliquez sur")}{" "}
+            <strong>{t("Synchroniser avec Meta")}</strong>.{" "}
+            {t("Seuls les templates approuvés peuvent être envoyés en dehors de la fenêtre de 24 heures.")}
           </p>
         </Card>
       ) : (
@@ -130,14 +130,14 @@ export function TemplatesClient() {
                 ) : null}
                 <span className="ml-auto text-xs text-muted-foreground">
                   {template.slots.length === 0
-                    ? t("sem parâmetros")
-                    : `${template.slots.length} ${t("parâmetro(s)")}`}
+                    ? t("sans paramètres")
+                    : `${template.slots.length} ${t("paramètre(s)")}`}
                 </span>
               </div>
 
               {template.rejectedReason ? (
                 <p className="mt-2 text-sm text-destructive">
-                  {t("Recusado:")} {template.rejectedReason}
+                  {t("Refusé :")} {template.rejectedReason}
                 </p>
               ) : null}
 
@@ -156,7 +156,7 @@ export function TemplatesClient() {
                           {s.onde} · {s.expects}
                         </span>
                         <span className="text-sm text-muted-foreground">
-                          {t("arquivo de")} {s.expects} {t("enviado no disparo")}
+                          {t("fichier de")} {s.expects} {t("envoyé lors de l’envoi")}
                         </span>
                       </div>
                     ))}

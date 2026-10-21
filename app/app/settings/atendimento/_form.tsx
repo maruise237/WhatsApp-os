@@ -126,9 +126,9 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
       try {
         await apiClient.patch("/api/v1/settings/routing", form);
         setSalvo(form);
-        toast.success(t("Distribuição de atendimento salva."));
+        toast.success(t("Distribution des demandes enregistrée."));
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : t("Não consegui salvar."));
+        toast.error(err instanceof Error ? err.message : t("Impossible d’enregistrer."));
       }
     });
   }
@@ -141,9 +141,9 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
     >
       <Card className="space-y-4 p-4">
         <div>
-          <h2 className="text-sm font-semibold">{t("Quem recebe o cliente novo")}</h2>
+          <h2 className="text-sm font-semibold">{t("Qui reçoit le nouveau client")}</h2>
           <p className="text-xs text-muted-foreground">
-            {t("Vale para conversa que chega sem dono.")}
+            {t("S’applique aux conversations qui arrivent sans responsable.")}
           </p>
         </div>
         <div className="space-y-2">
@@ -164,7 +164,7 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
         {form.mode === "round_robin" ? (
           <div className="grid gap-4 border-t pt-4 sm:grid-cols-2">
             <div className="space-y-1">
-              <Label htmlFor="max_retries">{t("Tentativas antes de desistir")}</Label>
+              <Label htmlFor="max_retries">{t("Tentatives avant abandon")}</Label>
               <Input
                 id="max_retries"
                 type="number"
@@ -181,7 +181,7 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
               </p>
             </div>
             <div className="space-y-1">
-              <Label htmlFor="backoff_seconds">{t("Espera entre tentativas (segundos)")}</Label>
+              <Label htmlFor="backoff_seconds">{t("Attente entre les tentatives (secondes)")}</Label>
               <Input
                 id="backoff_seconds"
                 type="number"
@@ -200,7 +200,7 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
 
       <Card className="space-y-4 p-4">
         <div>
-          <h2 className="text-sm font-semibold">{t("O que cada atendente enxerga")}</h2>
+          <h2 className="text-sm font-semibold">{t("Ce que chaque agent voit")}</h2>
           <p className="text-xs text-muted-foreground">
             {t(
               "Restringe apenas quem tem o papel Atendente. Gerente e administrador continuam vendo a operação inteira.",
@@ -236,10 +236,10 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
 
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={isPending || !sujo}>
-          {isPending ? t("Salvando…") : t("Salvar")}
+          {isPending ? t("Enregistrement…") : t("Enregistrer")}
         </Button>
         {sujo ? (
-          <span className="text-xs text-muted-foreground">{t("Há mudanças não salvas.")}</span>
+          <span className="text-xs text-muted-foreground">{t("Des modifications ne sont pas enregistrées.")}</span>
         ) : null}
       </div>
     </form>

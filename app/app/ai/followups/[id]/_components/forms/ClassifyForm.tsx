@@ -87,7 +87,7 @@ export function ClassifyForm({
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label htmlFor="classify-classes">{t("Classes (separadas por vírgula)")}</Label>
+        <Label htmlFor="classify-classes">{t("Classes (séparées par des virgules)")}</Label>
         <Input
           id="classify-classes"
           value={classesText}
@@ -95,7 +95,7 @@ export function ClassifyForm({
             setClassesText(e.target.value);
             commit({ classesText: e.target.value, graceMin, target, hint });
           }}
-          placeholder={t("interessado, sem interesse")}
+          placeholder={t("intéressé, pas intéressé")}
         />
       </div>
       <div className="space-y-2">
@@ -118,7 +118,7 @@ export function ClassifyForm({
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="classify-target">{t("O que a IA vai ler")}</Label>
+        <Label htmlFor="classify-target">{t("Ce que l’IA va lire")}</Label>
         <Select
           value={target}
           onValueChange={(v) => {
@@ -140,7 +140,7 @@ export function ClassifyForm({
         </Select>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="classify-hint">{t("Instrução (opcional)")}</Label>
+        <Label htmlFor="classify-hint">{t("Instruction (facultatif)")}</Label>
         <Textarea
           id="classify-hint"
           maxLength={500}

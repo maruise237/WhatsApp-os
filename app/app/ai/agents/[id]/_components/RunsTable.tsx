@@ -61,16 +61,16 @@ export function RunsTable({ agentId, active }: Props) {
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {isLoading ? t("Carregando…") : `${rows.length} ${t("execuções recentes")}`}
+          {isLoading ? t("Chargement…") : `${rows.length} ${t("exécutions récentes")}`}
         </p>
         <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
-          {isFetching ? t("Atualizando…") : t("Atualizar")}
+          {isFetching ? t("Actualisation…") : t("Actualiser")}
         </Button>
       </div>
 
       {error ? (
         <p className="border-destructive/40 bg-destructive/10 rounded-md border p-3 text-sm text-destructive">
-          {t("Erro ao carregar execuções.")}
+          {t("Erreur lors du chargement des exécutions.")}
         </p>
       ) : null}
 
@@ -78,21 +78,21 @@ export function RunsTable({ agentId, active }: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[170px]">{t("Início")}</TableHead>
-              <TableHead>{t("Status")}</TableHead>
-              <TableHead>{t("Tipo")}</TableHead>
-              <TableHead>{t("Tokens (in/out)")}</TableHead>
-              <TableHead>{t("Custo")}</TableHead>
-              <TableHead>{t("Latência")}</TableHead>
-              <TableHead>{t("Steps")}</TableHead>
-              <TableHead className="text-right">{t("Ações")}</TableHead>
+              <TableHead className="w-[170px]">{t("Début")}</TableHead>
+              <TableHead>{t("Statut")}</TableHead>
+              <TableHead>{t("Type")}</TableHead>
+              <TableHead>{t("Tokens (entrée/sortie)")}</TableHead>
+              <TableHead>{t("Coût")}</TableHead>
+              <TableHead>{t("Latence")}</TableHead>
+              <TableHead>{t("Étapes")}</TableHead>
+              <TableHead className="text-right">{t("Actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {rows.length === 0 && !isLoading ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-muted-foreground">
-                  {t("Nenhuma execução ainda.")}
+                  {t("Aucune exécution pour le moment.")}
                 </TableCell>
               </TableRow>
             ) : null}
@@ -117,10 +117,10 @@ export function RunsTable({ agentId, active }: Props) {
                 <TableCell className="text-xs">
                   {r.is_dry_run ? (
                     <Badge variant="outline" className="text-xs">
-                      {t("teste")}
+                      {t("test")}
                     </Badge>
                   ) : (
-                    <span className="text-muted-foreground">{t("produção")}</span>
+                    <span className="text-muted-foreground">{t("production")}</span>
                   )}
                 </TableCell>
                 <TableCell className="font-mono text-xs">
@@ -139,7 +139,7 @@ export function RunsTable({ agentId, active }: Props) {
                       setOpen(true);
                     }}
                   >
-                    {t("Detalhes")}
+                    {t("Détails")}
                   </Button>
                 </TableCell>
               </TableRow>

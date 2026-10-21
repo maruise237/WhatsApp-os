@@ -37,7 +37,7 @@ export function SystemPromptEditor({ value, onChange, disabled }: Props) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_280px]">
       <div className="space-y-2">
-        <Label htmlFor="system_prompt">{t("System prompt")}</Label>
+        <Label htmlFor="system_prompt">{t("Prompt système")}</Label>
         <Textarea
           id="system_prompt"
           ref={ref}
@@ -46,7 +46,7 @@ export function SystemPromptEditor({ value, onChange, disabled }: Props) {
           disabled={disabled}
           rows={18}
           className="font-mono text-sm"
-          placeholder={t("Você é um assistente da loja. Responda com clareza e cordialidade…")}
+          placeholder={t("Vous êtes un assistant de boutique. Répondez avec clarté et courtoisie…")}
         />
         <p className="text-xs text-muted-foreground">
           {t(
@@ -72,7 +72,7 @@ export function SystemPromptEditor({ value, onChange, disabled }: Props) {
                   onClick={() => insertPlaceholder(p.token)}
                   disabled={disabled}
                 >
-                  {t("Inserir")}
+                  {t("Insérer")}
                 </Button>
               </div>
               <span className="text-[11px] text-muted-foreground">{t(p.description)}</span>

@@ -69,10 +69,10 @@ function StatusBadge({ attendant, now }: { attendant: Attendant; now: Date }) {
   const a = attendant.availability;
   const online = !!a?.is_available && !isHeartbeatStale(a.last_heartbeat_at, now);
   return online ? (
-    <Badge variant="default">{t("Online")}</Badge>
+    <Badge variant="default">{t("En ligne")}</Badge>
   ) : (
     <Badge variant="outline" className="text-muted-foreground">
-      {t("Offline")}
+      {t("Hors ligne")}
     </Badge>
   );
 }
@@ -101,7 +101,7 @@ function ScheduleDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {t("Horário de")} {attendant.name}
+            {t("Horaires de")} {attendant.name}
           </DialogTitle>
           <DialogDescription>
             {t(
@@ -112,7 +112,7 @@ function ScheduleDialog({
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="tz">{t("Fuso horário")}</Label>
+            <Label htmlFor="tz">{t("Fuseau horaire")}</Label>
             {/* Mesma razão do painel anti-banimento, e aqui o custo é maior:
                 este fuso é lido por `localMoment`, que LANÇA num fuso inexistente
                 — e o atendente com agenda quebrada nunca fica elegível, sem que
@@ -134,7 +134,7 @@ function ScheduleDialog({
           <div className="space-y-2">
             {windows.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                {t("Nenhuma janela — disponível 24/7.")}
+                {t("Aucune plage — disponible 24 h/24 et 7 j/7.")}
               </p>
             ) : null}
             {windows.map((w, i) => (
@@ -145,7 +145,7 @@ function ScheduleDialog({
                     setWindows((ws) => ws.map((x, j) => (j === i ? { ...x, dow: Number(v) } : x)))
                   }
                 >
-                  <SelectTrigger className="w-[90px]" aria-label={t("Dia da semana")}>
+                  <SelectTrigger className="w-[90px]" aria-label={t("Jour de la semaine")}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -159,7 +159,7 @@ function ScheduleDialog({
                 <Input
                   type="time"
                   value={w.start}
-                  aria-label={t("Início")}
+                  aria-label={t("Début")}
                   onChange={(e) =>
                     setWindows((ws) =>
                       ws.map((x, j) => (j === i ? { ...x, start: e.target.value } : x)),
@@ -170,7 +170,7 @@ function ScheduleDialog({
                 <Input
                   type="time"
                   value={w.end}
-                  aria-label={t("Fim")}
+                  aria-label={t("Fin")}
                   onChange={(e) =>
                     setWindows((ws) =>
                       ws.map((x, j) => (j === i ? { ...x, end: e.target.value } : x)),
@@ -180,7 +180,7 @@ function ScheduleDialog({
                 <Button
                   variant="ghost"
                   size="icon"
-                  aria-label={t("Remover janela")}
+                  aria-label={t("Supprimer la plage")}
                   onClick={() => setWindows((ws) => ws.filter((_, j) => j !== i))}
                 >
                   <Trash size={18} />
@@ -192,17 +192,17 @@ function ScheduleDialog({
               size="sm"
               onClick={() => setWindows((ws) => [...ws, { dow: 1, start: "08:00", end: "18:00" }])}
             >
-              <Plus size={16} className="mr-1" /> {t("Adicionar janela")}
+              <Plus size={16} className="mr-1" /> {t("Ajouter une plage")}
             </Button>
           </div>
         </div>
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            {t("Cancelar")}
+            {t("Annuler")}
           </Button>
           <Button disabled={isPending} onClick={() => onSave(windows, timezone)}>
-            {t("Salvar")}
+            {t("Enregistrer")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -236,7 +236,7 @@ function RoutingCard({ canManage }: { canManage: boolean }) {
       <Card>
         <CardContent className="pt-6">
           <p className="text-sm text-destructive">
-            {t("Erro ao carregar a configuração de roteamento.")}
+            {t("Impossible de charger la configuration du routage.")}
           </p>
         </CardContent>
       </Card>
@@ -254,21 +254,21 @@ function RoutingCard({ canManage }: { canManage: boolean }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("Modo de roteamento")}</CardTitle>
+        <CardTitle>{t("Mode de routage")}</CardTitle>
         <CardDescription>
-          {t("Como as conversas novas são distribuídas entre os atendentes da organização.")}
+          {t("Comment les nouvelles conversations sont distribuées entre les agents de l’organisation.")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-1.5">
-            <Label>{t("Modo")}</Label>
+            <Label>{t("Mode")}</Label>
             <Select
               value={current.mode}
               disabled={!canManage}
               onValueChange={(v) => set({ mode: v as RoutingConfig["mode"] })}
             >
-              <SelectTrigger aria-label={t("Modo de roteamento")}>
+              <SelectTrigger aria-label={t("Mode de routage")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -279,13 +279,13 @@ function RoutingCard({ canManage }: { canManage: boolean }) {
                 ))}
                 {/* 'load' (balanceamento por carga) é pós-MVP: a API rejeita — desabilitado. */}
                 <SelectItem value="load" disabled>
-                  {t("Balanceamento por carga (em breve)")}
+                  {t("Équilibrage par charge (bientôt disponible)")}
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="max_retries">{t("Tentativas máx.")}</Label>
+            <Label htmlFor="max_retries">{t("Tentatives max.")}</Label>
             <Input
               id="max_retries"
               type="number"
@@ -316,7 +316,7 @@ function RoutingCard({ canManage }: { canManage: boolean }) {
               onClick={() => update.mutate(current, { onSuccess: () => setDraft(null) })}
               className="w-full sm:w-auto"
             >
-              {t("Salvar")}
+              {t("Enregistrer")}
             </Button>
           </div>
         ) : null}
@@ -356,9 +356,9 @@ export function AttendantsClient({ canManage }: Props) {
 
       <div className="rounded-md border">
         <div className="border-b px-4 py-3">
-          <h2 className="text-sm font-semibold">{t("Atendentes")}</h2>
+          <h2 className="text-sm font-semibold">{t("Agents")}</h2>
           <p className="text-xs text-muted-foreground">
-            {t("Status, carga atual e capacidade de cada atendente da organização.")}
+            {t("Statut, charge actuelle et capacité de chaque agent de l’organisation.")}
           </p>
         </div>
 
@@ -369,7 +369,7 @@ export function AttendantsClient({ canManage }: Props) {
             ))}
           </div>
         ) : isError ? (
-          <p className="p-4 text-sm text-destructive">{t("Erro ao carregar atendentes.")}</p>
+          <p className="p-4 text-sm text-destructive">{t("Impossible de charger les agents.")}</p>
         ) : attendants.length === 0 ? (
           <p className="p-4 text-sm text-muted-foreground">
             {t(
@@ -380,12 +380,12 @@ export function AttendantsClient({ canManage }: Props) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("Atendente")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
-                <TableHead>{t("Carga")}</TableHead>
-                <TableHead>{t("Capacidade")}</TableHead>
-                <TableHead>{t("Horário")}</TableHead>
-                {canManage ? <TableHead className="w-[120px]">{t("Disponível")}</TableHead> : null}
+                <TableHead>{t("Agent")}</TableHead>
+                <TableHead>{t("Statut")}</TableHead>
+                <TableHead>{t("Charge")}</TableHead>
+                <TableHead>{t("Capacité")}</TableHead>
+                <TableHead>{t("Horaires")}</TableHead>
+                {canManage ? <TableHead className="w-[120px]">{t("Disponible")}</TableHead> : null}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -417,7 +417,7 @@ export function AttendantsClient({ canManage }: Props) {
                           max={1000}
                           defaultValue={capacity}
                           className="h-8 w-20"
-                          aria-label={`${t("Capacidade de")} ${a.name}`}
+                          aria-label={`${t("Capacité de")} ${a.name}`}
                           onBlur={(e) => {
                             const next = Number(e.target.value);
                             if (Number.isInteger(next) && next >= 1 && next !== capacity) {
@@ -437,7 +437,7 @@ export function AttendantsClient({ canManage }: Props) {
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7"
-                            aria-label={`${t("Editar horário de")} ${a.name}`}
+                            aria-label={`${t("Modifier les horaires de")} ${a.name}`}
                             onClick={() => setScheduleFor(a)}
                           >
                             <Clock size={16} />
@@ -449,7 +449,7 @@ export function AttendantsClient({ canManage }: Props) {
                       <TableCell>
                         <Switch
                           checked={!!a.availability?.is_available}
-                          aria-label={`${t("Disponibilidade de")} ${a.name}`}
+                          aria-label={`${t("Disponibilité de")} ${a.name}`}
                           onCheckedChange={(v) =>
                             patch.mutate({ userId: a.userId, patch: { is_available: v } })
                           }

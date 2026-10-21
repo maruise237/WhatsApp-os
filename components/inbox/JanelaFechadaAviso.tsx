@@ -115,10 +115,10 @@ export function JanelaFechadaAviso({
       {
         onSuccess: () => {
           setEscolhido("");
-          toast.success(t("Modelo enviado — a janela reabre quando o cliente responder."));
+          toast.success(t("Modèle envoyé : la fenêtre se rouvrira lorsque le client répondra."));
         },
         onError: (e: unknown) =>
-          toast.error(e instanceof Error ? e.message : t("Não consegui enviar o modelo.")),
+          toast.error(e instanceof Error ? e.message : t("Impossible d’envoyer le modèle.")),
       },
     );
   }
@@ -141,13 +141,13 @@ export function JanelaFechadaAviso({
             value={escolhido}
             onChange={(e) => setEscolhido(e.target.value)}
             disabled={send.isPending}
-            aria-label={t("Modelo aprovado")}
+            aria-label={t("Modèle approuvé")}
             className={cn(
               "h-9 min-w-[16rem] flex-1 rounded-md border border-input bg-background px-2 text-sm",
               "focus:outline-none focus:ring-1 focus:ring-ring",
             )}
           >
-            <option value="">{t("Escolha um modelo aprovado…")}</option>
+            <option value="">{t("Choisissez un modèle approuvé…")}</option>
             {aprovados.map((modelo) => (
               <option
                 key={`${modelo.name}|${modelo.language}`}
@@ -155,13 +155,13 @@ export function JanelaFechadaAviso({
               >
                 {modelo.name} ({modelo.language})
                 {(modelo.slots?.length ?? 0) > 0
-                  ? ` · ${modelo.slots!.length} ${t("parâmetro(s)")}`
+                  ? ` · ${modelo.slots!.length} ${t("paramètre(s)")}`
                   : ""}
               </option>
             ))}
           </select>
           <Button type="button" size="sm" onClick={enviar} disabled={!atual || send.isPending}>
-            {send.isPending ? t("Enviando…") : t("Enviar modelo")}
+            {send.isPending ? t("Envoi…") : t("Envoyer un modèle")}
           </Button>
         </div>
       )}

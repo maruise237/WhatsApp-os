@@ -73,8 +73,8 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
           const n = res.data.updated_count;
           toast.success(
             ownerId === null
-              ? `${n} ${t("lead(s)")} ${t("Sem responsável")}.`
-              : `${n} ${t("lead(s)")} ${t("atribuído(s)")}.`,
+              ? `${n} ${t("lead(s)")} ${t("Aucun responsable")}.`
+              : `${n} ${t("lead(s)")} ${t("attribué(s)")}.`,
           );
           onClear();
         },
@@ -118,17 +118,17 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
           quebrar em linhas em vez de vazar. */}
       <div className="sticky bottom-4 z-30 mx-auto flex w-fit max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 shadow-md">
         <span className="text-sm font-medium">
-          {selectedIds.length} {t("selecionado(s)")}
+          {selectedIds.length} {t("sélectionné(s)")}
         </span>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" disabled={bulk.isPending}>
-              {t("Mover para…")}
+              {t("Déplacer vers…")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>{t("Stage")}</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("Étape")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {stages.map((s) => (
               <DropdownMenuItem key={s.id} onClick={() => runMove(s.id)}>
@@ -141,13 +141,13 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" disabled={bulk.isPending}>
-              {t("Atribuir a…")}
+              {t("Attribuer à…")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={() => runAssign(user.id)}>{t("Eu")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => runAssign(user.id)}>{t("Moi")}</DropdownMenuItem>
             <DropdownMenuItem onClick={() => runAssign(null)}>
-              {t("Remover responsável")}
+              {t("Retirer le responsable")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -163,7 +163,7 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
               <Input
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                placeholder={t("nova tag")}
+                placeholder={t("nouveau tag")}
                 className="h-8 w-40"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -173,7 +173,7 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
                 }}
               />
               <Button size="sm" onClick={runTagAdd} disabled={!tagInput.trim()}>
-                {t("Adicionar")}
+                {t("Ajouter")}
               </Button>
             </div>
           </DropdownMenuContent>
@@ -185,11 +185,11 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
           onClick={() => setConfirmDelete(true)}
           disabled={bulk.isPending}
         >
-          {t("Excluir")}
+          {t("Supprimer")}
         </Button>
 
         <Button size="sm" variant="ghost" onClick={onClear}>
-          {t("Cancelar")}
+          {t("Annuler")}
         </Button>
       </div>
 
@@ -197,18 +197,18 @@ export function BulkActionBar({ selectedIds, stages, pipelineId, onClear }: Bulk
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {t("Excluir")} {selectedIds.length} {t("lead(s)")}&nbsp;?
+              {t("Supprimer")} {selectedIds.length} {t("lead(s)")}&nbsp;?
             </DialogTitle>
             <DialogDescription>
-              {t("Esta ação remove os leads selecionados. Não pode ser desfeita.")}
+              {t("Cette action supprime les leads sélectionnés. Elle est irréversible.")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setConfirmDelete(false)}>
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button variant="destructive" onClick={runDelete} disabled={bulk.isPending}>
-              {t("Excluir")}
+              {t("Supprimer")}
             </Button>
           </DialogFooter>
         </DialogContent>

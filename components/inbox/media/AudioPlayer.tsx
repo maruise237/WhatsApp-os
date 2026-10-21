@@ -53,7 +53,7 @@ export function AudioPlayer({ messageId, isOutbound }: Props) {
     };
   }, []);
 
-  if (failed) return <MediaUnavailable kind={t("Áudio")} className="h-12 w-60" />;
+  if (failed) return <MediaUnavailable kind={t("Audio")} className="h-12 w-60" />;
 
   // ponytail: OGG streams report Infinity at loadedmetadata; self-heal when refined
   const safeDuration = Number.isFinite(duration) && duration > 0 ? duration : 0;
@@ -86,7 +86,7 @@ export function AudioPlayer({ messageId, isOutbound }: Props) {
       <audio ref={audioRef} src={mediaSrc(messageId)} preload="metadata" />
       <button
         type="button"
-        aria-label={playing ? t("Pausar áudio") : t("Reproduzir áudio")}
+        aria-label={playing ? t("Mettre l’audio en pause") : t("Lire l’audio")}
         onClick={toggle}
         className={cn(
           "flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors",
@@ -104,7 +104,7 @@ export function AudioPlayer({ messageId, isOutbound }: Props) {
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <input
           type="range"
-          aria-label={t("Progresso do áudio")}
+          aria-label={t("Progression de l’audio")}
           aria-valuetext={`${fmt(current)} sur ${fmt(safeDuration)}`}
           min="0"
           max={String(safeDuration || 1)}
@@ -119,7 +119,7 @@ export function AudioPlayer({ messageId, isOutbound }: Props) {
       </div>
       <button
         type="button"
-        aria-label={`${t("Velocidade de reprodução")}: ${RATES[rateIdx]}x`}
+        aria-label={`${t("Vitesse de lecture")}: ${RATES[rateIdx]}x`}
         onClick={cycleRate}
         className={cn(
           "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold tabular-nums transition-colors",

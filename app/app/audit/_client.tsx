@@ -65,7 +65,7 @@ export function AuditClient() {
       <Card className="p-4">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">{t("Ação contém")}</label>
+            <label className="text-xs text-muted-foreground">{t("L’action contient")}</label>
             <Input
               value={actionInput}
               onChange={(e) => setActionInput(e.target.value)}
@@ -73,7 +73,7 @@ export function AuditClient() {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">{t("Tipo de recurso")}</label>
+            <label className="text-xs text-muted-foreground">{t("Type de ressource")}</label>
             <Input
               value={resourceType}
               onChange={(e) => setResourceType(e.target.value)}
@@ -81,16 +81,16 @@ export function AuditClient() {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">{t("De")}</label>
+            <label className="text-xs text-muted-foreground">{t("Du")}</label>
             <Input type="datetime-local" value={from} onChange={(e) => setFrom(e.target.value)} />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">{t("Até")}</label>
+            <label className="text-xs text-muted-foreground">{t("Au")}</label>
             <Input type="datetime-local" value={to} onChange={(e) => setTo(e.target.value)} />
           </div>
           <div className="flex items-end">
             <Button variant="outline" className="w-full" onClick={handleExport}>
-              {t("Exportar CSV")}
+              {t("Exporter en CSV")}
             </Button>
           </div>
         </div>
@@ -100,12 +100,12 @@ export function AuditClient() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("Quando")}</TableHead>
-              <TableHead>{t("Ator")}</TableHead>
-              <TableHead>{t("Ação")}</TableHead>
-              <TableHead>{t("Recurso")}</TableHead>
-              <TableHead>{t("Request ID")}</TableHead>
-              <TableHead>{t("Metadata")}</TableHead>
+              <TableHead>{t("Quand")}</TableHead>
+              <TableHead>{t("Auteur")}</TableHead>
+              <TableHead>{t("Action")}</TableHead>
+              <TableHead>{t("Ressource")}</TableHead>
+              <TableHead>{t("ID de requête")}</TableHead>
+              <TableHead>{t("Métadonnées")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -122,7 +122,7 @@ export function AuditClient() {
             ) : rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center text-sm text-muted-foreground">
-                  {t("Nenhum log no período.")}
+                  {t("Aucun journal sur cette période.")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -165,7 +165,7 @@ export function AuditClient() {
             onClick={() => q.fetchNextPage()}
             disabled={q.isFetchingNextPage}
           >
-            {q.isFetchingNextPage ? t("Carregando…") : t("Carregar mais")}
+            {q.isFetchingNextPage ? t("Chargement…") : t("Charger davantage")}
           </Button>
         </div>
       )}

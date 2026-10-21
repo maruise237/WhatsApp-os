@@ -47,42 +47,42 @@ export function PublishConfirmDialog({
       <AlertDialogContent className="max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t("Publicar v{version}?").replace("{version}", String(draft.version_number))}
+            {t("Publier la v{version} ?").replace("{version}", String(draft.version_number))}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {t(
               "Esta versão se tornará a ativa no atendimento. A versão atual ({current}) será marcada como superseded.",
-            ).replace("{current}", published ? `v${published.version_number}` : t("nenhuma"))}
+            ).replace("{current}", published ? `v${published.version_number}` : t("aucune"))}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="border-border/60 space-y-2 rounded-md border p-3 text-xs">
           {toolsDiff.added.length > 0 ? (
             <p>
-              <strong>{t("Tools adicionadas:")}</strong> {toolsDiff.added.join(", ")}
+              <strong>{t("Capacités ajoutées :")}</strong> {toolsDiff.added.join(", ")}
             </p>
           ) : null}
           {toolsDiff.removed.length > 0 ? (
             <p>
-              <strong>{t("Tools removidas:")}</strong> {toolsDiff.removed.join(", ")}
+              <strong>{t("Capacités supprimées :")}</strong> {toolsDiff.removed.join(", ")}
             </p>
           ) : null}
           <p>
-            <strong>{t("Prompt:")}</strong>{" "}
+            <strong>{t("Prompt :")}</strong>{" "}
             {promptDeltaChars > 0
-              ? t("+{count} chars").replace("{count}", String(promptDeltaChars))
+              ? t("+{count} caractères").replace("{count}", String(promptDeltaChars))
               : promptDeltaChars < 0
-                ? t("{count} chars").replace("{count}", String(promptDeltaChars))
-                : t("sem alteração")}
+                ? t("{count} caractères").replace("{count}", String(promptDeltaChars))
+                : t("aucun changement")}
           </p>
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>{t("Cancelar")}</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>{t("Annuler")}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={isPending}>
             {isPending
-              ? t("Publicando…")
-              : t("Publicar v{version}").replace("{version}", String(draft.version_number))}
+              ? t("Publication…")
+              : t("Publier la v{version}").replace("{version}", String(draft.version_number))}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

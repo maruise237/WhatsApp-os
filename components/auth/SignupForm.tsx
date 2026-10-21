@@ -71,11 +71,11 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
         return;
       }
       if (res.error === "rate_limited") {
-        setServerError(t("Muitas tentativas. Aguarde alguns minutos."));
+        setServerError(t("Trop de tentatives. Patientez quelques minutes."));
       } else if (res.error === "validation_error") {
-        setServerError(t("Dados inválidos. Confira os campos."));
+        setServerError(t("Données invalides. Vérifiez les champs."));
       } else {
-        setServerError(t("Não foi possível criar a conta. Tente novamente."));
+        setServerError(t("Impossible de créer le compte. Réessayez."));
       }
     });
   };
@@ -83,10 +83,10 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
   if (sentTo) {
     return (
       <div className="bg-muted/40 space-y-2 rounded-md border px-4 py-6 text-center" role="status">
-        <p className="text-sm font-medium">{t("Confirme seu e-mail")}</p>
+        <p className="text-sm font-medium">{t("Confirmez votre e-mail")}</p>
         <p className="text-sm text-muted-foreground">
-          {t("Enviamos um link de confirmação para")} <strong>{sentTo}</strong>.{" "}
-          {t("Abra o e-mail e clique no link para ativar sua conta.")}
+          {t("Nous avons envoyé un lien de confirmation à")} <strong>{sentTo}</strong>.{" "}
+          {t("Ouvrez l’e-mail et cliquez sur le lien pour activer votre compte.")}
         </p>
       </div>
     );
@@ -96,7 +96,7 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
     <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       {!convite && (
         <div className="space-y-1.5">
-          <Label htmlFor="org_name">{t("Nome da empresa")}</Label>
+          <Label htmlFor="org_name">{t("Nom de l’entreprise")}</Label>
           <Input
             id="org_name"
             type="text"
@@ -111,7 +111,7 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
         </div>
       )}
       <div className="space-y-1.5">
-        <Label htmlFor="email">{t("Email")}</Label>
+        <Label htmlFor="email">{t("E-mail")}</Label>
         <Input
           id="email"
           type="email"
@@ -127,7 +127,7 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="password">{t("Senha")}</Label>
+        <Label htmlFor="password">{t("Mot de passe")}</Label>
         <Input
           id="password"
           type="password"
@@ -140,7 +140,7 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="password_confirm">{t("Confirmar senha")}</Label>
+        <Label htmlFor="password_confirm">{t("Confirmer le mot de passe")}</Label>
         <Input
           id="password_confirm"
           type="password"
@@ -161,7 +161,7 @@ export function SignupForm({ convite }: { convite?: ConviteDoSignup }) {
         </div>
       )}
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? t("Criando conta...") : t("Criar conta")}
+        {isPending ? t("Création du compte...") : t("Créer un compte")}
       </Button>
     </form>
   );

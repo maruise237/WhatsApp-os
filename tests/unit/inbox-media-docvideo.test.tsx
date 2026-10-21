@@ -47,10 +47,10 @@ describe("VideoMedia", () => {
 
     const aspectVideoBox = container.querySelector(".aspect-video");
     expect(aspectVideoBox).not.toBeNull();
-    expect(screen.getByText("Mídia indisponível")).toBeInTheDocument();
+    expect(screen.getByText("Média indisponible")).toBeInTheDocument();
 
     // Verifica que o fallback está dentro do container aspect-video
-    expect(aspectVideoBox?.contains(screen.getByText("Mídia indisponível"))).toBe(true);
+    expect(aspectVideoBox?.contains(screen.getByText("Média indisponible"))).toBe(true);
   });
 });
 
@@ -67,7 +67,7 @@ describe("DocumentCard", () => {
     );
     expect(screen.getByText("PDF")).toBeInTheDocument();
     expect(screen.getByText(/3,0 MB/)).toBeInTheDocument();
-    const link = screen.getByRole("link", { name: /baixar pdf \(3,0 MB\)/i });
+    const link = screen.getByRole("link", { name: /télécharger .*pdf.*\(3,0 MB\)/i });
     expect(link).toHaveAttribute("href", "/api/v1/messages/m5/media");
     expect(link).toHaveAttribute("target", "_blank");
   });

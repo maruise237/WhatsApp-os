@@ -207,13 +207,13 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
     if (!derivada || !degraus) return [];
     return [
       {
-        rotulo: t("Sua cor"),
+        rotulo: t("Votre couleur"),
         hex: derivada.marca,
         indice: degraus.suaCor,
-        nota: degraus.suaCor === null ? t("fora da escala — fica só no logo") : undefined,
+        nota: degraus.suaCor === null ? t("hors échelle — utilisée uniquement sur le logo") : undefined,
       },
-      { rotulo: t("Botões no modo claro"), hex: derivada.claro.accent, indice: degraus.claro },
-      { rotulo: t("Botões no modo escuro"), hex: derivada.escuro.accent, indice: degraus.escuro },
+      { rotulo: t("Boutons en mode clair"), hex: derivada.claro.accent, indice: degraus.claro },
+      { rotulo: t("Boutons en mode sombre"), hex: derivada.escuro.accent, indice: degraus.escuro },
     ];
   }, [derivada, degraus]);
 
@@ -228,14 +228,14 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
       accent_hex: hexLimpo.length > 0 ? hexLimpo : null,
     });
     if (!lido.success) {
-      toast.error(t("Confira os campos: algum valor não está no formato esperado."));
+      toast.error(t("Vérifiez les champs : une valeur n’est pas dans le format attendu."));
       return;
     }
 
     startTransition(async () => {
       const resultado = await updateMarcaDaOrganizacao(lido.data);
       if (resultado.ok) {
-        toast.success(t("Marca salva."));
+        toast.success(t("Marque enregistrée."));
         // O bloco de cor e o nome no menu são emitidos pelo LAYOUT de `/app`, e a
         // action já revalidou `/app` como layout. O refresh é o que traz esse
         // render novo para esta aba — sem ele a pessoa salvaria, veria "ok" e
@@ -245,7 +245,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
       }
       const mensagemConhecida = ERRO_EM_PORTUGUES[resultado.error];
       toast.error(
-        mensagemConhecida ? t(mensagemConhecida) : t("Não consegui salvar a marca agora."),
+        mensagemConhecida ? t(mensagemConhecida) : t("Impossible d’enregistrer la marque pour le moment."),
       );
       // Recusa que esta tela não sabe nomear não pode virar só um toast genérico:
       // o texto cru é o que torna o problema diagnosticável para quem tem acesso
@@ -258,11 +258,11 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
     <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
       <Card className="space-y-4 p-6">
         <h2 className="text-base font-semibold tracking-tight text-text">
-          {t("Como sua empresa aparece")}
+          {t("Apparence de votre entreprise")}
         </h2>
 
         <div className="space-y-2">
-          <Label htmlFor="org_app_name">{t("Nome da sua empresa")}</Label>
+          <Label htmlFor="org_app_name">{t("Nom de votre entreprise")}</Label>
           <Input
             id="org_app_name"
             value={nome}
@@ -281,7 +281,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="org_accent_hex">{t("Cor da sua marca")}</Label>
+          <Label htmlFor="org_accent_hex">{t("Couleur de votre marque")}</Label>
           <div className="flex items-center gap-3">
             {/* Atalho, nunca o controle principal: o seletor do navegador escolhe
                 UM pixel e não mostra o que o sistema faz com ele. Quem ensina é a
@@ -294,7 +294,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
                   : COR_NEUTRA_DO_SELETOR,
               }}
             >
-              <span className="sr-only">{t("Escolher a cor visualmente")}</span>
+              <span className="sr-only">{t("Choisir la couleur visuellement")}</span>
               <input
                 type="color"
                 value={ehHexValido(hexLimpo) ? normalizarHex(hexLimpo) : COR_NEUTRA_DO_SELETOR}
@@ -315,12 +315,12 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
             />
             {hexLimpo.length > 0 && !hexValido ? (
               <span className="text-sm text-error-fg">
-                {t("Use um código de cor como #7a5cd6.")}
+                {t("Utilisez un code couleur comme #7a5cd6.")}
               </span>
             ) : null}
           </div>
           <p id="ajuda-da-cor-da-organizacao" className="text-xs text-text-muted">
-            {t("Deixe em branco para voltar à cor que o sistema já usa.")}
+            {t("Laissez vide pour revenir à la couleur déjà utilisée par le système.")}
           </p>
         </div>
 
@@ -357,7 +357,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
             url: resolvida.origens.logoUrl === "organizacao" ? resolvida.logoUrl : null,
           }}
           logoHerdado={semAOrganizacao.logoUrl}
-          origemDoHerdado={t("de quem instalou o sistema")}
+          origemDoHerdado={t("de la personne qui a installé le système")}
           nomeEmVigor={resolvida.name}
         />
       </Card>
@@ -374,16 +374,16 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
       <Card className="space-y-3 p-6">
         <div>
           <h2 className="text-base font-semibold tracking-tight text-text">
-            {t("De onde vem cada coisa")}
+            {t("Origine de chaque élément")}
           </h2>
           <p className="text-sm text-text-muted">
-            {t("Considerando o que está nos campos acima.")}
+            {t("D’après les valeurs des champs ci-dessus.")}
           </p>
         </div>
 
         <div>
-          <LinhaDeOrigem campo={t("Nome")} valor={t(origemEmPortugues(resolvida.origens.nome))} />
-          <LinhaDeOrigem campo={t("Cor")} valor={t(origemEmPortugues(resolvida.origens.cor))} />
+          <LinhaDeOrigem campo={t("Nom")} valor={t(origemEmPortugues(resolvida.origens.nome))} />
+          <LinhaDeOrigem campo={t("Couleur")} valor={t(origemEmPortugues(resolvida.origens.cor))} />
           <LinhaDeOrigem
             campo={t("Logo")}
             valor={t(origemEmPortugues(resolvida.origens.logoUrl))}
@@ -416,7 +416,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
       */}
       <Card className="space-y-2 p-6">
         <h2 className="text-base font-semibold tracking-tight text-text">
-          {t("O que isto ainda não muda")}
+          {t("Ce que cela ne change pas encore")}
         </h2>
         <ul className="list-disc space-y-1 pl-5 text-sm text-text-muted">
           <li>
@@ -471,7 +471,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
           <span className="font-mono text-xs text-text-muted">{erroTecnico}</span>
         ) : null}
         <Button type="submit" disabled={isPending || !hexValido}>
-          {isPending ? t("Salvando…") : t("Salvar")}
+          {isPending ? t("Enregistrement…") : t("Enregistrer")}
         </Button>
       </div>
     </form>

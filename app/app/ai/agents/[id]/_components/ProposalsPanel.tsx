@@ -47,12 +47,12 @@ export function ProposalsPanel({
       await apply.mutateAsync(p.id);
       toast.success(
         p.type === "org_memory_entry"
-          ? t("Proposta aplicada como memória da organização.")
-          : t("Proposta aplicada como versão nova do agente."),
+          ? t("Proposition appliquée comme mémoire de l’organisation.")
+          : t("Proposition appliquée comme nouvelle version de l’agent."),
       );
     } catch (err) {
       toast.error(
-        err instanceof ApiError ? err.message : t("Não foi possível aplicar a proposta."),
+        err instanceof ApiError ? err.message : t("Impossible d’appliquer la proposition."),
       );
     }
   };
@@ -71,7 +71,7 @@ export function ProposalsPanel({
     return (
       <div className="flex flex-col items-center gap-2 rounded-lg border border-border py-16 text-center">
         <Brain size={28} className="text-muted-foreground/60" aria-hidden />
-        <p className="text-sm font-medium">{t("Nenhuma proposta ainda")}</p>
+        <p className="text-sm font-medium">{t("Aucune proposition pour le moment")}</p>
         <p className="max-w-sm text-xs text-muted-foreground">
           {t(
             "O assistente aprende com as conversas reais e propõe melhorias aqui. Você decide o que entra — nada é aplicado sozinho.",
@@ -91,11 +91,11 @@ export function ProposalsPanel({
         return (
           <li key={p.id} className="flex items-start gap-3 px-4 py-3" data-testid="proposal-item">
             <Badge variant={p.applied_at ? "success" : "info"} className="mt-0.5 shrink-0">
-              {p.applied_at ? t("aplicada") : t("pendente")}
+              {p.applied_at ? t("appliquée") : t("en attente")}
             </Badge>
             <div className="min-w-0 flex-1">
               <p className="text-xs text-muted-foreground">
-                {t(TYPE_LABEL[p.type])} · {t("proposta")} {when}
+                {t(TYPE_LABEL[p.type])} · {t("proposition")} {when}
               </p>
               <p className="mt-1 whitespace-pre-wrap text-sm">{p.content}</p>
             </div>
@@ -107,8 +107,8 @@ export function ProposalsPanel({
                 onClick={() => void handleApply(p)}
               >
                 {p.type === "org_memory_entry"
-                  ? t("Aplicar como memória da org")
-                  : t("Aplicar como versão nova")}
+                  ? t("Appliquer comme mémoire de l’organisation")
+                  : t("Appliquer comme nouvelle version")}
               </Button>
             ) : null}
           </li>

@@ -19,7 +19,7 @@ export function CitationButton({ citations, messageId, className }: Props) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label={t("Mostrar citações da resposta")}
+        aria-label={t("Afficher les citations de la réponse")}
         className={
           "inline-flex items-center justify-center rounded-full p-1 opacity-70 transition hover:opacity-100 " +
           (className ?? "")

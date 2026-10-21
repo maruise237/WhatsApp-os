@@ -97,13 +97,13 @@ export function TemplatesParceiroClient() {
       // Invalida também o seletor do inbox: sem isto o operador sincroniza aqui,
       // volta à conversa e o seletor segue dizendo que não há nenhuma.
       qc.invalidateQueries({ queryKey: ["channel-templates"] });
-      toast.success(`${r.data.sincronizadas} ${t("de")} ${r.data.total} ${t("sincronizada(s)")}.`);
+      toast.success(`${r.data.sincronizadas} ${t("sur")} ${r.data.total} ${t("synchronisée(s)")}.`);
       setCriando(false);
       setNome("");
       setCorpo("");
     },
     onError: (e: unknown) =>
-      toast.error(e instanceof Error ? e.message : t("Não consegui falar com a plataforma.")),
+      toast.error(e instanceof Error ? e.message : t("Impossible de joindre la plateforme.")),
   });
 
   const templates = lista.data?.data.templates ?? [];
@@ -124,10 +124,10 @@ export function TemplatesParceiroClient() {
             onClick={() => acao.mutate({ acao: "sincronizar" })}
             disabled={acao.isPending}
           >
-            {acao.isPending ? t("Sincronizando…") : t("Sincronizar")}
+            {acao.isPending ? t("Synchronisation…") : t("Synchroniser")}
           </Button>
           <Button type="button" size="sm" onClick={() => setCriando((v) => !v)}>
-            {criando ? t("Cancelar") : t("Criar modelo")}
+            {criando ? t("Annuler") : t("Créer un modèle")}
           </Button>
         </div>
       </div>
@@ -140,7 +140,7 @@ export function TemplatesParceiroClient() {
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 placeholder="nome_do_modelo"
-                aria-label={t("Nome do modelo")}
+                aria-label={t("Nom du modèle")}
                 className="h-9 flex-1 rounded-md border border-input bg-background px-2 text-sm"
               />
               {/* LISTA, e não campo livre. O contrato descreve o formato e não
@@ -150,7 +150,7 @@ export function TemplatesParceiroClient() {
               <select
                 value={idioma}
                 onChange={(e) => setIdioma(e.target.value)}
-                aria-label={t("Idioma")}
+                aria-label={t("Langue")}
                 className="h-9 w-56 rounded-md border border-input bg-background px-2 text-sm"
               >
                 {IDIOMAS_DA_DEFINICAO.map((i) => (
@@ -168,16 +168,16 @@ export function TemplatesParceiroClient() {
             <select
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
-              aria-label={t("Categoria")}
+              aria-label={t("Catégorie")}
               className="h-9 rounded-md border border-input bg-background px-2 text-sm"
             >
               <option value="UTILITY">
-                {t("Utilidade — aviso de pedido, agendamento, cobrança")}
+                {t("Utilité — avis de commande, rendez-vous, facturation")}
               </option>
               <option value="MARKETING">
-                {t("Marketing — promoção, novidade, reengajamento")}
+                {t("Marketing — promotion, nouveauté, réengagement")}
               </option>
-              <option value="AUTHENTICATION">{t("Autenticação — código de verificação")}</option>
+              <option value="AUTHENTICATION">{t("Authentification — code de vérification")}</option>
             </select>
 
             {/* CABEÇALHO opcional: texto OU mídia, nunca os dois — a plataforma
@@ -189,8 +189,8 @@ export function TemplatesParceiroClient() {
                   setCabecalho(e.target.value);
                   if (e.target.value) setMidiaUrl("");
                 }}
-                placeholder={t("Cabeçalho de texto (opcional)")}
-                aria-label={t("Cabeçalho de texto")}
+                placeholder={t("En-tête texte (facultatif)")}
+                aria-label={t("En-tête texte")}
                 disabled={!!midiaUrl}
                 className="h-9 flex-1 rounded-md border border-input bg-background px-2 text-sm disabled:opacity-50"
               />
@@ -205,15 +205,15 @@ export function TemplatesParceiroClient() {
                 )}
               >
                 {subindo
-                  ? t("Subindo…")
+                  ? t("Envoi…")
                   : midiaUrl
-                    ? t("Trocar imagem")
-                    : t("Subir imagem (JPG/PNG)")}
+                    ? t("Remplacer l’image")
+                    : t("Envoyer une image (JPG/PNG)")}
                 <input
                   type="file"
                   accept="image/jpeg,image/png"
                   className="hidden"
-                  aria-label={t("Imagem do cabeçalho")}
+                  aria-label={t("Image de l’en-tête")}
                   onChange={async (e) => {
                     const f = e.target.files?.[0];
                     if (!f) return;
@@ -232,7 +232,7 @@ export function TemplatesParceiroClient() {
                       if (!r.ok || !j.data?.url) {
                         // A mensagem da rota CHEGA ao operador: é ela que
                         // distingue "formato" de "tamanho" de "erro nosso".
-                        toast.error(j.error?.message ?? t("Não consegui subir a imagem."));
+                        toast.error(j.error?.message ?? t("Impossible d’envoyer l’image."));
                         return;
                       }
                       setMidiaUrl(j.data.url);
@@ -250,8 +250,8 @@ export function TemplatesParceiroClient() {
               <textarea
                 value={corpo}
                 onChange={(e) => setCorpo(e.target.value.slice(0, LIMITE_CORPO))}
-                placeholder={t("Texto da mensagem. Use {{1}}, {{2}} para os valores que mudam.")}
-                aria-label={t("Conteúdo")}
+                placeholder={t("Texte du message. Utilisez {{1}}, {{2}} pour les valeurs variables.")}
+                aria-label={t("Contenu")}
                 className="min-h-20 rounded-md border border-input bg-background px-2 py-1.5 text-sm"
               />
               {/* O contador existe porque passar do limite é RECUSA, e a recusa
@@ -265,8 +265,8 @@ export function TemplatesParceiroClient() {
               <input
                 value={rodape}
                 onChange={(e) => setRodape(e.target.value.slice(0, LIMITE_RODAPE))}
-                placeholder={t("Rodapé (opcional) — texto pequeno no fim da mensagem")}
-                aria-label={t("Rodapé")}
+                placeholder={t("Pied de page (facultatif) — petit texte à la fin du message")}
+                aria-label={t("Pied de page")}
                 className="h-9 rounded-md border border-input bg-background px-2 text-sm"
               />
               <span className="self-end text-[10px] text-muted-foreground">
@@ -288,12 +288,12 @@ export function TemplatesParceiroClient() {
                       p[i] = { ...b, tipo: e.target.value as BotaoDaDefinicao["tipo"] };
                       setBotoes(p);
                     }}
-                    aria-label={`${t("Tipo do botão")} ${i + 1}`}
+                    aria-label={`${t("Type du bouton")} ${i + 1}`}
                     className="h-8 w-40 rounded-md border border-input bg-background px-2 text-sm"
                   >
-                    <option value="quick_reply">{t("Resposta rápida")}</option>
-                    <option value="url">{t("Abrir link")}</option>
-                    <option value="phone_number">{t("Ligar")}</option>
+                    <option value="quick_reply">{t("Réponse rapide")}</option>
+                    <option value="url">{t("Ouvrir un lien")}</option>
+                    <option value="phone_number">{t("Appeler")}</option>
                   </select>
                   <input
                     value={b.texto}
@@ -302,8 +302,8 @@ export function TemplatesParceiroClient() {
                       p[i] = { ...b, texto: e.target.value };
                       setBotoes(p);
                     }}
-                    placeholder={t("Texto do botão")}
-                    aria-label={`${t("Texto do botão")} ${i + 1}`}
+                    placeholder={t("Texte du bouton")}
+                    aria-label={`${t("Texte du bouton")} ${i + 1}`}
                     className="h-8 flex-1 rounded-md border border-input bg-background px-2 text-sm"
                   />
                   {b.tipo === "url" && (
@@ -315,7 +315,7 @@ export function TemplatesParceiroClient() {
                         setBotoes(p);
                       }}
                       placeholder="https://…"
-                      aria-label={`${t("URL do botão")} ${i + 1}`}
+                      aria-label={`${t("URL du bouton")} ${i + 1}`}
                       className="h-8 flex-1 rounded-md border border-input bg-background px-2 text-sm"
                     />
                   )}
@@ -328,7 +328,7 @@ export function TemplatesParceiroClient() {
                         setBotoes(p);
                       }}
                       placeholder="+595…"
-                      aria-label={`${t("Telefone do botão")} ${i + 1}`}
+                      aria-label={`${t("Téléphone du bouton")} ${i + 1}`}
                       className="h-8 flex-1 rounded-md border border-input bg-background px-2 text-sm"
                     />
                   )}
@@ -336,9 +336,9 @@ export function TemplatesParceiroClient() {
                     type="button"
                     onClick={() => setBotoes(botoes.filter((_, j) => j !== i))}
                     className="text-xs text-muted-foreground hover:text-destructive"
-                    aria-label={`${t("Remover botão")} ${i + 1}`}
+                    aria-label={`${t("Supprimer le bouton")} ${i + 1}`}
                   >
-                    {t("remover")}
+                    {t("supprimer")}
                   </button>
                 </div>
               ))}
@@ -348,7 +348,7 @@ export function TemplatesParceiroClient() {
                   onClick={() => setBotoes([...botoes, { tipo: "quick_reply", texto: "" }])}
                   className="self-start text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
                 >
-                  + {t("Adicionar botão")} ({botoes.length}/{LIMITE_BOTOES})
+                  + {t("Ajouter un bouton")} ({botoes.length}/{LIMITE_BOTOES})
                 </button>
               )}
             </div>
@@ -361,7 +361,7 @@ export function TemplatesParceiroClient() {
                pedia o exemplo. */
               <div className="flex flex-col gap-1.5 rounded-md border border-amber-300 bg-amber-50/50 p-2 dark:border-amber-800/60 dark:bg-amber-950/20">
                 <p className="text-[11px] text-amber-900 dark:text-amber-200">
-                  {t("A revisão exige um exemplo de cada valor. Sem eles o modelo é recusado.")}
+                  {t("La révision exige un exemple pour chaque valeur. Sans eux, le modèle est refusé.")}
                 </p>
                 {Array.from({ length: nVariaveis }, (_, i) => (
                   <div key={i} className="flex items-center gap-2">
@@ -375,8 +375,8 @@ export function TemplatesParceiroClient() {
                         proximo[i] = e.target.value;
                         setExemplos(proximo);
                       }}
-                      placeholder={t("ex.: María")}
-                      aria-label={`${t("Exemplo do valor")} ${i + 1}`}
+                      placeholder={t("ex. : Marie")}
+                      aria-label={`${t("Exemple de la valeur")} ${i + 1}`}
                       className="h-8 flex-1 rounded-md border border-input bg-background px-2 text-sm"
                     />
                   </div>
@@ -414,7 +414,7 @@ export function TemplatesParceiroClient() {
                 }
                 className="w-full sm:w-auto"
               >
-                {t("Enviar para revisão")}
+                {t("Envoyer pour révision")}
               </Button>
             </div>
           </div>
@@ -434,11 +434,11 @@ export function TemplatesParceiroClient() {
       )}
 
       {lista.isLoading ? (
-        <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>
+        <p className="text-sm text-muted-foreground">{t("Chargement…")}</p>
       ) : templates.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          {t("Nenhum modelo espelhado ainda.")} {t("Clique em")} <strong>{t("Sincronizar")}</strong>{" "}
-          {t("para trazer os que já existem na plataforma.")}
+          {t("Aucun modèle synchronisé pour l’instant.")} {t("Cliquez sur")} <strong>{t("Synchroniser")}</strong>{" "}
+          {t("pour importer ceux qui existent déjà sur la plateforme.")}
         </p>
       ) : (
         <ul className="divide-y divide-border rounded-md border border-border">
@@ -466,7 +466,7 @@ export function TemplatesParceiroClient() {
                   )}
                   {c.variaveis > 0 && (
                     <span className="text-[10px] text-muted-foreground">
-                      {c.variaveis} {t("valor(es)")}
+                      {c.variaveis} {t("valeur(s)")}
                     </span>
                   )}
                   <span
@@ -491,16 +491,16 @@ export function TemplatesParceiroClient() {
                     {c.header && (
                       <p className="text-xs">
                         <span className="text-muted-foreground">
-                          {t("Cabeçalho")} ({c.header.formato}):{" "}
+                          {t("En-tête")} ({c.header.formato}):{" "}
                         </span>
-                        {c.header.texto ?? <em className="text-muted-foreground">{t("mídia")}</em>}
+                        {c.header.texto ?? <em className="text-muted-foreground">{t("média")}</em>}
                       </p>
                     )}
                     {c.body ? (
                       <p className="whitespace-pre-wrap">{c.body}</p>
                     ) : (
                       <p className="text-xs text-muted-foreground">
-                        {t("Sem corpo espelhado — sincronize para trazer o conteúdo.")}
+                        {t("Aucun corps synchronisé — synchronisez pour importer le contenu.")}
                       </p>
                     )}
                     {c.footer && <p className="text-xs text-muted-foreground">{c.footer}</p>}
@@ -514,7 +514,7 @@ export function TemplatesParceiroClient() {
                       </div>
                     )}
                     <p className="text-[10px] text-muted-foreground">
-                      {t("Sincronizado em")} {new Date(template.syncedAt).toLocaleString("fr-FR")}
+                      {t("Synchronisé le")} {new Date(template.syncedAt).toLocaleString("fr-FR")}
                     </p>
                   </div>
                 )}

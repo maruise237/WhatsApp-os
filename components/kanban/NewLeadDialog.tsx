@@ -86,7 +86,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     if (reais.length > 0) {
       valueCents = parseMontantEnCents(reais, DEVISE_PAR_DEFAUT);
       if (valueCents === null) {
-        form.setError("valueReais", { message: t("Valor inválido") });
+        form.setError("valueReais", { message: t("Valeur invalide") });
         return;
       }
     }
@@ -113,7 +113,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
 
     try {
       await create.mutateAsync(parsed.data as CreateLeadInput);
-      toast.success(t("Lead criado"));
+      toast.success(t("Lead créé"));
       form.reset({
         title: "",
         description: "",
@@ -134,34 +134,34 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Novo Lead")}</DialogTitle>
-          <DialogDescription>{t("Crie um lead manualmente neste pipeline.")}</DialogDescription>
+          <DialogTitle>{t("Nouveau lead")}</DialogTitle>
+          <DialogDescription>{t("Créez un lead manuellement dans ce pipeline.")}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">{t("Título")}</Label>
+            <Label htmlFor="title">{t("Titre")}</Label>
             <Input
               id="title"
-              placeholder={t("Ex: Pedido Maria — combo presente")}
+              placeholder={t("Ex. : Commande d’Aïcha — coffret cadeau")}
               {...form.register("title", { required: true, minLength: 2 })}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">{t("Descrição")}</Label>
+            <Label htmlFor="description">{t("Description")}</Label>
             <Textarea
               id="description"
               rows={3}
-              placeholder={t("Contexto, observações, links…")}
+              placeholder={t("Contexte, remarques, liens…")}
               {...form.register("description")}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>{t("Etapa")}</Label>
+            <Label>{t("Étape")}</Label>
             <Select value={stageId} onValueChange={(v) => form.setValue("stage_id", v)}>
               <SelectTrigger>
-                <SelectValue placeholder={t("Selecione a etapa")} />
+                <SelectValue placeholder={t("Sélectionnez l’étape")} />
               </SelectTrigger>
               <SelectContent>
                 {stages
@@ -177,7 +177,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="valueReais">{t("Montante")}</Label>
+              <Label htmlFor="valueReais">{t("Montant")}</Label>
               <Input
                 id="valueReais"
                 inputMode="decimal"
@@ -190,7 +190,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="expected_close_date">{t("Fechamento previsto")}</Label>
+              <Label htmlFor="expected_close_date">{t("Clôture prévue")}</Label>
               <Input
                 id="expected_close_date"
                 type="date"
@@ -200,7 +200,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
+            <Label htmlFor="tagsRaw">{t("Étiquettes (séparées par des virgules)")}</Label>
             <Input id="tagsRaw" placeholder="vip, réachat" {...form.register("tagsRaw")} />
           </div>
 
@@ -211,10 +211,10 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
               onClick={() => onOpenChange(false)}
               disabled={create.isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={create.isPending || !stageId}>
-              {create.isPending ? t("Criando…") : t("Criar lead")}
+              {create.isPending ? t("Création…") : t("Créer le lead")}
             </Button>
           </DialogFooter>
         </form>

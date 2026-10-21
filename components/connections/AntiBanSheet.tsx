@@ -112,10 +112,10 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             : new Date(`${form.numero_em_uso_desde}T12:00:00.000Z`).toISOString(),
         skip_warmup: form.pular_aquecimento,
       });
-      toast.success(t("Proteção de envio atualizada."));
+      toast.success(t("Protection des envois mise à jour."));
       onClose();
     } catch (err) {
-      toast.error(err instanceof ApiError ? err.message : t("Não foi possível salvar."));
+      toast.error(err instanceof ApiError ? err.message : t("Impossible d’enregistrer."));
     }
   };
 
@@ -124,7 +124,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
       <SheetContent className="flex w-full flex-col gap-0 overflow-y-auto sm:max-w-md">
         <SheetHeader>
           <SheetTitle>
-            {t("Proteção de envio")} — {label}
+            {t("Protection des envois")} — {label}
           </SheetTitle>
           <SheetDescription>
             {t(
@@ -135,7 +135,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
 
         <div className="flex flex-col gap-5 px-4 py-2" data-testid="anti-ban-form">
           <fieldset className="flex flex-col gap-2" data-testid="aquecimento">
-            <Label htmlFor="numero-em-uso-desde">{t("Este número é usado desde")}</Label>
+            <Label htmlFor="numero-em-uso-desde">{t("Ce numéro est utilisé depuis")}</Label>
             <Input
               id="numero-em-uso-desde"
               type="date"
@@ -159,7 +159,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
                 disabled={!canWrite}
               />
               <Label htmlFor="pular-aquecimento" className="font-normal">
-                {t("Este número já está aquecido — pular o aquecimento")}
+                {t("Ce numéro est déjà réchauffé — ignorer le réchauffement")}
               </Label>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -168,13 +168,13 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
                     "Vale só o teto diário abaixo. Use apenas se o número já envia há semanas: pular o aquecimento num número novo é o caminho mais rápido para o bloqueio.",
                   )
                 : item.warmup.cap_today === null
-                  ? `${t("Número com")} ${item.warmup.age_days} ${t("dia(s) de uso — já formado. Vale só o teto diário abaixo.")}`
-                  : `${t("Hoje o aquecimento libera")} ${item.warmup.cap_today} ${t("envio(s) — o número tem")} ${item.warmup.age_days} ${t("dia(s) de uso.")} ${t("Enquanto esse número for menor que o teto diário, é ELE que limita, e mexer no teto diário não muda nada.")}`}
+                  ? `${t("Numéro utilisé depuis")} ${item.warmup.age_days} ${t("jour(s) — déjà établi. Seul le plafond quotidien ci-dessous s’applique.")}`
+                  : `${t("Aujourd’hui, le réchauffement autorise")} ${item.warmup.cap_today} ${t("envoi(s) — le numéro est utilisé depuis")} ${item.warmup.age_days} ${t("jour(s).")} ${t("Tant que ce nombre est inférieur au plafond quotidien, c’est lui qui limite l’envoi ; modifier le plafond quotidien ne change rien.")}`}
             </p>
           </fieldset>
 
           <fieldset className="flex flex-col gap-2">
-            <Label>{t("Janela de envio (horário local)")}</Label>
+            <Label>{t("Fenêtre d’envoi (heure locale)")}</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -185,10 +185,10 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
                 value={form.window_start_hour}
                 onChange={(e) => set({ window_start_hour: e.target.value })}
                 disabled={!canWrite}
-                aria-label={t("Hora de início da janela")}
+                aria-label={t("Heure de début de la fenêtre")}
                 className="w-20"
               />
-              <span className="text-sm text-muted-foreground">{t("h até")}</span>
+              <span className="text-sm text-muted-foreground">{t("h à")}</span>
               <Input
                 type="number"
                 min={1}
@@ -198,7 +198,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
                 value={form.window_end_hour}
                 onChange={(e) => set({ window_end_hour: e.target.value })}
                 disabled={!canWrite}
-                aria-label={t("Hora de fim da janela")}
+                aria-label={t("Heure de fin de la fenêtre")}
                 className="w-20"
               />
               <span className="text-sm text-muted-foreground">h</span>
@@ -212,7 +212,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
 
           <fieldset className="flex items-center justify-between gap-4">
             <div>
-              <Label htmlFor="allow-sunday">{t("Enviar aos domingos")}</Label>
+              <Label htmlFor="allow-sunday">{t("Envoyer le dimanche")}</Label>
               <p className="text-xs text-muted-foreground">
                 {t(
                   "Ligado por padrão: quem escreve no domingo espera resposta no domingo. Desligue se você faz prospecção ativa e prefere não incomodar no fim de semana.",
@@ -228,7 +228,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
           </fieldset>
 
           <fieldset className="flex flex-col gap-2">
-            <Label>{t("Ritmo entre envios (segundos)")}</Label>
+            <Label>{t("Intervalle entre les envois (secondes)")}</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -239,10 +239,10 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
                 value={form.throttle_s}
                 onChange={(e) => set({ throttle_s: e.target.value })}
                 disabled={!canWrite}
-                aria-label={t("Intervalo mínimo entre envios em segundos")}
+                aria-label={t("Intervalle minimal entre les envois, en secondes")}
                 className="w-24"
               />
-              <span className="text-sm text-muted-foreground">{t("+ variação de até")}</span>
+              <span className="text-sm text-muted-foreground">{t("+ variation maximale de")}</span>
               <Input
                 type="number"
                 min={0}
@@ -252,7 +252,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
                 value={form.jitter_s}
                 onChange={(e) => set({ jitter_s: e.target.value })}
                 disabled={!canWrite}
-                aria-label={t("Variação aleatória máxima em segundos")}
+                aria-label={t("Variation aléatoire maximale, en secondes")}
                 className="w-24"
               />
               <span className="text-sm text-muted-foreground">s</span>
@@ -265,17 +265,17 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
           </fieldset>
 
           <fieldset className="flex flex-col gap-2">
-            <Label>{t("Teto diário de envios")}</Label>
+            <Label>{t("Plafond quotidien d’envois")}</Label>
             <Input
               type="number"
               min={item.bounds.daily_limit.min}
               max={item.bounds.daily_limit.max}
               inputMode="numeric"
-              placeholder={t("sem teto definido")}
+              placeholder={t("aucun plafond défini")}
               value={form.daily_message_limit}
               onChange={(e) => set({ daily_message_limit: e.target.value })}
               disabled={!canWrite}
-              aria-label={t("Teto diário de mensagens")}
+              aria-label={t("Plafond quotidien de messages")}
               className="w-32"
             />
             <p className="text-xs text-muted-foreground">
@@ -286,7 +286,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
           </fieldset>
 
           <fieldset className="flex flex-col gap-2">
-            <Label>{t("Fuso horário da janela")}</Label>
+            <Label>{t("Fuseau horaire de la fenêtre")}</Label>
             {/* LISTA, e não texto livre. A API já REJEITA fuso inválido — mas
                 rejeitar é devolver um erro a quem digitou certo na cabeça e
                 errado no teclado (`America/Asunción`, com o acento que um
@@ -295,11 +295,11 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
               value={form.timezone}
               onChange={(e) => set({ timezone: e.target.value })}
               disabled={!canWrite}
-              aria-label={t("Fuso horário IANA")}
+              aria-label={t("Fuseau horaire IANA")}
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm disabled:opacity-50"
             >
               <option value="">
-                {t("Usar o padrão")} ({eff.timezone})
+                {t("Utiliser la valeur par défaut")} ({eff.timezone})
               </option>
               {fusosComAtual(form.timezone).map((f) => (
                 <option key={f.codigo} value={f.codigo}>
@@ -308,18 +308,18 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
               ))}
             </select>
             <p className="text-xs text-muted-foreground">
-              {t("A janela de envio é avaliada neste fuso (ex.: Africa/Douala).")}
+              {t("La fenêtre d’envoi est évaluée dans ce fuseau (ex. : Africa/Douala).")}
             </p>
           </fieldset>
 
           <div className="bg-muted/30 rounded-md border border-border p-3">
-            <p className="text-xs font-medium">{t("Aquecimento automático de número novo")}</p>
+            <p className="text-xs font-medium">{t("Réchauffement automatique d’un nouveau numéro")}</p>
             <p className="mt-1 text-xs text-muted-foreground">
               {eff.warmupDailyCaps
                 .map((s) =>
                   s.cap === null
-                    ? `${t("a partir de")} ${s.minAgeDays} ${t("dias: sem limite de aquecimento")}`
-                    : `${s.minAgeDays} ${t("+ dias: até")} ${s.cap}${t("/dia")}`,
+                    ? `${t("à partir de")} ${s.minAgeDays} ${t("jours : aucun plafond de réchauffement")}`
+                    : `${s.minAgeDays} ${t("+ jours : jusqu’à")} ${s.cap}${t("/jour")}`,
                 )
                 .join(" · ")}
             </p>
@@ -333,11 +333,11 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
 
         <div className="mt-auto flex justify-end gap-2 border-t border-border px-4 py-3">
           <Button variant="ghost" onClick={onClose}>
-            {canWrite ? t("Cancelar") : t("Fechar")}
+            {canWrite ? t("Annuler") : t("Fermer")}
           </Button>
           {canWrite ? (
             <Button onClick={handleSave} disabled={update.isPending} data-testid="anti-ban-save">
-              {update.isPending ? t("Salvando…") : t("Salvar proteção")}
+              {update.isPending ? t("Enregistrement…") : t("Enregistrer la protection")}
             </Button>
           ) : null}
         </div>

@@ -30,7 +30,7 @@ export function InviteTeamForm() {
     startTransition(async () => {
       if (skip) {
         const res = await sendOnboardingInvites({ invitations: [], skip: true });
-        if (res && !res.ok) toast.error(`${t("Falha")}: ${res.error}`);
+        if (res && !res.ok) toast.error(`${t("Échec")}: ${res.error}`);
         return;
       }
       const emails = Array.from(
@@ -42,18 +42,18 @@ export function InviteTeamForm() {
         ),
       );
       if (emails.length === 0) {
-        toast.error(t("Adicione ao menos um email ou clique em Pular."));
+        toast.error(t("Ajoutez au moins une adresse e-mail ou cliquez sur Ignorer."));
         return;
       }
       if (emails.length > 20) {
-        toast.error(t("Máximo 20 emails por convite."));
+        toast.error(t("Maximum 20 adresses e-mail par invitation."));
         return;
       }
       const res = await sendOnboardingInvites({
         invitations: emails.map((email) => ({ email, role })),
       });
       if (res && !res.ok) {
-        toast.error(`${t("Falha")}: ${res.error}`);
+        toast.error(`${t("Échec")}: ${res.error}`);
         return;
       }
       if (res && res.ok && res.undelivered?.length) {
@@ -61,7 +61,7 @@ export function InviteTeamForm() {
         // admin mandar por conta própria — nunca fingir que o email saiu.
         setUndelivered(res.undelivered);
         toast.warning(
-          `${res.failed} ${t("convite(s) não puderam ser enviados por email. Copie os links abaixo e envie você mesmo.")}`,
+          `${res.failed} ${t("invitation(s) n’ont pas pu être envoyée(s) par e-mail. Copiez les liens ci-dessous et envoyez-les vous-même.")}`,
         );
       }
       // sucesso total redireciona no server action
@@ -71,7 +71,7 @@ export function InviteTeamForm() {
   return (
     <div className="space-y-4 rounded-lg border bg-background p-6">
       <div className="space-y-2">
-        <Label htmlFor="emails">{t("E-mail de quem vai trabalhar com ele")}</Label>
+        <Label htmlFor="emails">{t("E-mail des personnes qui travailleront avec lui")}</Label>
         <Textarea
           id="emails"
           value={emailsRaw}
@@ -82,7 +82,7 @@ export function InviteTeamForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="role">{t("O que essas pessoas podem fazer")}</Label>
+        <Label htmlFor="role">{t("Ce que ces personnes peuvent faire")}</Label>
         <Select value={role} onValueChange={(v) => setRole(v as Role)}>
           <SelectTrigger id="role">
             <SelectValue />
@@ -122,15 +122,15 @@ export function InviteTeamForm() {
                   variant="outline"
                   onClick={() => {
                     void copyToClipboard(u.accept_url).then((ok) => {
-                      if (ok) toast.success(t("Link copiado."));
+                      if (ok) toast.success(t("Lien copié."));
                       else
                         toast.error(
-                          t("Não consegui copiar — selecione e copie o link manualmente."),
+                          t("Impossible de copier ; sélectionnez et copiez le lien manuellement."),
                         );
                     });
                   }}
                 >
-                  {t("Copiar link")}
+                  {t("Copier le lien")}
                 </Button>
               </li>
             ))}
@@ -141,7 +141,7 @@ export function InviteTeamForm() {
               onClick={() => (window.location.href = "/onboarding")}
               className="w-full sm:w-auto"
             >
-              {t("Continuar")}
+              {t("Continuer")}
             </Button>
           </div>
         </div>
@@ -149,10 +149,10 @@ export function InviteTeamForm() {
 
       <div className="onb-acoes flex flex-wrap justify-between gap-2 pt-2">
         <Button type="button" variant="ghost" disabled={pending} onClick={() => submit(true)}>
-          {t("Pular por enquanto")}
+          {t("Ignorer pour le moment")}
         </Button>
         <Button type="button" disabled={pending} onClick={() => submit(false)}>
-          {pending ? t("Enviando...") : t("Enviar convites")}
+          {pending ? t("Envoi…") : t("Envoyer les invitations")}
         </Button>
       </div>
     </div>

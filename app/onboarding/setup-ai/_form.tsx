@@ -48,7 +48,7 @@ interface Props {
 
 export function SetupAiForm({ capacidades, conferencias }: Props) {
   const t = useT();
-  const [name, setName] = useState(t("Atendente IA"));
+  const [name, setName] = useState(t("Assistant IA"));
   const [jeito, setJeito] = useState<PromptTemplate>("ecommerce_friendly");
   const [regras, setRegras] = useState("");
   const [naoPublicado, setNaoPublicado] = useState<string | null>(null);
@@ -66,7 +66,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           setRegrasNaoSalvas(null);
           const res = await createDefaultAgent(formData);
           if (res && !res.ok) {
-            toast.error(`${t("Falha ao criar agente:")} ${res.error}`);
+            toast.error(`${t("Impossible de créer l’agent :")} ${res.error}`);
             return;
           }
           if (res?.regras_nao_salvas) setRegrasNaoSalvas(res.regras_nao_salvas);
@@ -74,25 +74,25 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           // não é esperar o catálogo nem trocar de provedor, é cadastrar a chave.
           if (res?.publish_blocked_by === "chave") {
             setCausa("chave");
-            toast.warning(t("Atendente criado, mas ainda não está no ar."));
+            toast.warning(t("Assistant créé, mais pas encore publié."));
             return;
           }
           if (res?.publish_blocked_by === "modelo") {
             setCausa("modelo");
-            toast.warning(t("Atendente criado, mas ainda não está no ar."));
+            toast.warning(t("Assistant créé, mais pas encore publié."));
             return;
           }
           if (res?.publish_error) {
             setNaoPublicado(res.publish_error);
             setCausa("canal");
-            toast.warning(t("Agente criado, mas ainda não publicado."));
+            toast.warning(t("Agent créé, mais pas encore publié."));
           }
         });
       }}
     >
       <div className="space-y-5 rounded-lg border bg-background p-6">
         <div className="space-y-2">
-          <Label htmlFor="name">{t("Como ele vai se chamar")}</Label>
+          <Label htmlFor="name">{t("Comment s’appellera-t-il ?")}</Label>
           <Input
             id="name"
             name="name"
@@ -103,12 +103,12 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
             required
           />
           <p className="text-xs text-muted-foreground">
-            {t("É o nome que aparece para o seu time. O cliente vê só a conversa.")}
+            {t("C’est le nom affiché à votre équipe. Le client ne voit que la conversation.")}
           </p>
         </div>
 
         <fieldset className="space-y-2">
-          <legend className="text-sm font-medium">{t("O jeito dele falar")}</legend>
+          <legend className="text-sm font-medium">{t("Sa façon de parler")}</legend>
           <div className="grid gap-2">
             {JEITOS.map((j) => (
               <label
@@ -136,7 +136,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         </fieldset>
 
         <div className="space-y-2">
-          <Label htmlFor="regras_da_casa">{t("As regras da casa (opcional)")}</Label>
+          <Label htmlFor="regras_da_casa">{t("Règles internes (facultatif)")}</Label>
           <Textarea
             id="regras_da_casa"
             name="regras_da_casa"
@@ -167,7 +167,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         <details className="group rounded-lg border bg-background">
           <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-2 text-sm font-medium">
             <span>
-              {t("Ele já vem sabendo")} <span className="font-normal text-muted-foreground">({capacidades.length})</span>
+              {t("Ce qu’il sait déjà faire")} <span className="font-normal text-muted-foreground">({capacidades.length})</span>
             </span>
             <CaretDown size={16} aria-hidden className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
           </summary>
@@ -180,7 +180,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
         <details className="group rounded-lg border bg-background">
           <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-2 text-sm font-medium">
             <span>
-              {t("E nunca vai fazer")} <span className="font-normal text-muted-foreground">({conferencias.length})</span>
+              {t("Ce qu’il ne fera jamais")} <span className="font-normal text-muted-foreground">({conferencias.length})</span>
             </span>
             <CaretDown size={16} aria-hidden className="shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
           </summary>
@@ -190,7 +190,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
             ))}
           </ul>
           <p className="px-4 pb-4 pt-2 text-xs text-muted-foreground">
-            {t("Essas conferências acontecem antes de cada mensagem sair, e não têm interruptor.")}
+            {t("Ces contrôles sont effectués avant chaque envoi et ne peuvent pas être désactivés.")}
           </p>
         </details>
       </div>
@@ -206,7 +206,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
             <strong>IA › Mémoire</strong>.
           </p>
           <p className="text-xs text-muted-foreground">
-            {t("Erro do banco de dados:")} <code className="break-all">{regrasNaoSalvas}</code>
+            {t("Erreur de base de données :")} <code className="break-all">{regrasNaoSalvas}</code>
           </p>
         </div>
       )}
@@ -217,7 +217,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           className="space-y-3 rounded-md border border-amber-300/60 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-950/20"
         >
           <p className="text-sm font-medium">
-            Votre assistant a été créé, mais il est resté en <strong>{t("rascunho")}</strong> : il
+            Votre assistant a été créé, mais il est resté en <strong>{t("brouillon")}</strong> : il
             n’est pas encore relié à l’intelligence de la plateforme.
           </p>
           <p className="text-sm">
@@ -241,7 +241,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
               }}
               className="w-full sm:w-auto"
             >
-              {t("Continuar sem publicar")}
+              {t("Continuer sans publier")}
             </Button>
           </div>
         </div>
@@ -253,7 +253,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           className="space-y-3 rounded-md border border-amber-300/60 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-950/20"
         >
           <p className="text-sm font-medium">
-            Votre assistant a été créé, mais il est resté en <strong>{t("rascunho")}</strong> : un
+            Votre assistant a été créé, mais il est resté en <strong>{t("brouillon")}</strong> : un
             brouillon ne répond pas aux messages.
           </p>
           {/*
@@ -275,7 +275,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
               }}
               className="w-full sm:w-auto"
             >
-              {t("Continuar sem publicar")}
+              {t("Continuer sans publier")}
             </Button>
           </div>
         </div>
@@ -287,12 +287,12 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           className="space-y-3 rounded-md border border-amber-300/60 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-950/20"
         >
           <p className="text-sm font-medium">
-            Votre agent a été créé, mais il est resté en <strong>{t("rascunho")}</strong> :
+            Votre agent a été créé, mais il est resté en <strong>{t("brouillon")}</strong> :
             impossible de lire les numéros WhatsApp de cette installation, donc le numéro de réponse
             ne peut pas être déterminé. Un brouillon ne répond pas aux messages.
           </p>
           <p className="text-xs text-muted-foreground">
-            {t("Erro do banco de dados:")} <code className="break-all">{naoPublicado}</code>
+            {t("Erreur de base de données :")} <code className="break-all">{naoPublicado}</code>
           </p>
           <p className="text-sm">
             Réessayez avec le bouton ci-dessous (un nouveau clic ne crée pas de second agent) ou
@@ -307,7 +307,7 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
               }}
               className="w-full sm:w-auto"
             >
-              {t("Continuar sem publicar")}
+              {t("Continuer sans publier")}
             </Button>
           </div>
         </div>
@@ -320,10 +320,10 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
           disabled={pending}
           onClick={() => startTransition(() => void skipAi())}
         >
-          {t("Pular")}
+          {t("Ignorer")}
         </Button>
         <Button type="submit" disabled={pending}>
-          {pending ? t("Criando...") : t("Criar e continuar")}
+          {pending ? t("Création...") : t("Créer et continuer")}
         </Button>
       </div>
     </form>

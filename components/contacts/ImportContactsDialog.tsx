@@ -45,14 +45,14 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
     try {
       const r = await importar.mutateAsync(file);
       setResumo(r);
-      if (r.imported > 0) toast.success(`${r.imported} ${t("importado(s)")}`);
-      if (r.errors.length > 0) toast.warning(`${r.errors.length} ${t("linha(s) com problema")}`);
+      if (r.imported > 0) toast.success(`${r.imported} ${t("importé(s)")}`);
+      if (r.errors.length > 0) toast.warning(`${r.errors.length} ${t("ligne(s) en erreur")}`);
     } catch (err) {
       // Falha de requisição (arquivo grande, formato errado…): mostra no rodapé.
       const msg =
         err instanceof Error && err.message
           ? err.message
-          : t("Não foi possível importar o arquivo.");
+          : t("Impossible d’importer le fichier.");
       toast.error(msg);
     }
   }
@@ -67,7 +67,7 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Importar contatos de planilha")}</DialogTitle>
+          <DialogTitle>{t("Importer des contacts depuis un tableur")}</DialogTitle>
           <DialogDescription>
             {t(
               "Envie um arquivo .csv com cabeçalho — colunas reconhecidas: nome, telefone, email, cpf, nascimento, tags. Excel: use “Salvar como” → “CSV UTF-8”. Máximo de 500 linhas por arquivo.",
@@ -79,7 +79,7 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
           {!resumo && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="csv-file">{t("Arquivo CSV")}</Label>
+                <Label htmlFor="csv-file">{t("Fichier CSV")}</Label>
                 <Input
                   id="csv-file"
                   ref={inputRef}
@@ -100,10 +100,10 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
                   onClick={() => onOpenChange(false)}
                   disabled={importar.isPending}
                 >
-                  {t("Cancelar")}
+                  {t("Annuler")}
                 </Button>
                 <Button type="submit" disabled={!file || importar.isPending}>
-                  {importar.isPending ? t("Importando…") : t("Importar")}
+                  {importar.isPending ? t("Importation…") : t("Importer")}
                 </Button>
               </DialogFooter>
             </>
@@ -113,19 +113,19 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2 text-sm">
                 <span className="rounded bg-surface px-2 py-1">
-                  {resumo.total_linhas} {t("linha(s) lidas")}
+                  {resumo.total_linhas} {t("ligne(s) lue(s)")}
                 </span>
                 <span className="rounded px-2 py-1 font-medium">
-                  {resumo.imported} {t("importado(s)")}
+                  {resumo.imported} {t("importé(s)")}
                 </span>
                 {resumo.skipped_duplicates > 0 && (
                   <span className="rounded bg-surface px-2 py-1">
-                    {resumo.skipped_duplicates} {t("já existente(s)")}
+                    {resumo.skipped_duplicates} {t("déjà existant(s)")}
                   </span>
                 )}
                 {resumo.errors.length > 0 && (
                   <span className="rounded px-2 py-1 font-medium">
-                    {resumo.errors.length} {t("com erro")}
+                    {resumo.errors.length} {t("en erreur")}
                   </span>
                 )}
               </div>
@@ -134,7 +134,7 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
                 <div className="max-h-48 space-y-1 overflow-y-auto rounded border border-border p-2 text-sm">
                   {resumo.errors.map((err) => (
                     <p key={err.linha}>
-                      {t("Linha")} {err.linha}: {err.motivo}
+                      {t("Ligne")} {err.linha}: {err.motivo}
                     </p>
                   ))}
                 </div>
@@ -142,10 +142,10 @@ export function ImportContactsDialog({ open, onOpenChange }: Props) {
 
               <DialogFooter>
                 <Button type="button" variant="ghost" onClick={reset}>
-                  {t("Importar outro arquivo")}
+                  {t("Importer un autre fichier")}
                 </Button>
                 <Button type="button" onClick={() => onOpenChange(false)}>
-                  {t("Concluir")}
+                  {t("Terminer")}
                 </Button>
               </DialogFooter>
             </div>

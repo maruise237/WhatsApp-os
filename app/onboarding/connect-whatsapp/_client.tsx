@@ -65,32 +65,32 @@ function isRedirectError(err: unknown): boolean {
 function rotuloDoEstado(s: Status, t: (texto: string) => string): string {
   switch (s) {
     case "SCAN_QR_CODE":
-      return t("Pronto para conectar");
+      return t("Prêt à connecter");
     case "STARTING":
     case "INIT":
-      return t("Preparando o código…");
+      return t("Préparation du code…");
     case "WORKING":
-      return t("Conectado!");
+      return t("Connecté !");
     case "FAILED":
-      return t("O código expirou");
+      return t("Le code a expiré");
     default:
-      return t("Não consegui falar com o WhatsApp");
+      return t("Impossible de communiquer avec WhatsApp");
   }
 }
 
 function explicacaoDoEstado(s: Status, t: (texto: string) => string): string {
   switch (s) {
     case "SCAN_QR_CODE":
-      return t("Escaneie o código abaixo com o celular que vai atender.");
+      return t("Scannez le code ci-dessous avec le téléphone qui répondra aux clients.");
     case "STARTING":
     case "INIT":
-      return t("Isso leva alguns segundos. O código aparece aqui sozinho.");
+      return t("Cela prend quelques secondes. Le code apparaîtra ici automatiquement.");
     case "WORKING":
-      return t("O número está no ar. Seguindo para o próximo passo.");
+      return t("Le numéro est connecté. Passage à l’étape suivante.");
     case "FAILED":
-      return t("É normal — ele vale poucos minutos. Dá para gerar outro.");
+      return t("C’est normal : il n’est valable que quelques minutes. Vous pouvez en générer un autre.");
     default:
-      return t("O serviço roda no seu servidor e não respondeu agora.");
+      return t("Le service fonctionne sur votre serveur et n’a pas répondu cette fois.");
   }
 }
 
@@ -149,7 +149,7 @@ function VoltarParaEscolha({ onVoltar }: { onVoltar: () => void }) {
       onClick={onVoltar}
       className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
     >
-      ← {t("Escolher outra forma")}
+      ← {t("Choisir une autre méthode")}
     </button>
   );
 }
@@ -177,12 +177,12 @@ function Saidas({ status, sessionName }: { status: Status; sessionName: string }
               await skipWhatsapp();
             } catch (err) {
               if (isRedirectError(err)) throw err;
-              toast.error(`${t("Falha ao pular:")} ${String(err)}`);
+              toast.error(`${t("Impossible d’ignorer l’étape :")} ${String(err)}`);
             }
           })
         }
       >
-        {t("Pular por enquanto")}
+        {t("Ignorer pour le moment")}
       </Button>
       <Button
         type="button"
@@ -196,12 +196,12 @@ function Saidas({ status, sessionName }: { status: Status; sessionName: string }
               );
             } catch (err) {
               if (isRedirectError(err)) throw err;
-              toast.error(`${t("Falha ao marcar passo:")} ${String(err)}`);
+              toast.error(`${t("Impossible de marquer l’étape :")} ${String(err)}`);
             }
           })
         }
       >
-        {t("Conectei em outro lugar")}
+        {t("Je l’ai connecté ailleurs")}
       </Button>
     </div>
   );
@@ -310,7 +310,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
         await markWhatsappConfigured(sessionName, "WORKING");
       } catch (err) {
         if (isRedirectError(err)) throw err;
-        toast.error(`${t("Falha ao avançar:")} ${String(err)}`);
+        toast.error(`${t("Impossible de continuer :")} ${String(err)}`);
       }
     });
   }, [status, sessionName]);
@@ -339,7 +339,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
     return (
       <div className="space-y-4 rounded-lg border bg-background p-6">
         <fieldset className="space-y-3">
-          <legend className="text-sm font-medium">{t("Como você já usa esse número?")}</legend>
+          <legend className="text-sm font-medium">{t("Comment utilisez-vous déjà ce numéro ?")}</legend>
           <p className="text-xs text-muted-foreground">
             {t(
               "Existe mais de um jeito de ter WhatsApp para empresa, e cada um conecta de um jeito. Se você nunca ouviu falar dos outros dois, é o primeiro.",
@@ -349,7 +349,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
             <Escolha
               valor="qr"
               atual={forma}
-              titulo={t("Leio um código com o celular")}
+              titulo={t("Je scanne un code avec mon téléphone")}
               corpo={t(
                 "É assim para quase todo mundo. Você abre o WhatsApp no celular que vai atender e aponta para um código que aparece aqui.",
               )}
@@ -358,7 +358,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
             <Escolha
               valor="oficial"
               atual={forma}
-              titulo={t("Tenho conta oficial na Meta")}
+              titulo={t("J’ai un compte officiel Meta")}
               corpo={t(
                 "Você cadastrou o número na Meta e tem as credenciais em mãos. Não usa o celular para conectar.",
               )}
@@ -367,8 +367,8 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
             <Escolha
               valor="parceiro"
               atual={forma}
-              titulo={t("Contrato de um provedor parceiro")}
-              corpo={t("Uma empresa parceira cuida do seu WhatsApp e te deu uma chave de acesso.")}
+              titulo={t("J’ai un contrat avec un fournisseur partenaire")}
+              corpo={t("Une entreprise partenaire gère votre WhatsApp et vous a fourni une clé d’accès.")}
               onEscolher={setForma}
             />
           </div>
@@ -386,7 +386,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
         {forma === "oficial" && !oficialPodeReceber && (
           <div className="rounded-md border border-amber-300/60 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-100">
             <p className="font-medium">
-              {t("Este servidor ainda não está pronto para RECEBER por este caminho.")}
+              {t("Ce serveur n’est pas encore prêt à RECEVOIR par cette méthode.")}
             </p>
             <p className="mt-1">
               {t(
@@ -411,7 +411,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
       <VoltarParaEscolha onVoltar={() => setForma(null)} />
       {!wahaConfigured && (
         <div className="rounded-md border border-amber-300/60 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-500/40 dark:bg-amber-950/40 dark:text-amber-100">
-          <p className="font-medium">{t("O WhatsApp desta instalação ainda não subiu.")}</p>
+          <p className="font-medium">{t("Le WhatsApp de cette installation n’est pas encore démarré.")}</p>
           <p className="mt-1">
             {t(
               "Ele roda no seu próprio servidor. Dá para seguir sem ele agora e conectar o número depois, em Canais › Conexões — seu funcionário fica pronto de qualquer jeito, só não terá por onde atender ainda.",
@@ -463,7 +463,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
                 <img
                   key={qrTick}
                   src={`/api/v1/onboarding/whatsapp/qr?t=${qrTick}`}
-                  alt={t("Código QR para conectar o WhatsApp")}
+                  alt={t("Code QR pour connecter WhatsApp")}
                   className="h-48 w-48 rounded-md border bg-white object-contain sm:h-56 sm:w-56"
                   onError={() => setQrFailed(true)}
                   onLoad={() => setQrFailed(false)}
@@ -474,7 +474,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
 
           {status === "WORKING" && (
             <p className="mt-3 text-sm font-medium text-emerald-700 dark:text-emerald-400">
-              {t("✓ Conectado! Avançando…")}
+              {t("✓ Connecté ! Passage à l’étape suivante…")}
             </p>
           )}
 
@@ -491,7 +491,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
                 )}
               </p>
               <Button type="button" size="sm" disabled={busy} onClick={restartSession}>
-                {busy ? t("Gerando…") : t("Gerar novo QR Code")}
+                {busy ? t("Génération…") : t("Générer un nouveau code QR")}
               </Button>
             </div>
           )}
@@ -505,7 +505,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
               </p>
               {info.error && (
                 <p className="text-xs text-muted-foreground">
-                  {t("Detalhe técnico:")} <code className="break-all">{info.error}</code>
+                  {t("Détail technique :")} <code className="break-all">{info.error}</code>
                 </p>
               )}
               <Button
@@ -515,7 +515,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
                 disabled={busy}
                 onClick={restartSession}
               >
-                {busy ? t("Tentando…") : t("Tentar de novo")}
+                {busy ? t("Nouvelle tentative…") : t("Réessayer")}
               </Button>
             </div>
           )}

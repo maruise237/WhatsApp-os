@@ -71,7 +71,7 @@ function canal(over: Partial<ChannelSession> = {}): ChannelSession {
   };
 }
 
-const SELETOR = "Filtrar por número de WhatsApp";
+const SELETOR = "Filtrer par numéro WhatsApp";
 
 beforeEach(() => {
   setOrg("agent", "own_and_unassigned");

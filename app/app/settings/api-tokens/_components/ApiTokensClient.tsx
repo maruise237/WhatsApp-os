@@ -74,7 +74,7 @@ export function ApiTokensClient() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (scopes.length === 0) {
-      toast.error(t("Selecione ao menos um escopo."));
+      toast.error(t("Sélectionnez au moins un périmètre."));
       return;
     }
     try {
@@ -101,24 +101,24 @@ export function ApiTokensClient() {
     <>
       <div className="flex sm:justify-end">
         <Button onClick={() => setCreateOpen(true)} className="w-full sm:w-auto">
-          {t("Criar token")}
+          {t("Créer un jeton")}
         </Button>
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>
+        <p className="text-sm text-muted-foreground">{t("Chargement…")}</p>
       ) : tokens.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t("Nenhum token criado ainda.")}</p>
+        <p className="text-sm text-muted-foreground">{t("Aucun jeton n’a encore été créé.")}</p>
       ) : (
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("Nome")}</TableHead>
-                <TableHead>{t("Prefixo")}</TableHead>
-                <TableHead>{t("Escopos")}</TableHead>
-                <TableHead>{t("Status")}</TableHead>
-                <TableHead>{t("Expira")}</TableHead>
+                <TableHead>{t("Nom")}</TableHead>
+                <TableHead>{t("Préfixe")}</TableHead>
+                <TableHead>{t("Périmètres")}</TableHead>
+                <TableHead>{t("Statut")}</TableHead>
+                <TableHead>{t("Expiration")}</TableHead>
                 <TableHead className="w-[120px]" />
               </TableRow>
             </TableHeader>
@@ -140,9 +140,9 @@ export function ApiTokensClient() {
                   </TableCell>
                   <TableCell>
                     {token.revoked_at ? (
-                      <Badge variant="destructive">{t("Revogado")}</Badge>
+                      <Badge variant="destructive">{t("Révoqué")}</Badge>
                     ) : (
-                      <Badge variant="default">{t("Ativo")}</Badge>
+                      <Badge variant="default">{t("Actif")}</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
@@ -156,10 +156,10 @@ export function ApiTokensClient() {
                         disabled={revoke.isPending}
                         onClick={async () => {
                           await revoke.mutateAsync(token.id);
-                          toast.success(t("Token revogado."));
+                          toast.success(t("Jeton révoqué."));
                         }}
                       >
-                        {t("Revogar")}
+                        {t("Révoquer")}
                       </Button>
                     ) : null}
                   </TableCell>
@@ -173,24 +173,24 @@ export function ApiTokensClient() {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("Criar novo token")}</DialogTitle>
-            <DialogDescription>{t("O plaintext será mostrado apenas uma vez.")}</DialogDescription>
+            <DialogTitle>{t("Créer un nouveau jeton")}</DialogTitle>
+            <DialogDescription>{t("Le texte brut ne sera affiché qu’une seule fois.")}</DialogDescription>
           </DialogHeader>
           <form onSubmit={onCreate} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="t-name">{t("Nome")}</Label>
+              <Label htmlFor="t-name">{t("Nom")}</Label>
               <Input
                 id="t-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder={t("Worker de import")}
+                placeholder={t("Worker d’importation")}
                 minLength={2}
                 maxLength={100}
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label>{t("Escopos")}</Label>
+              <Label>{t("Périmètres")}</Label>
               <div className="flex flex-wrap gap-2">
                 {SCOPES.map((s) => (
                   <button
@@ -210,7 +210,7 @@ export function ApiTokensClient() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="t-exp">{t("Expira em (dias) — opcional")}</Label>
+              <Label htmlFor="t-exp">{t("Expire dans (jours) — facultatif")}</Label>
               <Input
                 id="t-exp"
                 type="number"
@@ -223,10 +223,10 @@ export function ApiTokensClient() {
             </div>
             <DialogFooter>
               <Button type="button" variant="ghost" onClick={() => setCreateOpen(false)}>
-                {t("Cancelar")}
+                {t("Annuler")}
               </Button>
               <Button type="submit" disabled={create.isPending}>
-                {t("Criar")}
+                {t("Créer")}
               </Button>
             </DialogFooter>
           </form>
@@ -236,9 +236,9 @@ export function ApiTokensClient() {
       <Dialog open={!!created} onOpenChange={(o) => !o && setCreated(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("Token criado")}</DialogTitle>
+            <DialogTitle>{t("Jeton créé")}</DialogTitle>
             <DialogDescription>
-              {t("Copie e guarde agora — não conseguiremos exibir novamente.")}
+              {t("Copiez-le et conservez-le maintenant : il ne pourra plus être affiché.")}
             </DialogDescription>
           </DialogHeader>
           {created ? (
@@ -251,18 +251,18 @@ export function ApiTokensClient() {
                 variant="secondary"
                 onClick={() => {
                   void copyToClipboard(created.plaintext).then((ok) => {
-                    if (ok) toast.success(t("Token copiado."));
-                    else toast.error(t("Não foi possível copiar — selecione o token acima."));
+                    if (ok) toast.success(t("Jeton copié."));
+                    else toast.error(t("Impossible de copier : sélectionnez le jeton ci-dessus."));
                   });
                 }}
               >
-                {t("Copiar para clipboard")}
+                {t("Copier dans le presse-papiers")}
               </Button>
               <p className="text-xs text-muted-foreground">{created._warning}</p>
             </div>
           ) : null}
           <DialogFooter>
-            <Button onClick={() => setCreated(null)}>{t("Fechar")}</Button>
+            <Button onClick={() => setCreated(null)}>{t("Fermer")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -48,7 +48,7 @@ export function EdgeConfigPanel({ sourceNode, targetNode, condition, onChange }:
   return (
     <div className="flex h-full flex-col gap-5 overflow-y-auto" data-testid="edge-config-panel">
       <div className="space-y-1">
-        <h2 className="text-base font-semibold text-text">{t("Condição da aresta")}</h2>
+        <h2 className="text-base font-semibold text-text">{t("Condition de l’arête")}</h2>
         <p className="flex items-center gap-1.5 text-sm text-text-muted">
           <span className="truncate">{sourceNode?.label ?? "?"}</span>
           <ArrowRight size={12} aria-hidden className="shrink-0" />
@@ -57,7 +57,7 @@ export function EdgeConfigPanel({ sourceNode, targetNode, condition, onChange }:
       </div>
 
       <div className="space-y-2 border-t border-border pt-4">
-        <Label htmlFor="edge-condition">{t("Quando seguir por esta aresta")}</Label>
+        <Label htmlFor="edge-condition">{t("Quand suivre cette arête")}</Label>
         <Select
           value={currentKey}
           onValueChange={(v) => {
@@ -78,8 +78,8 @@ export function EdgeConfigPanel({ sourceNode, targetNode, condition, onChange }:
         </Select>
         {sourceNode && nodeBranches(sourceNode).length > 1 && (
           <p className="text-xs text-text-muted">
-            {t("São as saídas do nó")} &quot;{sourceNode.label}&quot; —{" "}
-            {t("as mesmas que aparecem no card.")}
+            {t("Ce sont les sorties du nœud")} &quot;{sourceNode.label}&quot; —{" "}
+            {t("les mêmes que celles affichées sur la carte.")}
           </p>
         )}
       </div>

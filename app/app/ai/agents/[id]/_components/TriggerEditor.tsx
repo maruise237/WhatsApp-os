@@ -85,7 +85,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
   return (
     <div className="space-y-4">
       <div>
-        <Label>{t("O que faz ele responder")}</Label>
+        <Label>{t("Ce qui le fait répondre")}</Label>
         <div className="mt-1 flex flex-wrap gap-2">
           {(["message"] as const).map((ev) => {
             const checked = value.events.includes(ev);
@@ -110,7 +110,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
                 />
                 {/* `message` é o nome do evento no wire; na tela vale o que ele
                     significa para quem lê. */}
-                {ev === "message" ? t("Uma mensagem nova do cliente") : ev}
+                {ev === "message" ? t("Un nouveau message du client") : ev}
               </label>
             );
           })}
@@ -125,7 +125,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
             disabled={disabled}
             id="ignore_groups"
           />
-          <Label htmlFor="ignore_groups">{t("Não responder em grupos")}</Label>
+          <Label htmlFor="ignore_groups">{t("Ne pas répondre dans les groupes")}</Label>
         </div>
         <div className="flex items-center gap-2">
           <Switch
@@ -135,14 +135,14 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
             id="ignore_self"
           />
           <Label htmlFor="ignore_self">
-            {t("Não responder às mensagens que saem do seu próprio número")}
+            {t("Ne pas répondre aux messages envoyés depuis votre propre numéro")}
           </Label>
         </div>
       </div>
 
       <div className="space-y-1">
         <Label htmlFor="keyword_regex">
-          {t("Só responder quando a mensagem falar de algo específico (opcional)")}
+          {t("Répondre uniquement lorsque le message concerne un sujet précis (facultatif)")}
         </Label>
         <Input
           id="keyword_regex"
@@ -150,7 +150,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
           onChange={(e) =>
             patchFilters({ keyword_regex: e.target.value.trim() === "" ? null : e.target.value })
           }
-          placeholder={t("Ex.: pedido|status|orçamento")}
+          placeholder={t("Ex. : commande|statut|devis")}
           disabled={disabled}
           spellCheck={false}
         />
@@ -162,7 +162,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
       </div>
 
       <div className="space-y-1">
-        <Label>{t("Quantos atendimentos ao mesmo tempo")}</Label>
+        <Label>{t("Combien de conversations traiter en même temps")}</Label>
         <Select
           value={value.concurrency}
           onValueChange={(v) =>
@@ -174,8 +174,8 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="one_per_conversation">{t("Um de cada vez por conversa")}</SelectItem>
-            <SelectItem value="one_per_contact">{t("Um de cada vez por cliente")}</SelectItem>
+            <SelectItem value="one_per_conversation">{t("Une à la fois par conversation")}</SelectItem>
+            <SelectItem value="one_per_contact">{t("Une à la fois par client")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -188,13 +188,13 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
             disabled={disabled}
             id="bh_enabled"
           />
-          <Label htmlFor="bh_enabled">{t("Só atender em horário de funcionamento")}</Label>
+          <Label htmlFor="bh_enabled">{t("Répondre uniquement pendant les heures d’ouverture")}</Label>
         </div>
         {bh ? (
           <div className="space-y-2">
             <div className="grid grid-cols-3 gap-2">
               <div className="space-y-1">
-                <Label htmlFor="bh_tz">{t("Fuso horário")}</Label>
+                <Label htmlFor="bh_tz">{t("Fuseau horaire")}</Label>
                 <Input
                   id="bh_tz"
                   value={bh.timezone}
@@ -203,7 +203,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="bh_start">{t("Início")}</Label>
+                <Label htmlFor="bh_start">{t("Début")}</Label>
                 <Input
                   id="bh_start"
                   type="time"
@@ -213,7 +213,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="bh_end">{t("Fim")}</Label>
+                <Label htmlFor="bh_end">{t("Fin")}</Label>
                 <Input
                   id="bh_end"
                   type="time"
@@ -224,7 +224,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
               </div>
             </div>
             <div>
-              <Label className="mb-1 block">{t("Dias")}</Label>
+              <Label className="mb-1 block">{t("Jours")}</Label>
               <div className="flex flex-wrap gap-1">
                 {WEEKDAYS.map((d) => {
                   const active = bh.weekdays.includes(d.id);

@@ -27,7 +27,7 @@ export function ShortcutsHelpDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{t("Atalhos de teclado")}</DialogTitle>
+          <DialogTitle>{t("Raccourcis clavier")}</DialogTitle>
         </DialogHeader>
         <ul className="space-y-2 text-sm">
           {BINDINGS.map((b) => (

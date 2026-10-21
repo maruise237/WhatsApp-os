@@ -32,14 +32,14 @@ export function SecurityClient({
   const [mexendo, startMexer] = useTransition();
 
   function handleRegenerate() {
-    if (!confirm(t("Gerar novos códigos invalida TODOS os atuais. Tem certeza?"))) {
+    if (!confirm(t("Générer de nouveaux codes invalidera TOUS les codes actuels. Êtes-vous sûr ?"))) {
       return;
     }
     startTransition(async () => {
       const r = await regenerateRecoveryCodes();
       if (r.ok) {
         setCodes(r.recovery_codes);
-        toast.success(t("Novos códigos gerados."));
+        toast.success(t("Nouveaux codes générés."));
       } else {
         toast.error(`Erreur : ${r.error}`);
       }
@@ -47,7 +47,7 @@ export function SecurityClient({
   }
 
   function handleSignOutAll() {
-    if (!confirm(t("Sair de TODOS os dispositivos? Você precisará fazer login de novo."))) return;
+    if (!confirm(t("Se déconnecter de TOUS les appareils ? Vous devrez vous reconnecter."))) return;
     startSignOut(async () => {
       await signOutEverywhere();
     });
@@ -62,7 +62,7 @@ export function SecurityClient({
       <Card className="space-y-3 p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-sm font-semibold">{t("Verificação em duas etapas")}</h2>
+            <h2 className="text-sm font-semibold">{t("Validation en deux étapes")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">
               {t(
                 "Além da senha, o sistema pede um código de 6 dígitos que só existe no seu celular. É a proteção que segura uma senha vazada.",
@@ -77,7 +77,7 @@ export function SecurityClient({
                 : "bg-muted text-muted-foreground")
             }
           >
-            {mfaEnrolled ? t("Ativada") : t("Desativada")}
+            {mfaEnrolled ? t("Activée") : t("Désactivée")}
           </span>
         </div>
 
@@ -95,32 +95,32 @@ export function SecurityClient({
                 size="sm"
                 disabled={mexendo}
                 onClick={() => {
-                  if (!confirm(t("Desligar a verificação em duas etapas desta conta?"))) return;
+                  if (!confirm(t("Désactiver la validation en deux étapes de ce compte ?"))) return;
                   startMexer(async () => {
                     const r = await desativarMfaDaConta();
                     if (!r.ok) {
                       toast.error(r.erro);
                       return;
                     }
-                    toast.success(t("Verificação desligada."));
+                    toast.success(t("Validation désactivée."));
                     window.location.reload();
                   });
                 }}
               >
-                {mexendo ? t("Desligando…") : t("Desligar")}
+                {mexendo ? t("Désactivation…") : t("Désactiver")}
               </Button>
             )}
           </div>
         ) : (
           <Button size="sm" onClick={() => setAtivando(true)}>
-            {t("Ativar")}
+            {t("Activer")}
           </Button>
         )}
       </Card>
 
       {podeExigirDaEquipe ? (
         <Card className="space-y-3 p-6">
-          <h2 className="text-sm font-semibold">{t("Exigir de quem administra")}</h2>
+          <h2 className="text-sm font-semibold">{t("L’exiger des administrateurs")}</h2>
           <label className="flex items-start gap-2 text-sm">
             <input
               type="checkbox"
@@ -137,8 +137,8 @@ export function SecurityClient({
                   }
                   toast.success(
                     marcar
-                      ? t("Agora os administradores precisam da verificação.")
-                      : t("A verificação deixou de ser obrigatória."),
+                      ? t("Les administrateurs doivent désormais utiliser la validation.")
+                      : t("La validation n’est plus obligatoire."),
                   );
                   window.location.reload();
                 });
@@ -159,31 +159,31 @@ export function SecurityClient({
       ) : null}
 
       <Card className="space-y-3 p-6">
-        <h2 className="text-sm font-semibold">{t("Códigos de recuperação")}</h2>
+        <h2 className="text-sm font-semibold">{t("Codes de récupération")}</h2>
         <p className="text-xs text-muted-foreground">
-          {t("Use se perder acesso ao autenticador. Cada código é de uso único.")}
+          {t("À utiliser si vous perdez l’accès à l’application d’authentification. Chaque code ne peut servir qu’une seule fois.")}
         </p>
         {codes ? (
           <RecoveryCodesPanel codes={codes} onAcknowledge={() => setCodes(null)} />
         ) : (
           <Button variant="outline" disabled={!mfaEnrolled || isPending} onClick={handleRegenerate}>
-            {isPending ? t("Gerando…") : t("Regenerar códigos de recuperação")}
+            {isPending ? t("Génération…") : t("Régénérer les codes de récupération")}
           </Button>
         )}
         {!mfaEnrolled && (
           <p className="text-xs text-muted-foreground">
-            {t("Habilite MFA antes de gerar códigos.")}
+            {t("Activez la MFA avant de générer des codes.")}
           </p>
         )}
       </Card>
 
       <Card className="space-y-3 p-6">
-        <h2 className="text-sm font-semibold">{t("Sessões ativas")}</h2>
+        <h2 className="text-sm font-semibold">{t("Sessions actives")}</h2>
         <p className="text-xs text-muted-foreground">
-          {t("Listagem de sessões — em breve. Por enquanto, deslogue todos os dispositivos:")}
+          {t("Liste des sessions — bientôt disponible. Pour l’instant, déconnectez tous les appareils :")}
         </p>
         <Button variant="outline" disabled={isSigningOut} onClick={handleSignOutAll}>
-          {isSigningOut ? t("Saindo…") : t("Sair de todos os dispositivos")}
+          {isSigningOut ? t("Déconnexion…") : t("Déconnecter tous les appareils")}
         </Button>
       </Card>
     </div>

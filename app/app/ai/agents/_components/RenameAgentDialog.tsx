@@ -39,7 +39,7 @@ export function RenameAgentDialog({ agent, open, onOpenChange }: Props) {
     startTransition(async () => {
       const res = await renameAgentAction(agent.id, name);
       if (res.ok) {
-        toast.success(t("Renomeado."));
+        toast.success(t("Nom modifié."));
         onOpenChange(false);
         router.refresh();
       } else {
@@ -52,14 +52,14 @@ export function RenameAgentDialog({ agent, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Renomear agent")}</DialogTitle>
+          <DialogTitle>{t("Renommer l’agent")}</DialogTitle>
           <DialogDescription>
-            {t("Apenas o nome interno muda. Versões publicadas e histórico são preservados.")}
+            {t("Seul le nom interne est modifié. Les versions publiées et l’historique sont préservés.")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="agent-name">{t("Nome")}</Label>
+            <Label htmlFor="agent-name">{t("Nom")}</Label>
             <Input
               id="agent-name"
               value={name}
@@ -76,10 +76,10 @@ export function RenameAgentDialog({ agent, open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               disabled={isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={isPending || name.trim().length === 0}>
-              {t("Salvar")}
+              {t("Enregistrer")}
             </Button>
           </DialogFooter>
         </form>

@@ -60,7 +60,7 @@ function Linha({ item, aoVivo }: { item: TimelineItemView; aoVivo?: boolean }) {
             // O que chegou AGORA fica marcado: sem isto ele entraria na lista
             // idêntico ao resto e a chegada seria indistinguível do histórico.
             <span className="ml-1.5 text-[10px] uppercase tracking-wide text-accent">
-              {t("agora")}
+              {t("à l’instant")}
             </span>
           )}
         </p>
@@ -87,7 +87,7 @@ export function LeadTimeline({ itens, chegouAoVivo, isLoading, isError }: Props)
   const blocos = agrupaTimeline(itens, chegouAoVivo);
 
   if (isLoading) {
-    return <p className="py-4 text-xs text-text-muted">{t("Carregando a linha do tempo…")}</p>;
+    return <p className="py-4 text-xs text-text-muted">{t("Chargement de la chronologie…")}</p>;
   }
   // TRÊS estados, não dois: "não consegui ler" é diferente de "não há nada".
   // Transformar erro em lista vazia diria ao usuário que o lead não tem
@@ -95,13 +95,13 @@ export function LeadTimeline({ itens, chegouAoVivo, isLoading, isError }: Props)
   if (isError) {
     return (
       <p className="py-4 text-xs text-warning-fg">
-        {t("Não consegui carregar a linha do tempo. Tente de novo em instantes.")}
+        {t("Impossible de charger la chronologie. Réessayez dans quelques instants.")}
       </p>
     );
   }
   if (itens.length === 0) {
     return (
-      <p className="py-4 text-xs text-text-muted">{t("Nada aconteceu com este negócio ainda.")}</p>
+      <p className="py-4 text-xs text-text-muted">{t("Rien ne s’est encore produit pour cette affaire.")}</p>
     );
   }
 
@@ -137,7 +137,7 @@ export function LeadTimeline({ itens, chegouAoVivo, isLoading, isError }: Props)
                 <span aria-hidden className="mt-1 h-2 w-0.5 shrink-0 bg-border" />
                 <span className="first-letter:uppercase">{b.rotulo}</span>
                 <span className="text-text-muted">
-                  · {b.itens.length} {t("ações")}
+                  · {b.itens.length} {t("actions")}
                 </span>
                 <span aria-hidden className="ml-auto text-[10px]">
                   {aberto ? "−" : "+"}
@@ -179,7 +179,7 @@ export function LeadTimeline({ itens, chegouAoVivo, isLoading, isError }: Props)
             >
               <Marcador item={primeiro} />
               <span>
-                {nome} · {b.itens.length} {t("ações")}
+                {nome} · {b.itens.length} {t("actions")}
               </span>
               <span aria-hidden className="ml-auto text-[10px]">
                 {aberto ? "−" : "+"}

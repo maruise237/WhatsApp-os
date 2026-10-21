@@ -56,7 +56,7 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
 
   async function criar() {
     if (conteudo.trim().length === 0) {
-      toast.error(t("Cole o conteúdo antes de criar."));
+      toast.error(t("Collez le contenu avant de créer la source."));
       return;
     }
     setEnviando(true);
@@ -77,14 +77,14 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
       });
       const json = (await res.json()) as { error?: { message?: string } };
       if (!res.ok) {
-        toast.error(json.error?.message ?? t("Não consegui criar a fonte."));
+        toast.error(json.error?.message ?? t("Impossible de créer la source."));
         return;
       }
-      toast.success(t("Fonte criada. A indexação começa em instantes."));
+      toast.success(t("Source créée. L’indexation commence dans un instant."));
       onCriada();
       onFechar();
     } catch {
-      toast.error(t("Não consegui falar com o servidor."));
+      toast.error(t("Impossible de joindre le serveur."));
     } finally {
       setEnviando(false);
     }
@@ -95,7 +95,7 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {t("Cadastrar")} {t(rotulo).toLowerCase()}
+            {t("Enregistrer")} {t(rotulo).toLowerCase()}
           </DialogTitle>
           <DialogDescription>
             {t(
@@ -105,11 +105,11 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
         </DialogHeader>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fonte-nome">{t("Nome da fonte")}</Label>
+            <Label htmlFor="fonte-nome">{t("Nom de la source")}</Label>
             <Input id="fonte-nome" value={nome} onChange={(e) => setNome(e.target.value)} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="fonte-conteudo">{t("Conteúdo")}</Label>
+            <Label htmlFor="fonte-conteudo">{t("Contenu")}</Label>
             <Textarea
               id="fonte-conteudo"
               rows={12}
@@ -118,17 +118,17 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
               onChange={(e) => setConteudo(e.target.value)}
             />
             <p className="text-xs text-text-muted">
-              {t("Uma linha")} <code>## Question :</code> {t("e uma")} <code>## Réponse :</code>{" "}
-              {t("por item, separados")} {t("por uma linha em branco.")}
+              {t("Une ligne")} <code>## Question :</code> {t("et une")} <code>## Réponse :</code>{" "}
+              {t("par élément, séparées")} {t("par une ligne vide.")}
             </p>
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onFechar} disabled={enviando}>
-            {t("Cancelar")}
+            {t("Annuler")}
           </Button>
           <Button onClick={criar} disabled={enviando}>
-            {enviando ? t("Criando…") : t("Criar fonte")}
+            {enviando ? t("Création…") : t("Créer la source")}
           </Button>
         </DialogFooter>
       </DialogContent>

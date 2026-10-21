@@ -44,7 +44,7 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
   return (
     <section>
       <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {t("Tags da conversa")}
+        {t("Étiquettes de la conversation")}
       </h3>
 
       <div className="mt-2 flex flex-wrap gap-1">
@@ -56,7 +56,7 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
                 type="button"
                 onClick={() => remove(tag)}
                 disabled={mutation.isPending}
-                aria-label={`${t("Remover tag")} ${tag}`}
+                aria-label={`${t("Supprimer l’étiquette")} ${tag}`}
                 className="rounded-sm hover:text-destructive"
               >
                 <X size={10} weight="bold" aria-hidden />
@@ -64,7 +64,7 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
             </Badge>
           ))
         ) : (
-          <span className="text-xs text-muted-foreground">{t("Sem tags.")}</span>
+          <span className="text-xs text-muted-foreground">{t("Aucune étiquette.")}</span>
         )}
       </div>
 
@@ -78,11 +78,11 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
               add(draft);
             }
           }}
-          placeholder={t("Nova tag…")}
+          placeholder={t("Nouvelle étiquette…")}
           maxLength={40}
           disabled={mutation.isPending || tags.length >= 20}
           className="h-7 text-xs"
-          aria-label={t("Adicionar tag à conversa")}
+          aria-label={t("Ajouter une étiquette à la conversation")}
         />
         <Button
           size="sm"
@@ -90,7 +90,7 @@ export function ConversationTagsEditor({ conversationId, orgId, tags }: Props) {
           className="h-7 px-2"
           onClick={() => add(draft)}
           disabled={mutation.isPending || !draft.trim() || tags.length >= 20}
-          aria-label={t("Adicionar tag")}
+          aria-label={t("Ajouter une étiquette")}
         >
           <Plus size={12} weight="regular" aria-hidden />
         </Button>

@@ -102,9 +102,9 @@ export function InboxFilters({ value, onChange }: Props) {
         <Input
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder={t("Buscar mensagens…")}
+          placeholder={t("Rechercher des messages…")}
           className="h-8 pl-8 text-sm"
-          aria-label={t("Buscar conversas")}
+          aria-label={t("Rechercher des conversations")}
         />
       </div>
 
@@ -115,13 +115,13 @@ export function InboxFilters({ value, onChange }: Props) {
             onChange({ ...value, channel_session_id: v === "all" ? undefined : v })
           }
         >
-          <SelectTrigger className="h-8 text-sm" aria-label={t("Filtrar por número de WhatsApp")}>
-            <SelectValue placeholder={t("Todos os números")} />
+          <SelectTrigger className="h-8 text-sm" aria-label={t("Filtrer par numéro WhatsApp")}>
+            <SelectValue placeholder={t("Tous les numéros")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("Todos os números")}</SelectItem>
+            <SelectItem value="all">{t("Tous les numéros")}</SelectItem>
             {filtroForaDaLista && value.channel_session_id != null && (
-              <SelectItem value={value.channel_session_id}>{t("Número removido")}</SelectItem>
+              <SelectItem value={value.channel_session_id}>{t("Numéro supprimé")}</SelectItem>
             )}
             {channels?.map((c) => (
               <SelectItem key={c.id} value={c.id}>
@@ -137,11 +137,11 @@ export function InboxFilters({ value, onChange }: Props) {
           value={value.tag ?? "all"}
           onValueChange={(v) => onChange({ ...value, tag: v === "all" ? undefined : v })}
         >
-          <SelectTrigger className="h-8 text-sm" aria-label={t("Filtrar por tag")}>
-            <SelectValue placeholder={t("Todas as tags")} />
+          <SelectTrigger className="h-8 text-sm" aria-label={t("Filtrer par étiquette")}>
+            <SelectValue placeholder={t("Toutes les étiquettes")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("Todas as tags")}</SelectItem>
+            <SelectItem value="all">{t("Toutes les étiquettes")}</SelectItem>
             {tagVocabulary?.map((t) => (
               <SelectItem key={t} value={t}>
                 {t}
@@ -178,7 +178,7 @@ export function InboxFilters({ value, onChange }: Props) {
 
       <div className="flex items-center justify-between">
         <Label htmlFor="only-unread" className="text-xs text-muted-foreground">
-          {t("Apenas não lidos")}
+          {t("Uniquement non lus")}
         </Label>
         <Switch
           id="only-unread"

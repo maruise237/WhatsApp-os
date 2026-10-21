@@ -67,7 +67,7 @@ export function UpdatePanel() {
       const mensagem =
         err instanceof ApiError && err.status === 409
           ? err.message
-          : t("Não consegui iniciar a atualização. Tente de novo em instantes.");
+          : t("Impossible de démarrer la mise à jour. Réessayez dans quelques instants.");
       setErro(mensagem);
     },
   });
@@ -79,7 +79,7 @@ export function UpdatePanel() {
   if (!data) {
     return (
       <Layout>
-        <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>
+        <p className="text-sm text-muted-foreground">{t("Chargement…")}</p>
       </Layout>
     );
   }
@@ -89,7 +89,7 @@ export function UpdatePanel() {
 
   if (rodando) {
     return (
-      <Layout titulo={t("Atualizando para a versão {version}").replace("{version}", nova)}>
+      <Layout titulo={t("Mise à jour vers la version {version}").replace("{version}", nova)}>
         <ol className="space-y-2 text-sm">
           {PASSOS.map((passo) => {
             const indice = PASSOS.findIndex((p) => p.chave === data.run?.last_step);
@@ -121,7 +121,7 @@ export function UpdatePanel() {
   if (data.run?.status === "failed_rolled_back") {
     return (
       <Layout
-        titulo={t("A atualização para a versão {version} não deu certo").replace("{version}", alvo)}
+        titulo={t("La mise à jour vers la version {version} a échoué").replace("{version}", alvo)}
       >
         <p className="text-sm">
           {t(
@@ -161,7 +161,7 @@ export function UpdatePanel() {
     // o log logo abaixo explica em português quando foi só uma recusa.
     return (
       <Layout
-        titulo={t("A atualização para a versão {version} não deu certo").replace("{version}", alvo)}
+        titulo={t("La mise à jour vers la version {version} a échoué").replace("{version}", alvo)}
       >
         <p className="text-sm">
           {t(
@@ -187,7 +187,7 @@ export function UpdatePanel() {
 
   if (data.run?.status === "unknown") {
     return (
-      <Layout titulo={t("Não sei dizer como terminou")}>
+      <Layout titulo={t("Impossible de déterminer comment elle s’est terminée")}>
         <p className="text-sm">
           {t(
             "Comecei a atualização para a versão {version} mas perdi contato com o servidor antes do fim. Confira se o sistema está funcionando normalmente — se estiver, provavelmente deu certo.",
@@ -199,7 +199,7 @@ export function UpdatePanel() {
           mutate={() => atualizar.mutate()}
           isPending={atualizar.isPending}
           erro={erro}
-          texto={t("Para conferir pelo servidor, quem tem acesso pode rodar:")}
+          texto={t("Pour vérifier depuis le serveur, une personne disposant d’un accès peut exécuter :")}
           comando={COMANDO_MANUAL}
         />
       </Layout>
@@ -208,7 +208,7 @@ export function UpdatePanel() {
 
   if (!data.agent_online) {
     return (
-      <Layout titulo={t("Atualização automática indisponível")}>
+      <Layout titulo={t("Mise à jour automatique indisponible")}>
         <p className="text-sm">
           {t(
             "Não estou conseguindo falar com o servidor onde o sistema está instalado, então não posso atualizar sozinho. Quem tem acesso ao servidor pode entrar na pasta onde o sistema foi instalado e rodar este comando — se for a primeira vez, rode duas vezes: a primeira baixa o programa novo e a segunda liga o botão desta tela.",
@@ -216,7 +216,7 @@ export function UpdatePanel() {
         </p>
         <Comando comando={COMANDO_MANUAL} />
         <p className="mt-3 text-sm text-muted-foreground">
-          {t("Versão instalada: {version}.").replace("{version}", versao)}
+          {t("Version installée : {version}.").replace("{version}", versao)}
         </p>
       </Layout>
     );
@@ -227,7 +227,7 @@ export function UpdatePanel() {
   // conta disso é o cliente nunca receber a próxima correção de segurança.
   if (data.compare_failed) {
     return (
-      <Layout titulo={t("Não consegui checar se há versão nova")}>
+      <Layout titulo={t("Impossible de vérifier s’il existe une nouvelle version")}>
         <p className="text-sm">
           {t(
             "O servidor não conseguiu comparar a sua versão ({version}) com a última publicada — normalmente é internet instável ou falta de espaço em disco na hora da checagem. Não quer dizer que esteja desatualizado, nem que esteja em dia: quer dizer que eu não sei.",
@@ -245,9 +245,9 @@ export function UpdatePanel() {
 
   if (!data.update_available && !data.off_release) {
     return (
-      <Layout titulo={t("Você está na versão {version}").replace("{version}", versao)}>
+      <Layout titulo={t("Vous utilisez la version {version}").replace("{version}", versao)}>
         <p className="text-sm text-muted-foreground">
-          {t("É a mais recente. Não há nada a fazer.")}
+          {t("C’est la version la plus récente. Aucune action n’est nécessaire.")}
         </p>
       </Layout>
     );
@@ -267,7 +267,7 @@ export function UpdatePanel() {
   if (!nova) {
     if (!data.has_known_release) {
       return (
-        <Layout titulo={t("Ainda não há nenhuma versão publicada")}>
+        <Layout titulo={t("Aucune version n’est encore publiée")}>
           <p className="text-sm">
             {t(
               "Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação — normal em um fork novo ou recém-criado a partir do código-fonte. Não há nada a atualizar agora, e isso não é um problema.",
@@ -283,7 +283,7 @@ export function UpdatePanel() {
       );
     }
     return (
-      <Layout titulo={t("Você está à frente da versão publicada")}>
+      <Layout titulo={t("Vous utilisez une version plus récente que la version publiée")}>
         <p className="text-sm">
           {t(
             "Seu sistema roda uma versão mais nova do que a última publicada, então não há nada a atualizar. É assim mesmo quando a instalação acompanha o desenvolvimento, e nada aqui está errado por causa disso — a marca da sua versão é {version}.",
@@ -300,7 +300,7 @@ export function UpdatePanel() {
   }
 
   return (
-    <Layout titulo={t("Versão {version} disponível").replace("{version}", nova)}>
+    <Layout titulo={t("Version {version} disponible").replace("{version}", nova)}>
       {data.off_release && (
         <p className="mb-4 rounded-md border border-warning bg-warning-bg p-3 text-sm text-warning-fg">
           {t(
@@ -311,7 +311,7 @@ export function UpdatePanel() {
 
       {data.notes?.requires_attention && (
         <div className="mb-4 rounded-md border border-warning bg-warning-bg p-3 text-sm text-warning-fg">
-          <p className="mb-1 font-medium">{t("Requer atenção")}</p>
+          <p className="mb-1 font-medium">{t("Attention requise")}</p>
           <p className="whitespace-pre-line">
             {markdownParaTextoSimples(data.notes.requires_attention)}
           </p>
@@ -320,7 +320,7 @@ export function UpdatePanel() {
 
       {data.notes?.body && (
         <div className="mb-6">
-          <p className="mb-2 text-sm font-medium">{t("O que muda")}</p>
+          <p className="mb-2 text-sm font-medium">{t("Ce qui change")}</p>
           <pre className="whitespace-pre-wrap font-sans text-sm text-muted-foreground">
             {markdownParaTextoSimples(data.notes.body)}
           </pre>
@@ -350,7 +350,7 @@ function BotaoAtualizar({
     <>
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={mutate} disabled={isPending}>
-          {isPending ? t("Iniciando…") : t("Atualizar agora")}
+          {isPending ? t("Démarrage…") : t("Mettre à jour maintenant")}
         </Button>
         <span className="text-sm text-muted-foreground">
           {t(
@@ -413,7 +413,7 @@ function DetalhesTecnicos({ texto }: { texto: string | undefined }) {
   return (
     <details className="mt-4 rounded-md border">
       <summary className="cursor-pointer px-3 py-2 text-sm text-muted-foreground">
-        {t("Detalhes técnicos (útil se for pedir ajuda)")}
+        {t("Détails techniques (utile pour demander de l’aide)")}
       </summary>
       <pre className="max-h-72 overflow-auto whitespace-pre-wrap px-3 pb-3 font-mono text-xs text-muted-foreground">
         {texto}
@@ -428,7 +428,7 @@ function Layout({ titulo, children }: { titulo?: string; children: React.ReactNo
     <div className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">
-          {titulo ?? t("Atualização do sistema")}
+          {titulo ?? t("Mise à jour du système")}
         </h1>
       </header>
       <Card className="p-6">{children}</Card>
@@ -439,9 +439,9 @@ function Layout({ titulo, children }: { titulo?: string; children: React.ReactNo
 function Reiniciando() {
   const t = useT();
   return (
-    <Layout titulo={t("Reiniciando…")}>
+    <Layout titulo={t("Redémarrage…")}>
       <p className="text-sm text-muted-foreground">
-        {t("O sistema está voltando. Esta página se atualiza sozinha em alguns instantes.")}
+        {t("Le système redémarre. Cette page se mettra à jour automatiquement dans quelques instants.")}
       </p>
     </Layout>
   );
@@ -464,7 +464,7 @@ function Comando({ comando }: { comando: string }) {
           setTimeout(() => setCopiado(false), 2000);
         }}
       >
-        {copiado ? t("Copiado") : t("Copiar")}
+        {copiado ? t("Copié") : t("Copier")}
       </Button>
     </div>
   );

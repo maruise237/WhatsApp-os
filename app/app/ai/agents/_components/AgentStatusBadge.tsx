@@ -49,7 +49,7 @@ export function AgentStatusBadge({ status }: { status: AgentStatus }) {
   const t = useT();
   const label = t(LABEL[status]);
   return (
-    <Badge variant={VARIANT[status]} aria-label={`${t("status:")} ${label}`}>
+    <Badge variant={VARIANT[status]} aria-label={`${t("statut :")} ${label}`}>
       {label}
     </Badge>
   );

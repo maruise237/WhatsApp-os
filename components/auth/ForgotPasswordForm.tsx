@@ -35,11 +35,11 @@ export function ForgotPasswordForm() {
         return;
       }
       if (res.error === "rate_limited") {
-        setServerError(t("Muitas tentativas. Aguarde alguns minutos."));
+        setServerError(t("Trop de tentatives. Patientez quelques minutes."));
       } else if (res.error === "validation_error") {
-        setServerError(t("Email inválido. Confira o campo."));
+        setServerError(t("E-mail invalide. Vérifiez le champ."));
       } else {
-        setServerError(t("Não foi possível enviar o e-mail. Tente novamente."));
+        setServerError(t("Impossible d’envoyer l’e-mail. Réessayez."));
       }
     });
   };
@@ -47,9 +47,9 @@ export function ForgotPasswordForm() {
   if (sent) {
     return (
       <div className="bg-muted/40 space-y-2 rounded-md border px-4 py-6 text-center" role="status">
-        <p className="text-sm font-medium">{t("Verifique seu e-mail")}</p>
+        <p className="text-sm font-medium">{t("Vérifiez votre e-mail")}</p>
         <p className="text-sm text-muted-foreground">
-          {t("Se existir uma conta com esse e-mail, enviamos um link para redefinir a senha.")}
+          {t("Si un compte existe avec cette adresse e-mail, un lien de réinitialisation du mot de passe vous a été envoyé.")}
         </p>
       </div>
     );
@@ -58,7 +58,7 @@ export function ForgotPasswordForm() {
   return (
     <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <Label htmlFor="email">{t("Email")}</Label>
+        <Label htmlFor="email">{t("E-mail")}</Label>
         <Input
           id="email"
           type="email"
@@ -80,7 +80,7 @@ export function ForgotPasswordForm() {
         </div>
       )}
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? t("Enviando...") : t("Enviar link de redefinição")}
+        {isPending ? t("Envoi…") : t("Envoyer le lien de réinitialisation")}
       </Button>
     </form>
   );

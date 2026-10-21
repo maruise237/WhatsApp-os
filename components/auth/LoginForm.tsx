@@ -46,13 +46,13 @@ export function LoginForm({ next }: { next?: string }) {
         return;
       }
       if (res.error === "invalid_credentials") {
-        setServerError(t("Email ou senha incorretos."));
+        setServerError(t("E-mail ou mot de passe incorrect."));
       } else if (res.error === "rate_limited") {
-        setServerError(t("Muitas tentativas. Aguarde alguns minutos."));
+        setServerError(t("Trop de tentatives. Patientez quelques minutes."));
       } else if (res.error === "validation_error") {
-        setServerError(t("Dados inválidos. Confira os campos."));
+        setServerError(t("Données invalides. Vérifiez les champs."));
       } else {
-        setServerError(t("Erro inesperado. Tente novamente."));
+        setServerError(t("Erreur inattendue. Réessayez."));
       }
     });
   };
@@ -60,7 +60,7 @@ export function LoginForm({ next }: { next?: string }) {
   return (
     <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <Label htmlFor="email">{t("Email")}</Label>
+        <Label htmlFor="email">{t("E-mail")}</Label>
         <Input
           id="email"
           type="email"
@@ -74,7 +74,7 @@ export function LoginForm({ next }: { next?: string }) {
         )}
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="password">{t("Senha")}</Label>
+        <Label htmlFor="password">{t("Mot de passe")}</Label>
         <Input
           id="password"
           type="password"
@@ -95,7 +95,7 @@ export function LoginForm({ next }: { next?: string }) {
         </div>
       )}
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? t("Entrando...") : t("Entrar")}
+        {isPending ? t("Connexion...") : t("Se connecter")}
       </Button>
     </form>
   );

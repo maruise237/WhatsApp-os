@@ -59,7 +59,7 @@ export function RulesTab() {
     update.mutate(
       { id: rule.id, is_active: checked },
       {
-        onSuccess: () => toast.success(checked ? t("Automação ligada.") : t("Automação pausada.")),
+        onSuccess: () => toast.success(checked ? t("Automatisation activée.") : t("Automatisation mise en pause.")),
         onError: () => qc.invalidateQueries({ queryKey: RULES_QUERY_KEY }),
       },
     );
@@ -90,14 +90,14 @@ export function RulesTab() {
         <Card className="max-w-md">
           <CardHeader className="items-center text-center">
             <Robot className="mb-2 h-10 w-10 text-accent" />
-            <CardTitle>{t("Crie sua primeira automação")}</CardTitle>
+            <CardTitle>{t("Créez votre première automatisation")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground">
-              {t("Ex.: quando entrar um contato novo, enviar uma mensagem de boas-vindas.")}
+              {t("Ex. : lorsqu’un nouveau contact arrive, envoyer un message de bienvenue.")}
             </p>
             <Button onClick={openCreate}>
-              <Plus /> {t("Nova automação")}
+              <Plus /> {t("Nouvelle automatisation")}
             </Button>
           </CardContent>
         </Card>
@@ -120,12 +120,12 @@ export function RulesTab() {
               <div className="flex items-center justify-between gap-2">
                 <CardTitle className="truncate">{r.name}</CardTitle>
                 <Badge variant={r.is_active ? "success" : "neutral"}>
-                  {r.is_active ? t("Ativa") : t("Pausada")}
+                  {r.is_active ? t("Active") : t("En pause")}
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">{triggerLabel(r.trigger_event, t)}</p>
               <p className="text-xs text-muted-foreground">
-                {r.actions.length} {r.actions.length === 1 ? t("ação") : t("ações")}
+                {r.actions.length} {r.actions.length === 1 ? t("action") : t("actions")}
               </p>
               {/* Uma regra ligada roda sozinha para sempre: quem a ligou é parte
                   do estado dela, não um detalhe de auditoria. */}
@@ -136,7 +136,7 @@ export function RulesTab() {
                 checked={r.is_active}
                 disabled={update.isPending}
                 onCheckedChange={(checked) => toggleActive(r, checked)}
-                aria-label={`${r.is_active ? t("Pausar") : t("Ativar")} ${r.name}`}
+                aria-label={`${r.is_active ? t("Mettre en pause") : t("Activer")} ${r.name}`}
               />
               <div className="flex items-center gap-1">
                 <Button
@@ -144,7 +144,7 @@ export function RulesTab() {
                   variant="ghost"
                   size="icon"
                   onClick={() => openEdit(r)}
-                  aria-label={t("Editar automação")}
+                  aria-label={t("Modifier l’automatisation")}
                 >
                   <PencilSimple />
                 </Button>
@@ -153,7 +153,7 @@ export function RulesTab() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setDeleting(r)}
-                  aria-label={t("Excluir automação")}
+                  aria-label={t("Supprimer l’automatisation")}
                 >
                   <Trash />
                 </Button>
@@ -168,22 +168,22 @@ export function RulesTab() {
       <AlertDialog open={!!deleting} onOpenChange={(o) => !o && setDeleting(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t("Excluir esta automação?")}</AlertDialogTitle>
+            <AlertDialogTitle>{t("Supprimer cette automatisation ?")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {deleting?.name} {t("para de rodar imediatamente. Essa ação não pode ser desfeita.")}
+              {deleting?.name} {t("cessera immédiatement de fonctionner. Cette action est irréversible.")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t("Cancelar")}</AlertDialogCancel>
+            <AlertDialogCancel>{t("Annuler")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
                 if (!deleting) return;
                 await del.mutateAsync(deleting.id);
-                toast.success(t("Automação excluída."));
+                toast.success(t("Automatisation supprimée."));
                 setDeleting(null);
               }}
             >
-              {t("Excluir")}
+              {t("Supprimer")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

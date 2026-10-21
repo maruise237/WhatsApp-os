@@ -77,7 +77,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
         .map((m) => ({
           key: `u:${m.user_id}`,
           owner: m.user_id,
-          name: m.full_name ?? t("Sem nome"),
+          name: m.full_name ?? t("Sans nom"),
           kind: "user" as OwnerKind,
           version: null,
         })),
@@ -93,26 +93,26 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
   }, [members, agents, user.id, t]);
   const ownerLabel =
     filters.owner === "unassigned"
-      ? t("Sem responsável")
+      ? t("Aucun responsable")
       : !filters.owner || filters.owner === "any"
-        ? t("Todos")
+        ? t("Tous")
         : filteredAgentId
-          ? (agents?.find((a) => a.agent_id === filteredAgentId)?.name ?? t("Agente"))
+          ? (agents?.find((a) => a.agent_id === filteredAgentId)?.name ?? t("Agent"))
           : filters.owner === user.id
-            ? t("Eu")
-            : (members?.find((m) => m.user_id === filters.owner)?.full_name ?? t("Responsável"));
+            ? t("Moi")
+            : (members?.find((m) => m.user_id === filters.owner)?.full_name ?? t("Responsable"));
 
   const statusLabel = t(
     STATUS_OPTIONS.find((o) => o.value === (filters.status ?? "all"))?.label ?? "Todos",
   );
 
-  const tagLabel = filters.tag ?? t("Tag: todas");
+  const tagLabel = filters.tag ?? t("Tag : toutes");
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-surface p-2">
       <Input
         type="search"
-        placeholder={t("Buscar por título…")}
+        placeholder={t("Rechercher par titre…")}
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         className="h-9 w-full sm:w-64"
@@ -121,20 +121,20 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
-            {t("Responsável:")} {ownerLabel}
+            {t("Responsable :")} {ownerLabel}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
-          <DropdownMenuLabel>{t("Responsável")}</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("Responsable")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => onChange({ ...filters, owner: "any" })}>
-            {t("Todos")}
+            {t("Tous")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onChange({ ...filters, owner: "unassigned" })}>
-            {t("Sem responsável")}
+            {t("Aucun responsable")}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onChange({ ...filters, owner: user.id })}>
-            {t("Eu")}
+            {t("Moi")}
           </DropdownMenuItem>
           {/*
             Humanos e agentes numa lista SÓ, ordenados juntos por nome. Não existe
@@ -188,7 +188,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => onChange({ ...filters, tag: undefined })}>
-            {t("Todas")}
+            {t("Toutes")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           {tagOptions.map((t) => (
@@ -210,7 +210,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
           checked={!!filters.overdueOnly}
           onChange={(e) => onChange({ ...filters, overdueOnly: e.target.checked })}
         />
-        {t("Apenas atrasados")}
+        {t("Uniquement en retard")}
       </label>
 
       {(filters.search ||
@@ -226,7 +226,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
             onChange({ status: "all" });
           }}
         >
-          {t("Limpar filtros")}
+          {t("Effacer les filtres")}
         </Button>
       )}
     </div>

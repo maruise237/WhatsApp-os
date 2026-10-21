@@ -13,7 +13,7 @@ export function MediaUnavailable({ kind, className }: { kind: string; className?
       )}
     >
       <ImageIcon size={20} weight="duotone" aria-hidden />
-      <span className="text-xs">{t("Mídia indisponível")}</span>
+      <span className="text-xs">{t("Média indisponible")}</span>
       <span className="sr-only">{kind}</span>
     </div>
   );

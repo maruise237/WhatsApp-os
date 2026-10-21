@@ -68,10 +68,10 @@ function ComoOPapelEstaIndo() {
   return (
     <Card className="space-y-2 p-4" data-testid="operador-como-esta-indo">
       <h4 className="text-sm font-medium">
-        {t("Como está indo (últimos {days} dias)").replace("{days}", String(dias))}
+        {t("Comment cela se passe (les {days} derniers jours)").replace("{days}", String(dias))}
       </h4>
       <p className="text-xs text-muted-foreground" data-testid="operador-metrica-acao">
-        {t("Organizou o sistema em {agiu} de {turnos} conversas.")
+        {t("Le système a été organisé dans {agiu} conversation(s) sur {turnos}.")
           .replace("{agiu}", String(agiu))
           .replace("{turnos}", String(turnos))}
       </p>
@@ -112,7 +112,7 @@ export function PainelDoOperador(props: Props) {
           />
           <div className="space-y-1">
             <Label htmlFor="operator_enabled" className="text-sm font-medium">
-              {t("Deixar o agente organizar o sistema depois de cada conversa")}
+              {t("Laisser l’agent organiser le système après chaque conversation")}
             </Label>
             <p className="text-xs text-muted-foreground">
               {t(
@@ -133,7 +133,7 @@ export function PainelDoOperador(props: Props) {
             data-testid="operador-consequencia"
             className="rounded-md border border-dashed p-3 text-xs text-muted-foreground"
           >
-            <p className="font-medium text-foreground">{t("Com isto desligado:")}</p>
+            <p className="font-medium text-foreground">{t("Lorsque cette option est désactivée :")}</p>
             <p className="mt-1">
               {t(
                 "o assistente continua atendendo e o básico continua sendo registrado sozinho — a etapa do cliente, o retorno que ele prometeu e o histórico da conversa.",
@@ -153,7 +153,7 @@ export function PainelDoOperador(props: Props) {
           {/* Plus de choix de modèle ici : l'IA est fournie par la plateforme
               (lib/ai/plateforme.ts), le même modèle organise et converse. */}
           <Card className="space-y-2 p-4">
-            <h3 className="text-sm font-medium">{t("O que ele pode mexer no sistema")}</h3>
+            <h3 className="text-sm font-medium">{t("Ce qu’il peut modifier dans le système")}</h3>
             <p className="text-xs text-muted-foreground">
               {t(
                 "Esta lista é só deste papel — nada aqui é usado enquanto ele conversa com o cliente. Ligue por jornada de trabalho.",

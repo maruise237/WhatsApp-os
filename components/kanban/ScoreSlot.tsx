@@ -55,7 +55,7 @@ export function ScoreSlot({ probability, band, reason, factors }: ScoreSlotProps
           onMouseLeave={() => setAberto(false)}
           // O rótulo acessível carrega o número E a faixa: "72%" lido sozinho
           // não diz se é bom ou ruim para quem não vê a barra.
-          aria-label={`${t("Probabilidade")} ${probability}%, ${t(bandLabel(band))}. ${t("Ver o porquê.")}`}
+          aria-label={`${t("Probabilité")} ${probability}%, ${t(bandLabel(band))}. ${t("Voir pourquoi.")}`}
           className="flex min-w-0 items-center gap-2 rounded text-left"
         >
           <span
@@ -110,8 +110,8 @@ export function ScoreSlot({ probability, band, reason, factors }: ScoreSlotProps
                     <span className="ml-1 text-text-muted">
                       (
                       {f.ancora.kind === "message"
-                        ? t("ver a mensagem")
-                        : t("registro que sustenta")}
+                        ? t("voir le message")
+                        : t("enregistrement justificatif")}
                       )
                     </span>
                   )}
@@ -122,7 +122,7 @@ export function ScoreSlot({ probability, band, reason, factors }: ScoreSlotProps
         ) : (
           // Vazio com DESENHO PRÓPRIO: não há evidência a mostrar, e dizer isso
           // é melhor que deixar um espaço que parece defeito de carregamento.
-          <p className="mt-2 text-text-muted">{t("Sem evidências registradas.")}</p>
+          <p className="mt-2 text-text-muted">{t("Aucune preuve enregistrée.")}</p>
         )}
       </PopoverContent>
     </Popover>

@@ -24,16 +24,16 @@ export function RecoveryForm({ next }: RecoveryFormProps) {
     setError(null);
     const normalizedCode = code.trim().toUpperCase();
     if (!/^[A-Z0-9]{8}$/.test(normalizedCode)) {
-      setError(t("Código inválido ou já utilizado."));
+      setError(t("Code invalide ou déjà utilisé."));
       return;
     }
     startTransition(async () => {
       const res = await submitRecoveryCode({ email, code: normalizedCode }, next);
       if (!res) return; // server-side redirect on success
       if (res.error === "service_unavailable") {
-        setError(t("Serviço de recuperação indisponível. Contate o administrador."));
+        setError(t("Le service de récupération est indisponible. Contactez l’administrateur."));
       } else {
-        setError(t("Código inválido ou já utilizado."));
+        setError(t("Code invalide ou déjà utilisé."));
       }
     });
   };
@@ -41,7 +41,7 @@ export function RecoveryForm({ next }: RecoveryFormProps) {
   return (
     <form method="post" onSubmit={onSubmit} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <Label htmlFor="email">{t("Email")}</Label>
+        <Label htmlFor="email">{t("E-mail")}</Label>
         <Input
           id="email"
           type="email"
@@ -53,7 +53,7 @@ export function RecoveryForm({ next }: RecoveryFormProps) {
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="recovery-code">{t("Código de recuperação")}</Label>
+        <Label htmlFor="recovery-code">{t("Code de récupération")}</Label>
         <Input
           id="recovery-code"
           inputMode="text"
@@ -66,7 +66,7 @@ export function RecoveryForm({ next }: RecoveryFormProps) {
           onChange={(e) => setCode(e.target.value.toUpperCase())}
         />
         <p className="text-xs text-muted-foreground">
-          {t("Use um dos 10 códigos que você salvou ao configurar a verificação em duas etapas.")}
+          {t("Utilisez l’un des 10 codes enregistrés lors de la configuration de la validation en deux étapes.")}
         </p>
       </div>
 
@@ -80,7 +80,7 @@ export function RecoveryForm({ next }: RecoveryFormProps) {
       )}
 
       <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? t("Validando...") : t("Recuperar acesso")}
+        {isPending ? t("Validation…") : t("Récupérer l’accès")}
       </Button>
     </form>
   );

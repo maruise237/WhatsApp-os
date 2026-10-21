@@ -73,10 +73,10 @@ export function RunTrace({ toolCalls, finalText, emptyMessage = "Aucune trace di
                 <Badge variant="outline" className="font-mono text-xs">
                   #{stepNum}
                 </Badge>
-                <span className="font-mono">{s.tool_name ?? t("(sem nome)")}</span>
+                <span className="font-mono">{s.tool_name ?? t("(sans nom)")}</span>
                 {errMsg ? (
                   <Badge variant="destructive" className="text-xs">
-                    {t("erro")}
+                    {t("erreur")}
                   </Badge>
                 ) : null}
               </span>
@@ -86,22 +86,22 @@ export function RunTrace({ toolCalls, finalText, emptyMessage = "Aucune trace di
             </summary>
             <div className="border-border/60 space-y-3 border-t px-3 py-3 text-xs">
               <div>
-                <p className="mb-1 font-medium text-muted-foreground">{t("Args")}</p>
+                <p className="mb-1 font-medium text-muted-foreground">{t("Arguments")}</p>
                 <pre className="bg-muted/40 overflow-x-auto rounded p-2 font-mono leading-relaxed">
-                  {clip(fmtJson(s.args), 4000, t("truncado"))}
+                  {clip(fmtJson(s.args), 4000, t("tronqué"))}
                 </pre>
               </div>
               <div>
-                <p className="mb-1 font-medium text-muted-foreground">{t("Result")}</p>
+                <p className="mb-1 font-medium text-muted-foreground">{t("Résultat")}</p>
                 <pre className="bg-muted/40 overflow-x-auto rounded p-2 font-mono leading-relaxed">
-                  {clip(fmtJson(s.result), 4000, t("truncado"))}
+                  {clip(fmtJson(s.result), 4000, t("tronqué"))}
                 </pre>
               </div>
               {errMsg ? (
                 <div>
-                  <p className="mb-1 font-medium text-destructive">{t("Error")}</p>
+                  <p className="mb-1 font-medium text-destructive">{t("Erreur")}</p>
                   <pre className="bg-destructive/10 overflow-x-auto rounded p-2 font-mono leading-relaxed text-destructive">
-                    {clip(errMsg, 4000, t("truncado"))}
+                    {clip(errMsg, 4000, t("tronqué"))}
                   </pre>
                 </div>
               ) : null}
@@ -118,7 +118,7 @@ export function RunTrace({ toolCalls, finalText, emptyMessage = "Aucune trace di
       {finalText ? (
         <div className="border-primary/30 bg-primary/5 rounded-md border p-3 text-sm">
           <p className="mb-1 text-xs font-medium uppercase tracking-wide text-primary">
-            {t("Mensagem que SERIA enviada")}
+            {t("Message qui SERAIT envoyé")}
           </p>
           <p className="whitespace-pre-wrap">{finalText}</p>
         </div>

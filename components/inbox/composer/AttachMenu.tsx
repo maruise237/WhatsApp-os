@@ -33,7 +33,7 @@ export function AttachMenu({ disabled, onPick, onPickContact }: Props) {
             size="icon"
             variant="ghost"
             className="h-9 w-9 shrink-0"
-            aria-label={t("Anexar")}
+            aria-label={t("Joindre")}
             disabled={disabled}
           >
             <Plus size={18} weight="regular" aria-hidden />
@@ -46,7 +46,7 @@ export function AttachMenu({ disabled, onPick, onPickContact }: Props) {
             onClick={() => mediaRef.current?.click()}
           >
             <ImageSquare size={18} weight="duotone" className="text-primary" aria-hidden />
-            {t("Fotos e vídeos")}
+            {t("Photos et vidéos")}
           </button>
           <button
             type="button"
@@ -54,7 +54,7 @@ export function AttachMenu({ disabled, onPick, onPickContact }: Props) {
             onClick={() => docRef.current?.click()}
           >
             <FileText size={18} weight="duotone" className="text-primary" aria-hidden />
-            {t("Documento")}
+            {t("Document")}
           </button>
           {onPickContact && (
             <button
@@ -63,7 +63,7 @@ export function AttachMenu({ disabled, onPick, onPickContact }: Props) {
               onClick={onPickContact}
             >
               <UserCircle size={18} weight="duotone" className="text-primary" aria-hidden />
-              {t("Contato")}
+              {t("Contact")}
             </button>
           )}
         </PopoverContent>

@@ -21,14 +21,14 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
     <div className="space-y-6 rounded-lg border bg-background p-6">
       <div className="space-y-1 text-center">
         <h2 className="text-2xl font-semibold tracking-tight">
-          {semNumero ? "Presque prêt" : t("Tudo pronto!")}
+          {semNumero ? "Presque prêt" : t("Tout est prêt !")}
         </h2>
         <p className="text-sm text-muted-foreground">
           {pendentes.length === 0
-            ? t("Seu funcionário está montado. Daqui em diante é só acompanhar.")
+            ? t("Votre assistant est prêt. Il ne vous reste plus qu’à suivre son activité.")
             : semNumero
               ? "Votre assistant est créé, mais il ne répondra à vos clients qu’une fois le numéro WhatsApp connecté (Menu › Connexions)."
-              : t("Seu funcionário já está de pé. O que ficou para depois continua te esperando.")}
+              : t("Votre assistant est déjà opérationnel. Les éléments reportés vous attendent toujours.")}
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
                 "(pulado)", inclusive passo que a instalação nunca ofereceu —
                 o wizard cobrando o que ninguém pediu.
               */}
-              {it.pulado ? t(" (você pulou)") : it.feito ? "" : t(" (ainda não)")}
+              {it.pulado ? t(" (vous avez ignoré cette étape)") : it.feito ? "" : t(" (pas encore)")}
             </span>
           </li>
         ))}
@@ -66,9 +66,9 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
       */}
       <section className="space-y-3 border-t pt-6">
         <div>
-          <h3 className="text-sm font-medium">{t("O que mais tem aqui")}</h3>
+          <h3 className="text-sm font-medium">{t("Que trouve-t-on d’autre ici ?")}</h3>
           <p className="text-xs text-muted-foreground">
-            {t("Você não precisa mexer em nada disso agora. É só para saber que existe.")}
+            {t("Vous n’avez rien à modifier maintenant. Cette section vous présente simplement les fonctionnalités disponibles.")}
           </p>
         </div>
         {/*
@@ -94,7 +94,7 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
 
               <details className="group mt-2">
                 <summary className="cursor-pointer list-none text-xs text-muted-foreground underline underline-offset-2">
-                  {t("Como funciona")}
+                  {t("Comment ça fonctionne")}
                 </summary>
                 <ol className="mt-2 space-y-1.5">
                   {p.comoFunciona.map((passo, i) => (
@@ -122,11 +122,11 @@ export function DoneClient({ itens, pecas }: { itens: ItemDoResumo[]; pecas: Pec
           onClick={() =>
             startTransition(async () => {
               const res = await finishOnboarding();
-              if (res && !res.ok) toast.error(`${t("Falha")}: ${res.error}`);
+              if (res && !res.ok) toast.error(`${t("Échec")}: ${res.error}`);
             })
           }
         >
-          {pending ? t("Finalizando...") : t("Começar a usar")}
+          {pending ? t("Finalisation…") : t("Commencer à utiliser")}
         </Button>
       </div>
     </div>

@@ -71,7 +71,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
   return (
     <Card className="space-y-3 p-4">
       <div>
-        <h3 className="text-sm font-medium">{t("Em que negócios ele pode mexer")}</h3>
+        <h3 className="text-sm font-medium">{t("Dans quelles affaires l’agent peut-il intervenir ?")}</h3>
         <p className="text-xs text-muted-foreground">
           {t(
             "Marque os funis que este assistente cuida. Ele conversa com qualquer cliente, mas só move, edita ou encerra negócio dos funis marcados aqui.",
@@ -81,7 +81,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
 
       {funis.length === 0 ? (
         <p className="text-xs text-muted-foreground">
-          {t("Você ainda não tem nenhum funil. Crie um em Funis para poder liberar o assistente.")}
+          {t("Vous n’avez encore aucun pipeline. Créez-en un dans Pipelines pour pouvoir activer l’assistant.")}
         </p>
       ) : (
         <div className="space-y-2" data-testid="agente-funis">
@@ -104,7 +104,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
                 {f.name}
                 {f.is_default ? (
                   <span className="ml-2 text-xs text-muted-foreground">
-                    {t("(é para cá que vão as conversas novas)")}
+                    {t("(c’est ici qu’arrivent les nouvelles conversations)")}
                   </span>
                 ) : null}
                 {/* A lacuna de tradução só aparece no funil MARCADO: fora do
@@ -112,7 +112,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
                     configuração que ninguém prometeu. */}
                 {marcados.has(f.id) && cobertura?.[f.id]?.mudo ? (
                   <span data-testid={`funil-mudo-${f.id}`} className="ml-2 text-xs text-warning-fg">
-                    {t("— ele não sabe organizar este funil ainda")}
+                    {t("— il ne sait pas encore organiser ce pipeline")}
                   </span>
                 ) : null}
               </Label>
@@ -138,7 +138,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
             : t(
                 "Você marcou {count} funis em que ninguém disse ao assistente o que cada etapa significa — ele vai atender e deixar os negócios parados onde estão.",
               ).replace("{count}", String(mudosMarcados.length))}{" "}
-          {t("Isso se configura em Configurações › Funis.")}
+          {t("Cette configuration se fait dans Paramètres › Pipelines.")}
         </p>
       ) : null}
 

@@ -203,7 +203,7 @@ export function ConversationHeader({ conversation }: Props) {
               })
             }
           >
-            {t("Assumir")}
+            {t("Prendre en charge")}
           </Button>
         )}
         {isMineAssigned && (
@@ -213,7 +213,7 @@ export function ConversationHeader({ conversation }: Props) {
             disabled={release.isPending}
             onClick={() => release.mutate({ conversation_id: conversation.id })}
           >
-            {t("Liberar")}
+            {t("Libérer")}
           </Button>
         )}
         {/* O INTERRUPTOR. Um botão, dois rótulos, um slot.
@@ -247,7 +247,7 @@ export function ConversationHeader({ conversation }: Props) {
             }
             onClick={() => retomar.mutate({ conversation_id: conversation.id })}
           >
-            {retomar.isPending ? "Restitution…" : t("Devolver ao automático")}
+            {retomar.isPending ? "Restitution…" : t("Remettre à l'automatique")}
           </Button>
         )}
         {podePausar && (
@@ -262,12 +262,12 @@ export function ConversationHeader({ conversation }: Props) {
             title="La réponse automatique s’arrête dans cette conversation. Le responsable ne change pas."
             onClick={() => pausar.mutate({ conversation_id: conversation.id })}
           >
-            {pausar.isPending ? "Mise en pause…" : t("Pausar o automático")}
+            {pausar.isPending ? "Mise en pause…" : t("Mettre l'automatique en pause")}
           </Button>
         )}
         {status !== "closed" && status !== "archived" && (
           <Button size="sm" variant="outline" onClick={() => setReassignOpen(true)}>
-            {t("Transferir")}
+            {t("Transférer")}
           </Button>
         )}
         {status !== "closed" && status !== "archived" && (
@@ -287,7 +287,7 @@ export function ConversationHeader({ conversation }: Props) {
               }
             }}
           >
-            {t("Fechar")}
+            {t("Fermer")}
           </Button>
         )}
         {/* `xl:hidden` porque a partir de 1280px o painel lateral de CRM entra

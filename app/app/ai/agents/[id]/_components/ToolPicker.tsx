@@ -213,12 +213,12 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
   }
 
   if (query.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t("Carregando as capacidades…")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Chargement des capacités…")}</p>;
   }
   if (query.isError) {
     return (
       <p className="border-destructive/40 bg-destructive/10 rounded-md border p-3 text-sm text-destructive">
-        {t("Não foi possível carregar as capacidades. Recarregue a página.")}
+        {t("Impossible de charger les capacités. Rechargez la page.")}
       </p>
     );
   }
@@ -231,12 +231,12 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
           <strong data-testid="consumo-teto">
             {value.length} de {TETO_TOOLS_POR_AGENTE}
           </strong>{" "}
-          {t("capacidades ligadas")}
+          {t("capacités activées")}
         </p>
         <p className="text-xs text-muted-foreground">
           {cheio
-            ? t("Limite atingido. Desligue algo para ligar outra coisa.")
-            : t("Acima disso o agente erra na hora de escolher o que usar.")}
+            ? t("Limite atteinte. Désactivez une capacité avant d’en activer une autre.")
+            : t("Au-delà de cette limite, l’agent risque de se tromper dans son choix.")}
         </p>
       </div>
 
@@ -285,7 +285,7 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
                     </label>
                     {estado === "parcial" ? (
                       <Badge variant="outline" className="text-[11px]">
-                        {t("parcial")}
+                        {t("partiel")}
                       </Badge>
                     ) : null}
                   </div>
@@ -306,7 +306,7 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
                   className="border-destructive/30 bg-destructive/5 space-y-1 rounded-md border p-2"
                 >
                   <p className="text-xs font-medium text-destructive">
-                    {t("Só ligando uma a uma — o pacote não liga por você:")}
+                    {t("Activation individuelle uniquement — le package ne l’active pas pour vous :")}
                   </p>
                   {criticas.map((name) => {
                     const capacidade = porNome.get(name);
@@ -339,7 +339,7 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
           onClick={() => setAvancado((v) => !v)}
           className="text-sm font-medium text-primary underline-offset-4 hover:underline"
         >
-          {avancado ? t("Esconder a lista completa") : t("Escolher uma a uma (modo avançado)")}
+          {avancado ? t("Masquer la liste complète") : t("Choisir individuellement (mode avancé)")}
         </button>
 
         {avancado ? (
@@ -377,10 +377,10 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
         >
           <p>
             {orfas.length === 1
-              ? t("Uma capacidade ligada não existe mais")
-              : `${orfas.length} ${t("capacidades ligadas não existem mais")}`}{" "}
-            {t("nesta versão do sistema")} ({orfas.join(", ")}).{" "}
-            {t("Elas continuam salvas, mas o agente não consegue usá-las.")}
+              ? t("Une capacité activée n’existe plus")
+              : `${orfas.length} ${t("capacités activées n’existent plus")}`}{" "}
+            {t("dans cette version du système")} ({orfas.join(", ")}).{" "}
+            {t("Elles restent enregistrées, mais l’agent ne peut pas les utiliser.")}
           </p>
           <button
             type="button"
@@ -392,7 +392,7 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
             }}
             className="font-medium underline underline-offset-4 disabled:opacity-50"
           >
-            {t("Desligar")} {orfas.length === 1 ? t("essa capacidade") : t("essas capacidades")}
+            {t("Désactiver")} {orfas.length === 1 ? t("cette capacité") : t("ces capacités")}
           </button>
         </div>
       ) : null}

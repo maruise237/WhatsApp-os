@@ -54,14 +54,14 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
   const [revokeDialog, setRevokeDialog] = useState<TeamMember | null>(null);
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t("Carregando…")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Chargement…")}</p>;
   }
   if (isError) {
-    return <p className="text-sm text-destructive">{t("Erro ao carregar membros.")}</p>;
+    return <p className="text-sm text-destructive">{t("Erreur lors du chargement des membres.")}</p>;
   }
   const members = data?.data ?? [];
   if (members.length === 0) {
-    return <p className="text-sm text-muted-foreground">{t("Nenhum membro ativo.")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Aucun membre actif.")}</p>;
   }
 
   return (
@@ -70,10 +70,10 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("Membro")}</TableHead>
-              <TableHead>{t("Role")}</TableHead>
-              <TableHead>{t("Status")}</TableHead>
-              <TableHead>{t("Última atividade")}</TableHead>
+              <TableHead>{t("Membre")}</TableHead>
+              <TableHead>{t("Rôle")}</TableHead>
+              <TableHead>{t("Statut")}</TableHead>
+              <TableHead>{t("Dernière activité")}</TableHead>
               {canManage ? <TableHead className="w-[80px]" /> : null}
             </TableRow>
           </TableHeader>
@@ -96,7 +96,7 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
                     >
                       <SelectTrigger
                         className="w-[130px]"
-                        aria-label={`${t("Papel de")} ${m.full_name ?? m.email ?? m.user_id}`}
+                        aria-label={`${t("Rôle de")} ${m.full_name ?? m.email ?? m.user_id}`}
                       >
                         <SelectValue />
                       </SelectTrigger>
@@ -114,9 +114,9 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
                 </TableCell>
                 <TableCell>
                   {m.accepted_at ? (
-                    <Badge variant="default">{t("Aceito")}</Badge>
+                    <Badge variant="default">{t("Accepté")}</Badge>
                   ) : (
-                    <Badge variant="outline">{t("Pendente")}</Badge>
+                    <Badge variant="outline">{t("En attente")}</Badge>
                   )}
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
@@ -127,7 +127,7 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
                     {m.user_id !== currentUserId ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" aria-label={t("Ações")}>
+                          <Button variant="ghost" size="icon" aria-label={t("Actions")}>
                             <DotsThree size={20} />
                           </Button>
                         </DropdownMenuTrigger>
@@ -136,12 +136,12 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
                             className="text-destructive focus:text-destructive"
                             onClick={() => setRevokeDialog(m)}
                           >
-                            {t("Revogar acesso")}
+                            {t("Révoquer l’accès")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     ) : (
-                      <span className="text-xs text-muted-foreground">{t("você")}</span>
+                      <span className="text-xs text-muted-foreground">{t("vous")}</span>
                     )}
                   </TableCell>
                 ) : null}
@@ -154,15 +154,15 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
       <Dialog open={!!revokeDialog} onOpenChange={(o) => !o && setRevokeDialog(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("Revogar acesso")}</DialogTitle>
+            <DialogTitle>{t("Révoquer l’accès")}</DialogTitle>
             <DialogDescription>
               {revokeDialog?.email ?? revokeDialog?.user_id}{" "}
-              {t("perderá acesso ao tenant. Esta ação pode ser desfeita reconvidando o membro.")}
+              {t("perdra l’accès au tenant. Cette action peut être annulée en renvoyant une invitation au membre.")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setRevokeDialog(null)}>
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button
               variant="destructive"
@@ -171,14 +171,14 @@ export function TeamMembersClient({ currentUserId, canManage }: Props) {
                 if (!revokeDialog) return;
                 try {
                   await revoke.mutateAsync(revokeDialog.user_id);
-                  toast.success(t("Acesso revogado."));
+                  toast.success(t("Accès révoqué."));
                   setRevokeDialog(null);
                 } catch {
                   /* showApiError already triggered by the hook */
                 }
               }}
             >
-              {t("Revogar")}
+              {t("Révoquer")}
             </Button>
           </DialogFooter>
         </DialogContent>

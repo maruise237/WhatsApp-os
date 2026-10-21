@@ -15,9 +15,9 @@ import { SourceDetail } from "./SourceDetail";
 import { useIdioma, useT } from "@/hooks/i18n/useT";
 
 function lastReceivedLabel(iso: string | null, t: ReturnType<typeof useT>, idioma: string): string {
-  if (!iso) return t("nunca recebeu");
+  if (!iso) return t("n’a jamais reçu de données");
   const locale = idioma === "fr-FR" ? fr : enUS;
-  return `${t("último recebimento")} ${formatDistanceToNowStrict(new Date(iso), {
+  return `${t("dernier envoi reçu")} ${formatDistanceToNowStrict(new Date(iso), {
     addSuffix: true,
     locale,
   })}`;
@@ -47,16 +47,16 @@ export function SourcesTab() {
         <Card className="max-w-md">
           <CardHeader className="items-center text-center">
             <PlugsConnected className="mb-2 h-10 w-10 text-accent" />
-            <CardTitle>{t("Conecte sua landing page em 2 minutos")}</CardTitle>
+            <CardTitle>{t("Connectez votre page d’atterrissage en 2 minutes")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <ol className="space-y-2 text-left text-sm text-muted-foreground">
-              <li>{t("1. Crie uma fonte e diga em qual funil o contato entra.")}</li>
-              <li>{t("2. Copie o endereço ou o formulário pronto.")}</li>
-              <li>{t("3. Cole no seu site — cada envio vira um lead aqui dentro.")}</li>
+              <li>{t("1. Créez une source et indiquez dans quel tableau le contact entre.")}</li>
+              <li>{t("2. Copiez l’adresse ou le formulaire prêt à l’emploi.")}</li>
+              <li>{t("3. Collez-le sur votre site — chaque envoi devient un lead ici.")}</li>
             </ol>
             <Button onClick={() => setCreateOpen(true)}>
-              <Plus /> {t("Criar primeira fonte")}
+              <Plus /> {t("Créer la première source")}
             </Button>
           </CardContent>
         </Card>
@@ -80,7 +80,7 @@ export function SourcesTab() {
     <div className="space-y-4 pt-4">
       <div className="flex sm:justify-end">
         <Button onClick={() => setCreateOpen(true)} className="w-full sm:w-auto">
-          <Plus /> {t("Nova fonte")}
+          <Plus /> {t("Nouvelle source")}
         </Button>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -94,7 +94,7 @@ export function SourcesTab() {
               <div className="flex items-center justify-between gap-2">
                 <CardTitle className="truncate">{s.name}</CardTitle>
                 <Badge variant={s.is_active ? "success" : "neutral"}>
-                  {s.is_active ? t("Ativa") : t("Pausada")}
+                  {s.is_active ? t("Active") : t("En pause")}
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">

@@ -38,8 +38,8 @@ export function mergeThreadItems(messages: Message[], notes: Note[]): ThreadItem
 }
 
 function dayLabel(d: Date, t: (texto: string) => string): string {
-  if (isToday(d)) return t("Hoje");
-  if (isYesterday(d)) return t("Ontem");
+  if (isToday(d)) return t("Aujourd’hui");
+  if (isYesterday(d)) return t("Hier");
   return format(d, "dd/MM/yyyy", { locale: fr });
 }
 
@@ -139,7 +139,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {...sinalDoCanal}
         className="flex h-full items-center justify-center text-sm text-muted-foreground"
       >
-        {t("Selecione uma conversa")}
+        {t("Sélectionnez une conversation")}
       </div>
     );
   }
@@ -160,9 +160,9 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {...sinalDoCanal}
         className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground"
       >
-        <p>{t("Erro ao carregar mensagens.")}</p>
+        <p>{t("Erreur lors du chargement des messages.")}</p>
         <Button size="sm" variant="outline" onClick={() => q.refetch()}>
-          {t("Tentar novamente")}
+          {t("Réessayer")}
         </Button>
       </div>
     );
@@ -174,7 +174,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
         {...sinalDoCanal}
         className="flex h-full items-center justify-center text-sm text-muted-foreground"
       >
-        {t("Nenhuma mensagem nesta conversa.")}
+        {t("Aucun message dans cette conversation.")}
       </div>
     );
   }
@@ -200,7 +200,7 @@ export function ChatThread({ conversationId, onResponder }: Props) {
               onClick={() => q.fetchNextPage()}
               disabled={q.isFetchingNextPage}
             >
-              {q.isFetchingNextPage ? t("Carregando…") : t("Carregar mais antigas")}
+              {q.isFetchingNextPage ? t("Chargement…") : t("Charger les messages plus anciens")}
             </Button>
           </div>
         )}

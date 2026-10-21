@@ -22,21 +22,21 @@ beforeAll(() => {
 describe("AudioPlayer", () => {
   it("renderiza com src do endpoint e controles", () => {
     render(<AudioPlayer messageId="m3" isOutbound={false} />);
-    expect(screen.getByRole("button", { name: /reproduzir/i })).toBeInTheDocument();
-    expect(screen.getByRole("slider", { name: /progresso/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /velocidade/i })).toHaveTextContent("1x");
+    expect(screen.getByRole("button", { name: /lire/i })).toBeInTheDocument();
+    expect(screen.getByRole("slider", { name: /progression/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /vitesse/i })).toHaveTextContent("1x");
   });
 
   it("alterna play/pause", () => {
     render(<AudioPlayer messageId="m3" isOutbound={false} />);
-    const btn = screen.getByRole("button", { name: /reproduzir/i });
+    const btn = screen.getByRole("button", { name: /lire/i });
     fireEvent.click(btn);
-    expect(screen.getByRole("button", { name: /pausar/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /pause/i })).toBeInTheDocument();
   });
 
   it("cicla a velocidade 1x → 1.5x → 2x → 1x", () => {
     render(<AudioPlayer messageId="m3" isOutbound={false} />);
-    const rate = screen.getByRole("button", { name: /velocidade/i });
+    const rate = screen.getByRole("button", { name: /vitesse/i });
     fireEvent.click(rate);
     expect(rate).toHaveTextContent("1.5x");
     fireEvent.click(rate);
@@ -79,6 +79,6 @@ describe("AudioPlayer", () => {
       audio.dispatchEvent(new Event("error"));
     });
 
-    await waitFor(() => expect(screen.getByText(/mídia indisponível/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/média indisponible/i)).toBeInTheDocument());
   });
 });

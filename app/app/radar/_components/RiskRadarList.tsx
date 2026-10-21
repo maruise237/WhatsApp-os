@@ -28,16 +28,16 @@ const RISK_META: Record<
 };
 
 function coldFor(hours: number, t: (texto: string) => string): string {
-  if (hours < 48) return `${t("parado há")} ${hours}h`;
-  return `${t("parado há")} ${Math.round(hours / 24)}d`;
+  if (hours < 48) return `${t("inactif depuis")} ${hours}h`;
+  return `${t("inactif depuis")} ${Math.round(hours / 24)}d`;
 }
 
 function followupWhen(iso: string, t: (texto: string) => string): string {
   const diffMs = new Date(iso).getTime() - Date.now();
-  if (diffMs <= 0) return t("agora");
+  if (diffMs <= 0) return t("à l’instant");
   const hours = Math.round(diffMs / 3_600_000);
-  if (hours < 48) return `${t("em")} ${Math.max(1, hours)}h`;
-  return `${t("em")} ${Math.round(hours / 24)}d`;
+  if (hours < 48) return `${t("dans")} ${Math.max(1, hours)}h`;
+  return `${t("dans")} ${Math.round(hours / 24)}d`;
 }
 
 export function RiskRadarList() {
@@ -66,9 +66,9 @@ export function RiskRadarList() {
         data-testid="radar-empty"
       >
         <CheckCircle size={28} className="text-success-fg/70" aria-hidden />
-        <p className="text-sm font-medium">{t("Nenhuma demanda em risco")}</p>
+        <p className="text-sm font-medium">{t("Aucune demande à risque")}</p>
         <p className="text-xs text-muted-foreground">
-          {t("Toda demanda aberta teve atividade recente ou já tem um retorno agendado.")}
+          {t("Toute demande ouverte a eu une activité récente ou a déjà un retour planifié.")}
         </p>
       </div>
     );
@@ -87,8 +87,8 @@ export function RiskRadarList() {
           <p className="text-sm font-medium">
             {semPasso.length}{" "}
             {semPasso.length === 1
-              ? t("demanda aberta sem próximo passo")
-              : t("demandas abertas sem próximo passo")}
+              ? t("demande ouverte sans prochaine étape")
+              : t("demandes ouvertes sans prochaine étape")}
           </p>
           <p className="mb-2 text-xs text-muted-foreground">
             {t(
@@ -98,9 +98,9 @@ export function RiskRadarList() {
           <ul className="flex flex-col gap-1">
             {semPasso.slice(0, 8).map((d) => (
               <li key={d.id} className="flex items-baseline justify-between gap-3 text-xs">
-                <span className="truncate">{d.contact_name ?? t("Contato sem nome")}</span>
+                <span className="truncate">{d.contact_name ?? t("Contact sans nom")}</span>
                 <span className="shrink-0 tabular-nums text-muted-foreground">
-                  {t("aberta há")} {d.horas_aberta}h
+                  {t("ouverte depuis")} {d.horas_aberta}h
                 </span>
               </li>
             ))}
@@ -110,13 +110,13 @@ export function RiskRadarList() {
 
       <div className="flex flex-wrap gap-2" data-testid="radar-counts">
         <Badge variant="error">
-          {data.counts.critico} {t("crítico")}
+          {data.counts.critico} {t("critique")}
         </Badge>
         <Badge variant="warning">
-          {data.counts.em_risco} {t("em risco")}
+          {data.counts.em_risco} {t("à risque")}
         </Badge>
         <Badge variant="info">
-          {data.counts.em_voo} {t("em voo")}
+          {data.counts.em_voo} {t("en vol")}
         </Badge>
       </div>
 
@@ -146,12 +146,12 @@ function RadarRow({ lead }: { lead: AtRiskLead }) {
   // uma fonte de verdade para "quem é o dono", em todas as telas.
   const dono =
     lead.owner_kind === "ai"
-      ? `${t("Agente:")} ${lead.owner_agent_name ?? t("sem nome")}`
+      ? `${t("Agent :")} ${lead.owner_agent_name ?? t("sans nom")}`
       : lead.owner_user_id || lead.assignee_kind === "user"
-        ? t("Com atendente")
+        ? t("Avec un agent")
         : lead.assignee_kind === "ai"
-          ? t("Assistente na conversa")
-          : t("Sem dono");
+          ? t("Assistant dans la conversation")
+          : t("Sans propriétaire");
 
   // "Assumir" é tirar da IA e trazer para si: continua valendo enquanto não há
   // dono HUMANO — dono agente não bloqueia o handoff, é justamente o caso dele.
@@ -165,7 +165,7 @@ function RadarRow({ lead }: { lead: AtRiskLead }) {
       {
         onSuccess: () => {
           qc.invalidateQueries({ queryKey: ["leads-at-risk"] });
-          toast.success(t("Você assumiu a demanda"));
+          toast.success(t("Vous avez pris en charge la demande"));
         },
       },
     );
@@ -196,12 +196,12 @@ function RadarRow({ lead }: { lead: AtRiskLead }) {
           {lead.in_flight && lead.next_followup_at ? (
             <p className="mt-1 inline-flex items-center gap-1 text-xs text-info-fg">
               <PaperPlaneTilt size={13} aria-hidden />
-              {t("Assistente retorna")} {followupWhen(lead.next_followup_at, t)}
+              {t("L’assistant revient")} {followupWhen(lead.next_followup_at, t)}
             </p>
           ) : (
             <p className="mt-1 inline-flex items-center gap-1 text-xs text-warning-fg">
               <Warning size={13} aria-hidden />
-              {t("Sem próximo passo agendado")}
+              {t("Aucune prochaine étape planifiée")}
             </p>
           )}
         </div>
@@ -215,7 +215,7 @@ function RadarRow({ lead }: { lead: AtRiskLead }) {
             onClick={handleClaim}
             data-testid="radar-claim"
           >
-            {t("Assumir")}
+            {t("Prendre en charge")}
           </Button>
         ) : null}
         <ArrowRight size={16} className="text-muted-foreground" aria-hidden />

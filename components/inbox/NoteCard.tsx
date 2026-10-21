@@ -21,16 +21,16 @@ export function NoteCard({ note, onDelete }: Props) {
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide opacity-80">
             <NoteIcon size={12} weight="fill" aria-hidden />
-            <span>{note.created_by_name ?? t("Alguém")}</span>
+            <span>{note.created_by_name ?? t("Quelqu’un")}</span>
             <span aria-hidden>·</span>
-            <span>{t("Nota interna · só o time vê")}</span>
+            <span>{t("Note interne · visible par l’équipe uniquement")}</span>
           </div>
           {onDelete && (
             <button
               type="button"
               onClick={onDelete}
               className="opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
-              aria-label={t("Excluir nota")}
+              aria-label={t("Supprimer la note")}
             >
               <Trash size={12} weight="bold" />
             </button>

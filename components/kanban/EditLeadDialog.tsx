@@ -75,7 +75,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
     if (reais.length > 0) {
       valueCents = parseMontantEnCents(reais, lead.currency);
       if (valueCents === null) {
-        form.setError("valueReais", { message: t("Valor inválido") });
+        form.setError("valueReais", { message: t("Valeur invalide") });
         return;
       }
     }
@@ -100,7 +100,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
         leadId: lead.id,
         patch: parsed.data as UpdateLeadInput,
       });
-      toast.success(t("Lead atualizado"));
+      toast.success(t("Lead mis à jour"));
       onOpenChange(false);
     } catch {
       // toast already shown
@@ -111,25 +111,25 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Editar lead")}</DialogTitle>
+          <DialogTitle>{t("Modifier le lead")}</DialogTitle>
           <DialogDescription>
-            {t("Atualize os campos. Mover de etapa ou marcar ganho/perdido tem opções próprias.")}
+            {t("Mettez à jour les champs. Le changement d’étape et le marquage gagné/perdu disposent de leurs propres actions.")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">{t("Título")}</Label>
+            <Label htmlFor="title">{t("Titre")}</Label>
             <Input id="title" {...form.register("title", { required: true, minLength: 2 })} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">{t("Descrição")}</Label>
+            <Label htmlFor="description">{t("Description")}</Label>
             <Textarea id="description" rows={3} {...form.register("description")} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="valueReais">{t("Montante")}</Label>
+              <Label htmlFor="valueReais">{t("Montant")}</Label>
               <Input
                 id="valueReais"
                 inputMode="decimal"
@@ -142,7 +142,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="expected_close_date">{t("Fechamento previsto")}</Label>
+              <Label htmlFor="expected_close_date">{t("Clôture prévue")}</Label>
               <Input
                 id="expected_close_date"
                 type="date"
@@ -152,7 +152,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tagsRaw">{t("Tags (separadas por vírgula)")}</Label>
+            <Label htmlFor="tagsRaw">{t("Étiquettes (séparées par des virgules)")}</Label>
             <Input id="tagsRaw" placeholder="vip, réachat" {...form.register("tagsRaw")} />
           </div>
 
@@ -163,10 +163,10 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
               onClick={() => onOpenChange(false)}
               disabled={edit.isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={edit.isPending}>
-              {edit.isPending ? t("Salvando…") : t("Salvar")}
+              {edit.isPending ? t("Enregistrement…") : t("Enregistrer")}
             </Button>
           </DialogFooter>
         </form>

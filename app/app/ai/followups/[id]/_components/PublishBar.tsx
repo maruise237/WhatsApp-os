@@ -83,7 +83,7 @@ export function PublishBar({
             else flowLevel.push(e.message);
           }
           onPublishErrors(byNode);
-          toast.error(t("Fluxo reprovado na validação — corrija os nós destacados."), {
+          toast.error(t("Flow rejeté lors de la validation — corrigez les nœuds signalés."), {
             description: flowLevel.length > 0 ? flowLevel.join(" ") : undefined,
           });
           return;
@@ -110,7 +110,7 @@ export function PublishBar({
         <FlowStatusBadge status={flow.status} />
         {dirty && (
           <Badge variant="warning" data-testid="dirty-indicator">
-            {t("Alterações não salvas")}
+            {t("Modifications non enregistrées")}
           </Badge>
         )}
       </div>
@@ -122,7 +122,7 @@ export function PublishBar({
           value={flow.handoff_policy}
           onValueChange={(v) => handoffPolicy.mutate(v as FollowupFlowDetailRow["handoff_policy"])}
         >
-          <SelectTrigger className="w-56" aria-label={t("Política de handoff")}>
+          <SelectTrigger className="w-56" aria-label={t("Politique de relais humain")}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -141,7 +141,7 @@ export function PublishBar({
           disabled={!dirty || busy}
           onClick={onSave}
         >
-          {save.isPending ? t("Salvando…") : t("Salvar")}
+          {save.isPending ? t("Enregistrement…") : t("Enregistrer")}
         </Button>
         <Button
           type="button"
@@ -150,7 +150,7 @@ export function PublishBar({
           onClick={onPublish}
           data-testid="publish-button"
         >
-          {publish.isPending ? t("Publicando…") : t("Publicar")}
+          {publish.isPending ? t("Publication…") : t("Publier")}
         </Button>
         <Button
           type="button"
@@ -159,7 +159,7 @@ export function PublishBar({
           disabled={busy || flow.status === "disabled"}
           onClick={onDisable}
         >
-          {t("Desativar")}
+          {t("Désactiver")}
         </Button>
         <Button
           type="button"
@@ -169,7 +169,7 @@ export function PublishBar({
           onClick={onRollback}
           data-testid="rollback-button"
         >
-          {t("Rollback")}
+          {t("Rétablir la version précédente")}
         </Button>
       </div>
     </div>

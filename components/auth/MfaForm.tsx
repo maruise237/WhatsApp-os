@@ -48,7 +48,7 @@ export function MfaForm({ next }: MfaFormProps) {
         setError(`Trop de tentatives. Attendez ${res.retry_in_seconds ?? 60}s avant de réessayer.`);
         setCode("");
       } else {
-        setError(t("Código inválido. Tente novamente."));
+        setError(t("Code invalide. Réessayez."));
         setCode("");
       }
     });
@@ -92,7 +92,7 @@ export function MfaForm({ next }: MfaFormProps) {
       )}
 
       <Button type="submit" className="w-full" disabled={isPending || locked || code.length !== 6}>
-        {isPending ? t("Verificando...") : t("Verificar")}
+        {isPending ? t("Vérification…") : t("Vérifier")}
       </Button>
 
       <div className="text-center text-sm">
@@ -100,7 +100,7 @@ export function MfaForm({ next }: MfaFormProps) {
           href={recoveryHref}
           className="text-muted-foreground underline-offset-4 hover:underline"
         >
-          {t("Perdi acesso ao autenticador")}
+          {t("J’ai perdu l’accès à mon application d’authentification")}
         </Link>
       </div>
     </form>

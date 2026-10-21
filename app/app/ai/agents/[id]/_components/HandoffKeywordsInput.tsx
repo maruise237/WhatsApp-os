@@ -33,7 +33,7 @@ export function HandoffKeywordsInput({ value, onChange, disabled }: Props) {
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="handoff_kw">{t("Palavras que chamam uma pessoa na hora")}</Label>
+      <Label htmlFor="handoff_kw">{t("Mots qui appellent immédiatement une personne")}</Label>
       <div className="border-border/60 flex flex-wrap gap-1 rounded border p-2">
         {value.map((kw) => (
           <button
@@ -42,14 +42,14 @@ export function HandoffKeywordsInput({ value, onChange, disabled }: Props) {
             onClick={() => !disabled && remove(kw)}
             className="hover:bg-destructive/15 group flex items-center gap-1 rounded bg-muted px-2 py-0.5 text-xs"
             disabled={disabled}
-            aria-label={t("Remover {kw}").replace("{kw}", kw)}
+            aria-label={t("Supprimer {kw}").replace("{kw}", kw)}
           >
             {kw}
             <span className="text-muted-foreground group-hover:text-destructive">×</span>
           </button>
         ))}
         {value.length === 0 ? (
-          <span className="text-xs text-muted-foreground">{t("Sem palavras-chave.")}</span>
+          <span className="text-xs text-muted-foreground">{t("Aucun mot-clé.")}</span>
         ) : null}
       </div>
       <div className="flex gap-2">
@@ -63,7 +63,7 @@ export function HandoffKeywordsInput({ value, onChange, disabled }: Props) {
               add(draft);
             }
           }}
-          placeholder={t("Digite uma expressão e aperte Enter")}
+          placeholder={t("Saisissez une expression et appuyez sur Entrée")}
           disabled={disabled || value.length >= 20}
           maxLength={60}
         />
@@ -73,7 +73,7 @@ export function HandoffKeywordsInput({ value, onChange, disabled }: Props) {
           onClick={() => add(draft)}
           disabled={disabled || draft.trim() === ""}
         >
-          {t("Adicionar")}
+          {t("Ajouter")}
         </button>
       </div>
       <div className="flex flex-wrap gap-1">

@@ -80,7 +80,7 @@ describe("os elos que somem sem barulho", () => {
     // Sem porta, a tela não é alcançável — e o CI já reprova tela sem porta.
     const fonte = readFileSync("components/connections/ConexoesShell.tsx", "utf8");
     expect(fonte).toMatch(/\n\s*<TemplatesParceiroClient \/>/);
-    expect(fonte).toMatch(/Modelos do parceiro/);
+    expect(fonte).toMatch(/Modèles du partenaire/);
   });
 
   it("a rota passa pelo SEAM, e não fala com a plataforma direto", () => {

@@ -96,13 +96,13 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
 
   if (query.isLoading) {
     return (
-      <p className="text-sm text-muted-foreground">{t("Carregando o uso das capacidades…")}</p>
+      <p className="text-sm text-muted-foreground">{t("Chargement de l’utilisation des capacités…")}</p>
     );
   }
   if (query.isError || !query.data) {
     return (
       <p className="border-destructive/40 bg-destructive/10 rounded-md border p-3 text-sm text-destructive">
-        {t("Não foi possível carregar o uso das capacidades.")}
+        {t("Impossible de charger l’utilisation des capacités.")}
       </p>
     );
   }
@@ -115,7 +115,7 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
         <div className="space-y-1">
           <p className="text-sm">
             <strong data-testid="uso-total"> {resumo.usos}</strong>{" "}
-            {t(resumo.usos === 1 ? "uso" : "usos")} {t("nos últimos")} {janela_em_dias} {t("dias")}
+            {t(resumo.usos === 1 ? "uso" : "usos")} {t("au cours des")} {janela_em_dias} {t("derniers jours")}
             {resumo.falhas > 0 ? (
               <>
                 {" · "}
@@ -130,12 +130,12 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
             {resumo.precisam_de_atencao > 0
               ? `${resumo.precisam_de_atencao} ${
                   resumo.precisam_de_atencao === 1
-                    ? t("capacidade pede uma decisão sua")
-                    : t("capacidades pedem uma decisão sua")
+                    ? t("capacité nécessite une décision de votre part")
+                    : t("capacités nécessitent une décision de votre part")
                 }.`
-              : t("Nada pedindo decisão no momento.")}
+              : t("Aucune décision requise pour le moment.")}
             {versao_lida
-              ? ` ${t("O que está ligado vem da versão")} ${t(
+              ? ` ${t("Les capacités activées proviennent de la version")} ${t(
                   NOME_DA_VERSAO[versao_lida.status] ?? versao_lida.status,
                 )}.`
               : null}
@@ -147,7 +147,7 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
           onClick={() => query.refetch()}
           disabled={query.isFetching}
         >
-          {query.isFetching ? t("Atualizando…") : t("Atualizar")}
+          {query.isFetching ? t("Actualisation…") : t("Actualiser")}
         </Button>
       </div>
 
@@ -176,7 +176,7 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
                 </Badge>
                 {!c.ligada ? (
                   <Badge variant="outline" className="text-[11px] text-muted-foreground">
-                    {t("desligada")}
+                    {t("désactivée")}
                   </Badge>
                 ) : null}
                 <span className="text-xs text-muted-foreground">· {t(c.o_que_toca)}</span>
@@ -186,19 +186,19 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
 
               <div className="flex flex-wrap gap-x-4 pt-2 font-mono text-[11px] text-muted-foreground">
                 <span>
-                  {t("usos")} <strong className="text-foreground">{c.total}</strong>
+                  {t("utilisations")} <strong className="text-foreground">{c.total}</strong>
                 </span>
                 <span>
-                  {t("falhas")}{" "}
+                  {t("échecs")}{" "}
                   <strong className={c.falhas > 0 ? "text-destructive" : "text-foreground"}>
                     {c.falhas}
                   </strong>
                 </span>
                 <span>
-                  {t("em teste")} <strong className="text-foreground">{c.em_teste}</strong>
+                  {t("en test")} <strong className="text-foreground">{c.em_teste}</strong>
                 </span>
                 <span>
-                  {t("última vez")} {formatarData(c.ultima_vez, idioma)}
+                  {t("dernière utilisation")} {formatarData(c.ultima_vez, idioma)}
                 </span>
               </div>
             </li>

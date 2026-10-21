@@ -56,10 +56,10 @@ export function ReactivationSlot({
     <>
       <span
         className="min-w-0 flex-1 truncate text-warning-fg"
-        title={t("Este negócio parou de responder")}
+        title={t("Cette affaire a cessé de répondre")}
       >
-        {t("Retomar contato?")}{" "}
-        <span className="text-text-muted" title={`${t("A sugestão vence em")} ${resta}`}>
+        {t("Reprendre le contact ?")}{" "}
+        <span className="text-text-muted" title={`${t("La suggestion expire dans")} ${resta}`}>
           · {resta}
         </span>
       </span>
@@ -68,14 +68,14 @@ export function ReactivationSlot({
           type="button"
           disabled={decidir.isPending}
           onClick={(e) => decide(e, "accept")}
-          aria-label={t("Retomar contato com este negócio")}
+          aria-label={t("Reprendre le contact avec cette affaire")}
           className={cn(
             "rounded px-1.5 py-0.5 text-[11px] font-medium transition-colors",
             "bg-warning-fg/10 hover:bg-warning-fg/20 text-warning-fg",
             "disabled:opacity-50",
           )}
         >
-          {t("Retomar")}
+          {t("Reprendre")}
         </button>
         <button
           type="button"
@@ -84,14 +84,14 @@ export function ReactivationSlot({
           // "Encerrar" e não "Ignorar": ignorar não é decisão, e a recusa AQUI é
           // decisão registrada — o que distingue negócio encerrado com critério
           // de negócio esquecido.
-          aria-label={t("Encerrar: não retomar este negócio")}
+          aria-label={t("Clôturer : ne pas reprendre cette affaire")}
           className={cn(
             "rounded px-1.5 py-0.5 text-[11px] transition-colors",
             "hover:bg-surface-muted text-text-muted hover:text-text",
             "disabled:opacity-50",
           )}
         >
-          {t("Encerrar")}
+          {t("Clôturer")}
         </button>
       </span>
     </>

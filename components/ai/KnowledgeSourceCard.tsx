@@ -67,17 +67,17 @@ const TYPE_META: Record<
 };
 
 function formatRelative(iso: string | null, t: (text: string) => string): string {
-  if (!iso) return t("Nunca indexado");
+  if (!iso) return t("Jamais indexé");
   const then = new Date(iso).getTime();
   const now = Date.now();
   const diffSec = Math.floor((now - then) / 1000);
-  if (diffSec < 60) return t("agora há pouco");
+  if (diffSec < 60) return t("à l’instant");
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${t("há")} ${diffMin} ${t("min")}`;
+  if (diffMin < 60) return `${t("il y a")} ${diffMin} ${t("min")}`;
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${t("há")} ${diffHr} ${t("h")}`;
+  if (diffHr < 24) return `${t("il y a")} ${diffHr} ${t("h")}`;
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 30) return `${t("há")} ${diffDay} ${t("d")}`;
+  if (diffDay < 30) return `${t("il y a")} ${diffDay} ${t("j")}`;
   return new Date(iso).toLocaleDateString("fr-FR");
 }
 
@@ -121,7 +121,7 @@ export function KnowledgeSourceCard({
           {cadastroManual ? (
             <>
               <Button variant="secondary" size="sm" onClick={() => setNovaAberta(true)}>
-                {t("Configurar")} {t(meta.label)}
+                {t("Configurer")} {t(meta.label)}
               </Button>
               <NovaFonteDialog
                 agentId={agentId}
@@ -145,8 +145,8 @@ export function KnowledgeSourceCard({
   const extraButton = (() => {
     if (type === "faq") {
       return (
-        <Button variant="ghost" size="sm" onClick={() => toast.info(t("Editor de FAQ em breve."))}>
-          {t("Editar conteúdo")}
+        <Button variant="ghost" size="sm" onClick={() => toast.info(t("L’éditeur de FAQ sera bientôt disponible."))}>
+          {t("Modifier le contenu")}
         </Button>
       );
     }
@@ -155,9 +155,9 @@ export function KnowledgeSourceCard({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => toast.info(t("Upload de política em breve."))}
+          onClick={() => toast.info(t("L’importation d’une politique sera bientôt disponible."))}
         >
-          {t("Upload novo arquivo")}
+          {t("Importer un nouveau fichier")}
         </Button>
       );
     }
@@ -178,16 +178,16 @@ export function KnowledgeSourceCard({
       </CardHeader>
       <CardContent className="flex-1 space-y-2 text-sm">
         <div className="flex items-baseline justify-between">
-          <span className="text-text-muted">{t("Última indexação")}</span>
+          <span className="text-text-muted">{t("Dernière indexation")}</span>
           <span>{formatRelative(source.last_indexed_at, t)}</span>
         </div>
         <div className="flex items-baseline justify-between">
-          <span className="text-text-muted">{t("Chunks indexados")}</span>
+          <span className="text-text-muted">{t("Segments indexés")}</span>
           <span>{source.chunks_count}</span>
         </div>
         {showError ? (
           <details className="bg-error-bg/30 rounded-md border border-error-bg p-2 text-xs text-error-fg">
-            <summary className="cursor-pointer font-medium">{t("Detalhes do erro")}</summary>
+            <summary className="cursor-pointer font-medium">{t("Détails de l’erreur")}</summary>
             <p className="mt-1 whitespace-pre-wrap break-words">{source.last_index_error}</p>
           </details>
         ) : null}
@@ -198,7 +198,7 @@ export function KnowledgeSourceCard({
             className={`mr-2 h-3.5 w-3.5 ${isReindexing ? "animate-spin" : ""}`}
             aria-hidden
           />
-          {isReindexing ? t("Reindexando...") : t("Re-indexar")}
+          {isReindexing ? t("Réindexation…") : t("Réindexer")}
         </Button>
         {extraButton}
       </CardFooter>

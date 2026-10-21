@@ -44,13 +44,13 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
       avatar_url: avatarUrl || null,
     });
     if (!parsed.success) {
-      toast.error(t("Dados inválidos."));
+      toast.error(t("Données invalides."));
       return;
     }
     startTransition(async () => {
       const r = await updateProfile(parsed.data);
-      if (r.ok) toast.success(t("Perfil atualizado."));
-      else toast.error(`${t("Erro")}: ${r.error}`);
+      if (r.ok) toast.success(t("Profil mis à jour."));
+      else toast.error(`${t("Erreur")}: ${r.error}`);
     });
   }
 
@@ -58,12 +58,12 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
     <form onSubmit={handleSubmit} className="max-w-xl">
       <Card className="space-y-4 p-6">
         <div className="space-y-2">
-          <Label htmlFor="email">{t("Email")}</Label>
+          <Label htmlFor="email">{t("E-mail")}</Label>
           <Input id="email" value={email} disabled />
-          <p className="text-xs text-muted-foreground">{t("Trocar email — em breve.")}</p>
+          <p className="text-xs text-muted-foreground">{t("Changer d’e-mail — bientôt.")}</p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="full_name">{t("Nome completo")}</Label>
+          <Label htmlFor="full_name">{t("Nom complet")}</Label>
           <Input
             id="full_name"
             value={fullName}
@@ -73,7 +73,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="locale">{t("Idioma")}</Label>
+            <Label htmlFor="locale">{t("Langue")}</Label>
             <Select value={locale} onValueChange={(v) => setLocale(v as Locale)}>
               <SelectTrigger id="locale">
                 <SelectValue />
@@ -85,7 +85,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="timezone">{t("Fuso horário")}</Label>
+            <Label htmlFor="timezone">{t("Fuseau horaire")}</Label>
             <Select value={timezone} onValueChange={setTimezone}>
               <SelectTrigger id="timezone">
                 <SelectValue />
@@ -101,7 +101,7 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="avatar_url">{t("Avatar URL")}</Label>
+          <Label htmlFor="avatar_url">{t("URL de l’avatar")}</Label>
           <Input
             id="avatar_url"
             type="url"
@@ -110,12 +110,12 @@ export function ProfileForm({ email, initialFullName, initialAvatarUrl, initialL
             onChange={(e) => setAvatarUrl(e.target.value)}
           />
           <p className="text-xs text-muted-foreground">
-            {t("Upload de arquivo — em breve. Cole uma URL pública.")}
+            {t("Téléversement de fichier — bientôt disponible. Collez une URL publique.")}
           </p>
         </div>
         <div className="flex sm:justify-end">
           <Button type="submit" disabled={isPending} className="w-full sm:w-auto">
-            {isPending ? t("Salvando…") : t("Salvar")}
+            {isPending ? t("Enregistrement…") : t("Enregistrer")}
           </Button>
         </div>
       </Card>

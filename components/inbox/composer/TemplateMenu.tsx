@@ -31,11 +31,11 @@ export function TemplateMenu({ open, query, templates, onPick, onClose: _onClose
     <div
       className="absolute bottom-14 left-3 z-20 max-h-64 w-80 overflow-y-auto rounded-lg border border-border bg-popover p-1 shadow-lg"
       role="listbox"
-      aria-label={t("Templates de script")}
+      aria-label={t("Modèles de script")}
     >
       {filtered.length === 0 ? (
         <div className="px-3 py-2 text-xs text-muted-foreground">
-          {t("Nenhum template. Crie em Configurações.")}
+          {t("Aucun modèle. Créez-en un dans les Paramètres.")}
         </div>
       ) : (
         filtered.map((template) => (

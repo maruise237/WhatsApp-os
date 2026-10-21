@@ -75,7 +75,7 @@ export function MergeDialog({ queueItemId, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{t("Resolver merge de contatos")}</DialogTitle>
+          <DialogTitle>{t("Résoudre la fusion de contacts")}</DialogTitle>
           <DialogDescription>
             {t(
               "Comparação dos candidatos detectados. A resolução automática via API ainda não está disponível neste MVP — entre em contato com o admin para mesclar via SQL.",
@@ -86,7 +86,7 @@ export function MergeDialog({ queueItemId, open, onOpenChange }: Props) {
         {loading ? (
           <Skeleton className="h-32 w-full" />
         ) : candidates.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("Nenhum candidato disponível.")}</p>
+          <p className="text-sm text-muted-foreground">{t("Aucun candidat disponible.")}</p>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {candidates.map((c, idx) => (
@@ -104,10 +104,10 @@ export function MergeDialog({ queueItemId, open, onOpenChange }: Props) {
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            {t("Fechar")}
+            {t("Fermer")}
           </Button>
-          <Button disabled title={t("Endpoint de resolução não implementado neste MVP")}>
-            {t("Resolver via SQL (em breve)")}
+          <Button disabled title={t("Le point d’accès de résolution n’est pas implémenté dans ce MVP")}>
+            {t("Résoudre via SQL (bientôt disponible)")}
           </Button>
         </DialogFooter>
       </DialogContent>

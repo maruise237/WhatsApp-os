@@ -144,16 +144,16 @@ export function ConditionForm({
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label htmlFor="cond-branching">{t("Como as regras decidem o caminho")}</Label>
+        <Label htmlFor="cond-branching">{t("Comment les règles déterminent le chemin")}</Label>
         <Select value={branching} onValueChange={(v) => pedirModo(v as Branching)}>
           <SelectTrigger id="cond-branching">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="combined">
-              {t("Avaliar as regras juntas (uma saída de sim e uma de não)")}
+              {t("Évaluer les règles ensemble (une sortie oui et une sortie non)")}
             </SelectItem>
-            <SelectItem value="per_check">{t("Uma saída por regra")}</SelectItem>
+            <SelectItem value="per_check">{t("Une sortie par règle")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -164,7 +164,7 @@ export function ConditionForm({
           data-testid="cond-troca-aviso"
         >
           <p className="text-xs leading-snug text-warning-fg">
-            {t("Trocar de modo deixa")} {trocaPendente.orfas}{" "}
+            {t("Changer de mode laisse")} {trocaPendente.orfas}{" "}
             {t(trocaPendente.orfas === 1 ? "ligação sem saída" : "ligações sem saída")}{" "}
             {t(
               "neste nó. Elas continuam desenhadas, mas param de levar a lugar nenhum até você religá-las.",
@@ -172,10 +172,10 @@ export function ConditionForm({
           </p>
           <div className="flex gap-2">
             <Button type="button" size="sm" onClick={() => aplicarModo(trocaPendente.modo)}>
-              {t("Trocar mesmo assim")}
+              {t("Changer quand même")}
             </Button>
             <Button type="button" size="sm" variant="ghost" onClick={() => setTrocaPendente(null)}>
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
           </div>
         </div>
@@ -187,7 +187,7 @@ export function ConditionForm({
           que o subtítulo do card tinha. O texto é o do vocabulário, não meu. */}
       {!porRegra && (
         <div className="space-y-2">
-          <Label htmlFor="cond-combinator">{t("Seguir por aqui quando")}</Label>
+          <Label htmlFor="cond-combinator">{t("Suivre par ici lorsque")}</Label>
           <Select
             value={combinator}
             onValueChange={(v) => {
@@ -219,13 +219,13 @@ export function ConditionForm({
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-text-muted">
-                {t("Condição")} {idx + 1}
+                {t("Condition")} {idx + 1}
               </span>
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
-                aria-label={t("Remover condição")}
+                aria-label={t("Supprimer la condition")}
                 disabled={checks.length <= 1}
                 onClick={() => {
                   const next = checks.filter((_, i) => i !== idx);
@@ -238,8 +238,8 @@ export function ConditionForm({
             </div>
             {porRegra && (
               <Input
-                aria-label={`${t("Nome da saída")} ${idx + 1}`}
-                placeholder={t("Nome desta saída (opcional)")}
+                aria-label={`${t("Nom de la sortie")} ${idx + 1}`}
+                placeholder={t("Nom de cette sortie (facultatif)")}
                 value={check.label ?? ""}
                 onChange={(e) => {
                   const texto = e.target.value;
@@ -267,7 +267,7 @@ export function ConditionForm({
                 commit({ checks: next });
               }}
             >
-              <SelectTrigger aria-label={t("Campo")}>
+              <SelectTrigger aria-label={t("Champ")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -288,7 +288,7 @@ export function ConditionForm({
                 commit({ checks: next });
               }}
             >
-              <SelectTrigger aria-label={t("Operador")}>
+              <SelectTrigger aria-label={t("Opérateur")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -300,9 +300,9 @@ export function ConditionForm({
               </SelectContent>
             </Select>
             <Input
-              aria-label={t("Valor")}
+              aria-label={t("Valeur")}
               placeholder={
-                CAMPOS_DA_CONDICAO[check.field].tipoDeValor === "numero" ? t("Ex.: 3") : t("Valor")
+                CAMPOS_DA_CONDICAO[check.field].tipoDeValor === "numero" ? t("Ex. : 3") : t("Valeur")
               }
               value={String(check.value)}
               onChange={(e) => {
@@ -337,7 +337,7 @@ export function ConditionForm({
           commit({ checks: next });
         }}
       >
-        <Plus size={14} aria-hidden className="mr-1" /> {t("Condição")}
+        <Plus size={14} aria-hidden className="mr-1" /> {t("Condition")}
       </Button>
       {error && <p className="text-xs text-error-fg">{t(error)}</p>}
     </div>

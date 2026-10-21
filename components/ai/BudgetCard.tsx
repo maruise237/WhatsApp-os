@@ -99,18 +99,18 @@ function clamp(n: number, min: number, max: number): number {
 function frameDoEstado(status: BudgetStatus, t: (text: string) => string, locale: string): string {
   const efetivoEm = status.enforcement_effective_at;
   if (status.enforcement_mode === "off") {
-    return t("Isto é só acompanhamento. A IA não vai parar sozinha por gasto.");
+    return t("C’est uniquement un suivi. L’IA ne s’arrêtera pas automatiquement pour dépassement de budget.");
   }
   if (status.enforcement_mode === "avisar") {
-    return `${t("Avisamos ao passar de")} ${status.alarm_threshold_pct}% ${t("do limite. A IA não para.")}`;
+    return `${t("Alerte au-delà de")} ${status.alarm_threshold_pct}% ${t("de la limite. L’IA ne s’arrête pas.")}`;
   }
   if (efetivoEm && new Date(efetivoEm).getTime() > Date.now()) {
-    return `${t("A parada começa a valer em")} ${fmtData(efetivoEm, locale)}. ${t("Até lá, só avisamos.")}`;
+    return `${t("L’arrêt prendra effet le")} ${fmtData(efetivoEm, locale)}. ${t("D’ici là, seules les alertes sont activées.")}`;
   }
   return (
-    `${t("A IA para de responder ao chegar em")} ${fmtCents(status.monthly_limit_cents, locale)}. ` +
-    `${t("Quando isso acontecer, as conversas em andamento vão para a fila de atendimento")} ` +
-    t("humano e voltam ao automático uma a uma, pelo cabeçalho de cada conversa.")
+    `${t("L’IA arrête de répondre à")} ${fmtCents(status.monthly_limit_cents, locale)}. ` +
+    `${t("À ce moment-là, les conversations en cours sont placées dans la file de traitement")} ` +
+    t("humain et reviennent une à une à l’automatique depuis l’en-tête de chaque conversation.")
   );
 }
 
@@ -158,7 +158,7 @@ export function BudgetCard({ initialData, isAdmin }: Props) {
   if (!status) {
     return (
       <Card className="p-4">
-        <p className="text-sm text-muted-foreground">{t("Carregando orçamento...")}</p>
+        <p className="text-sm text-muted-foreground">{t("Chargement du budget…")}</p>
       </Card>
     );
   }
@@ -173,19 +173,19 @@ export function BudgetCard({ initialData, isAdmin }: Props) {
     <Card className="p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-base font-semibold tracking-tight">{t("Orçamento mensal de IA")}</h2>
+          <h2 className="text-base font-semibold tracking-tight">{t("Budget mensuel de l’IA")}</h2>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            {t("Gasto de ")}
+            {t("Dépense de ")}
             {mesCorrente(locale)} ·{" "}
-            {t("valores em dólar (é a moeda em que o provedor de IA cobra)")}
+            {t("montants en dollars (la devise facturée par le fournisseur d’IA)")}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {/* Um badge só de parada, e ele vem do ÚNICO produtor real: um
               `budget_exceeded` aberto na Central. */}
-          {status.blocked_now && <Badge variant="destructive">{t("IA parada por gasto")}</Badge>}
+          {status.blocked_now && <Badge variant="destructive">{t("IA arrêtée pour dépassement de budget")}</Badge>}
           {!status.blocked_now && overLimit && limit > 0 && (
-            <Badge variant="secondary">{t("Passou do limite")}</Badge>
+            <Badge variant="secondary">{t("Limite dépassée")}</Badge>
           )}
           {isAdmin && <EditBudgetDialog status={status} />}
         </div>
@@ -229,20 +229,20 @@ export function BudgetCard({ initialData, isAdmin }: Props) {
             {limit > 0 ? (
               <>
                 {" "}
-                {t("gastos de ")}
+                {t("dépensés sur ")}
                 {fmtCents(limit, locale)}
               </>
             ) : (
-              <> {t("gastos este mês")}</>
+              <> {t("dépensés ce mois-ci")}</>
             )}
           </span>
           <span className="text-muted-foreground">
             {limit > 0 ? (
               <>
-                {status.pct.toFixed(0)}% {t("do limite")} · {frameDoEstado(status, t, locale)}
+                {status.pct.toFixed(0)}% {t("de la limite")} · {frameDoEstado(status, t, locale)}
               </>
             ) : (
-              t("Sem limite definido — a IA não vai parar sozinha por gasto.")
+              t("Aucune limite définie — l’IA ne s’arrêtera pas automatiquement pour dépassement de budget.")
             )}
           </span>
         </div>
@@ -373,12 +373,12 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline">
-          {t("Editar limite")}
+          {t("Modifier la limite")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Orçamento de IA")}</DialogTitle>
+          <DialogTitle>{t("Budget IA")}</DialogTitle>
           <DialogDescription>
             {t(
               "Escolha o que acontece quando o gasto do mês chega no limite. Os valores são em dólar — é a moeda em que o provedor de IA cobra.",
@@ -392,7 +392,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               atual={modo}
               onPick={setModo}
               disabled={update.isPending}
-              titulo={t("Só acompanhar")}
+              titulo={t("Uniquement suivre")}
               corpo={t(
                 "A IA nunca para por gasto. Você vê o número nesta tela e decide o que fazer.",
               )}
@@ -402,7 +402,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               atual={modo}
               onPick={setModo}
               disabled={update.isPending}
-              titulo={`${t("Me avisar ao passar de")} ${limiarEfetivo}% ${t("do limite")} ${fmtCents(tetoParaCopy, locale)}`}
+              titulo={`${t("M’alerter au-delà de")} ${limiarEfetivo}% ${t("de la limite")} ${fmtCents(tetoParaCopy, locale)}`}
               corpo={t(
                 "Abrimos um aviso na Central de avisos. A IA continua respondendo normalmente.",
               )}
@@ -412,14 +412,14 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               atual={modo}
               onPick={setModo}
               disabled={update.isPending || pularDegrau}
-              titulo={`${t("Parar a IA ao chegar em")} ${fmtCents(tetoParaCopy, locale)}`}
+              titulo={`${t("Arrêter l’IA à")} ${fmtCents(tetoParaCopy, locale)}`}
               corpo={
                 t(
                   "As conversas em andamento vão para a fila de atendimento humano — ninguém fica sem resposta, mas alguém precisa responder.",
                 ) +
                 ` ${t('Cada uma volta ao automático pelo botão "Devolver ao automático" no cabeçalho dela.')}` +
                 (status.gasto_incompleto
-                  ? ` ${t("Atenção: o produto ainda não sabe o preço do modelo em uso, então o gasto medido é menor que o real e esta parada pode não disparar.")}`
+                  ? ` ${t("Attention : le produit ne connaît pas encore le prix du modèle utilisé ; les dépenses mesurées sont donc inférieures aux dépenses réelles et cet arrêt peut ne pas se déclencher.")}`
                   : "")
               }
               {...(pularDegrau
@@ -439,7 +439,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="limit-usd">{t("Limite mensal (US$)")}</Label>
+            <Label htmlFor="limit-usd">{t("Limite mensuelle (US$)")}</Label>
             <Input
               id="limit-usd"
               type="number"
@@ -451,20 +451,20 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
             />
             {tetoInsuficiente && (
               <p className="text-xs text-destructive">
-                {t("Para avisar ou parar no limite, ele precisa ser de pelo menos")}{" "}
+                {t("Pour alerter ou arrêter à la limite, celle-ci doit être d’au moins")}{" "}
                 {fmtCents(PISO_DE_TETO_CENTS, locale)}{" "}
                 {t(
                   "por mês. Abaixo disso não é orçamento de um atendimento — é erro de digitação.",
                 )}{" "}
-                {t("Se você só quer acompanhar o gasto sem limite, escolha")} &quot;
-                {t("Só acompanhar")}&quot;.
+                {t("Si vous souhaitez uniquement suivre les dépenses sans limite, choisissez")} &quot;
+                {t("Uniquement suivre")}&quot;.
               </p>
             )}
           </div>
 
           {modo !== "off" && (
             <div className="space-y-1.5">
-              <Label htmlFor="threshold-pct">{t("Avisar ao chegar em (% do limite)")}</Label>
+              <Label htmlFor="threshold-pct">{t("Alerter à (% de la limite)")}</Label>
               <Input
                 id="threshold-pct"
                 type="number"
@@ -480,7 +480,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
           {armando && (
             <div className="space-y-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3">
               <p className="text-xs">
-                {t("A parada começa a valer")} <strong>72 {t("horas")}</strong>{" "}
+                {t("L’arrêt prendra effet")} <strong>72 {t("heures")}</strong>{" "}
                 {t(
                   "depois de salvar. É o tempo de você ver o aviso chegar antes que alguma conversa pare.",
                 )}
@@ -492,7 +492,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
                   onChange={(e) => setImediato(e.target.checked)}
                   className="h-4 w-4 accent-primary"
                 />
-                {t("Começar a valer agora, sem esperar as 72 horas")}
+                {t("Prendre effet maintenant, sans attendre les 72 heures")}
               </label>
             </div>
           )}
@@ -504,10 +504,10 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               onClick={() => setOpen(false)}
               disabled={update.isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={update.isPending || !centsValidos || tetoInsuficiente}>
-              {update.isPending ? t("Salvando...") : t("Salvar")}
+              {update.isPending ? t("Enregistrement…") : t("Enregistrer")}
             </Button>
           </DialogFooter>
         </form>

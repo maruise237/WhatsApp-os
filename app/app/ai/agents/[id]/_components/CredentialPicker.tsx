@@ -56,10 +56,10 @@ export function CredentialPicker({
 
   return (
     <div className="space-y-1">
-      <Label htmlFor={id}>{t("Chave de acesso")}</Label>
+      <Label htmlFor={id}>{t("Clé d’accès")}</Label>
       <Select value={value || undefined} onValueChange={onChange} disabled={disabled}>
         <SelectTrigger id={id}>
-          <SelectValue placeholder={t("Escolha uma chave")} />
+          <SelectValue placeholder={t("Choisissez une clé")} />
         </SelectTrigger>
         <SelectContent>
           {/*
@@ -70,7 +70,7 @@ export function CredentialPicker({
           */}
           {instalacaoTemChave ? (
             <SelectItem value={CHAVE_DA_INSTALACAO}>
-              {t("A chave desta instalação (")}
+              {t("Clé de cette installation (")}
               {provider})
             </SelectItem>
           ) : null}
@@ -84,7 +84,7 @@ export function CredentialPicker({
           })}
           {semOpcao ? (
             <SelectItem value="__none__" disabled>
-              {t("Nenhuma credencial")} {provider} {t("cadastrada")}
+              {t("Aucune clé")} {provider} {t("enregistré")}
             </SelectItem>
           ) : null}
         </SelectContent>
@@ -95,9 +95,9 @@ export function CredentialPicker({
             href="/app/ai/credentials"
             className="font-medium text-foreground underline underline-offset-4"
           >
-            {t("Cadastrar credencial")} {provider}
+            {t("Enregistrer une clé")} {provider}
           </Link>{" "}
-          {t("na aba Credenciais.")}
+          {t("dans l’onglet Clés d’accès.")}
         </p>
       ) : null}
     </div>

@@ -76,7 +76,7 @@ export function EditContactDialog({ contact, open, onOpenChange }: Props) {
     }
     try {
       await update.mutateAsync(parsed.data as ContactPatch);
-      toast.success(t("Contato atualizado"));
+      toast.success(t("Contact mis à jour"));
       onOpenChange(false);
     } catch {
       // hook handles toast
@@ -87,24 +87,24 @@ export function EditContactDialog({ contact, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Editar contato")}</DialogTitle>
-          <DialogDescription>{t("Atualize os dados deste contato.")}</DialogDescription>
+          <DialogTitle>{t("Modifier le contact")}</DialogTitle>
+          <DialogDescription>{t("Mettez à jour les informations de ce contact.")}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="ec-name">{t("Nome")}</Label>
+            <Label htmlFor="ec-name">{t("Nom")}</Label>
             <Input id="ec-name" {...form.register("name")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="ec-email">{t("Email")}</Label>
+            <Label htmlFor="ec-email">{t("E-mail")}</Label>
             <Input id="ec-email" type="email" {...form.register("email")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="ec-phone">{t("Telefone (E.164)")}</Label>
+            <Label htmlFor="ec-phone">{t("Téléphone (E.164)")}</Label>
             <Input id="ec-phone" {...form.register("phone_number")} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="ec-tags">{t("Tag")}</Label>
+            <Label htmlFor="ec-tags">{t("Étiquette")}</Label>
             <Input id="ec-tags" {...form.register("tagsRaw")} />
           </div>
           {serverError && <p className="text-sm text-error-fg">{serverError}</p>}
@@ -115,10 +115,10 @@ export function EditContactDialog({ contact, open, onOpenChange }: Props) {
               onClick={() => onOpenChange(false)}
               disabled={update.isPending}
             >
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={update.isPending}>
-              {update.isPending ? t("Salvando…") : t("Salvar")}
+              {update.isPending ? t("Enregistrement…") : t("Enregistrer")}
             </Button>
           </DialogFooter>
         </form>

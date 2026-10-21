@@ -27,10 +27,10 @@ export function CaseList() {
         <Tabs value={tab} onValueChange={(v) => setTab(v as "open" | "resolved")}>
           <TabsList>
             <TabsTrigger value="open">
-              {t("Abertos")}
+              {t("Ouverts")}
               {data ? ` (${data.open_count})` : ""}
             </TabsTrigger>
-            <TabsTrigger value="resolved">{t("Concluídos")}</TabsTrigger>
+            <TabsTrigger value="resolved">{t("Terminés")}</TabsTrigger>
           </TabsList>
         </Tabs>
 
@@ -43,12 +43,12 @@ export function CaseList() {
           <div className="flex flex-1 flex-col items-center justify-center gap-2 py-16 text-center">
             <Robot size={28} className="text-muted-foreground/60" aria-hidden />
             <p className="text-sm font-medium">
-              {tab === "open" ? t("Nenhum caso aberto") : t("Nenhum caso concluído")}
+              {tab === "open" ? t("Aucun cas ouvert") : t("Aucun cas terminé")}
             </p>
             <p className="text-xs text-muted-foreground">
               {tab === "open"
-                ? t("Quando a IA precisar de você, aparece aqui.")
-                : t("Casos concluídos, cancelados ou repassados ficam aqui.")}
+                ? t("Lorsqu’elle aura besoin de vous, l’IA l’affichera ici.")
+                : t("Les cas terminés, annulés ou transférés apparaissent ici.")}
             </p>
           </div>
         ) : (
@@ -107,7 +107,7 @@ function CaseRow({
           </Badge>
         </div>
         <p className="text-xs text-muted-foreground">
-          {item.contact_name ?? t("Contato sem nome")} · {when}
+          {item.contact_name ?? t("Contact sans nom")} · {when}
         </p>
       </button>
     </li>

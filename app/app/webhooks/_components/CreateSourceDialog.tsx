@@ -64,7 +64,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!pipelineId || !stageId) {
-      toast.error(t("Escolha o funil e o estágio de entrada."));
+      toast.error(t("Choisissez le tableau et l’étape d’entrée."));
       return;
     }
     try {
@@ -74,7 +74,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
         default_stage_id: stageId,
         redirect_to: redirectTo.trim() || undefined,
       });
-      toast.success(t("Fonte criada. Agora é só conectar seu site."));
+      toast.success(t("Source créée. Il ne reste plus qu’à connecter votre site."));
       onOpenChange(false);
       onCreated(res.data);
     } catch {
@@ -86,7 +86,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Nova fonte de captação")}</DialogTitle>
+          <DialogTitle>{t("Nouvelle source d’acquisition")}</DialogTitle>
           <DialogDescription>
             {t(
               "Dê um nome e diga em qual funil o contato deve entrar quando alguém preencher seu formulário.",
@@ -95,22 +95,22 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="src-name">{t("Nome")}</Label>
+            <Label htmlFor="src-name">{t("Nom")}</Label>
             <Input
               id="src-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t("Landing page de Black Friday")}
+              placeholder={t("Page d’atterrissage Black Friday")}
               minLength={1}
               maxLength={120}
               required
             />
           </div>
           <div className="space-y-2">
-            <Label>{t("Funil de entrada")}</Label>
+            <Label>{t("Tableau d’entrée")}</Label>
             <Select value={pipelineId} onValueChange={setPipelineId} disabled={pipelinesLoading}>
               <SelectTrigger>
-                <SelectValue placeholder={t("Escolha o funil")} />
+                <SelectValue placeholder={t("Choisissez le tableau")} />
               </SelectTrigger>
               <SelectContent>
                 {pipelines.map((p) => (
@@ -122,7 +122,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>{t("Estágio de entrada")}</Label>
+            <Label>{t("Étape d’entrée")}</Label>
             <Select
               value={stageId}
               onValueChange={setStageId}
@@ -130,7 +130,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
             >
               <SelectTrigger>
                 <SelectValue
-                  placeholder={pipelineId ? t("Escolha o estágio") : t("Escolha o funil primeiro")}
+                  placeholder={pipelineId ? t("Choisissez l’étape") : t("Choisissez d’abord le tableau")}
                 />
               </SelectTrigger>
               <SelectContent>
@@ -143,7 +143,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="src-redirect">{t("URL de obrigado (opcional)")}</Label>
+            <Label htmlFor="src-redirect">{t("URL de remerciement (facultative)")}</Label>
             <Input
               id="src-redirect"
               type="url"
@@ -152,15 +152,15 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
               placeholder="https://votresite.com/merci"
             />
             <p className="text-xs text-muted-foreground">
-              {t("Para onde enviar a pessoa depois que ela preencher seu formulário.")}
+              {t("URL vers laquelle rediriger la personne après le remplissage du formulaire.")}
             </p>
           </div>
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              {t("Cancelar")}
+              {t("Annuler")}
             </Button>
             <Button type="submit" disabled={create.isPending}>
-              {t("Criar fonte")}
+              {t("Créer la source")}
             </Button>
           </DialogFooter>
         </form>

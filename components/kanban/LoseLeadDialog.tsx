@@ -61,14 +61,14 @@ export function LoseLeadDialog({ open, onOpenChange, leadId, pipelineId }: LoseL
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("Marcar como perdido")}</DialogTitle>
+          <DialogTitle>{t("Marquer comme perdu")}</DialogTitle>
           <DialogDescription>
-            {t("Informe o motivo. Essa informação ajuda a melhorar o funil.")}
+            {t("Indiquez le motif. Cette information aide à améliorer le pipeline.")}
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-3">
-          <Label>{t("Motivo")}</Label>
+          <Label>{t("Motif")}</Label>
           <div className="grid grid-cols-1 gap-1.5">
             {CANONICAL_LOST_REASONS.map((code) => (
               <label
@@ -88,12 +88,12 @@ export function LoseLeadDialog({ open, onOpenChange, leadId, pipelineId }: LoseL
           </div>
           {reasonCode === "other" && (
             <div className="grid gap-1.5">
-              <Label htmlFor="lost-reason-other">{t("Detalhe (opcional)")}</Label>
+              <Label htmlFor="lost-reason-other">{t("Détail (facultatif)")}</Label>
               <Textarea
                 id="lost-reason-other"
                 value={otherText}
                 onChange={(e) => setOtherText(e.target.value)}
-                placeholder={t("Ex: Cliente desistiu por X motivo")}
+                placeholder={t("Ex. : Le client s’est désisté pour telle raison")}
                 maxLength={MAX_LEN}
                 rows={3}
               />
@@ -110,10 +110,10 @@ export function LoseLeadDialog({ open, onOpenChange, leadId, pipelineId }: LoseL
             onClick={() => onOpenChange(false)}
             disabled={mutation.isPending}
           >
-            {t("Cancelar")}
+            {t("Annuler")}
           </Button>
           <Button onClick={handleSubmit} disabled={disabled}>
-            {mutation.isPending ? t("Salvando...") : t("Confirmar")}
+            {mutation.isPending ? t("Enregistrement…") : t("Confirmer")}
           </Button>
         </DialogFooter>
       </DialogContent>

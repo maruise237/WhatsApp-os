@@ -103,7 +103,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
       // permissão negada / sem mic — não gravar é o estado final; toast simples
       const { showApiError } = await import("@/components/feedback/ApiErrorToast");
       showApiError(
-        new Error(t("Não consegui acessar o microfone. Verifique a permissão do navegador.")),
+        new Error(t("Impossible d’accéder au microphone. Vérifiez l’autorisation du navigateur.")),
       );
     } finally {
       startingRef.current = false;
@@ -122,7 +122,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         type="button"
         size="icon"
         className="h-9 w-9 shrink-0"
-        aria-label={t("Gravar áudio")}
+        aria-label={t("Enregistrer un audio")}
         onClick={start}
         disabled={disabled}
       >
@@ -138,7 +138,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         size="icon"
         variant="ghost"
         className="h-9 w-9 shrink-0 text-destructive"
-        aria-label={t("Cancelar gravação")}
+        aria-label={t("Annuler l’enregistrement")}
         onClick={() => {
           discardRef.current = true;
           stopIfRecording();
@@ -154,7 +154,7 @@ export function AudioRecorder({ conversationId, disabled }: Props) {
         type="button"
         size="icon"
         className="h-9 w-9 shrink-0"
-        aria-label={t("Enviar áudio")}
+        aria-label={t("Envoyer l’audio")}
         onClick={stopIfRecording}
       >
         <PaperPlaneTilt size={16} weight="fill" aria-hidden />

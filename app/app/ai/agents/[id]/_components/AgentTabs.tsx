@@ -52,14 +52,14 @@ export function AgentTabs(props: Props) {
       className="flex flex-col gap-4"
     >
       <TabsList>
-        <TabsTrigger value="configuration">{t("Configuração")}</TabsTrigger>
+        <TabsTrigger value="configuration">{t("Configuration")}</TabsTrigger>
         <TabsTrigger value="test" disabled={!hasVersion}>
-          {t("Teste")}
+          {t("Test")}
         </TabsTrigger>
-        <TabsTrigger value="capacidades">{t("Capacidades")}</TabsTrigger>
-        <TabsTrigger value="runs">{t("Execuções")}</TabsTrigger>
-        <TabsTrigger value="history">{t("Histórico")}</TabsTrigger>
-        <TabsTrigger value="proposals">{t("Propostas")}</TabsTrigger>
+        <TabsTrigger value="capacidades">{t("Capacités")}</TabsTrigger>
+        <TabsTrigger value="runs">{t("Exécutions")}</TabsTrigger>
+        <TabsTrigger value="history">{t("Historique")}</TabsTrigger>
+        <TabsTrigger value="proposals">{t("Propositions")}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="configuration" className="m-0">

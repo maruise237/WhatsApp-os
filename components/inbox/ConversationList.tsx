@@ -99,9 +99,9 @@ export function ConversationList({
   if (q.isError) {
     return (
       <div className="p-4 text-center text-sm text-muted-foreground">
-        <p>{t("Erro ao carregar conversas.")}</p>
+        <p>{t("Erreur lors du chargement des conversations.")}</p>
         <Button size="sm" variant="outline" className="mt-2" onClick={() => q.refetch()}>
-          {t("Tentar novamente")}
+          {t("Réessayer")}
         </Button>
       </div>
     );
@@ -140,7 +140,7 @@ export function ConversationList({
               onClick={() => q.fetchNextPage()}
               disabled={q.isFetchingNextPage}
             >
-              {q.isFetchingNextPage ? t("Carregando…") : t("Carregar mais")}
+              {q.isFetchingNextPage ? t("Chargement…") : t("Charger davantage")}
             </Button>
           </div>
         )}

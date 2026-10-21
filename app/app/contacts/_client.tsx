@@ -80,9 +80,9 @@ export function ContactsListClient() {
     <div className="space-y-4 p-6">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight">{t("Contatos")}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("Contacts")}</h1>
           <p className="text-sm text-muted-foreground">
-            {t("Customer 360 — busque, filtre e gerencie contatos.")}
+            {t("Retrouvez, filtrez et gérez vos clients.")}
           </p>
         </div>
         {/*
@@ -93,11 +93,11 @@ export function ContactsListClient() {
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="outline" onClick={() => setImportOpen(true)}>
             <UploadSimple size={16} weight="bold" aria-hidden />
-            <span>{t("Importar CSV")}</span>
+            <span>{t("Importer un CSV")}</span>
           </Button>
           <Button onClick={() => setCreateOpen(true)}>
             <Plus size={16} weight="bold" aria-hidden />
-            <span>{t("Novo contato")}</span>
+            <span>{t("Nouveau contact")}</span>
           </Button>
         </div>
       </header>
@@ -111,7 +111,7 @@ export function ContactsListClient() {
           />
           <Input
             type="search"
-            placeholder={t("Buscar por nome, email ou telefone…")}
+            placeholder={t("Rechercher par nom, e-mail ou téléphone…")}
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className="h-9 w-full pl-8"
@@ -121,13 +121,13 @@ export function ContactsListClient() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" disabled={tagOptions.length === 0}>
-              {tag ? `${t("Tag:")} ${tag}` : t("Tag: todas")}
+              {tag ? `${t("Tag :")} ${tag}` : t("Tag : toutes")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>{t("Tag")}</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("Étiquette")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setTag(undefined)}>{t("Todas")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTag(undefined)}>{t("Toutes")}</DropdownMenuItem>
             {tagOptions.map((tagOpt) => (
               <DropdownMenuItem key={tagOpt} onClick={() => setTag(tagOpt)}>
                 {tagOpt}
@@ -141,7 +141,7 @@ export function ContactsListClient() {
             <Button variant="outline" size="sm">
               {SOURCE_OPTIONS.find((s) => s.value === source)?.label
                 ? t(SOURCE_OPTIONS.find((s) => s.value === source)!.label)
-                : t("Origem")}
+                : t("Origine")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
@@ -156,11 +156,11 @@ export function ContactsListClient() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
-              {limit} {t("por página")}
+              {limit} {t("par page")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuLabel>{t("Itens por página")}</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("Éléments par page")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {PAGE_SIZE_OPTIONS.map((n) => (
               <DropdownMenuItem key={n} onClick={() => setLimit(n)}>
@@ -181,7 +181,7 @@ export function ContactsListClient() {
               setSource(undefined);
             }}
           >
-            {t("Limpar filtros")}
+            {t("Effacer les filtres")}
           </Button>
         )}
       </div>
@@ -194,14 +194,14 @@ export function ContactsListClient() {
         </div>
       ) : q.isError ? (
         <Card className="p-6 text-center">
-          <p className="text-sm text-error-fg">{t("Erro ao carregar contatos.")}</p>
+          <p className="text-sm text-error-fg">{t("Erreur lors du chargement des contacts.")}</p>
           <Button
             size="sm"
             variant="outline"
             className="mt-2"
             onClick={() => q.refetch()}
           >
-            {t("Tentar novamente")}
+            {t("Réessayer")}
           </Button>
         </Card>
       ) : allContacts.length === 0 ? (
@@ -221,7 +221,7 @@ export function ContactsListClient() {
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
             <p className="text-sm text-muted-foreground">
               {allContacts.length} {t(allContacts.length === 1 ? "contato" : "contatos")}
-              {q.hasNextPage ? ` ${t("carregados — há mais resultados")}` : ""}
+              {q.hasNextPage ? ` ${t("chargés — il y a plus de résultats")}` : ""}
             </p>
             {q.hasNextPage && (
               <Button
@@ -230,7 +230,7 @@ export function ContactsListClient() {
                 onClick={() => q.fetchNextPage()}
                 disabled={q.isFetchingNextPage}
               >
-                {q.isFetchingNextPage ? t("Carregando…") : t("Carregar mais")}
+                {q.isFetchingNextPage ? t("Chargement…") : t("Charger davantage")}
               </Button>
             )}
           </div>

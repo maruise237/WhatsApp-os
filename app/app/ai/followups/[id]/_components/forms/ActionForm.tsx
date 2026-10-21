@@ -38,11 +38,11 @@ function SeletorDeModelo({
   const t = useT();
   const { data: modelos, isLoading, isError } = useMessageTemplates();
 
-  if (isLoading) return <p className="text-xs text-text-muted">{t("Carregando seus modelos…")}</p>;
+  if (isLoading) return <p className="text-xs text-text-muted">{t("Chargement de vos modèles…")}</p>;
   if (isError) {
     return (
       <p className="text-xs text-error-fg">
-        {t("Não consegui carregar seus modelos de mensagem. Recarregue a página.")}
+        {t("Impossible de charger vos modèles de messages. Rechargez la page.")}
       </p>
     );
   }
@@ -63,10 +63,10 @@ function SeletorDeModelo({
       onValueChange={(v) => onChange(v === SEM_MODELO ? "" : v)}
     >
       <SelectTrigger id={id}>
-        <SelectValue placeholder={t("Escolha um modelo")} />
+        <SelectValue placeholder={t("Choisissez un modèle")} />
       </SelectTrigger>
       <SelectContent>
-        {permiteVazio && <SelectItem value={SEM_MODELO}>{t("Nenhum")}</SelectItem>}
+        {permiteVazio && <SelectItem value={SEM_MODELO}>{t("Aucun")}</SelectItem>}
         {modelos.map((m) => (
           <SelectItem key={m.id} value={m.id}>
             {m.title}
@@ -125,7 +125,7 @@ export function ActionForm({
   return (
     <div className="space-y-3">
       <div className="space-y-2">
-        <Label htmlFor="action-mode">{t("Como escrever a mensagem")}</Label>
+        <Label htmlFor="action-mode">{t("Comment rédiger le message")}</Label>
         <Select
           value={mode}
           onValueChange={(v) => {
@@ -150,7 +150,7 @@ export function ActionForm({
       {mode === "ai_message" ? (
         <>
           <div className="space-y-2">
-            <Label htmlFor="action-prompt-hint">{t("Instrução para a IA")}</Label>
+            <Label htmlFor="action-prompt-hint">{t("Instruction pour l’IA")}</Label>
             <Textarea
               id="action-prompt-hint"
               maxLength={1000}
@@ -163,7 +163,7 @@ export function ActionForm({
           </div>
           <div className="space-y-2">
             <Label htmlFor="action-fallback">
-              {t("Se a IA não conseguir escrever, mandar este modelo")}
+              {t("Si l’IA ne peut pas rédiger le message, envoyer ce modèle")}
             </Label>
             <SeletorDeModelo
               id="action-fallback"
@@ -178,7 +178,7 @@ export function ActionForm({
         </>
       ) : (
         <div className="space-y-2">
-          <Label htmlFor="action-template-id">{t("Modelo de mensagem")}</Label>
+          <Label htmlFor="action-template-id">{t("Modèle de message")}</Label>
           <SeletorDeModelo
             id="action-template-id"
             valor={templateId}

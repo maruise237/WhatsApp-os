@@ -71,7 +71,7 @@ export function AgentCard({ agent, canWrite }: Props) {
         <div className="flex shrink-0 items-center gap-1">
           {agent.is_default && (
             <Badge variant="secondary" className="text-xs">
-              {t("default")}
+              {t("Par défaut")}
             </Badge>
           )}
           <AgentStatusBadge status={status} />
@@ -83,18 +83,18 @@ export function AgentCard({ agent, canWrite }: Props) {
       )}
       <dl className="grid grid-cols-2 gap-2 pt-1 text-xs">
         <div>
-          <dt className="text-muted-foreground">{t("Tipo")}</dt>
+          <dt className="text-muted-foreground">{t("Type")}</dt>
           <dd className="font-mono">{agent.kind ?? "rag_bot"}</dd>
         </div>
         <div>
-          <dt className="text-muted-foreground">{t("Prioridade")}</dt>
+          <dt className="text-muted-foreground">{t("Priorité")}</dt>
           <dd className="font-mono">{agent.priority ?? "—"}</dd>
         </div>
       </dl>
       <div className="mt-auto pt-2">
         <Link href={`/app/ai/agents/${agent.id}`}>
           <Button variant="outline" size="sm" className="w-full">
-            {canWrite ? t("Editar") : t("Visualizar")}
+            {canWrite ? t("Modifier") : t("Afficher")}
           </Button>
         </Link>
       </div>

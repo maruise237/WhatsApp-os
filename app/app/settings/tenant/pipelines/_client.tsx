@@ -107,7 +107,7 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
       if (!Array.isArray(parsed)) throw new Error("not_array");
       fields = parsed as CustomFieldDef[];
     } catch {
-      toast.error(t("Custom fields: JSON inválido. Esperado um array."));
+      toast.error(t("Champs personnalisés : JSON invalide. Un tableau est attendu."));
       return;
     }
     const reasons = reasonsText
@@ -122,14 +122,14 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
     };
     startTransition(async () => {
       const r = await updatePipelineConfig(pipeline.id, patch);
-      if (r.ok) toast.success(t("{name} atualizado.").replace("{name}", pipeline.name));
+      if (r.ok) toast.success(t("{name} mis à jour.").replace("{name}", pipeline.name));
       else toast.error(`Erreur : ${r.error}`);
     });
   }
 
   return (
     <div className="space-y-4 border-t border-border pt-6">
-      <h3 className="text-sm font-semibold">{t("Vocabulário e campos")}</h3>
+      <h3 className="text-sm font-semibold">{t("Vocabulaire et champs")}</h3>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="space-y-1">
@@ -137,26 +137,26 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
           <Input value={lead} onChange={(e) => setLead(e.target.value)} />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">{t("Deal")}</Label>
+          <Label className="text-xs">{t("Affaire")}</Label>
           <Input value={deal} onChange={(e) => setDeal(e.target.value)} />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">{t("Won")}</Label>
+          <Label className="text-xs">{t("Gagnée")}</Label>
           <Input value={won} onChange={(e) => setWon(e.target.value)} />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">{t("Lost")}</Label>
+          <Label className="text-xs">{t("Perdue")}</Label>
           <Input value={lost} onChange={(e) => setLost(e.target.value)} />
         </div>
       </div>
 
       <div className="space-y-1">
-        <Label className="text-xs">{t("Motivos de perda (separados por vírgula)")}</Label>
+        <Label className="text-xs">{t("Motifs de perte supplémentaires (séparés par des virgules)")}</Label>
         <Input value={reasonsText} onChange={(e) => setReasonsText(e.target.value)} />
       </div>
 
       <div className="space-y-1">
-        <Label className="text-xs">{t("Custom fields (JSON array)")}</Label>
+        <Label className="text-xs">{t("Champs personnalisés (tableau JSON)")}</Label>
         <textarea
           value={fieldsJson}
           onChange={(e) => setFieldsJson(e.target.value)}
@@ -170,7 +170,7 @@ function PipelineEditor({ pipeline }: { pipeline: PipelineRow }) {
 
       <div className="flex sm:justify-end">
         <Button onClick={handleSave} disabled={isPending} className="w-full sm:w-auto">
-          {isPending ? t("Salvando…") : t("Salvar vocabulário e campos")}
+          {isPending ? t("Enregistrement…") : t("Enregistrer le vocabulaire et les champs")}
         </Button>
       </div>
     </div>

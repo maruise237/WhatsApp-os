@@ -34,7 +34,7 @@ export function CaseReplyPanel({ caseId, status }: { caseId: string; status: Cas
       { id: caseId, action, body: body.trim() },
       {
         onSuccess: () => {
-          toast.success(t("Resposta enviada."));
+          toast.success(t("Réponse envoyée."));
           setBody("");
           setAction(null);
         },
@@ -45,13 +45,13 @@ export function CaseReplyPanel({ caseId, status }: { caseId: string; status: Cas
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-border p-4">
-      <h3 className="text-sm font-semibold">{t("O que você quer fazer?")}</h3>
+      <h3 className="text-sm font-semibold">{t("Que souhaitez-vous faire ?")}</h3>
       {disabled ? <p className="text-xs text-muted-foreground">{t(disabledReason ?? "")}</p> : null}
 
       <div
         className="flex flex-col gap-2"
         role="radiogroup"
-        aria-label={t("O que você quer fazer?")}
+        aria-label={t("Que souhaitez-vous faire ?")}
       >
         {CASE_ACTIONS.map((opt) => (
           <button
@@ -79,16 +79,16 @@ export function CaseReplyPanel({ caseId, status }: { caseId: string; status: Cas
         value={body}
         onChange={(e) => setBody(e.target.value)}
         disabled={disabled}
-        placeholder={t("Escreva sua resposta para a IA...")}
+        placeholder={t("Écrivez votre réponse à l’IA…")}
         rows={3}
       />
       {!disabled && action === null ? (
         <p className="text-xs text-muted-foreground">
-          {t("Escolha uma das opções acima para enviar.")}
+          {t("Choisissez l’une des options ci-dessus pour envoyer votre réponse.")}
         </p>
       ) : null}
       <Button onClick={handleSubmit} disabled={!canSubmit}>
-        {reply.isPending ? t("Enviando...") : t("Enviar")}
+        {reply.isPending ? t("Envoi…") : t("Envoyer")}
       </Button>
     </div>
   );

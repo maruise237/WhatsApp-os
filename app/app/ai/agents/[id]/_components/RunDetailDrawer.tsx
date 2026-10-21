@@ -55,7 +55,7 @@ export function RunDetailDrawer({ run, open, onOpenChange }: Props) {
       <SheetContent className="flex w-full flex-col gap-4 overflow-y-auto sm:max-w-2xl">
         <SheetHeader className="space-y-1 text-left">
           <SheetTitle className="flex items-center gap-2 text-base">
-            <span>{t("Execução")}</span>
+            <span>{t("Exécution")}</span>
             {run ? (
               <Badge variant={STATUS_VARIANT[run.status] ?? "outline"} className="text-xs">
                 {t(run.status)}
@@ -73,16 +73,16 @@ export function RunDetailDrawer({ run, open, onOpenChange }: Props) {
         {run ? (
           <div className="flex flex-col gap-4 text-sm">
             <dl className="grid grid-cols-2 gap-2 text-xs">
-              <Cell label={t("Iniciado")}>{new Date(run.started_at).toLocaleString()}</Cell>
-              <Cell label={t("Concluído")}>
+              <Cell label={t("Démarrée")}>{new Date(run.started_at).toLocaleString()}</Cell>
+              <Cell label={t("Terminé")}>
                 {run.completed_at ? new Date(run.completed_at).toLocaleString() : "—"}
               </Cell>
-              <Cell label={t("Tokens (in/out)")}>
+              <Cell label={t("Tokens (entrée/sortie)")}>
                 {(run.tokens_in ?? 0).toLocaleString()} / {(run.tokens_out ?? 0).toLocaleString()}
               </Cell>
-              <Cell label={t("Custo")}>{fmtCost(run.cost_cents)}</Cell>
-              <Cell label={t("Latência")}>{fmtLatency(run.latency_ms)}</Cell>
-              <Cell label={t("Steps")}>{run.steps_count ?? 0}</Cell>
+              <Cell label={t("Coût")}>{fmtCost(run.cost_cents)}</Cell>
+              <Cell label={t("Latence")}>{fmtLatency(run.latency_ms)}</Cell>
+              <Cell label={t("Étapes")}>{run.steps_count ?? 0}</Cell>
             </dl>
 
             {run.error_code || run.error_message ? (
@@ -98,14 +98,14 @@ export function RunDetailDrawer({ run, open, onOpenChange }: Props) {
               {run.conversation_id ? (
                 <Button variant="outline" size="sm" asChild>
                   <Link href={`/app/inbox?id=${run.conversation_id}`}>
-                    {t("Ver conversa")}
+                    {t("Voir la conversation")}
                   </Link>
                 </Button>
               ) : null}
               {run.inbound_message_id ? (
                 <Button variant="ghost" size="sm" asChild>
                   <Link href={`/app/inbox?message=${run.inbound_message_id}`}>
-                    {t("Ver inbound")}
+                    {t("Voir le message entrant")}
                   </Link>
                 </Button>
               ) : null}
@@ -119,7 +119,7 @@ export function RunDetailDrawer({ run, open, onOpenChange }: Props) {
             </div>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">{t("Selecione uma execução.")}</p>
+          <p className="text-sm text-muted-foreground">{t("Sélectionnez une exécution.")}</p>
         )}
       </SheetContent>
     </Sheet>

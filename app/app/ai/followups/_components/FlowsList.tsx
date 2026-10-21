@@ -33,7 +33,7 @@ export function FlowsList({ initialData, canWrite }: Props) {
 
   const newFlowButton = (
     <Button onClick={() => setDialogOpen(true)} className="w-full sm:w-auto">
-      <Plus size={14} aria-hidden className="mr-2" /> {t("Novo fluxo")}
+      <Plus size={14} aria-hidden className="mr-2" /> {t("Nouveau flow")}
     </Button>
   );
 
@@ -42,7 +42,7 @@ export function FlowsList({ initialData, canWrite }: Props) {
       <>
         <Card className="flex flex-col items-center gap-3 p-10 text-center">
           <FlowArrow size={36} aria-hidden className="text-text-muted" />
-          <h2 className="font-medium">{t("Nenhum fluxo de follow-up ainda")}</h2>
+          <h2 className="font-medium">{t("Aucun flow de follow-up pour le moment")}</h2>
           <p className="max-w-sm text-sm text-text-muted">
             {t(
               "Follow-ups reengajam contatos automaticamente após silêncio, mudança de etapa ou fim de conversa — sem depender de alguém lembrar de mandar mensagem.",
@@ -72,16 +72,16 @@ export function FlowsList({ initialData, canWrite }: Props) {
                 </div>
                 <dl className="grid grid-cols-2 gap-2 pt-1 text-xs">
                   <div>
-                    <dt className="text-text-muted">{t("Versão")}</dt>
-                    <dd className="font-mono">{flow.active_version_id ? t("publicada") : "—"}</dd>
+                    <dt className="text-text-muted">{t("Version")}</dt>
+                    <dd className="font-mono">{flow.active_version_id ? t("publiée") : "—"}</dd>
                   </div>
                   <div>
-                    <dt className="text-text-muted">{t("Handoff")}</dt>
+                    <dt className="text-text-muted">{t("Relais humain")}</dt>
                     <dd className="font-mono">{flow.handoff_policy}</dd>
                   </div>
                 </dl>
                 <p className="mt-auto pt-2 text-xs text-text-muted">
-                  {t("Atualizado em")} {formatUpdatedAt(flow.updated_at, idioma)}
+                  {t("Mis à jour le")} {formatUpdatedAt(flow.updated_at, idioma)}
                 </p>
               </Card>
             </Link>

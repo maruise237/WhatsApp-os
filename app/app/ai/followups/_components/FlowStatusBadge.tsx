@@ -17,7 +17,7 @@ const VARIANT: Record<FollowupFlowStatus, "neutral" | "success" | "warning"> = {
 export function FlowStatusBadge({ status }: { status: FollowupFlowStatus }) {
   const t = useT();
   return (
-    <Badge variant={VARIANT[status]} aria-label={`${t("status:")} ${t(LABEL[status])}`}>
+    <Badge variant={VARIANT[status]} aria-label={`${t("statut :")} ${t(LABEL[status])}`}>
       {t(LABEL[status])}
     </Badge>
   );

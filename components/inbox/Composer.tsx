@@ -233,7 +233,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
                 : "text-muted-foreground hover:bg-muted",
             )}
           >
-            {t("Responder")}
+            {t("Répondre")}
           </button>
           <button
             type="button"
@@ -245,7 +245,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
                 : "text-muted-foreground hover:bg-muted",
             )}
           >
-            {t("Nota interna")}
+            {t("Note interne")}
           </button>
         </div>
         {/*
@@ -262,16 +262,16 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
           <div className="bg-muted/60 mb-1 flex items-start gap-2 rounded-md border-l-2 border-primary px-2 py-1.5">
             <div className="min-w-0 flex-1">
               <div className="text-[11px] font-medium text-primary">
-                {respondendo.direction === "outbound" ? t("Você") : t("Cliente")}
+                {respondendo.direction === "outbound" ? t("Vous") : t("Client")}
               </div>
               <div className="line-clamp-2 text-xs text-muted-foreground">
-                {respondendo.body?.trim() || t("(sem texto)")}
+                {respondendo.body?.trim() || t("(sans texte)")}
               </div>
             </div>
             <button
               type="button"
               onClick={onCancelarResposta}
-              aria-label={t("Cancelar resposta")}
+              aria-label={t("Annuler la réponse")}
               className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <X className="size-4" />
@@ -335,20 +335,20 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
             // essa informação não pode depender de abrir um diálogo.
             placeholder={
               mode === "note"
-                ? t("Escreva uma nota interna… (só o time vê)")
-                : t("Escreva uma mensagem…")
+                ? t("Écrivez une note interne… (seulement l'équipe la voit)")
+                : t("Écrivez un message…")
             }
             title={
               mode === "note"
-                ? t("Enter salva a nota · Shift+Enter quebra linha")
-                : t("Enter envia · Shift+Enter quebra linha")
+                ? t("Entrée enregistre la note · Maj+Entrée insère un retour à la ligne")
+                : t("Entrée envoie · Maj+Entrée insère un retour à la ligne")
             }
             className={cn(
               "max-h-40 min-h-9 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm",
               "placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring",
             )}
             disabled={mode === "note" ? isDisabled : respostaBarrada}
-            aria-label={t("Mensagem")}
+            aria-label={t("Message")}
           />
           {text.trim() || mode === "note" ? (
             <Button
@@ -357,7 +357,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
               className="h-9 w-9 shrink-0"
               onClick={handleSubmit}
               disabled={(mode === "note" ? isDisabled : respostaBarrada) || !text.trim()}
-              aria-label={t("Enviar")}
+              aria-label={t("Envoyer")}
             >
               <PaperPlaneTilt size={16} weight="fill" aria-hidden />
             </Button>

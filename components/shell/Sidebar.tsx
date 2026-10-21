@@ -208,14 +208,14 @@ export function SidebarContent({
               "hover:bg-accent/50 flex w-full items-center gap-2 rounded-md px-3 py-2 text-xs text-muted-foreground hover:text-foreground",
               collapsed && "justify-center px-2",
             )}
-            aria-label={collapsed ? t("Expandir sidebar") : t("Recolher sidebar")}
+            aria-label={collapsed ? t("Développer la barre latérale") : t("Réduire la barre latérale")}
           >
             {collapsed ? (
               <CaretDoubleRight size={14} aria-hidden />
             ) : (
               <CaretDoubleLeft size={14} aria-hidden />
             )}
-            {!collapsed && <span>{t("Recolher")}</span>}
+            {!collapsed && <span>{t("Réduire")}</span>}
           </button>
         )}
       </div>

@@ -27,7 +27,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
   const [carregando, setCarregando] = useState(false);
   const [pending, startTransition] = useTransition();
 
-  const funcionario = nome ?? t("seu funcionário");
+  const funcionario = nome ?? t("votre assistant");
 
   // Três estados possíveis, e nenhum deles pode virar uma tela vazia: sem
   // agente (a pessoa pulou o treinamento), agente em rascunho (não tem versão
@@ -93,7 +93,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
     <div className="space-y-4">
       {semAgente && (
         <div className="rounded-lg border bg-background p-6" role="status">
-          <p className="text-sm font-medium">{t("Você ainda não montou seu funcionário.")}</p>
+          <p className="text-sm font-medium">{t("Vous n’avez pas encore configuré votre assistant.")}</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
               "Sem ninguém treinado, não há o que testar. Dá para voltar ao passo anterior agora ou fazer isso depois, em IA › Agentes.",
@@ -105,7 +105,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
       {rascunho && (
         <div className="rounded-lg border bg-background p-6" role="status">
           <p className="text-sm font-medium">
-            {funcionario} est en <strong>{t("rascunho")}</strong> — il n’est pas encore en ligne.
+            {funcionario} est en <strong>{t("brouillon")}</strong> — il n’est pas encore en ligne.
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
@@ -118,7 +118,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
       {!semAgente && !rascunho && (
         <div className="space-y-4 rounded-lg border bg-background p-6">
           <div className="space-y-2">
-            <Label htmlFor="mensagem">{t("Escreva como se fosse um cliente")}</Label>
+            <Label htmlFor="mensagem">{t("Écrivez comme si vous étiez un client")}</Label>
             <Textarea
               id="mensagem"
               value={mensagem}
@@ -134,18 +134,18 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
               disabled={carregando || mensagem.trim() === ""}
               className="w-full sm:w-auto"
             >
-              {carregando ? t("Ele está pensando...") : t("Mandar mensagem")}
+              {carregando ? t("Il réfléchit…") : t("Envoyer le message")}
             </Button>
           </div>
 
           {desfecho?.tipo === "resposta" && (
             <div className="bg-muted/40 space-y-2 rounded-md border p-4">
               <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                {funcionario} {t("a respondeu")}
+                {funcionario} {t("a répondu")}
               </p>
               <p className="whitespace-pre-wrap text-sm">{desfecho.texto}</p>
               <p className="text-xs text-muted-foreground">
-                {t("Esta conversa não foi enviada a ninguém e não aparece no seu inbox.")}
+                {t("Cette conversation n’a été envoyée à personne et n’apparaît pas dans votre Inbox.")}
               </p>
             </div>
           )}
@@ -159,7 +159,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
                 Il n’a pas pu répondre — mieux vaut le découvrir maintenant qu’avec un vrai client.
               </p>
               <p className="text-xs text-muted-foreground">
-                {t("Motivo:")} <code className="break-all">{desfecho.mensagem}</code>
+                {t("Motif :")} <code className="break-all">{desfecho.mensagem}</code>
               </p>
               <p className="text-sm">
                 Réessayez dans un instant. Si cela se répète, contactez le support — et vous pouvez
@@ -177,7 +177,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
           disabled={pending}
           onClick={() => startTransition(() => void pularTeste())}
         >
-          {t("Pular")}
+          {t("Ignorer")}
         </Button>
         <Button
           type="button"
@@ -194,12 +194,12 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
                 await marcarTesteFeito(desfecho?.tipo === "resposta");
               } catch (err) {
                 if (err instanceof Error && err.message.startsWith("NEXT_REDIRECT")) throw err;
-                toast.error(t("Não consegui salvar este passo."));
+                toast.error(t("Impossible d’enregistrer cette étape."));
               }
             })
           }
         >
-          {t("Continuar")}
+          {t("Continuer")}
         </Button>
       </div>
     </div>

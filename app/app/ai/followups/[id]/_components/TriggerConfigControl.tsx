@@ -135,7 +135,7 @@ function summaryLabel(
 ): string {
   if (cfg.kind === "silence") {
     const minutes = (cfg.params as { threshold_minutes?: number } | undefined)?.threshold_minutes;
-    return `${t("Gatilho: Silêncio")}${typeof minutes === "number" ? ` (${minutes} min)` : ""}`;
+    return `${t("Déclencheur : silence")}${typeof minutes === "number" ? ` (${minutes} min)` : ""}`;
   }
   if (cfg.kind === "stage_change") {
     // Enquanto os nomes não chegaram (ou a etapa sumiu do funil) o rótulo diz o
@@ -143,14 +143,14 @@ function summaryLabel(
     // Com o funil junto, este rótulo passa a distinguir as homônimas: é a única
     // superfície que o dono lê uma semana depois, sem abrir nada.
     return etapa
-      ? `${t("Gatilho: entrou em")} «${etapa.stageName}» ${t("em")} ${etapa.pipelineName}`
-      : t("Gatilho: Etapa do funil");
+      ? `${t("Déclencheur : entrée dans")} «${etapa.stageName}» ${t("dans")} ${etapa.pipelineName}`
+      : t("Déclencheur : étape du tableau");
   }
-  if (cfg.kind === "case_opened") return t("Gatilho: quando o agente pede ajuda");
-  if (cfg.kind === "manual" || cfg.kind === undefined) return t("Gatilho: Manual");
+  if (cfg.kind === "case_opened") return t("Déclencheur : lorsque l’agent demande de l’aide");
+  if (cfg.kind === "manual" || cfg.kind === undefined) return t("Déclencheur : manuel");
   // conversation_end de dados antigos (API crua) — sem UI própria, mas mostrado
   // com transparência em vez de mentir "Manual".
-  return `${t("Déclencheur :")} ${String(cfg.kind)} (${t("indisponível")})`;
+  return `${t("Déclencheur :")} ${String(cfg.kind)} (${t("indisponible")})`;
 }
 
 interface Props {
@@ -226,7 +226,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
       <PopoverContent className="w-80" align="end" data-testid="trigger-config-panel">
         <div className="space-y-3">
           <div className="space-y-2">
-            <Label htmlFor="trigger-kind">{t("Tipo de gatilho")}</Label>
+            <Label htmlFor="trigger-kind">{t("Type de déclencheur")}</Label>
             <Select
               value={form.kind}
               onValueChange={(v) => setForm((f) => ({ ...f, kind: v as TriggerKind }))}
@@ -245,7 +245,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
 
           {form.kind === "stage_change" && (
             <div className="space-y-2">
-              <Label htmlFor="trigger-stage">{t("Etapa que dispara o fluxo")}</Label>
+              <Label htmlFor="trigger-stage">{t("Étape qui déclenche le flow")}</Label>
               <Select
                 value={form.stageId}
                 onValueChange={(v) => setForm((f) => ({ ...f, stageId: v }))}
@@ -257,7 +257,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
                   aria-invalid={stageInvalid}
                 >
                   <SelectValue
-                    placeholder={etapasCarregando ? t("Carregando etapas…") : t("Escolha a etapa")}
+                    placeholder={etapasCarregando ? t("Chargement des étapes…") : t("Choisissez l’étape")}
                   />
                 </SelectTrigger>
                 <SelectContent>
@@ -280,7 +280,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
               </Select>
               {!etapasCarregando && etapas.length === 0 && (
                 <p className="text-xs text-error-fg">
-                  {t("Nenhuma etapa ativa encontrada — crie o funil antes de armar este gatilho.")}
+                  {t("Aucune étape active trouvée — créez le tableau avant d’armer ce déclencheur.")}
                 </p>
               )}
               <p className="text-xs text-muted-foreground">
@@ -303,13 +303,13 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
                   instante põe duas vozes na mesma conversa. O atraso é do FLUXO, e
                   quem monta precisa saber disso antes de publicar. */}
               <p className="text-xs text-muted-foreground">
-                <strong className="font-medium">{t("Comece o fluxo por uma espera.")}</strong>{" "}
+                <strong className="font-medium">{t("Commencez le flow par une attente.")}</strong>{" "}
                 {t(
                   "O agente continua conversando depois de abrir o caso — sem espera, o cliente recebe duas mensagens ao mesmo tempo.",
                 )}
               </p>
               <p className="text-xs text-muted-foreground">
-                {t("Se o caso for resolvido antes, o follow-up é cancelado sozinho.")}
+                {t("Si le dossier est résolu avant, le follow-up est automatiquement annulé.")}
               </p>
             </div>
           )}
@@ -317,7 +317,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
           {form.kind === "silence" && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="trigger-threshold">{t("Minutos de silêncio")}</Label>
+                <Label htmlFor="trigger-threshold">{t("Minutes de silence")}</Label>
                 <Input
                   id="trigger-threshold"
                   type="number"
@@ -330,15 +330,15 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
                 />
                 {thresholdInvalid && (
                   <p className="text-xs text-error-fg">
-                    {t("Mínimo de")} {MIN_THRESHOLD_MINUTES} {t("minutos.")}
+                    {t("Minimum de")} {MIN_THRESHOLD_MINUTES} {t("minutes.")}
                   </p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="trigger-segments">{t("Segmentos (tags, opcional)")}</Label>
+                <Label htmlFor="trigger-segments">{t("Segments (étiquettes, facultatif)")}</Label>
                 <Input
                   id="trigger-segments"
-                  placeholder={t("ex: vip, carrinho-abandonado")}
+                  placeholder={t("ex. : vip, panier-abandonné")}
                   value={form.segments}
                   onChange={(e) => setForm((f) => ({ ...f, segments: e.target.value }))}
                 />
@@ -347,7 +347,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
           )}
 
           <div className="flex items-center justify-between gap-2">
-            <Label htmlFor="trigger-cancel-on-reply">{t("Cancelar se o lead responder")}</Label>
+            <Label htmlFor="trigger-cancel-on-reply">{t("Annuler si le lead répond")}</Label>
             <Switch
               id="trigger-cancel-on-reply"
               checked={form.cancelOnReply}
@@ -363,7 +363,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
             onClick={onSave}
             data-testid="trigger-config-save"
           >
-            {update.isPending ? t("Salvando…") : t("Salvar gatilho")}
+            {update.isPending ? t("Enregistrement…") : t("Enregistrer le déclencheur")}
           </Button>
         </div>
       </PopoverContent>

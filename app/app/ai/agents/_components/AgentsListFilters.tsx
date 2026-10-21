@@ -33,21 +33,21 @@ export function AgentsListFilters({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Input
-        placeholder={t("Buscar por nome…")}
+        placeholder={t("Rechercher par nom…")}
         value={query}
         onChange={(e) => onQueryChange(e.target.value)}
         className="w-full sm:w-64"
-        aria-label={t("Buscar agents")}
+        aria-label={t("Rechercher des agents")}
       />
       <Select value={status} onValueChange={(v) => onStatusChange(v as StatusFilter)}>
-        <SelectTrigger className="w-44" aria-label={t("Filtrar por status")}>
-          <SelectValue placeholder={t("Status")} />
+        <SelectTrigger className="w-44" aria-label={t("Filtrer par statut")}>
+          <SelectValue placeholder={t("Statut")} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">{t("Todos")}</SelectItem>
-          <SelectItem value="published">{t("Publicado")}</SelectItem>
-          <SelectItem value="paused">{t("Pausado")}</SelectItem>
-          <SelectItem value="archived">{t("Arquivado")}</SelectItem>
+          <SelectItem value="all">{t("Tous")}</SelectItem>
+          <SelectItem value="published">{t("Publié")}</SelectItem>
+          <SelectItem value="paused">{t("En pause")}</SelectItem>
+          <SelectItem value="archived">{t("Archivé")}</SelectItem>
         </SelectContent>
       </Select>
       <label className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -57,7 +57,7 @@ export function AgentsListFilters({
           onChange={(e) => onShowArchivedChange(e.target.checked)}
           className="size-4"
         />
-        {t("Incluir arquivados")}
+        {t("Inclure les agents archivés")}
       </label>
     </div>
   );

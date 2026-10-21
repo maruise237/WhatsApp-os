@@ -66,7 +66,7 @@ export function PropostasDeDado({ contactId, podeDecidir, aoDecidir }: Props) {
     } catch {
       // Não some da tela: `itens` fica como está e o erro aparece. Uma lista que
       // esvazia por falha de rede diz "não há nada pendente", que é mentira.
-      setErro(t("Não foi possível carregar as sugestões agora."));
+      setErro(t("Impossible de charger les suggestions pour le moment."));
     }
   }, [contactId]);
 
@@ -88,14 +88,14 @@ export function PropostasDeDado({ contactId, podeDecidir, aoDecidir }: Props) {
         // A mensagem do servidor é a que explica 409 ("já foi decidida", "venceu
         // pelo prazo") — e é justamente o caso em que a pessoa precisa entender
         // por que o clique dela não valeu, em vez de tentar de novo.
-        setErro(body?.error?.message ?? t("Não foi possível registrar a decisão."));
+        setErro(body?.error?.message ?? t("Impossible d’enregistrer la décision."));
         await carregar();
         return;
       }
       await carregar();
       if (decision === "accept") aoDecidir?.();
     } catch {
-      setErro(t("Não foi possível registrar a decisão."));
+      setErro(t("Impossible d’enregistrer la décision."));
     } finally {
       setOcupado(null);
     }
@@ -108,13 +108,13 @@ export function PropostasDeDado({ contactId, podeDecidir, aoDecidir }: Props) {
   return (
     <Card className="border-warning-fg/30 bg-warning-bg/40 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <h2 className="text-sm font-semibold">{t("O assistente ouviu isto na conversa")}</h2>
+        <h2 className="text-sm font-semibold">{t("L’assistant a relevé ceci dans la conversation")}</h2>
         <Badge variant="warning">
-          {itens?.length ?? 0} {t("aguardando você")}
+          {itens?.length ?? 0} {t("en attente de votre validation")}
         </Badge>
       </div>
       <p className="mb-3 text-xs text-muted-foreground">
-        {t("Nada foi salvo ainda. Confira o que a pessoa escreveu e decida.")}
+        {t("Rien n’a encore été enregistré. Vérifiez ce que la personne a écrit et décidez.")}
       </p>
 
       {erro && <p className="mb-3 text-sm text-error-fg">{erro}</p>}
@@ -131,7 +131,7 @@ export function PropostasDeDado({ contactId, podeDecidir, aoDecidir }: Props) {
                   vai ser substituído. */}
               {p.valor_anterior && (
                 <span className="text-xs text-muted-foreground">
-                  ({t("(hoje:")} {p.valor_anterior})
+                  ({t("(actuellement :")} {p.valor_anterior})
                 </span>
               )}
             </div>
@@ -149,7 +149,7 @@ export function PropostasDeDado({ contactId, podeDecidir, aoDecidir }: Props) {
                   disabled={ocupado === p.id}
                   onClick={() => void decidir(p.id, "accept")}
                 >
-                  {ocupado === p.id ? t("Salvando…") : t("Está certo, salvar")}
+                  {ocupado === p.id ? t("Enregistrement…") : t("C’est correct, enregistrer")}
                 </Button>
                 <Button
                   size="sm"
@@ -157,7 +157,7 @@ export function PropostasDeDado({ contactId, podeDecidir, aoDecidir }: Props) {
                   disabled={ocupado === p.id}
                   onClick={() => void decidir(p.id, "dismiss")}
                 >
-                  {t("Descartar")}
+                  {t("Rejeter")}
                 </Button>
               </div>
             )}

@@ -33,22 +33,22 @@ export function FollowupFlowPicker({ value, onChange, disabled }: Props) {
   }
 
   if (query.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t("Carregando fluxos publicados…")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Chargement des flows publiés…")}</p>;
   }
   if (query.isError) {
-    return <p className="text-sm text-destructive">{t("Erro ao carregar fluxos.")}</p>;
+    return <p className="text-sm text-destructive">{t("Erreur lors du chargement des flows.")}</p>;
   }
   if (publishedFlows.length === 0) {
     return (
       <p className="text-xs text-muted-foreground">
-        {t("Nenhum fluxo publicado ainda.")}{" "}
+        {t("Aucun flow publié pour le moment.")}{" "}
         <Link
           href="/app/ai/followups"
           className="underline underline-offset-2 hover:text-foreground"
         >
-          {t("Publique um fluxo de follow-up")}
+          {t("Publiez un flow de follow-up")}
         </Link>{" "}
-        {t("para vinculá-lo.")}
+        {t("pour le rattacher.")}
       </p>
     );
   }
@@ -56,7 +56,7 @@ export function FollowupFlowPicker({ value, onChange, disabled }: Props) {
   return (
     <fieldset className="border-border/60 space-y-2 rounded-md border p-3">
       <legend className="px-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        {t("Fluxos publicados")}
+        {t("Flows publiés")}
       </legend>
       {publishedFlows.map((f) => {
         const checked = value.includes(f.id);
@@ -78,7 +78,7 @@ export function FollowupFlowPicker({ value, onChange, disabled }: Props) {
         );
       })}
       {value.length > 20 ? (
-        <p className="text-xs text-destructive">{t("Máximo de 20 fluxos por agent.")}</p>
+        <p className="text-xs text-destructive">{t("Maximum de 20 flows par agent.")}</p>
       ) : null}
     </fieldset>
   );

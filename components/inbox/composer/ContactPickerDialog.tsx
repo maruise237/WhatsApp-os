@@ -37,7 +37,7 @@ interface Props {
 }
 
 function displayName(c: Contact, t: (texto: string) => string): string {
-  return c.display_name ?? c.name ?? c.phone_number ?? t("Sem nome");
+  return c.display_name ?? c.name ?? c.phone_number ?? t("Sans nom");
 }
 
 export function ContactPickerDialog({
@@ -122,9 +122,9 @@ export function ContactPickerDialog({
     <Dialog open={open} onOpenChange={close}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{t("Enviar contato")}</DialogTitle>
+          <DialogTitle>{t("Envoyer un contact")}</DialogTitle>
           <DialogDescription>
-            {t("Escolha alguém da base ou informe nome e telefone — como no WhatsApp.")}
+            {t("Choisissez une personne dans la base ou saisissez son nom et son téléphone, comme dans WhatsApp.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -137,7 +137,7 @@ export function ContactPickerDialog({
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={t("Buscar por nome ou telefone…")}
+            placeholder={t("Rechercher par nom ou téléphone…")}
             className="pl-8"
             autoFocus
           />
@@ -146,13 +146,13 @@ export function ContactPickerDialog({
         <div className="max-h-48 overflow-y-auto rounded-md border border-border">
           {list.isLoading && contacts.length === 0 ? (
             <p className="px-3 py-6 text-center text-sm text-muted-foreground">
-              {t("Carregando…")}
+              {t("Chargement…")}
             </p>
           ) : contacts.length === 0 ? (
             <p className="px-3 py-4 text-center text-sm text-muted-foreground">
               {debounced
-                ? t("Nenhum contato encontrado na base.")
-                : t("Nenhum contato com telefone na base.")}
+                ? t("Aucun contact trouvé dans la base.")
+                : t("Aucun contact avec un numéro de téléphone dans la base.")}
             </p>
           ) : (
             <ul className="divide-y divide-border">
@@ -194,7 +194,7 @@ export function ContactPickerDialog({
             disabled={list.isFetchingNextPage}
             onClick={() => list.fetchNextPage()}
           >
-            {list.isFetchingNextPage ? t("Carregando…") : t("Carregar mais")}
+            {list.isFetchingNextPage ? t("Chargement…") : t("Charger davantage")}
           </Button>
         )}
 
@@ -202,8 +202,8 @@ export function ContactPickerDialog({
           <div className="space-y-3 border-t border-border pt-3">
             <p className="text-xs font-medium text-muted-foreground">
               {searchPhone && !phoneAlreadyInList
-                ? t("Enviar número informado")
-                : t("Ou informe um contato")}
+                ? t("Envoyer le numéro saisi")
+                : t("Ou saisir un contact")}
             </p>
             {searchPhone && !phoneAlreadyInList && (
               <button
@@ -229,17 +229,17 @@ export function ContactPickerDialog({
               </button>
             )}
             <div className="space-y-1.5">
-              <Label htmlFor="manual-contact-name">{t("Nome (opcional)")}</Label>
+              <Label htmlFor="manual-contact-name">{t("Nom (facultatif)")}</Label>
               <Input
                 id="manual-contact-name"
                 value={manualName}
                 onChange={(e) => setManualName(e.target.value)}
-                placeholder={t("Como aparece no cartão")}
+                placeholder={t("Nom affiché sur la fiche")}
                 disabled={sending}
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="manual-contact-phone">{t("Telefone")}</Label>
+              <Label htmlFor="manual-contact-phone">{t("Téléphone")}</Label>
               <Input
                 id="manual-contact-phone"
                 value={manualPhone}
@@ -254,7 +254,7 @@ export function ContactPickerDialog({
               disabled={sending || !resolvedManualPhone}
               onClick={pickManual}
             >
-              {t("Enviar contato")}
+              {t("Envoyer un contact")}
             </Button>
           </div>
         )}

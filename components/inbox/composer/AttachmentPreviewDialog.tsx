@@ -46,7 +46,7 @@ export function AttachmentPreviewDialog({ file, sending, onCancel, onSend }: Pro
     <Dialog open onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{t("Enviar anexo")}</DialogTitle>
+          <DialogTitle>{t("Envoyer la pièce jointe")}</DialogTitle>
         </DialogHeader>
         <div className="bg-muted/40 flex items-center justify-center rounded-lg p-3">
           {isImage && objectUrl && (
@@ -68,16 +68,16 @@ export function AttachmentPreviewDialog({ file, sending, onCancel, onSend }: Pro
         <Input
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
-          placeholder={t("Legenda (opcional)")}
-          aria-label={t("Legenda")}
+          placeholder={t("Légende (facultatif)")}
+          aria-label={t("Légende")}
           onKeyDown={(e) => e.key === "Enter" && !sending && onSend(caption.trim())}
         />
         <DialogFooter>
           <Button variant="ghost" onClick={onCancel} disabled={sending}>
-            {t("Cancelar")}
+            {t("Annuler")}
           </Button>
           <Button onClick={() => onSend(caption.trim())} disabled={sending}>
-            {t("Enviar")}
+            {t("Envoyer")}
           </Button>
         </DialogFooter>
       </DialogContent>
