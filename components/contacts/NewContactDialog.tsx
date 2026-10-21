@@ -61,7 +61,7 @@ export function NewContactDialog({ open, onOpenChange }: Props) {
     const parsed = contactCreateSchema.safeParse(payload);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      setServerError(t(first?.message ?? "Dados inválidos"));
+      setServerError(t(first?.message ?? "Données invalides"));
       return;
     }
 

@@ -285,7 +285,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
               )}
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "O fluxo começa quando um negócio entra nesta etapa, por arrasto no quadro ou por automação. A entrada na fila leva poucos minutos, não é instantânea.",
+                  "Le flow commence lorsqu’une affaire entre dans cette étape, par glisser-déposer dans le tableau ou par automatisation. Son entrée dans la file prend quelques minutes, elle n’est pas instantanée.",
                 )}
               </p>
             </div>
@@ -295,7 +295,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "O fluxo começa quando o agente abre um caso — o momento em que ele diz que precisa de uma pessoa. Não há o que escolher aqui: vale para qualquer caso desta conta.",
+                  "Le flow commence lorsque l’agent ouvre un dossier — au moment où il indique avoir besoin d’une personne. Il n’y a rien à choisir ici : cela vaut pour tous les dossiers de ce compte.",
                 )}
               </p>
               {/* ⚠️ ESTA FRASE NÃO É DICA, É A DEFESA PRINCIPAL. Abrir um caso não
@@ -305,7 +305,7 @@ export function TriggerConfigControl({ flowId, triggerConfig }: Props) {
               <p className="text-xs text-muted-foreground">
                 <strong className="font-medium">{t("Commencez le flow par une attente.")}</strong>{" "}
                 {t(
-                  "O agente continua conversando depois de abrir o caso — sem espera, o cliente recebe duas mensagens ao mesmo tempo.",
+                  "L’agent continue de converser après l’ouverture du dossier — sans attente, le client reçoit deux messages en même temps.",
                 )}
               </p>
               <p className="text-xs text-muted-foreground">

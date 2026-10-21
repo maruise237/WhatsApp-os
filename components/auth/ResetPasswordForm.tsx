@@ -36,7 +36,7 @@ export function ResetPasswordForm() {
         setNeedsMfa(true);
         setServerError(
           t(
-            "Sua conta tem verificação em duas etapas. Digite o código de 6 dígitos do seu app autenticador para concluir.",
+            "Votre compte utilise la validation en deux étapes. Saisissez le code à 6 chiffres de votre application d’authentification pour terminer.",
           ),
         );
       } else if (res.error === "mfa_invalid") {

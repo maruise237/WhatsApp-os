@@ -122,12 +122,12 @@ function frameDoEstado(status: BudgetStatus, t: (text: string) => string, locale
 function avisoDaChave(status: BudgetStatus, t: (text: string) => string): string | null {
   if (status.enforcement_env === "off") {
     return t(
-      "Proteção de gasto desligada nesta instalação (AI_BUDGET_ENFORCEMENT=off). O que estiver escolhido aqui não vale enquanto quem cuida do servidor não religar.",
+      "La protection contre les dépenses est désactivée sur cette installation (AI_BUDGET_ENFORCEMENT=off). Le choix effectué ici ne s’applique pas tant que l’administrateur du serveur ne la réactive pas.",
     );
   }
   if (status.enforcement_env === "avisar") {
     return t(
-      'Nesta instalação a proteção só avisa (AI_BUDGET_ENFORCEMENT=avisar): mesmo com "Parar a IA" escolhido, ela vai continuar respondendo.',
+      "Sur cette installation, la protection ne fait qu’alerter (AI_BUDGET_ENFORCEMENT=avisar) : même si \"Arrêter l’IA\" est choisi, elle continuera de répondre.",
     );
   }
   return null;
@@ -381,7 +381,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
           <DialogTitle>{t("Budget IA")}</DialogTitle>
           <DialogDescription>
             {t(
-              "Escolha o que acontece quando o gasto do mês chega no limite. Os valores são em dólar — é a moeda em que o provedor de IA cobra.",
+              "Choisissez ce qui se passe lorsque les dépenses du mois atteignent la limite. Les montants sont en dollars — la devise facturée par le fournisseur d’IA.",
             )}
           </DialogDescription>
         </DialogHeader>
@@ -394,7 +394,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               disabled={update.isPending}
               titulo={t("Uniquement suivre")}
               corpo={t(
-                "A IA nunca para por gasto. Você vê o número nesta tela e decide o que fazer.",
+                "L’IA ne s’arrête jamais pour dépassement de budget. Consultez le montant ici et décidez de la suite.",
               )}
             />
             <OpcaoDeModo
@@ -404,7 +404,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               disabled={update.isPending}
               titulo={`${t("M’alerter au-delà de")} ${limiarEfetivo}% ${t("de la limite")} ${fmtCents(tetoParaCopy, locale)}`}
               corpo={t(
-                "Abrimos um aviso na Central de avisos. A IA continua respondendo normalmente.",
+                "Une alerte est ouverte dans le centre des alertes. L’IA continue de répondre normalement.",
               )}
             />
             <OpcaoDeModo
@@ -415,9 +415,9 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               titulo={`${t("Arrêter l’IA à")} ${fmtCents(tetoParaCopy, locale)}`}
               corpo={
                 t(
-                  "As conversas em andamento vão para a fila de atendimento humano — ninguém fica sem resposta, mas alguém precisa responder.",
+                  "Les conversations en cours sont placées dans la file de traitement humain — personne ne reste sans réponse, mais quelqu’un doit répondre.",
                 ) +
-                ` ${t('Cada uma volta ao automático pelo botão "Devolver ao automático" no cabeçalho dela.')}` +
+                ` ${t("Chacune revient à l’automatique avec le bouton \"Remettre à l’automatique\" dans son en-tête.")}` +
                 (status.gasto_incompleto
                   ? ` ${t("Attention : le produit ne connaît pas encore le prix du modèle utilisé ; les dépenses mesurées sont donc inférieures aux dépenses réelles et cet arrêt peut ne pas se déclencher.")}`
                   : "")
@@ -431,7 +431,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
                     // Quem garante tempo é a carência de 72h — e é dela que a frase
                     // fala agora.
                     motivoBloqueado: t(
-                      'Disponível depois de salvar "Me avisar" — e, quando você armar a parada, ela só começa a valer 72 horas depois.',
+                      "Disponible après avoir enregistré \"M’alerter\" — lorsque vous armez l’arrêt, celui-ci ne prend effet qu’après 72 heures.",
                     ),
                   }
                 : {})}
@@ -454,7 +454,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
                 {t("Pour alerter ou arrêter à la limite, celle-ci doit être d’au moins")}{" "}
                 {fmtCents(PISO_DE_TETO_CENTS, locale)}{" "}
                 {t(
-                  "por mês. Abaixo disso não é orçamento de um atendimento — é erro de digitação.",
+                  "par mois. En dessous, ce n’est pas le budget d’un traitement — c’est probablement une erreur de saisie.",
                 )}{" "}
                 {t("Si vous souhaitez uniquement suivre les dépenses sans limite, choisissez")} &quot;
                 {t("Uniquement suivre")}&quot;.
@@ -482,7 +482,7 @@ function EditBudgetDialog({ status }: { status: BudgetStatus }) {
               <p className="text-xs">
                 {t("L’arrêt prendra effet")} <strong>72 {t("heures")}</strong>{" "}
                 {t(
-                  "depois de salvar. É o tempo de você ver o aviso chegar antes que alguma conversa pare.",
+                  "après l’enregistrement. Cela vous laisse le temps de voir l’alerte arriver avant qu’une conversation ne s’arrête.",
                 )}
               </p>
               <label className="flex cursor-pointer items-center gap-2 text-xs">

@@ -142,7 +142,7 @@ export function PainelDeSeguranca() {
           L’assistant rédige, et le système vérifie. {t("Il y a")} {CONFERENCIAS_DE_SAIDA.length}{" "}
           {t("vérifications")},{" "}
           {t(
-            "nesta ordem — a primeira que barra interrompe as seguintes, e o assistente recebe de volta o motivo para reescrever.",
+            "dans cet ordre — la première qui bloque interrompt les suivantes, et l’assistant reçoit le motif pour réécrire.",
           )}
         </p>
         <ul className="divide-y">

@@ -65,7 +65,7 @@ export function ReassignDialog({ conversationId, open, onOpenChange }: Props) {
           <DialogTitle>{t("Transférer la conversation")}</DialogTitle>
           <DialogDescription>
             {t(
-              "A transferência é imediata: o atendente escolhido vira o responsável agora e a mudança fica registrada no histórico.",
+              "Le transfert est immédiat : l’agent choisi devient responsable dès maintenant et la modification est enregistrée dans l’historique.",
             )}
           </DialogDescription>
         </DialogHeader>

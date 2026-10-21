@@ -81,7 +81,7 @@ export function TemplatesClient() {
         <h2 className="font-medium">{t("Canal officiel non connecté")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {t(
-            "Os templates vivem na sua conta do WhatsApp Business (Meta) — esta tela é um espelho deles. Conecte o canal oficial em Conexões WhatsApp para começar a sincronizar.",
+            "Les templates vivent dans votre compte WhatsApp Business (Meta) : cet écran en est le miroir. Connectez le canal officiel dans Connexions WhatsApp pour commencer la synchronisation.",
           )}
         </p>
       </Card>

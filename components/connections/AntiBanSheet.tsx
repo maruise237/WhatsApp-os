@@ -128,7 +128,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
           </SheetTitle>
           <SheetDescription>
             {t(
-              "Estes limites protegem o número contra bloqueio do WhatsApp. Campo vazio usa o padrão seguro do sistema (mostrado no campo).",
+              "Ces limites protègent le numéro contre le blocage de WhatsApp. Un champ vide utilise la valeur sûre par défaut du système (affichée dans le champ).",
             )}
           </SheetDescription>
         </SheetHeader>
@@ -147,7 +147,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             />
             <p className="text-xs text-muted-foreground">
               {t(
-                "A conexão pode ser nova sem que o número seja. O aquecimento conta a idade do NÚMERO — se você deixar em branco, ele é tratado como recém-criado e começa liberando pouco por dia.",
+                "La connexion peut être nouvelle sans que le numéro le soit. Le réchauffement tient compte de l’âge du NUMÉRO : si vous laissez ce champ vide, il est considéré comme nouveau et commence avec un faible plafond quotidien.",
               )}
             </p>
 
@@ -165,7 +165,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             <p className="text-xs text-muted-foreground">
               {form.pular_aquecimento
                 ? t(
-                    "Vale só o teto diário abaixo. Use apenas se o número já envia há semanas: pular o aquecimento num número novo é o caminho mais rápido para o bloqueio.",
+                    "Seul le plafond quotidien ci-dessous s’applique. Utilisez cette option uniquement si le numéro envoie depuis plusieurs semaines : ignorer le réchauffement d’un nouveau numéro est le chemin le plus rapide vers le blocage.",
                   )
                 : item.warmup.cap_today === null
                   ? `${t("Numéro utilisé depuis")} ${item.warmup.age_days} ${t("jour(s) — déjà établi. Seul le plafond quotidien ci-dessous s’applique.")}`
@@ -205,7 +205,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                "O assistente só envia mensagens dentro desta janela. Fora dela, a resposta fica agendada para a próxima abertura — você vê o motivo na conversa.",
+                "L’assistant n’envoie des messages que pendant cette fenêtre. En dehors, la réponse est planifiée pour la prochaine ouverture ; la raison apparaît dans la conversation.",
               )}
             </p>
           </fieldset>
@@ -215,7 +215,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
               <Label htmlFor="allow-sunday">{t("Envoyer le dimanche")}</Label>
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "Ligado por padrão: quem escreve no domingo espera resposta no domingo. Desligue se você faz prospecção ativa e prefere não incomodar no fim de semana.",
+                  "Activé par défaut : une personne qui écrit le dimanche attend une réponse le dimanche. Désactivez cette option si vous prospectez activement et préférez ne pas déranger le week-end.",
                 )}
               </p>
             </div>
@@ -259,7 +259,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Intervalo mínimo entre mensagens do mesmo número, mais uma variação aleatória — ritmo cravado parece robô para o WhatsApp.",
+                "Intervalle minimal entre les messages du même numéro, avec une variation aléatoire : un rythme parfaitement régulier ressemble à un robot pour WhatsApp.",
               )}
             </p>
           </fieldset>
@@ -280,7 +280,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             />
             <p className="text-xs text-muted-foreground">
               {t(
-                "Máximo de mensagens que este número envia por dia. Números novos também respeitam o aquecimento automático abaixo, o que for menor.",
+                "Nombre maximal de messages envoyés par ce numéro chaque jour. Les nouveaux numéros respectent également le réchauffement automatique ci-dessous ; la limite la plus basse s’applique.",
               )}
             </p>
           </fieldset>
@@ -325,7 +325,7 @@ export function AntiBanSheet({ item, canWrite, onClose }: Props) {
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               {t(
-                "Número recém-conectado envia pouco e sobe aos poucos — enviar demais no início é a causa nº 1 de bloqueio.",
+                "Un numéro nouvellement connecté envoie peu de messages et augmente progressivement ; envoyer trop au début est la première cause de blocage.",
               )}
             </p>
           </div>

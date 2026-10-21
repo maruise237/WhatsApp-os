@@ -50,7 +50,7 @@ export function SystemPromptEditor({ value, onChange, disabled }: Props) {
         />
         <p className="text-xs text-muted-foreground">
           {t(
-            "Mínimo 20 caracteres, máximo 10.000. Use placeholders para injetar contexto dinâmico.",
+            "20 caractères minimum, 10 000 maximum. Utilisez des placeholders pour injecter le contexte dynamique.",
           )}
         </p>
       </div>

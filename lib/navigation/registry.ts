@@ -95,15 +95,15 @@ export interface NavDestination {
  * dava para chegar.
  */
 export const NAV_GROUPS: NavGroup[] = [
-  { id: "atendimento", label: "Atendimento" },
+  { id: "atendimento", label: "Assistance" },
   { id: "crm", label: "CRM" },
-  { id: "ia", label: "Agente de IA", hub: { href: "/app/ai", label: "Ver tudo em IA" } },
-  { id: "canais", label: "Canais" },
-  { id: "analise", label: "Análise" },
+  { id: "ia", label: "Agent IA", hub: { href: "/app/ai", label: "Voir tout en IA" } },
+  { id: "canais", label: "Canaux" },
+  { id: "analise", label: "Analyse" },
   {
     id: "organizacao",
-    label: "Organização",
-    hub: { href: "/app/settings", label: "Configurações" },
+    label: "Organisation",
+    hub: { href: "/app/settings", label: "Paramètres" },
   },
 ];
 
@@ -136,7 +136,7 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   {
     href: "/app/inbox",
     label: "Inbox",
-    description: "As conversas de WhatsApp, com você e a IA atendendo lado a lado.",
+    description: "Les conversations WhatsApp, avec vous et l’IA qui répondent côte à côte.",
     icon: Inbox,
     group: "atendimento",
     sidebar: true,
@@ -144,7 +144,7 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   {
     href: "/app/radar",
     label: "Radar",
-    description: "Quem esfriou e ainda está aberto — o que corre risco de morrer sem resposta.",
+    description: "Ceux qui se sont refroidis et sont encore ouverts — ce qui risque de mourir sans réponse.",
     icon: ClockCountdown,
     group: "atendimento",
     sidebar: true,
@@ -154,8 +154,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // Composer do inbox. O nome "Templates" fica livre para os da Meta (HSM),
     // onde é o termo técnico correto.
     href: "/app/templates",
-    label: "Respostas rápidas",
-    description: "Scripts salvos para responder mais rápido, seus ou da equipe.",
+    label: "Réponses rapides",
+    description: "Scripts enregistrés pour répondre plus vite, les vôtres ou ceux de l’équipe.",
     icon: FileText,
     group: "atendimento",
     sidebar: true,
@@ -174,16 +174,16 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // abre o quadro de cada um. "Pipeline" é palavra de quem construiu o
     // sistema; "funil de vendas" é palavra de quem vende.
     href: "/app/kanban",
-    label: "Funis",
-    description: "Seus funis de venda — clique em um para abrir o quadro de clientes.",
+    label: "Tableaux",
+    description: "Vos tableaux de vente — cliquez sur l’un d’eux pour ouvrir le tableau des clients.",
     icon: Kanban,
     group: "crm",
     sidebar: true,
   },
   {
     href: "/app/contacts",
-    label: "Contatos",
-    description: "As pessoas do outro lado da conversa e seu histórico.",
+    label: "Contacts",
+    description: "Les personnes de l’autre côté de la conversation et leur historique.",
     icon: Users,
     group: "crm",
     sidebar: true,
@@ -207,8 +207,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // e é ela que o nome carrega agora: lá se ABRE o funil, aqui se CONFIGURA o
     // que ele significa.
     href: "/app/settings/tenant/pipelines",
-    label: "Etapas do funil",
-    description: "As colunas de cada funil, o vocabulário do negócio e os motivos de perda.",
+    label: "Étapes du tableau",
+    description: "Les colonnes de chaque tableau, le vocabulaire de l’activité et les motifs de perte.",
     icon: Funnel,
     group: "crm",
     minRole: "manager",
@@ -218,8 +218,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   // ---- Agente de IA — montar, ensinar, acompanhar ----
   {
     href: "/app/ai/agents",
-    label: "Agentes",
-    description: "Quem atende por você: instruções, modelo, ferramentas e publicação.",
+    label: "Agents",
+    description: "Qui répond à votre place : instructions, modèle, outils et publication.",
     icon: Robot,
     group: "ia",
     section: "Montar o agente",
@@ -229,7 +229,7 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   {
     href: "/app/ai/followups",
     label: "Follow-ups",
-    description: "Como o agente retoma uma conversa que esfriou, para nenhuma morrer no silêncio.",
+    description: "Comment l’agent relance une conversation refroidie, pour qu’aucune ne meure dans le silence.",
     icon: FlowArrow,
     group: "ia",
     section: "Montar o agente",
@@ -238,8 +238,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/routers",
-    label: "Roteadores",
-    description: "Qual agente pega qual conversa, e quando o humano assume.",
+    label: "Routeurs",
+    description: "Quel agent prend quelle conversation, et quand l’humain prend le relais.",
     icon: Signpost,
     group: "ia",
     section: "Montar o agente",
@@ -248,8 +248,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/knowledge/sources",
-    label: "Conhecimento",
-    description: "Os materiais que o agente consulta antes de responder sobre o seu negócio.",
+    label: "Connaissances",
+    description: "Les documents que l’agent consulte avant de répondre sur votre activité.",
     icon: BookOpen,
     group: "ia",
     section: "Ensinar o agente",
@@ -257,8 +257,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/memory",
-    label: "Memória",
-    description: "O que o agente já aprendeu sobre a sua operação e reaproveita.",
+    label: "Mémoire",
+    description: "Ce que l’agent a déjà appris sur votre activité et qu’il réutilise.",
     icon: Brain,
     group: "ia",
     section: "Ensinar o agente",
@@ -266,8 +266,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/skills",
-    label: "Skills",
-    description: "As ações que o agente pode executar sozinho durante o atendimento.",
+    label: "Compétences",
+    description: "Les actions que l’agent peut exécuter seul pendant les échanges.",
     icon: PuzzlePiece,
     group: "ia",
     section: "Ensinar o agente",
@@ -275,8 +275,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/cases",
-    label: "Casos",
-    description: "Os atendimentos que o agente conduziu, do início ao desfecho.",
+    label: "Cas",
+    description: "Les échanges que l’agent a menés, du début à la fin.",
     icon: ClipboardText,
     group: "ia",
     section: "Acompanhar o agente",
@@ -284,8 +284,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/inbox",
-    label: "Alertas",
-    description: "O que a IA encontrou e precisa de uma decisão sua.",
+    label: "Alertes",
+    description: "Ce que l’IA a trouvé et qui nécessite une décision de votre part.",
     icon: Flag,
     group: "ia",
     section: "Acompanhar o agente",
@@ -294,8 +294,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // Órfã: nenhum lugar do app linkava para cá. O flywheel gerava propostas de
     // melhoria do agente e a fila só era vista por quem soubesse a URL.
     href: "/app/ai/proposals",
-    label: "Propostas",
-    description: "Melhorias que a IA sugere para si mesma, esperando sua decisão.",
+    label: "Propositions",
+    description: "Améliorations que l’IA se suggère à elle-même, en attente de votre décision.",
     icon: Lightbulb,
     group: "ia",
     section: "Acompanhar o agente",
@@ -306,8 +306,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // Antes da migration 0128 ela seria impossível de construir com honestidade
     // — llm_calls só registrava sucesso.
     href: "/app/ai/runs",
-    label: "Execuções",
-    description: "O que a IA fez — e, quando falhou, o que aconteceu e o que fazer.",
+    label: "Exécutions",
+    description: "Ce que l’IA a fait — et, en cas d’échec, ce qui s’est passé et quoi faire.",
     icon: ListChecks,
     group: "ia",
     section: "Acompanhar o agente",
@@ -317,8 +317,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/ai/usage",
-    label: "Uso e orçamento",
-    description: "Quanto a IA consumiu e qual é o teto de gasto do mês.",
+    label: "Utilisation et budget",
+    description: "Combien l’IA a consommé et quel est le plafond de dépense du mois.",
     icon: Gauge,
     group: "ia",
     section: "Acompanhar o agente",
@@ -328,13 +328,13 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   // ---- Canais — por onde as mensagens entram e saem ----
   {
     href: "/app/connections",
-    label: "Conexões",
+    label: "Connexions",
     // Cobre os DOIS caminhos desde o PR #105: número por QR e canal oficial da
     // Meta (com os templates dele), cada um numa aba. A descrição cita "oficial"
     // e "Meta" de propósito — é por esses nomes que se procura no ⌘K, e a busca
     // varre a descrição além do rótulo.
     description:
-      "Seus números de WhatsApp: por QR ou canal oficial da Meta, com saúde, reconexão e templates.",
+      "Vos numéros WhatsApp : par QR ou canal officiel Meta, avec santé, reconnexion et modèles.",
     icon: PlugsConnected,
     group: "canais",
     minRole: "admin",
@@ -348,7 +348,7 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   {
     href: "/app/webhooks",
     label: "Webhooks",
-    description: "Avise outros sistemas quando algo acontecer aqui dentro.",
+    description: "Prévenez d’autres systèmes quand quelque chose se passe ici.",
     icon: WebhooksLogo,
     group: "canais",
     minRole: "manager",
@@ -358,8 +358,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   // ---- Análise — olhar o sistema funcionando ----
   {
     href: "/app/metrics",
-    label: "Desempenho",
-    description: "Funil e performance por atendente nos últimos 30 dias.",
+    label: "Performance",
+    description: "Tableau et performance par conseiller sur les 30 derniers jours.",
     icon: ChartBar,
     group: "analise",
     sidebar: true,
@@ -367,8 +367,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   {
     // Observabilidade, não configuração: por isso não fica junto dos agentes.
     href: "/app/ai/evolution",
-    label: "Evolução da IA",
-    description: "Se o agente está melhorando, onde ele erra e o que falta ensinar.",
+    label: "Évolution de l'IA",
+    description: "Si l’agent progresse, où il se trompe et ce qu’il reste à lui apprendre.",
     icon: ChartLineUp,
     group: "analise",
     minRole: "manager",
@@ -376,8 +376,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/audit",
-    label: "Audit Log",
-    description: "Quem fez o quê, quando — o histórico que não se apaga.",
+    label: "Journal d'audit",
+    description: "Qui a fait quoi, quand — l’historique qui ne s’efface pas.",
     icon: ClockCounterClockwise,
     group: "analise",
     minRole: "manager",
@@ -387,32 +387,32 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   // ---- Organização — conta, empresa, acesso ----
   {
     href: "/app/settings/profile",
-    label: "Perfil",
-    description: "Seu nome, idioma, fuso horário e avatar.",
+    label: "Profil",
+    description: "Votre nom, langue, fuseau horaire et avatar.",
     icon: UserCircle,
     group: "organizacao",
     section: "Sua conta",
   },
   {
     href: "/app/settings/security",
-    label: "Segurança",
-    description: "Verificação em duas etapas, códigos de recuperação e sessões.",
+    label: "Sécurité",
+    description: "Validation en deux étapes, codes de récupération et sessions.",
     icon: ShieldCheck,
     group: "organizacao",
     section: "Sua conta",
   },
   {
     href: "/app/settings/notifications",
-    label: "Notificações",
-    description: "Por onde e sobre o quê você quer ser avisado.",
+    label: "Notifications",
+    description: "Par quel canal et à quel sujet vous voulez être prévenu.",
     icon: Bell,
     group: "organizacao",
     section: "Sua conta",
   },
   {
     href: "/app/team",
-    label: "Equipe",
-    description: "Quem trabalha aqui, com qual papel e quanta conversa cada um aguenta.",
+    label: "Équipe",
+    description: "Qui travaille ici, avec quel rôle et combien de conversations chacun peut gérer.",
     icon: UsersThree,
     group: "organizacao",
     section: "Sua empresa",
@@ -422,8 +422,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // visibilidade existiam inteiros no backend e não tinham NENHUMA tela — só
     // dava para ligar com UPDATE à mão no banco.
     href: "/app/settings/atendimento",
-    label: "Distribuição de atendimento",
-    description: "Quem recebe cada cliente novo, e o que cada atendente enxerga.",
+    label: "Répartition des échanges",
+    description: "Qui reçoit chaque nouveau client, et ce que chaque conseiller voit.",
     icon: UsersThree,
     group: "organizacao",
     section: "Sua empresa",
@@ -431,8 +431,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/settings/tenant",
-    label: "Organização",
-    description: "Dados da empresa, retenção de dados e encarregado de LGPD.",
+    label: "Organisation",
+    description: "Données de l’entreprise, conservation des données et délégué à la protection des données.",
     icon: Buildings,
     group: "organizacao",
     section: "Sua empresa",
@@ -440,8 +440,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/settings/marca",
-    label: "Marca",
-    description: "O nome e a cor que sua empresa mostra dentro do sistema.",
+    label: "Marque",
+    description: "Le nom et la couleur que votre entreprise affiche dans le système.",
     icon: Palette,
     group: "organizacao",
     section: "Sua empresa",
@@ -455,8 +455,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/settings/billing",
-    label: "Billing",
-    description: "Plano e cobrança.",
+    label: "Facturation",
+    description: "Offre et facturation.",
     icon: Receipt,
     group: "organizacao",
     section: "Sua empresa",
@@ -464,8 +464,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/lgpd/requests",
-    label: "LGPD",
-    description: "Pedidos de exportação e exclusão de dados feitos por clientes.",
+    label: "Protection des données",
+    description: "Demandes d’export et de suppression de données faites par les clients.",
     icon: ScalesSimple,
     group: "organizacao",
     section: "Dados e acesso",
@@ -473,8 +473,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
   },
   {
     href: "/app/settings/api-tokens",
-    label: "API Tokens",
-    description: "Chaves para outro sistema conversar com o seu CRM.",
+    label: "Jetons API",
+    description: "Des clés pour qu’un autre système dialogue avec votre CRM.",
     icon: Lock,
     group: "organizacao",
     section: "Dados e acesso",

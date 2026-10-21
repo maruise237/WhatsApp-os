@@ -53,7 +53,7 @@ export function WaitForm({
           };
     const parsed = waitConfigSchema.safeParse(candidate);
     if (!parsed.success) {
-      setError(t(parsed.error.issues[0]?.message ?? "Configuração inválida."));
+      setError(t(parsed.error.issues[0]?.message ?? "Configuration invalide."));
       return;
     }
     setError(null);

@@ -98,7 +98,7 @@ export function CanalOficialClient() {
             <p className="mt-1 text-sm text-muted-foreground">
               Dans <strong>WhatsApp → {t("Configuration")}</strong>,{" "}
               {t(
-                "na seção de Webhook. Sem esse passo o canal envia, mas não recebe — as respostas do cliente não chegam e a janela de 24 horas nunca abre.",
+                "dans la section Webhook. Sans cette étape, le canal envoie mais ne reçoit pas : les réponses du client n’arrivent pas et la fenêtre de 24 heures ne s’ouvre jamais.",
               )}
             </p>
           </div>
@@ -125,7 +125,7 @@ export function CanalOficialClient() {
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {t(
-            "Os três valores vêm do seu app na Meta (WhatsApp → Configuração da API). A credencial é validada com a Meta antes de ser gravada — se o número não responder, nada é salvo.",
+            "Les trois valeurs proviennent de votre application Meta (WhatsApp → Configuration de l’API). L’identifiant est validé auprès de Meta avant d’être enregistré : si le numéro ne répond pas, rien n’est sauvegardé.",
           )}
         </p>
 

@@ -342,7 +342,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
           <legend className="text-sm font-medium">{t("Comment utilisez-vous déjà ce numéro ?")}</legend>
           <p className="text-xs text-muted-foreground">
             {t(
-              "Existe mais de um jeito de ter WhatsApp para empresa, e cada um conecta de um jeito. Se você nunca ouviu falar dos outros dois, é o primeiro.",
+              "Il existe plusieurs façons d’utiliser WhatsApp pour une entreprise, chacune avec sa propre connexion. Si vous ne connaissez pas les deux autres, choisissez la première.",
             )}
           </p>
           <div className="grid gap-2">
@@ -351,7 +351,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
               atual={forma}
               titulo={t("Je scanne un code avec mon téléphone")}
               corpo={t(
-                "É assim para quase todo mundo. Você abre o WhatsApp no celular que vai atender e aponta para um código que aparece aqui.",
+                "C’est la méthode la plus courante. Ouvrez WhatsApp sur le téléphone qui répondra aux clients et scannez le code affiché ici.",
               )}
               onEscolher={setForma}
             />
@@ -360,7 +360,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
               atual={forma}
               titulo={t("J’ai un compte officiel Meta")}
               corpo={t(
-                "Você cadastrou o número na Meta e tem as credenciais em mãos. Não usa o celular para conectar.",
+                "Vous avez enregistré le numéro auprès de Meta et disposez de ses identifiants. Le téléphone n’est pas utilisé pour la connexion.",
               )}
               onEscolher={setForma}
             />
@@ -390,7 +390,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
             </p>
             <p className="mt-1">
               {t(
-                "Dá para conectar e já enviar, mas as respostas do cliente não vão chegar até quem instalou o sistema completar uma configuração no servidor. Se você quer atender hoje, o caminho do código com o celular funciona agora — e dá para trocar depois, sem perder nada.",
+                "Vous pouvez connecter le numéro et envoyer des messages, mais les réponses des clients n’arriveront pas tant qu’une configuration serveur ne sera pas terminée. Si vous devez répondre aujourd’hui, la méthode du code avec le téléphone fonctionne immédiatement et pourra être remplacée plus tard sans perte de données.",
               )}
             </p>
           </div>
@@ -414,7 +414,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
           <p className="font-medium">{t("Le WhatsApp de cette installation n’est pas encore démarré.")}</p>
           <p className="mt-1">
             {t(
-              "Ele roda no seu próprio servidor. Dá para seguir sem ele agora e conectar o número depois, em Canais › Conexões — seu funcionário fica pronto de qualquer jeito, só não terá por onde atender ainda.",
+              "Il fonctionne sur votre propre serveur. Vous pouvez continuer sans lui et connecter le numéro plus tard via Canaux › Connexions ; votre assistant sera prêt, mais ne pourra pas encore répondre aux clients.",
             )}
           </p>
         </div>
@@ -455,7 +455,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
               {qrFailed ? (
                 <p className="text-xs text-muted-foreground">
                   {t(
-                    "Não consegui carregar o código agora. Ele deve reaparecer sozinho em instantes — se não aparecer, gere outro abaixo.",
+                    "Impossible de charger le code pour le moment. Il devrait réapparaître dans quelques instants ; sinon, générez-en un nouveau ci-dessous.",
                   )}
                 </p>
               ) : (
@@ -482,12 +482,12 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
             <div className="mt-3 space-y-2">
               <p className="text-sm text-destructive">
                 {t(
-                  "O código expirou antes de alguém escanear. É normal — ele vale só alguns minutos.",
+                  "Le code a expiré avant d’être scanné. C’est normal : il n’est valable que quelques minutes.",
                 )}
               </p>
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "Deixe o WhatsApp já aberto em Aparelhos conectados antes de gerar o próximo, que aí dá tempo de sobra.",
+                  "Laissez WhatsApp ouvert dans « Appareils connectés » avant de générer le prochain code pour avoir suffisamment de temps.",
                 )}
               </p>
               <Button type="button" size="sm" disabled={busy} onClick={restartSession}>
@@ -500,7 +500,7 @@ export function ConnectWhatsappClient({ wahaConfigured, sessionName, oficialPode
             <div className="mt-3 space-y-2">
               <p className="text-sm">
                 {t(
-                  "O serviço de WhatsApp desta instalação não respondeu. Ele roda no seu servidor, junto com o resto do sistema — quem instalou consegue religá-lo.",
+                  "Le service WhatsApp de cette installation n’a pas répondu. Il fonctionne sur votre serveur avec le reste du système ; la personne qui l’a installé peut le redémarrer.",
                 )}
               </p>
               {info.error && (

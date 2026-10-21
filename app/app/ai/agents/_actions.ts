@@ -55,7 +55,7 @@ export async function pauseAgentAction(id: string): Promise<ActionResult> {
     .maybeSingle();
 
   if (!existing) return { ok: false, error: "not_found" };
-  if (existing.archived_at) return { ok: false, error: "state_conflict", message: "Agent arquivado." };
+  if (existing.archived_at) return { ok: false, error: "state_conflict", message: "Agent archivé." };
 
   const requestId = randomUUID();
   const previousVersionId = (existing as { published_version_id: string | null }).published_version_id;

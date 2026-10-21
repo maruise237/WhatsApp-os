@@ -23,9 +23,9 @@ export type InboxTab = "unassigned" | "mine" | "all" | "closed" | "ai";
 
 const INBOX_TABS: { value: InboxTab; label: string }[] = [
   { value: "unassigned", label: "File" },
-  { value: "mine", label: "Minhas" },
+  { value: "mine", label: "Les miennes" },
   { value: "all", label: "Toutes" },
-  { value: "closed", label: "Fechadas" },
+  { value: "closed", label: "Fermées" },
   { value: "ai", label: "IA" },
 ];
 

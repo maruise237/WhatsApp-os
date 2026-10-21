@@ -39,7 +39,7 @@ const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
     classe: "border-destructive/50 bg-destructive/10 text-destructive",
   },
   falhando: {
-    rotulo: "falhas",
+    rotulo: "échecs",
     classe: "border-destructive/40 text-destructive",
   },
   fora_da_configuracao: {
@@ -59,7 +59,7 @@ const SINAL: Record<SinalDeUso, { rotulo: string; classe: string }> = {
     classe: "border-border/60 text-muted-foreground",
   },
   saudavel: {
-    rotulo: "funcionando",
+    rotulo: "fonctionnelle",
     classe: "border-emerald-500/40 text-emerald-700 dark:text-emerald-400",
   },
 };
@@ -115,14 +115,14 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
         <div className="space-y-1">
           <p className="text-sm">
             <strong data-testid="uso-total"> {resumo.usos}</strong>{" "}
-            {t(resumo.usos === 1 ? "uso" : "usos")} {t("au cours des")} {janela_em_dias} {t("derniers jours")}
+            {t(resumo.usos === 1 ? "utilisation" : "utilisations")} {t("au cours des")} {janela_em_dias} {t("derniers jours")}
             {resumo.falhas > 0 ? (
               <>
                 {" · "}
                 <strong className="text-destructive" data-testid="uso-falhas">
                   {resumo.falhas}
                 </strong>{" "}
-                {t(resumo.falhas === 1 ? "falha" : "falhas")}
+                {t(resumo.falhas === 1 ? "échec" : "échecs")}
               </>
             ) : null}
           </p>
@@ -157,7 +157,7 @@ export function UsoDasCapacidades({ agentId, active }: Props) {
           className="border-border/60 rounded-md border p-4 text-sm text-muted-foreground"
         >
           {t(
-            "Este agente ainda não tem nenhuma capacidade ligada, e nenhuma foi usada. Ligue o que ele pode fazer na aba Configuração.",
+            "Cet agent n’a encore aucune capacité activée et n’en a utilisé aucune. Activez ce qu’il peut faire dans l’onglet Configuration.",
           )}
         </p>
       ) : (

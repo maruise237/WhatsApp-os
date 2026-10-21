@@ -103,7 +103,7 @@ export function FilterBar({ filters, onChange, leads }: FilterBarProps) {
             : (members?.find((m) => m.user_id === filters.owner)?.full_name ?? t("Responsable"));
 
   const statusLabel = t(
-    STATUS_OPTIONS.find((o) => o.value === (filters.status ?? "all"))?.label ?? "Todos",
+    STATUS_OPTIONS.find((o) => o.value === (filters.status ?? "all"))?.label ?? "Tous",
   );
 
   const tagLabel = filters.tag ?? t("Tag : toutes");

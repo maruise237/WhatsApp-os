@@ -145,12 +145,12 @@ export function SetupAiForm({ capacidades, conferencias }: Props) {
             rows={5}
             maxLength={20000}
             placeholder={t(
-              "Nunca prometa desconto sem confirmar com uma pessoa.\nHorário de atendimento: 9h às 18h, de segunda a sexta.\nSempre chame o cliente pelo primeiro nome.",
+              "Ne promettez jamais de remise sans confirmation humaine.\nHoraires d’ouverture : de 9 h à 18 h, du lundi au vendredi.\nAppelez toujours le client par son prénom.",
             )}
           />
           <p className="text-xs text-muted-foreground">
             {t(
-              "O que vale para qualquer atendimento aqui. Pode deixar em branco agora e escrever depois — ele aprende com você ao longo do tempo.",
+              "Ces règles s’appliquent à tous les échanges. Vous pouvez laisser ce champ vide et les ajouter plus tard : votre assistant apprend avec vous au fil du temps.",
             )}
           </p>
         </div>

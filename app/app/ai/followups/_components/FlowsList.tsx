@@ -45,7 +45,7 @@ export function FlowsList({ initialData, canWrite }: Props) {
           <h2 className="font-medium">{t("Aucun flow de follow-up pour le moment")}</h2>
           <p className="max-w-sm text-sm text-text-muted">
             {t(
-              "Follow-ups reengajam contatos automaticamente após silêncio, mudança de etapa ou fim de conversa — sem depender de alguém lembrar de mandar mensagem.",
+              "Les follow-ups réengagent automatiquement les contacts après un silence, un changement d’étape ou la fin d’une conversation — sans dépendre de la mémoire de l’équipe.",
             )}
           </p>
           {canWrite && <div className="mt-1">{newFlowButton}</div>}

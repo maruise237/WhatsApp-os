@@ -96,7 +96,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
           <p className="text-sm font-medium">{t("Vous n’avez pas encore configuré votre assistant.")}</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
-              "Sem ninguém treinado, não há o que testar. Dá para voltar ao passo anterior agora ou fazer isso depois, em IA › Agentes.",
+              "Sans assistant formé, rien ne peut être testé. Vous pouvez revenir à l’étape précédente ou le faire plus tard via IA › Agents.",
             )}
           </p>
         </div>
@@ -109,7 +109,7 @@ export function TestarClient({ nome, agenteId, versaoId }: Props) {
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
-              "Rascunho não responde mensagem, então não há o que ensaiar. O passo anterior explicou o que falta; você pode resolver depois em IA › Agentes.",
+              "Un brouillon ne répond pas aux messages : rien ne peut donc être testé. L’étape précédente explique ce qui manque ; vous pourrez le résoudre plus tard via IA › Agents.",
             )}
           </p>
         </div>

@@ -81,7 +81,7 @@ export function NodeConfigPanel({ node, onChange, ramosLigados }: Props) {
         {type === "trigger" && (
           <p className="text-sm text-text-muted">
             {t(
-              "Início do fluxo — sem configuração adicional. O disparo (manual, mudança de etapa, silêncio ou fim de conversa) é definido nas configurações do fluxo.",
+              "Début du flow — aucune configuration supplémentaire. Le déclenchement (manuel, changement d’étape, silence ou fin de conversation) est défini dans les paramètres du flow.",
             )}
           </p>
         )}

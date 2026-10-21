@@ -89,7 +89,7 @@ export function CreateSourceDialog({ open, onOpenChange, onCreated }: Props) {
           <DialogTitle>{t("Nouvelle source d’acquisition")}</DialogTitle>
           <DialogDescription>
             {t(
-              "Dê um nome e diga em qual funil o contato deve entrar quando alguém preencher seu formulário.",
+              "Donnez-lui un nom et indiquez dans quel tableau le contact doit être ajouté lorsqu’il remplira votre formulaire.",
             )}
           </DialogDescription>
         </DialogHeader>

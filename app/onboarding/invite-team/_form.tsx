@@ -106,7 +106,7 @@ export function InviteTeamForm() {
         <div className="space-y-3 rounded-md border border-amber-300/60 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-950/20">
           <p className="text-sm font-medium">
             {t(
-              "Esta instalação não envia e-mail. Os convites estão prontos — copie o link de cada pessoa e mande por onde você já fala com ela:",
+              "Cette installation n’envoie pas d’e-mails. Les invitations sont prêtes : copiez le lien de chaque personne et envoyez-le par votre canal habituel :",
             )}
           </p>
           <ul className="space-y-2">

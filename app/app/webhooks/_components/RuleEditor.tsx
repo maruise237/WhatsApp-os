@@ -71,7 +71,7 @@ const MESSAGE_FIELDS: CuratedField[] = [
 ];
 const TAG_ADDED_FIELD: CuratedField = {
   value: "event.added_tags",
-  label: "Tag adicionada",
+  label: "Étiquette ajoutée",
   op: "contains",
 };
 
@@ -193,7 +193,7 @@ export function RuleEditor({ open, onOpenChange, rule }: Props) {
           <SheetTitle>{isEdit ? t("Modifier l’automatisation") : t("Nouvelle automatisation")}</SheetTitle>
           <SheetDescription>
             {t(
-              "Monte a regra em três passos: quando algo acontece, opcionalmente confira uma condição, e então dispare uma ou mais ações.",
+              "Construisez la règle en trois étapes : lorsqu’un événement survient, vérifiez éventuellement une condition, puis déclenchez une ou plusieurs actions.",
             )}
           </SheetDescription>
         </SheetHeader>

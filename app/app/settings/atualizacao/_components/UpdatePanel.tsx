@@ -104,7 +104,7 @@ export function UpdatePanel() {
         </ol>
         <p className="mt-4 text-sm text-muted-foreground">
           {t(
-            "O sistema sai do ar por alguns instantes e volta sozinho. Pode deixar esta página aberta.",
+            "Le système sera indisponible quelques instants, puis redémarrera seul. Vous pouvez laisser cette page ouverte.",
           )}
         </p>
       </Layout>
@@ -125,13 +125,13 @@ export function UpdatePanel() {
       >
         <p className="text-sm">
           {t(
-            "Voltei o sistema para a versão {version}, que é a que está no ar agora, e os seus dados estão intactos.",
+            "Le système a été restauré vers la version {version}, actuellement en service, et vos données sont intactes.",
           ).replace("{version}", anterior)}{" "}
           {t(
-            "O banco de dados já tinha sido atualizado e permanece assim — isso é seguro, a versão {version} funciona com ele.",
+            "La base de données avait déjà été mise à jour et le reste — c’est sans danger, la version {version} fonctionne avec elle.",
           ).replace("{version}", anterior)}{" "}
           {t(
-            "Se quiser desfazer também o banco, use a cópia de segurança feita antes da tentativa",
+            "Si vous souhaitez également annuler la mise à jour de la base de données, utilisez la sauvegarde créée avant la tentative",
           )}{" "}
           (<code>bash hostgator-setup-kit/restore.sh</code>).
         </p>
@@ -142,7 +142,7 @@ export function UpdatePanel() {
           isPending={atualizar.isPending}
           erro={erro}
           texto={t(
-            "Para deixar o servidor inteiro de volta na versão {version} — inclusive o código, que já foi trocado —, quem tem acesso pode rodar:",
+            "Pour restaurer entièrement le serveur vers la version {version} — y compris le code déjà remplacé —, une personne ayant accès peut exécuter :",
           ).replace("{version}", anterior)}
           comando={comandoDeVolta(data.run.from_version)}
         />
@@ -165,7 +165,7 @@ export function UpdatePanel() {
       >
         <p className="text-sm">
           {t(
-            "Não consegui voltar sozinho para a versão {previous}: o sistema pode estar rodando a versão {target} com defeito, ou fora do ar. Seus dados estão intactos e a cópia de segurança feita antes da tentativa continua guardada no servidor.",
+            "Je n’ai pas réussi à restaurer automatiquement la version {previous} : le système peut fonctionner avec la version {target} défectueuse ou être indisponible. Vos données sont intactes et la sauvegarde créée avant la tentative reste conservée sur le serveur.",
           )
             .replace("{previous}", anterior)
             .replace("{target}", alvo)}
@@ -177,7 +177,7 @@ export function UpdatePanel() {
           isPending={atualizar.isPending}
           erro={erro}
           texto={t(
-            "Para colocar o sistema de volta no ar na versão {version}, quem tem acesso ao servidor precisa rodar:",
+            "Pour remettre le système en service avec la version {version}, une personne ayant accès au serveur doit exécuter :",
           ).replace("{version}", anterior)}
           comando={comandoDeVolta(data.run.from_version)}
         />
@@ -190,7 +190,7 @@ export function UpdatePanel() {
       <Layout titulo={t("Impossible de déterminer comment elle s’est terminée")}>
         <p className="text-sm">
           {t(
-            "Comecei a atualização para a versão {version} mas perdi contato com o servidor antes do fim. Confira se o sistema está funcionando normalmente — se estiver, provavelmente deu certo.",
+            "J’ai commencé la mise à jour vers la version {version}, mais j’ai perdu le contact avec le serveur avant la fin. Vérifiez que le système fonctionne normalement — si c’est le cas, la mise à jour a probablement réussi.",
           ).replace("{version}", alvo)}
         </p>
         <DetalhesTecnicos texto={data.run.log_tail} />
@@ -211,7 +211,7 @@ export function UpdatePanel() {
       <Layout titulo={t("Mise à jour automatique indisponible")}>
         <p className="text-sm">
           {t(
-            "Não estou conseguindo falar com o servidor onde o sistema está instalado, então não posso atualizar sozinho. Quem tem acesso ao servidor pode entrar na pasta onde o sistema foi instalado e rodar este comando — se for a primeira vez, rode duas vezes: a primeira baixa o programa novo e a segunda liga o botão desta tela.",
+            "Je n’arrive pas à communiquer avec le serveur où le système est installé et je ne peux donc pas le mettre à jour automatiquement. Une personne ayant accès au serveur peut ouvrir le dossier d’installation et exécuter cette commande — s’il s’agit de la première fois, exécutez-la deux fois : la première télécharge le nouveau programme et la seconde active le bouton de cette page.",
           )}
         </p>
         <Comando comando={COMANDO_MANUAL} />
@@ -230,12 +230,12 @@ export function UpdatePanel() {
       <Layout titulo={t("Impossible de vérifier s’il existe une nouvelle version")}>
         <p className="text-sm">
           {t(
-            "O servidor não conseguiu comparar a sua versão ({version}) com a última publicada — normalmente é internet instável ou falta de espaço em disco na hora da checagem. Não quer dizer que esteja desatualizado, nem que esteja em dia: quer dizer que eu não sei.",
+            "Le serveur n’a pas pu comparer votre version ({version}) avec la dernière version publiée — il s’agit généralement d’une connexion instable ou d’un manque d’espace disque lors de la vérification. Cela ne signifie ni que le système est obsolète ni qu’il est à jour : cela signifie que je ne sais pas.",
           ).replace("{version}", versao)}
         </p>
         <p className="mt-3 text-sm">
           {t(
-            "Vou tentar de novo sozinho a cada poucos minutos. Se continuar assim, quem tem acesso ao servidor pode conferir na hora com:",
+            "Je réessaierai automatiquement toutes les quelques minutes. Si le problème persiste, une personne ayant accès au serveur peut vérifier immédiatement avec :",
           )}
         </p>
         <Comando comando={COMANDO_MANUAL} />
@@ -270,12 +270,12 @@ export function UpdatePanel() {
         <Layout titulo={t("Aucune version n’est encore publiée")}>
           <p className="text-sm">
             {t(
-              "Este projeto ainda não tem nenhuma versão publicada para comparar com a sua instalação — normal em um fork novo ou recém-criado a partir do código-fonte. Não há nada a atualizar agora, e isso não é um problema.",
+              "Ce projet ne possède encore aucune version publiée à comparer avec votre installation — c’est normal pour un nouveau fork ou un projet récemment créé depuis le code source. Aucune mise à jour n’est nécessaire pour le moment, et ce n’est pas un problème.",
             )}
           </p>
           <p className="mt-3 text-sm">
             {t(
-              "Quando sair a primeira versão publicada, ela aparece aqui sozinha. Quem tem acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem avisar:",
+              "Lorsque la première version publiée sera disponible, elle apparaîtra ici automatiquement. Une personne ayant accès au serveur peut vérifier à tout moment avec la commande ci-dessous — elle ne modifie rien sans avertissement :",
             )}
           </p>
           <Comando comando={COMANDO_MANUAL} />
@@ -286,12 +286,12 @@ export function UpdatePanel() {
       <Layout titulo={t("Vous utilisez une version plus récente que la version publiée")}>
         <p className="text-sm">
           {t(
-            "Seu sistema roda uma versão mais nova do que a última publicada, então não há nada a atualizar. É assim mesmo quando a instalação acompanha o desenvolvimento, e nada aqui está errado por causa disso — a marca da sua versão é {version}.",
+            "Votre système utilise une version plus récente que la dernière version publiée : aucune mise à jour n’est donc nécessaire. C’est normal lorsque l’installation suit le développement, et cela n’indique aucun problème — l’identifiant de votre version est {version}.",
           ).replace("{version}", versao)}
         </p>
         <p className="mt-3 text-sm">
           {t(
-            "Quando sair uma versão publicada mais nova que a sua, ela aparece aqui sozinha. Quem tem acesso ao servidor pode conferir a qualquer momento com o comando abaixo — ele não muda nada sem avisar:",
+            "Lorsqu’une version publiée plus récente que la vôtre sera disponible, elle apparaîtra ici automatiquement. Une personne ayant accès au serveur peut vérifier à tout moment avec la commande ci-dessous — elle ne modifie rien sans avertissement :",
           )}
         </p>
         <Comando comando={COMANDO_MANUAL} />
@@ -304,7 +304,7 @@ export function UpdatePanel() {
       {data.off_release && (
         <p className="mb-4 rounded-md border border-warning bg-warning-bg p-3 text-sm text-warning-fg">
           {t(
-            "Sua instalação está numa versão de desenvolvimento. Atualizar vai levá-la para a versão publicada {version}.",
+            "Votre installation utilise une version de développement. La mise à jour la fera passer à la version publiée {version}.",
           ).replace("{version}", nova)}
         </p>
       )}
@@ -354,7 +354,7 @@ function BotaoAtualizar({
         </Button>
         <span className="text-sm text-muted-foreground">
           {t(
-            "O sistema sai do ar por cerca de 2 minutos e volta sozinho. Faço uma cópia de segurança dos seus dados antes.",
+            "Le système sera indisponible pendant environ 2 minutes, puis redémarrera seul. Une sauvegarde de vos données sera effectuée avant.",
           )}
         </span>
       </div>

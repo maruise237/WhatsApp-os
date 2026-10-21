@@ -65,7 +65,7 @@ export function SecurityClient({
             <h2 className="text-sm font-semibold">{t("Validation en deux étapes")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">
               {t(
-                "Além da senha, o sistema pede um código de 6 dígitos que só existe no seu celular. É a proteção que segura uma senha vazada.",
+                "En plus du mot de passe, le système demande un code à 6 chiffres disponible uniquement sur votre téléphone. C’est la protection qui limite les risques liés à un mot de passe compromis.",
               )}
             </p>
           </div>
@@ -86,7 +86,7 @@ export function SecurityClient({
             {obrigatorio ? (
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "Ela é obrigatória para administradores desta empresa, então não dá para desligar aqui. Um administrador pode mudar essa regra abaixo.",
+                  "Elle est obligatoire pour les administrateurs de cette entreprise et ne peut donc pas être désactivée ici. Un administrateur peut modifier cette règle ci-dessous.",
                 )}
               </p>
             ) : (
@@ -146,11 +146,11 @@ export function SecurityClient({
             />
             <span>
               {t(
-                "Todo administrador desta empresa precisa configurar a verificação em duas etapas.",
+                "Chaque administrateur de cette entreprise doit configurer la validation en deux étapes.",
               )}
               <span className="mt-1 block text-xs text-muted-foreground">
                 {t(
-                  "Quando ligado, quem administra vê uma tela pedindo a configuração antes de usar o sistema. Ligue se a sua equipe mexe com dados de clientes — é a diferença entre uma senha vazada virar um susto ou virar um vazamento.",
+                  "Lorsqu’elle est activée, les administrateurs voient un écran demandant la configuration avant d’utiliser le système. Activez-la si votre équipe traite des données clients : cela peut faire la différence entre une alerte et une fuite après la compromission d’un mot de passe.",
                 )}
               </span>
             </span>

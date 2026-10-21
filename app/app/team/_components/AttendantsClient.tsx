@@ -105,7 +105,7 @@ function ScheduleDialog({
           </DialogTitle>
           <DialogDescription>
             {t(
-              "Sem janelas = disponível 24/7. Adicione janelas para restringir o roteamento a horários específicos.",
+              "Sans plage horaire, disponibilité 24 h/24 et 7 j/7. Ajoutez des plages pour limiter le routage à des horaires précis.",
             )}
           </DialogDescription>
         </DialogHeader>
@@ -373,7 +373,7 @@ export function AttendantsClient({ canManage }: Props) {
         ) : attendants.length === 0 ? (
           <p className="p-4 text-sm text-muted-foreground">
             {t(
-              "Nenhum atendente na organização. Convide membros com papel de atendente ou superior.",
+              "Aucun agent dans l’organisation. Invitez des membres ayant le rôle d’agent ou un rôle supérieur.",
             )}
           </p>
         ) : (

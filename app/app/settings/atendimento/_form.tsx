@@ -176,7 +176,7 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
               />
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "Quando não há ninguém disponível, o sistema tenta de novo mais tarde. Ao estourar, a conversa fica na fila esperando alguém.",
+                  "Lorsqu’aucun agent n’est disponible, le système réessaie plus tard. Une fois la limite atteinte, la conversation reste dans la file en attendant quelqu’un.",
                 )}
               </p>
             </div>
@@ -203,7 +203,7 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
           <h2 className="text-sm font-semibold">{t("Ce que chaque agent voit")}</h2>
           <p className="text-xs text-muted-foreground">
             {t(
-              "Restringe apenas quem tem o papel Atendente. Gerente e administrador continuam vendo a operação inteira.",
+              "La restriction ne concerne que les personnes ayant le rôle Agent. Les responsables et administrateurs continuent de voir toute l’activité.",
             )}
           </p>
         </div>
@@ -228,7 +228,7 @@ export function AtendimentoForm({ initial }: { initial: AtendimentoConfig }) {
             className="rounded-md border border-amber-500/40 bg-amber-50/60 p-3 text-xs dark:bg-amber-900/10"
           >
             {t(
-              "Com “só os seus” e distribuição manual, ninguém enxerga a fila para pegar — e nenhum cliente é atendido. Ligue o rodízio para que alguém receba.",
+              "Avec « les siens uniquement » et la distribution manuelle, personne ne voit la file pour prendre un client — aucun client n’est donc pris en charge. Activez la rotation pour qu’un agent en reçoive un.",
             )}
           </p>
         ) : null}

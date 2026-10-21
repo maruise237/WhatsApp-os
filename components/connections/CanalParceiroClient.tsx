@@ -132,7 +132,7 @@ export function CanalParceiroClient() {
             </h3>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Um número oficial (WhatsApp Business) conectado através do seu provedor. As mensagens entram e saem pelo CRM, e os modelos aprovados são os mesmos da sua conta.",
+                "Un numéro officiel (WhatsApp Business) connecté via votre fournisseur. Les messages entrent et sortent par le CRM, et les modèles approuvés sont les mêmes que ceux de votre compte.",
               )}
             </p>
           </div>
@@ -181,7 +181,7 @@ export function CanalParceiroClient() {
             />
             <p className="text-xs text-muted-foreground">
               {t(
-                "Guardada cifrada. Depois de gravar ela não é mostrada de novo — para trocar, cole a nova.",
+                "Conservée chiffrée. Après l’enregistrement, elle n’est plus affichée ; pour la remplacer, collez la nouvelle clé.",
               )}
             </p>
           </div>
@@ -228,7 +228,7 @@ export function CanalParceiroClient() {
             <h3 className="text-sm font-semibold">{t("Webhook")}</h3>
             <p className="text-xs text-muted-foreground">
               {t(
-                "O endereço que o provedor usa para entregar as mensagens. O segredo não é mostrado de novo — para obter um novo, reconecte.",
+                "L’adresse utilisée par le fournisseur pour livrer les messages. Le secret n’est plus affiché ; pour en obtenir un nouveau, reconnectez-vous.",
               )}
             </p>
           </div>

@@ -142,7 +142,7 @@ export function AgentRowMenu({ agent }: Props) {
             </AlertDialogTitle>
             <AlertDialogDescription>
               {t(
-                "O agent deixa de responder gatilhos e some das listas ativas. Versões publicadas são preservadas para auditoria. Não é possível desarquivar pela UI nesta versão.",
+                "L’agent cesse de répondre aux déclencheurs et disparaît des listes actives. Les versions publiées sont conservées pour l’audit. Il n’est pas possible de désarchiver depuis l’interface dans cette version.",
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>

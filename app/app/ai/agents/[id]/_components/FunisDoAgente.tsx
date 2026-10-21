@@ -74,7 +74,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
         <h3 className="text-sm font-medium">{t("Dans quelles affaires l’agent peut-il intervenir ?")}</h3>
         <p className="text-xs text-muted-foreground">
           {t(
-            "Marque os funis que este assistente cuida. Ele conversa com qualquer cliente, mas só move, edita ou encerra negócio dos funis marcados aqui.",
+            "Sélectionnez les pipelines pris en charge par cet assistant. Il peut échanger avec n’importe quel client, mais il ne déplace, ne modifie ou ne clôture que les affaires des pipelines sélectionnés ici.",
           )}
         </p>
       </div>
@@ -124,7 +124,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
       {value.length === 0 ? (
         <p data-testid="agente-sem-funil" className="text-xs text-muted-foreground">
           {t(
-            "Sem nenhum funil marcado, ele conversa com os clientes normalmente, mas não mexe em negócio nenhum — nem move, nem encerra, nem marca.",
+            "Sans pipeline sélectionné, il échange normalement avec les clients, mais n’intervient dans aucune affaire — il ne la déplace, ne la clôture et ne l’étiquette pas.",
           )}
         </p>
       ) : null}
@@ -133,10 +133,10 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
         <p data-testid="agente-funis-mudos" className="text-xs text-warning-fg">
           {mudosMarcados.length === 1
             ? t(
-                "Você marcou {name}, mas ninguém disse ao assistente o que cada etapa desse funil significa — ele vai atender e deixar os negócios parados onde estão.",
+                "Vous avez sélectionné {name}, mais personne n’a indiqué à l’assistant la signification de ses étapes — il répondra aux clients, mais laissera les affaires là où elles se trouvent.",
               ).replace("{name}", mudosMarcados[0] ?? "")
             : t(
-                "Você marcou {count} funis em que ninguém disse ao assistente o que cada etapa significa — ele vai atender e deixar os negócios parados onde estão.",
+                "Vous avez sélectionné {count} pipelines dont les étapes n’ont pas été expliquées à l’assistant — il répondra aux clients, mais laissera les affaires là où elles se trouvent.",
               ).replace("{count}", String(mudosMarcados.length))}{" "}
           {t("Cette configuration se fait dans Paramètres › Pipelines.")}
         </p>
@@ -145,7 +145,7 @@ export function FunisDoAgente({ funis, value, onChange, cobertura, disabled = fa
       {entradaDeFora ? (
         <p data-testid="agente-entrada-de-fora" className="text-xs text-warning-fg">
           {t(
-            "As conversas novas viram negócio em {name}, que não está marcado. O assistente vai atender e os negócios vão se acumular ali sem que ele possa organizá-los.",
+            "Les nouvelles conversations créent une affaire dans {name}, qui n’est pas sélectionné. L’assistant répondra aux clients, mais les affaires s’y accumuleront sans pouvoir être organisées.",
           ).replace("{name}", funilDeEntrada?.name ?? "")}
         </p>
       ) : null}

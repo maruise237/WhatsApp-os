@@ -349,7 +349,7 @@ export function ToolPicker({ value, onChange, disabled }: Props) {
           >
             <p className="pb-1 text-xs text-muted-foreground">
               {t(
-                "Cada linha é uma capacidade. O nome em cinza é como ela aparece para quem integra o sistema por fora.",
+                "Chaque ligne correspond à une capacité. Le nom grisé est celui utilisé par les intégrations externes.",
               )}
             </p>
             {catalogo.map((capacidade) => {

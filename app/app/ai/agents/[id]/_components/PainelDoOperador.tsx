@@ -58,7 +58,7 @@ function ComoOPapelEstaIndo() {
       <Card className="p-4" data-testid="operador-como-esta-indo">
         <p className="text-xs text-muted-foreground">
           {t(
-            "Nenhuma conversa passou por aqui nos últimos {days} dias. Assim que o assistente atender alguém, o que ele organizar aparece nesta área.",
+            "Aucune conversation n’est passée ici au cours des {days} derniers jours. Dès que l’assistant répondra à quelqu’un, ce qu’il organisera apparaîtra dans cette zone.",
           ).replace("{days}", String(dias))}
         </p>
       </Card>
@@ -77,7 +77,7 @@ function ComoOPapelEstaIndo() {
       </p>
       <p className="text-xs text-muted-foreground" data-testid="operador-metrica-promessas">
         {t(
-          "De {declaradas} promessas feitas ao cliente, {assumidas} ficaram com um responsável — e {semDono} não. Elas aparecem na Central de avisos, uma por conversa.",
+          "Sur {declaradas} promesse(s) faite(s) au client, {assumidas} ont reçu un responsable — et {semDono} non. Elles apparaissent dans le Centre des alertes, une par conversation.",
         )
           .replace("{declaradas}", String(promessas.declaradas))
           .replace("{assumidas}", String(promessas.assumidas))
@@ -86,7 +86,7 @@ function ComoOPapelEstaIndo() {
       {quisAgirENaoPode > 0 ? (
         <p className="text-xs text-muted-foreground" data-testid="operador-metrica-sem-mao">
           {t(
-            "Em {quisAgirENaoPode} delas o assistente tinha algo a registrar e nenhuma capacidade marcada para isso — o que resolve é marcar abaixo o que ele pode fazer.",
+            "Dans {quisAgirENaoPode} cas, l’assistant avait quelque chose à enregistrer mais aucune capacité n’était activée pour cela — activez ci-dessous ce qu’il peut faire.",
           ).replace("{quisAgirENaoPode}", String(quisAgirENaoPode))}
         </p>
       ) : null}
@@ -116,7 +116,7 @@ export function PainelDoOperador(props: Props) {
             </Label>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Quem conversa com o cliente é uma coisa; quem mantém o sistema em dia é outra. Separar os dois evita que o assistente comente com o cliente o que está fazendo por dentro — e é o que faz ele realmente registrar, em vez de só responder bem.",
+                "La personne qui échange avec le client et celle qui maintient le système à jour sont deux rôles différents. Les séparer évite que l’assistant commente au client ce qu’il fait en interne et lui permet d’enregistrer réellement les actions, au lieu de seulement bien répondre.",
               )}
             </p>
           </div>
@@ -136,12 +136,12 @@ export function PainelDoOperador(props: Props) {
             <p className="font-medium text-foreground">{t("Lorsque cette option est désactivée :")}</p>
             <p className="mt-1">
               {t(
-                "o assistente continua atendendo e o básico continua sendo registrado sozinho — a etapa do cliente, o retorno que ele prometeu e o histórico da conversa.",
+                "l’assistant continue de répondre et les éléments de base restent enregistrés automatiquement — l’étape du client, le suivi qu’il a promis et l’historique de la conversation.",
               )}
             </p>
             <p className="mt-1">
               {t(
-                "O que ele deixa de fazer é decidir sobre a operação: abrir chamados, distribuir para a pessoa certa, organizar marcadores e etapas. Isso passa a ser trabalho de alguém do time.",
+                "Il cesse en revanche de décider pour l’opération : ouvrir des tickets, attribuer au bon membre, organiser les étiquettes et les étapes. Cela devient le travail d’un membre de l’équipe.",
               )}
             </p>
           </div>
@@ -156,7 +156,7 @@ export function PainelDoOperador(props: Props) {
             <h3 className="text-sm font-medium">{t("Ce qu’il peut modifier dans le système")}</h3>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Esta lista é só deste papel — nada aqui é usado enquanto ele conversa com o cliente. Ligue por jornada de trabalho.",
+                "Cette liste concerne uniquement ce rôle — rien ici n’est utilisé lorsqu’il échange avec le client. Activez les capacités selon son périmètre de travail.",
               )}
             </p>
             <div data-testid="operador-capacidades">
@@ -171,7 +171,7 @@ export function PainelDoOperador(props: Props) {
               // usuário liga o papel, não escolhe nada, e conclui que quebrou.
               <p data-testid="operador-sem-capacidade" className="text-xs text-muted-foreground">
                 {t(
-                  "Sem nada marcado, ele ainda avisa você quando o assistente prometer algo a um cliente e ninguém cumprir — mas não consegue resolver sozinho.",
+                  "Si rien n’est sélectionné, il vous avertit lorsqu’une promesse faite à un client n’est pas tenue — mais il ne peut pas la résoudre seul.",
                 )}
               </p>
             ) : null}

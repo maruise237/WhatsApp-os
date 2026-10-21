@@ -328,10 +328,10 @@ export function QueueTab({ canWrite }: Props) {
             <AlertDialogDescription>
               {pendingCancel?.source === "promise"
                 ? t(
-                    "O agente não voltará a falar com esta pessoa no horário combinado, e vai saber que você desmarcou.",
+                    "L’agent ne recontactera pas cette personne à l’heure prévue et saura que vous avez annulé la relance.",
                   )
                 : t(
-                    "O lead não receberá mais mensagens deste fluxo. Essa ação não pode ser desfeita.",
+                    "Le lead ne recevra plus de messages de ce flow. Cette action est irréversible.",
                   )}
             </AlertDialogDescription>
           </AlertDialogHeader>

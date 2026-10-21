@@ -74,7 +74,7 @@ export function ProposalsPanel({
         <p className="text-sm font-medium">{t("Aucune proposition pour le moment")}</p>
         <p className="max-w-sm text-xs text-muted-foreground">
           {t(
-            "O assistente aprende com as conversas reais e propõe melhorias aqui. Você decide o que entra — nada é aplicado sozinho.",
+            "L’assistant apprend des conversations réelles et propose ici des améliorations. Vous décidez de ce qui entre — rien n’est appliqué automatiquement.",
           )}
         </p>
       </div>

@@ -51,7 +51,7 @@ export function PublishConfirmDialog({
           </AlertDialogTitle>
           <AlertDialogDescription>
             {t(
-              "Esta versão se tornará a ativa no atendimento. A versão atual ({current}) será marcada como superseded.",
+              "Cette version deviendra active pour le traitement. La version actuelle ({current}) sera marquée comme remplacée.",
             ).replace("{current}", published ? `v${published.version_number}` : t("aucune"))}
           </AlertDialogDescription>
         </AlertDialogHeader>

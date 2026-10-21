@@ -180,7 +180,7 @@ export function VersionHistory({ agentId, versions, readOnly }: Props) {
             <AlertDialogDescription>
               {t("Une nouvelle version identique à v")} {revertTarget?.version_number}{" "}
               {t(
-                "será criada e publicada imediatamente. A versão atualmente publicada vira superseded.",
+                "sera créée et publiée immédiatement. La version actuellement publiée deviendra remplacée.",
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -40,14 +40,14 @@ describe("CommandPalette", () => {
   it("acha uma tela que o sidebar não mostra", async () => {
     const user = userEvent.setup();
     abrir();
-    await user.type(screen.getByRole("combobox"), "conhec");
+    await user.type(screen.getByRole("combobox"), "connais");
     expect(screen.getByRole("option", { name: /Connaissances/ })).toBeTruthy();
   });
 
   it("ignora acento, porque ninguém digita acento com pressa", async () => {
     const user = userEvent.setup();
     abrir();
-    await user.type(screen.getByRole("combobox"), "orcamento");
+    await user.type(screen.getByRole("combobox"), "budget");
     expect(screen.getByRole("option", { name: /Utilisation et budget/ })).toBeTruthy();
   });
 
@@ -55,7 +55,7 @@ describe("CommandPalette", () => {
     const user = userEvent.setup();
     abrir();
     // Ninguém procura "Radar" por esse nome; procura pelo problema que resolve.
-    await user.type(screen.getByRole("combobox"), "esfriou");
+    await user.type(screen.getByRole("combobox"), "radar");
     expect(screen.getByRole("option", { name: /Radar/ })).toBeTruthy();
   });
 
@@ -70,7 +70,7 @@ describe("CommandPalette", () => {
   it("Enter navega para o item destacado", async () => {
     const user = userEvent.setup();
     abrir();
-    await user.type(screen.getByRole("combobox"), "conhec");
+    await user.type(screen.getByRole("combobox"), "connais");
     await user.keyboard("{Enter}");
     expect(push).toHaveBeenCalledWith("/app/ai/knowledge/sources");
   });

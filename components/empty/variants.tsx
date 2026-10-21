@@ -40,7 +40,7 @@ export function EmptyKanban({ primary, secondary }: VariantProps = {}) {
       icon={Kanban}
       headline={t("Tableau vide")}
       subcopy={t(
-        "Ainda não há nenhum cliente aqui. Assim que a primeira conversa começar, o cartão aparece nesta coluna.",
+        "Aucun client ici pour le moment. Dès que la première conversation commencera, la carte apparaîtra dans cette colonne.",
       )}
       primary={primary}
       secondary={secondary}
@@ -81,7 +81,7 @@ export function EmptyPipeline({ primary, secondary }: VariantProps = {}) {
       icon={GitBranch}
       headline={t("Aucun pipeline pour le moment")}
       subcopy={t(
-        "Um funil é o caminho que o cliente percorre até fechar. Crie o primeiro para ter um quadro.",
+        "Un pipeline représente le parcours du client jusqu’à la conversion. Créez le premier pour obtenir un tableau.",
       )}
       primary={primary}
       secondary={secondary}

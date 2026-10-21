@@ -108,7 +108,7 @@ describe("InboxFilters render — 3 visões + escopo", () => {
   it("agent em modo own*: mostra Minhas e Fila, esconde Todas", () => {
     setOrg("agent", "own_and_unassigned");
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
-    expect(screen.getByRole("tab", { name: /Minhas/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Les miennes/ })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /File/ })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: /Toutes/ })).not.toBeInTheDocument();
   });
@@ -123,7 +123,7 @@ describe("InboxFilters render — 3 visões + escopo", () => {
     setOrg("manager", "all");
     render(<InboxFilters value={VALUE} onChange={() => {}} />);
     expect(screen.getByRole("tab", { name: /File/ })).toHaveTextContent("3");
-    expect(screen.getByRole("tab", { name: /Minhas/ })).toHaveTextContent("2");
+    expect(screen.getByRole("tab", { name: /Les miennes/ })).toHaveTextContent("2");
     expect(screen.getByRole("tab", { name: /Toutes/ })).toHaveTextContent("5");
   });
 });

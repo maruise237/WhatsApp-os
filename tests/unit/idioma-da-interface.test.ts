@@ -25,6 +25,13 @@ import { IDIOMAS, IDIOMA_PADRAO, normalizarIdioma } from "@/lib/i18n/idiomas";
 import { NAV_DESTINATIONS, NAV_GROUPS } from "@/lib/navigation/registry";
 import { DICIONARIO } from "@/lib/i18n/dicionario";
 
+// Libellés déjà écrits en français dans le code : valeurs connues du dictionnaire.
+const FRANCAIS = new Set(
+  Object.values(DICIONARIO)
+    .map((v) => v["fr-FR"])
+    .filter((v): v is string => typeof v === "string"),
+);
+
 describe("traduzir", () => {
   it("sert l’anglais lorsqu’une traduction anglaise existe", () => {
     expect(traduzir("Assumir", "en-US")).toBe("Prendre en charge");
@@ -141,7 +148,7 @@ describe("o dicionário acompanha o registro de navegação", () => {
     const NOMES_PROPRIOS: string[] = [];
     const semTraducao = NAV_DESTINATIONS.filter((d) => d.sidebar)
       .filter((d) => !NOMES_PROPRIOS.includes(d.label))
-      .filter((d) => !(d.label in DICIONARIO));
+      .filter((d) => !(d.label in DICIONARIO) && !FRANCAIS.has(d.label));
     expect(
       semTraducao.map((d) => d.label),
       "item de menu sem entrada em lib/i18n/dicionario.ts — o espanhol dele cai para o português",
@@ -149,7 +156,7 @@ describe("o dicionário acompanha o registro de navegação", () => {
   });
 
   it("todo grupo da barra lateral tem tradução", () => {
-    const semTraducao = NAV_GROUPS.filter((g) => !(g.label in DICIONARIO));
+    const semTraducao = NAV_GROUPS.filter((g) => !(g.label in DICIONARIO) && !FRANCAIS.has(g.label));
     expect(semTraducao.map((g) => g.label)).toEqual([]);
   });
 });

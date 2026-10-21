@@ -102,7 +102,7 @@ export function ConditionForm({
     };
     const parsed = conditionConfigSchema.safeParse(candidato);
     if (!parsed.success) {
-      setError(t(parsed.error.issues[0]?.message ?? "Configuração inválida."));
+      setError(t(parsed.error.issues[0]?.message ?? "Configuration invalide."));
       return;
     }
     setError(null);
@@ -165,9 +165,9 @@ export function ConditionForm({
         >
           <p className="text-xs leading-snug text-warning-fg">
             {t("Changer de mode laisse")} {trocaPendente.orfas}{" "}
-            {t(trocaPendente.orfas === 1 ? "ligação sem saída" : "ligações sem saída")}{" "}
+            {t(trocaPendente.orfas === 1 ? "liaison sans sortie" : "liaisons sans sortie")}{" "}
             {t(
-              "neste nó. Elas continuam desenhadas, mas param de levar a lugar nenhum até você religá-las.",
+              "sur ce nœud. Elles restent affichées, mais ne mènent nulle part jusqu’à ce que vous les reconnectiez.",
             )}
           </p>
           <div className="flex gap-2">

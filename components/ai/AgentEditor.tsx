@@ -322,7 +322,7 @@ export function AgentEditor({ agentId, initialData, readOnly = false }: Props) {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Top K = quantos trechos buscar. Similarity threshold = mínimo de relevância (cosine). Confidence = limiar abaixo do qual o agent escala para humano.",
+                "Top K = nombre d’extraits à rechercher. Seuil de similarité = pertinence minimale (cosinus). Confiance = seuil en dessous duquel l’agent transmet à un humain.",
               )}
             </p>
           </Card>

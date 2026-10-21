@@ -66,7 +66,7 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
         />
         <p className="text-xs text-muted-foreground">
           {t(
-            "É o nome que aparece para o seu time e nos relatórios. Pode ser clínica, loja, escritório — o que for seu.",
+            "C’est le nom affiché à votre équipe et dans les rapports. Il peut s’agir d’une clinique, d’un magasin, d’un cabinet ou de toute autre activité.",
           )}
         </p>
       </div>
@@ -90,7 +90,7 @@ export function WelcomeForm({ defaultOrgName }: { defaultOrgName: string }) {
         />
         <p className="text-xs text-muted-foreground">
           {t(
-            "Uma linha basta. É com isso que seu funcionário aprende com quem ele está falando — e que a gente monta o quadro de clientes do seu jeito.",
+            "Une ligne suffit. Ces informations aident votre assistant à comprendre son interlocuteur et nous permettent d’adapter votre tableau clients.",
           )}
         </p>
       </div>

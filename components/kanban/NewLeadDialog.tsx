@@ -107,7 +107,7 @@ export function NewLeadDialog({ open, onOpenChange, pipelineId, stages, contactI
     const parsed = createLeadSchema.safeParse(payload);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(t(first?.message ?? "Dados inválidos"));
+      toast.error(t(first?.message ?? "Données invalides"));
       return;
     }
 

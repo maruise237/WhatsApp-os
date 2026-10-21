@@ -132,7 +132,7 @@ export function JanelaFechadaAviso({
         // um seletor vazio que se lê como "ainda não carregou".
         <p className="text-xs text-amber-900/80 dark:text-amber-200/80">
           {t(
-            "Nenhum modelo aprovado ainda. Crie um em Conexões → Templates e envie quando a plataforma aprovar.",
+            "Aucun modèle approuvé pour le moment. Créez-en un via Connexions → Modèles, puis envoyez-le lorsque la plateforme l’aura approuvé.",
           )}
         </p>
       ) : (
@@ -171,7 +171,7 @@ export function JanelaFechadaAviso({
         // ainda não os coleta, então o envio vai falhar na plataforma.
         <p className="mt-2 text-[11px] text-amber-900/80 dark:text-amber-200/80">
           {t(
-            "Este modelo pede {count} valor(es) e ainda não dá para preenchê-los aqui — envie por Conexões → Templates, ou escolha um modelo sem parâmetros.",
+            "Ce modèle demande {count} valeur(s), mais il n’est pas encore possible de les renseigner ici. Envoyez-le via Connexions → Modèles ou choisissez un modèle sans paramètres.",
           ).replace("{count}", String(atual?.slots?.length ?? 0))}
         </p>
       )}

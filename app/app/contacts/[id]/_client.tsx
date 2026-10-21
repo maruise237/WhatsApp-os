@@ -191,7 +191,7 @@ export function ContactDetailClient({ contactId }: Props) {
                 <h2 className="text-lg font-semibold">{t("Droit à l’effacement (données personnelles)")}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {t(
-                    "A anonimização é irreversível. Use somente após confirmação formal do titular ou ordem judicial.",
+                    "L’anonymisation est irréversible. Utilisez-la uniquement après confirmation formelle de la personne concernée ou sur ordonnance judiciaire.",
                   )}
                 </p>
               </div>

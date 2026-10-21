@@ -156,7 +156,7 @@ export function TriggerEditor({ value, onChange, disabled }: Props) {
         />
         <p className="text-xs text-muted-foreground">
           {t(
-            "Deixe em branco para o agente responder a tudo. Se preencher, ele só entra quando a mensagem contiver uma dessas palavras — separe por barra vertical (|). Aceita expressão regular, para quem já conhece.",
+            "Laissez vide pour que l’agent réponde à tout. Si vous renseignez ce champ, il intervient uniquement lorsque le message contient l’un de ces mots — séparez-les par une barre verticale (|). Les expressions régulières sont acceptées.",
           )}
         </p>
       </div>

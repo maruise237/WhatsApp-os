@@ -240,7 +240,7 @@ export function AgentMappingSection({
         <h3 className="text-sm font-semibold">{t("Où va le card à chaque étape")}</h3>
         <p className="max-w-3xl text-sm leading-relaxed text-text-muted">
           {t(
-            "Quando o agente avança no atendimento, o card do cliente pode andar sozinho no seu funil. Escolha para qual etapa ele vai em cada momento. Deixar em «não mover» é uma escolha válida — o card fica onde está e o agente segue trabalhando.",
+            "Lorsque l’agent avance dans le traitement, le card du client peut se déplacer automatiquement dans votre pipeline. Choisissez l’étape correspondante à chaque moment. Laisser « ne pas déplacer » est un choix valide : le card reste où il est et l’agent continue son travail.",
           )}
         </p>
       </div>

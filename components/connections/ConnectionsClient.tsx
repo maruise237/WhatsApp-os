@@ -203,7 +203,7 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
             ? t("Impossible de charger vos numéros.")
             : list.length === 0
               ? t("Aucun numéro n’est encore connecté.")
-              : `${list.length} ${t(list.length === 1 ? "número conectado" : "números conectados")}.`}
+              : `${list.length} ${t(list.length === 1 ? "numéro connecté" : "numéros connectés")}.`}
         </p>
         <div className="flex gap-2">
           {list.length > 0 && (
@@ -256,7 +256,7 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
           <p className="font-medium">{t("Cette installation utilise une base de données obsolète.")}</p>
           <p className="mt-1">
             {t(
-              "Falta aplicar a migration que registra canal excluído. Até lá, um número que você excluir continua aparecendo nesta lista.",
+              "La migration qui enregistre les canaux supprimés doit encore être appliquée. D’ici là, un numéro supprimé continuera d’apparaître dans cette liste.",
             )}
           </p>
         </div>
@@ -273,12 +273,12 @@ export function ConnectionsClient({ wahaConfigured }: { wahaConfigured: boolean 
           <Warning size={28} className="text-error-fg" aria-hidden />
           <p className="text-sm text-error-fg">
             {t(
-              "Não foi possível carregar seus números — esta lista não está mostrando o que existe.",
+              "Impossible de charger vos numéros : cette liste ne reflète peut-être pas les numéros existants.",
             )}
           </p>
           <p className="text-xs text-muted-foreground">
             {t(
-              "Não conecte um número novo por causa disto: recarregue a página. Se persistir, o servidor do sistema está fora do ar.",
+              "Ne connectez pas un nouveau numéro pour l’instant : rechargez la page. Si le problème persiste, le serveur de l’installation est peut-être indisponible.",
             )}
           </p>
         </Card>
@@ -522,7 +522,7 @@ function ExcluirCanalDialog({
               ) : isError || !impact ? (
                 <p>
                   {t(
-                    "Não foi possível verificar o que está ligado a este número. A exclusão continua possível — quem decide apagar ou arquivar é o servidor, e ele preserva o histórico quando existe.",
+                    "Impossible de vérifier les éléments liés à ce numéro. La suppression reste possible : le serveur décide de supprimer ou d’archiver et préserve l’historique lorsqu’il existe.",
                   )}
                 </p>
               ) : (

@@ -275,7 +275,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
           />
           <p className="text-xs text-text-muted">
             {t(
-              "Aparece no menu lateral, para quem trabalha aqui. Deixe em branco para usar {name}.",
+              "S’affiche dans la barre latérale pour les membres de cette entreprise. Laissez vide pour utiliser {name}.",
             ).replace("{name}", semAOrganizacao.name)}
           </p>
         </div>
@@ -328,7 +328,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
           <div className="space-y-2">
             <p className="text-sm text-text-muted">
               {t(
-                "A partir da sua cor o sistema monta esta escala e escolhe, dentro dela, o tom que vai nos botões:",
+                "À partir de votre couleur, le système construit cette échelle et choisit le ton utilisé pour les boutons :",
               )}
             </p>
             <TiraDeTons tons={derivada.rampa} legenda={legenda} />
@@ -337,7 +337,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
                 esta linha, ver dois tons marcados na escala parece incoerência. */}
             <p className="text-xs text-text-muted">
               {t(
-                "No modo escuro o sistema usa naturalmente um tom mais claro da escala, para a cor não se perder no fundo escuro.",
+                "En mode sombre, le système utilise naturellement un ton plus clair de l’échelle afin que la couleur reste visible sur le fond sombre.",
               )}
             </p>
           </div>
@@ -403,7 +403,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
         {!serializacao.css && resolvida.cor ? (
           <p className="text-sm text-error-fg">
             {t(
-              "Do jeito que está, esta cor não chegaria à tela: o sistema continuaria com a cor que já usa.",
+              "En l’état, cette couleur n’atteindrait pas l’interface : le système conserverait la couleur déjà utilisée.",
             )}
           </p>
         ) : null}
@@ -421,12 +421,12 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
         <ul className="list-disc space-y-1 pl-5 text-sm text-text-muted">
           <li>
             {t(
-              "O título da aba do navegador continua com o nome do sistema, e não com o da sua empresa.",
+              "Le titre de l’onglet du navigateur conserve le nom du système, et non celui de votre entreprise.",
             )}
           </li>
           <li>
             {t(
-              "A tela de entrada é sempre a do sistema: quando alguém digita a senha, ainda não dá para saber de qual empresa ele é.",
+              "L’écran de connexion reste toujours celui du système : lorsqu’une personne saisit son mot de passe, il est encore impossible de savoir de quelle entreprise elle dépend.",
             )}
           </li>
           {/*
@@ -439,17 +439,17 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
           */}
           <li>
             {t(
-              "Os e-mails que este sistema envia (convite de time, pedidos de LGPD) já saem com o nome da sua empresa.",
+              "Les e-mails envoyés par ce système (invitations d’équipe, demandes liées aux données personnelles) utilisent déjà le nom de votre entreprise.",
             )}
           </li>
           <li>
             {t(
-              'O relatório de LGPD entregue ao cliente traz a RAZÃO SOCIAL da sua empresa, e não o nome aqui de cima — é ela que responde legalmente pelos dados. Confira o campo "Razão social" em Configurações → Organização.',
+              "Le rapport de données personnelles remis au client contient la RAISON SOCIALE de votre entreprise, et non le nom affiché ci-dessus — c’est elle qui assume la responsabilité légale des données. Vérifiez le champ « Raison sociale » dans Paramètres → Organisation.",
             )}
           </li>
           <li>
             {t(
-              "O aplicativo de verificação em duas etapas continua registrando o nome do sistema: o cadastro acontece antes de saber de qual empresa a pessoa é.",
+              "L’application d’authentification à deux facteurs continue d’enregistrer le nom du système : l’inscription intervient avant qu’il soit possible de savoir de quelle entreprise dépend la personne.",
             )}
           </li>
           {/*
@@ -460,7 +460,7 @@ export function FormularioDaMarcaDaOrganizacao({ gravada, instalacao, ambiente }
           */}
           <li>
             {t(
-              "O logo que você subir aqui aparece no menu lateral, para quem trabalha nesta empresa. A tela de entrada continua com o logo de quem instalou o sistema: ali ainda não dá para saber de qual empresa a pessoa é.",
+              "Le logo que vous téléversez ici apparaît dans la barre latérale pour les membres de cette entreprise. L’écran de connexion conserve le logo de l’installation du système : il est encore impossible d’y savoir de quelle entreprise dépend la personne.",
             )}
           </li>
         </ul>

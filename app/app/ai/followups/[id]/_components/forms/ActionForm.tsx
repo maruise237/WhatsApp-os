@@ -50,7 +50,7 @@ function SeletorDeModelo({
     return (
       <p className="text-xs text-text-muted">
         {t(
-          "Você ainda não tem modelos de mensagem. Crie um em Ajustes → Modelos e ele aparece aqui.",
+          "Vous n’avez encore aucun modèle de message. Créez-en un dans Paramètres → Modèles pour le voir ici.",
         )}
       </p>
     );
@@ -115,7 +115,7 @@ export function ActionForm({
         : { mode: "template" as const, template_id: next.templateId };
     const parsed = actionConfigSchema.safeParse(candidate);
     if (!parsed.success) {
-      setError(t(parsed.error.issues[0]?.message ?? "Configuração inválida."));
+      setError(t(parsed.error.issues[0]?.message ?? "Configuration invalide."));
       return;
     }
     setError(null);

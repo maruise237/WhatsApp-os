@@ -99,7 +99,7 @@ export function NovaFonteDialog({ agentId, tipo, rotulo, aberto, onFechar, onCri
           </DialogTitle>
           <DialogDescription>
             {t(
-              "Cole as perguntas e respostas. O agente passa a consultar isso antes de responder.",
+              "Collez les questions et réponses. L’agent les consultera avant de répondre.",
             )}
           </DialogDescription>
         </DialogHeader>

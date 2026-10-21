@@ -335,12 +335,12 @@ export function StagesSection({
         <h3 className="text-sm font-semibold">{t("Étapes de ce pipeline")}</h3>
         <p className="max-w-3xl text-sm leading-relaxed text-text-muted">
           {t(
-            "Estas são as colunas do seu quadro, na ordem em que o cliente avança. Você pode renomear, criar, reordenar e arquivar.",
+            "Voici les colonnes de votre tableau, dans l’ordre de progression du client. Vous pouvez les renommer, en créer, les réordonner et les archiver.",
           )}
         </p>
         <p className="max-w-3xl text-sm leading-relaxed text-text-muted">
           {t(
-            "Duas colunas têm papel especial: a de fechamento é onde o negócio vira venda, e a de perda é onde ele se perde. Cada funil precisa de uma de cada — por isso a marcação se muda de lugar, não se apaga.",
+            "Deux colonnes ont un rôle spécial : la conclusion est celle où l’opportunité devient une vente, et la perte est celle où elle est abandonnée. Chaque pipeline en exige une de chaque ; le rôle est donc déplacé, jamais supprimé.",
           )}
         </p>
       </div>
@@ -537,7 +537,7 @@ export function StagesSection({
                     <p className="text-sm leading-relaxed">
                       {t("Archiver")} «{etapa.name}»?{" "}
                       {t(
-                        "A coluna sai do quadro e para de receber negócios novos. Nada é apagado — o histórico de quem passou por ela continua guardado —, mas",
+                        "La colonne quitte le tableau et ne reçoit plus de nouvelles opportunités. Rien n’est supprimé — l’historique des passages est conservé —, mais",
                       )}{" "}
                       <strong>{t("la colonne ne peut pas être restaurée ici")}</strong>.
                     </p>
@@ -549,10 +549,10 @@ export function StagesSection({
                       data-testid={`arquivar-sem-destino-${etapa.id}`}
                     >
                       {arquivandoAqui.negocios}{" "}
-                      {t(arquivandoAqui.negocios === 1 ? "negócio" : "negócios")}{" "}
-                      {t(arquivandoAqui.negocios === 1 ? "está" : "estão")}{" "}
+                      {t(arquivandoAqui.negocios === 1 ? "opportunité" : "opportunités")}{" "}
+                      {t(arquivandoAqui.negocios === 1 ? "est" : "sont")}{" "}
                       {t("à cette étape et aucune autre colonne ouverte n’est disponible pour")}{" "}
-                      {t(arquivandoAqui.negocios === 1 ? "lo" : "los")}.
+                      {t(arquivandoAqui.negocios === 1 ? "la recevoir" : "les recevoir")}.
                       {t("Créez une étape avant d’archiver")} «{etapa.name}».
                     </p>
                   ) : (
@@ -562,11 +562,11 @@ export function StagesSection({
                         data-testid={`arquivar-pergunta-${etapa.id}`}
                       >
                         {arquivandoAqui.negocios}{" "}
-                        {t(arquivandoAqui.negocios === 1 ? "negócio" : "negócios")}{" "}
+                        {t(arquivandoAqui.negocios === 1 ? "opportunité" : "opportunités")}{" "}
                         {t(
                           arquivandoAqui.negocios === 1
-                            ? "está nesta etapa. Para onde ele vai?"
-                            : "estão nesta etapa. Para onde eles vão?",
+                            ? "est dans cette étape. Où doit-il aller ?"
+                            : "sont dans cette étape. Où doivent-ils aller ?",
                         )}
                       </p>
                       <div className="sm:w-72">
@@ -610,7 +610,7 @@ export function StagesSection({
                       {t(ROTULO_DO_PASSO[passo])}
                       {t(" ». ")}
                       {t(
-                        "Arquivando, ele para de mover o card nesse passo até você escolher outra etapa em",
+                        "En l’archivant, l’assistant cesse de déplacer le card à cette étape jusqu’à ce que vous en choisissiez une autre dans",
                       )}{" "}
                       <a className="underline underline-offset-2" href={`#${ancoraMapeamento}`}>
                         {t("« Où va le card à chaque étape »")}

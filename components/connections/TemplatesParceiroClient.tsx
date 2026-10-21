@@ -113,7 +113,7 @@ export function TemplatesParceiroClient() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
           {t(
-            "O que a plataforma aprovou para este número. É daqui que sai a mensagem quando a janela de 24h fecha.",
+            "Ce que la plateforme a approuvé pour ce numéro. C’est ici que vient le message lorsque la fenêtre de 24 h est fermée.",
           )}
         </p>
         <div className="flex gap-2">
@@ -389,7 +389,7 @@ export function TemplatesParceiroClient() {
               envelhecer separado da fonte. */}
             <p className="text-[11px] text-muted-foreground">
               {t(
-                "A plataforma revisa antes de aprovar — o modelo nasce pendente e some da lista de envio até ela decidir.",
+                "La plateforme vérifie avant d’approuver : le modèle est créé en attente et reste absent de la liste d’envoi jusqu’à sa décision.",
               )}
             </p>
             <div className="flex sm:justify-end">

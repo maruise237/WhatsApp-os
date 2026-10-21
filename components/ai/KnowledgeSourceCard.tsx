@@ -111,7 +111,7 @@ export function KnowledgeSourceCard({
         </CardHeader>
         <CardContent className="flex-1">
           <p className="text-sm text-text-muted">
-            {t(meta.comoSePreenche ?? "Nenhuma fonte configurada.")}
+            {t(meta.comoSePreenche ?? "Aucune source configurée.")}
           </p>
         </CardContent>
         <CardFooter>

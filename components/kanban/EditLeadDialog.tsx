@@ -91,7 +91,7 @@ export function EditLeadDialog({ open, onOpenChange, lead, pipelineId }: Props) 
     const parsed = updateLeadSchema.safeParse(patch);
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-      toast.error(t(first?.message ?? "Dados inválidos"));
+      toast.error(t(first?.message ?? "Données invalides"));
       return;
     }
 

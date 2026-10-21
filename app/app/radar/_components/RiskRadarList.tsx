@@ -92,7 +92,7 @@ export function RiskRadarList() {
           </p>
           <p className="mb-2 text-xs text-muted-foreground">
             {t(
-              "Ninguém marcou o que acontece a seguir. Cada uma é alguém esperando sem que nada esteja combinado.",
+              "Personne n’a indiqué la suite. Chacune de ces demandes est une personne qui attend sans qu’aucune échéance ne soit fixée.",
             )}
           </p>
           <ul className="flex flex-col gap-1">

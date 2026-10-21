@@ -78,7 +78,7 @@ export function MergeDialog({ queueItemId, open, onOpenChange }: Props) {
           <DialogTitle>{t("Résoudre la fusion de contacts")}</DialogTitle>
           <DialogDescription>
             {t(
-              "Comparação dos candidatos detectados. A resolução automática via API ainda não está disponível neste MVP — entre em contato com o admin para mesclar via SQL.",
+              "Comparaison des candidats détectés. La résolution automatique via API n’est pas encore disponible dans ce MVP ; contactez l’administrateur pour effectuer la fusion via SQL.",
             )}
           </DialogDescription>
         </DialogHeader>

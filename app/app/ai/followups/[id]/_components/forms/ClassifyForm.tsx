@@ -77,7 +77,7 @@ export function ClassifyForm({
     };
     const parsed = aiClassifyConfigSchema.safeParse(candidate);
     if (!parsed.success) {
-      setError(t(parsed.error.issues[0]?.message ?? "Configuração inválida."));
+      setError(t(parsed.error.issues[0]?.message ?? "Configuration invalide."));
       return;
     }
     setError(null);
@@ -113,7 +113,7 @@ export function ClassifyForm({
         />
         <p className="text-xs text-text-muted">
           {t(
-            "Se o contato não responder dentro desse tempo, o fluxo segue sozinho pelo caminho “Sem resposta”. Mínimo de 15 minutos.",
+            "Si le contact ne répond pas dans ce délai, le flow suit automatiquement le chemin « Sans réponse ». Minimum : 15 minutes.",
           )}
         </p>
       </div>

@@ -220,7 +220,7 @@ export function ContactsListClient() {
           </Card>
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
             <p className="text-sm text-muted-foreground">
-              {allContacts.length} {t(allContacts.length === 1 ? "contato" : "contatos")}
+              {allContacts.length} {t(allContacts.length === 1 ? "contact" : "contacts")}
               {q.hasNextPage ? ` ${t("chargés — il y a plus de résultats")}` : ""}
             </p>
             {q.hasNextPage && (

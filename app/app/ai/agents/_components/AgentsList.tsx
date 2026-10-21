@@ -44,7 +44,7 @@ export function AgentsList({ initialData, canWrite }: Props) {
         <h2 className="font-medium">{t("Aucun agent configuré")}</h2>
         <p className="max-w-sm text-sm text-muted-foreground">
           {t(
-            "Crie um agent para responder a conversas no WhatsApp com IA. Você configura prompt, tools, gatilhos e janela de contexto.",
+            "Créez un agent pour répondre aux conversations WhatsApp avec l’IA. Vous configurez le prompt, les outils, les déclencheurs et la fenêtre de contexte.",
           )}
         </p>
         {canWrite && (

@@ -309,7 +309,7 @@ export function AgentForm(props: Props) {
     const tamanhoDoPrompt = form.system_prompt.trim().length;
     if (tamanhoDoPrompt > 20000)
       errors.system_prompt = t(
-        "As instruções têm {count} caracteres, e o máximo é 20.000. Corte {excesso} para conseguir salvar.",
+        "Les instructions contiennent {count} caractères, alors que le maximum est de 20 000. Supprimez-en {excesso} pour pouvoir enregistrer.",
       )
         .replace("{count}", tamanhoDoPrompt.toLocaleString(idioma))
         .replace("{excesso}", (tamanhoDoPrompt - 20000).toLocaleString(idioma));
@@ -446,7 +446,7 @@ export function AgentForm(props: Props) {
           title={
             obsoleta
               ? t(
-                  "O rascunho v{version} é anterior a esta versão e foi superado por ela — ele continua no Histórico.",
+                  "Le brouillon v{version} est antérieur à cette version et a été dépassé — il reste accessible dans l’historique.",
                 ).replace("{version}", String(obsoleta))
               : undefined
           }
@@ -632,7 +632,7 @@ export function AgentForm(props: Props) {
               />
               <p className="text-xs text-muted-foreground">
                 {t(
-                  "Quando mais de um agente puder atender a mesma conversa, o de número maior tenta primeiro. Se você só tem um agente, pode deixar como está.",
+                  "Lorsque plusieurs agents peuvent traiter la même conversation, celui qui a le numéro le plus élevé essaie en premier. Si vous n’avez qu’un agent, vous pouvez laisser cette valeur telle quelle.",
                 )}
               </p>
             </div>
@@ -846,7 +846,7 @@ export function AgentForm(props: Props) {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Em vez de um bloco único, a resposta sai em bolhas separadas, espaçadas pelo mesmo ritmo anti-banimento do envio. O agente também é instruído a escrever em parágrafos curtos.",
+                "Au lieu d’un bloc unique, la réponse est envoyée en plusieurs bulles séparées, avec le même rythme d’envoi anti-blocage. L’agent est également invité à écrire des paragraphes courts.",
               )}
             </p>
             {form.split_messages ? (
@@ -875,7 +875,7 @@ export function AgentForm(props: Props) {
             <h3 className="text-sm font-medium">{t("Ce que l’agent peut faire")}</h3>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Ligue por jornada de trabalho. O agente só consegue fazer o que estiver ligado aqui — e o que estiver ligado, ele fará sozinho durante o atendimento.",
+                "Activez les capacités par parcours de travail. L’agent ne peut faire que ce qui est activé ici — et il exécutera automatiquement ce qui est activé pendant la conversation.",
               )}
             </p>
             <ToolPicker
@@ -935,7 +935,7 @@ export function AgentForm(props: Props) {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Diferente de passar a conversa: aqui o agente continua atendendo. Quando esbarra em algo que só uma pessoa resolve — aprovar um desconto, por exemplo — ele abre um pedido interno e retoma assim que for respondido.",
+                "Contrairement au transfert de conversation, l’agent continue ici à répondre. Lorsqu’il rencontre une situation qu’une personne seule peut résoudre — approuver une remise, par exemple — il ouvre une demande interne et reprend dès qu’une réponse est apportée.",
               )}
             </p>
           </Card>
@@ -945,7 +945,7 @@ export function AgentForm(props: Props) {
             <h3 className="text-sm font-medium">{t("Follow-up")}</h3>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Retomar sozinho quem parou de responder, para o interessado não sumir sem ninguém perceber.",
+                "Relancer automatiquement les personnes qui ont cessé de répondre, afin qu’aucun intéressé ne disparaisse sans que personne ne le remarque.",
               )}
             </p>
             <div className="flex items-center gap-2">
@@ -961,7 +961,7 @@ export function AgentForm(props: Props) {
             </div>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Os fluxos abaixo só entram em ação para um cliente se este agente estiver publicado com follow-up habilitado.",
+                "Les flux ci-dessous ne s’appliquent à un client que si cet agent est publié avec le suivi activé.",
               )}
             </p>
             <FollowupFlowPicker

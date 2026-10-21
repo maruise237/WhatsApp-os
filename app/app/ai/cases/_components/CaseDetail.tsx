@@ -48,7 +48,7 @@ export function CaseDetail({ caseId }: { caseId: string | null }) {
             <Badge
               variant="neutral"
               title={t(
-                "Aberto automaticamente pelo sistema — a IA prometeu passar pra humano mas não abriu o caso, então o sistema abriu por ela.",
+                "Ouvert automatiquement par le système : l’IA avait promis de passer la main à une personne sans ouvrir le cas, le système l’a donc ouvert à sa place.",
               )}
             >
               {t("Ouvert automatiquement")}

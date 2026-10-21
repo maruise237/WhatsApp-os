@@ -33,7 +33,7 @@ export function EndForm({
     const candidate = { outcome: next.outcome, ...(next.note.trim() ? { note: next.note } : {}) };
     const parsed = endConfigSchema.safeParse(candidate);
     if (!parsed.success) {
-      setError(t(parsed.error.issues[0]?.message ?? "Configuração inválida."));
+      setError(t(parsed.error.issues[0]?.message ?? "Configuration invalide."));
       return;
     }
     setError(null);

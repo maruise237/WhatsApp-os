@@ -133,7 +133,7 @@ export function AuditDetailClient({ entryId }: AuditDetailClientProps) {
 
           {/* Extra entry fields */}
           <div className="rounded-md border p-4 space-y-2 text-sm">
-            <Row label="Request ID" value={entry.request_id ?? "—"} mono />
+            <Row label="ID de requête" value={entry.request_id ?? "—"} mono />
             <Row label="Resource Type" value={entry.resource_type ?? "—"} />
             <Row label="Resource ID" value={entry.resource_id ?? "—"} mono />
             <Row label="Bypassed RLS" value={entry.bypassed_rls ? "Oui" : "Non"} />

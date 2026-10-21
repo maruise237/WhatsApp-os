@@ -58,7 +58,7 @@ export function PipelinesClient({
     return (
       <Card className="p-6 text-sm leading-relaxed text-muted-foreground">
         {t(
-          "Você ainda não tem nenhum funil. Enquanto for assim, o agente atende normalmente, mas não tem para onde levar o card de ninguém — não há etapas para onde mover. Criar o funil é feito por quem instalou o sistema, direto no banco; depois ele aparece aqui para você escolher a etapa de cada passo.",
+          "Vous n’avez encore aucun pipeline. Dans cette situation, l’agent répond normalement, mais aucune étape ne permet de déplacer les affaires — il n’y a pas d’étape où les envoyer. Le pipeline est créé directement dans la base de données par la personne qui a installé le système ; il apparaîtra ensuite ici pour que vous puissiez choisir l’étape de chaque action.",
         )}
       </Card>
     );

@@ -71,7 +71,7 @@ export function EditContactDialog({ contact, open, onOpenChange }: Props) {
 
     const parsed = contactPatchSchema.safeParse(payload);
     if (!parsed.success) {
-      setServerError(t(parsed.error.issues[0]?.message ?? "Dados inválidos"));
+      setServerError(t(parsed.error.issues[0]?.message ?? "Données invalides"));
       return;
     }
     try {
