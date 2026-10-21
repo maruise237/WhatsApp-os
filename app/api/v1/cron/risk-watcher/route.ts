@@ -99,7 +99,7 @@ async function handle(req: NextRequest): Promise<Response> {
       // estranho congelaria o radar de todos os demais — e o sintoma seria
       // "ninguém esfria mais", que é indistinguível de "está tudo em dia".
       comErro.push(org);
-      logger.error("[risk-watcher] org falhou", {
+      logger.error("[risk-watcher] organisation en échec", {
         organizationId: org,
         error: e instanceof Error ? e.message : String(e),
         requestId,
@@ -108,7 +108,7 @@ async function handle(req: NextRequest): Promise<Response> {
   }
 
   if (falhas > 0) {
-    logger.warn("[risk-watcher] travessias sem linha na timeline", { falhas, requestId });
+    logger.warn("[risk-watcher] passages sans ligne dans la timeline", { falhas, requestId });
   }
 
   return ok(

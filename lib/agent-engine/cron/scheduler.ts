@@ -242,13 +242,13 @@ async function fireOneDue(
       const failure = await applyFailure(client, cron, cfg, nowMs, fireErr);
       await client.query('commit');
       if (failure.outcome === 'disabled') {
-        log.error('cron: job desabilitado por falha de disparo', {
+        log.error('cron : job désactivé après échec de déclenchement', {
           cron_job_id: cron.id,
           classification: failure.classification,
           attempts: failure.attempts,
         });
       } else {
-        log.warn('cron: disparo falhou — retry com backoff', {
+        log.warn('cron : déclenchement en échec — nouvel essai avec backoff', {
           cron_job_id: cron.id,
           attempts: failure.attempts,
         });
@@ -300,9 +300,9 @@ export async function runCronLoop(
   while (!signal.aborted) {
     try {
       const tick = await tickCron(pool, cfg, log);
-      if (tick.fired + tick.retried + tick.disabled > 0) log.info('cron: tick processado', { ...tick });
+      if (tick.fired + tick.retried + tick.disabled > 0) log.info('cron : tick traité', { ...tick });
     } catch (err) {
-      log.error('cron: tick falhou — tenta no próximo intervalo', { error: errMsg(err) });
+      log.error('cron : tick en échec — nouvel essai au prochain intervalle', { error: errMsg(err) });
     }
     try {
       await sleep(cfg.intervalMs, undefined, { signal });

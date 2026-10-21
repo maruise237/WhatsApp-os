@@ -38,7 +38,7 @@ export async function POST(_req: NextRequest): Promise<Response> {
   // `latest` vazios — e cai direto no 409 "você já está em dia" abaixo. É a
   // pior mensagem possível bem na hora de uma falha de infraestrutura.
   if (versionError) {
-    logger.error("[system/update] leitura de system_version falhou", { error: versionError.message });
+    logger.error("[system/update] lecture de system_version en échec", { error: versionError.message });
     return fail("internal_error", "Impossible de lire l’état de la mise à jour.", 500);
   }
 
@@ -81,7 +81,7 @@ export async function POST(_req: NextRequest): Promise<Response> {
       .eq("id", running.id)
       .eq("status", "dispatched");
     if (staleError) {
-      logger.error("[system/update] não consegui expirar o run travado", {
+      logger.error("[system/update] impossible d’expirer l’exécution bloquée", {
         error: staleError.message,
         runId: running.id,
       });
@@ -105,7 +105,7 @@ export async function POST(_req: NextRequest): Promise<Response> {
     if (error.code === "23505") {
       return fail("state_conflict", RUN_IN_PROGRESS_MESSAGE, 409);
     }
-    logger.error("[system/update] insert do run falhou", { error: error.message });
+    logger.error("[system/update] insertion de l’exécution en échec", { error: error.message });
     return fail("internal_error", "Impossible d’enregistrer la demande de mise à jour.", 500);
   }
 

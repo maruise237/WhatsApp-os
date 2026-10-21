@@ -94,7 +94,7 @@ export async function embedQuery(cfg: EmbedConfig, query: string): Promise<numbe
   }
   if (!res.ok) {
     const detail = (await res.text()).slice(0, 300);
-    throw new EmbedError(`embedding falhou (HTTP ${res.status}): ${detail}`, res.status);
+    throw new EmbedError(`échec de l’embedding (HTTP ${res.status}) : ${detail}`, res.status);
   }
   const parsed = (await res.json()) as { data?: Array<{ embedding?: number[] }> };
   const embedding = parsed.data?.[0]?.embedding;

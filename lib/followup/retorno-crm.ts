@@ -104,7 +104,7 @@ export function criaRetornoDbSupabase(admin: DbClient): RetornoDb {
         .select(COLUNAS)
         .single();
       if (error || !data) {
-        throw new Error(`retorno_insert_failed: ${error?.message ?? "sem linha"}`);
+        throw new Error(`retorno_insert_failed: ${error?.message ?? "aucune ligne"}`);
       }
       return paraRetorno(data as unknown as LinhaDeCron);
     },

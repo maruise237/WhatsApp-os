@@ -123,7 +123,7 @@ export async function deriveMessageMedia(row: EventRow): Promise<HandlerResult> 
         // Binding apontando para provedor sem chave não pode derrubar a
         // derivação inteira: cai no padrão da organização e AVISA, que é o
         // desfecho que deixa rastro em vez de silêncio.
-        logger.warn("[media-derive] binding de visão sem credencial utilizável; usando o padrão da org", {
+        logger.warn("[media-derive] liaison vision sans identifiant utilisable ; utilisation du réglage par défaut de l’organisation", {
           organization_id: row.organization_id,
           provider: bindingDaVisao.provider,
           error: err instanceof Error ? err.message : String(err),
@@ -188,7 +188,7 @@ async function lerBindingDoPonto(
     .eq("is_enabled", true)
     .maybeSingle();
   if (error) {
-    logger.warn("[media-derive] não consegui ler o binding do ponto", {
+    logger.warn("[media-derive] impossible de lire la liaison du point", {
       organization_id: organizationId,
       purpose,
       error: error.message,
@@ -331,13 +331,13 @@ async function avisarMidiaNaoLida(
     // que falha em silêncio é pior que aviso nenhum — ele faz o próximo
     // diagnóstico começar da premissa errada.
     if (error) {
-      logger.warn("[media-derive] o banco recusou o aviso de mídia não lida", {
+      logger.warn("[media-derive] la base a refusé l’alerte de média non lu", {
         organization_id: organizationId,
         error: error.message,
       });
     }
   } catch (err) {
-    logger.warn("[media-derive] não consegui abrir o aviso de mídia não lida", {
+    logger.warn("[media-derive] impossible d’ouvrir l’alerte de média non lu", {
       organization_id: organizationId,
       error: err instanceof Error ? err.message : String(err),
     });

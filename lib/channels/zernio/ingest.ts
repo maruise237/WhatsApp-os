@@ -263,7 +263,7 @@ async function marcarConversa(
   // pior que perder a mensagem — mas MUITO melhor que devolver 500 e fazer o
   // provider reenviar tudo de novo.
   if (error) {
-    logger.warn("[zernio] carimbo da conversa falhou", {
+    logger.warn("[zernio] l’horodatage de la conversation a échoué", {
       conversationId,
       detail: error.message,
     });
@@ -296,7 +296,7 @@ async function pedirPersistenciaDaMidia(
     p_organization_id: organizationId,
   } as never);
   if (error) {
-    logger.warn("[zernio] emit media.persist_requested falhou", {
+    logger.warn("[zernio] émission de media.persist_requested en échec", {
       messageId,
       detail: error.message,
     });
@@ -479,7 +479,7 @@ async function insertMessage(
   // recebe 200, e tratar isto como falha faria a rota devolver 500 e ele
   // reenviar de novo, para sempre.
   if (error?.code === "23505") return "duplicate";
-  if (error || !data) throw new Error(`zernio_ingest_insert_failed: ${error?.message ?? "sem id"}`);
+  if (error || !data) throw new Error(`zernio_ingest_insert_failed: ${error?.message ?? "sans id"}`);
 
   return (data as { id: string }).id;
 }

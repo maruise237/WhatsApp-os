@@ -190,7 +190,7 @@ export async function avisarEnvioQueFalhou(
   // erro barato — uma checagem de RUÍDO nunca pode calar o SINAL que ela existe
   // para organizar.
   if (erroDaBusca) {
-    logger.warn("[automation] não deu para checar aviso repetido — avisando assim mesmo", {
+    logger.warn("[automation] impossible de vérifier une alerte en double — alerte envoyée quand même", {
       organization_id: entrada.organizationId,
       causa: erroDaBusca.message,
     });
@@ -210,7 +210,7 @@ export async function avisarEnvioQueFalhou(
     ref_id: entrada.conversationId ?? null,
   });
   if (error) {
-    logger.error("[automation] aviso de envio falho não entrou na Central", {
+    logger.error("[automation] l’alerte d’envoi en échec n’est pas arrivée dans la Centrale", {
       organization_id: entrada.organizationId,
       error: error.message,
     });

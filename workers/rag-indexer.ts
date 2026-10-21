@@ -343,8 +343,8 @@ async function handleKnowledgeSourceUpdated(
     sourceType: "knowledge_source",
   });
   console.warn(
-    `[rag-indexer] reconstruindo base: versão ${versionNumber} (${versionId}), ` +
-      `${sources.length} fonte(s), ${pedacos.length} chunk(s)`,
+    `[rag-indexer] reconstruction de la base : version ${versionNumber} (${versionId}), ` +
+      `${sources.length} source(s), ${pedacos.length} chunk(s)`,
   );
 
   let gravados = 0;

@@ -111,7 +111,7 @@ export async function drainTick(
          where id = $1`,
         [event.id, terminal ? 'dead' : 'pending', message],
       );
-      log.error('drain: evento falhou', { event_id: event.id, terminal, error: message });
+      log.error('drain : événement en échec', { event_id: event.id, terminal, error: message });
     }
   }
   return events.length;
@@ -138,7 +138,7 @@ async function processEvent(
   if (!parsed.success) {
     // Payload fora do contrato do ingest — evento é descartável (processed), não
     // retryável: re-tentar não conserta shape.
-    log.warn('drain: payload de dispatch fora do contrato — evento descartado', {
+    log.warn('drain : payload de dispatch hors contrat — événement ignoré', {
       event_id: event.id,
     });
     return 'processado';
@@ -152,7 +152,7 @@ async function processEvent(
     [event.organization_id],
   );
   if (modeRows[0]?.mode === 'external') {
-    log.info('drain: org em modo external (spec 14) — evento pulado', { event_id: event.id });
+    log.info('drain : organisation en mode external (spec 14) — événement ignoré', { event_id: event.id });
     return 'processado';
   }
 
@@ -162,7 +162,7 @@ async function processEvent(
     [event.organization_id, p.conversation_id],
   );
   if (convRows[0]?.is_group !== false) {
-    log.info('drain: conversa de grupo ou inexistente — evento pulado', { event_id: event.id });
+    log.info('drain : conversation de groupe ou inexistante — événement ignoré', { event_id: event.id });
     return 'processado';
   }
 
@@ -205,7 +205,7 @@ async function processEvent(
   );
   const cap = capacidade[0];
   if (cap !== undefined && !cap.tem_agente && !cap.tem_roteador) {
-    log.info('drain: nenhum agente publicado para a sessão — turno pulado (sem gasto)', {
+    log.info('drain : aucun assistant publié pour la session — tour ignoré (sans coût)', {
       event_id: event.id,
       channel_session_id: p.channel_session_id,
     });
@@ -233,14 +233,14 @@ async function processEvent(
   ) {
     const esperandoHa = Date.now() - new Date(event.created_at).getTime();
     if (esperandoHa < TETO_ESPERA_DERIVACAO_MS) {
-      log.info('drain: mídia ainda sendo transcrita — turno adiado', {
+      log.info('drain : média en cours de transcription — tour reporté', {
         event_id: event.id,
         tipo: msg.type,
         esperando_ha_ms: esperandoHa,
       });
       return 'adiar';
     }
-    log.warn('drain: derivação não concluiu no teto — seguindo sem o texto', {
+    log.warn('drain : dérivation non terminée dans le délai — on continue sans le texte', {
       event_id: event.id,
       tipo: msg.type,
       esperando_ha_ms: esperandoHa,
@@ -258,7 +258,7 @@ async function processEvent(
       [event.organization_id, p.contact_id],
     );
     if (pendingRows[0]) {
-      log.info('drain: rajada coalescida em job pendente', {
+      log.info('drain : rafale regroupée dans un job en attente', {
         event_id: event.id,
         job_id: pendingRows[0].id,
       });
@@ -280,7 +280,7 @@ async function processEvent(
     },
     ...(runAfter !== undefined ? { runAfter } : {}),
   });
-  log.info('drain: job de turno enfileirado', { event_id: event.id, job_id: job.id, deduped });
+  log.info('drain : job de tour mis en file', { event_id: event.id, job_id: job.id, deduped });
   return 'processado';
 }
 
@@ -296,7 +296,7 @@ export async function runDrainLoop(
     try {
       drained = await drainTick(pool, knobs, log);
     } catch (err) {
-      log.error('drain: tick falhou', {
+      log.error('drain : tick en échec', {
         error: (err instanceof Error ? err.message : String(err)).slice(0, 300),
       });
     }

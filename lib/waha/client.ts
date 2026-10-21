@@ -185,7 +185,7 @@ export class WahaClient {
     try {
       const atual = await fetch(url, { headers: { "X-Api-Key": this.apiKey } });
       if (!atual.ok) {
-        logger.warn("[waha] não li a config da sessão; não vou reescrevê-la", {
+        logger.warn("[waha] config de la session illisible ; elle ne sera pas réécrite", {
           status: atual.status,
         });
         return;
@@ -195,7 +195,7 @@ export class WahaClient {
       } | null;
       // Sem corpo reconhecível, o mesmo raciocínio: não escrever é o seguro.
       if (!sessao || typeof sessao.config !== "object" || sessao.config === null) {
-        logger.warn("[waha] a sessão respondeu sem config; não vou reescrevê-la", {});
+        logger.warn("[waha] la session a répondu sans config ; elle ne sera pas réécrite", {});
         return;
       }
 
@@ -221,7 +221,7 @@ export class WahaClient {
         body: JSON.stringify({ name, config }),
       });
       if (!res.ok) {
-        logger.warn("[waha] não consegui convergir a config da sessão", { status: res.status });
+        logger.warn("[waha] impossible de faire converger la config de la session", { status: res.status });
       }
     } catch (err) {
       // Rede fora aqui não é assunto de quem só quer iniciar a sessão — a
@@ -229,7 +229,7 @@ export class WahaClient {
       // outros dois caminhos de falha deste mesmo bloco logam, e sem esta
       // linha a única falha INVISÍVEL seria justamente a que faz a economia
       // não acontecer: a config fica velha e ninguém fica sabendo.
-      logger.warn("[waha] não consegui falar com o WAHA para convergir a config", {
+      logger.warn("[waha] impossible de joindre WAHA pour faire converger la config", {
         erro: err instanceof Error ? err.message : "unknown",
       });
     }

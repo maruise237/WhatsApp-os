@@ -77,7 +77,7 @@ export async function estamparAtribuicaoDoContato(
     // mergeado, e um erro que só existe no stdout do contêiner não chega a
     // ninguém. A falha é tolerada de propósito — perder a atribuição não pode
     // derrubar a entrada da mensagem — mas ela precisa aparecer.
-    logger.error("[atribuicao-de-anuncio] falha ao estampar contato", {
+    logger.error("[atribuicao-de-anuncio] échec du marquage du contact", {
       contact_id: contactId,
       plataforma: atribuicao.plataforma,
       detail: error.message.slice(0, 200),

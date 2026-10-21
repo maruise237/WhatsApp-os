@@ -30,7 +30,7 @@ function trataInsert(
     return "erro";
   }
   if (insertErr?.code === "23505") {
-    logger.info("waha.ingest: inbound ja ingerido, dedup por external_id", {
+    logger.info("waha.ingest : entrant déjà ingéré, dédoublonné par external_id", {
       organization_id: ctx.organization_id,
       conversation_id: ctx.conversation_id,
       external_id: ctx.external_id,

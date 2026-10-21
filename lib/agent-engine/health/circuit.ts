@@ -83,7 +83,7 @@ export async function loadHealthKnobs(
   if (raw === null || raw === undefined) return { ...HEALTH_DEFAULTS };
   const parsed = parseHealthKnobs(raw);
   if (!parsed) {
-    logger?.warn('health_knobs inválido em channel_knobs — usando defaults conservadores', {
+    logger?.warn('health_knobs invalide dans channel_knobs — valeurs prudentes par défaut utilisées', {
       tenantId,
       channelSessionId,
     });
@@ -420,9 +420,9 @@ export async function runHealthLoop(
     try {
       const tick = await channelHealthTick(harness, log);
       const activity = tick.held + tick.released + tick.alerts + tick.jobsHeld + tick.jobsReleased;
-      if (activity > 0) log.info('health: tick processado', { ...tick });
+      if (activity > 0) log.info('health : tick traité', { ...tick });
     } catch (err) {
-      log.error('health: tick falhou — tenta no próximo intervalo', { error: errMsg(err) });
+      log.error('health : tick en échec — nouvel essai au prochain intervalle', { error: errMsg(err) });
     }
     try {
       await sleep(cfg.intervalMs, undefined, { signal });

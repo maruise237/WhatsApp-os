@@ -387,12 +387,12 @@ export function createOperatorTurnHandler(deps: InboundTurnDeps) {
         // derruba o job, mas também não morre no log de um contêiner que
         // ninguém abre — o aviso vai para a Central.
         const detalhe = (err instanceof Error ? err.message : String(err)).slice(0, 200);
-        log.error('capacidades do operador não montadas — o papel segue sem elas', { error: detalhe });
+        log.error('capacités de l’opérateur non montées — le rôle continue sans elles', { error: detalhe });
         await avisarCapacidadesAusentes(pool, tenantId, payload.conversation_id, detalhe, log);
       }
     }
 
-    log.info('operador rodou', {
+    log.info('opérateur exécuté', {
       promessas: promessas.length,
       intencoes: declaracao?.intencoes.length ?? 0,
       declaracao_ausente: declaracao === null,
@@ -563,7 +563,7 @@ async function registrarDesfecho(
   const { desfecho, dono } = entrada;
   const semDono = dono !== null && !dono.assumida;
 
-  log.info('operador — desfecho do turno', {
+  log.info('opérateur — issue du tour', {
     desfecho: desfecho.tipo,
     porque: 'porque' in desfecho ? desfecho.porque : null,
     promessas: entrada.promessasDeclaradas,
@@ -594,7 +594,7 @@ async function registrarDesfecho(
       ],
     );
   } catch (err) {
-    log.warn('desfecho do operador não foi registrado', {
+    log.warn('l’issue de l’opérateur n’a pas été enregistrée', {
       error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
     });
   }
@@ -616,7 +616,7 @@ async function registrarDesfecho(
       payload: { promessas: entrada.promessasDeclaradas, porque: dono.porque },
     });
   } catch (err) {
-    log.warn('linha de promessa sem responsável não foi emitida', {
+    log.warn('la ligne de promesse sans responsable n’a pas été émise', {
       error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
     });
   }
@@ -640,7 +640,7 @@ async function registrarDesfecho(
       'kind_e_ref',
     );
   } catch (err) {
-    log.warn('aviso de promessa sem responsável não foi gravado', {
+    log.warn('l’alerte de promesse sans responsable n’a pas été enregistrée', {
       error: (err instanceof Error ? err.message : String(err)).slice(0, 120),
     });
   }

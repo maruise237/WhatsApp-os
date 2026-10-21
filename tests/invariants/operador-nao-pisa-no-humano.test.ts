@@ -276,7 +276,7 @@ describe("o Operador respeita o humano que assumiu", () => {
     // Sem este caso, os dois abaixo passariam por a fixture não fazer nada.
     const log = await rodarOperador();
     expect(await avisosAbertos(), "a fixture não chegou a produzir o aviso — os casos de handoff abaixo não medem nada").toBe(1);
-    expect(log.entries.some((e) => e.msg.includes("operador rodou"))).toBe(true);
+    expect(log.entries.some((e) => e.msg.includes("opérateur exécuté"))).toBe(true);
   });
 
   it("com force_human no contato, não escreve nada e diz por quê", async () => {
@@ -292,7 +292,7 @@ describe("o Operador respeita o humano que assumiu", () => {
     expect(pulou, "pulou sem registrar o motivo — return mudo").toBeTruthy();
     expect(pulou?.fields?.desfecho).toBe("pulado");
     // Não basta não agir: o caminho não pode nem ter chegado a rodar o papel.
-    expect(log.entries.some((e) => e.msg.includes("operador rodou"))).toBe(false);
+    expect(log.entries.some((e) => e.msg.includes("opérateur exécuté"))).toBe(false);
   });
 
   it("com a conversa silenciada (bot_silenced_until no futuro), também não escreve", async () => {

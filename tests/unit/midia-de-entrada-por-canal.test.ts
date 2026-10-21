@@ -73,7 +73,7 @@ describe("elo 2 — alguém acorda o worker", () => {
   it("falha do emit NÃO derruba a ingestão", () => {
     // A mensagem já está gravada e visível. Devolver 500 ao provider faria ele
     // reenviar tudo — trocaria uma mídia faltando por uma tempestade.
-    expect(INGEST).toMatch(/logger\.warn\("\[zernio\] emit media\.persist_requested falhou"/);
+    expect(INGEST).toMatch(/logger\.warn\("\[zernio\] émission de media\.persist_requested en échec"/);
   });
 });
 

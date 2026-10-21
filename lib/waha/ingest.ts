@@ -161,7 +161,7 @@ async function avisarChatNaoReconhecido(
     p_organization_id: organizationId,
   } as never);
   if (error) {
-    console.error("[waha.ingest] o aviso de chat não reconhecido também falhou", error.message);
+    console.error("[waha.ingest] l’alerte de chat non reconnu a aussi échoué", error.message);
   }
 }
 
@@ -443,7 +443,7 @@ async function markConversation(
   if (erroAviso) {
     // Segunda linha de defesa: o próprio canal de aviso caiu. Aqui o log do
     // processo é o que sobra — é para ESTE caso que ele existe, não como rotina.
-    console.error("[waha.ingest] o carimbo falhou E o aviso também", {
+    console.error("[waha.ingest] l’horodatage a échoué ET l’alerte aussi", {
       conversa: convId,
       erro: error.message,
       aviso: erroAviso.message,
@@ -537,7 +537,7 @@ async function handleInbound(
     // Não é erro, é evento esperado — por isso `info` e não `error`. O que ele
     // paga é a CONTAGEM: sem a linha, o silêncio de um dedup normal e o de uma
     // perda têm a mesma cara.
-    logger.info("waha.ingest: inbound ja ingerido, dedup por external_id", {
+    logger.info("waha.ingest : entrant déjà ingéré, dédoublonné par external_id", {
       organization_id: session.organization_id,
       conversation_id: conversationId,
       external_id: p.id,
@@ -735,7 +735,7 @@ async function handleOutboundFromUserPhone(
   }
   if (insertErr?.code === "23505") {
     // Mesma razão do inbound: dedup é esperado, invisível não.
-    logger.info("waha.ingest: outbound ja ingerido, dedup por external_id", {
+    logger.info("waha.ingest : sortant déjà ingéré, dédoublonné par external_id", {
       organization_id: session.organization_id,
       external_id: p.id,
       direcao: "outbound",
