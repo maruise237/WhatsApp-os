@@ -26,7 +26,6 @@ import * as path from "node:path";
 import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
 
 import { afirmarAdminDeTenantPuro } from "./utils/precondicao";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 import { catalogoEntregueAoOperador } from "@/lib/agent-engine/agent/entrega-de-capacidade";
 
 const APP_URL = `http://localhost:${process.env.E2E_PORT ?? "3001"}`;
@@ -36,7 +35,6 @@ const SAIDA = path.join(process.cwd(), "evidence", "ia-360-w4");
 interface Creds {
   password: string;
   users: Record<string, { email: string }>;
-  admin_totp?: { factor_id: string; secret: string };
 }
 
 function loadCreds(): Creds {
@@ -298,30 +296,11 @@ const CENARIOS = [
  * pensa é do dono.
  */
 async function login(page: Page): Promise<void> {
-  const secret = creds.admin_totp?.secret;
-  expect(secret, "o seed precisa gravar admin_totp em .e2e-creds.json").toBeTruthy();
-
   await page.goto(`${APP_URL}/login`);
   await page.locator("#email").fill(creds.users.admin!.email);
   await page.locator("#password").fill(creds.password);
   await page.getByRole("button", { name: /se connecter/i }).click();
-  await page.waitForURL(/\/login\/mfa/);
-
-  for (let tentativa = 0; tentativa < 2; tentativa++) {
-    // Código a menos de 3s da virada da janela expira em trânsito.
-    if (msUntilNextTotpWindow() < 3_000) {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-    await page.locator('input[aria-label="Chiffre 1"]').click();
-    await page.keyboard.type(generateTotp(secret!), { delay: 40 });
-    try {
-      await page.waitForURL(/\/app\//, { timeout: 8_000 });
-      return;
-    } catch {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-  }
-  throw new Error("MFA falhou depois de 2 tentativas de TOTP");
+  await page.waitForURL(/\/app\//, { timeout: 30_000 });
 }
 
 /**

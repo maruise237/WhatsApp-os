@@ -19,7 +19,6 @@ import { test, expect } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 import { afirmarAdminDeTenantPuro } from "./utils/precondicao";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
 const EVIDENCIA = path.join(process.cwd(), "evidence", "ia-360-w5");
@@ -27,7 +26,6 @@ const EVIDENCIA = path.join(process.cwd(), "evidence", "ia-360-w5");
 interface Creds {
   password: string;
   users: { admin?: { email: string } };
-  admin_totp?: { secret: string };
 }
 
 /** Telas do épico que estavam SEM cobertura alguma na medição de `dffa823a`. */
@@ -76,17 +74,11 @@ test.describe("les écrans de l’épique s’ouvrent pour une personne", () => 
     });
     page.on("pageerror", (e) => erros.push(`PAGEERROR: ${String(e).slice(0, 200)}`));
 
-    // Login REAL pela tela, com MFA — não injeção de sessão.
+    // Login REAL pela tela — não injeção de sessão.
     await page.goto("/login");
     await page.locator("#email").fill(creds.users.admin!.email);
     await page.locator("#password").fill(creds.password);
     await page.getByRole("button", { name: /se connecter/i }).click();
-    await page.waitForURL(/\/login\/mfa/, { timeout: 30_000 });
-    // Espera a janela virar: um código gerado no fim da janela expira durante a
-    // digitação e o sintoma é "MFA falhou", que não parece o que é.
-    await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    await page.locator('input[aria-label="Chiffre 1"]').click();
-    await page.keyboard.type(generateTotp(creds.admin_totp!.secret), { delay: 60 });
     await page.waitForURL(/\/app\//, { timeout: 30_000 });
 
     const quebradas: string[] = [];

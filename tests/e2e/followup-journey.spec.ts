@@ -40,7 +40,6 @@ import * as path from "node:path";
 import { test, expect, type Page } from "@playwright/test";
 
 import { afirmarAdminDeTenantPuro } from "./utils/precondicao";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 import { carregarEnvLocal } from "../../scripts/lib/env-de-teste";
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
@@ -51,7 +50,6 @@ interface Creds {
   org_id: string;
   password: string;
   users: Record<string, { email: string }>;
-  admin_totp?: { factor_id: string; secret: string };
   followup_agent_fixtures?: { credential_id: string; channel_session_id: string };
 }
 
@@ -59,7 +57,7 @@ function loadCreds(): Creds {
   const needsSeed = (): boolean => {
     if (!fs.existsSync(CREDS_PATH)) return true;
     const c = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as Creds;
-    return !c.users?.admin || !c.admin_totp;
+    return !c.users?.admin;
   };
   if (needsSeed()) {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-credentials.ts"], { stdio: "inherit" });
@@ -103,29 +101,12 @@ function runHelper(args: string[]): unknown {
   return JSON.parse(lastLine);
 }
 
-async function loginWithTotp(page: Page, email: string, secretTotp: string): Promise<void> {
-  await page.goto("/login");
+async function login(page: Page, email: string): Promise<void> {
+  await page.goto(`/login`);
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
   await page.getByRole("button", { name: /se connecter/i }).click();
-  await page.waitForURL(/\/login\/mfa/);
-
-  for (let attempt = 0; attempt < 2; attempt++) {
-    if (msUntilNextTotpWindow() < 3_000) {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-    const code = generateTotp(secretTotp);
-    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
-    await firstDigit.click();
-    await page.keyboard.type(code, { delay: 40 });
-    try {
-      await page.waitForURL(/\/app\//, { timeout: 8_000 });
-      return;
-    } catch {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-  }
-  throw new Error("MFA challenge failed after 2 TOTP attempts");
+  await page.waitForURL(/\/app\//, { timeout: 30_000 });
 }
 
 // ---------------------------------------------------------------------------
@@ -227,9 +208,8 @@ test.describe("relance — parcours complet (Task 8.3)", () => {
     // curto demais (mesmo padrão de tests/e2e/webhooks.spec.ts, que também
     // dreno event_log real e usa 180s).
     test.setTimeout(300_000);
-    expect(creds.admin_totp?.secret, "seed deve gravar admin_totp em .e2e-creds.json").toBeTruthy();
     expect(creds.followup_agent_fixtures, "seed-e2e-followup-agent.ts deve gravar followup_agent_fixtures").toBeTruthy();
-    await loginWithTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
+    await login(page, creds.users.admin!.email);
 
     const stamp = Date.now();
 

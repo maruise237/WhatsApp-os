@@ -2,7 +2,7 @@
  * G2-04 — E2E da matriz role×recurso (spec 13 §4) com usuários seed reais.
  *
  * Papéis: agent bloqueado em /app/settings/api-tokens e /app/settings/billing;
- * admin (com MFA TOTP — secret conhecido do seed) acessa ambas; agent vê inbox
+ * admin acessa ambas; agent vê inbox
  * e kanban; viewer não consegue enviar mensagem (403 server-side).
  *
  * Pré-requisito: `npx tsx scripts/seed-e2e-credentials.ts` (o spec roda o seed
@@ -16,12 +16,10 @@ import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 import { afirmarAdminDeTenantPuro } from "./utils/precondicao";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 
 interface E2ECreds {
   password: string;
   users: Record<string, { id: string; email: string; role: string }>;
-  admin_totp?: { factor_id: string; secret: string };
 }
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
@@ -30,7 +28,7 @@ function loadCreds(): E2ECreds {
   const needsSeed = (): boolean => {
     if (!fs.existsSync(CREDS_PATH)) return true;
     const c = JSON.parse(fs.readFileSync(CREDS_PATH, "utf8")) as E2ECreds;
-    return !c.users?.viewer || !c.admin_totp?.secret;
+    return !c.users?.viewer || !c.users?.admin;
   };
   if (needsSeed()) {
     execFileSync("npx", ["tsx", "scripts/seed-e2e-credentials.ts"], { stdio: "inherit" });
@@ -63,32 +61,6 @@ async function login(page: Page, email: string): Promise<void> {
   await page.waitForURL(/\/app\//);
 }
 
-async function loginWithTotp(page: Page, email: string, secret: string): Promise<void> {
-  await page.goto("/login");
-  await page.locator("#email").fill(email);
-  await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /se connecter/i }).click();
-  await page.waitForURL(/\/login\/mfa/);
-
-  // Até 2 tentativas: um código pode expirar na borda da janela de 30s.
-  for (let attempt = 0; attempt < 2; attempt++) {
-    if (msUntilNextTotpWindow() < 3_000) {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-    const code = generateTotp(secret);
-    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
-    await firstDigit.click();
-    await page.keyboard.type(code, { delay: 40 });
-    try {
-      await page.waitForURL(/\/app\//, { timeout: 8_000 });
-      return;
-    } catch {
-      // código rejeitado — espera a próxima janela e tenta de novo
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-  }
-  throw new Error("MFA challenge failed after 2 TOTP attempts");
-}
 
 async function expectNoBlockingA11y(page: Page, excludeSelector?: string): Promise<void> {
   let builder = new AxeBuilder({ page });
@@ -115,9 +87,8 @@ test.describe("matrice des rôles RBAC (spec 13 §4)", () => {
     await expectNoBlockingA11y(page);
   });
 
-  test("l’admin accède à api-tokens et billing (connexion avec MFA TOTP)", async ({ page }) => {
-    expect(creds.admin_totp?.secret, "seed deve gravar admin_totp em .e2e-creds.json").toBeTruthy();
-    await loginWithTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
+  test("l’admin accède à api-tokens et billing (connexion par mot de passe)", async ({ page }) => {
+    await login(page, creds.users.admin!.email);
 
     await page.goto("/app/settings/api-tokens");
     await expect(page.getByRole("heading", { name: "Jetons API" })).toBeVisible();

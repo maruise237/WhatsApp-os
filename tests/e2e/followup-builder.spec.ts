@@ -17,7 +17,6 @@ import * as path from "node:path";
 import { test, expect, type Page } from "@playwright/test";
 
 import { afirmarAdminDeTenantPuro } from "./utils/precondicao";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
 // test-results/ é limpo pelo outputDir do Playwright a cada run — preserva a
@@ -28,7 +27,6 @@ fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
 interface Creds {
   password: string;
   users: Record<string, { email: string }>;
-  admin_totp?: { factor_id: string; secret: string };
   followup_agent_fixtures?: { credential_id: string; channel_session_id: string };
 }
 
@@ -69,36 +67,6 @@ async function login(page: Page, email: string): Promise<void> {
   await page.waitForURL(/\/app\//);
 }
 
-/**
- * Login com MFA TOTP (mesmo padrão de rbac-roles.spec.ts). Necessário pro
- * admin: o editor de agente (`AgentForm.tsx`) passa `readOnly` quando
- * `role<admin` (page.tsx §RBAC — manager só VÊ o formulário, não salva), e a
- * Task 7.2 precisa salvar o rascunho.
- */
-async function loginWithTotp(page: Page, email: string, secret: string): Promise<void> {
-  await page.goto("/login");
-  await page.locator("#email").fill(email);
-  await page.locator("#password").fill(creds.password);
-  await page.getByRole("button", { name: /se connecter/i }).click();
-  await page.waitForURL(/\/login\/mfa/);
-
-  for (let attempt = 0; attempt < 2; attempt++) {
-    if (msUntilNextTotpWindow() < 3_000) {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-    const code = generateTotp(secret);
-    const firstDigit = page.locator('input[aria-label="Chiffre 1"]');
-    await firstDigit.click();
-    await page.keyboard.type(code, { delay: 40 });
-    try {
-      await page.waitForURL(/\/app\//, { timeout: 8_000 });
-      return;
-    } catch {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-  }
-  throw new Error("MFA challenge failed after 2 TOTP attempts");
-}
 
 test.describe("flows de relance — liste + création (Task 6.1)", () => {
   test("le manager crée un flow et il apparaît dans la liste avec le badge Brouillon", async ({ page }) => {
@@ -640,12 +608,11 @@ test.describe("sélecteur de flow de relance dans l’éditeur de l’agent (Tas
   test("l’admin lie un flow publié à l’agent, enregistre, et la persistance est prouvée via l’API", async ({
     page,
   }) => {
-    expect(creds.admin_totp?.secret, "seed deve gravar admin_totp em .e2e-creds.json").toBeTruthy();
     expect(
       creds.followup_agent_fixtures,
       "seed-e2e-followup-agent.ts deve gravar followup_agent_fixtures",
     ).toBeTruthy();
-    await loginWithTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
+    await login(page, creds.users.admin!.email);
 
     // --- 1. publica um fluxo mínimo trigger→end via API ---
     const stamp = Date.now();

@@ -2,15 +2,9 @@
  * Um login por corrida, não um por teste.
  *
  * ─── O defeito que isto remove ──────────────────────────────────────────────
- * Cada jornada logava do zero: nove logins com MFA em dois minutos. Rodando
- * isoladas, todas passavam; rodando em série, o **primeiro teste de um arquivo**
- * caía — e qual arquivo mudava a cada corrida. A foto da falha mostrava a tela de
- * `/login` com os campos vazios: tínhamos chegado em `/login/mfa` e voltado.
- *
- * Tentei primeiro a hipótese barata (replay do código TOTP, que é de uso único) e
- * ela foi **descartada por medição**: com o guard de replay no lugar, a falha
- * continuou, só trocou de arquivo. A causa exata do lado do GoTrue não foi
- * isolada — o container tinha sido reiniciado e não guardava log do período.
+ * Cada jornada logava do zero: nove logins em dois minutos. Rodando isoladas,
+ * todas passavam; rodando em série, o **primeiro teste de um arquivo** caía — e
+ * qual arquivo mudava a cada corrida.
  *
  * O que se sabe com certeza é o suficiente para decidir: a falha vem de logins
  * consecutivos, e nenhuma jornada além de uma precisa exercitar o login. Logar uma

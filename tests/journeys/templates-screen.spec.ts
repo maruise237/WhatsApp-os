@@ -23,9 +23,8 @@ const EVIDENCE = path.join(
 fs.mkdirSync(EVIDENCE, { recursive: true });
 
 /**
- * A tela de templates é admin-only, e o admin da org de e2e tem MFA. Reusa o
- * mesmo fluxo de TOTP da jornada baseline — reimplementar daria um segundo
- * login para manter em sincronia.
+ * A tela de templates é admin-only. Reusa o mesmo login da jornada baseline —
+ * reimplementar daria um segundo login para manter em sincronia.
  */
 
 test.describe.configure({ mode: "serial" });

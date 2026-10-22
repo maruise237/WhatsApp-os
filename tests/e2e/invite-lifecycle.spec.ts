@@ -26,13 +26,11 @@ import { test, expect, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
 import { signInviteToken } from "../../lib/auth/invite-token";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 
 // ---- creds do seed base (.e2e-creds.json) + do convite (.e2e-invite.json) ----
 interface BaseCreds {
   password: string;
   users: Record<string, { id: string; email: string; role: string }>;
-  admin_totp?: { factor_id: string; secret: string };
 }
 interface InviteCreds {
   org_id: string;
@@ -95,30 +93,6 @@ async function login(page: Page, email: string): Promise<void> {
   await page.waitForURL(/\/app\//);
 }
 
-async function loginAdminTotp(page: Page): Promise<void> {
-  const secret = base.admin_totp!.secret;
-  await page.goto("/login");
-  await page.locator("#email").fill(base.users.admin!.email);
-  await page.locator("#password").fill(base.password);
-  await page.getByRole("button", { name: /se connecter/i }).click();
-  await page.waitForURL(/\/login\/mfa/);
-  for (let attempt = 0; attempt < 3; attempt++) {
-    // não digitar em cima da virada da janela TOTP (o código expiraria no envio)
-    if (msUntilNextTotpWindow() < 4_000) await page.waitForTimeout(msUntilNextTotpWindow() + 300);
-    await page.locator('input[aria-label="Chiffre 1"]').click();
-    await page.keyboard.type(generateTotp(secret), { delay: 40 });
-    try {
-      // 1ª compilação de /app no dev pode ser lenta → timeout generoso
-      await page.waitForURL(/\/app\//, { timeout: 30_000 });
-      return;
-    } catch {
-      if (/\/app\//.test(page.url())) return; // navegou; só passou do timeout
-      if (!/\/login\/mfa/.test(page.url())) throw new Error(`MFA em estado inesperado: ${page.url()}`);
-      await page.waitForTimeout(msUntilNextTotpWindow() + 300); // código recusado → nova janela
-    }
-  }
-  throw new Error("admin MFA falhou após 3 tentativas");
-}
 
 // admin convida o convidado como agent → devolve o accept_url (token stateless)
 async function issueInvite(page: Page, email: string, role: string): Promise<{ acceptUrl: string; failed: Array<{ email: string; reason: string }> }> {
@@ -144,7 +118,7 @@ test.describe("cycle de vie de l’invitation (de bout en bout + adversarial)", 
     test.setTimeout(600_000);
     await resetInvitee(); // convidado começa SEM acesso
 
-    // (a) telas autenticadas de /app + endpoints — como agent (membro, sem MFA)
+    // (a) telas autenticadas de /app + endpoints — como agent (membro)
     const ctx = await browser.newContext();
     const page = await ctx.newPage();
     await page.goto("/login");
@@ -162,23 +136,13 @@ test.describe("cycle de vie de l’invitation (de bout en bout + adversarial)", 
     // compila a tela de aceite (token dummy → inválido, mas compila a página)
     await page.goto("/team/accept-invite/warmup").catch(() => {});
     await ctx.close();
-
-    // (b) /login/mfa — login de senha do admin, sem completar o TOTP
-    const mctx = await browser.newContext();
-    const mp = await mctx.newPage();
-    await mp.goto("/login");
-    await mp.locator("#email").fill(base.users.admin!.email);
-    await mp.locator("#password").fill(base.password);
-    await mp.getByRole("button", { name: /se connecter/i }).click();
-    await mp.waitForURL(/\/login\/mfa/, { timeout: 150_000 }).catch(() => {});
-    await mctx.close();
   });
 
   test("1. cycle nominal : inviter → accepter → devient agent → arrive dans l’inbox", async ({ browser }) => {
     // admin convida
     const adminCtx = await browser.newContext();
     const adminPage = await adminCtx.newPage();
-    await loginAdminTotp(adminPage);
+    await login(adminPage, base.users.admin!.email);
     const { acceptUrl, failed } = await issueInvite(adminPage, inv.invitee_email, "agent");
     expect(failed).toEqual([]);
     expect(acceptUrl).toContain("/team/accept-invite/");
@@ -268,7 +232,7 @@ test.describe("cycle de vie de l’invitation (de bout en bout + adversarial)", 
   test("5. already_member : réinviter un membre existant → failed already_member", async ({ browser }) => {
     const ctx = await browser.newContext();
     const page = await ctx.newPage();
-    await loginAdminTotp(page);
+    await login(page, base.users.admin!.email);
     const { failed } = await issueInvite(page, inv.invitee_email, "agent");
     expect(failed.some((f) => f.email === inv.invitee_email && f.reason === "already_member")).toBe(true);
     await ctx.close();

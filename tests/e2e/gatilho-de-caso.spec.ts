@@ -31,7 +31,6 @@ import * as path from "node:path";
 import { test, expect, type Page } from "@playwright/test";
 
 import { afirmarAdminDeTenantPuro } from "./utils/precondicao";
-import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 import { carregarEnvLocal } from "../../scripts/lib/env-de-teste";
 
 const CREDS_PATH = path.join(process.cwd(), ".e2e-creds.json");
@@ -46,7 +45,6 @@ interface Creds {
   password: string;
   org_id: string;
   users: Record<string, { email: string }>;
-  admin_totp?: { factor_id: string; secret: string };
   followup_agent_fixtures?: { credential_id: string; channel_session_id: string };
 }
 
@@ -92,26 +90,13 @@ function segredoInterno(): string {
   return secret;
 }
 
-async function loginComTotp(page: Page, email: string, secret: string): Promise<void> {
+async function loginComSenha(page: Page, email: string): Promise<void> {
   await page.goto("/login");
   await expect(page.locator("#email")).toBeVisible({ timeout: ESPERA });
   await page.locator("#email").fill(email);
   await page.locator("#password").fill(creds.password);
   await page.getByRole("button", { name: /se connecter/i }).click();
-  await page.waitForURL(/\/login\/mfa/, { timeout: ESPERA });
-
-  for (let tentativa = 0; tentativa < 3; tentativa++) {
-    if (msUntilNextTotpWindow() < 3_000) await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    await page.locator('input[aria-label="Chiffre 1"]').click();
-    await page.keyboard.type(generateTotp(secret), { delay: 40 });
-    try {
-      await page.waitForURL(/\/app\//, { timeout: 20_000 });
-      return;
-    } catch {
-      await page.waitForTimeout(msUntilNextTotpWindow() + 200);
-    }
-  }
-  throw new Error("MFA falhou depois de 2 tentativas de TOTP");
+  await page.waitForURL(/\/app\//, { timeout: ESPERA });
 }
 
 /** Fluxo mínimo publicável: gatilho → fim. O nó de espera não entra porque o
@@ -153,9 +138,8 @@ test.describe("déclencheur de dossier ouvert", () => {
 
   test("le dossier ouvert par l’agent arme la relance, et le régler l’annule", async ({ page }) => {
     test.setTimeout(240_000);
-    expect(creds.admin_totp?.secret, "seed deve gravar admin_totp").toBeTruthy();
 
-    await loginComTotp(page, creds.users.admin!.email, creds.admin_totp!.secret);
+    await loginComSenha(page, creds.users.admin!.email);
     const secret = segredoInterno();
 
     const marca = Date.now();
